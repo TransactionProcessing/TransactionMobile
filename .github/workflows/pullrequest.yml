@@ -68,7 +68,10 @@ jobs:
         uses: microsoft/setup-msbuild@v1.1
         with:
           vs-prerelease: true
-        
+
+      - name: test
+        run: dotnet --info
+
       - name: Install MAUI Workloads
         run: |
           dotnet workload install maui --ignore-failed-sources
