@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TransactionMobile.Maui.Pages.LoginPage"
+             Title="LoginPage"
+             Shell.NavBarIsVisible="False"
+             Shell.FlyoutItemIsVisible="False"
+             xmlns:viewmodels="clr-namespace:TransactionMobile.Maui.ViewModels"
+             x:DataType="viewmodels:LoginViewModel"
+             BackgroundColor="White">
+    <ContentPage.Content>
+        <StackLayout>
+            <Button Text="Login"
+                    Command="{Binding LoginCommand}"
+                    HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="CenterAndExpand" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

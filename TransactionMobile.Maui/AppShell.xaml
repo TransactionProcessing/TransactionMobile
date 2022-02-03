@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Shell x:Class="TransactionMobile.Maui.AppShell"
+       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:login="clr-namespace:TransactionMobile.Maui.Pages"
+       xmlns:home="clr-namespace:TransactionMobile.Maui.Pages.AppHome"
+       xmlns:transactions="clr-namespace:TransactionMobile.Maui.Pages.Transactions"
+       xmlns:reports="clr-namespace:TransactionMobile.Maui.Pages.Reports"
+       xmlns:myaccount="clr-namespace:TransactionMobile.Maui.Pages.MyAccount">
+    <Shell.Resources>
+        <!--
+		Define the resources to be used within this Shell visual hierarchy
+	-->
+    </Shell.Resources>
+
+    <TabBar>
+        <ShellContent ContentTemplate="{DataTemplate login:LoginPage}"
+                      Route="login" />
+    </TabBar>
+    <TabBar>
+        <ShellContent ContentTemplate="{DataTemplate home:HomePage}" Title="Home"
+                      Route="home" />
+
+        <ShellContent ContentTemplate="{DataTemplate transactions:TransactionsPage}" Title="Transactions"
+                      Route="transactions" />
+
+        <ShellContent ContentTemplate="{DataTemplate reports:ReportsPage}" Title="Reports"
+                      Route="reports" />
+
+        <ShellContent ContentTemplate="{DataTemplate myaccount:MyAccountPage}" Title="My Account"
+                      Route="myaccount" />
+
+        <!--<ShellContent ContentTemplate="{DataTemplate local:LoginPage}"
+                      Route="support" />-->
+    </TabBar>
+</Shell>
