@@ -51,70 +51,76 @@ jobs:
       #    path: src/MauiBeach/bin/Release/net6.0-android/*Signed.a*
 
   # MAUI Windows Build
-#  build-windows:
-#    runs-on: windows-2022
-#    name: Windows Build
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v2
+  build-windows:
+    runs-on: windows-2022
+    name: Windows Build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-#      - name: Setup .NET 6
-#        uses: actions/setup-dotnet@v1
-#        with:
-#          dotnet-version: 6.0.200-preview.22055.15
-#          include-prerelease: true
+      - name: Setup .NET 6
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.200-preview.22055.15
+          include-prerelease: true
 
-#      - name: Setup MSBuild
-#        uses: microsoft/setup-msbuild@v1.1
-#        with:
-#          vs-prerelease: true
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          vs-prerelease: true
         
-#      - name: Install MAUI Workloads
-#        run: |
-#          dotnet workload install maui --ignore-failed-sources
+      - name: Install MAUI Workloads
+        run: |
+          dotnet workload install maui --ignore-failed-sources
 
-#      - name: Restore Dependencies
-#        run: dotnet restore TransactionMobile.Maui.sln
+      - name: Restore Dependencies
+        run: dotnet restore TransactionMobile.Maui.sln
 
-#      - name: Build Code
-#        run: msbuild TransactionMobile.Maui/TransactionMobile.Maui.csproj  -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true
+      - name: Build Code
+        run: msbuild TransactionMobile.Maui/TransactionMobile.Maui.csproj  -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true
 
-#      #- name: Upload Windows Artifact
-#      #  uses: actions/upload-artifact@v2.3.1
-#      #  with:
-#      #    name: windows-ci-build
-#      #    path: src/MauiBeach/bin/Release/net6.0-windows*/**/MauiBeach*.msix
+      - name: Run Unit Tests
+        run: dotnet test TransactionMobile.Maui.Tests/TransactionMobile.Maui.Tests.csproj
 
-## MAUI iOS Build
-#  build-ios:
-#    runs-on: macos-11
-#    name: iOS Build
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v2
+      #- name: Upload Windows Artifact
+      #  uses: actions/upload-artifact@v2.3.1
+      #  with:
+      #    name: windows-ci-build
+      #    path: src/MauiBeach/bin/Release/net6.0-windows*/**/MauiBeach*.msix
 
-#      - name: Setup .NET 6
-#        uses: actions/setup-dotnet@v1
-#        with:
-#          dotnet-version: 6.0.200-preview.22055.15
-#          include-prerelease: true
+# MAUI iOS Build
+  build-ios:
+    runs-on: macos-11
+    name: iOS Build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-#      - name: Install MAUI Workloads
-#        run: |
-#          dotnet workload install ios --ignore-failed-sources
-#          dotnet workload install maui --ignore-failed-sources
+      - name: Setup .NET 6
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.200-preview.22055.15
+          include-prerelease: true
 
-#      - name: Restore Dependencies
-#        run: dotnet restore TransactionMobile.Maui.sln
+      - name: Install MAUI Workloads
+        run: |
+          dotnet workload install ios --ignore-failed-sources
+          dotnet workload install maui --ignore-failed-sources
 
-#      - name: Build Code
-#        run: dotnet build TransactionMobile.Maui.sln -c Release -f net6.0-ios --no-restore
+      - name: Restore Dependencies
+        run: dotnet restore TransactionMobile.Maui.sln
 
-#      #- name: Upload iOS Artifact
-#      #  uses: actions/upload-artifact@v2.3.1
-#      #  with:
-#      #    name: ios-ci-build
-#      #    path: src/MauiBeach/bin/Release/net6.0-ios/**/*.app/
+      - name: Build Code
+        run: dotnet build TransactionMobile.Maui.sln -c Release -f net6.0-ios --no-restore
+
+      - name: Run Unit Tests
+        run: dotnet test TransactionMobile.Maui.Tests/TransactionMobile.Maui.Tests.csproj
+
+      #- name: Upload iOS Artifact
+      #  uses: actions/upload-artifact@v2.3.1
+      #  with:
+      #    name: ios-ci-build
+      #    path: src/MauiBeach/bin/Release/net6.0-ios/**/*.app/
 
 #  # MAUI MacCatalyst Build
 #  build-mac:
