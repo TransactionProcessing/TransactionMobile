@@ -42,7 +42,7 @@ jobs:
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-android --no-restore
 
       - name: Run Unit Tests
-        run: dotnet test TransactionMobile.Maui.Tests/TransactionMobile..Tests.csproj
+        run: dotnet test TransactionMobile.Maui.Tests/TransactionMobile.Tests.csproj
 
       #- name: Upload Android Artifact
       #  uses: actions/upload-artifact@v2.3.1
