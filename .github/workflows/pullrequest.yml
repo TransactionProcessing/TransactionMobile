@@ -68,6 +68,7 @@ jobs:
         uses: microsoft/setup-msbuild@v1.1
         with:
           vs-prerelease: true
+          vs-version: 17.1.0-preview-21610-01+96a618ca5
         
       - name: Install MAUI Workloads
         run: |
@@ -77,8 +78,8 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln
 
       - name: Build Code
-        #run: msbuild TransactionMobile.Maui/TransactionMobile.Maui.csproj  -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-windows --no-restore
+        run: msbuild TransactionMobile.Maui/TransactionMobile.Maui.csproj  -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true
+       
 
       - name: Run Unit Tests
         run: dotnet test TransactionMobile.Maui.Tests/TransactionMobile.Maui.Tests.csproj
