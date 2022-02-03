@@ -94,6 +94,7 @@
 	</PropertyGroup>
 	
 	<PropertyGroup>
-		<CodesignKey>iPhone Developer</CodesignKey>
+		<CodesignKey>Apple Development: TransactionProcessing</CodesignKey>
+		<CodesignProvision>VS: com.companyname.transactionmobile.maui</CodesignProvision>
 	</PropertyGroup>
 </Project>
