@@ -22,7 +22,7 @@ jobs:
       - name: Setup .NET 6
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 6.0.200-preview.22055.15
           include-prerelease: true
           
       - uses: actions/setup-java@v2
@@ -38,7 +38,7 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln
 
-      - name: Build MAUI Android
+      - name: Build Code
         run: dotnet build TransactionMobile.Maui.sln -c Release -f net6.0-android --no-restore
 
       #- name: Upload Android Artifact
@@ -58,7 +58,7 @@ jobs:
       - name: Setup .NET 6
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 6.0.200-preview.22055.15
           include-prerelease: true
 
       - name: Setup MSBuild
@@ -73,8 +73,8 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln
 
-      - name: Build MAUI Android
-        run: msbuild build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true
+      - name: Build Code
+        run: msbuild TransactionMobile.Maui/TransactionMobile.Maui.csproj  -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true
 
       #- name: Upload Windows Artifact
       #  uses: actions/upload-artifact@v2.3.1
@@ -93,7 +93,7 @@ jobs:
       - name: Setup .NET 6
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 6.0.200-preview.22055.15
           include-prerelease: true
 
       - name: Install MAUI Workloads
@@ -104,7 +104,7 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln
 
-      - name: Build MAUI Android
+      - name: Build Code
         run: dotnet build TransactionMobile.Maui.sln -c Release -f net6.0-ios --no-restore
 
       #- name: Upload iOS Artifact
@@ -124,7 +124,7 @@ jobs:
       - name: Setup .NET 6
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 6.0.200-preview.22055.15
           include-prerelease: true
 
       - name: Install MAUI Workloads
@@ -135,7 +135,7 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln
 
-      - name: Build MAUI Android
+      - name: Build Code
         run: dotnet build TransactionMobile.Maui.sln -c Release -f net6.0-maccatalyst --no-restore
 
       #- name: Upload MacCatalyst Artifact
