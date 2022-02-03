@@ -1,0 +1,69 @@
+name: Build and Test Pull Requests
+
+on:
+  pull_request:
+    branches:
+    - main
+
+jobs:  
+  buildandroid:
+    name: "Build and Test Pull Requests - Android"
+    env:
+        ANDROID_HOME: "/Users/runner/Library/Android/sdk"
+        ScreenshotFolder: "/Users/runner/screenshots"
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v2.3.4      
+            
+    - uses: malinskiy/action-android/install-sdk@release/0.1.2
+    - run: sdkmanager "platform-tools" "platforms;android-29"
+    - run: sdkmanager "build-tools;30.0.2"
+    - run: adb devices
+    
+    #- name: Set up Node.js
+    #  uses: actions/setup-node@v1
+    #  with:
+    #    node-version: '12.12.0'
+
+    #- name: Set up Appium
+    #  run: |
+    #    npm install -g appium --unsafe-perm=true --allow-root
+
+#    - name: Setup Nuget
+#      uses: olegtarasov/download-nuget@v1
+
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.x'
+        include-prerelease: true
+          
+    - name: Restore Nuget Packages
+      run: dotnet restore TransactionMobile.Maui.sln -source "https://api.nuget.org/v3/index.json;https://www.myget.org/F/transactionprocessing/api/v3/index.json"
+
+    - name: Build Code
+      run: dotnet build TransactionMobile.Maui.sln --configuration Release -f net6.0-android
+
+    - name: Run Unit Tests
+      run: dotnet test TransactionMobile.Maui.Tests/TransactionMobile.Maui.Tests.csproj
+
+    #- name: Build APK
+    #  run: msbuild TransactionMobile/TransactionMobile.Android/TransactionMobile.Android.csproj -target:SignAndroidPackage /p:Configuration=Release  
+   
+    #- name: Run Integration Tests - Android
+    #  uses: malinskiy/action-android/emulator-run-cmd@release/0.1.1
+    #  with:
+    #      cmd: dotnet test TransactionMobile/TransactionMobile.IntegrationTests.WithAppium/TransactionMobile.IntegrationTests.WithAppium.csproj --filter (Category=PRTest)&(Category=Android)
+    #      api: 28
+    #      tag: default
+    #      abi: x86   
+    #      verbose: true
+
+    #- name: Save logcat output
+    #  uses: actions/upload-artifact@master
+    #  if: failure()
+    #  with:
+    #    name: logcat
+    #    path: artifacts/logcat.log
+
