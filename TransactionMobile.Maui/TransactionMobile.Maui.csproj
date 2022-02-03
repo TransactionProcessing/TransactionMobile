@@ -68,23 +68,23 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="AppShell.xaml">
-	    <Generator>MSBuild:Compile</Generator>
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\AppHome\HomePage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\LoginPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\MyAccount\MyAccount.xaml">
 	    <SubType>Designer</SubType>
-	    <Generator>MSBuild:Compile</Generator>
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Reports\Reports.xaml">
-	    <Generator>MSBuild:Compile</Generator>
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Transactions\Transactions.xaml">
-	    <Generator>MSBuild:Compile</Generator>
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 	  </MauiXaml>
 	</ItemGroup>
 
