@@ -68,23 +68,23 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="AppShell.xaml">
-	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\AppHome\HomePage.xaml">
-	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\LoginPage.xaml">
-	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\MyAccount\MyAccount.xaml">
 	    <SubType>Designer</SubType>
-	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Reports\Reports.xaml">
-	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Transactions\Transactions.xaml">
-	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
 
@@ -93,8 +93,7 @@
 		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
 	</PropertyGroup>
 	
-	<PropertyGroup>
-		<CodesignKey>Apple Development: TransactionProcessing</CodesignKey>
-		<CodesignProvision>VS: com.companyname.transactionmobile.maui</CodesignProvision>
-	</PropertyGroup>
+	<!--<PropertyGroup>
+		<ProvisioningType>automatic</ProvisioningType>
+	</PropertyGroup>-->
 </Project>
