@@ -93,4 +93,7 @@
 		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
 	</PropertyGroup>
 	
+	<!--<PropertyGroup>
+		<ProvisioningType>automatic</ProvisioningType>
+	</PropertyGroup>-->
 </Project>

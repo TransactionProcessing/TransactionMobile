@@ -5,6 +5,12 @@ VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionMobile.Maui", "TransactionMobile.Maui\TransactionMobile.Maui.csproj", "{73668181-7A26-435D-83E3-CF141AC8FD0B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1CBEF4C1-7D90-4A78-AA55-D81F1447A70E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{AB312EE3-CBA4-469A-8694-67C5466298C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionMobile.Maui.Tests", "TransactionMobile.Maui.Tests\TransactionMobile.Maui.Tests.csproj", "{BD64046D-7103-44E6-8453-46C895A2AB93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,9 +23,17 @@ Global
 		{73668181-7A26-435D-83E3-CF141AC8FD0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73668181-7A26-435D-83E3-CF141AC8FD0B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{73668181-7A26-435D-83E3-CF141AC8FD0B}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{BD64046D-7103-44E6-8453-46C895A2AB93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD64046D-7103-44E6-8453-46C895A2AB93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD64046D-7103-44E6-8453-46C895A2AB93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD64046D-7103-44E6-8453-46C895A2AB93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{73668181-7A26-435D-83E3-CF141AC8FD0B} = {1CBEF4C1-7D90-4A78-AA55-D81F1447A70E}
+		{BD64046D-7103-44E6-8453-46C895A2AB93} = {AB312EE3-CBA4-469A-8694-67C5466298C5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}
