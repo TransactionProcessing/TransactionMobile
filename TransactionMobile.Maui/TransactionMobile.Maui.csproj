@@ -56,6 +56,10 @@
 		<PackageReference Include="MediatR" Version="10.0.1" />
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\TransactionMobile.Maui.BusinessLogic\TransactionMobile.Maui.BusinessLogic.csproj" />
+	</ItemGroup>
 		
 	<ItemGroup>
 	  <Compile Update="Pages\MyAccount\MyAccount.xaml.cs">
@@ -86,6 +90,10 @@
 	  <MauiXaml Update="Pages\Transactions\Transactions.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Models\" />
 	</ItemGroup>
 
 	<PropertyGroup Condition="$(TargetFramework.Contains('-windows'))">
