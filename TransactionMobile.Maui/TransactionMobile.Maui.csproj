@@ -92,8 +92,8 @@
 		<OutputType>WinExe</OutputType>
 		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
 	</PropertyGroup>
-	
-	<!--<PropertyGroup>
-		<ProvisioningType>automatic</ProvisioningType>
-	</PropertyGroup>-->
+
+	<PropertyGroup Condition="$(TargetFramework.Contains('-ios'))">
+		<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+	</PropertyGroup>
 </Project>
