@@ -11,10 +11,10 @@
 		<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
 
 		<!-- Display name -->
-		<ApplicationTitle>TransactionMobile.Maui</ApplicationTitle>
+		<ApplicationTitle>Transaction Processing POS</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.transactionmobile.maui</ApplicationId>
+		<ApplicationId>com.transactionprocessing.pos</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationVersion>1</ApplicationVersion>
