@@ -2,6 +2,8 @@
 
 namespace TransactionMobile.Maui;
 
+using CommunityToolkit.Maui;
+
 public static class MauiProgram
 {
 	public static MauiApp Container;
@@ -12,6 +14,9 @@ public static class MauiProgram
 			.UseMauiApp<App>()
 			.ConfigureRequestHandlers()
 			.ConfigureViewModels()
+            .ConfigureAppServices()
+            //.ConfigureUIServices()
+            .UseMauiCommunityToolkit()
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

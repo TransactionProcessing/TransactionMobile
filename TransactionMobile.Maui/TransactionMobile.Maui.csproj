@@ -53,6 +53,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="1.0.0-pre5" />
 		<PackageReference Include="MediatR" Version="10.0.1" />
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
 	</ItemGroup>
@@ -62,11 +63,23 @@
 	</ItemGroup>
 		
 	<ItemGroup>
-	  <Compile Update="Pages\MyAccount\MyAccount.xaml.cs">
-	    <DependentUpon>MyAccount.xaml</DependentUpon>
+	  <Compile Update="Pages\MyAccount\MyAccountPage.xaml.cs">
+	    <DependentUpon>MyAccountPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Pages\Reports\Reports.xaml.cs">
-	    <DependentUpon>Reports.xaml</DependentUpon>
+	  <Compile Update="Pages\Reports\ReportsPage.xaml.cs">
+	    <DependentUpon>ReportsPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\Transactions\MobileTopup\MobileTopupPerformTopupPage.xaml.cs">
+	    <DependentUpon>MobileTopupPerformTopupPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\Transactions\MobileTopup\MobileTopupSelectOperatorPage.xaml.cs">
+	    <DependentUpon>MobileTopupSelectOperatorPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\Transactions\MobileTopup\MobileTopupFailedPage.xaml.cs">
+	    <DependentUpon>MobileTopupFailedPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\Transactions\TransactionsPage.xaml.cs">
+	    <DependentUpon>TransactionsPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
@@ -80,14 +93,32 @@
 	  <MauiXaml Update="Pages\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\MyAccount\MyAccount.xaml">
+	  <MauiXaml Update="Pages\MyAccount\MyAccountPage.xaml">
 	    <SubType>Designer</SubType>
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\Reports\Reports.xaml">
+	  <MauiXaml Update="Pages\Reports\ReportsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\Transactions\Transactions.xaml">
+	  <MauiXaml Update="Pages\Transactions\MobileTopup\MobileTopupPerformTopupPage.xaml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Transactions\MobileTopup\MobileTopupSelectOperatorPage.xaml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Transactions\MobileTopup\MobileTopupSelectProductPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Transactions\MobileTopup\MobileTopupFailedPage.xaml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Transactions\MobileTopup\MobileTopupSuccessPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Transactions\TransactionsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

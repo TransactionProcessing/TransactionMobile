@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TransactionMobile.Maui.Pages.Transactions.TransactionsPage"
+             Shell.NavBarIsVisible="True"
+             xmlns:viewmodels="clr-namespace:TransactionMobile.Maui.ViewModels.Transactions"
+             x:DataType="viewmodels:TransactionsPageViewModel"
+             Title="{Binding Title}"
+             BackgroundColor="White">
+    <StackLayout>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+            </Grid.RowDefinitions>
+
+
+            <Button AutomationId="MobileTopupButton" Command="{Binding MobileTopupCommand}" x:Name="MobileTopupButton" Text="Mobile Topup" Grid.Row="0" Grid.Column="0" Style="{DynamicResource MobileTopupButtonStyle}"/>
+            <Button AutomationId="MobileWalletButton" Command="{Binding MobileWalletCommand}" x:Name="MobileWalletButton" Text="Mobile Wallet" Grid.Row="1" Grid.Column="0" Style="{DynamicResource MobileWalletButtonStyle}"/>
+            <Button AutomationId="BillPaymentButton" Command="{Binding BillPaymentCommand}" x:Name="BillPaymentButton" Text="Bill Payment" Grid.Row="2" Grid.Column="0" Style="{DynamicResource BillPaymentButtonStyle}"/>
+            <Button AutomationId="VoucherButton" Command="{Binding VoucherCommand}" x:Name="VoucherButton" Text="Voucher" Grid.Row="3" Grid.Column="0" Style="{DynamicResource VoucherButtonStyle}"/>
+            <Button AutomationId="AdminButton" Command="{Binding AdminCommand}" x:Name="AdminButton" Text="Admin" Grid.Row="4" Grid.Column="0" Style="{DynamicResource AdminButtonStyle}"/>
+        </Grid>
+    </StackLayout>
+</ContentPage>
