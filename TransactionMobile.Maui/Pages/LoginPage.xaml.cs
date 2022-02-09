@@ -4,9 +4,9 @@ namespace TransactionMobile.Maui.Pages;
 
 public partial class LoginPage : ContentPage
 {
-	private LoginViewModel viewModel => BindingContext as LoginViewModel;
+	private LoginPageViewModel viewModel => BindingContext as LoginPageViewModel;
 
-	public LoginPage(LoginViewModel vm)
+	public LoginPage(LoginPageViewModel vm)
 	{
 		InitializeComponent();
 		BindingContext = vm;
@@ -15,6 +15,6 @@ public partial class LoginPage : ContentPage
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
-		await viewModel.InitializeAsync();
+		//await viewModel.InitializeAsync();
 	}
 }

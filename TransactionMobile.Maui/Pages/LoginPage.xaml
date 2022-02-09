@@ -6,7 +6,7 @@
              Shell.NavBarIsVisible="False"
              Shell.FlyoutItemIsVisible="False"
              xmlns:viewmodels="clr-namespace:TransactionMobile.Maui.ViewModels"
-             x:DataType="viewmodels:LoginViewModel"
+             x:DataType="viewmodels:LoginPageViewModel"
              BackgroundColor="White">
     <ContentPage.Content>
         <StackLayout>

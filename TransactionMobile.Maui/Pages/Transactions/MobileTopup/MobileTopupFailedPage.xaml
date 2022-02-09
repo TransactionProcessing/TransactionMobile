@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TransactionMobile.Maui.MobileTopupFailedPage"
+             xmlns:viewmodels="clr-namespace:TransactionMobile.Maui.ViewModels.Transactions"
+             x:DataType="viewmodels:MobileTopupFailedPageViewModel"
+             Title="{Binding Title}"
+             BackgroundColor="White">
+    <StackLayout>
+        <Label
+            Margin="0,40,0,0"
+            Style="{StaticResource LabelStyle}"
+            HorizontalTextAlignment="Center"
+            AutomationId="MobileTopupFailed"
+            Text="MOBILE TOPUP FAILURE" />
+
+        <Button
+            x:Name="CancelButton"
+            Grid.Row="5"
+            Margin="0,16"
+            MinimumWidthRequest="250"
+            WidthRequest="400"
+            Text="Cancel"
+            Command="{Binding CancelledCommand}"
+            AutomationId="CancelButton"/>
+    </StackLayout>
+</ContentPage>

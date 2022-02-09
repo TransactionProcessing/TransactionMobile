@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TransactionMobile.Maui.MobileTopupPerformTopupPage"
+             xmlns:viewmodels="clr-namespace:TransactionMobile.Maui.ViewModels.Transactions"
+             x:DataType="viewmodels:MobileTopupPerformTopupPageViewModel"
+             xmlns:behaviors="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
+             Title="{Binding Title}"
+             BackgroundColor="White">
+    <StackLayout>
+        <Entry x:Name="CustomerMobileNumberEntry"
+               Placeholder="Customer Mobile Number"
+               AutomationId="CustomerMobileNumberEntry"
+               Text="{Binding CustomerMobileNumber}"
+               Keyboard="Numeric">
+            <Entry.Behaviors>
+                <behaviors:EventToCommandBehavior             
+                    EventName="Completed"  
+                    Command="{Binding CustomerMobileNumberEntryCompletedCommand}" />
+            </Entry.Behaviors>
+        </Entry>
+
+        <Entry x:Name="TopupAmountEntry"
+               Placeholder="100"
+               AutomationId="TopupAmountEntry"
+               Text="{Binding TopupAmount}"
+               Keyboard="Numeric">
+            <Entry.Behaviors>
+                <behaviors:EventToCommandBehavior             
+                    EventName="Completed"  
+                    Command="{Binding TopupAmountEntryCompletedCommand}" />
+            </Entry.Behaviors>
+        </Entry>
+        
+        <Entry x:Name="CustomerEmailAddressEntry"
+               Placeholder="customeremail@email.com"
+               AutomationId="CustomerEmailAddressEntry"
+               Text="{Binding CustomerEmailAddress}">
+            <Entry.Behaviors>
+                <behaviors:EventToCommandBehavior             
+                    EventName="Completed"  
+                    Command="{Binding CustomerEmailAddressEntryCompletedCommand}" />
+            </Entry.Behaviors>
+        </Entry>
+
+        <Button x:Name="PerformTopupButton" 
+                Text="Perform Topup"
+                Command="{Binding PerformTopupCommand}"
+                AutomationId="PerformTopupButton"/>
+    </StackLayout>
+</ContentPage>

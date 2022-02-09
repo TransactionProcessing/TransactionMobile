@@ -7,9 +7,9 @@
     public class LoginRequestHandler : IRequestHandler<LoginRequest, String>
     {
         #region Constructors
-
         public LoginRequestHandler(IAuthenticationService authenticationService)
         {
+            
             this.AuthenticationService = authenticationService;
         }
 
@@ -32,5 +32,7 @@
         }
 
         #endregion
+
+        
     }
 }
