@@ -19,7 +19,7 @@
     </TabBar>
     <TabBar>
         <ShellContent ContentTemplate="{DataTemplate home:HomePage}" Title="Home"
-                      Route="home" />
+                      Route="home"/>
 
         <ShellContent ContentTemplate="{DataTemplate transactions:TransactionsPage}" Title="Transactions"
                       Route="transactions" />
