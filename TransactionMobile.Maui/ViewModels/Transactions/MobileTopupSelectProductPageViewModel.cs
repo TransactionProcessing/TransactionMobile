@@ -6,6 +6,7 @@ using BusinessLogic.Requests;
 using MediatR;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
+using UIServices;
 
 [QueryProperty(nameof(MobileTopupSelectProductPageViewModel.OperatorIdentifier), nameof(MobileTopupSelectProductPageViewModel.OperatorIdentifier))]
 public class MobileTopupSelectProductPageViewModel : BaseViewModel
@@ -14,13 +15,16 @@ public class MobileTopupSelectProductPageViewModel : BaseViewModel
 
     private readonly IMediator Mediator;
 
+    private readonly INavigationService NavigationService;
+
     #endregion
 
     #region Constructors
 
-    public MobileTopupSelectProductPageViewModel(IMediator mediator)
+    public MobileTopupSelectProductPageViewModel(IMediator mediator, INavigationService navigationService)
     {
         this.Mediator = mediator;
+        this.NavigationService = navigationService;
         this.ProductSelectedCommand = new AsyncCommand<SelectedItemChangedEventArgs>(this.ProductSelectedCommandExecute);
         this.Title = "Select a Product";
     }
@@ -53,8 +57,7 @@ public class MobileTopupSelectProductPageViewModel : BaseViewModel
     private async Task ProductSelectedCommandExecute(SelectedItemChangedEventArgs e)
     {
         ContractProductModel productModel = e.SelectedItem as ContractProductModel;
-        await
-            Shell.Current.GoToAsync($"{nameof(MobileTopupPerformTopupPage)}?OperatorIdentifier={productModel.OperatorIdentfier}&ContractId={productModel.ContractId}&ProductId={productModel.ProductId}&TopupAmount={productModel.Value}");
+        await this.NavigationService.GoToMobileTopupPerformTopupPage(productModel.OperatorIdentfier, productModel.ContractId, productModel.ProductId, productModel.Value);
     }
 
     #endregion

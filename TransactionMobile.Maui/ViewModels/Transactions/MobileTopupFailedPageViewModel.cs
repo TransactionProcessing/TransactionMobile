@@ -3,13 +3,17 @@
 using System.Windows.Input;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
+using UIServices;
 
 public class MobileTopupFailedPageViewModel : BaseViewModel
 {
+    private readonly INavigationService NavigationService;
+
     #region Constructors
 
-    public MobileTopupFailedPageViewModel()
+    public MobileTopupFailedPageViewModel(INavigationService navigationService)
     {
+        this.NavigationService = navigationService;
         this.CancelledCommand = new AsyncCommand(this.CancelledCommandExecute);
     }
 
@@ -25,7 +29,7 @@ public class MobileTopupFailedPageViewModel : BaseViewModel
 
     private async Task CancelledCommandExecute()
     {
-        await Shell.Current.Navigation.PopToRootAsync();
+        await this.NavigationService.PopToRoot();
     }
 
     #endregion

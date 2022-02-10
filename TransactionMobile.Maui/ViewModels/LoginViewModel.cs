@@ -6,15 +6,19 @@
     using MediatR;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
+    using UIServices;
 
     public class LoginPageViewModel : BaseViewModel
     {
+        private readonly INavigationService NavigationService;
+
         #region Constructors
 
         //public String Username { get; set; }
         //public String Password { get; set; }
-        public LoginPageViewModel(IMediator mediator)
+        public LoginPageViewModel(IMediator mediator, INavigationService navigationService)
         {
+            this.NavigationService = navigationService;
             this.LoginCommand = new AsyncCommand(this.LoginCommandExecute);
             this.Mediator = mediator;
         }
@@ -63,7 +67,7 @@
             var merchantBalance = await this.Mediator.Send(getMerchantBalanceRequest);
 
             // TODO: Cache the token as will be needed later
-            await Shell.Current.GoToAsync("//home");
+            await this.NavigationService.GoToHome();
         }
 
         #endregion

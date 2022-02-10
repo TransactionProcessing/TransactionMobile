@@ -3,13 +3,17 @@
     using System.Windows.Input;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
+    using UIServices;
 
     public class TransactionsPageViewModel : BaseViewModel
     {
+        private readonly INavigationService NavigationService;
+
         #region Constructors
 
-        public TransactionsPageViewModel()
+        public TransactionsPageViewModel(INavigationService navigationService)
         {
+            this.NavigationService = navigationService;
             this.MobileTopupCommand = new AsyncCommand(this.MobileTopupCommandExecute);
             this.MobileWalletCommand = new AsyncCommand(this.MobileWalletCommandExecute);
             this.BillPaymentCommand = new AsyncCommand(this.BillPaymentCommandExecute);
@@ -46,7 +50,7 @@
 
         private async Task MobileTopupCommandExecute()
         {
-            await Shell.Current.GoToAsync(nameof(MobileTopupSelectOperatorPage));
+            await this.NavigationService.GoToMobileTopupSelectOperatorPage();
         }
 
         private async Task MobileWalletCommandExecute()
