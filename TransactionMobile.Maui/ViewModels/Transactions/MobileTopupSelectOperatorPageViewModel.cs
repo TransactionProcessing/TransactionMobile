@@ -6,6 +6,7 @@ using BusinessLogic.Requests;
 using MediatR;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
+using UIServices;
 
 public class MobileTopupSelectOperatorPageViewModel : BaseViewModel
 {
@@ -13,13 +14,16 @@ public class MobileTopupSelectOperatorPageViewModel : BaseViewModel
 
     private readonly IMediator Mediator;
 
+    private readonly INavigationService NavigationService;
+
     #endregion
 
     #region Constructors
 
-    public MobileTopupSelectOperatorPageViewModel(IMediator mediator)
+    public MobileTopupSelectOperatorPageViewModel(IMediator mediator, INavigationService navigationService)
     {
         this.Mediator = mediator;
+        this.NavigationService = navigationService;
         this.OperatorSelectedCommand = new AsyncCommand<SelectedItemChangedEventArgs>(this.OperatorSelectedCommandExecute);
         this.Title = "Select an Operator";
     }
@@ -61,7 +65,8 @@ public class MobileTopupSelectOperatorPageViewModel : BaseViewModel
     private async Task OperatorSelectedCommandExecute(SelectedItemChangedEventArgs e)
     {
         ContractOperatorModel operatorModel = e.SelectedItem as ContractOperatorModel;
-        await Shell.Current.GoToAsync($"{nameof(MobileTopupSelectProductPage)}?OperatorIdentifier={operatorModel.OperatorIdentfier}");
+        await this.NavigationService.GoToMobileTopupSelectProductPage(operatorModel.OperatorIdentfier);
+
     }
 
     #endregion

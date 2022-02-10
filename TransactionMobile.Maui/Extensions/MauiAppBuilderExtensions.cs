@@ -22,12 +22,12 @@
             return builder;
         }
 
-        //public static MauiAppBuilder ConfigureUIServices(this MauiAppBuilder builder)
-        //{
+        public static MauiAppBuilder ConfigureUIServices(this MauiAppBuilder builder)
+        {
         //    builder.Services.AddSingleton<IDialogService, DialogService>();
-
-        //    return builder;
-        //}
+            builder.Services.AddSingleton<INavigationService, ShellNavigationService>();
+            return builder;
+        }
 
         public static MauiAppBuilder ConfigureRequestHandlers(this MauiAppBuilder builder)
         {

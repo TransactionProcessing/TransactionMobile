@@ -3,13 +3,17 @@
     using System.Windows.Input;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
+    using UIServices;
 
     public class MobileTopupSuccessPageViewModel : BaseViewModel
     {
+        private readonly INavigationService NavigationService;
+
         #region Constructors
 
-        public MobileTopupSuccessPageViewModel()
+        public MobileTopupSuccessPageViewModel(INavigationService navigationService)
         {
+            this.NavigationService = navigationService;
             this.CompletedCommand = new AsyncCommand(this.CompletedCommandExecute);
             this.Title = "Mobile Topup Successful";
         }
@@ -26,7 +30,7 @@
 
         private async Task CompletedCommandExecute()
         {
-            await Shell.Current.Navigation.PopToRootAsync();
+            await this.NavigationService.PopToRoot();
         }
 
         #endregion

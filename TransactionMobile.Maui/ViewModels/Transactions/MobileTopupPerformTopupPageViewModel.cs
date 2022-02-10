@@ -5,6 +5,7 @@ using BusinessLogic.Requests;
 using MediatR;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
+using UIServices;
 
 [QueryProperty(nameof(MobileTopupPerformTopupPageViewModel.ContractId), nameof(MobileTopupPerformTopupPageViewModel.ContractId))]
 [QueryProperty(nameof(MobileTopupPerformTopupPageViewModel.ProductId), nameof(MobileTopupPerformTopupPageViewModel.ProductId))]
@@ -20,15 +21,18 @@ public class MobileTopupPerformTopupPageViewModel : BaseViewModel
 
     private readonly IMediator Mediator;
 
+    private readonly INavigationService NavigationService;
+
     private Decimal topupAmount;
 
     #endregion
 
     #region Constructors
 
-    public MobileTopupPerformTopupPageViewModel(IMediator mediator)
+    public MobileTopupPerformTopupPageViewModel(IMediator mediator, INavigationService navigationService)
     {
         this.Mediator = mediator;
+        this.NavigationService = navigationService;
         this.PerformTopupCommand = new AsyncCommand(this.PerformTopupCommandExecute);
         this.CustomerMobileNumberEntryCompletedCommand = new Command(this.CustomerMobileNumberEntryCompletedCommandExecute);
         this.TopupAmountEntryCompletedCommand = new Command(this.TopupAmountEntryCompletedCommandExecute);
@@ -110,11 +114,12 @@ public class MobileTopupPerformTopupPageViewModel : BaseViewModel
 
         if (response)
         {
-            await Shell.Current.GoToAsync($"{nameof(MobileTopupSuccessPage)}");
+            await this.NavigationService.GoToMobileTopupSuccessPage();
+
         }
         else
         {
-            await Shell.Current.GoToAsync($"{nameof(MobileTopupFailedPage)}");
+            await this.NavigationService.GoToMobileTopupFailedPage();
         }
     }
 
