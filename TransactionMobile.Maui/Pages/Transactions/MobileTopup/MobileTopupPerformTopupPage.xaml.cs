@@ -1,7 +1,7 @@
 namespace TransactionMobile.Maui;
 
 using BusinessLogic.Models;
-using ViewModels.Transactions;
+using BusinessLogic.ViewModels.Transactions;
 
 public partial class MobileTopupPerformTopupPage : ContentPage
 {

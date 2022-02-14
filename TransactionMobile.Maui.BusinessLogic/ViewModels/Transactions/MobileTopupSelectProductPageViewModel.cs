@@ -1,15 +1,16 @@
-﻿namespace TransactionMobile.Maui.ViewModels.Transactions;
+﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions;
 
+using System.Web;
 using System.Windows.Input;
-using BusinessLogic.Models;
-using BusinessLogic.Requests;
 using MediatR;
+using Microsoft.Maui.Controls;
+using Models;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
+using Requests;
 using UIServices;
 
-[QueryProperty(nameof(MobileTopupSelectProductPageViewModel.OperatorIdentifier), nameof(MobileTopupSelectProductPageViewModel.OperatorIdentifier))]
-public class MobileTopupSelectProductPageViewModel : BaseViewModel
+public class MobileTopupSelectProductPageViewModel : BaseViewModel, IQueryAttributable
 {
     #region Fields
 
@@ -21,11 +22,16 @@ public class MobileTopupSelectProductPageViewModel : BaseViewModel
 
     #region Constructors
 
+    public void ApplyQueryAttributes(IDictionary<string, Object> query)
+    {
+        this.OperatorIdentifier = HttpUtility.UrlDecode(query[nameof(OperatorIdentifier)].ToString());
+    }
+
     public MobileTopupSelectProductPageViewModel(IMediator mediator, INavigationService navigationService)
     {
         this.Mediator = mediator;
         this.NavigationService = navigationService;
-        this.ProductSelectedCommand = new AsyncCommand<SelectedItemChangedEventArgs>(this.ProductSelectedCommandExecute);
+        this.ProductSelectedCommand = new AsyncCommand<ItemSelected<ContractProductModel>>(this.ProductSelectedCommandExecute);
         this.Title = "Select a Product";
     }
 
@@ -33,7 +39,7 @@ public class MobileTopupSelectProductPageViewModel : BaseViewModel
 
     #region Properties
 
-    public String OperatorIdentifier { get; set; }
+    public String OperatorIdentifier { get; private set; }
 
     public List<ContractProductModel> Products { get; private set; }
 
@@ -45,7 +51,7 @@ public class MobileTopupSelectProductPageViewModel : BaseViewModel
 
     public async Task Initialise(CancellationToken cancellationToken)
     {
-        GetContractProductsRequest request = GetContractProductsRequest.Create("",App.EstateId,App.MerchantId);
+        GetContractProductsRequest request = GetContractProductsRequest.Create("",Guid.Empty, Guid.Empty);
 
         List<ContractProductModel> products = await this.Mediator.Send(request, cancellationToken);
 
@@ -54,10 +60,9 @@ public class MobileTopupSelectProductPageViewModel : BaseViewModel
         this.Products = products;
     }
 
-    private async Task ProductSelectedCommandExecute(SelectedItemChangedEventArgs e)
+    private async Task ProductSelectedCommandExecute(ItemSelected<ContractProductModel> e)
     {
-        ContractProductModel productModel = e.SelectedItem as ContractProductModel;
-        await this.NavigationService.GoToMobileTopupPerformTopupPage(productModel.OperatorIdentfier, productModel.ContractId, productModel.ProductId, productModel.Value);
+        await this.NavigationService.GoToMobileTopupPerformTopupPage(e.SelectedItem.OperatorIdentfier, e.SelectedItem.ContractId, e.SelectedItem.ProductId, e.SelectedItem.Value);
     }
 
     #endregion

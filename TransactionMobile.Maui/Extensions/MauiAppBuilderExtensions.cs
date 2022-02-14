@@ -4,10 +4,10 @@
     using BusinessLogic.RequestHandlers;
     using BusinessLogic.Requests;
     using BusinessLogic.Services;
+    using BusinessLogic.ViewModels;
+    using BusinessLogic.ViewModels.Transactions;
     using MediatR;
     using UIServices;
-    using ViewModels;
-    using ViewModels.Transactions;
 
     public static class MauiAppBuilderExtensions
     {

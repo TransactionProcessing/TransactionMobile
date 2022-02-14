@@ -5,7 +5,7 @@
              Title="LoginPage"
              Shell.NavBarIsVisible="False"
              Shell.FlyoutItemIsVisible="False"
-             xmlns:viewmodels="clr-namespace:TransactionMobile.Maui.ViewModels"
+             xmlns:viewmodels="http://transactionmobile.maui.com/schemas/viewmodels"
              x:DataType="viewmodels:LoginPageViewModel"
              BackgroundColor="White">
     <ContentPage.Content>

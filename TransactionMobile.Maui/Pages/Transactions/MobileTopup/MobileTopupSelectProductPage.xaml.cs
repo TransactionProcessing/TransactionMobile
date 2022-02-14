@@ -1,7 +1,7 @@
 namespace TransactionMobile.Maui;
 
 using BusinessLogic.Models;
-using ViewModels.Transactions;
+using BusinessLogic.ViewModels.Transactions;
 
 public partial class MobileTopupSelectProductPage : ContentPage
 {
@@ -46,7 +46,11 @@ public partial class MobileTopupSelectProductPage : ContentPage
 
             Binding commandParameter = new Binding()
                                        {
-                                           Source = new SelectedItemChangedEventArgs(modelProduct, rowCount)
+                                           Source = new ItemSelected<ContractProductModel>
+                                                    {
+                                                        SelectedItem = modelProduct,
+                                                        SelectedItemIndex = rowCount
+                                                    }
                                        };
 
             Binding command = new Binding

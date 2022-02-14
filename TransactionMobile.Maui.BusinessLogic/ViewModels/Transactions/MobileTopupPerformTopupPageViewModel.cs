@@ -1,17 +1,16 @@
-﻿namespace TransactionMobile.Maui.ViewModels.Transactions;
+﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions;
 
+using System.Web;
 using System.Windows.Input;
-using BusinessLogic.Requests;
 using MediatR;
+using Microsoft.Maui.Controls;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
+using Requests;
 using UIServices;
+using Command = Microsoft.Maui.Controls.Command;
 
-[QueryProperty(nameof(MobileTopupPerformTopupPageViewModel.ContractId), nameof(MobileTopupPerformTopupPageViewModel.ContractId))]
-[QueryProperty(nameof(MobileTopupPerformTopupPageViewModel.ProductId), nameof(MobileTopupPerformTopupPageViewModel.ProductId))]
-[QueryProperty(nameof(MobileTopupPerformTopupPageViewModel.OperatorIdentifer), nameof(MobileTopupPerformTopupPageViewModel.OperatorIdentifer))]
-[QueryProperty(nameof(MobileTopupPerformTopupPageViewModel.TopupAmount), nameof(MobileTopupPerformTopupPageViewModel.TopupAmount))]
-public class MobileTopupPerformTopupPageViewModel : BaseViewModel
+public class MobileTopupPerformTopupPageViewModel : BaseViewModel, IQueryAttributable
 {
     #region Fields
 
@@ -28,6 +27,14 @@ public class MobileTopupPerformTopupPageViewModel : BaseViewModel
     #endregion
 
     #region Constructors
+
+    public void ApplyQueryAttributes(IDictionary<string, Object> query)
+    {
+        this.ContractId = HttpUtility.UrlDecode(query[nameof(ContractId)].ToString());
+        this.ProductId = HttpUtility.UrlDecode(query[nameof(ProductId)].ToString());
+        this.OperatorIdentifer = HttpUtility.UrlDecode(query[nameof(OperatorIdentifer)].ToString());
+        this.TopupAmount = Decimal.Parse(HttpUtility.UrlDecode(query[nameof(TopupAmount)].ToString()));
+    }
 
     public MobileTopupPerformTopupPageViewModel(IMediator mediator, INavigationService navigationService)
     {

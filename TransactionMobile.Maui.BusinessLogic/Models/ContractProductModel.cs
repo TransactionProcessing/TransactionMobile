@@ -1,36 +1,5 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Models
 {
-    public class ContractOperatorModel
-    {
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the operator identifier.
-        /// </summary>
-        /// <value>
-        /// The operator identifier.
-        /// </value>
-        public Guid OperatorId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the operator identfier.
-        /// </summary>
-        /// <value>
-        /// The operator identfier.
-        /// </value>
-        public String OperatorIdentfier { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the operator.
-        /// </summary>
-        /// <value>
-        /// The name of the operator.
-        /// </value>
-        public String OperatorName { get; set; }
-
-        #endregion
-    }
-
     public class ContractProductModel
     {
         #region Properties
@@ -108,33 +77,5 @@
         public Decimal Value { get; set; }
 
         #endregion
-    }
-
-    public enum ProductType
-    {
-        /// <summary>
-        /// The not set
-        /// </summary>
-        NotSet = 0,
-
-        /// <summary>
-        /// The mobile topup
-        /// </summary>
-        MobileTopup,
-
-        /// <summary>
-        /// The mobile wallet
-        /// </summary>
-        MobileWallet,
-
-        /// <summary>
-        /// The bill payment
-        /// </summary>
-        BillPayment,
-
-        /// <summary>
-        /// The voucher
-        /// </summary>
-        Voucher
     }
 }
