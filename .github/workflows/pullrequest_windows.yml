@@ -12,29 +12,29 @@ env:
 
 jobs:
   build-windows:
-    runs-on: self-hosted
+    runs-on: windows-latest
     name: Windows Build
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      #- name: Setup .NET 6
-      #  uses: actions/setup-dotnet@v1
-      #  with:
-      #    dotnet-version: 6.0.200-preview.22055.15
-      #    include-prerelease: true
+      - name: Setup .NET 6
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.200-preview.22055.15
+          include-prerelease: true
 
-      #- name: Setup MSBuild
-      #  uses: microsoft/setup-msbuild@v1.1
-      #  with:
-      #    vs-prerelease: true
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          vs-prerelease: true
 
-  #    - name: Install MAUI Workloads
-  #      run: |
-  #        dotnet workload install maui --ignore-failed-sources
+      - name: Install MAUI Workloads
+        run: |
+          dotnet workload install maui --ignore-failed-sources
 
       - name: Restore Dependencies
-        run: dotnet restore TransactionMobile.Maui.sln
+        run: dotnet restore TransactionMobile.Maui.sln --source https://api.nuget.org/v3/index.json --source https://www.myget.org/F/transactionprocessing/api/v3/index.json --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
         run: msbuild TransactionMobile.Maui/TransactionMobile.Maui.csproj  -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true       
