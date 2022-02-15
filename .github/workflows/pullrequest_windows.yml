@@ -12,7 +12,7 @@ env:
 
 jobs:
   build-windows:
-    runs-on: windows-2022
+    runs-on: self-hosted
     name: Windows Build
     steps:
       - name: Checkout

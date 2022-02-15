@@ -13,7 +13,7 @@ env:
 jobs:
   # MAUI Android Build
   build-android:
-    runs-on: windows-2022
+    runs-on: self-hosted
     name: Android Build
     steps:
       - name: Checkout
