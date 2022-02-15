@@ -18,29 +18,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup .NET 6
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 6.0.200-preview.22055.15
-          include-prerelease: true
+      #- name: Setup .NET 6
+      #  uses: actions/setup-dotnet@v1
+      #  with:
+      #    dotnet-version: 6.0.200-preview.22055.15
+      #    include-prerelease: true
 
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.1
-        with:
-          vs-prerelease: true
+      #- name: Setup MSBuild
+      #  uses: microsoft/setup-msbuild@v1.1
+      #  with:
+      #    vs-prerelease: true
 
   #    - name: Install MAUI Workloads
   #      run: |
   #        dotnet workload install maui --ignore-failed-sources
 
-  #    - name: Restore Dependencies
-  #      run: dotnet restore TransactionMobile.Maui.sln
+      - name: Restore Dependencies
+        run: dotnet restore TransactionMobile.Maui.sln
 
-  #    - name: Build Code
-  #      run: msbuild TransactionMobile.Maui/TransactionMobile.Maui.csproj  -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true       
+      - name: Build Code
+        run: msbuild TransactionMobile.Maui/TransactionMobile.Maui.csproj  -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true       
 
-  #    - name: Run Unit Tests
-  #      run: dotnet test TransactionMobile.Maui.Tests/TransactionMobile.Maui.Tests.csproj
+      - name: Run Unit Tests
+        run: dotnet test TransactionMobile.Maui.Tests/TransactionMobile.Maui.Tests.csproj
 
   #    #- name: Upload Windows Artifact
   #    #  uses: actions/upload-artifact@v2.3.1
