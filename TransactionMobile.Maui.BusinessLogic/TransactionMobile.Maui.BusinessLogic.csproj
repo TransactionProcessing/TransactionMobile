@@ -4,23 +4,11 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<UseMaui>true</UseMaui>
   </PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="MediatR" Version="10.0.1" />
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Reference Include="Microsoft.Maui.Controls">
-	    <HintPath>C:\Program Files\dotnet\packs\Microsoft.Maui.Controls.Ref.android\6.0.200-preview.13.2636\ref\net6.0-android30.0\Microsoft.Maui.Controls.dll</HintPath>
-	  </Reference>
-	</ItemGroup>
-
-	<!--<ItemGroup>
-	  <Reference Include="Microsoft.Maui.Controls">
-	    <HintPath>C:\Program Files\dotnet\packs\Microsoft.Maui.Controls.Ref.win\6.0.200-preview.13.2636\ref\net6.0-windows10.0.19041\Microsoft.Maui.Controls.dll</HintPath>
-	  </Reference>
-	</ItemGroup>-->
-
 </Project>
