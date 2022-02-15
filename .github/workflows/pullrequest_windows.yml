@@ -37,7 +37,7 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln --source https://api.nuget.org/v3/index.json --source https://www.myget.org/F/transactionprocessing/api/v3/index.json --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
-        run: msbuild TransactionMobile.Maui/TransactionMobile.Maui.csproj  -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true       
+        run: "D:\Program Files\Microsoft Visual Studio\2022\Preview\Msbuild\Current\Bin\msbuild" TransactionMobile.Maui/TransactionMobile.Maui.csproj  -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true       
 
       - name: Run Unit Tests
         run: dotnet test TransactionMobile.Maui.Tests/TransactionMobile.Maui.Tests.csproj
