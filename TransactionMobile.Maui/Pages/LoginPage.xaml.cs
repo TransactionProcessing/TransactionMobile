@@ -1,6 +1,6 @@
-using TransactionMobile.Maui.ViewModels;
-
 namespace TransactionMobile.Maui.Pages;
+
+using BusinessLogic.ViewModels;
 
 public partial class LoginPage : ContentPage
 {

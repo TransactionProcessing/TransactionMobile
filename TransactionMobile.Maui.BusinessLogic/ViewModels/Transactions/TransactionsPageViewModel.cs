@@ -1,4 +1,4 @@
-﻿namespace TransactionMobile.Maui.ViewModels.Transactions
+﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions
 {
     using System.Windows.Input;
     using MvvmHelpers;
@@ -42,10 +42,12 @@
 
         private async Task AdminCommandExecute()
         {
+            await this.NavigationService.GoToHome();
         }
 
         private async Task BillPaymentCommandExecute()
         {
+            await this.NavigationService.GoToHome();
         }
 
         private async Task MobileTopupCommandExecute()
@@ -55,10 +57,12 @@
 
         private async Task MobileWalletCommandExecute()
         {
+            await this.NavigationService.GoToHome();
         }
 
         private async Task VoucherCommandExecute()
         {
+            await this.NavigationService.GoToHome();
         }
 
         #endregion

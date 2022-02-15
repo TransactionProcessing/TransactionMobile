@@ -1,6 +1,6 @@
 namespace TransactionMobile.Maui.Pages.Transactions;
 
-using ViewModels.Transactions;
+using BusinessLogic.ViewModels.Transactions;
 
 public partial class TransactionsPage : ContentPage
 {

@@ -1,11 +1,11 @@
-﻿namespace TransactionMobile.Maui.ViewModels.Transactions;
+﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions;
 
 using System.Windows.Input;
-using BusinessLogic.Models;
-using BusinessLogic.Requests;
 using MediatR;
+using Models;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
+using Requests;
 using UIServices;
 
 public class MobileTopupSelectOperatorPageViewModel : BaseViewModel
@@ -24,7 +24,7 @@ public class MobileTopupSelectOperatorPageViewModel : BaseViewModel
     {
         this.Mediator = mediator;
         this.NavigationService = navigationService;
-        this.OperatorSelectedCommand = new AsyncCommand<SelectedItemChangedEventArgs>(this.OperatorSelectedCommandExecute);
+        this.OperatorSelectedCommand = new AsyncCommand<ItemSelected<ContractOperatorModel>>(this.OperatorSelectedCommandExecute);
         this.Title = "Select an Operator";
     }
 
@@ -42,7 +42,7 @@ public class MobileTopupSelectOperatorPageViewModel : BaseViewModel
 
     public async Task Initialise(CancellationToken cancellationToken)
     {
-        GetContractProductsRequest request = GetContractProductsRequest.Create("", App.EstateId, App.MerchantId);
+        GetContractProductsRequest request = GetContractProductsRequest.Create("", Guid.Empty, Guid.Empty);
 
         List<ContractProductModel> products = await this.Mediator.Send(request, cancellationToken);
 
@@ -62,12 +62,17 @@ public class MobileTopupSelectOperatorPageViewModel : BaseViewModel
         this.Operators = operators;
     }
 
-    private async Task OperatorSelectedCommandExecute(SelectedItemChangedEventArgs e)
+    private async Task OperatorSelectedCommandExecute(ItemSelected<ContractOperatorModel> e)
     {
-        ContractOperatorModel operatorModel = e.SelectedItem as ContractOperatorModel;
-        await this.NavigationService.GoToMobileTopupSelectProductPage(operatorModel.OperatorIdentfier);
+        await this.NavigationService.GoToMobileTopupSelectProductPage(e.SelectedItem.OperatorIdentfier);
 
     }
 
     #endregion
+}
+
+public class ItemSelected<T>
+{
+    public T SelectedItem;
+    public Int32 SelectedItemIndex;
 }

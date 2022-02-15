@@ -1,11 +1,11 @@
-﻿namespace TransactionMobile.Maui.ViewModels
+﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels
 {
     using System.Windows.Input;
-    using BusinessLogic.Models;
-    using BusinessLogic.Requests;
     using MediatR;
+    using Models;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
+    using Requests;
     using UIServices;
 
     public class LoginPageViewModel : BaseViewModel
@@ -13,9 +13,7 @@
         private readonly INavigationService NavigationService;
 
         #region Constructors
-
-        //public String Username { get; set; }
-        //public String Password { get; set; }
+        
         public LoginPageViewModel(IMediator mediator, INavigationService navigationService)
         {
             this.NavigationService = navigationService;
@@ -53,17 +51,17 @@
             Boolean logonSuccessful = await this.Mediator.Send(logonTransactionRequest);
 
             // TODO: get these values off the logon response (maybe make response a tuple)
-            App.EstateId = Guid.Parse("56CEE156-6815-4562-A96E-9389C16FA79B");
-            App.MerchantId = Guid.Parse("E746EACB-4E73-4E78-B732-53B9C65E5BDA");
+            var estateId = Guid.Parse("56CEE156-6815-4562-A96E-9389C16FA79B");
+            var merchantId = Guid.Parse("E746EACB-4E73-4E78-B732-53B9C65E5BDA");
 
             // TODO: Get Contracts & Balance ??
-            GetContractProductsRequest getContractProductsRequest = GetContractProductsRequest.Create("", App.EstateId, App.MerchantId);
+            GetContractProductsRequest getContractProductsRequest = GetContractProductsRequest.Create("", estateId, merchantId);
 
             // TODO: Cache the result, but will add this to a timer call to keep up to date...
             List<ContractProductModel> products = await this.Mediator.Send(getContractProductsRequest);
 
             // TODO: Cache the result, but will add this to a timer call to keep up to date...
-            GetMerchantBalanceRequest getMerchantBalanceRequest = GetMerchantBalanceRequest.Create("", App.EstateId, App.MerchantId);
+            GetMerchantBalanceRequest getMerchantBalanceRequest = GetMerchantBalanceRequest.Create("", estateId, merchantId);
             var merchantBalance = await this.Mediator.Send(getMerchantBalanceRequest);
 
             // TODO: Cache the token as will be needed later

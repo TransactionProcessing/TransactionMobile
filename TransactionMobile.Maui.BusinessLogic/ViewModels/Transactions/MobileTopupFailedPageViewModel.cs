@@ -1,4 +1,4 @@
-﻿namespace TransactionMobile.Maui.ViewModels.Transactions;
+﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions;
 
 using System.Windows.Input;
 using MvvmHelpers;

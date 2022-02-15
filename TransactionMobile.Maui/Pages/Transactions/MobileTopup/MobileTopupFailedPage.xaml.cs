@@ -1,6 +1,6 @@
 namespace TransactionMobile.Maui;
 
-using ViewModels.Transactions;
+using BusinessLogic.ViewModels.Transactions;
 
 public partial class MobileTopupFailedPage : ContentPage
 {

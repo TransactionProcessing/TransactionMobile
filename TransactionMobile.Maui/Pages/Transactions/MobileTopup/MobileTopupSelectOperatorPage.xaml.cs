@@ -1,10 +1,7 @@
 namespace TransactionMobile.Maui;
 
-using System.Windows.Input;
 using BusinessLogic.Models;
-using Microsoft.Maui.Controls.Platform;
-using MvvmHelpers.Commands;
-using ViewModels.Transactions;
+using BusinessLogic.ViewModels.Transactions;
 
 public partial class MobileTopupSelectOperatorPage : ContentPage
 {
@@ -48,7 +45,10 @@ public partial class MobileTopupSelectOperatorPage : ContentPage
             //button.SetDynamicResource(VisualElement.StyleProperty, "MobileTopupButtonStyle");
             Binding commandParameter = new Binding()
                                        {
-                                           Source = new SelectedItemChangedEventArgs(modelOperator, rowCount)
+                                           Source = new ItemSelected<ContractOperatorModel>(){ 
+                                                                            SelectedItem = modelOperator,
+                                                                            SelectedItemIndex = rowCount
+                                                                        }
                                        };
 
             Binding command = new Binding
