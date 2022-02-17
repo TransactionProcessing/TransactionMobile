@@ -3,8 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TransactionMobile.Maui.Pages.Transactions.TransactionsPage"
              Shell.NavBarIsVisible="True"
-             xmlns:viewmodels="http://transactionmobile.maui.com/schemas/transactionsviewmodels"
-             x:DataType="viewmodels:TransactionsPageViewModel"
              Title="{Binding Title}"
              BackgroundColor="White">
     <StackLayout>
