@@ -9,6 +9,8 @@ env:
   DOTNET_NOLOGO: true                     # Disable the .NET logo
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
   DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
+  DOTNETVERSION:  6.0.200-preview.22055.15
+  MAUIROLLBACKLINK: https://aka.ms/dotnet/maui/preview.12.json
 
 jobs:
   # MAUI Android Build
@@ -20,26 +22,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup .NET 6
+      - name: Setup .NET Core SDK ${{env.DOTNETVERSION}}
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.200-preview.22055.15
-          include-prerelease: true
-          
-      - uses: actions/setup-java@v2
-        with:
-          distribution: 'microsoft'
-          java-version: '11'
+          dotnet-version: '${{env.DOTNETVERSION}}'
 
-      - name: Install MAUI Workloads
+      - name: Install .NET MAUI
+        shell: pwsh
         run: |
-          dotnet workload install android --ignore-failed-sources
-          dotnet workload install maui --ignore-failed-sources
+          & dotnet --version
+          & dotnet nuget locals all --clear
+          & dotnet workload install maui --from-rollback-file ${{env.MAUIROLLBACKLINK}} --source https://aka.ms/dotnet6/nuget/index.json --source https://api.nuget.org/v3/index.json
+          & dotnet workload install android ios maccatalyst tvos macos maui wasm-tools --from-rollback-file ${{env.MAUIROLLBACKLINK}} --source https://aka.ms/dotnet6/nuget/index.json --source https://api.nuget.org/v3/index.json
 
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln --source https://api.nuget.org/v3/index.json --source https://www.myget.org/F/transactionprocessing/api/v3/index.json --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
-      - name: Build Code
+      - name: Build Android
+        shell: pwsh
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-android --no-restore
 
       - name: Run Unit Tests
