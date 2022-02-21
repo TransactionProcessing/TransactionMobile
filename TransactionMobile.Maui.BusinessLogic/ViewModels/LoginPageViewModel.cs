@@ -55,7 +55,7 @@
             var merchantId = Guid.Parse("E746EACB-4E73-4E78-B732-53B9C65E5BDA");
 
             // TODO: Get Contracts & Balance ??
-            GetContractProductsRequest getContractProductsRequest = GetContractProductsRequest.Create("", estateId, merchantId);
+            GetContractProductsRequest getContractProductsRequest = GetContractProductsRequest.Create("", estateId, merchantId, null);
 
             // TODO: Cache the result, but will add this to a timer call to keep up to date...
             List<ContractProductModel> products = await this.Mediator.Send(getContractProductsRequest);

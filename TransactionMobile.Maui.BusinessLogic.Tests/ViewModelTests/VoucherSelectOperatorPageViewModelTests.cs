@@ -11,15 +11,15 @@ using UIServices;
 using ViewModels.Transactions;
 using Xunit;
 
-public class MobileTopupSelectOperatorPageViewModelTests
+public class VoucherSelectOperatorPageViewModelTests
 {
     [Fact]
-    public async Task MobileTopupSelectOperatorPageViewModel_Initialise_IsInitialised()
+    public async Task VoucherSelectOperatorPageViewModel_Initialise_IsInitialised()
     {
         Mock<IMediator> mediator = new Mock<IMediator>();
         mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.ContractProductList);
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        MobileTopupSelectOperatorPageViewModel viewModel = new MobileTopupSelectOperatorPageViewModel(mediator.Object, navigationService.Object);
+        VoucherSelectOperatorPageViewModel viewModel = new VoucherSelectOperatorPageViewModel(mediator.Object, navigationService.Object);
 
         await viewModel.Initialise(CancellationToken.None);
         mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
@@ -28,12 +28,12 @@ public class MobileTopupSelectOperatorPageViewModelTests
     }
 
     [Fact]
-    public async Task MobileTopupSelectOperatorPageViewModel_OperatorSelectedCommand_Execute_IsExecuted()
+    public async Task VoucherSelectOperatorPageViewModel_OperatorSelectedCommand_Execute_IsExecuted()
     {
         Mock<IMediator> mediator = new Mock<IMediator>();
         mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.ContractProductList);
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        MobileTopupSelectOperatorPageViewModel viewModel = new MobileTopupSelectOperatorPageViewModel(mediator.Object, navigationService.Object);
+        VoucherSelectOperatorPageViewModel viewModel = new VoucherSelectOperatorPageViewModel(mediator.Object, navigationService.Object);
 
         await viewModel.Initialise(CancellationToken.None);
 
@@ -47,6 +47,6 @@ public class MobileTopupSelectOperatorPageViewModelTests
 
         viewModel.OperatorSelectedCommand.Execute(selectedContractOperator);
 
-        navigationService.Verify(n => n.GoToMobileTopupSelectProductPage(TestData.OperatorIdentifier1), Times.Once);
+        navigationService.Verify(n => n.GoToVoucherSelectProductPage(TestData.OperatorIdentifier1), Times.Once);
     }
 }

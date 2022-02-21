@@ -1,0 +1,38 @@
+﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions
+{
+    using System.Windows.Input;
+    using MvvmHelpers;
+    using MvvmHelpers.Commands;
+    using UIServices;
+
+    public class VoucherIssueSuccessPageViewModel : BaseViewModel
+    {
+        private readonly INavigationService NavigationService;
+
+        #region Constructors
+
+        public VoucherIssueSuccessPageViewModel(INavigationService navigationService)
+        {
+            this.NavigationService = navigationService;
+            this.CompletedCommand = new AsyncCommand(this.CompletedCommandExecute);
+            this.Title = "Voucher Issue Successful";
+        }
+
+        #endregion
+
+        #region Properties
+
+        public ICommand CompletedCommand { get; }
+
+        #endregion
+
+        #region Methods
+
+        private async Task CompletedCommandExecute()
+        {
+            await this.NavigationService.PopToRoot();
+        }
+
+        #endregion
+    }
+}

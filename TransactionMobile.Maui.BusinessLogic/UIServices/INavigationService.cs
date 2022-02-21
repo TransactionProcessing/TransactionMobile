@@ -19,7 +19,21 @@ public interface INavigationService
 
     Task GoToMobileTopupSuccessPage();
 
+    Task GoToVoucherIssueSuccessPage();
+
+    Task GoToVoucherIssueFailedPage();
+
     Task PopToRoot();
+
+    Task GoToVoucherSelectOperatorPage();
+
+    Task GoToVoucherSelectProductPage(String operatorIdentifier);
+
+    Task GoToVoucherIssueVoucherPage(String operatorIdentifier,
+                                         Guid contractId,
+                                         Guid productId,
+                                         Decimal voucherAmount);
+
 
     #endregion
 }

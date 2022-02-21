@@ -13,6 +13,41 @@ public class DummyMerchantService : IMerchantService
                {
                    new ContractProductModel
                    {
+                       ContractId = Guid.Parse("21DA6AC5-70E6-478E-A5E9-74C9B27F5725"),
+                       IsFixedValue = true,
+                       OperatorId = Guid.Parse("2CA5F4C7-34EC-425B-BB53-7EEDF48D9967"),
+                       OperatorIdentfier = "Safaricom",
+                       OperatorName = "Safaricom",
+                       ProductDisplayText = "100 KES",
+                       ProductId = Guid.Parse("CBF55D95-306A-4E85-B367-24FA442998F6"),
+                       ProductType = ProductType.Voucher,
+                       Value = 100
+                   },
+                   new ContractProductModel
+                   {
+                       ContractId = Guid.Parse("21DA6AC5-70E6-478E-A5E9-74C9B27F5725"),
+                       IsFixedValue = true,
+                       OperatorId = Guid.Parse("2CA5F4C7-34EC-425B-BB53-7EEDF48D9967"),
+                       OperatorIdentfier = "Safaricom",
+                       OperatorName = "Safaricom",
+                       ProductDisplayText = "200 KES",
+                       ProductId = Guid.Parse("F5F9B63F-9F68-45E8-960B-CE0FC15ED672"),
+                       ProductType = ProductType.Voucher,
+                       Value = 200
+                   },
+                   new ContractProductModel
+                   {
+                       ContractId = Guid.Parse("21DA6AC5-70E6-478E-A5E9-74C9B27F5725"),
+                       IsFixedValue = false,
+                       OperatorId = Guid.Parse("2CA5F4C7-34EC-425B-BB53-7EEDF48D9967"),
+                       OperatorIdentfier = "Safaricom",
+                       OperatorName = "Safaricom",
+                       ProductDisplayText = "Custom",
+                       ProductId = Guid.Parse("268CBAF5-95E0-4D4C-9725-3BB2B76E4273"),
+                       ProductType = ProductType.Voucher
+                   },
+                   new ContractProductModel
+                   {
                        ContractId = Guid.Parse("D57DAC9B-4039-4120-B5A8-F7FDF1D3A3C2"),
                        IsFixedValue = true,
                        OperatorId = Guid.Parse("2CA5F4C7-34EC-425B-BB53-7EEDF48D9967"),
@@ -45,8 +80,7 @@ public class DummyMerchantService : IMerchantService
                        ProductDisplayText = "Custom",
                        ProductId = Guid.Parse("63821A48-D35E-451D-9E88-C8DCB548E7ED"),
                        ProductType = ProductType.MobileTopup
-                   }
-                   ,
+                   },
                    new ContractProductModel
                    {
                        ContractId = Guid.Parse("D57DAC9B-4039-4120-B5A8-F7FDF1D3A3C2"),

@@ -1,5 +1,7 @@
 ﻿namespace TransactionMobile.Maui.UIServices;
 
+using BusinessLogic.ViewModels.Transactions;
+
 public class ShellNavigationService : INavigationService
 {
     #region Methods
@@ -38,9 +40,38 @@ public class ShellNavigationService : INavigationService
         await Shell.Current.GoToAsync($"{nameof(MobileTopupSuccessPage)}");
     }
 
+    public async Task GoToVoucherIssueSuccessPage()
+    {
+        await Shell.Current.GoToAsync($"{nameof(VoucherIssueSuccessPage)}");
+    }
+
+    public async Task GoToVoucherIssueFailedPage()
+    {
+        await Shell.Current.GoToAsync($"{nameof(VoucherIssueFailedPage)}");
+    }
+
     public async Task PopToRoot()
     {
         await Shell.Current.Navigation.PopToRootAsync();
+    }
+
+    public async Task GoToVoucherSelectOperatorPage()
+    {
+        await Shell.Current.GoToAsync(nameof(VoucherSelectOperatorPage));
+    }
+
+    public async Task GoToVoucherSelectProductPage(String operatorIdentifier)
+    {
+        await Shell.Current.GoToAsync($"{nameof(VoucherSelectProductPage)}?OperatorIdentifier={operatorIdentifier}");
+    }
+
+    public async Task GoToVoucherIssueVoucherPage(String operatorIdentifier,
+                                                  Guid contractId,
+                                                  Guid productId,
+                                                  Decimal voucherAmount)
+    {
+        await
+            Shell.Current.GoToAsync($"{nameof(VoucherPerformIssuePage)}?OperatorIdentifier={operatorIdentifier}&ContractId={contractId}&ProductId={productId}&VoucherAmount={voucherAmount}");
     }
 
     #endregion

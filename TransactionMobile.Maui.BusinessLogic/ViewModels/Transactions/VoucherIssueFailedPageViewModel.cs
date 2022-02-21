@@ -5,17 +5,17 @@ using MvvmHelpers;
 using MvvmHelpers.Commands;
 using UIServices;
 
-public class MobileTopupFailedPageViewModel : BaseViewModel
+public class VoucherIssueFailedPageViewModel : BaseViewModel
 {
     private readonly INavigationService NavigationService;
 
     #region Constructors
 
-    public MobileTopupFailedPageViewModel(INavigationService navigationService)
+    public VoucherIssueFailedPageViewModel(INavigationService navigationService)
     {
         this.NavigationService = navigationService;
         this.CancelledCommand = new AsyncCommand(this.CancelledCommandExecute);
-        this.Title = "Mobile Topup Failed";
+        this.Title = "Voucher Issue Failed";
     }
 
     #endregion

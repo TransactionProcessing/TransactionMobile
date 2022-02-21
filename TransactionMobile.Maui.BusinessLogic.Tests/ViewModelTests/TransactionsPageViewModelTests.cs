@@ -54,6 +54,6 @@ public class TransactionsPageViewModelTests
         TransactionsPageViewModel viewModel = new TransactionsPageViewModel(navigationService.Object);
 
         viewModel.VoucherCommand.Execute(null);
-        navigationService.Verify(n => n.GoToHome(), Times.Once);
+        navigationService.Verify(n => n.GoToVoucherSelectOperatorPage(), Times.Once);
     }
 }

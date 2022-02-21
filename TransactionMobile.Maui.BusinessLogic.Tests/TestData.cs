@@ -16,14 +16,19 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
 
         public static String OperatorIdentifier1 = "Safaricom";
         public static String OperatorIdentifier2 = "Safaricom1";
+        public static String OperatorIdentifier3 = "Voucher";
+
         public static String OperatorName1 = "Safaricom";
         public static String OperatorName2 = "Safaricom1";
+        public static String OperatorName3 = "Voucher";
 
         public static Guid OperatorId1 = Guid.Parse("2CA5F4C7-34EC-425B-BB53-7EEDF48D9967");
         public static Guid OperatorId2 = Guid.Parse("1CA5F4C7-34EC-425B-BB53-7EEDF48D9968");
+        public static Guid OperatorId3 = Guid.Parse("17FA0431-4DCB-43CF-97B7-2CEDC74E4796");
 
         public static Guid OperatorId1ContractId = Guid.Parse("D57DAC9B-4039-4120-B5A8-F7FDF1D3A3C2");
         public static Guid OperatorId2ContractId = Guid.Parse("2471F981-DDA8-4B87-91F4-DD5DCB984FC1");
+        public static Guid OperatorId3ContractId = Guid.Parse("(0BCACE74-CBF1-4F2C-AC1C-733BF1F53133)");
 
         public static ContractProductModel Operator1Product_100KES = new ContractProductModel
                                                                      {
@@ -75,12 +80,26 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
                                                                          ProductType = ProductType.MobileTopup
                                                                      };
 
+        public static ContractProductModel Operator3Product_200KES = new ContractProductModel
+                                                                     {
+                                                                         ContractId = OperatorId3ContractId,
+                                                                         IsFixedValue = false,
+                                                                         OperatorId = TestData.OperatorId3,
+                                                                         OperatorIdentfier = OperatorIdentifier3,
+                                                                         OperatorName = OperatorName3,
+                                                                         ProductDisplayText = "100 KES",
+                                                                         ProductId = Guid.Parse("3270DC5F-1BB3-4ECF-BA06-AFB42B651483"),
+                                                                         ProductType = ProductType.Voucher,
+                                                                         Value = 200
+                                                                     };
+
         public static List<ContractProductModel> ContractProductList = new List<ContractProductModel>
                                                                        {
                                                                            Operator1Product_100KES,
                                                                            Operator1Product_200KES,
                                                                            Operator1Product_Custom,
-                                                                           Operator2Product_Custom
+                                                                           Operator2Product_Custom,
+                                                                           TestData.Operator3Product_200KES
                                                                        };
 
         public static ContractOperatorModel ContractOperatorModel = new ContractOperatorModel
@@ -103,6 +122,10 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
 
         public static String CustomerAccountNumber = "0123456";
         public static String CustomerEmailAddress = "1@2.com";
+
+        public static String RecipientMobileNumber = "0123456";
+
+        public static String RecipientEmailAddress = "1@2.com";
 
         public static Decimal MerchantBalance = 199.99m;
     }

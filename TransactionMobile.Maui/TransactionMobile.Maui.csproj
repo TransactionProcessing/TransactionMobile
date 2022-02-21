@@ -81,6 +81,21 @@
 	  <Compile Update="Pages\Transactions\TransactionsPage.xaml.cs">
 	    <DependentUpon>TransactionsPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Pages\Transactions\Voucher\VoucherIssueFailedPage.xaml.cs">
+	    <DependentUpon>VoucherIssueFailedPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\Transactions\Voucher\VoucherIssueSuccessPage.xaml.cs">
+	    <DependentUpon>VoucherIssueSuccessPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\Transactions\Voucher\VoucherPerformIssuePage.xaml.cs">
+	    <DependentUpon>VoucherPerformIssuePage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\Transactions\Voucher\VoucherSelectOperatorPage.xaml.cs">
+	    <DependentUpon>VoucherSelectOperatorPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\Transactions\Voucher\VoucherSelectProductPage.xaml.cs">
+	    <DependentUpon>VoucherSelectProductPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -119,6 +134,24 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Transactions\TransactionsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Transactions\Voucher\VoucherIssueFailedPage.xaml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Transactions\Voucher\VoucherIssueSuccessPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Transactions\Voucher\VoucherPerformIssuePage.xaml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Transactions\Voucher\VoucherSelectOperatorPage.xaml">
+	    <SubType>Designer</SubType>
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Transactions\Voucher\VoucherSelectProductPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

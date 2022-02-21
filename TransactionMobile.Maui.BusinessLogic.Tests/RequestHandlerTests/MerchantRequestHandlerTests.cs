@@ -24,7 +24,8 @@ public class MerchantRequestHandlerTests
 
         GetContractProductsRequest request = GetContractProductsRequest.Create(TestData.AccessToken,
                                                                                TestData.EstateId,
-                                                                               TestData.MerchantId);
+                                                                               TestData.MerchantId,
+                                                                               null);
 
         List<ContractProductModel> contractProductModels = await handler.Handle(request, CancellationToken.None);
 

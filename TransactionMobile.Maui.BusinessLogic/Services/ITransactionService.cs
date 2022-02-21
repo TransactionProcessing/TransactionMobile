@@ -12,7 +12,7 @@
 
         Task<Boolean> PerformReconciliation(CancellationToken cancellationToken);
 
-        Task<Boolean> PerformVoucherIssue(CancellationToken cancellationToken);
+        Task<Boolean> PerformVoucherIssue(PerformVoucherIssueRequestModel model, CancellationToken cancellationToken);
 
         #endregion
     }
@@ -39,8 +39,13 @@
             return true;
         }
 
-        public async Task<Boolean> PerformVoucherIssue(CancellationToken cancellationToken)
+        public async Task<Boolean> PerformVoucherIssue(PerformVoucherIssueRequestModel model, CancellationToken cancellationToken)
         {
+            if (model.VoucherAmount == 100)
+            {
+                return false;
+            }
+
             return true;
         }
     }

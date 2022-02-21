@@ -17,7 +17,8 @@ public class RequestTests
     {
         GetContractProductsRequest request = GetContractProductsRequest.Create(TestData.AccessToken,
                                                                                TestData.EstateId,
-                                                                               TestData.MerchantId);
+                                                                               TestData.MerchantId,
+                                                                               null);
 
         request.ShouldNotBeNull();
         request.AccessToken.ShouldBe(TestData.AccessToken);
@@ -88,6 +89,35 @@ public class RequestTests
         request.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier1);
         request.CustomerAccountNumber.ShouldBe(TestData.CustomerAccountNumber);
         request.TopupAmount.ShouldBe(TestData.Operator1Product_100KES.Value);
+        request.CustomerEmailAddress.ShouldBe(TestData.CustomerEmailAddress);
+    }
+
+    [Fact]
+    public void PerformVoucherIssueRequest_Create_IsCreated()
+    {
+        PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(TestData.TransactionDateTime,
+                                                                               TestData.TransactionNumber,
+                                                                               TestData.DeviceIdentifier,
+                                                                               TestData.ApplicationVersion,
+                                                                               TestData.OperatorId3ContractId,
+                                                                               TestData.Operator3Product_200KES.ProductId,
+                                                                               TestData.OperatorIdentifier3,
+                                                                               TestData.RecipientMobileNumber,
+                                                                               TestData.RecipientEmailAddress,
+                                                                               TestData.Operator3Product_200KES.Value,
+                                                                               TestData.CustomerEmailAddress);
+
+        request.ShouldNotBeNull();
+        request.TransactionDateTime.ShouldBe(TestData.TransactionDateTime);
+        request.TransactionNumber.ShouldBe(TestData.TransactionNumber);
+        request.DeviceIdentifier.ShouldBe(TestData.DeviceIdentifier);
+        request.ApplicationVersion.ShouldBe(TestData.ApplicationVersion);
+        request.ContractId.ShouldBe(TestData.OperatorId3ContractId);
+        request.ProductId.ShouldBe(TestData.Operator3Product_200KES.ProductId);
+        request.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier3);
+        request.RecipientMobileNumber.ShouldBe(TestData.RecipientMobileNumber);
+        request.RecipientEmailAddress.ShouldBe(TestData.RecipientEmailAddress);
+        request.VoucherAmount.ShouldBe(TestData.Operator3Product_200KES.Value);
         request.CustomerEmailAddress.ShouldBe(TestData.CustomerEmailAddress);
     }
 }

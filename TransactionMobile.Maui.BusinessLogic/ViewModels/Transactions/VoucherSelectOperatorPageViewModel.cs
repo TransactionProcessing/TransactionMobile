@@ -8,7 +8,7 @@ using MvvmHelpers.Commands;
 using Requests;
 using UIServices;
 
-public class MobileTopupSelectOperatorPageViewModel : BaseViewModel
+public class VoucherSelectOperatorPageViewModel : BaseViewModel
 {
     #region Fields
 
@@ -20,7 +20,7 @@ public class MobileTopupSelectOperatorPageViewModel : BaseViewModel
 
     #region Constructors
 
-    public MobileTopupSelectOperatorPageViewModel(IMediator mediator, INavigationService navigationService)
+    public VoucherSelectOperatorPageViewModel(IMediator mediator, INavigationService navigationService)
     {
         this.Mediator = mediator;
         this.NavigationService = navigationService;
@@ -42,7 +42,7 @@ public class MobileTopupSelectOperatorPageViewModel : BaseViewModel
 
     public async Task Initialise(CancellationToken cancellationToken)
     {
-        GetContractProductsRequest request = GetContractProductsRequest.Create("", Guid.Empty, Guid.Empty, ProductType.MobileTopup);
+        GetContractProductsRequest request = GetContractProductsRequest.Create("", Guid.Empty, Guid.Empty, ProductType.Voucher);
 
         List<ContractProductModel> products = await this.Mediator.Send(request, cancellationToken);
 
@@ -64,15 +64,8 @@ public class MobileTopupSelectOperatorPageViewModel : BaseViewModel
 
     private async Task OperatorSelectedCommandExecute(ItemSelected<ContractOperatorModel> e)
     {
-        await this.NavigationService.GoToMobileTopupSelectProductPage(e.SelectedItem.OperatorIdentfier);
-
+        await this.NavigationService.GoToVoucherSelectProductPage(e.SelectedItem.OperatorIdentfier);
     }
 
     #endregion
-}
-
-public class ItemSelected<T>
-{
-    public T SelectedItem;
-    public Int32 SelectedItemIndex;
 }
