@@ -165,7 +165,13 @@
 		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
+		<RuntimeIdentifier>maccatalyst-x64</RuntimeIdentifier>
+		<MtouchLink>SdkOnly</MtouchLink>
+	</PropertyGroup>
+
 	<PropertyGroup Condition="$(TargetFramework.Contains('-ios'))">
-		<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+		<RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
+		<MtouchLink>SdkOnly</MtouchLink>
 	</PropertyGroup>
 </Project>
