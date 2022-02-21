@@ -5,7 +5,9 @@ using Models;
 using Requests;
 using Services;
 
-public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupRequest, Boolean>, IRequestHandler<LogonTransactionRequest, Boolean>
+public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupRequest, Boolean>, 
+                                         IRequestHandler<LogonTransactionRequest, Boolean>,
+                                         IRequestHandler<PerformVoucherIssueRequest, Boolean>
 {
     #region Fields
 
@@ -65,4 +67,28 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
     }
 
     #endregion
+
+    public async Task<Boolean> Handle(PerformVoucherIssueRequest request,
+                                      CancellationToken cancellationToken)
+    {
+        // TODO: Factory
+        PerformVoucherIssueRequestModel model = new PerformVoucherIssueRequestModel
+        {
+                                                   ApplicationVersion = request.ApplicationVersion,
+                                                   ContractId = request.ContractId,
+                                                   RecipientEmailAddress = request.RecipientEmailAddress,
+                                                   RecipientMobileNumber = request.RecipientMobileNumber,
+                                                   CustomerEmailAddress = request.CustomerEmailAddress,
+                                                   DeviceIdentifier = request.DeviceIdentifier,
+                                                   OperatorIdentifier = request.OperatorIdentifier,
+                                                   ProductId = request.ProductId,
+                                                   VoucherAmount = request.VoucherAmount,
+                                                   TransactionDateTime = request.TransactionDateTime,
+                                                   TransactionNumber = request.TransactionNumber
+                                               };
+
+        Boolean result = await this.TransactionService.PerformVoucherIssue(model, cancellationToken);
+
+        return result;
+    }
 }

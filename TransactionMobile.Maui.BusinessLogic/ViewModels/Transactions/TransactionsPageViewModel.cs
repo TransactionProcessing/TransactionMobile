@@ -62,7 +62,7 @@
 
         private async Task VoucherCommandExecute()
         {
-            await this.NavigationService.GoToHome();
+            await this.NavigationService.GoToVoucherSelectOperatorPage();
         }
 
         #endregion

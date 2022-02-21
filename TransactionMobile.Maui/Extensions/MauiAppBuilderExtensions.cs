@@ -37,6 +37,7 @@
             builder.Services.AddSingleton<IRequestHandler<GetMerchantBalanceRequest, Decimal>, MerchantRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<PerformMobileTopupRequest, Boolean>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<LogonTransactionRequest, Boolean>, TransactionRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<PerformVoucherIssueRequest, Boolean>, TransactionRequestHandler>();
             builder.Services.AddSingleton<ServiceFactory>(ctx => { return t => ctx.GetService(t); });
 
             return builder;
@@ -46,11 +47,19 @@
         {
             builder.Services.AddTransient<LoginPageViewModel>();
             builder.Services.AddTransient<TransactionsPageViewModel>();
+            
             builder.Services.AddTransient<MobileTopupSelectOperatorPageViewModel>();
             builder.Services.AddTransient<MobileTopupSelectProductPageViewModel>();
             builder.Services.AddTransient<MobileTopupPerformTopupPageViewModel>();
             builder.Services.AddTransient<MobileTopupSuccessPageViewModel>();
             builder.Services.AddTransient<MobileTopupFailedPageViewModel>();
+
+            builder.Services.AddTransient<VoucherSelectOperatorPageViewModel>();
+            builder.Services.AddTransient<VoucherSelectProductPageViewModel>();
+            builder.Services.AddTransient<VoucherPerformIssuePageViewModel>();
+            builder.Services.AddTransient<VoucherIssueSuccessPageViewModel>();
+            builder.Services.AddTransient<VoucherIssueFailedPageViewModel>();
+
 
             return builder;
         }

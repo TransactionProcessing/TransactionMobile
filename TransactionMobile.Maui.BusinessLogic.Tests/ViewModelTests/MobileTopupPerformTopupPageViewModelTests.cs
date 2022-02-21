@@ -24,13 +24,13 @@ public class MobileTopupPerformTopupPageViewModelTests
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifer), TestData.OperatorIdentifier1},
+                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
                                            {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
                                        });
 
         viewModel.ContractId.ShouldBe(TestData.OperatorId1ContractId.ToString());
         viewModel.ProductId.ShouldBe(TestData.Operator1Product_100KES.ProductId.ToString());
-        viewModel.OperatorIdentifer.ShouldBe(TestData.OperatorIdentifier1);
+        viewModel.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier1);
         viewModel.TopupAmount.ShouldBe(TestData.Operator1Product_100KES.Value);
     }
 
@@ -50,7 +50,7 @@ public class MobileTopupPerformTopupPageViewModelTests
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifer), TestData.OperatorIdentifier1},
+                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
                                            {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
                                        });
         viewModel.CustomerEmailAddressEntryCompletedCommand.Execute(null);
@@ -73,7 +73,7 @@ public class MobileTopupPerformTopupPageViewModelTests
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifer), TestData.OperatorIdentifier1},
+                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
                                            {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
                                        });
         viewModel.CustomerMobileNumberEntryCompletedCommand.Execute(null);
@@ -96,7 +96,7 @@ public class MobileTopupPerformTopupPageViewModelTests
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifer), TestData.OperatorIdentifier1},
+                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
                                            {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
                                        });
         viewModel.TopupAmountEntryCompletedCommand.Execute(null);
@@ -114,7 +114,7 @@ public class MobileTopupPerformTopupPageViewModelTests
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifer), TestData.OperatorIdentifier1},
+                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
                                            {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
                                        });
         viewModel.PerformTopupCommand.Execute(null);
@@ -133,7 +133,7 @@ public class MobileTopupPerformTopupPageViewModelTests
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifer), TestData.OperatorIdentifier1},
+                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
                                            {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
                                        });
         viewModel.PerformTopupCommand.Execute(null);

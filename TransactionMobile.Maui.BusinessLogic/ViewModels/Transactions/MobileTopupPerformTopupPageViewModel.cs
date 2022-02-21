@@ -32,7 +32,7 @@ public class MobileTopupPerformTopupPageViewModel : BaseViewModel, IQueryAttribu
     {
         this.ContractId = HttpUtility.UrlDecode(query[nameof(ContractId)].ToString());
         this.ProductId = HttpUtility.UrlDecode(query[nameof(ProductId)].ToString());
-        this.OperatorIdentifer = HttpUtility.UrlDecode(query[nameof(OperatorIdentifer)].ToString());
+        this.OperatorIdentifier = HttpUtility.UrlDecode(query[nameof(OperatorIdentifier)].ToString());
         this.TopupAmount = Decimal.Parse(HttpUtility.UrlDecode(query[nameof(TopupAmount)].ToString()));
     }
 
@@ -75,7 +75,7 @@ public class MobileTopupPerformTopupPageViewModel : BaseViewModel, IQueryAttribu
 
     public Action OnTopupAmountEntryCompleted { get; set; }
 
-    public String OperatorIdentifer { get; set; }
+    public String OperatorIdentifier { get; set; }
 
     public ICommand PerformTopupCommand { get; }
 
@@ -112,8 +112,8 @@ public class MobileTopupPerformTopupPageViewModel : BaseViewModel, IQueryAttribu
                                                                              "",
                                                                              Guid.Parse(this.ContractId),
                                                                              Guid.Parse(this.ProductId),
-                                                                             this.OperatorIdentifer,
-                                                                             this.CustomerEmailAddress,
+                                                                             this.OperatorIdentifier,
+                                                                             this.CustomerMobileNumber,
                                                                              this.TopupAmount,
                                                                              this.CustomerEmailAddress);
 

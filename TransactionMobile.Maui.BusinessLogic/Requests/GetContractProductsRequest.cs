@@ -9,11 +9,13 @@ public class GetContractProductsRequest : IRequest<List<ContractProductModel>>
 
     private GetContractProductsRequest(String accessToken,
                                        Guid estateId,
-                                       Guid merchantId)
+                                       Guid merchantId,
+                                       ProductType? productType)
     {
         this.AccessToken = accessToken;
         this.EstateId = estateId;
         this.MerchantId = merchantId;
+        this.ProductType = productType;
     }
 
     #endregion
@@ -25,16 +27,17 @@ public class GetContractProductsRequest : IRequest<List<ContractProductModel>>
     public Guid EstateId { get; }
 
     public Guid MerchantId { get; }
-
+    public ProductType? ProductType { get; }
     #endregion
 
     #region Methods
 
     public static GetContractProductsRequest Create(String accessToken,
                                                     Guid estateId,
-                                                    Guid merchantId)
+                                                    Guid merchantId,
+                                                    ProductType? productType)
     {
-        return new GetContractProductsRequest(accessToken, estateId, merchantId);
+        return new GetContractProductsRequest(accessToken, estateId, merchantId,productType);
     }
 
     #endregion

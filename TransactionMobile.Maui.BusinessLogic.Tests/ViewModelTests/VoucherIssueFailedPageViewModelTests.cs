@@ -5,15 +5,15 @@ using UIServices;
 using ViewModels.Transactions;
 using Xunit;
 
-public class MobileTopupSuccessViewModelTests
+public class VoucherIssueFailedPageViewModelTests
 {
     [Fact]
-    public void MobileTopupSuccessPageViewModel_CompletedCommand_Execute_IsExecuted()
+    public void VoucherIssueFailedPageViewModel_CancelledCommand_Execute_IsExecuted()
     {
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        MobileTopupSuccessPageViewModel viewModel = new MobileTopupSuccessPageViewModel(navigationService.Object);
+        VoucherIssueFailedPageViewModel viewModel = new VoucherIssueFailedPageViewModel(navigationService.Object);
 
-        viewModel.CompletedCommand.Execute(null);
+        viewModel.CancelledCommand.Execute(null);
         navigationService.Verify(n => n.PopToRoot(), Times.Once);
     }
 }

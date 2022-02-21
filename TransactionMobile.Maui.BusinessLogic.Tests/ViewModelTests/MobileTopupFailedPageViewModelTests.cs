@@ -5,10 +5,10 @@ using UIServices;
 using ViewModels.Transactions;
 using Xunit;
 
-public class MobileTopupFailedViewModelTests
+public class MobileTopupFailedPageViewModelTests
 {
     [Fact]
-    public void MobileTopupFailedPageViewModel_CompletedCommand_Execute_IsExecuted()
+    public void MobileTopupFailedPageViewModel_CancelledCommand_Execute_IsExecuted()
     {
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         MobileTopupFailedPageViewModel viewModel = new MobileTopupFailedPageViewModel(navigationService.Object);

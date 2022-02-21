@@ -31,6 +31,32 @@ public class PerformMobileTopupRequest : IRequest<Boolean>
 
     #endregion
 
+    #region Properties
+
+    public String ApplicationVersion { get; }
+
+    public Guid ContractId { get; }
+
+    public String CustomerAccountNumber { get; }
+
+    public String CustomerEmailAddress { get; }
+
+    public String DeviceIdentifier { get; }
+
+    public String OperatorIdentifier { get; }
+
+    public Guid ProductId { get; }
+
+    public Decimal TopupAmount { get; }
+
+    public DateTime TransactionDateTime { get; }
+
+    public String TransactionNumber { get; }
+
+    #endregion
+
+    #region Methods
+
     public static PerformMobileTopupRequest Create(DateTime transactionDateTime,
                                                    String transactionNumber,
                                                    String deviceIdentifier,
@@ -53,28 +79,6 @@ public class PerformMobileTopupRequest : IRequest<Boolean>
                                              topupAmount,
                                              customerEmailAddress);
     }
-
-    #region Properties
-
-    public String ApplicationVersion { get; }
-
-    public Guid ContractId { get; }
-
-    public String CustomerAccountNumber { get; }
-
-    public String CustomerEmailAddress { get; }
-
-    public String DeviceIdentifier { get; }
-
-    public String OperatorIdentifier { get; }
-
-    public Guid ProductId { get; }
-
-    public Decimal TopupAmount { get; }
-
-    public DateTime TransactionDateTime { get; }
-
-    public String TransactionNumber { get; }
 
     #endregion
 }

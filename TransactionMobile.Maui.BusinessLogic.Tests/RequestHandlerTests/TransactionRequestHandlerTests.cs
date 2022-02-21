@@ -52,4 +52,28 @@ public class TransactionRequestHandlerTests
 
         response.ShouldBeTrue();
     }
+
+    [Fact]
+    public async Task TransactionRequestHandler_PerformVoucherIssueRequest_Handle_IsHandled()
+    {
+        Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
+        transactionService.Setup(t => t.PerformVoucherIssue(It.IsAny<PerformVoucherIssueRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
+        TransactionRequestHandler handler = new TransactionRequestHandler(transactionService.Object);
+
+        PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(TestData.TransactionDateTime,
+                                                                               TestData.TransactionNumber,
+                                                                               TestData.DeviceIdentifier,
+                                                                               TestData.ApplicationVersion,
+                                                                               TestData.OperatorId3ContractId,
+                                                                               TestData.Operator3Product_200KES.ProductId,
+                                                                               TestData.OperatorIdentifier3,
+                                                                               TestData.RecipientMobileNumber,
+                                                                               TestData.RecipientEmailAddress,
+                                                                               TestData.Operator3Product_200KES.Value,
+                                                                               TestData.CustomerEmailAddress);
+
+        Boolean response = await handler.Handle(request, CancellationToken.None);
+
+        response.ShouldBeTrue();
+    }
 }

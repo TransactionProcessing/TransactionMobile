@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TransactionMobile.Maui.VoucherPerformIssuePage"
+             xmlns:behaviors="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
+             Title="{Binding Title}"
+             BackgroundColor="White">
+    <StackLayout>
+        <Entry x:Name="RecipientMobileNumberEntry"
+               Placeholder="Recipient Mobile Number"
+               AutomationId="RecipientMobileNumberEntry"
+               Text="{Binding RecipientMobileNumber}"
+               Keyboard="Numeric">
+            <Entry.Behaviors>
+                <behaviors:EventToCommandBehavior             
+                    EventName="Completed"  
+                    Command="{Binding RecipientMobileNumberEntryCompletedCommand}" />
+            </Entry.Behaviors>
+        </Entry>
+
+        <Entry x:Name="RecipientEmailAddressEntry"
+               Placeholder="Recipient Email Address"
+               AutomationId="RecipientEmailAddressEntry"
+               Text="{Binding RecipientEmailAddress}"
+               Keyboard="Numeric">
+            <Entry.Behaviors>
+                <behaviors:EventToCommandBehavior             
+                    EventName="Completed"  
+                    Command="{Binding RecipientEmailAddressEntryCompletedCommand}" />
+            </Entry.Behaviors>
+        </Entry>
+
+        <Entry x:Name="VoucherAmountEntry"
+               Placeholder="100"
+               AutomationId="VoucherAmountEntry"
+               Text="{Binding VoucherAmount}"
+               Keyboard="Numeric">
+            <Entry.Behaviors>
+                <behaviors:EventToCommandBehavior             
+                    EventName="Completed"  
+                    Command="{Binding VoucherAmountEntryCompletedCommand}" />
+            </Entry.Behaviors>
+        </Entry>
+        
+        <Entry x:Name="CustomerEmailAddressEntry"
+               Placeholder="customeremail@email.com"
+               AutomationId="CustomerEmailAddressEntry"
+               Text="{Binding CustomerEmailAddress}">
+            <Entry.Behaviors>
+                <behaviors:EventToCommandBehavior             
+                    EventName="Completed"  
+                    Command="{Binding CustomerEmailAddressEntryCompletedCommand}" />
+            </Entry.Behaviors>
+        </Entry>
+
+        <Button x:Name="IssueVoucherButton" 
+                Text="Issue Voucher"
+                Command="{Binding IssueVoucherCommand}"
+                AutomationId="IssueVoucherButton"/>
+    </StackLayout>
+</ContentPage>
