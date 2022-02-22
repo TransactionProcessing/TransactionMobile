@@ -25,17 +25,17 @@ jobs:
           dotnet-version: 6.0.200-preview.22055.15
           include-prerelease: true
 
-      #- name: Setup MSBuild
-      #  uses: microsoft/setup-msbuild@v1.1
-      #  with:
-      #    vs-prerelease: true
-      #    msbuild-architecture: x64
-      #    vs-version: '[17.2]'
-      - run: dotnet tool update -g dotnet-vs
-      - run: echo "::set-env name=MSB::$(vs where preview --prop=InstallationPath)"
-      - run: vs install preview --quiet +Microsoft.VisualStudio.Component.ManagedDesktop.Core +Microsoft.NetCore.Component.DevelopmentTools
-        if: env.MSB == ''
-      - run: echo "::add-path::$(vs where preview --prop=InstallationPath)\MSBuild\Current\Bin"
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          vs-prerelease: true
+          msbuild-architecture: x64
+          
+      #- run: dotnet tool update -g dotnet-vs
+      #- run: echo "::set-env name=MSB::$(vs where preview --prop=InstallationPath)"
+      #- run: vs install preview --quiet +Microsoft.VisualStudio.Component.ManagedDesktop.Core +Microsoft.NetCore.Component.DevelopmentTools
+      #  if: env.MSB == ''
+      #- run: echo "::add-path::$(vs where preview --prop=InstallationPath)\MSBuild\Current\Bin"
 
       - name: Install MAUI Workloads
         run: |
