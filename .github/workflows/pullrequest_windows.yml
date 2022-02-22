@@ -29,6 +29,7 @@ jobs:
         with:
           vs-prerelease: true
           msbuild-architecture: x64
+          vs-version: '[17.2]'
 
       - name: Install MAUI Workloads
         run: |
