@@ -38,7 +38,7 @@ jobs:
       #- run: echo "::set-env name=MSB::$(vs where preview --prop=InstallationPath)"
       - run: vs install preview --quiet +Microsoft.VisualStudio.Component.ManagedDesktop.Core +Microsoft.NetCore.Component.DevelopmentTools
       #- run: echo "::add-path::$(vs where preview --prop=InstallationPath)\MSBuild\Current\Bin"
-      - run: echo "::set-env name=MSB::$(echo vswhere -prerelease -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe | select-object -first 1)"
+      - run: echo "::set-env name=MSB::$(vswhere -prerelease -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe | select-object -first 1)"
       - run: env
 
 
