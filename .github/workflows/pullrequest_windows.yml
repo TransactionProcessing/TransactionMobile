@@ -52,7 +52,7 @@ jobs:
       #  run: env
         
       - name: Build Code
-        run: C:\\Program Files\\Microsoft Visual Studio\\2022\\Preview\\MSBuild\\Current\\Bin\\MSBuild.exe TransactionMobile.Maui/TransactionMobile.Maui.csproj -r -p:Configuration=Release -p:RestorePackages=true -p:TargetFramework=net6.0-windows10.0.19041 /p:RestoreSources=https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+        run: "C:\\Program Files\\Microsoft Visual Studio\\2022\\Preview\\MSBuild\\Current\\Bin\\MSBuild.exe TransactionMobile.Maui/TransactionMobile.Maui.csproj -r -p:Configuration=Release -p:RestorePackages=true -p:TargetFramework=net6.0-windows10.0.19041 /p:RestoreSources=https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json"
       #  #run: msbuild TransactionMobile.Maui.sln  -restore -p:Configuration=Release  -p:TargetFramework=net6.0-windows10.0.19041  /p:RestoreSources=https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json 
 
       #- name: Run Unit Tests
