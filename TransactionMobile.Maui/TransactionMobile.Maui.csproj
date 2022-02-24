@@ -14,7 +14,8 @@
 		<ApplicationTitle>Transaction Processing POS</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.transactionprocessing.pos</ApplicationId>
+		<!--<ApplicationId>com.transactionprocessing.pos</ApplicationId>-->
+		<ApplicationId>com.taranissoftware.MauiBeach</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationVersion>1</ApplicationVersion>
