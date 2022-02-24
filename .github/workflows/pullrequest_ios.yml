@@ -25,15 +25,15 @@ jobs:
           dotnet-version: 6.0.200-preview.22055.15
           include-prerelease: true
 
-      #- run: dotnet tool update -g dotnet-vs
+      - run: dotnet tool update -g dotnet-vs
       #- run: sudo vs install preview --quiet +Microsoft.VisualStudio.Component.ManagedDesktop.Core +Microsoft.NetCore.Component.DevelopmentTools
       #- run: echo "::set-env name=MSB::$(vswhere -prerelease -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe | select-object -first 1)" 
       #- run: env
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.1
-        with:
-          vs-prerelease: true
-          msbuild-architecture: x64
+      #- name: Setup MSBuild
+      #  uses: microsoft/setup-msbuild@v1.1
+      #  with:
+      #    vs-prerelease: true
+      #    msbuild-architecture: x64
 
       - name: Install MAUI Workloads
         run: |
