@@ -11,7 +11,8 @@
 		<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
 
 		<!-- Display name -->
-		<ApplicationTitle>Transaction Processing POS</ApplicationTitle>
+		<!--<ApplicationTitle>Transaction Processing POS</ApplicationTitle>-->
+		<ApplicationTitle>MAUI Beach</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<!--<ApplicationId>com.transactionprocessing.pos</ApplicationId>-->
