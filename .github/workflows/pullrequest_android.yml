@@ -8,32 +8,32 @@ on:
 env:
   DOTNET_NOLOGO: true                     # Disable the .NET logo
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
-  DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
+  DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry  
 
 jobs:
   # MAUI Android Build
   build-android:
-    runs-on: self-hosted
+    runs-on: windows-2022
     name: Android Build
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      #- name: Setup .NET 6
-      #  uses: actions/setup-dotnet@v1
-      #  with:
-      #    dotnet-version: 6.0.200-preview.22055.15
-      #    include-prerelease: true
+      - name: Setup .NET 6
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.200-preview.22055.15
+          include-prerelease: true
           
-      #- uses: actions/setup-java@v2
-      #  with:
-      #    distribution: 'microsoft'
-      #    java-version: '11'
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'microsoft'
+          java-version: '11'
 
-      #- name: Install MAUI Workloads
-      #  run: |
-      #    dotnet workload install android --ignore-failed-sources
-      #    dotnet workload install maui --ignore-failed-sources
+      - name: Install MAUI Workloads
+        run: |
+          dotnet workload install android --ignore-failed-sources
+          dotnet workload install maui --ignore-failed-sources
 
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln --source https://api.nuget.org/v3/index.json --source https://www.myget.org/F/transactionprocessing/api/v3/index.json --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json

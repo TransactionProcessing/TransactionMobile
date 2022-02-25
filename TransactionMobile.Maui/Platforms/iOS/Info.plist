@@ -28,12 +28,6 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
-	<key>CFBundleVersion</key>
-	<string>1.0.5</string>
-	<key>CFBundleIdentifier</key>
-	<string>com.transactionprocessing.pos</string>
-	<key>CFBundleDisplayName</key>
-	<string>Transaction Processing POS</string>
 	<key>CFBundleName</key>
 	<string>Transaction Processing POS</string>
 </dict>
