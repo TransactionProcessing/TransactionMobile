@@ -52,8 +52,8 @@ jobs:
       #- name: Build Code
       #  run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile.Maui/TransactionMobile.Maui.csproj
 
-      #- name: Run Unit Tests
-      #  run: dotnet test TransactionMobile.Maui.Tests/TransactionMobile.Maui.Tests.csproj
+      - name: Run Unit Tests
+        run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
 
 #      #- name: Upload iOS Artifact
 #      #  uses: actions/upload-artifact@v2.3.1
