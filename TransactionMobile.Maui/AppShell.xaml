@@ -6,6 +6,7 @@
        xmlns:home="clr-namespace:TransactionMobile.Maui.Pages.AppHome"
        xmlns:transactions="clr-namespace:TransactionMobile.Maui.Pages.Transactions"
        xmlns:reports="clr-namespace:TransactionMobile.Maui.Pages.Reports"
+       xmlns:support="clr-namespace:TransactionMobile.Maui.Pages.Support"
        xmlns:myaccount="clr-namespace:TransactionMobile.Maui.Pages.MyAccount">
     <Shell.Resources>
         <!--
@@ -30,7 +31,7 @@
         <ShellContent ContentTemplate="{DataTemplate myaccount:MyAccountPage}" Title="My Account"
                       Route="myaccount" />
 
-        <!--<ShellContent ContentTemplate="{DataTemplate local:LoginPage}"
+        <!--<ShellContent ContentTemplate="{DataTemplate support:SupportPage}" Title="Support"
                       Route="support" />-->
     </TabBar>
 </Shell>
