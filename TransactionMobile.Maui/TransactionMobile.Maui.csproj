@@ -12,9 +12,11 @@
 
 		<!-- Display name -->
 		<ApplicationTitle>Transaction Processing POS</ApplicationTitle>
+		<!--<ApplicationTitle>MAUI Beach</ApplicationTitle>-->
 
 		<!-- App Identifier -->
 		<ApplicationId>com.transactionprocessing.pos</ApplicationId>
+		<!--<ApplicationId>com.taranissoftware.MauiBeach</ApplicationId>-->
 
 		<!-- Versions -->
 		<ApplicationVersion>1</ApplicationVersion>
@@ -171,7 +173,7 @@
 		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="$(TargetFramework.Contains('-ios'))">
+	<!--<PropertyGroup Condition="$(TargetFramework.Contains('-ios'))">
 		<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
-	</PropertyGroup>
+	</PropertyGroup>-->
 </Project>
