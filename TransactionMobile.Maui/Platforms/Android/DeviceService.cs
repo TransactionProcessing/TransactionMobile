@@ -11,9 +11,9 @@ namespace TransactionMobile.Maui.Platforms.Services
     using Android.Provider;
     using Android.Util;
 
-    public partial class DeviceInformationService
+    public static partial class DeviceInformationService
     {
-        public partial String Identifier()
+        public static partial String Identifier()
         {
             String id = Build.Serial;
             //if (string.IsNullOrWhiteSpace(id) || id == Build.Unknown || id == "0")
@@ -32,9 +32,9 @@ namespace TransactionMobile.Maui.Platforms.Services
 
             return id;
         }
-        public partial String Model() => Build.Model;
+        public static partial String Model() => Build.Model;
         
-        public partial String Platform()
+        public static partial String Platform()
         {
             return $"Android {Build.VERSION.Release} (API {AndroidSDK} - {AndroidCodename()})";
         }

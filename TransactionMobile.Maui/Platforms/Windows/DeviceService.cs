@@ -8,11 +8,11 @@ using Windows.System.Profile;
 
 namespace TransactionMobile.Maui.Platforms.Services
 {
-    public partial class DeviceInformationService
+    public static partial class DeviceInformationService
     {
-        public partial String Model() => new EasClientDeviceInformation().SystemProductName;
+        public static partial String Model() => new EasClientDeviceInformation().SystemProductName;
         
-        public partial String Platform() => $"UWP {GetVersionString()}";
+        public static partial String Platform() => $"UWP {GetVersionString()}";
         
         private static string GetVersionString()
         {
@@ -31,7 +31,7 @@ namespace TransactionMobile.Maui.Platforms.Services
         }
         
 
-        public partial String DeviceIdentifier()
+        public static partial String Identifier()
         {
             var deviceInformation = new EasClientDeviceInformation();
             string Id = deviceInformation.Id.ToString();

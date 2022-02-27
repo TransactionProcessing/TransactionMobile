@@ -10,7 +10,7 @@ namespace TransactionMobile.Maui.Platforms.Services
     using Foundation;
     using UIKit;
 
-    public partial class DeviceInformationService
+    public static partial class DeviceInformationService
     {
         // based on code from https://github.com/dannycabrera/Get-iOS-Model
 
@@ -23,7 +23,7 @@ namespace TransactionMobile.Maui.Platforms.Services
                                                IntPtr newp,
                                                uint newlen);
 
-        public partial String Model()
+        public static partial String Model()
         {
             string version = FindVersion();
             if (version == "i386" || version == "x86_64")
@@ -33,7 +33,7 @@ namespace TransactionMobile.Maui.Platforms.Services
             return GetModel(version);
         }
 
-        public partial String Platform() => $"{DeviceInfo.Platform} {UIDevice.CurrentDevice.SystemVersion}";
+        public static partial String Platform() => $"{DeviceInfo.Platform} {UIDevice.CurrentDevice.SystemVersion}";
 
         private static string FindVersion()
         {
@@ -73,12 +73,12 @@ namespace TransactionMobile.Maui.Platforms.Services
             return "Unknown";
         }
         
-        public partial String DeviceIdentifier()
+        public static partial String Identifier()
         {
             return UIDevice.CurrentDevice.IdentifierForVendor.AsString().Replace("-", "");
         }
 
-        private static string GetModel(string version)
+        private static static string GetModel(string version)
         {
             if (version.StartsWith("iPhone"))
             {
