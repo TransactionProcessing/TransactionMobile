@@ -5,6 +5,7 @@
     using BusinessLogic.Requests;
     using BusinessLogic.Services;
     using BusinessLogic.ViewModels;
+    using BusinessLogic.ViewModels.Support;
     using BusinessLogic.ViewModels.Transactions;
     using MediatR;
     using UIServices;
@@ -59,6 +60,8 @@
             builder.Services.AddTransient<VoucherPerformIssuePageViewModel>();
             builder.Services.AddTransient<VoucherIssueSuccessPageViewModel>();
             builder.Services.AddTransient<VoucherIssueFailedPageViewModel>();
+
+            builder.Services.AddTransient<SupportPageViewModel>();
 
 
             return builder;
