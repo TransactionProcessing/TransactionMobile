@@ -78,7 +78,7 @@ namespace TransactionMobile.Maui.Platforms.Services
             return UIDevice.CurrentDevice.IdentifierForVendor.AsString().Replace("-", "");
         }
 
-        private static static string GetModel(string version)
+        private static string GetModel(string version)
         {
             if (version.StartsWith("iPhone"))
             {
