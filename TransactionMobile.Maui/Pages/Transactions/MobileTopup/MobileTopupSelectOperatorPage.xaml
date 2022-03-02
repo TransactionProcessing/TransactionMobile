@@ -3,9 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TransactionMobile.Maui.MobileTopupSelectOperatorPage"
              Title="{Binding Title}"
+             Shell.NavBarIsVisible="False"
              BackgroundColor="White">
-    <StackLayout>
-        <Grid x:Name="OperatorGrid" HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">
-        </Grid>
-    </StackLayout>
+    <VerticalStackLayout x:Name="MainLayout">
+        <Label Text="{Binding Title}" FontSize="24" HorizontalOptions="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+        <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
+           CornerRadius="20" Opacity="0.9" BackgroundColor="#E5E9F0">
+            <VerticalStackLayout x:Name="OperatorList" Spacing="10">
+            </VerticalStackLayout>
+        </Frame>
+    </VerticalStackLayout>
 </ContentPage>

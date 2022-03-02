@@ -22,17 +22,8 @@ public partial class MobileTopupSelectProductPage : ContentPage
 
     private void LoadProducts(MobileTopupSelectProductPageViewModel viewModel)
     {
-        RowDefinitionCollection rowDefinitionCollection = new RowDefinitionCollection();
-        for (Int32 i = 0; i < viewModel.Products.Count; i++)
-        {
-            rowDefinitionCollection.Add(new RowDefinition
-                                        {
-                                            Height = 60
-                                        });
-        }
-
-        this.ProductsGrid.RowDefinitions = rowDefinitionCollection;
-
+        this.ProductsList.Clear();
+        
         Int32 rowCount = 0;
         foreach (ContractProductModel modelProduct in viewModel.Products)
         {
@@ -42,7 +33,7 @@ public partial class MobileTopupSelectProductPage : ContentPage
                                   HorizontalOptions = LayoutOptions.FillAndExpand,
                                   AutomationId = modelProduct.ProductDisplayText,
             };
-            //button.SetDynamicResource(VisualElement.StyleProperty, "MobileTopupButtonStyle");
+            button.SetDynamicResource(VisualElement.StyleProperty, "MobileTopupButtonStyle");
 
             Binding commandParameter = new Binding()
                                        {
@@ -61,7 +52,7 @@ public partial class MobileTopupSelectProductPage : ContentPage
             button.SetBinding(Button.CommandProperty, command);
             button.SetBinding(Button.CommandParameterProperty, commandParameter);
 
-            this.ProductsGrid.Add(button, 0, rowCount);
+            this.ProductsList.Add(button);
 
             rowCount++;
         }

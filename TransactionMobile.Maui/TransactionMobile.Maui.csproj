@@ -101,6 +101,9 @@
 	  <Compile Update="Pages\Transactions\Voucher\VoucherSelectProductPage.xaml.cs">
 	    <DependentUpon>VoucherSelectProductPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Resources\Styles\LightTheme.xaml.cs">
+	    <DependentUpon>LightTheme.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -160,6 +163,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Transactions\Voucher\VoucherSelectProductPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Resources\Styles\LightTheme.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
