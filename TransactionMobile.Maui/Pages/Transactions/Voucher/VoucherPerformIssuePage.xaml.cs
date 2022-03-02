@@ -13,7 +13,7 @@ public partial class VoucherPerformIssuePage : ContentPage
         BindingContext = vm;
         vm.OnRecipientMobileNumberEntryCompleted = () =>
                                                   {
-                                                      if (this.VoucherAmountEntry.IsEnabled)
+                                                      if (this.VoucherAmountEntry.IsReadOnly == false)
                                                       {
                                                           this.VoucherAmountEntry.Focus();
                                                       }
@@ -48,7 +48,7 @@ public partial class VoucherPerformIssuePage : ContentPage
         base.OnAppearing();
         if (viewModel.VoucherAmount > 0)
         {
-            this.VoucherAmountEntry.IsEnabled = false;
+            this.VoucherAmountEntry.IsReadOnly = true;
         }
     }
 

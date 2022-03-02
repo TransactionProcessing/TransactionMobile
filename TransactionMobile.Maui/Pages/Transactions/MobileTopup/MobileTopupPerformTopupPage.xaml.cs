@@ -13,7 +13,7 @@ public partial class MobileTopupPerformTopupPage : ContentPage
         BindingContext = vm;
         vm.OnCustomerMobileNumberEntryCompleted = () =>
                                                   {
-                                                      if (this.TopupAmountEntry.IsReadOnly)
+                                                      if (this.TopupAmountEntry.IsReadOnly == false)
                                                       {
                                                           this.TopupAmountEntry.Focus();
                                                       }
