@@ -2,25 +2,22 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TransactionMobile.Maui.Pages.Transactions.TransactionsPage"
-             Shell.NavBarIsVisible="True"
              Title="{Binding Title}"
+             Shell.NavBarIsVisible="False"
              BackgroundColor="White">
-    <StackLayout>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"></RowDefinition>
-                <RowDefinition Height="50"></RowDefinition>
-                <RowDefinition Height="50"></RowDefinition>
-                <RowDefinition Height="50"></RowDefinition>
-                <RowDefinition Height="50"></RowDefinition>
-            </Grid.RowDefinitions>
-
-
-            <Button AutomationId="MobileTopupButton" Command="{Binding MobileTopupCommand}" x:Name="MobileTopupButton" Text="Mobile Topup" Grid.Row="0" Grid.Column="0" Style="{DynamicResource MobileTopupButtonStyle}"/>
-            <Button AutomationId="MobileWalletButton" Command="{Binding MobileWalletCommand}" x:Name="MobileWalletButton" Text="Mobile Wallet" Grid.Row="1" Grid.Column="0" Style="{DynamicResource MobileWalletButtonStyle}"/>
-            <Button AutomationId="BillPaymentButton" Command="{Binding BillPaymentCommand}" x:Name="BillPaymentButton" Text="Bill Payment" Grid.Row="2" Grid.Column="0" Style="{DynamicResource BillPaymentButtonStyle}"/>
-            <Button AutomationId="VoucherButton" Command="{Binding VoucherCommand}" x:Name="VoucherButton" Text="Voucher" Grid.Row="3" Grid.Column="0" Style="{DynamicResource VoucherButtonStyle}"/>
-            <Button AutomationId="AdminButton" Command="{Binding AdminCommand}" x:Name="AdminButton" Text="Admin" Grid.Row="4" Grid.Column="0" Style="{DynamicResource AdminButtonStyle}"/>
-        </Grid>
-    </StackLayout>
+    <!-- This might be better as a flex layout if we had images-->
+    <VerticalStackLayout>
+    <Label Text="{Binding Title}" FontSize="24" HorizontalOptions="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+    <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
+           CornerRadius="20" Opacity="0.9" BackgroundColor="#E5E9F0">
+            <VerticalStackLayout Spacing="10">
+            
+                <Button AutomationId="MobileTopupButton" Command="{Binding MobileTopupCommand}" x:Name="MobileTopupButton" Text="Mobile Topup" Style="{DynamicResource MobileTopupButtonStyle}"/>
+                <Button AutomationId="MobileWalletButton" Command="{Binding MobileWalletCommand}" x:Name="MobileWalletButton" Text="Mobile Wallet" Style="{DynamicResource MobileWalletButtonStyle}"/>
+                <Button AutomationId="BillPaymentButton" Command="{Binding BillPaymentCommand}" x:Name="BillPaymentButton" Text="Bill Payment" Style="{DynamicResource BillPaymentButtonStyle}"/>
+                <Button AutomationId="VoucherButton" Command="{Binding VoucherCommand}" x:Name="VoucherButton" Text="Voucher" Style="{DynamicResource VoucherButtonStyle}"/>
+                <Button AutomationId="AdminButton" Command="{Binding AdminCommand}" x:Name="AdminButton" Text="Admin" Style="{DynamicResource AdminButtonStyle}"/>
+           </VerticalStackLayout>
+    </Frame>
+    </VerticalStackLayout>
 </ContentPage>

@@ -1,29 +1,24 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TransactionMobile.Maui.MobileTopupSuccessPage"
-             Title="{Binding Title}"
-             BackgroundColor="White">
-    <StackLayout>
-        <Label
-            Margin="0,40,0,0"
-            Style="{StaticResource LabelStyle}"
-            HorizontalTextAlignment="Center"
-            AutomationId="MobileTopupSuccessful"
-            Text="MOBILE TOPUP SUCCESSFUL" />
+             x:Class="TransactionMobile.Maui.MobileTopupSuccessPage" Title="{Binding Title}"
+             Shell.NavBarIsVisible="False" BackgroundColor="White">
+    <VerticalStackLayout x:Name="MainLayout">
+        <Label Text="{Binding Title}" FontSize="24" HorizontalOptions="Center" VerticalOptions="End"
+               FontAttributes="Bold" Padding="20,0,0,20"/>
+        <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" CornerRadius="20"
+               Opacity="0.9" BackgroundColor="#E5E9F0">
+            <VerticalStackLayout Spacing="10">
 
-        <!--  Payment description label  -->
-        <Label
-            Margin="17,8"
-            Text="Thank you for your topup. An automated payment receipt will be sent to your email entered." />
+                <Image Source="Resources/PaymentSuccess.svg" VerticalOptions="Start" Aspect="AspectFit"/>
 
-        <Button
-            x:Name="CompleteButton"
-            Margin="0,16"
-            MinimumWidthRequest="250"
-            WidthRequest="250"
-            Text="Complete"
-            Command="{Binding CompletedCommand}"
-            AutomationId="CompleteButton"/>
-    </StackLayout>
+                <!--  Payment description label  -->
+                <Label Margin="17,8"
+                       Text="Thank you for your topup. An automated payment receipt will be sent to your email entered."/>
+
+                <Button x:Name="CompleteButton" Margin="0,16" Text="Complete" Command="{Binding CompletedCommand}"
+                        Style="{DynamicResource MobileTopupButtonStyle}" AutomationId="CompleteButton"/>
+            </VerticalStackLayout>
+        </Frame>
+    </VerticalStackLayout>
 </ContentPage>
