@@ -37,9 +37,11 @@
         private async Task LoginCommandExecute()
         {
             // TODO: this method needs refactored
+            GetConfigurationRequest getConfigurationRequest = GetConfigurationRequest.Create("");
+            Configuration configuration = await this.Mediator.Send(getConfigurationRequest);
+            // TODO: Cache the config object somewhere
 
             LoginRequest loginRequest = LoginRequest.Create("", "");
-
             String token = await this.Mediator.Send(loginRequest);
 
             //if (token == null)

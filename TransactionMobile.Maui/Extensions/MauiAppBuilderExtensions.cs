@@ -4,6 +4,7 @@
     using BusinessLogic.RequestHandlers;
     using BusinessLogic.Requests;
     using BusinessLogic.Services;
+    using BusinessLogic.Services.DummyServices;
     using BusinessLogic.ViewModels;
     using BusinessLogic.ViewModels.Support;
     using BusinessLogic.ViewModels.Transactions;
@@ -19,6 +20,7 @@
             builder.Services.AddSingleton<IAuthenticationService, DummyAuthenticationService>();
             builder.Services.AddSingleton<IMerchantService, DummyMerchantService>();
             builder.Services.AddSingleton<ITransactionService, DummyTransactionService>();
+            builder.Services.AddSingleton<IConfigurationService, DummyConfigurationService>();
 
             return builder;
         }
@@ -33,12 +35,16 @@
         public static MauiAppBuilder ConfigureRequestHandlers(this MauiAppBuilder builder)
         {
             builder.Services.AddSingleton<IMediator, Mediator>();
+            builder.Services.AddSingleton<IRequestHandler<GetConfigurationRequest, Configuration>, LoginRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<LoginRequest, String>, LoginRequestHandler>();
+
             builder.Services.AddSingleton<IRequestHandler<GetContractProductsRequest, List<ContractProductModel>>, MerchantRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<GetMerchantBalanceRequest, Decimal>, MerchantRequestHandler>();
+            
             builder.Services.AddSingleton<IRequestHandler<PerformMobileTopupRequest, Boolean>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<LogonTransactionRequest, Boolean>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<PerformVoucherIssueRequest, Boolean>, TransactionRequestHandler>();
+            
             builder.Services.AddSingleton<ServiceFactory>(ctx => { return t => ctx.GetService(t); });
 
             return builder;

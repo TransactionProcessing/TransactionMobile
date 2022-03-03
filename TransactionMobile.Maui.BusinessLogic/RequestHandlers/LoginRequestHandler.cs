@@ -1,15 +1,21 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.RequestHandlers
 {
     using MediatR;
+    using Models;
     using Requests;
     using Services;
 
-    public class LoginRequestHandler : IRequestHandler<LoginRequest, String>
+    public class LoginRequestHandler : IRequestHandler<LoginRequest, String>,
+                                       IRequestHandler<GetConfigurationRequest, Configuration>
     {
+        private readonly IConfigurationService ConfigurationService;
+
         #region Constructors
-        public LoginRequestHandler(IAuthenticationService authenticationService)
+        public LoginRequestHandler(IAuthenticationService authenticationService,
+                                   IConfigurationService configurationService)
         {
-            
+            this.ConfigurationService = configurationService;
+
             this.AuthenticationService = authenticationService;
         }
 
@@ -30,9 +36,13 @@
 
             return token;
         }
+        
+        public async Task<Configuration> Handle(GetConfigurationRequest request,
+                                                CancellationToken cancellationToken)
+        {
+            return await this.ConfigurationService.GetConfiguration(request.DeviceIdentifier, cancellationToken);
+        }
 
         #endregion
-
-        
     }
 }
