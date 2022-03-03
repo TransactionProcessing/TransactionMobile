@@ -1,4 +1,4 @@
-﻿namespace TransactionMobile.Maui.BusinessLogic.Services;
+﻿namespace TransactionMobile.Maui.BusinessLogic.Services.DummyServices;
 
 public class DummyAuthenticationService : IAuthenticationService
 {
