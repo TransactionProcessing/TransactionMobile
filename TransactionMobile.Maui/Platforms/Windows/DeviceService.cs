@@ -35,6 +35,7 @@ namespace TransactionMobile.Maui.Platforms.Services
         {
             var deviceInformation = new EasClientDeviceInformation();
             string Id = deviceInformation.Id.ToString();
+            return Id;
         }
     }
 }

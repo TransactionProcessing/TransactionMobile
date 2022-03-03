@@ -22,17 +22,8 @@ public partial class VoucherSelectOperatorPage : ContentPage
 
     private void LoadOperators(VoucherSelectOperatorPageViewModel viewModel)
     {
-        RowDefinitionCollection rowDefinitionCollection = new RowDefinitionCollection();
-        for (Int32 i = 0; i < viewModel.Operators.Count; i++)
-        {
-            rowDefinitionCollection.Add(new RowDefinition
-                                        {
-                                            Height = 60
-                                        });
-        }
-
-        this.OperatorGrid.RowDefinitions = rowDefinitionCollection;
-
+        this.OperatorList.Children.Clear();
+        
         Int32 rowCount = 0;
         foreach (ContractOperatorModel modelOperator in viewModel.Operators)
         {
@@ -42,7 +33,7 @@ public partial class VoucherSelectOperatorPage : ContentPage
                                 HorizontalOptions = LayoutOptions.FillAndExpand,
                                 AutomationId = modelOperator.OperatorName,
                             };
-            //button.SetDynamicResource(VisualElement.StyleProperty, "MobileTopupButtonStyle");
+            button.SetDynamicResource(VisualElement.StyleProperty, "VoucherButtonStyle");
             Binding commandParameter = new Binding()
                                        {
                                            Source = new ItemSelected<ContractOperatorModel>(){ 
@@ -59,7 +50,7 @@ public partial class VoucherSelectOperatorPage : ContentPage
             button.SetBinding(Button.CommandProperty, command);
             button.SetBinding(Button.CommandParameterProperty, commandParameter);
 
-            this.OperatorGrid.Add(button, 0, rowCount);
+            this.OperatorList.Add(button);
 
             rowCount++;
         }

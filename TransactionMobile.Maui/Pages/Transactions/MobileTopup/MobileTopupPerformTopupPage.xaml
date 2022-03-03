@@ -54,7 +54,6 @@
                 Style="{DynamicResource MobileTopupButtonStyle}"
                 Command="{Binding PerformTopupCommand}"
                 AutomationId="PerformTopupButton"/>
-            <!--Style="{DynamicResource MobileTopupButtonStyle}"-->
         </VerticalStackLayout>
     </Frame>
     </VerticalStackLayout>

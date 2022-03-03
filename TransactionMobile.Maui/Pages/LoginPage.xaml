@@ -8,48 +8,33 @@
              BackgroundColor="White">
     <ContentPage.Content>
         <!-- Main structure-->
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
-            </Grid.RowDefinitions>
+        <VerticalStackLayout x:Name="MainLayout">
             <!--Main image-->
-            <Image Grid.RowSpan="2" Grid.Row="0" Source="Resources/loginimage.jpg" VerticalOptions="Start" Aspect="AspectFit"/>
+            <Image Source="Resources/loginimage.jpg" VerticalOptions="Start" Aspect="AspectFit"/>
 
             <!-- Title-->
-            <Label Grid.Row="1" Text="Log In" FontSize="34" VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+            <Label Text="Log In" FontSize="34" HorizontalOptions="Center" FontAttributes="Bold" Padding="20,0,0,20"/>
 
-            <Frame Grid.Row="2" HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
+            <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
                    CornerRadius="20" Opacity="0.9" BackgroundColor="#E5E9F0">
-                <Grid ColumnDefinitions="Auto,*">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"></RowDefinition>
-                        <RowDefinition Height="50"></RowDefinition>
-                        <RowDefinition Height="50"></RowDefinition>
-                        <RowDefinition Height="50"></RowDefinition>
-                    </Grid.RowDefinitions>
+                <VerticalStackLayout x:Name="SubLayout">
 
                     <Entry x:Name="UserNameEntry"
-                           Grid.Row="0"
                            Placeholder="User name or email address"
                            AutomationId="UserNameEntry"
-                           Style="{DynamicResource UserNameEntryStyle}"
-                           Grid.ColumnSpan="2">
+                           Style="{DynamicResource UserNameEntryStyle}">
                     </Entry>
 
                     <Entry x:Name="PasswordEntry"
-                           Grid.Row="1"
                            Placeholder="******"
                            AutomationId="PasswordEntry"
-                           Style="{DynamicResource PasswordEntryStyle}"
-                           Grid.ColumnSpan="2">
+                           Style="{DynamicResource PasswordEntryStyle}">
                     </Entry>
 
-                    <Button Grid.ColumnSpan="2" Grid.Row="2" Text="Continue" Style="{StaticResource StandardButton}" Command="{Binding LoginCommand}"/>
-                    <Label Grid.ColumnSpan="2" Grid.Row="3" Text="Forgot your password?" TextColor="{StaticResource P}" FontAttributes="Bold"/>
-                </Grid>
+                    <Button Text="Continue" Style="{StaticResource StandardButton}" Command="{Binding LoginCommand}"/>
+                    <!--<Label Grid.ColumnSpan="2" Grid.Row="3" Text="Forgot your password?" TextColor="{StaticResource P}" FontAttributes="Bold"/>-->
+                </VerticalStackLayout>
             </Frame>
-        </Grid>
+        </VerticalStackLayout>
     </ContentPage.Content>
 </ContentPage>
