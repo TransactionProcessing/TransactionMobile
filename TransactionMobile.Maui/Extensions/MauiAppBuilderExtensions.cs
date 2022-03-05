@@ -5,6 +5,7 @@
     using BusinessLogic.Requests;
     using BusinessLogic.Services;
     using BusinessLogic.Services.DummyServices;
+    using BusinessLogic.UIServices;
     using BusinessLogic.ViewModels;
     using BusinessLogic.ViewModels.Support;
     using BusinessLogic.ViewModels.Transactions;
@@ -29,6 +30,7 @@
         {
         //    builder.Services.AddSingleton<IDialogService, DialogService>();
             builder.Services.AddSingleton<INavigationService, ShellNavigationService>();
+            builder.Services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
             return builder;
         }
 
