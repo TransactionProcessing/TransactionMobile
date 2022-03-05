@@ -13,11 +13,16 @@ namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Support
     {
         private readonly IDeviceService DeviceService;
 
-        public SupportPageViewModel(IDeviceService deviceService)
+        private readonly IApplicationInfoService ApplicationInfoService;
+
+        public SupportPageViewModel(IDeviceService deviceService,IApplicationInfoService applicationInfoService)
         {
             this.DeviceService = deviceService;
+            this.ApplicationInfoService = applicationInfoService;
         }
-        public string AppVersion => $"Version: {AppInfo.VersionString}{Environment.NewLine}Copyright © 2022 Stuart Ferguson";
+
+        public String ApplicationName => $"{this.ApplicationInfoService.ApplicationName} v{this.ApplicationInfoService.VersionString}";
+        //public string AppVersion => $"Version: {this.ApplicationInfoService.VersionString}{Environment.NewLine}Copyright © 2022 Stuart Ferguson";
 
         //public string Description => "A playground for experiments with .Net MAUI. All code is available on GitHub and development is documented on my blog 'Sailing the Sharp Sea'.";
 
