@@ -5,7 +5,8 @@
     using Requests;
     using Services;
 
-    public class LoginRequestHandler : IRequestHandler<LoginRequest, String>,
+    public class LoginRequestHandler : IRequestHandler<LoginRequest, TokenResponseModel>,
+                                       IRequestHandler<RefreshTokenRequest, TokenResponseModel>,
                                        IRequestHandler<GetConfigurationRequest, Configuration>
     {
         private readonly IConfigurationService ConfigurationService;
@@ -29,10 +30,10 @@
 
         #region Methods
 
-        public async Task<String> Handle(LoginRequest request,
-                                         CancellationToken cancellationToken)
+        public async Task<TokenResponseModel> Handle(LoginRequest request,
+                                                     CancellationToken cancellationToken)
         {
-            var token = await this.AuthenticationService.GetToken(request.UserName, request.Password, cancellationToken);
+            TokenResponseModel token = await this.AuthenticationService.GetToken(request.UserName, request.Password, cancellationToken);
 
             return token;
         }
@@ -44,5 +45,13 @@
         }
 
         #endregion
+
+        public async Task<TokenResponseModel> Handle(RefreshTokenRequest request,
+                                                     CancellationToken cancellationToken)
+        {
+            TokenResponseModel token = await this.AuthenticationService.RefreshAccessToken(request.RefreshToken, cancellationToken);
+
+            return token;
+        }
     }
 }

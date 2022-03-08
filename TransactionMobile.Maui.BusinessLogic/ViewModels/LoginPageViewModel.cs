@@ -3,6 +3,8 @@
     using System.Windows.Input;
     using Maui.UIServices;
     using MediatR;
+    using Microsoft.Extensions.Caching.Memory;
+    using Microsoft.Extensions.Primitives;
     using Models;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
@@ -13,11 +15,28 @@
     {
         private readonly INavigationService NavigationService;
 
+        private readonly IMemoryCache UserDetailsCache;
+
+        private readonly IMemoryCache ConfigurationCache;
+
+        private readonly IDeviceService DeviceService;
+
+        private readonly IApplicationInfoService ApplicationInfoService;
+
+        private String userName;
+
+        private String password;
+
         #region Constructors
         
-        public LoginPageViewModel(IMediator mediator, INavigationService navigationService)
+        public LoginPageViewModel(IMediator mediator, INavigationService navigationService, IMemoryCache userDetailsCache, IMemoryCache configurationCache,
+                                  IDeviceService deviceService,IApplicationInfoService applicationInfoService)
         {
             this.NavigationService = navigationService;
+            this.UserDetailsCache = userDetailsCache;
+            this.ConfigurationCache = configurationCache;
+            this.DeviceService = deviceService;
+            this.ApplicationInfoService = applicationInfoService;
             this.LoginCommand = new AsyncCommand(this.LoginCommandExecute);
             this.Mediator = mediator;
         }
@@ -30,6 +49,18 @@
 
         public IMediator Mediator { get; }
 
+        public String UserName
+        {
+            get => this.userName;
+            set => this.SetProperty(ref this.userName, value);
+        }
+
+        public String Password
+        {
+            get => this.password;
+            set => this.SetProperty(ref this.password, value);
+        }
+
         #endregion
 
         #region Methods
@@ -37,38 +68,86 @@
         private async Task LoginCommandExecute()
         {
             // TODO: this method needs refactored
-            GetConfigurationRequest getConfigurationRequest = GetConfigurationRequest.Create("");
+            
+            GetConfigurationRequest getConfigurationRequest = GetConfigurationRequest.Create(this.DeviceService.GetIdentifier());
             Configuration configuration = await this.Mediator.Send(getConfigurationRequest);
-            // TODO: Cache the config object somewhere
+            // Cache the config object
+            this.ConfigurationCache.Set("Configuration", configuration);
 
-            LoginRequest loginRequest = LoginRequest.Create("", "");
-            String token = await this.Mediator.Send(loginRequest);
+            LoginRequest loginRequest = LoginRequest.Create(this.UserName, this.Password);
+            TokenResponseModel token = await this.Mediator.Send(loginRequest);
 
             //if (token == null)
             //{
-            //    // TODO: Some kind of error handling
+            // TODO: Some kind of error handling
             //}
+            // Cache the token
+            this.CacheAccessToken(token);
 
-            // TODO: Logon Transaction
-            LogonTransactionRequest logonTransactionRequest = LogonTransactionRequest.Create(DateTime.Now, "1", "", "");
-            Boolean logonSuccessful = await this.Mediator.Send(logonTransactionRequest);
+            // Logon Transaction
+            LogonTransactionRequest logonTransactionRequest = LogonTransactionRequest.Create(DateTime.Now, "1", 
+                                                                                             this.DeviceService.GetIdentifier(), 
+                                                                                             this.ApplicationInfoService.VersionString);
+            PerformLogonResponseModel logonResponse = await this.Mediator.Send(logonTransactionRequest);
 
-            // TODO: get these values off the logon response (maybe make response a tuple)
-            var estateId = Guid.Parse("56CEE156-6815-4562-A96E-9389C16FA79B");
-            var merchantId = Guid.Parse("E746EACB-4E73-4E78-B732-53B9C65E5BDA");
+            if (logonResponse.IsSuccessful == false)
+            {
+                // TODO: Throw an error here
+            }
 
-            // TODO: Get Contracts & Balance ??
-            GetContractProductsRequest getContractProductsRequest = GetContractProductsRequest.Create("", estateId, merchantId, null);
+            // Set the user information
+            this.UserDetailsCache.Set("EstateId", logonResponse.EstateId);
+            this.UserDetailsCache.Set("Merchant", logonResponse.MerchantId);
 
+            // Get Contracts
             // TODO: Cache the result, but will add this to a timer call to keep up to date...
+            GetContractProductsRequest getContractProductsRequest = GetContractProductsRequest.Create(token.AccessToken, 
+                                                                                                      logonResponse.EstateId, 
+                                                                                                      logonResponse.MerchantId, null);
             List<ContractProductModel> products = await this.Mediator.Send(getContractProductsRequest);
 
+            // Get the merchant balance
             // TODO: Cache the result, but will add this to a timer call to keep up to date...
-            GetMerchantBalanceRequest getMerchantBalanceRequest = GetMerchantBalanceRequest.Create("", estateId, merchantId);
-            var merchantBalance = await this.Mediator.Send(getMerchantBalanceRequest);
+            GetMerchantBalanceRequest getMerchantBalanceRequest = GetMerchantBalanceRequest.Create(token.AccessToken,
+                                                                                                   logonResponse.EstateId,
+                                                                                                   logonResponse.MerchantId);
+            Decimal merchantBalance = await this.Mediator.Send(getMerchantBalanceRequest);
 
-            // TODO: Cache the token as will be needed later
             await this.NavigationService.GoToHome();
+        }
+        
+        private async void AccessTokenExpired(Object key,
+                                        Object value,
+                                        EvictionReason reason,
+                                        Object state)
+        {
+            if (reason == EvictionReason.Expired || reason == EvictionReason.TokenExpired)
+            {
+                // access token has expired need to make another call to get new one
+                TokenResponseModel token = value as TokenResponseModel;
+
+                RefreshTokenRequest request = RefreshTokenRequest.Create(token.RefreshToken);
+                TokenResponseModel newToken = await this.Mediator.Send(request, CancellationToken.None);
+
+                this.CacheAccessToken(newToken);
+            }
+        }
+
+        private void CacheAccessToken(TokenResponseModel token)
+        {
+            DateTime expirationTime = DateTime.Now.AddMinutes(token.ExpiryInMinutes).AddSeconds(-30);
+            CancellationChangeToken expirationToken = new CancellationChangeToken(new CancellationTokenSource(TimeSpan.FromMinutes(token.ExpiryInMinutes).Add(TimeSpan.FromSeconds(-30))).Token);
+            MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
+                                                        // Pin to cache.
+                                                        .SetPriority(CacheItemPriority.NeverRemove)
+                                                        // Set the actual expiration time
+                                                        .SetAbsoluteExpiration(expirationTime)
+                                                        // Force eviction to run
+                                                        .AddExpirationToken(expirationToken)
+                                                        // Add eviction callback
+                                                        .RegisterPostEvictionCallback(callback:this.AccessTokenExpired);
+
+            this.UserDetailsCache.Set("AccessToken", token, cacheEntryOptions);
         }
 
         #endregion

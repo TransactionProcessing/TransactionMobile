@@ -22,13 +22,15 @@
                     <Entry x:Name="UserNameEntry"
                            Placeholder="User name or email address"
                            AutomationId="UserNameEntry"
-                           Style="{DynamicResource UserNameEntryStyle}">
+                           Style="{DynamicResource UserNameEntryStyle}"
+                           Text="{Binding UserName}">
                     </Entry>
 
                     <Entry x:Name="PasswordEntry"
                            Placeholder="******"
                            AutomationId="PasswordEntry"
-                           Style="{DynamicResource PasswordEntryStyle}">
+                           Style="{DynamicResource PasswordEntryStyle}"
+                           Text="{Binding Password}">
                     </Entry>
 
                     <Button Text="Continue" Style="{StaticResource StandardButton}" Command="{Binding LoginCommand}"/>

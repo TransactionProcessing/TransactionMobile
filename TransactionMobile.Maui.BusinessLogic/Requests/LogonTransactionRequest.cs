@@ -1,8 +1,9 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Requests;
 
 using MediatR;
+using Models;
 
-public class LogonTransactionRequest : IRequest<Boolean>
+public class LogonTransactionRequest : IRequest<PerformLogonResponseModel>
 {
     public String DeviceIdentifier { get; private set; }
     public DateTime TransactionDateTime { get; private set; }

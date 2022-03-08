@@ -6,10 +6,17 @@ public class DummyTransactionService : ITransactionService
 {
     #region Methods
 
-    public async Task<Boolean> PerformLogon(PerformLogonRequestModel model,
-                                            CancellationToken cancellationToken)
+    public async Task<PerformLogonResponseModel> PerformLogon(PerformLogonRequestModel model,
+                                                              CancellationToken cancellationToken)
     {
-        return true;
+        return new PerformLogonResponseModel
+               {
+                   EstateId = Guid.Parse("D7E52254-E0BE-436A-9A34-CC291DA0D66A"),
+                   MerchantId = Guid.Parse("DD034A3B-D8EE-45A4-A29F-8774751CEE76"),
+                   IsSuccessful = true,
+                   ResponseMessage = "SUCCESS",
+                   RequireApplicationUpdate = false
+               };
     }
 
     public async Task<Boolean> PerformMobileTopup(PerformMobileTopupRequestModel model,

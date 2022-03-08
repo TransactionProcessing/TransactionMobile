@@ -7,19 +7,9 @@ using Pages.AppHome;
 
 public partial class App : Application
 {
-    /// <summary>
-    /// The estate identifier
-    /// </summary>
-    public static Guid EstateId;
-
-    /// <summary>
-    /// The merchant identifier
-    /// </summary>
-    public static Guid MerchantId;
-
 	public App()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
 		
 		MainPage = new AppShell();
 

@@ -6,7 +6,7 @@
     {
         #region Methods
 
-        Task<Boolean> PerformLogon(PerformLogonRequestModel model, CancellationToken cancellationToken);
+        Task<PerformLogonResponseModel> PerformLogon(PerformLogonRequestModel model, CancellationToken cancellationToken);
 
         Task<Boolean> PerformMobileTopup(PerformMobileTopupRequestModel model, CancellationToken cancellationToken);
 

@@ -22,7 +22,7 @@ public class MerchantRequestHandlerTests
                        .ReturnsAsync(TestData.ContractProductList);
         MerchantRequestHandler handler = new MerchantRequestHandler(merchantService.Object);
 
-        GetContractProductsRequest request = GetContractProductsRequest.Create(TestData.AccessToken,
+        GetContractProductsRequest request = GetContractProductsRequest.Create(TestData.Token,
                                                                                TestData.EstateId,
                                                                                TestData.MerchantId,
                                                                                null);
@@ -40,7 +40,7 @@ public class MerchantRequestHandlerTests
                        .ReturnsAsync(TestData.MerchantBalance);
         MerchantRequestHandler handler = new MerchantRequestHandler(merchantService.Object);
 
-        GetMerchantBalanceRequest request = GetMerchantBalanceRequest.Create(TestData.AccessToken,
+        GetMerchantBalanceRequest request = GetMerchantBalanceRequest.Create(TestData.Token,
                                                                              TestData.EstateId,
                                                                              TestData.MerchantId);
 

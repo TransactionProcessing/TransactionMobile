@@ -1,8 +1,9 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Requests
 {
     using MediatR;
+    using Models;
 
-    public class LoginRequest : IRequest<String>
+    public class LoginRequest : IRequest<TokenResponseModel>
     {
         #region Constructors
 
