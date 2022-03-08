@@ -15,13 +15,13 @@ public class RequestTests
     [Fact]
     public void GetContractProductsRequest_Create_IsCreated()
     {
-        GetContractProductsRequest request = GetContractProductsRequest.Create(TestData.AccessToken,
+        GetContractProductsRequest request = GetContractProductsRequest.Create(TestData.Token,
                                                                                TestData.EstateId,
                                                                                TestData.MerchantId,
                                                                                null);
 
         request.ShouldNotBeNull();
-        request.AccessToken.ShouldBe(TestData.AccessToken);
+        request.AccessToken.ShouldBe(TestData.Token);
         request.EstateId.ShouldBe(TestData.EstateId);
         request.MerchantId.ShouldBe(TestData.MerchantId);
     }
@@ -29,12 +29,12 @@ public class RequestTests
     [Fact]
     public void GetMerchantBalanceRequest_Create_IsCreated()
     {
-        GetMerchantBalanceRequest request = GetMerchantBalanceRequest.Create(TestData.AccessToken,
+        GetMerchantBalanceRequest request = GetMerchantBalanceRequest.Create(TestData.Token,
                                                                              TestData.EstateId,
                                                                              TestData.MerchantId);
 
         request.ShouldNotBeNull();
-        request.AccessToken.ShouldBe(TestData.AccessToken);
+        request.AccessToken.ShouldBe(TestData.Token);
         request.EstateId.ShouldBe(TestData.EstateId);
         request.MerchantId.ShouldBe(TestData.MerchantId);
     }
@@ -48,6 +48,15 @@ public class RequestTests
         request.ShouldNotBeNull();
         request.UserName.ShouldBe(TestData.UserName);
         request.Password.ShouldBe(TestData.Password);
+    }
+
+    [Fact]
+    public void RefreshTokenRequest_Create_IsCreated()
+    {
+        RefreshTokenRequest request = RefreshTokenRequest.Create(TestData.RefreshToken);
+
+        request.ShouldNotBeNull();
+        request.RefreshToken.ShouldBe(TestData.RefreshToken);
     }
 
     [Fact]

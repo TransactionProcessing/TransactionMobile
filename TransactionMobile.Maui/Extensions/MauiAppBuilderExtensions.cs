@@ -38,13 +38,14 @@
         {
             builder.Services.AddSingleton<IMediator, Mediator>();
             builder.Services.AddSingleton<IRequestHandler<GetConfigurationRequest, Configuration>, LoginRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<LoginRequest, String>, LoginRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<LoginRequest, TokenResponseModel>, LoginRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<RefreshTokenRequest, TokenResponseModel>, LoginRequestHandler>();
 
             builder.Services.AddSingleton<IRequestHandler<GetContractProductsRequest, List<ContractProductModel>>, MerchantRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<GetMerchantBalanceRequest, Decimal>, MerchantRequestHandler>();
             
             builder.Services.AddSingleton<IRequestHandler<PerformMobileTopupRequest, Boolean>, TransactionRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<LogonTransactionRequest, Boolean>, TransactionRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<LogonTransactionRequest, PerformLogonResponseModel>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<PerformVoucherIssueRequest, Boolean>, TransactionRequestHandler>();
             
             builder.Services.AddSingleton<ServiceFactory>(ctx => { return t => ctx.GetService(t); });

@@ -6,11 +6,23 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.BusinessLogic.Tests
 {
+    using Microsoft.Win32.SafeHandles;
     using Models;
 
     public static class TestData
     {
-        public static String AccessToken = "Token";
+        public static TokenResponseModel AccessToken =>
+            new TokenResponseModel
+            {
+                ExpiryInMinutes = TestData.TokenExpiryInMinutes,
+                AccessToken = TestData.Token,
+                RefreshToken = TestData.RefreshToken
+            };
+
+        public static String Token = "Token";
+
+        public static String RefreshToken = "RefreshToken";
+        public static Int32 TokenExpiryInMinutes = 5;
         public static Guid EstateId = Guid.Parse("21D339F4-C97F-4C30-A212-11CA01E2D508");
         public static Guid MerchantId = Guid.Parse("E8B4B839-434A-43A2-B373-D8813F63F615");
 
@@ -128,6 +140,16 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
         public static String RecipientEmailAddress = "1@2.com";
 
         public static Decimal MerchantBalance = 199.99m;
+
+        public static PerformLogonResponseModel PerformLogonResponseModel =>
+            new PerformLogonResponseModel
+            {
+                EstateId = TestData.EstateId,
+                MerchantId = TestData.MerchantId,
+                IsSuccessful = true,
+                RequireApplicationUpdate = false,
+                ResponseMessage = "SUCCESS"
+            };
     }
 }
  

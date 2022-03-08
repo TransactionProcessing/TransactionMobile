@@ -17,7 +17,7 @@ public class TransactionRequestHandlerTests
     public async Task TransactionRequestHandler_LogonTransactionRequest_Handle_IsHandled()
     {
         Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
-        transactionService.Setup(t => t.PerformLogon(It.IsAny<PerformLogonRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
+        transactionService.Setup(t => t.PerformLogon(It.IsAny<PerformLogonRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.PerformLogonResponseModel);
         TransactionRequestHandler handler = new TransactionRequestHandler(transactionService.Object);
 
         LogonTransactionRequest request = LogonTransactionRequest.Create(TestData.TransactionDateTime,
@@ -25,9 +25,9 @@ public class TransactionRequestHandlerTests
                                                                          TestData.DeviceIdentifier,
                                                                          TestData.ApplicationVersion);
 
-        Boolean response = await handler.Handle(request, CancellationToken.None);
+        PerformLogonResponseModel? response = await handler.Handle(request, CancellationToken.None);
 
-        response.ShouldBeTrue();
+        response.IsSuccessful.ShouldBeTrue();
     }
 
     [Fact]

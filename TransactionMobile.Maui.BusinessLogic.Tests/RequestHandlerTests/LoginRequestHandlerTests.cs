@@ -24,9 +24,29 @@ public class LoginRequestHandlerTests
             
         LoginRequest request = LoginRequest.Create(TestData.UserName,TestData.Password);
 
-        String accessToken = await handler.Handle(request, CancellationToken.None);
+        TokenResponseModel accessToken = await handler.Handle(request, CancellationToken.None);
 
-        accessToken.ShouldBe(TestData.AccessToken);
+        accessToken.AccessToken.ShouldBe(TestData.Token);
+        accessToken.ExpiryInMinutes.ShouldBe(TestData.TokenExpiryInMinutes);
+        accessToken.RefreshToken.ShouldBe(TestData.RefreshToken);
+    }
+
+    [Fact]
+    public async Task LoginRequestHandler_Handle_RefreshTokenRequest_IsHandled()
+    {
+        Mock<IAuthenticationService> authenticationService = new Mock<IAuthenticationService>();
+        authenticationService.Setup(a => a.RefreshAccessToken(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.AccessToken);
+        Mock<IConfigurationService> configurationService = new Mock<IConfigurationService>();
+        configurationService.Setup(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(new Configuration());
+        LoginRequestHandler handler = new LoginRequestHandler(authenticationService.Object, configurationService.Object);
+
+        RefreshTokenRequest request = RefreshTokenRequest.Create(TestData.RefreshToken);
+
+        TokenResponseModel accessToken = await handler.Handle(request, CancellationToken.None);
+
+        accessToken.AccessToken.ShouldBe(TestData.Token);
+        accessToken.ExpiryInMinutes.ShouldBe(TestData.TokenExpiryInMinutes);
+        accessToken.RefreshToken.ShouldBe(TestData.RefreshToken);
     }
 
     [Fact]

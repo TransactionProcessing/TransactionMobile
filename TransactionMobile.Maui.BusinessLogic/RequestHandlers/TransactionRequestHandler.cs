@@ -6,7 +6,7 @@ using Requests;
 using Services;
 
 public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupRequest, Boolean>, 
-                                         IRequestHandler<LogonTransactionRequest, Boolean>,
+                                         IRequestHandler<LogonTransactionRequest, PerformLogonResponseModel>,
                                          IRequestHandler<PerformVoucherIssueRequest, Boolean>
 {
     #region Fields
@@ -49,8 +49,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         return result;
     }
 
-    public async Task<Boolean> Handle(LogonTransactionRequest request,
-                                      CancellationToken cancellationToken)
+    public async Task<PerformLogonResponseModel> Handle(LogonTransactionRequest request,
+                                                        CancellationToken cancellationToken)
     {
         // TODO: Factory
         PerformLogonRequestModel model = new PerformLogonRequestModel
@@ -61,7 +61,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                              TransactionNumber = request.TransactionNumber
                                          };
 
-        Boolean result = await this.TransactionService.PerformLogon(model, cancellationToken);
+        PerformLogonResponseModel result = await this.TransactionService.PerformLogon(model, cancellationToken);
 
         return result;
     }

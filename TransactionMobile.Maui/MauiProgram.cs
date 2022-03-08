@@ -17,7 +17,8 @@ public static class MauiProgram
                                {
                                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                                })
-			.Services.AddTransient<IDeviceService, DeviceService>();
+			.Services.AddTransient<IDeviceService, DeviceService>()
+               .AddMemoryCache();
 
 		Container = builder.Build();
 		return Container;
