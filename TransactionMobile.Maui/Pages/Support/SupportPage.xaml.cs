@@ -11,4 +11,10 @@ public partial class SupportPage : ContentPage
         InitializeComponent();
         BindingContext = vm;
     }
+
+    protected override void OnAppearing()
+    {
+        SupportPageViewModel vm = MauiProgram.Container.Services.GetRequiredService<SupportPageViewModel>();
+        BindingContext = vm;
+    }
 }

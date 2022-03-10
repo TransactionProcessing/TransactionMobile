@@ -1,5 +1,6 @@
 ﻿namespace TransactionMobile.Maui.Extensions
 {
+
     using BusinessLogic.Models;
     using BusinessLogic.RequestHandlers;
     using BusinessLogic.Requests;
@@ -9,12 +10,23 @@
     using BusinessLogic.ViewModels;
     using BusinessLogic.ViewModels.Support;
     using BusinessLogic.ViewModels.Transactions;
+    using Database;
     using MediatR;
     using UIServices;
 
     public static class MauiAppBuilderExtensions
     {
         #region Methods
+
+        public static MauiAppBuilder ConfigureDatabase(this MauiAppBuilder builder)
+        {
+            String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "transactionpos.db");
+            IDatabaseContext database = new DatabaseContext(connectionString);
+            database.InitialiseDatabase(); 
+            builder.Services.AddSingleton<IDatabaseContext>(database);
+
+            return builder;
+        }
 
         public static MauiAppBuilder ConfigureAppServices(this MauiAppBuilder builder)
         {

@@ -22,6 +22,9 @@
                 
                 <Label Text="{Binding Platform, Mode=OneTime}"
                        VerticalOptions="Center"/>
+
+                <Label Text="{Binding NumberTransactionsStored, Mode=OneTime}"
+                       VerticalOptions="Center"/>
             </VerticalStackLayout>
         </Frame>
     </VerticalStackLayout>
