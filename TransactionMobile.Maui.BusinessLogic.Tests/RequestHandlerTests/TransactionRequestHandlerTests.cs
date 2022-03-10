@@ -3,6 +3,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Database;
 using Models;
 using Moq;
 using RequestHandlers;
@@ -17,8 +18,9 @@ public class TransactionRequestHandlerTests
     public async Task TransactionRequestHandler_LogonTransactionRequest_Handle_IsHandled()
     {
         Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
+        Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
         transactionService.Setup(t => t.PerformLogon(It.IsAny<PerformLogonRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.PerformLogonResponseModel);
-        TransactionRequestHandler handler = new TransactionRequestHandler(transactionService.Object);
+        TransactionRequestHandler handler = new TransactionRequestHandler(transactionService.Object, databaseContext.Object);
 
         LogonTransactionRequest request = LogonTransactionRequest.Create(TestData.TransactionDateTime,
                                                                          TestData.TransactionNumber,
@@ -34,8 +36,9 @@ public class TransactionRequestHandlerTests
     public async Task TransactionRequestHandler_PerformMobileTopupRequest_Handle_IsHandled()
     {
         Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
+        Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
         transactionService.Setup(t => t.PerformMobileTopup(It.IsAny<PerformMobileTopupRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
-        TransactionRequestHandler handler = new TransactionRequestHandler(transactionService.Object);
+        TransactionRequestHandler handler = new TransactionRequestHandler(transactionService.Object,databaseContext.Object);
 
         PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(TestData.TransactionDateTime,
                                                                              TestData.TransactionNumber,
@@ -57,8 +60,9 @@ public class TransactionRequestHandlerTests
     public async Task TransactionRequestHandler_PerformVoucherIssueRequest_Handle_IsHandled()
     {
         Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
+        Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
         transactionService.Setup(t => t.PerformVoucherIssue(It.IsAny<PerformVoucherIssueRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
-        TransactionRequestHandler handler = new TransactionRequestHandler(transactionService.Object);
+        TransactionRequestHandler handler = new TransactionRequestHandler(transactionService.Object,databaseContext.Object);
 
         PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(TestData.TransactionDateTime,
                                                                                TestData.TransactionNumber,
