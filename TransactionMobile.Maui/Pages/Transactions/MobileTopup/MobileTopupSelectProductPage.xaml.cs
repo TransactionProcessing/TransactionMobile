@@ -1,4 +1,4 @@
-namespace TransactionMobile.Maui;
+namespace TransactionMobile.Maui.Pages.Transactions.MobileTopup;
 
 using BusinessLogic.Models;
 using BusinessLogic.ViewModels.Transactions;

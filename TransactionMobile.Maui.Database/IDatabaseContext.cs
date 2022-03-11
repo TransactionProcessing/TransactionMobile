@@ -17,6 +17,7 @@ namespace TransactionMobile.Maui.Database
         Task UpdateTransaction(TransactionRecord transactionRecord);
 
         Task<List<TransactionRecord>> GetTransactions();
+        Task ClearStoredTransactions();
     }
 
     public class DatabaseContext : IDatabaseContext
@@ -48,6 +49,11 @@ namespace TransactionMobile.Maui.Database
         public async Task<List<TransactionRecord>> GetTransactions()
         {
             return this.Connection.Table<TransactionRecord>().ToList();
+        }
+
+        public async Task ClearStoredTransactions()
+        {
+            this.Connection.DeleteAll<TransactionRecord>();
         }
     }
 

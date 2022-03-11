@@ -15,6 +15,8 @@ public interface INavigationService
 
     Task GoToMobileTopupSelectOperatorPage();
 
+    Task GoToAdminPage();
+
     Task GoToMobileTopupSelectProductPage(String operatorIdentifier);
 
     Task GoToMobileTopupSuccessPage();

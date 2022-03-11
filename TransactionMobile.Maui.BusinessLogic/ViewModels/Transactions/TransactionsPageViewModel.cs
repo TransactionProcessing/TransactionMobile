@@ -43,7 +43,7 @@
 
         private async Task AdminCommandExecute()
         {
-            await this.NavigationService.GoToHome();
+            await this.NavigationService.GoToAdminPage();
         }
 
         private async Task BillPaymentCommandExecute()
