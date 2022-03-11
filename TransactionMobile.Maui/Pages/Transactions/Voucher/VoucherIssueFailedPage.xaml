@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TransactionMobile.Maui.VoucherIssueFailedPage"
+             x:Class="TransactionMobile.Maui.Pages.Transactions.Voucher.VoucherIssueFailedPage"
              Shell.NavBarIsVisible="False"
              BackgroundColor="White">
     <VerticalStackLayout x:Name="MainLayout">

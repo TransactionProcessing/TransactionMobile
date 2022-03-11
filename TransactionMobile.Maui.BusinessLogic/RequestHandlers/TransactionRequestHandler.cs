@@ -6,9 +6,10 @@ using Models;
 using Requests;
 using Services;
 
-public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupRequest, Boolean>, 
+public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupRequest, Boolean>,
                                          IRequestHandler<LogonTransactionRequest, PerformLogonResponseModel>,
-                                         IRequestHandler<PerformVoucherIssueRequest, Boolean>
+                                         IRequestHandler<PerformVoucherIssueRequest, Boolean>,
+                                         IRequestHandler<PerformReconciliationRequest, Boolean>
 {
     #region Fields
 
@@ -20,7 +21,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
 
     #region Constructors
 
-    public TransactionRequestHandler(ITransactionService transactionService, IDatabaseContext databaseContext)
+    public TransactionRequestHandler(ITransactionService transactionService,
+                                     IDatabaseContext databaseContext)
     {
         this.TransactionService = transactionService;
         this.DatabaseContext = databaseContext;
@@ -132,7 +134,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                CancellationToken cancellationToken)
     {
         transactionRecord.IsSuccessful = result;
-        
+
         await this.DatabaseContext.UpdateTransaction(transactionRecord);
     }
 
@@ -148,8 +150,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                              DeviceIdentifier = request.DeviceIdentifier,
                                              TransactionDateTime = request.TransactionDateTime,
                                              TransactionNumber = transaction.transactionNumber.ToString()
-        };
-        
+                                         };
+
         PerformLogonResponseModel result = await this.TransactionService.PerformLogon(model, cancellationToken);
 
         await this.UpdateTransactionRecord(transaction.transactionRecord, result, cancellationToken);
@@ -165,23 +167,78 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         (TransactionRecord transactionRecord, Int64 transactionNumber) transaction = await this.CreateTransactionRecord(request, cancellationToken);
         // TODO: Factory
         PerformVoucherIssueRequestModel model = new PerformVoucherIssueRequestModel
-        {
-                                                   ApplicationVersion = request.ApplicationVersion,
-                                                   ContractId = request.ContractId,
-                                                   RecipientEmailAddress = request.RecipientEmailAddress,
-                                                   RecipientMobileNumber = request.RecipientMobileNumber,
-                                                   CustomerEmailAddress = request.CustomerEmailAddress,
-                                                   DeviceIdentifier = request.DeviceIdentifier,
-                                                   OperatorIdentifier = request.OperatorIdentifier,
-                                                   ProductId = request.ProductId,
-                                                   VoucherAmount = request.VoucherAmount,
-                                                   TransactionDateTime = request.TransactionDateTime,
-                                                   TransactionNumber = transaction.transactionNumber.ToString()
-        };
+                                                {
+                                                    ApplicationVersion = request.ApplicationVersion,
+                                                    ContractId = request.ContractId,
+                                                    RecipientEmailAddress = request.RecipientEmailAddress,
+                                                    RecipientMobileNumber = request.RecipientMobileNumber,
+                                                    CustomerEmailAddress = request.CustomerEmailAddress,
+                                                    DeviceIdentifier = request.DeviceIdentifier,
+                                                    OperatorIdentifier = request.OperatorIdentifier,
+                                                    ProductId = request.ProductId,
+                                                    VoucherAmount = request.VoucherAmount,
+                                                    TransactionDateTime = request.TransactionDateTime,
+                                                    TransactionNumber = transaction.transactionNumber.ToString()
+                                                };
 
         Boolean result = await this.TransactionService.PerformVoucherIssue(model, cancellationToken);
 
         await this.UpdateTransactionRecord(transaction.transactionRecord, result, cancellationToken);
+
+        return result;
+    }
+
+    public async Task<Boolean> Handle(PerformReconciliationRequest request,
+                                      CancellationToken cancellationToken)
+    {
+        List<TransactionRecord> storedTransactions = await this.DatabaseContext.GetTransactions();
+
+        if (storedTransactions.Any() == false)
+        {
+            return true;
+        }
+
+        // TODO: convert these to operator totals
+        List<OperatorTotalModel> operatorTotals = (from t in storedTransactions
+                                                   where t.IsSuccessful = true &&
+                                                                          t.TransactionType != 1 // Filter out logons
+                                                   group t by new
+                                                              {
+                                                                  t.ContractId,
+                                                                  t.OperatorIdentifier
+                                                              }
+                                                   into tempOperatorTotals
+                                                   select new OperatorTotalModel
+                                                          {
+                                                              ContractId = tempOperatorTotals.Key.ContractId,
+                                                              OperatorIdentifier = tempOperatorTotals.Key.OperatorIdentifier,
+                                                              TransactionValue = tempOperatorTotals.Sum(t => t.Amount),
+                                                              TransactionCount = tempOperatorTotals.Count()
+                                                          }).ToList();
+
+        var grandTotals = new
+                          {
+                              TransactionValue = operatorTotals.Sum(t => t.TransactionValue),
+                              TransactionCount = operatorTotals.Sum(t => t.TransactionCount)
+                          };
+
+        PerformReconciliationRequestModel model = new PerformReconciliationRequestModel
+                                           {
+                                               ApplicationVersion = request.ApplicationVersion,
+                                               DeviceIdentifier = request.DeviceIdentifier,
+                                               TransactionDateTime = request.TransactionDateTime,
+                                               TransactionValue = grandTotals.TransactionValue,
+                                               TransactionCount = grandTotals.TransactionCount,
+                                               OperatorTotals = operatorTotals
+                                           };
+        // Send to the host
+        Boolean result = await this.TransactionService.PerformReconciliation(model, cancellationToken);
+
+        // Clear store (if successful)
+        if (result)
+        {
+            await this.DatabaseContext.ClearStoredTransactions();
+        }
 
         return result;
     }

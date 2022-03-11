@@ -1,4 +1,4 @@
-namespace TransactionMobile.Maui;
+namespace TransactionMobile.Maui.Pages.Transactions.Voucher;
 
 using BusinessLogic.ViewModels.Transactions;
 

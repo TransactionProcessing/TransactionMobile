@@ -74,6 +74,9 @@
 	  <Compile Update="Pages\Support\SupportPage.xaml.cs">
 	    <DependentUpon>SupportPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Pages\Transactions\Admin\AdminPage.xaml.cs">
+	    <DependentUpon>AdminPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\Transactions\MobileTopup\MobileTopupPerformTopupPage.xaml.cs">
 	    <DependentUpon>MobileTopupPerformTopupPage.xaml</DependentUpon>
 	  </Compile>
@@ -124,6 +127,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Support\SupportPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Transactions\Admin\AdminPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Transactions\MobileTopup\MobileTopupPerformTopupPage.xaml">

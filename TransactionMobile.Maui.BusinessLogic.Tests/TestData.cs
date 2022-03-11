@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.BusinessLogic.Tests
 {
+    using Database;
     using Microsoft.Win32.SafeHandles;
     using Models;
 
@@ -140,6 +141,29 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
         public static String RecipientEmailAddress = "1@2.com";
 
         public static Decimal MerchantBalance = 199.99m;
+
+        public static List<TransactionRecord> StoredTransactions =>
+            new List<TransactionRecord>
+            {
+                new TransactionRecord
+                {
+                    Amount = TestData.Operator1Product_100KES.Value,
+                    ContractId = TestData.Operator1Product_100KES.ContractId,
+                    OperatorIdentifier = TestData.Operator1Product_100KES.OperatorIdentfier
+                },
+                new TransactionRecord
+                {
+                    Amount = TestData.Operator1Product_100KES.Value,
+                    ContractId = TestData.Operator1Product_100KES.ContractId,
+                    OperatorIdentifier = TestData.Operator1Product_100KES.OperatorIdentfier
+                },
+                new TransactionRecord
+                {
+                    Amount = TestData.Operator1Product_100KES.Value,
+                    ContractId = TestData.Operator1Product_100KES.ContractId,
+                    OperatorIdentifier = TestData.Operator1Product_100KES.OperatorIdentfier
+                }
+            };
 
         public static PerformLogonResponseModel PerformLogonResponseModel =>
             new PerformLogonResponseModel

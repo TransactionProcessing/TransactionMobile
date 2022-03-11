@@ -129,4 +129,17 @@ public class RequestTests
         request.VoucherAmount.ShouldBe(TestData.Operator3Product_200KES.Value);
         request.CustomerEmailAddress.ShouldBe(TestData.CustomerEmailAddress);
     }
+
+    [Fact]
+    public void PerformReconciliationRequest_Create_IsCreated()
+    {
+        PerformReconciliationRequest request = PerformReconciliationRequest.Create(TestData.TransactionDateTime,TestData.DeviceIdentifier,
+                                                                                   TestData.ApplicationVersion);
+
+        request.ShouldNotBeNull();
+        request.TransactionDateTime.ShouldBe(TestData.TransactionDateTime);
+        request.DeviceIdentifier.ShouldBe(TestData.DeviceIdentifier);
+        request.ApplicationVersion.ShouldBe(TestData.ApplicationVersion);
+
+    }
 }

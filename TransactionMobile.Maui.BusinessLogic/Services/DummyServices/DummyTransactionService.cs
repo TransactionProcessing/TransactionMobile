@@ -30,7 +30,7 @@ public class DummyTransactionService : ITransactionService
         return true;
     }
 
-    public async Task<Boolean> PerformReconciliation(CancellationToken cancellationToken)
+    public async Task<Boolean> PerformReconciliation(PerformReconciliationRequestModel model,CancellationToken cancellationToken)
     {
         return true;
     }

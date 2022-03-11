@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TransactionMobile.Maui.Pages.Transactions.Admin.AdminPage"
+             Title="{Binding Title}"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="White">
+    <!-- This might be better as a flex layout if we had images-->
+    <VerticalStackLayout>
+    <Label Text="{Binding Title}" FontSize="24" HorizontalOptions="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+    <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
+           CornerRadius="20" Opacity="0.9" BackgroundColor="#E5E9F0">
+            <VerticalStackLayout Spacing="10">
+                <Button AutomationId="ReconciliationButton" Command="{Binding ReconciliationCommand}" x:Name="ReconciliationButton" Text="Reconciliation" Style="{DynamicResource AdminButtonStyle}"/>
+            </VerticalStackLayout>
+    </Frame>
+    </VerticalStackLayout>
+</ContentPage>
