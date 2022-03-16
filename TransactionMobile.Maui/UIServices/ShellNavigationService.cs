@@ -1,6 +1,8 @@
 ﻿namespace TransactionMobile.Maui.UIServices;
 
-using BusinessLogic.ViewModels.Transactions;
+using Pages.Transactions.Admin;
+using Pages.Transactions.MobileTopup;
+using Pages.Transactions.Voucher;
 
 public class ShellNavigationService : INavigationService
 {
@@ -28,6 +30,11 @@ public class ShellNavigationService : INavigationService
     public async Task GoToMobileTopupSelectOperatorPage()
     {
         await Shell.Current.GoToAsync(nameof(MobileTopupSelectOperatorPage));
+    }
+
+    public async Task GoToAdminPage()
+    {
+        await Shell.Current.GoToAsync(nameof(AdminPage));
     }
 
     public async Task GoToMobileTopupSelectProductPage(String operatorIdentifier)

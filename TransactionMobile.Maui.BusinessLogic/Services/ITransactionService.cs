@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Services
 {
     using Models;
+    using RequestHandlers;
 
     public interface ITransactionService
     {
@@ -10,7 +11,7 @@
 
         Task<Boolean> PerformMobileTopup(PerformMobileTopupRequestModel model, CancellationToken cancellationToken);
 
-        Task<Boolean> PerformReconciliation(CancellationToken cancellationToken);
+        Task<Boolean> PerformReconciliation(PerformReconciliationRequestModel model, CancellationToken cancellationToken);
 
         Task<Boolean> PerformVoucherIssue(PerformVoucherIssueRequestModel model, CancellationToken cancellationToken);
 

@@ -10,6 +10,7 @@
     using BusinessLogic.Services.DummyServices;
     using BusinessLogic.UIServices;
     using BusinessLogic.ViewModels;
+    using BusinessLogic.ViewModels.Admin;
     using BusinessLogic.ViewModels.Support;
     using BusinessLogic.ViewModels.Transactions;
     using Database;
@@ -127,7 +128,8 @@
             builder.Services.AddSingleton<IRequestHandler<PerformMobileTopupRequest, Boolean>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<LogonTransactionRequest, PerformLogonResponseModel>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<PerformVoucherIssueRequest, Boolean>, TransactionRequestHandler>();
-            
+            builder.Services.AddSingleton<IRequestHandler<PerformReconciliationRequest, Boolean>, TransactionRequestHandler>();
+
             builder.Services.AddSingleton<ServiceFactory>(ctx => { return t => ctx.GetService(t); });
 
             return builder;
@@ -149,6 +151,8 @@
             builder.Services.AddTransient<VoucherPerformIssuePageViewModel>();
             builder.Services.AddTransient<VoucherIssueSuccessPageViewModel>();
             builder.Services.AddTransient<VoucherIssueFailedPageViewModel>();
+
+            builder.Services.AddTransient<AdminPageViewModel>();
 
             builder.Services.AddTransient<SupportPageViewModel>();
 
