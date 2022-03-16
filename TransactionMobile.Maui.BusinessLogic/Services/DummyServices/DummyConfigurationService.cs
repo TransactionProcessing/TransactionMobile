@@ -14,11 +14,11 @@
                        ClientId = "dummyClientId",
                        ClientSecret = "dummyClientSecret",
                        EnableAutoUpdates = false,
-                       EstateManagementUrl = "http://localhost:5000",
-                       EstateReportingUrl = "http://localhost:5006",
+                       EstateManagementUri = "http://localhost:5000",
+                       EstateReportingUri = "http://localhost:5006",
                        LogLevel = LogLevel.Debug,
-                       SecurityServiceUrl = "http://localhost:5001",
-                       TransactionProcessorAclUrl = "http://localhost:5003"
+                       SecurityServiceUri = "http://localhost:5001",
+                       TransactionProcessorAclUri = "http://localhost:5003"
                    };
         }
 

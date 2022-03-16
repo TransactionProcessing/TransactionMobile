@@ -1,6 +1,8 @@
 ﻿namespace TransactionMobile.Maui.Extensions
 {
-
+    using System.Net.Security;
+    using System.Security.Cryptography.X509Certificates;
+    using Microsoft.Extensions.Caching.Memory;
     using BusinessLogic.Models;
     using BusinessLogic.RequestHandlers;
     using BusinessLogic.Requests;
@@ -11,7 +13,9 @@
     using BusinessLogic.ViewModels.Support;
     using BusinessLogic.ViewModels.Transactions;
     using Database;
+    using EstateManagement.Client;
     using MediatR;
+    using SecurityService.Client;
     using UIServices;
 
     public static class MauiAppBuilderExtensions
@@ -27,13 +31,77 @@
 
             return builder;
         }
-
+        
         public static MauiAppBuilder ConfigureAppServices(this MauiAppBuilder builder)
         {
-            builder.Services.AddSingleton<IAuthenticationService, DummyAuthenticationService>();
-            builder.Services.AddSingleton<IMerchantService, DummyMerchantService>();
-            builder.Services.AddSingleton<ITransactionService, DummyTransactionService>();
-            builder.Services.AddSingleton<IConfigurationService, DummyConfigurationService>();
+            HttpClientHandler httpClientHandler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message,
+                                                             certificate2,
+                                                             arg3,
+                                                             arg4) =>
+                                                            {
+                                                                return true;
+                                                            }
+            };
+            
+            HttpClient httpClient = new HttpClient(httpClientHandler);
+            builder.Services.AddSingleton<HttpClient>(httpClient);
+            builder.Services.AddSingleton<Func<String, String>>(
+                                                                new Func<String, String>(configSetting =>
+                                                                                         {
+                                                                                             
+
+                                                                                             if (configSetting == "ConfigServiceUrl")
+                                                                                             {
+                                                                                                 return "https://5r8nmm.deta.dev";
+                                                                                             }
+
+                                                                                             IMemoryCache cacheprovider = MauiProgram.Container.Services
+                                                                                                 .GetService<IMemoryCache>();
+
+                                                                                             Configuration configuration = cacheprovider.Get<Configuration>("Configuration");
+
+                                                                                             if (configuration != null)
+                                                                                             {
+                                                                                                 if (configSetting == "SecurityService")
+                                                                                                 {
+                                                                                                     return configuration.SecurityServiceUri;
+                                                                                                 }
+
+                                                                                                 if (configSetting == "TransactionProcessorACL")
+                                                                                                 {
+                                                                                                     return configuration.TransactionProcessorAclUri;
+                                                                                                 }
+
+                                                                                                 if (configSetting == "EstateManagementApi")
+                                                                                                 {
+                                                                                                     return configuration.EstateManagementUri;
+                                                                                                 }
+
+                                                                                                 if (configSetting == "EstateReportingApi")
+                                                                                                 {
+                                                                                                     return configuration.EstateReportingUri;
+                                                                                                 }
+
+                                                                                                 return string.Empty;
+                                                                                             }
+
+                                                                                             return string.Empty;
+                                                                                         }));
+
+            //builder.Services.AddSingleton<IConfigurationService, DummyConfigurationService>();
+            //builder.Services.AddSingleton<IAuthenticationService, DummyAuthenticationService>();
+            //builder.Services.AddSingleton<ITransactionService, DummyTransactionService>();
+            //builder.Services.AddSingleton<IMerchantService, DummyMerchantService>();
+
+            builder.Services.AddSingleton<IConfigurationService, ConfigurationService>();
+            builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddSingleton<ITransactionService, TransactionService>();
+            builder.Services.AddSingleton<IMerchantService, MerchantService>();
+
+            builder.Services.AddSingleton<ISecurityServiceClient, SecurityServiceClient>();
+            builder.Services.AddSingleton<IEstateClient, EstateClient>();
 
             return builder;
         }

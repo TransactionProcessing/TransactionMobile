@@ -4,10 +4,7 @@ using Models;
 
 public class DummyMerchantService : IMerchantService
 {
-    public async Task<List<ContractProductModel>> GetContractProducts(String accessToken,
-                                                                      Guid estateId,
-                                                                      Guid merchantId,
-                                                                      CancellationToken cancellationToken)
+    public async Task<List<ContractProductModel>> GetContractProducts(CancellationToken cancellationToken)
     {
         return new List<ContractProductModel>
                {
@@ -95,10 +92,7 @@ public class DummyMerchantService : IMerchantService
                };
     }
 
-    public async Task<Decimal> GetMerchantBalance(String accessToken,
-                                                  Guid estateId,
-                                                  Guid merchantId,
-                                                  CancellationToken cancellationToken)
+    public async Task<Decimal> GetMerchantBalance(CancellationToken cancellationToken)
     {
         return 100;
     }

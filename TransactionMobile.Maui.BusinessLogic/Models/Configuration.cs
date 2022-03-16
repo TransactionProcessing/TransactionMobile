@@ -6,13 +6,13 @@ public class Configuration
 
     public String ClientSecret { get; set; }
 
-    public String SecurityServiceUrl { get; set; }
+    public String SecurityServiceUri { get; set; }
         
-    public String TransactionProcessorAclUrl { get; set; }
+    public String TransactionProcessorAclUri { get; set; }
 
-    public String EstateManagementUrl { get; set; }
+    public String EstateManagementUri { get; set; }
 
-    public String EstateReportingUrl { get; set; }
+    public String EstateReportingUri { get; set; }
 
     public LogLevel LogLevel { get; set; }
 

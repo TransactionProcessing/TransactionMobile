@@ -10,5 +10,5 @@ public class TokenResponseModel
 {
     public String AccessToken { get; set; }
     public String RefreshToken { get; set; }
-    public Int32 ExpiryInMinutes { get; set; }
+    public Int64 ExpiryInMinutes { get; set; }
 }

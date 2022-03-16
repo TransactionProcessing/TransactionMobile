@@ -15,20 +15,10 @@ namespace TransactionMobile.Maui.Platforms.Services
     {
         public static partial String Identifier()
         {
-            String id = Build.Serial;
-            //if (string.IsNullOrWhiteSpace(id) || id == Build.Unknown || id == "0")
-            //{
-            //    try
-            //    {
-            //        Application.Current.Con
-            //        //Context context = Application.Context;
-            //        //id = Settings.Secure.GetString(context.ContentResolver, Settings.Secure.AndroidId);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Log.Warn("DeviceInfo", "Unable to get id: " + ex);
-            //    }
-            //}
+            var context = Android.App.Application.Context;
+
+            string id = Android.Provider.Settings.Secure.GetString(context.ContentResolver, Settings.Secure.AndroidId);
+
 
             return id;
         }

@@ -58,6 +58,7 @@
 		<PackageReference Include="CommunityToolkit.Maui" Version="1.0.0-pre7" />
 		<PackageReference Include="MediatR" Version="10.0.1" />
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
+		<PackageReference Include="SecurityService.Client" Version="1.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -179,7 +180,7 @@
 		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
 	</PropertyGroup>
 
-	<!--<PropertyGroup Condition="$(TargetFramework.Contains('-ios'))">
-		<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
-	</PropertyGroup>-->
+	<PropertyGroup>
+		<AndroidHttpClientHandlerType>DangerousAndroidMessageHandler, DangerousAndroidMessageHandler</AndroidHttpClientHandlerType>
+	</PropertyGroup>
 </Project>
