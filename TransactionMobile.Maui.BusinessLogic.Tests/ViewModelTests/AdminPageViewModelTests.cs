@@ -14,22 +14,21 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests
     using ViewModels.Admin;
     using ViewModels.Transactions;
     using Xunit;
+    using TransactionMobile.Maui.BusinessLogic.Services;
 
     public class AdminPageViewModelTests
     {
         [Fact]
-        public void TransactionsPageViewModel_AdminCommand_Execute_IsExecuted()
+        public void AdminPageViewModel_AdminCommand_Execute_IsExecuted()
         {
             Mock<INavigationService> navigationService = new Mock<INavigationService>();
             Mock<IMediator> mediator = new Mock<IMediator>();
-            Mock<IMemoryCache> userDetailsCache = new Mock<IMemoryCache>();
-            Mock<IMemoryCache> configurationCache = new Mock<IMemoryCache>();
+            Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
             Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
             Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
             AdminPageViewModel viewModel = new AdminPageViewModel(mediator.Object,
                                                                   navigationService.Object,
-                                                                  userDetailsCache.Object,
-                                                                  configurationCache.Object,
+                                                                  memoryCacheService.Object,
                                                                   deviceService.Object,
                                                                   applicationInfoService.Object);
 

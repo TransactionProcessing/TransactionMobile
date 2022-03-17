@@ -19,7 +19,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
     {
         private readonly Func<String, String> BaseAddressResolver;
 
-        private readonly IMemoryCache CacheProvider;
+        private readonly IMemoryCacheService MemoryCacheService;
 
         private String BuildRequestUrl(String route)
         {
@@ -46,10 +46,10 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
         public TransactionService(Func<String, String> baseAddressResolver,
                                   HttpClient httpClient,
-                                  IMemoryCache cacheProvider) : base(httpClient)
+                                  IMemoryCacheService memoryCacheService) : base(httpClient)
         {
             this.BaseAddressResolver = baseAddressResolver;
-            this.CacheProvider = cacheProvider;
+            this.MemoryCacheService = memoryCacheService;
 
             // Add the API version header
             this.HttpClient.DefaultRequestHeaders.Add("api-version", "1.0");
@@ -67,7 +67,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 LogonTransactionRequestMessage logonTransactionRequest = new LogonTransactionRequestMessage
                                                                          {
                                                                              ApplicationVersion = "1.0.5", //model.ApplicationVersion,
-                                                                             DeviceIdentifier = "d6b3e40886681417", //model.DeviceIdentifier,
+                                                                             DeviceIdentifier = model.DeviceIdentifier,
                                                                              TransactionDateTime = model.TransactionDateTime,
                                                                              TransactionNumber = model.TransactionNumber
                                                                          };
@@ -81,7 +81,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 StringContent httpContent = new StringContent(requestSerialised, Encoding.UTF8, "application/json");
 
                 // Add the access token to the client headers
-                TokenResponseModel accessToken = this.CacheProvider.Get<TokenResponseModel>("AccessToken");
+                this.MemoryCacheService.TryGetValue<TokenResponseModel>("AccessToken", out TokenResponseModel accessToken);
                 this.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
 
                 // Make the Http Call here
@@ -128,7 +128,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                                                                            ProductId = model.ProductId,
                                                                            OperatorIdentifier = model.OperatorIdentifier,
                                                                            ApplicationVersion = "1.0.5", //model.ApplicationVersion,
-                                                                           DeviceIdentifier = "d6b3e40886681417", //model.DeviceIdentifier,
+                                                                           DeviceIdentifier = model.DeviceIdentifier,
                                                                            ContractId = model.ContractId,
                                                                            TransactionDateTime = model.TransactionDateTime,
                                                                            CustomerEmailAddress = model.CustomerEmailAddress,
@@ -149,7 +149,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 StringContent httpContent = new StringContent(requestSerialised, Encoding.UTF8, "application/json");
 
                 // Add the access token to the client headers
-                TokenResponseModel accessToken = this.CacheProvider.Get<TokenResponseModel>("AccessToken");
+                this.MemoryCacheService.TryGetValue<TokenResponseModel>("AccessToken", out TokenResponseModel accessToken);
                 this.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
 
                 // Make the Http Call here
@@ -174,14 +174,32 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             return response;
         }
 
-        public async Task<Boolean> PerformReconciliation(CancellationToken cancellationToken)
+        public async Task<Boolean> PerformReconciliation(PerformReconciliationRequestModel model, CancellationToken cancellationToken)
         {
             Boolean response = false;
             String requestUri = this.BuildRequestUrl("/api/transactions");
 
             try
             {
-                ReconciliationRequestMessage reconciliationRequest = new ReconciliationRequestMessage();
+                ReconciliationRequestMessage reconciliationRequest = new ReconciliationRequestMessage
+                                                                     {
+                                                                         ApplicationVersion = model.ApplicationVersion,
+                                                                         TransactionDateTime = model.TransactionDateTime,
+                                                                         DeviceIdentifier = model.DeviceIdentifier,
+                                                                         TransactionCount = model.TransactionCount,
+                                                                         TransactionValue = model.TransactionValue,
+                                                                         OperatorTotals = new List<OperatorTotalRequest>()
+                                                                     };
+                foreach (OperatorTotalModel modelOperatorTotal in model.OperatorTotals)
+                {
+                    reconciliationRequest.OperatorTotals.Add(new OperatorTotalRequest
+                                                             {
+                                                                 OperatorIdentifier = modelOperatorTotal.OperatorIdentifier,
+                                                                 TransactionValue = modelOperatorTotal.TransactionValue,
+                                                                 ContractId = modelOperatorTotal.ContractId,
+                                                                 TransactionCount = modelOperatorTotal.TransactionCount
+                                                             });
+                }
 
                 String requestSerialised = JsonConvert.SerializeObject(reconciliationRequest,
                                                                        new JsonSerializerSettings
@@ -192,7 +210,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 StringContent httpContent = new StringContent(requestSerialised, Encoding.UTF8, "application/json");
 
                 // Add the access token to the client headers
-                TokenResponseModel accessToken = this.CacheProvider.Get<TokenResponseModel>("AccessToken");
+                this.MemoryCacheService.TryGetValue<TokenResponseModel>("AccessToken", out TokenResponseModel accessToken);
                 this.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
 
                 // Make the Http Call here
@@ -230,7 +248,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                     ProductId = model.ProductId,
                     OperatorIdentifier = model.OperatorIdentifier,
                     ApplicationVersion = "1.0.5", //model.ApplicationVersion,
-                    DeviceIdentifier = "d6b3e40886681417", //model.DeviceIdentifier,
+                    DeviceIdentifier = model.DeviceIdentifier,
                     ContractId = model.ContractId,
                     TransactionDateTime = model.TransactionDateTime,
                     CustomerEmailAddress = model.CustomerEmailAddress,
@@ -252,7 +270,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 StringContent httpContent = new StringContent(requestSerialised, Encoding.UTF8, "application/json");
 
                 // Add the access token to the client headers
-                TokenResponseModel accessToken = this.CacheProvider.Get<TokenResponseModel>("AccessToken");
+                this.MemoryCacheService.TryGetValue<TokenResponseModel>("AccessToken", out TokenResponseModel accessToken);
                 this.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
 
                 // Make the Http Call here

@@ -20,20 +20,21 @@ public class MerchantService : IMerchantService
 {
     private readonly IEstateClient EstateClient;
 
-    private readonly IMemoryCache CacheProvider;
+    private readonly IMemoryCacheService MemoryCacheService;
 
-    public MerchantService(IEstateClient estateClient, IMemoryCache cacheProvider)
+    public MerchantService(IEstateClient estateClient, IMemoryCacheService memoryCacheService)
     {
         this.EstateClient = estateClient;
-        this.CacheProvider = cacheProvider;
+        this.MemoryCacheService = memoryCacheService;
     }
     public async Task<List<ContractProductModel>> GetContractProducts(CancellationToken cancellationToken)
     {
         List<ContractProductModel> result = new List<ContractProductModel>();
 
-        TokenResponseModel accessToken = this.CacheProvider.Get<TokenResponseModel>("AccessToken");
-        Guid estateId = this.CacheProvider.Get<Guid>("EstateId");
-        Guid merchantId = this.CacheProvider.Get<Guid>("MerchantId");
+        this.MemoryCacheService.TryGetValue<TokenResponseModel>("AccessToken", out TokenResponseModel accessToken);
+        this.MemoryCacheService.TryGetValue<Guid>("EstateId", out Guid estateId);
+        this.MemoryCacheService.TryGetValue<Guid>("MerchantId", out Guid merchantId);
+
         List<ContractResponse> merchantContracts = await this.EstateClient.GetMerchantContracts(accessToken.AccessToken, estateId, merchantId, cancellationToken);
 
         foreach (ContractResponse contractResponse in merchantContracts)
@@ -94,9 +95,10 @@ public class MerchantService : IMerchantService
 
     public async Task<Decimal> GetMerchantBalance(CancellationToken cancellationToken)
     {
-        TokenResponseModel accessToken = this.CacheProvider.Get<TokenResponseModel>("AccessToken");
-        Guid estateId = this.CacheProvider.Get<Guid>("EstateId");
-        Guid merchantId = this.CacheProvider.Get<Guid>("MerchantId");
+        this.MemoryCacheService.TryGetValue<TokenResponseModel>("AccessToken", out TokenResponseModel accessToken);
+        this.MemoryCacheService.TryGetValue<Guid>("EstateId", out Guid estateId);
+        this.MemoryCacheService.TryGetValue<Guid>("MerchantId", out Guid merchantId);
+
         MerchantBalanceResponse merchantBalance = await this.EstateClient.GetMerchantBalance(accessToken.AccessToken, estateId, merchantId, cancellationToken);
 
         return merchantBalance.AvailableBalance;

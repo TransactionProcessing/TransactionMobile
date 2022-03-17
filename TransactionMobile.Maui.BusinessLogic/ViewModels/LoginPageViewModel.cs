@@ -9,13 +9,14 @@
     using MvvmHelpers;
     using MvvmHelpers.Commands;
     using Requests;
+    using Services;
     using UIServices;
 
     public class LoginPageViewModel : BaseViewModel
     {
         private readonly INavigationService NavigationService;
 
-        private readonly IMemoryCache CacheProvider;
+        private readonly IMemoryCacheService MemoryCacheService;
         
         private readonly IDeviceService DeviceService;
 
@@ -27,11 +28,11 @@
 
         #region Constructors
         
-        public LoginPageViewModel(IMediator mediator, INavigationService navigationService, IMemoryCache cacheProvider,
+        public LoginPageViewModel(IMediator mediator, INavigationService navigationService, IMemoryCacheService memoryCacheService,
                                   IDeviceService deviceService,IApplicationInfoService applicationInfoService)
         {
             this.NavigationService = navigationService;
-            this.CacheProvider = cacheProvider;
+            this.MemoryCacheService = memoryCacheService;
             this.DeviceService = deviceService;
             this.ApplicationInfoService = applicationInfoService;
             this.LoginCommand = new AsyncCommand(this.LoginCommandExecute);
@@ -69,7 +70,7 @@
             GetConfigurationRequest getConfigurationRequest = GetConfigurationRequest.Create(deviceIdentifier);
             Configuration configuration = await this.Mediator.Send(getConfigurationRequest);
             // Cache the config object
-            this.CacheProvider.Set("Configuration", configuration);
+            this.MemoryCacheService.Set("Configuration", configuration);
 
             LoginRequest loginRequest = LoginRequest.Create(this.UserName, this.Password);
             TokenResponseModel token = await this.Mediator.Send(loginRequest);
@@ -93,8 +94,8 @@
             }
 
             // Set the user information
-            this.CacheProvider.Set("EstateId", logonResponse.EstateId);
-            this.CacheProvider.Set("MerchantId", logonResponse.MerchantId);
+            this.MemoryCacheService.Set("EstateId", logonResponse.EstateId);
+            this.MemoryCacheService.Set("MerchantId", logonResponse.MerchantId);
 
             // Get Contracts
             GetContractProductsRequest getContractProductsRequest = GetContractProductsRequest.Create();
@@ -139,7 +140,7 @@
                                                         // Add eviction callback
                                                         .RegisterPostEvictionCallback(callback:this.AccessTokenExpired);
 
-            this.CacheProvider.Set("AccessToken", token, cacheEntryOptions);
+            this.MemoryCacheService.Set("AccessToken", token, cacheEntryOptions);
         }
         
         #endregion

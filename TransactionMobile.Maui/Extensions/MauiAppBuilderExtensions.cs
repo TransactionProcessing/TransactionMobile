@@ -18,6 +18,12 @@
     using MediatR;
     using SecurityService.Client;
     using UIServices;
+    using TransactionMobile.Maui.Pages;
+    using TransactionMobile.Maui.Pages.Transactions;
+    using TransactionMobile.Maui.Pages.Transactions.MobileTopup;
+    using TransactionMobile.Maui.Pages.Transactions.Voucher;
+    using TransactionMobile.Maui.Pages.Transactions.Admin;
+    using TransactionMobile.Maui.Pages.Support;
 
     public static class MauiAppBuilderExtensions
     {
@@ -58,12 +64,12 @@
                                                                                                  return "https://5r8nmm.deta.dev";
                                                                                              }
 
-                                                                                             IMemoryCache cacheprovider = MauiProgram.Container.Services
-                                                                                                 .GetService<IMemoryCache>();
+                                                                                             IMemoryCacheService memoryCacheService = MauiProgram.Container.Services
+                                                                                                 .GetService<IMemoryCacheService>();
 
-                                                                                             Configuration configuration = cacheprovider.Get<Configuration>("Configuration");
+                                                                                             Boolean configFound = memoryCacheService.TryGetValue<Configuration>("Configuration", out Configuration configuration);
 
-                                                                                             if (configuration != null)
+                                                                                             if (configFound && configuration != null)
                                                                                              {
                                                                                                  if (configSetting == "SecurityService")
                                                                                                  {
@@ -103,6 +109,7 @@
 
             builder.Services.AddSingleton<ISecurityServiceClient, SecurityServiceClient>();
             builder.Services.AddSingleton<IEstateClient, EstateClient>();
+            builder.Services.AddSingleton<IMemoryCacheService, MemoryCacheService>();
 
             return builder;
         }
@@ -156,6 +163,30 @@
 
             builder.Services.AddTransient<SupportPageViewModel>();
 
+
+            return builder;
+        }
+
+        public static MauiAppBuilder ConfigurePages(this MauiAppBuilder builder)
+        {
+            builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddTransient<TransactionsPage>();
+
+            builder.Services.AddTransient<MobileTopupSelectOperatorPage>();
+            builder.Services.AddTransient<MobileTopupSelectProductPage>();
+            builder.Services.AddTransient<MobileTopupPerformTopupPage>();
+            builder.Services.AddTransient<MobileTopupSuccessPage>();
+            builder.Services.AddTransient<MobileTopupFailedPage>();
+
+            builder.Services.AddTransient<VoucherSelectOperatorPage>();
+            builder.Services.AddTransient<VoucherSelectProductPage>();
+            builder.Services.AddTransient<VoucherPerformIssuePage>();
+            builder.Services.AddTransient<VoucherIssueSuccessPage>();
+            builder.Services.AddTransient<VoucherIssueFailedPage>();
+
+            builder.Services.AddTransient<AdminPage>();
+
+            builder.Services.AddTransient<SupportPage>();
 
             return builder;
         }

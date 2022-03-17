@@ -7,6 +7,7 @@
     using MvvmHelpers;
     using MvvmHelpers.Commands;
     using Requests;
+    using Services;
     using UIServices;
 
     public class AdminPageViewModel : BaseViewModel
@@ -15,10 +16,8 @@
 
         private readonly INavigationService NavigationService;
 
-        private readonly IMemoryCache UserDetailsCache;
-
-        private readonly IMemoryCache ConfigurationCache;
-
+        private readonly IMemoryCacheService MemoryCacheService;
+        
         private readonly IDeviceService DeviceService;
 
         private readonly IApplicationInfoService ApplicationInfoService;
@@ -26,13 +25,12 @@
         #region Constructors
 
         public AdminPageViewModel(IMediator mediator, INavigationService navigationService,
-                                  IMemoryCache userDetailsCache, IMemoryCache configurationCache,
+                                  IMemoryCacheService memoryCacheService,
                                   IDeviceService deviceService, IApplicationInfoService applicationInfoService)
         {
             this.Mediator = mediator;
             this.NavigationService = navigationService;
-            this.UserDetailsCache = userDetailsCache;
-            this.ConfigurationCache = configurationCache;
+            this.MemoryCacheService = memoryCacheService;
             this.DeviceService = deviceService;
             this.ApplicationInfoService = applicationInfoService;
             this.ReconciliationCommand = new AsyncCommand(this.ReconciliationCommandExecute);

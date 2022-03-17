@@ -15,28 +15,31 @@ public class RequestTests
     [Fact]
     public void GetContractProductsRequest_Create_IsCreated()
     {
-        GetContractProductsRequest request = GetContractProductsRequest.Create(TestData.Token,
-                                                                               TestData.EstateId,
-                                                                               TestData.MerchantId,
-                                                                               null);
+        GetContractProductsRequest request = GetContractProductsRequest.Create();
 
         request.ShouldNotBeNull();
-        request.AccessToken.ShouldBe(TestData.Token);
-        request.EstateId.ShouldBe(TestData.EstateId);
-        request.MerchantId.ShouldBe(TestData.MerchantId);
+        request.ProductType.ShouldBeNull();
+    }
+
+    [Theory]
+    [InlineData(Models.ProductType.BillPayment)]
+    [InlineData(Models.ProductType.MobileWallet)]
+    [InlineData(Models.ProductType.MobileTopup)]
+    [InlineData(Models.ProductType.Voucher)]
+    public void GetContractProductsRequest_Create_WithProductType_IsCreated(Models.ProductType productType)
+    {
+        GetContractProductsRequest request = GetContractProductsRequest.Create(productType);
+
+        request.ShouldNotBeNull();
+        request.ProductType.ShouldBe(productType);
     }
 
     [Fact]
     public void GetMerchantBalanceRequest_Create_IsCreated()
     {
-        GetMerchantBalanceRequest request = GetMerchantBalanceRequest.Create(TestData.Token,
-                                                                             TestData.EstateId,
-                                                                             TestData.MerchantId);
+        GetMerchantBalanceRequest request = GetMerchantBalanceRequest.Create();
 
         request.ShouldNotBeNull();
-        request.AccessToken.ShouldBe(TestData.Token);
-        request.EstateId.ShouldBe(TestData.EstateId);
-        request.MerchantId.ShouldBe(TestData.MerchantId);
     }
 
     [Fact]

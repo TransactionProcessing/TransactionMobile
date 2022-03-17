@@ -15,12 +15,12 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
     {
         private readonly ISecurityServiceClient SecurityServiceClient;
 
-        private readonly IMemoryCache CacheProvider;
+        private readonly IMemoryCacheService MemoryCacheService;
 
-        public AuthenticationService(ISecurityServiceClient securityServiceClient, IMemoryCache cacheProvider)
+        public AuthenticationService(ISecurityServiceClient securityServiceClient, IMemoryCacheService memoryCacheService)
         {
             this.SecurityServiceClient = securityServiceClient;
-            this.CacheProvider = cacheProvider;
+            this.MemoryCacheService = memoryCacheService;
         }
 
         public async Task<TokenResponseModel> GetToken(String username,
@@ -29,7 +29,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
         {
             try
             {
-                Configuration configuration = this.CacheProvider.Get<Configuration>("Configuration");
+                this.MemoryCacheService.TryGetValue<Configuration>("Configuration", out Configuration configuration);
 
                 username = "merchantuser@v28emulatormerchant.co.uk";
                 password = "123456";
@@ -55,7 +55,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
         public async Task<TokenResponseModel> RefreshAccessToken(String refreshToken,
                                                                  CancellationToken cancellationToken)
         {
-            var configuration = this.CacheProvider.Get<Configuration>("Configuration");
+            this.MemoryCacheService.TryGetValue<Configuration>("Configuration", out Configuration configuration);
+
             TokenResponse token = await this.SecurityServiceClient.GetToken(configuration.ClientId,configuration.ClientSecret, refreshToken,cancellationToken);
 
             return new TokenResponseModel

@@ -13,15 +13,15 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
 
     private readonly IMerchantService MerchantService;
 
-    private readonly IMemoryCache CacheProvider;
+    private readonly IMemoryCacheService MemoryCacheService;
 
     #endregion
 
     #region Constructors
-    public MerchantRequestHandler(IMerchantService merchantService,IMemoryCache cacheProvider)
+    public MerchantRequestHandler(IMerchantService merchantService,IMemoryCacheService memoryCacheService)
     {
         this.MerchantService = merchantService;
-        this.CacheProvider = cacheProvider;
+        this.MemoryCacheService = memoryCacheService;
     }
 
     #endregion
@@ -31,7 +31,7 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
     public async Task<List<ContractProductModel>> Handle(GetContractProductsRequest request,
                                                          CancellationToken cancellationToken)
     {
-        List<ContractProductModel> products = this.CacheProvider.Get<List<ContractProductModel>>("ContractProducts");
+        this.MemoryCacheService.TryGetValue<List<ContractProductModel>>("ContractProducts", out List<ContractProductModel> products);
         
         if (products == null || products.Any() == false)
         {
@@ -66,7 +66,7 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
                                                     // Force eviction to run
                                                     .AddExpirationToken(expirationToken);
 
-        this.CacheProvider.Set("ContractProducts", contractProductModels, cacheEntryOptions);
+        this.MemoryCacheService.Set("ContractProducts", contractProductModels, cacheEntryOptions);
     }
 
     #endregion

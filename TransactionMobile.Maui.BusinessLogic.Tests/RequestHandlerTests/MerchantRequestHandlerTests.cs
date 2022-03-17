@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using Models;
 using Moq;
 using RequestHandlers;
@@ -18,14 +19,14 @@ public class MerchantRequestHandlerTests
     public async Task MerchantRequestHandler_GetContractProductsRequest_Handle_IsHandled()
     {
         Mock<IMerchantService> merchantService = new Mock<IMerchantService>();
-        merchantService.Setup(m => m.GetContractProducts(It.IsAny<String>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+        merchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
                        .ReturnsAsync(TestData.ContractProductList);
-        MerchantRequestHandler handler = new MerchantRequestHandler(merchantService.Object);
+        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
+        
 
-        GetContractProductsRequest request = GetContractProductsRequest.Create(TestData.Token,
-                                                                               TestData.EstateId,
-                                                                               TestData.MerchantId,
-                                                                               null);
+        MerchantRequestHandler handler = new MerchantRequestHandler(merchantService.Object, memoryCacheService.Object);
+
+        GetContractProductsRequest request = GetContractProductsRequest.Create();
 
         List<ContractProductModel> contractProductModels = await handler.Handle(request, CancellationToken.None);
 
@@ -36,13 +37,12 @@ public class MerchantRequestHandlerTests
     public async Task MerchantRequestHandler_GetMerchantBalanceRequest_Handle_IsHandled()
     {
         Mock<IMerchantService> merchantService = new Mock<IMerchantService>();
-        merchantService.Setup(m => m.GetMerchantBalance(It.IsAny<String>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+        merchantService.Setup(m => m.GetMerchantBalance(It.IsAny<CancellationToken>()))
                        .ReturnsAsync(TestData.MerchantBalance);
-        MerchantRequestHandler handler = new MerchantRequestHandler(merchantService.Object);
+        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
+        MerchantRequestHandler handler = new MerchantRequestHandler(merchantService.Object, memoryCacheService.Object);
 
-        GetMerchantBalanceRequest request = GetMerchantBalanceRequest.Create(TestData.Token,
-                                                                             TestData.EstateId,
-                                                                             TestData.MerchantId);
+        GetMerchantBalanceRequest request = GetMerchantBalanceRequest.Create();
 
         Decimal merchantBalance = await handler.Handle(request, CancellationToken.None);
 
