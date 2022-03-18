@@ -25,7 +25,11 @@ jobs:
           dotnet-version: 6.0.200-preview.22055.15
           include-prerelease: true
 
-      #- run: dotnet tool update -g dotnet-vs
+      - name: Setup .NET 6
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+          include-prerelease: true
       
       - name: Install MAUI Workloads
         run: |
