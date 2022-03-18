@@ -9,16 +9,15 @@
     using MvvmHelpers;
     using MvvmHelpers.Commands;
     using Requests;
+    using Services;
     using UIServices;
 
     public class LoginPageViewModel : BaseViewModel
     {
         private readonly INavigationService NavigationService;
 
-        private readonly IMemoryCache UserDetailsCache;
-
-        private readonly IMemoryCache ConfigurationCache;
-
+        private readonly IMemoryCacheService MemoryCacheService;
+        
         private readonly IDeviceService DeviceService;
 
         private readonly IApplicationInfoService ApplicationInfoService;
@@ -29,12 +28,11 @@
 
         #region Constructors
         
-        public LoginPageViewModel(IMediator mediator, INavigationService navigationService, IMemoryCache userDetailsCache, IMemoryCache configurationCache,
+        public LoginPageViewModel(IMediator mediator, INavigationService navigationService, IMemoryCacheService memoryCacheService,
                                   IDeviceService deviceService,IApplicationInfoService applicationInfoService)
         {
             this.NavigationService = navigationService;
-            this.UserDetailsCache = userDetailsCache;
-            this.ConfigurationCache = configurationCache;
+            this.MemoryCacheService = memoryCacheService;
             this.DeviceService = deviceService;
             this.ApplicationInfoService = applicationInfoService;
             this.LoginCommand = new AsyncCommand(this.LoginCommandExecute);
@@ -68,11 +66,11 @@
         private async Task LoginCommandExecute()
         {
             // TODO: this method needs refactored
-            
-            GetConfigurationRequest getConfigurationRequest = GetConfigurationRequest.Create(this.DeviceService.GetIdentifier());
+            String deviceIdentifier = this.DeviceService.GetIdentifier();
+            GetConfigurationRequest getConfigurationRequest = GetConfigurationRequest.Create(deviceIdentifier);
             Configuration configuration = await this.Mediator.Send(getConfigurationRequest);
             // Cache the config object
-            this.ConfigurationCache.Set("Configuration", configuration);
+            this.MemoryCacheService.Set("Configuration", configuration);
 
             LoginRequest loginRequest = LoginRequest.Create(this.UserName, this.Password);
             TokenResponseModel token = await this.Mediator.Send(loginRequest);
@@ -86,7 +84,7 @@
 
             // Logon Transaction
             LogonTransactionRequest logonTransactionRequest = LogonTransactionRequest.Create(DateTime.Now, "1", 
-                                                                                             this.DeviceService.GetIdentifier(), 
+                                                                                             deviceIdentifier,
                                                                                              this.ApplicationInfoService.VersionString);
             PerformLogonResponseModel logonResponse = await this.Mediator.Send(logonTransactionRequest);
 
@@ -96,22 +94,17 @@
             }
 
             // Set the user information
-            this.UserDetailsCache.Set("EstateId", logonResponse.EstateId);
-            this.UserDetailsCache.Set("Merchant", logonResponse.MerchantId);
+            this.MemoryCacheService.Set("EstateId", logonResponse.EstateId);
+            this.MemoryCacheService.Set("MerchantId", logonResponse.MerchantId);
 
             // Get Contracts
-            // TODO: Cache the result, but will add this to a timer call to keep up to date...
-            GetContractProductsRequest getContractProductsRequest = GetContractProductsRequest.Create(token.AccessToken, 
-                                                                                                      logonResponse.EstateId, 
-                                                                                                      logonResponse.MerchantId, null);
-            List<ContractProductModel> products = await this.Mediator.Send(getContractProductsRequest);
-
+            GetContractProductsRequest getContractProductsRequest = GetContractProductsRequest.Create();
+            await this.Mediator.Send(getContractProductsRequest);
+            
             // Get the merchant balance
             // TODO: Cache the result, but will add this to a timer call to keep up to date...
-            GetMerchantBalanceRequest getMerchantBalanceRequest = GetMerchantBalanceRequest.Create(token.AccessToken,
-                                                                                                   logonResponse.EstateId,
-                                                                                                   logonResponse.MerchantId);
-            Decimal merchantBalance = await this.Mediator.Send(getMerchantBalanceRequest);
+            GetMerchantBalanceRequest getMerchantBalanceRequest = GetMerchantBalanceRequest.Create();
+            await this.Mediator.Send(getMerchantBalanceRequest);
 
             await this.NavigationService.GoToHome();
         }
@@ -147,9 +140,9 @@
                                                         // Add eviction callback
                                                         .RegisterPostEvictionCallback(callback:this.AccessTokenExpired);
 
-            this.UserDetailsCache.Set("AccessToken", token, cacheEntryOptions);
+            this.MemoryCacheService.Set("AccessToken", token, cacheEntryOptions);
         }
-
+        
         #endregion
     }
 }

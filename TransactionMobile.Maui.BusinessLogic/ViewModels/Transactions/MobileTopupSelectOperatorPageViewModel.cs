@@ -43,7 +43,8 @@ public class MobileTopupSelectOperatorPageViewModel : BaseViewModel
 
     public async Task Initialise(CancellationToken cancellationToken)
     {
-        GetContractProductsRequest request = GetContractProductsRequest.Create("", Guid.Empty, Guid.Empty, ProductType.MobileTopup);
+
+        GetContractProductsRequest request = GetContractProductsRequest.Create(ProductType.MobileTopup);
 
         List<ContractProductModel> products = await this.Mediator.Send(request, cancellationToken);
 

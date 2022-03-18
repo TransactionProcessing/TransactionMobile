@@ -1,6 +1,8 @@
 ﻿namespace TransactionMobile.Maui.Extensions
 {
-
+    using System.Net.Security;
+    using System.Security.Cryptography.X509Certificates;
+    using Microsoft.Extensions.Caching.Memory;
     using BusinessLogic.Models;
     using BusinessLogic.RequestHandlers;
     using BusinessLogic.Requests;
@@ -12,8 +14,16 @@
     using BusinessLogic.ViewModels.Support;
     using BusinessLogic.ViewModels.Transactions;
     using Database;
+    using EstateManagement.Client;
     using MediatR;
+    using SecurityService.Client;
     using UIServices;
+    using TransactionMobile.Maui.Pages;
+    using TransactionMobile.Maui.Pages.Transactions;
+    using TransactionMobile.Maui.Pages.Transactions.MobileTopup;
+    using TransactionMobile.Maui.Pages.Transactions.Voucher;
+    using TransactionMobile.Maui.Pages.Transactions.Admin;
+    using TransactionMobile.Maui.Pages.Support;
 
     public static class MauiAppBuilderExtensions
     {
@@ -28,13 +38,78 @@
 
             return builder;
         }
-
+        
         public static MauiAppBuilder ConfigureAppServices(this MauiAppBuilder builder)
         {
-            builder.Services.AddSingleton<IAuthenticationService, DummyAuthenticationService>();
-            builder.Services.AddSingleton<IMerchantService, DummyMerchantService>();
-            builder.Services.AddSingleton<ITransactionService, DummyTransactionService>();
-            builder.Services.AddSingleton<IConfigurationService, DummyConfigurationService>();
+            HttpClientHandler httpClientHandler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message,
+                                                             certificate2,
+                                                             arg3,
+                                                             arg4) =>
+                                                            {
+                                                                return true;
+                                                            }
+            };
+            
+            HttpClient httpClient = new HttpClient(httpClientHandler);
+            builder.Services.AddSingleton<HttpClient>(httpClient);
+            builder.Services.AddSingleton<Func<String, String>>(
+                                                                new Func<String, String>(configSetting =>
+                                                                                         {
+                                                                                             
+
+                                                                                             if (configSetting == "ConfigServiceUrl")
+                                                                                             {
+                                                                                                 return "https://5r8nmm.deta.dev";
+                                                                                             }
+
+                                                                                             IMemoryCacheService memoryCacheService = MauiProgram.Container.Services
+                                                                                                 .GetService<IMemoryCacheService>();
+
+                                                                                             Boolean configFound = memoryCacheService.TryGetValue<Configuration>("Configuration", out Configuration configuration);
+
+                                                                                             if (configFound && configuration != null)
+                                                                                             {
+                                                                                                 if (configSetting == "SecurityService")
+                                                                                                 {
+                                                                                                     return configuration.SecurityServiceUri;
+                                                                                                 }
+
+                                                                                                 if (configSetting == "TransactionProcessorACL")
+                                                                                                 {
+                                                                                                     return configuration.TransactionProcessorAclUri;
+                                                                                                 }
+
+                                                                                                 if (configSetting == "EstateManagementApi")
+                                                                                                 {
+                                                                                                     return configuration.EstateManagementUri;
+                                                                                                 }
+
+                                                                                                 if (configSetting == "EstateReportingApi")
+                                                                                                 {
+                                                                                                     return configuration.EstateReportingUri;
+                                                                                                 }
+
+                                                                                                 return string.Empty;
+                                                                                             }
+
+                                                                                             return string.Empty;
+                                                                                         }));
+
+            //builder.Services.AddSingleton<IConfigurationService, DummyConfigurationService>();
+            //builder.Services.AddSingleton<IAuthenticationService, DummyAuthenticationService>();
+            //builder.Services.AddSingleton<ITransactionService, DummyTransactionService>();
+            //builder.Services.AddSingleton<IMerchantService, DummyMerchantService>();
+
+            builder.Services.AddSingleton<IConfigurationService, ConfigurationService>();
+            builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddSingleton<ITransactionService, TransactionService>();
+            builder.Services.AddSingleton<IMerchantService, MerchantService>();
+
+            builder.Services.AddSingleton<ISecurityServiceClient, SecurityServiceClient>();
+            builder.Services.AddSingleton<IEstateClient, EstateClient>();
+            builder.Services.AddSingleton<IMemoryCacheService, MemoryCacheService>();
 
             return builder;
         }
@@ -88,6 +163,30 @@
 
             builder.Services.AddTransient<SupportPageViewModel>();
 
+
+            return builder;
+        }
+
+        public static MauiAppBuilder ConfigurePages(this MauiAppBuilder builder)
+        {
+            builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddTransient<TransactionsPage>();
+
+            builder.Services.AddTransient<MobileTopupSelectOperatorPage>();
+            builder.Services.AddTransient<MobileTopupSelectProductPage>();
+            builder.Services.AddTransient<MobileTopupPerformTopupPage>();
+            builder.Services.AddTransient<MobileTopupSuccessPage>();
+            builder.Services.AddTransient<MobileTopupFailedPage>();
+
+            builder.Services.AddTransient<VoucherSelectOperatorPage>();
+            builder.Services.AddTransient<VoucherSelectProductPage>();
+            builder.Services.AddTransient<VoucherPerformIssuePage>();
+            builder.Services.AddTransient<VoucherIssueSuccessPage>();
+            builder.Services.AddTransient<VoucherIssueFailedPage>();
+
+            builder.Services.AddTransient<AdminPage>();
+
+            builder.Services.AddTransient<SupportPage>();
 
             return builder;
         }

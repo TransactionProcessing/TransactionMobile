@@ -5,6 +5,11 @@ using Platforms.Services;
 
 public class DeviceService : IDeviceService
 {
+    public String GetIdentifier()
+    {
+        return DeviceInformationService.Identifier();
+    }
+
     public String GetModel()
     {
         return DeviceInformationService.Model();
@@ -14,9 +19,5 @@ public class DeviceService : IDeviceService
     {
         return DeviceInformationService.Platform();
     }
-
-    public String GetIdentifier()
-    {
-        return DeviceInformationService.Identifier();
-    }
+    
 }

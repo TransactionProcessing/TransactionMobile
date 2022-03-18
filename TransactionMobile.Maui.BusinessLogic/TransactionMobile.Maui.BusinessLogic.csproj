@@ -15,9 +15,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="ClientProxyBase" Version="1.1.8" />
+		<PackageReference Include="EstateManagement.Client" Version="1.1.0" />
 		<PackageReference Include="MediatR" Version="10.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.2-mauipre.1.22102.15" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
+		<PackageReference Include="SecurityService.Client" Version="1.1.0" />
+		<PackageReference Include="TransactionProcessorACL.DataTransferObjects" Version="1.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>

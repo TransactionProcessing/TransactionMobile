@@ -43,7 +43,7 @@ public class VoucherSelectOperatorPageViewModel : BaseViewModel
 
     public async Task Initialise(CancellationToken cancellationToken)
     {
-        GetContractProductsRequest request = GetContractProductsRequest.Create("", Guid.Empty, Guid.Empty, ProductType.Voucher);
+        GetContractProductsRequest request = GetContractProductsRequest.Create(ProductType.Voucher);
 
         List<ContractProductModel> products = await this.Mediator.Send(request, cancellationToken);
 

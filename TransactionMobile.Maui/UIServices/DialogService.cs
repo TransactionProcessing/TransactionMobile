@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.UIServices
 {
-    using CommunityToolkit.Maui.Alerts;
-    using CommunityToolkit.Maui.Core;
+    //using CommunityToolkit.Maui.Alerts;
+    //using CommunityToolkit.Maui.Core;
 
     //public interface IDialogService
     //{

@@ -7,37 +7,22 @@ public class GetContractProductsRequest : IRequest<List<ContractProductModel>>
 {
     #region Constructors
 
-    private GetContractProductsRequest(String accessToken,
-                                       Guid estateId,
-                                       Guid merchantId,
-                                       ProductType? productType)
+    private GetContractProductsRequest(ProductType? productType)
     {
-        this.AccessToken = accessToken;
-        this.EstateId = estateId;
-        this.MerchantId = merchantId;
         this.ProductType = productType;
     }
 
     #endregion
 
     #region Properties
-
-    public String AccessToken { get; }
-
-    public Guid EstateId { get; }
-
-    public Guid MerchantId { get; }
     public ProductType? ProductType { get; }
     #endregion
 
     #region Methods
 
-    public static GetContractProductsRequest Create(String accessToken,
-                                                    Guid estateId,
-                                                    Guid merchantId,
-                                                    ProductType? productType)
+    public static GetContractProductsRequest Create(ProductType? productType =null)
     {
-        return new GetContractProductsRequest(accessToken, estateId, merchantId,productType);
+        return new GetContractProductsRequest(productType);
     }
 
     #endregion
