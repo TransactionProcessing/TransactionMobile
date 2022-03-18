@@ -28,7 +28,8 @@ jobs:
       - name: Setup .NET 6
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.200-preview.22055.15
+#          dotnet-version: 6.0.200-preview.22055.15
+          dotnet-version: 6.0.300-preview.22154.4
           include-prerelease: true
           
       - uses: actions/setup-java@v2
@@ -38,14 +39,18 @@ jobs:
 
       - name: Install MAUI Workloads
         run: |
-          dotnet workload install android --ignore-failed-sources
           dotnet workload install maui --ignore-failed-sources
+          dotnet workload install maui-android --ignore-failed-sources
+          dotnet workload install maui-desktop --ignore-failed-sources
+          dotnet workload install maui-ios --ignore-failed-sources
+          dotnet workload install maui-mobile --ignore-failed-sources
+          dotnet workload install maui-windows --ignore-failed-sources
 
-      - name: Setup .NET 6
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 6.0.300-preview.22154.4
-          include-prerelease: true
+      #- name: Setup .NET 6
+      #  uses: actions/setup-dotnet@v1
+      #  with:
+      #    dotnet-version: 6.0.300-preview.22154.4
+      #    include-prerelease: true
 
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln --source https://api.nuget.org/v3/index.json --source https://www.myget.org/F/transactionprocessing/api/v3/index.json --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
