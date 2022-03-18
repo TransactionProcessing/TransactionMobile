@@ -9,7 +9,7 @@
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
-		<PublishTrimmed>true</PublishTrimmed>
+		<PublishTrimmed>false</PublishTrimmed>
 
 		<!-- Display name -->
 		<ApplicationTitle>Transaction Processing POS</ApplicationTitle>
