@@ -193,7 +193,7 @@
 		<PublishTrimmed>false</PublishTrimmed>
 	</PropertyGroup>
 	<PropertyGroup Condition="$(TargetFramework.Contains('-ios'))">
-		<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+		<!--<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>-->
 		<PublishTrimmed>true</PublishTrimmed>
 	</PropertyGroup>
 	<PropertyGroup Condition="$(TargetFramework.Contains('-catalyst'))">
