@@ -62,6 +62,7 @@ public class VoucherSelectProductPageViewModel : BaseViewModel, IQueryAttributab
 
     private async Task ProductSelectedCommandExecute(ItemSelected<ContractProductModel> e)
     {
+        Shared.Logger.Logger.LogInformation("ProductSelectedCommandExecute called");
         await this.NavigationService.GoToVoucherIssueVoucherPage(e.SelectedItem.OperatorIdentfier, e.SelectedItem.ContractId, e.SelectedItem.ProductId, e.SelectedItem.Value);
     }
 

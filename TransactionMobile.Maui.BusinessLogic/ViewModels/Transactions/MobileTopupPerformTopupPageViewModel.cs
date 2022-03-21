@@ -96,16 +96,19 @@ public class MobileTopupPerformTopupPageViewModel : BaseViewModel, IQueryAttribu
 
     private void CustomerEmailAddressEntryCompletedCommandExecute()
     {
+        Shared.Logger.Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
         this.OnCustomerEmailAddressEntryCompleted();
     }
 
     private void CustomerMobileNumberEntryCompletedCommandExecute()
     {
+        Shared.Logger.Logger.LogInformation("CustomerMobileNumberEntryCompletedCommandExecute called");
         this.OnCustomerMobileNumberEntryCompleted();
     }
 
     private async Task PerformTopupCommandExecute()
     {
+        Shared.Logger.Logger.LogInformation("PerformTopupCommandExecute called");
         // TODO: Create Command and Send
         PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(DateTime.Now,
                                                                              "1",
@@ -133,6 +136,7 @@ public class MobileTopupPerformTopupPageViewModel : BaseViewModel, IQueryAttribu
 
     private void TopupAmountEntryCompletedCommandExecute()
     {
+        Shared.Logger.Logger.LogInformation("TopupAmountEntryCompletedCommandExecute called");
         this.OnTopupAmountEntryCompleted();
     }
 

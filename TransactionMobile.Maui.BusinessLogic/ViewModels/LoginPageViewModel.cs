@@ -10,6 +10,7 @@
     using MvvmHelpers.Commands;
     using Requests;
     using Services;
+    using TransactionMobile.Maui.Database;
     using UIServices;
 
     public class LoginPageViewModel : BaseViewModel
@@ -65,10 +66,13 @@
 
         private async Task LoginCommandExecute()
         {
+            Shared.Logger.Logger.LogInformation("LoginCommandExecute called");
+            
             // TODO: this method needs refactored
             String deviceIdentifier = this.DeviceService.GetIdentifier();
             GetConfigurationRequest getConfigurationRequest = GetConfigurationRequest.Create(deviceIdentifier);
             Configuration configuration = await this.Mediator.Send(getConfigurationRequest);
+            
             // Cache the config object
             this.MemoryCacheService.Set("Configuration", configuration);
 

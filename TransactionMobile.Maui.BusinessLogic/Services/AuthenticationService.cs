@@ -8,6 +8,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 {
     using Microsoft.Extensions.Caching.Memory;
     using Models;
+    using Newtonsoft.Json;
     using SecurityService.Client;
     using SecurityService.DataTransferObjects.Responses;
 
@@ -34,8 +35,14 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 username = "merchantuser@v28emulatormerchant.co.uk";
                 password = "123456";
 
+                Shared.Logger.Logger.LogInformation($"About to request token for {username}");
+                Shared.Logger.Logger.LogDebug($"Token Request details UserName: {username} Password: {password} ClientId: {configuration.ClientId} ClientSecret: {configuration.ClientSecret}");
+                
                 TokenResponse token =
                     await this.SecurityServiceClient.GetToken(username, password, configuration.ClientId, configuration.ClientSecret, cancellationToken);
+
+                Shared.Logger.Logger.LogInformation($"Token for {username} requested successfully");
+                Shared.Logger.Logger.LogDebug($"Token Response: [{JsonConvert.SerializeObject(token)}]");
 
                 return new TokenResponseModel
                        {
@@ -46,6 +53,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             }
             catch(Exception ex)
             {
+                Shared.Logger.Logger.LogError(new Exception($"Error getting Token", ex));
                 return null;
             }
 
@@ -56,15 +64,28 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                                                                  CancellationToken cancellationToken)
         {
             this.MemoryCacheService.TryGetValue<Configuration>("Configuration", out Configuration configuration);
+            try
+            {
+                Shared.Logger.Logger.LogInformation($"About to request refresh token");
+                Shared.Logger.Logger.LogDebug($"Refresh Token Request details Token: {refreshToken} ClientId: {configuration.ClientId} ClientSecret: {configuration.ClientSecret}");
 
-            TokenResponse token = await this.SecurityServiceClient.GetToken(configuration.ClientId,configuration.ClientSecret, refreshToken,cancellationToken);
+                TokenResponse token = await this.SecurityServiceClient.GetToken(configuration.ClientId, configuration.ClientSecret, refreshToken, cancellationToken);
 
-            return new TokenResponseModel
-                   {
-                       AccessToken = token.AccessToken,
-                       ExpiryInMinutes = token.ExpiresIn,
-                       RefreshToken = token.RefreshToken
-                   };
+                Shared.Logger.Logger.LogInformation($"Refresh Token requested successfully");
+                Shared.Logger.Logger.LogDebug($"Token Response: [{JsonConvert.SerializeObject(token)}]");
+
+                return new TokenResponseModel
+                {
+                    AccessToken = token.AccessToken,
+                    ExpiryInMinutes = token.ExpiresIn,
+                    RefreshToken = token.RefreshToken
+                };
+            }
+            catch (Exception ex)
+            {
+                Shared.Logger.Logger.LogError(new Exception($"Error refreshing Token", ex));
+                return null;
+            }
         }
     }
 }

@@ -108,21 +108,25 @@ public class VoucherPerformIssuePageViewModel : BaseViewModel, IQueryAttributabl
 
     private void CustomerEmailAddressEntryCompletedCommandExecute()
     {
+        Shared.Logger.Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
         this.OnCustomerEmailAddressEntryCompleted();
     }
 
     private void RecipientMobileNumberEntryCompletedCommandExecute()
     {
+        Shared.Logger.Logger.LogInformation("RecipientMobileNumberEntryCompletedCommandExecute called");
         this.OnRecipientMobileNumberEntryCompleted();
     }
 
     private void RecipientEmailAddressEntryCompletedCommandExecute()
     {
+        Shared.Logger.Logger.LogInformation("RecipientEmailAddressEntryCompletedCommandExecute called");
         this.OnRecipientEmailAddressEntryCompleted();
     }
 
     private async Task IssueVoucherCommandExecute()
     {
+        Shared.Logger.Logger.LogInformation("IssueVoucherCommandExecute called");
         // TODO: Create Command and Send
         PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(DateTime.Now,
                                                                                "1",
@@ -151,6 +155,7 @@ public class VoucherPerformIssuePageViewModel : BaseViewModel, IQueryAttributabl
 
     private void VoucherAmountEntryCompletedCommandExecute()
     {
+        Shared.Logger.Logger.LogInformation("VoucherAmountEntryCompletedCommandExecute called");
         this.OnVoucherAmountEntryCompleted();
     }
 

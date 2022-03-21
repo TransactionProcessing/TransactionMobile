@@ -24,6 +24,7 @@
     using TransactionMobile.Maui.Pages.Transactions.Voucher;
     using TransactionMobile.Maui.Pages.Transactions.Admin;
     using TransactionMobile.Maui.Pages.Support;
+    using System;
 
     public static class MauiAppBuilderExtensions
     {
@@ -32,10 +33,15 @@
         public static MauiAppBuilder ConfigureDatabase(this MauiAppBuilder builder)
         {
             String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "transactionpos.db");
-            IDatabaseContext database = new DatabaseContext(connectionString);
+            Func<Database.LogLevel> logLevelFunc = new Func<Database.LogLevel>( () =>
+                {
+                return Database.LogLevel.Debug;
+            });                      
+
+            IDatabaseContext database = new DatabaseContext(connectionString, logLevelFunc);
             database.InitialiseDatabase(); 
             builder.Services.AddSingleton<IDatabaseContext>(database);
-
+                        
             return builder;
         }
         
@@ -136,6 +142,7 @@
             builder.Services.AddSingleton<IRequestHandler<LogonTransactionRequest, PerformLogonResponseModel>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<PerformVoucherIssueRequest, Boolean>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<PerformReconciliationRequest, Boolean>, TransactionRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<UploadLogsRequest, Boolean>, TransactionRequestHandler>();
 
             builder.Services.AddSingleton<ServiceFactory>(ctx => { return t => ctx.GetService(t); });
 

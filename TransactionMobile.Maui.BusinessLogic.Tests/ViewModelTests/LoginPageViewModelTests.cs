@@ -9,6 +9,7 @@ using Models;
 using Moq;
 using Requests;
 using TransactionMobile.Maui.BusinessLogic.Services;
+using TransactionMobile.Maui.Database;
 using UIServices;
 using ViewModels;
 using Xunit;

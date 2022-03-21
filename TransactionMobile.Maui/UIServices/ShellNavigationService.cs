@@ -10,12 +10,12 @@ public class ShellNavigationService : INavigationService
 
     public async Task GoToHome()
     {
-        await Shell.Current.GoToAsync("//home");
+        await NavigateTo("//home");
     }
 
     public async Task GoToMobileTopupFailedPage()
     {
-        await Shell.Current.GoToAsync($"{nameof(MobileTopupFailedPage)}");
+        await NavigateTo($"{nameof(MobileTopupFailedPage)}");
     }
 
     public async Task GoToMobileTopupPerformTopupPage(String operatorIdentifier,
@@ -23,53 +23,53 @@ public class ShellNavigationService : INavigationService
                                                       Guid productId,
                                                       Decimal topupAmount)
     {
-        await
-            Shell.Current.GoToAsync($"{nameof(MobileTopupPerformTopupPage)}?OperatorIdentifier={operatorIdentifier}&ContractId={contractId}&ProductId={productId}&TopupAmount={topupAmount}");
+        await NavigateTo($"{nameof(MobileTopupPerformTopupPage)}?OperatorIdentifier={operatorIdentifier}&ContractId={contractId}&ProductId={productId}&TopupAmount={topupAmount}");
     }
 
     public async Task GoToMobileTopupSelectOperatorPage()
     {
-        await Shell.Current.GoToAsync(nameof(MobileTopupSelectOperatorPage));
+        await NavigateTo(nameof(MobileTopupSelectOperatorPage));
     }
 
     public async Task GoToAdminPage()
     {
-        await Shell.Current.GoToAsync(nameof(AdminPage));
+        await NavigateTo(nameof(AdminPage));
     }
 
     public async Task GoToMobileTopupSelectProductPage(String operatorIdentifier)
     {
-        await Shell.Current.GoToAsync($"{nameof(MobileTopupSelectProductPage)}?OperatorIdentifier={operatorIdentifier}");
+        await NavigateTo($"{nameof(MobileTopupSelectProductPage)}?OperatorIdentifier={operatorIdentifier}");
     }
 
     public async Task GoToMobileTopupSuccessPage()
     {
-        await Shell.Current.GoToAsync($"{nameof(MobileTopupSuccessPage)}");
+        await NavigateTo($"{nameof(MobileTopupSuccessPage)}");
     }
 
     public async Task GoToVoucherIssueSuccessPage()
     {
-        await Shell.Current.GoToAsync($"{nameof(VoucherIssueSuccessPage)}");
+        await NavigateTo($"{nameof(VoucherIssueSuccessPage)}");
     }
 
     public async Task GoToVoucherIssueFailedPage()
     {
-        await Shell.Current.GoToAsync($"{nameof(VoucherIssueFailedPage)}");
+        await NavigateTo($"{nameof(VoucherIssueFailedPage)}");
     }
 
     public async Task PopToRoot()
     {
+        Shared.Logger.Logger.LogInformation($"navigating to root");
         await Shell.Current.Navigation.PopToRootAsync();
     }
 
     public async Task GoToVoucherSelectOperatorPage()
     {
-        await Shell.Current.GoToAsync(nameof(VoucherSelectOperatorPage));
+        await NavigateTo(nameof(VoucherSelectOperatorPage));
     }
 
     public async Task GoToVoucherSelectProductPage(String operatorIdentifier)
     {
-        await Shell.Current.GoToAsync($"{nameof(VoucherSelectProductPage)}?OperatorIdentifier={operatorIdentifier}");
+        await NavigateTo($"{nameof(VoucherSelectProductPage)}?OperatorIdentifier={operatorIdentifier}");
     }
 
     public async Task GoToVoucherIssueVoucherPage(String operatorIdentifier,
@@ -77,8 +77,13 @@ public class ShellNavigationService : INavigationService
                                                   Guid productId,
                                                   Decimal voucherAmount)
     {
-        await
-            Shell.Current.GoToAsync($"{nameof(VoucherPerformIssuePage)}?OperatorIdentifier={operatorIdentifier}&ContractId={contractId}&ProductId={productId}&VoucherAmount={voucherAmount}");
+        await NavigateTo($"{nameof(VoucherPerformIssuePage)}?OperatorIdentifier={operatorIdentifier}&ContractId={contractId}&ProductId={productId}&VoucherAmount={voucherAmount}");
+    }
+
+    private async Task NavigateTo(String route)
+    {
+        Shared.Logger.Logger.LogInformation($"navigating to {route}");
+        await Shell.Current.GoToAsync(route);
     }
 
     #endregion

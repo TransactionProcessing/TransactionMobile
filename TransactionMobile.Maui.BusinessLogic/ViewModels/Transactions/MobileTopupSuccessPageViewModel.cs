@@ -31,6 +31,7 @@
 
         private async Task CompletedCommandExecute()
         {
+            Shared.Logger.Logger.LogInformation("CompletedCommandExecute called");
             await this.NavigationService.PopToRoot();
         }
 
