@@ -142,7 +142,7 @@
             builder.Services.AddSingleton<IRequestHandler<LogonTransactionRequest, PerformLogonResponseModel>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<PerformVoucherIssueRequest, Boolean>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<PerformReconciliationRequest, Boolean>, TransactionRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<UploadLogsRequest, Boolean>, TransactionRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<UploadLogsRequest, Boolean>, SupportRequestHandler>();
 
             builder.Services.AddSingleton<ServiceFactory>(ctx => { return t => ctx.GetService(t); });
 

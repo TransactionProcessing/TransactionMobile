@@ -9,13 +9,11 @@ using Services;
 public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupRequest, Boolean>,
                                          IRequestHandler<LogonTransactionRequest, PerformLogonResponseModel>,
                                          IRequestHandler<PerformVoucherIssueRequest, Boolean>,
-                                         IRequestHandler<PerformReconciliationRequest, Boolean>,
-                                         IRequestHandler<UploadLogsRequest,Boolean>
+                                         IRequestHandler<PerformReconciliationRequest, Boolean>                                         
 {
     #region Fields
 
     private readonly ITransactionService TransactionService;
-    private readonly IConfigurationService ConfigurationService;
     private readonly IDatabaseContext DatabaseContext;
 
     #endregion
@@ -23,11 +21,9 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
     #region Constructors
 
     public TransactionRequestHandler(ITransactionService transactionService,
-                                     IConfigurationService configurationService,
                                      IDatabaseContext databaseContext)
     {
         this.TransactionService = transactionService;
-        this.ConfigurationService = configurationService;
         this.DatabaseContext = databaseContext;
     }
 
@@ -244,36 +240,5 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         }
 
         return result;
-    }
-
-    public async Task<Boolean> Handle(UploadLogsRequest request, CancellationToken cancellationToken)
-    {
-        while (true)
-        {
-            var logEntries = await this.DatabaseContext.GetLogMessages(10); // TODO: Configurable batch size
-
-            if (logEntries.Any() == false)
-            {
-                break;
-            }
-
-            // TODO: Translate log messages
-            List<Models.LogMessage> logMessageModels = new List<Models.LogMessage>();
-
-            logEntries.ForEach(l => logMessageModels.Add(new Models.LogMessage
-            {
-                LogLevel = l.LogLevel,
-                Message = l.Message,
-                EntryDateTime = l.EntryDateTime,
-                Id = l.Id
-            }));
-
-            await this.ConfigurationService.PostDiagnosticLogs(request.DeviceIdentifier, logMessageModels, CancellationToken.None);
-
-            // Clear the logs that have been uploaded
-            await this.DatabaseContext.RemoveUploadedMessages(logEntries);            
-        }
-
-        return true;
     }
 }
