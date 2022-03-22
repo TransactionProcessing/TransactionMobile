@@ -7,6 +7,7 @@ using Maui.UIServices;
 using MediatR;
 using Moq;
 using Requests;
+using Shared.Logger;
 using Shouldly;
 using UIServices;
 using ViewModels.Transactions;
@@ -40,6 +41,7 @@ public class VoucherPerformIssuePageViewModelTests
     {
         Mock<IMediator> mediator = new Mock<IMediator>();
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Logger.Initialise(NullLogger.Instance);
         VoucherPerformIssuePageViewModel viewModel = new VoucherPerformIssuePageViewModel(mediator.Object, navigationService.Object);
         Boolean isCompletedCalled = false;
         viewModel.OnCustomerEmailAddressEntryCompleted = () =>
@@ -63,6 +65,7 @@ public class VoucherPerformIssuePageViewModelTests
     {
         Mock<IMediator> mediator = new Mock<IMediator>();
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Logger.Initialise(NullLogger.Instance);
         VoucherPerformIssuePageViewModel viewModel = new VoucherPerformIssuePageViewModel(mediator.Object, navigationService.Object);
         Boolean isCompletedCalled = false;
         viewModel.OnRecipientMobileNumberEntryCompleted = () =>
@@ -86,6 +89,7 @@ public class VoucherPerformIssuePageViewModelTests
     {
         Mock<IMediator> mediator = new Mock<IMediator>();
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Logger.Initialise(NullLogger.Instance);
         VoucherPerformIssuePageViewModel viewModel = new VoucherPerformIssuePageViewModel(mediator.Object, navigationService.Object);
         Boolean isCompletedCalled = false;
         viewModel.OnRecipientEmailAddressEntryCompleted = () =>
@@ -109,6 +113,7 @@ public class VoucherPerformIssuePageViewModelTests
     {
         Mock<IMediator> mediator = new Mock<IMediator>();
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Logger.Initialise(NullLogger.Instance);
         VoucherPerformIssuePageViewModel viewModel = new VoucherPerformIssuePageViewModel(mediator.Object, navigationService.Object);
         Boolean isCompletedCalled = false;
         viewModel.OnVoucherAmountEntryCompleted = () =>
@@ -133,6 +138,7 @@ public class VoucherPerformIssuePageViewModelTests
         Mock<IMediator> mediator = new Mock<IMediator>();
         mediator.Setup(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Logger.Initialise(NullLogger.Instance);
         VoucherPerformIssuePageViewModel viewModel = new VoucherPerformIssuePageViewModel(mediator.Object, navigationService.Object);
         viewModel.ApplyQueryAttributes(new Dictionary<String, Object>
                                        {
@@ -152,6 +158,8 @@ public class VoucherPerformIssuePageViewModelTests
         Mock<IMediator> mediator = new Mock<IMediator>();
         mediator.Setup(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Logger.Initialise(NullLogger.Instance);
+
         VoucherPerformIssuePageViewModel viewModel = new VoucherPerformIssuePageViewModel(mediator.Object, navigationService.Object);
         viewModel.ApplyQueryAttributes(new Dictionary<String, Object>
                                        {

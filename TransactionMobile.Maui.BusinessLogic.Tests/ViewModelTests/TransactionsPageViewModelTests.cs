@@ -2,6 +2,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests;
 
 using Maui.UIServices;
 using Moq;
+using Shared.Logger;
 using UIServices;
 using ViewModels.Transactions;
 using Xunit;
@@ -22,6 +23,7 @@ public class TransactionsPageViewModelTests
     public void TransactionsPageViewModel_BillPaymentCommand_Execute_IsExecuted()
     {
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Logger.Initialise(NullLogger.Instance);
         TransactionsPageViewModel viewModel = new TransactionsPageViewModel(navigationService.Object);
 
         viewModel.BillPaymentCommand.Execute(null);
@@ -32,6 +34,7 @@ public class TransactionsPageViewModelTests
     public void TransactionsPageViewModel_MobileTopupCommand_Execute_IsExecuted()
     {
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Logger.Initialise(NullLogger.Instance);
         TransactionsPageViewModel viewModel = new TransactionsPageViewModel(navigationService.Object);
 
         viewModel.MobileTopupCommand.Execute(null);
@@ -42,6 +45,7 @@ public class TransactionsPageViewModelTests
     public void TransactionsPageViewModel_MobileWalletCommand_Execute_IsExecuted()
     {
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Logger.Initialise(NullLogger.Instance);
         TransactionsPageViewModel viewModel = new TransactionsPageViewModel(navigationService.Object);
 
         viewModel.MobileWalletCommand.Execute(null);
@@ -52,6 +56,7 @@ public class TransactionsPageViewModelTests
     public void TransactionsPageViewModel_VoucherCommand_Execute_IsExecuted()
     {
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Logger.Initialise(NullLogger.Instance);
         TransactionsPageViewModel viewModel = new TransactionsPageViewModel(navigationService.Object);
 
         viewModel.VoucherCommand.Execute(null);

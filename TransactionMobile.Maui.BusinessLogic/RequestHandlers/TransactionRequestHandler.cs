@@ -9,12 +9,11 @@ using Services;
 public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupRequest, Boolean>,
                                          IRequestHandler<LogonTransactionRequest, PerformLogonResponseModel>,
                                          IRequestHandler<PerformVoucherIssueRequest, Boolean>,
-                                         IRequestHandler<PerformReconciliationRequest, Boolean>
+                                         IRequestHandler<PerformReconciliationRequest, Boolean>                                         
 {
     #region Fields
 
     private readonly ITransactionService TransactionService;
-
     private readonly IDatabaseContext DatabaseContext;
 
     #endregion

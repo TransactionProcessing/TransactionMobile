@@ -7,7 +7,12 @@ using System.Threading.Tasks;
 namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Support
 {
     using Database;
+    using MediatR;
     using MvvmHelpers;
+    using MvvmHelpers.Commands;
+    using System.Windows.Input;
+    using TransactionMobile.Maui.BusinessLogic.Requests;
+    using TransactionMobile.Maui.UIServices;
     using UIServices;
 
     public class SupportPageViewModel : BaseViewModel
@@ -18,19 +23,38 @@ namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Support
 
         private readonly IDatabaseContext DatabaseContext;
 
-        public SupportPageViewModel(IDeviceService deviceService,IApplicationInfoService applicationInfoService,IDatabaseContext databaseContext)
+        private readonly IMediator Mediator;
+
+        private readonly INavigationService NavigationService;
+
+        public SupportPageViewModel(IDeviceService deviceService,IApplicationInfoService applicationInfoService,IDatabaseContext databaseContext,
+            IMediator mediator,INavigationService navigationService)
         {
             this.DeviceService = deviceService;
             this.ApplicationInfoService = applicationInfoService;
             this.DatabaseContext = databaseContext;
+            this.UploadLogsCommand = new AsyncCommand(this.UploadLogsCommandExecute);
+            this.Mediator = mediator;
+            this.NavigationService = navigationService;
         }
+
+        public ICommand UploadLogsCommand { get; }
 
         public String NumberTransactionsStored => $"Transactions Stored: {this.DatabaseContext.GetTransactions().Result.Count()}";
 
         public String ApplicationName => $"{this.ApplicationInfoService.ApplicationName} v{this.ApplicationInfoService.VersionString}";
-        //public string AppVersion => $"Version: {this.ApplicationInfoService.VersionString}{Environment.NewLine}Copyright © 2022 Stuart Ferguson";
 
-        //public string Description => "A playground for experiments with .Net MAUI. All code is available on GitHub and development is documented on my blog 'Sailing the Sharp Sea'.";
+        private async Task UploadLogsCommandExecute()
+        {
+            Shared.Logger.Logger.LogInformation("UploadLogsCommandExecute called");
+
+            UploadLogsRequest uploadLogsRequest = UploadLogsRequest.Create(this.DeviceService.GetIdentifier());
+
+            Boolean response = await this.Mediator.Send(uploadLogsRequest, CancellationToken.None);
+
+            // TODO: Act on the response (display message or something)...
+            await this.NavigationService.GoToHome();
+        }
 
         public string Platform
         {

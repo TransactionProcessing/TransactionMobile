@@ -53,6 +53,9 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
             try
             {
+                Shared.Logger.Logger.LogInformation($"About to request configuration for device identifier {deviceIdentifier}");
+                Shared.Logger.Logger.LogDebug($"Configuration Request details: Uri {requestUri}");
+
                 // Make the Http Call here
                 HttpResponseMessage httpResponse = await this.HttpClient.GetAsync(requestUri, cancellationToken);
 
@@ -61,11 +64,16 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
                 // call was successful so now deserialise the body to the response object
                 response = JsonConvert.DeserializeObject<Configuration>(content);
+
+                Shared.Logger.Logger.LogInformation($"Configuration for device identifier {deviceIdentifier} requested successfully");
+                Shared.Logger.Logger.LogDebug($"Configuration Response: [{content}]");
             }
             catch (Exception ex)
             {
                 // An exception has occurred, add some additional information to the message
                 Exception exception = new Exception($"Error getting configuration for device Id {deviceIdentifier}.", ex);
+
+                Shared.Logger.Logger.LogError(exception);
 
                 throw exception;
             }
@@ -77,7 +85,18 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                                              List<LogMessage> logMessages,
                                              CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            String requestUri = this.BuildRequestUrl($"/logging/{deviceIdentifier}");
+
+            // Create a container
+            var container = new
+            {
+                messages = logMessages
+            };
+            StringContent content = new StringContent(JsonConvert.SerializeObject(container), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage httpResponse = await this.HttpClient.PostAsync(requestUri, content, cancellationToken);
+
+            await this.HandleResponse(httpResponse, cancellationToken);
         }
     }
 }

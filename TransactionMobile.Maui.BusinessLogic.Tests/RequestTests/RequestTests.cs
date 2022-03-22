@@ -143,6 +143,14 @@ public class RequestTests
         request.TransactionDateTime.ShouldBe(TestData.TransactionDateTime);
         request.DeviceIdentifier.ShouldBe(TestData.DeviceIdentifier);
         request.ApplicationVersion.ShouldBe(TestData.ApplicationVersion);
+    }
 
+    [Fact]
+    public void UploadLogsRequest_Create_IsCreated()
+    {
+        UploadLogsRequest request = UploadLogsRequest.Create(TestData.DeviceIdentifier);
+
+        request.ShouldNotBeNull();
+        request.DeviceIdentifier.ShouldBe(TestData.DeviceIdentifier);
     }
 }

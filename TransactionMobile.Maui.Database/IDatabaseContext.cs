@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.Database
 {
-    using SQLite;
-
     public interface IDatabaseContext
     {
         Task InitialiseDatabase();
@@ -18,78 +16,13 @@ namespace TransactionMobile.Maui.Database
 
         Task<List<TransactionRecord>> GetTransactions();
         Task ClearStoredTransactions();
-    }
 
-    public class DatabaseContext : IDatabaseContext
-    {
-        private readonly SQLiteConnection Connection;
+        Task<List<LogMessage>> GetLogMessages(Int32 batchSize);
 
-        public DatabaseContext(String connectionString)
-        {
-            this.Connection = new SQLiteConnection(connectionString);
-        }
+        Task InsertLogMessage(LogMessage logMessage);
 
-        public async Task InitialiseDatabase()
-        {
-            this.Connection.CreateTable<TransactionRecord>();
-        }
+        Task InsertLogMessages(List<LogMessage> logMessages);
 
-        public async Task<Int64> CreateTransaction(TransactionRecord transactionRecord)
-        {
-            this.Connection.Insert(transactionRecord);
-
-            return SQLite3.LastInsertRowid(this.Connection.Handle);
-        }
-
-        public async Task UpdateTransaction(TransactionRecord transactionRecord)
-        {
-            this.Connection.Update(transactionRecord);
-        }
-
-        public async Task<List<TransactionRecord>> GetTransactions()
-        {
-            return this.Connection.Table<TransactionRecord>().ToList();
-        }
-
-        public async Task ClearStoredTransactions()
-        {
-            this.Connection.DeleteAll<TransactionRecord>();
-        }
-    }
-
-    public class TransactionRecord
-    {
-        public String ApplicationVersion { get; set; }
-        
-        public Guid ContractId { get; set; }
-
-        public String CustomerAccountNumber { get; set; }
-
-        public String CustomerEmailAddress { get; set; }
-
-        public String DeviceIdentifier { get; set; }
-
-        public String OperatorIdentifier { get; set; }
-
-        public Guid ProductId { get; set; }
-
-        public Decimal Amount { get; set; }
-
-        public DateTime TransactionDateTime { get; set; }
-
-        [PrimaryKey, AutoIncrement]
-        public Int32 TransactionNumber { get; set; }
-
-        public String RecipientMobileNumber { get; set; }
-        public String RecipientEmailAddress { get; set; }
-
-        public Int32 TransactionType { get; set; }
-
-        public Guid EstateId { get; set; }
-        public Guid MerchantId { get; set; }
-        public Boolean IsSuccessful { get; set; }
-
-        public String ResponseMessage { get; set; }
-
+        Task RemoveUploadedMessages(List<LogMessage> logMessagesToRemove);
     }
 }

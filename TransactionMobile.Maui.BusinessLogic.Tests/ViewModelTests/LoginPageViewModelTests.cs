@@ -8,7 +8,9 @@ using Microsoft.Extensions.Caching.Memory;
 using Models;
 using Moq;
 using Requests;
+using Shared.Logger;
 using TransactionMobile.Maui.BusinessLogic.Services;
+using TransactionMobile.Maui.Database;
 using UIServices;
 using ViewModels;
 using Xunit;
@@ -25,7 +27,7 @@ public class LoginPageViewModelTests
         Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
         LoginPageViewModel viewModel = new LoginPageViewModel(mediator.Object, navigationService.Object, memoryCacheService.Object,
                                                               deviceService.Object,applicationInfoService.Object);
-
+        Logger.Initialise(NullLogger.Instance);
         mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new Configuration());
         mediator.Setup(m => m.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.AccessToken);
         mediator.Setup(m => m.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.PerformLogonResponseModel);

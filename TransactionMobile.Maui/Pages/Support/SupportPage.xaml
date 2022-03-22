@@ -25,6 +25,8 @@
 
                 <Label Text="{Binding NumberTransactionsStored, Mode=OneTime}"
                        VerticalOptions="Center"/>
+                
+                <Button Text="Upload Logs" Style="{StaticResource StandardButton}" Command="{Binding UploadLogsCommand}"/>
             </VerticalStackLayout>
         </Frame>
     </VerticalStackLayout>

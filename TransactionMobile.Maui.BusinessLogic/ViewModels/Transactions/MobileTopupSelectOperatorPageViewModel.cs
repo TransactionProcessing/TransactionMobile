@@ -43,7 +43,6 @@ public class MobileTopupSelectOperatorPageViewModel : BaseViewModel
 
     public async Task Initialise(CancellationToken cancellationToken)
     {
-
         GetContractProductsRequest request = GetContractProductsRequest.Create(ProductType.MobileTopup);
 
         List<ContractProductModel> products = await this.Mediator.Send(request, cancellationToken);
@@ -66,6 +65,7 @@ public class MobileTopupSelectOperatorPageViewModel : BaseViewModel
 
     private async Task OperatorSelectedCommandExecute(ItemSelected<ContractOperatorModel> e)
     {
+        Shared.Logger.Logger.LogInformation("OperatorSelectedCommandExecute called");
         await this.NavigationService.GoToMobileTopupSelectProductPage(e.SelectedItem.OperatorIdentfier);
 
     }

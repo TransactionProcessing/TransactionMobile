@@ -15,6 +15,5 @@ public partial class LoginPage : ContentPage
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
-		//await viewModel.InitializeAsync();
 	}
 }

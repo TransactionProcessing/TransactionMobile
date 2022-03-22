@@ -9,6 +9,7 @@ using MediatR;
 using Models;
 using Moq;
 using Requests;
+using Shared.Logger;
 using Shouldly;
 using UIServices;
 using ViewModels.Transactions;
@@ -55,6 +56,7 @@ public class MobileTopupSelectProductPageViewModelTests
         Mock<IMediator> mediator = new Mock<IMediator>();
         mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.ContractProductList);
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Logger.Initialise(NullLogger.Instance);
         MobileTopupSelectProductPageViewModel viewModel = new MobileTopupSelectProductPageViewModel(mediator.Object, navigationService.Object);
 
         viewModel.ApplyQueryAttributes(new Dictionary<String, Object>

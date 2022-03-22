@@ -64,6 +64,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
             try
             {
+                Shared.Logger.Logger.LogInformation($"About to perform logon transaction");
+                
                 LogonTransactionRequestMessage logonTransactionRequest = new LogonTransactionRequestMessage
                                                                          {
                                                                              ApplicationVersion = "1.0.5", //model.ApplicationVersion,
@@ -82,6 +84,9 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
                 // Add the access token to the client headers
                 this.MemoryCacheService.TryGetValue<TokenResponseModel>("AccessToken", out TokenResponseModel accessToken);
+
+                Shared.Logger.Logger.LogDebug($"Logon Transaction Request details:  Uri {requestUri} Payload {requestSerialised} Access Token {accessToken.AccessToken}");
+
                 this.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
 
                 // Make the Http Call here
@@ -102,11 +107,16 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                                RequireApplicationUpdate = responseMessage.RequiresApplicationUpdate,
                                ResponseMessage = responseMessage.ResponseMessage
                            };
+
+                Shared.Logger.Logger.LogInformation($"Logon transaction performed successfully");
+                Shared.Logger.Logger.LogDebug($"Logon Transaction Response details:  Status {httpResponse.StatusCode} Payload {content}");
             }
             catch (Exception ex)
             {
                 // An exception has occurred, add some additional information to the message
                 Exception exception = new Exception("Error posting logon transaction.", ex);
+
+                Shared.Logger.Logger.LogError(exception);
 
                 throw exception;
             }
@@ -123,6 +133,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
             try
             {
+                Shared.Logger.Logger.LogInformation($"About to perform mobile topup transaction");
+
                 SaleTransactionRequestMessage saleTransactionRequest = new SaleTransactionRequestMessage
                                                                        {
                                                                            ProductId = model.ProductId,
@@ -150,6 +162,9 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
                 // Add the access token to the client headers
                 this.MemoryCacheService.TryGetValue<TokenResponseModel>("AccessToken", out TokenResponseModel accessToken);
+
+                Shared.Logger.Logger.LogDebug($"Mobile Topup Transaction Request details:  Uri {requestUri} Payload {requestSerialised} Access Token {accessToken.AccessToken}");
+
                 this.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
 
                 // Make the Http Call here
@@ -162,11 +177,16 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 SaleTransactionResponseMessage responseMessage = JsonConvert.DeserializeObject<SaleTransactionResponseMessage>(content);
 
                 response = responseMessage.ResponseCode == "0000";
+
+                Shared.Logger.Logger.LogInformation($"Mobile Topup transaction performed successfully");
+                Shared.Logger.Logger.LogDebug($"Mobile Topup Transaction Response details:  Status {httpResponse.StatusCode} Payload {content}");
             }
             catch (Exception ex)
             {
                 // An exception has occurred, add some additional information to the message
                 Exception exception = new Exception("Error posting sale transaction.", ex);
+
+                Shared.Logger.Logger.LogError(exception);
 
                 throw exception;
             }
@@ -181,6 +201,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
             try
             {
+                Shared.Logger.Logger.LogInformation($"About to perform reconciliation transaction");
                 ReconciliationRequestMessage reconciliationRequest = new ReconciliationRequestMessage
                                                                      {
                                                                          ApplicationVersion = model.ApplicationVersion,
@@ -211,6 +232,9 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
                 // Add the access token to the client headers
                 this.MemoryCacheService.TryGetValue<TokenResponseModel>("AccessToken", out TokenResponseModel accessToken);
+
+                Shared.Logger.Logger.LogDebug($"Reconciliation Transaction Request details:  Uri {requestUri} Payload {requestSerialised} Access Token {accessToken.AccessToken}");
+
                 this.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
 
                 // Make the Http Call here
@@ -223,11 +247,16 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 ReconciliationResponseMessage responseMessage = JsonConvert.DeserializeObject<ReconciliationResponseMessage>(content);
 
                 response = responseMessage.ResponseCode == "0000";
+
+                Shared.Logger.Logger.LogInformation($"Reconciliation transaction performed successfully");
+                Shared.Logger.Logger.LogDebug($"Reconciliation Transaction Response details:  Status {httpResponse.StatusCode} Payload {content}");
             }
             catch (Exception ex)
             {
                 // An exception has occurred, add some additional information to the message
                 Exception exception = new Exception("Error posting reconciliation transaction.", ex);
+
+                Shared.Logger.Logger.LogError(exception);
 
                 throw exception;
             }
@@ -243,6 +272,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
             try
             {
+                Shared.Logger.Logger.LogInformation($"About to perform voucher transaction");
+
                 SaleTransactionRequestMessage saleTransactionRequest = new SaleTransactionRequestMessage
                 {
                     ProductId = model.ProductId,
@@ -271,6 +302,9 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
                 // Add the access token to the client headers
                 this.MemoryCacheService.TryGetValue<TokenResponseModel>("AccessToken", out TokenResponseModel accessToken);
+
+                Shared.Logger.Logger.LogDebug($"Voucher Transaction Request details:  Uri {requestUri} Payload {requestSerialised} Access Token {accessToken.AccessToken}");
+
                 this.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
 
                 // Make the Http Call here
@@ -283,11 +317,16 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 SaleTransactionResponseMessage responseMessage = JsonConvert.DeserializeObject<SaleTransactionResponseMessage>(content);
 
                 response = responseMessage.ResponseCode == "0000";
+
+                Shared.Logger.Logger.LogInformation($"Voucher transaction performed successfully");
+                Shared.Logger.Logger.LogDebug($"Voucher Transaction Response details:  Status {httpResponse.StatusCode} Payload {content}");
             }
             catch (Exception ex)
             {
                 // An exception has occurred, add some additional information to the message
                 Exception exception = new Exception("Error posting sale transaction.", ex);
+
+                Shared.Logger.Logger.LogError(exception);
 
                 throw exception;
             }

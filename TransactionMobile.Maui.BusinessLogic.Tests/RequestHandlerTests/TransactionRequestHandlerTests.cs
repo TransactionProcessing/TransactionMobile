@@ -20,6 +20,7 @@ public class TransactionRequestHandlerTests
     {
         Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
         Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
+        
         transactionService.Setup(t => t.PerformLogon(It.IsAny<PerformLogonRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.PerformLogonResponseModel);
         TransactionRequestHandler handler = new TransactionRequestHandler(transactionService.Object, databaseContext.Object);
 

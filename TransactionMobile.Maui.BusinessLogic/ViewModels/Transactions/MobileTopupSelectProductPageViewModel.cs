@@ -63,6 +63,7 @@ public class MobileTopupSelectProductPageViewModel : BaseViewModel, IQueryAttrib
 
     private async Task ProductSelectedCommandExecute(ItemSelected<ContractProductModel> e)
     {
+        Shared.Logger.Logger.LogInformation("ProductSelectedCommandExecute called");
         await this.NavigationService.GoToMobileTopupPerformTopupPage(e.SelectedItem.OperatorIdentfier, e.SelectedItem.ContractId, e.SelectedItem.ProductId, e.SelectedItem.Value);
     }
 
