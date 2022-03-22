@@ -53,11 +53,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Maui" Version="1.0.0-pre8" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="1.0.0-pre7" />
 		<PackageReference Include="MediatR" Version="10.0.1" />
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
-		<!--<PackageReference Include="SecurityService.Client" Version="1.1.0" />
-		<PackageReference Include="Shared" Version="1.1.8" />-->
 	</ItemGroup>
 
 	<ItemGroup>
