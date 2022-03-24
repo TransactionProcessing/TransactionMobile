@@ -11,16 +11,16 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
 {
     #region Fields
 
-    private readonly IMerchantService MerchantService;
+    private readonly Func<Boolean,IMerchantService> MerchantServiceResolver;
 
     private readonly IMemoryCacheService MemoryCacheService;
 
     #endregion
 
     #region Constructors
-    public MerchantRequestHandler(IMerchantService merchantService,IMemoryCacheService memoryCacheService)
+    public MerchantRequestHandler(Func<Boolean, IMerchantService> merchantServiceResolver,IMemoryCacheService memoryCacheService)
     {
-        this.MerchantService = merchantService;
+        this.MerchantServiceResolver = merchantServiceResolver;
         this.MemoryCacheService = memoryCacheService;
     }
 
@@ -32,10 +32,13 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
                                                          CancellationToken cancellationToken)
     {
         this.MemoryCacheService.TryGetValue<List<ContractProductModel>>("ContractProducts", out List<ContractProductModel> products);
+        this.MemoryCacheService.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
         
+        var merchantService = this.MerchantServiceResolver(useTrainingMode);
+
         if (products == null || products.Any() == false)
         {
-            products = await this.MerchantService.GetContractProducts(cancellationToken);
+            products = await merchantService.GetContractProducts(cancellationToken);
 
             this.CacheContractData(products);
         }
@@ -51,7 +54,10 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
     public async Task<Decimal> Handle(GetMerchantBalanceRequest request,
                                       CancellationToken cancellationToken)
     {
-        return await this.MerchantService.GetMerchantBalance(cancellationToken);
+        this.MemoryCacheService.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
+        var merchantService = this.MerchantServiceResolver(useTrainingMode);
+
+        return await merchantService.GetMerchantBalance(cancellationToken);
     }
 
     private void CacheContractData(List<ContractProductModel> contractProductModels)

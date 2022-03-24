@@ -18,10 +18,16 @@ public class SupportRequestHandlerTests
     public async Task SupportRequestHandlerTests_UploadLogsRequest_NoLogs_Handle_IsHandled()
     {
         Mock<IConfigurationService> configurationService = new Mock<IConfigurationService>();
+        Func<Boolean, IConfigurationService> configurationServiceResolver = new Func<bool, IConfigurationService>((param) =>
+        {
+            return configurationService.Object;
+        });
+
         Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
         databaseContext.Setup(d => d.GetLogMessages(It.IsAny<Int32>())).ReturnsAsync(new List<Database.LogMessage>());
+        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
 
-        SupportRequestHandler handler = new SupportRequestHandler(configurationService.Object, databaseContext.Object);
+        SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, memoryCacheService.Object);
 
         UploadLogsRequest request = UploadLogsRequest.Create(TestData.DeviceIdentifier);
 
@@ -34,6 +40,10 @@ public class SupportRequestHandlerTests
     public async Task SupportRequestHandlerTests_UploadLogsRequest_LogsToUpload_Only10Messages_Handle_IsHandled()
     {
         Mock<IConfigurationService> configurationService = new Mock<IConfigurationService>();
+        Func<Boolean, IConfigurationService> configurationServiceResolver = new Func<bool, IConfigurationService>((param) =>
+        {
+            return configurationService.Object;
+        });
         Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
         databaseContext.SetupSequence(d => d.GetLogMessages(It.IsAny<Int32>())).ReturnsAsync(new List<Database.LogMessage>()
         {
@@ -49,7 +59,9 @@ public class SupportRequestHandlerTests
             new Database.LogMessage()
         }).ReturnsAsync(new List<Database.LogMessage>());
 
-        SupportRequestHandler handler = new SupportRequestHandler(configurationService.Object, databaseContext.Object);
+        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
+
+        SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, memoryCacheService.Object);
 
         UploadLogsRequest request = UploadLogsRequest.Create(TestData.DeviceIdentifier);
 
@@ -63,6 +75,10 @@ public class SupportRequestHandlerTests
     public async Task SupportRequestHandlerTests_UploadLogsRequest_LogsToUpload_15Messages_Handle_IsHandled()
     {
         Mock<IConfigurationService> configurationService = new Mock<IConfigurationService>();
+        Func<Boolean, IConfigurationService> configurationServiceResolver = new Func<bool, IConfigurationService>((param) =>
+        {
+            return configurationService.Object;
+        });
         Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
         databaseContext.SetupSequence(d => d.GetLogMessages(It.IsAny<Int32>())).ReturnsAsync(new List<Database.LogMessage>()
         {
@@ -85,7 +101,9 @@ public class SupportRequestHandlerTests
             new Database.LogMessage(),
         }).ReturnsAsync(new List<Database.LogMessage>());
 
-        SupportRequestHandler handler = new SupportRequestHandler(configurationService.Object, databaseContext.Object);
+        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
+
+        SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, memoryCacheService.Object);
 
         UploadLogsRequest request = UploadLogsRequest.Create(TestData.DeviceIdentifier);
 

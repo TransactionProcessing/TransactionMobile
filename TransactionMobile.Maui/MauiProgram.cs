@@ -13,6 +13,7 @@ using Shared.Logger;
 public static class MauiProgram
 {
 	public static MauiApp Container;
+	private static MauiAppBuilder Builder;
 	public static MauiApp CreateMauiApp()
 	{
 #if ANDROID && DEBUG
@@ -20,9 +21,9 @@ public static class MauiProgram
         Platforms.Services.DangerousTrustProvider.Register();
 #endif
 
-		//raw.SetProvider(new SQLite3Provider_sqlite3());
-		var builder = MauiApp.CreateBuilder();
-		builder.UseMauiApp<App>()
+        //raw.SetProvider(new SQLite3Provider_sqlite3());
+        Builder = MauiApp.CreateBuilder();
+		Builder.UseMauiApp<App>()
 			.ConfigureRequestHandlers()
 			.ConfigurePages()
 			.ConfigureViewModels()
@@ -37,7 +38,7 @@ public static class MauiProgram
 			.Services.AddTransient<IDeviceService, DeviceService>()
 			   .AddMemoryCache();
 		
-		Container = builder.Build();
+		Container = Builder.Build();
 
 		// Setup static logger
 		IDatabaseContext databaseContext = MauiProgram.Container.Services.GetService<IDatabaseContext>();

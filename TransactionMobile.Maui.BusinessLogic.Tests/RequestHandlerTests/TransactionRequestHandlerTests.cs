@@ -19,10 +19,14 @@ public class TransactionRequestHandlerTests
     public async Task TransactionRequestHandler_LogonTransactionRequest_Handle_IsHandled()
     {
         Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
+        Func<Boolean, ITransactionService> transactionServiceResolver = new Func<bool, ITransactionService>((param) =>
+        {
+            return transactionService.Object;
+        });
         Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
-        
+        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
         transactionService.Setup(t => t.PerformLogon(It.IsAny<PerformLogonRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.PerformLogonResponseModel);
-        TransactionRequestHandler handler = new TransactionRequestHandler(transactionService.Object, databaseContext.Object);
+        TransactionRequestHandler handler = new TransactionRequestHandler(transactionServiceResolver, databaseContext.Object, memoryCacheService.Object);
 
         LogonTransactionRequest request = LogonTransactionRequest.Create(TestData.TransactionDateTime,
                                                                          TestData.TransactionNumber,
@@ -38,9 +42,14 @@ public class TransactionRequestHandlerTests
     public async Task TransactionRequestHandler_PerformMobileTopupRequest_Handle_IsHandled()
     {
         Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
+        Func<Boolean, ITransactionService> transactionServiceResolver = new Func<bool, ITransactionService>((param) =>
+        {
+            return transactionService.Object;
+        });
         Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
+        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
         transactionService.Setup(t => t.PerformMobileTopup(It.IsAny<PerformMobileTopupRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
-        TransactionRequestHandler handler = new TransactionRequestHandler(transactionService.Object,databaseContext.Object);
+        TransactionRequestHandler handler = new TransactionRequestHandler(transactionServiceResolver, databaseContext.Object, memoryCacheService.Object);
 
         PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(TestData.TransactionDateTime,
                                                                              TestData.TransactionNumber,
@@ -62,9 +71,14 @@ public class TransactionRequestHandlerTests
     public async Task TransactionRequestHandler_PerformVoucherIssueRequest_Handle_IsHandled()
     {
         Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
+        Func<Boolean, ITransactionService> transactionServiceResolver = new Func<bool, ITransactionService>((param) =>
+        {
+            return transactionService.Object;
+        });
         Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
+        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
         transactionService.Setup(t => t.PerformVoucherIssue(It.IsAny<PerformVoucherIssueRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
-        TransactionRequestHandler handler = new TransactionRequestHandler(transactionService.Object,databaseContext.Object);
+        TransactionRequestHandler handler = new TransactionRequestHandler(transactionServiceResolver, databaseContext.Object, memoryCacheService.Object);
 
         PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(TestData.TransactionDateTime,
                                                                                TestData.TransactionNumber,
@@ -87,10 +101,15 @@ public class TransactionRequestHandlerTests
     public async Task TransactionRequestHandler_PerformReconciliationRequest_NoTransactions_Handle_IsHandled()
     {
         Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
+        Func<Boolean, ITransactionService> transactionServiceResolver = new Func<bool, ITransactionService>((param) =>
+        {
+            return transactionService.Object;
+        });
         Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
+        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
         transactionService.Setup(t => t.PerformReconciliation(It.IsAny<PerformReconciliationRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
         databaseContext.Setup(d => d.GetTransactions()).ReturnsAsync(new List<TransactionRecord>());
-        TransactionRequestHandler handler = new TransactionRequestHandler(transactionService.Object, databaseContext.Object);
+        TransactionRequestHandler handler = new TransactionRequestHandler(transactionServiceResolver, databaseContext.Object, memoryCacheService.Object);
 
         PerformReconciliationRequest request = PerformReconciliationRequest.Create(TestData.TransactionDateTime,
                                                                                    TestData.DeviceIdentifier,
@@ -105,11 +124,16 @@ public class TransactionRequestHandlerTests
     public async Task TransactionRequestHandler_PerformReconciliationRequest_TransactionsStored_Handle_IsHandled()
     {
         Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
+        Func<Boolean, ITransactionService> transactionServiceResolver = new Func<bool, ITransactionService>((param) =>
+        {
+            return transactionService.Object;
+        });
         Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
+        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
         transactionService.Setup(t => t.PerformReconciliation(It.IsAny<PerformReconciliationRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
         databaseContext.Setup(d => d.GetTransactions()).ReturnsAsync(TestData.StoredTransactions);
-        TransactionRequestHandler handler = new TransactionRequestHandler(transactionService.Object, databaseContext.Object);
+        TransactionRequestHandler handler = new TransactionRequestHandler(transactionServiceResolver, databaseContext.Object, memoryCacheService.Object);
 
         PerformReconciliationRequest request = PerformReconciliationRequest.Create(TestData.TransactionDateTime,
                                                                                    TestData.DeviceIdentifier,

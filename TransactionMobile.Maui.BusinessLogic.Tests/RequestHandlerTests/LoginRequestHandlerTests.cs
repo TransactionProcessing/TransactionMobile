@@ -17,10 +17,21 @@ public class LoginRequestHandlerTests
     public async Task LoginRequestHandler_Handle_LoginRequest_IsHandled()
     {
         Mock<IAuthenticationService> authenticationService = new Mock<IAuthenticationService>();
-        authenticationService.Setup(a => a.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.AccessToken);
+        Func<Boolean, IAuthenticationService> authenticationServiceResolver = new Func<bool, IAuthenticationService>((param) =>
+        {
+            return authenticationService.Object;
+        });
         Mock<IConfigurationService> configurationService = new Mock<IConfigurationService>();
+        Func<Boolean, IConfigurationService> configurationServiceResolver = new Func<bool, IConfigurationService>((param) =>
+        {
+            return configurationService.Object;
+        });
+
+        authenticationService.Setup(a => a.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.AccessToken);
         configurationService.Setup(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(new Configuration());
-        LoginRequestHandler handler = new LoginRequestHandler(authenticationService.Object,configurationService.Object);
+        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
+
+        LoginRequestHandler handler = new LoginRequestHandler(authenticationServiceResolver, configurationServiceResolver, memoryCacheService.Object);
             
         LoginRequest request = LoginRequest.Create(TestData.UserName,TestData.Password);
 
@@ -35,10 +46,20 @@ public class LoginRequestHandlerTests
     public async Task LoginRequestHandler_Handle_RefreshTokenRequest_IsHandled()
     {
         Mock<IAuthenticationService> authenticationService = new Mock<IAuthenticationService>();
-        authenticationService.Setup(a => a.RefreshAccessToken(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.AccessToken);
+        Func<Boolean, IAuthenticationService> authenticationServiceResolver = new Func<bool, IAuthenticationService>((param) =>
+        {
+            return authenticationService.Object;
+        });
         Mock<IConfigurationService> configurationService = new Mock<IConfigurationService>();
+        Func<Boolean, IConfigurationService> configurationServiceResolver = new Func<bool, IConfigurationService>((param) =>
+        {
+            return configurationService.Object;
+        });
+        authenticationService.Setup(a => a.RefreshAccessToken(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.AccessToken);
         configurationService.Setup(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(new Configuration());
-        LoginRequestHandler handler = new LoginRequestHandler(authenticationService.Object, configurationService.Object);
+        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
+
+        LoginRequestHandler handler = new LoginRequestHandler(authenticationServiceResolver, configurationServiceResolver, memoryCacheService.Object);
 
         RefreshTokenRequest request = RefreshTokenRequest.Create(TestData.RefreshToken);
 
@@ -53,10 +74,20 @@ public class LoginRequestHandlerTests
     public async Task LoginRequestHandler_Handle_GetConfigurationRequest_IsHandled()
     {
         Mock<IAuthenticationService> authenticationService = new Mock<IAuthenticationService>();
-        authenticationService.Setup(a => a.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.AccessToken);
+        Func<Boolean, IAuthenticationService> authenticationServiceResolver = new Func<bool, IAuthenticationService>((param) =>
+        {
+            return authenticationService.Object;
+        });
         Mock<IConfigurationService> configurationService = new Mock<IConfigurationService>();
+        Func<Boolean, IConfigurationService> configurationServiceResolver = new Func<bool, IConfigurationService>((param) =>
+        {
+            return configurationService.Object;
+        });
+        authenticationService.Setup(a => a.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.AccessToken);
         configurationService.Setup(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(new Configuration());
-        LoginRequestHandler handler = new LoginRequestHandler(authenticationService.Object, configurationService.Object);
+        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
+
+        LoginRequestHandler handler = new LoginRequestHandler(authenticationServiceResolver, configurationServiceResolver, memoryCacheService.Object);
 
         GetConfigurationRequest request = GetConfigurationRequest.Create(TestData.DeviceIdentifier);
 

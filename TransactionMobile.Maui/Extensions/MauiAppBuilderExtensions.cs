@@ -113,9 +113,67 @@
             builder.Services.AddSingleton<ITransactionService, TransactionService>();
             builder.Services.AddSingleton<IMerchantService, MerchantService>();
 
+            builder.Services.AddSingleton<Func<Boolean, IConfigurationService>>(new Func<Boolean, IConfigurationService>(useTrainingMode =>
+            {
+                if (useTrainingMode)
+                {
+                    return new DummyConfigurationService();
+                }
+                else
+                {
+                    return MauiProgram.Container.Services.GetService<IConfigurationService>();
+                }
+            }));
+
+            builder.Services.AddSingleton<Func<Boolean, IAuthenticationService>>(new Func<Boolean, IAuthenticationService>(useTrainingMode =>
+            {
+                if (useTrainingMode)
+                {
+                    return new DummyAuthenticationService();
+                }
+                else
+                {
+                    return MauiProgram.Container.Services.GetService<IAuthenticationService>();
+                }
+            }));
+
+            builder.Services.AddSingleton<Func<Boolean, ITransactionService>>(new Func<Boolean, ITransactionService>(useTrainingMode =>
+            {
+                if (useTrainingMode)
+                {
+                    return new DummyTransactionService();
+                }
+                else
+                {
+                    return MauiProgram.Container.Services.GetService<ITransactionService>();
+                }
+            }));
+
+            builder.Services.AddSingleton<Func<Boolean, IMerchantService>>(new Func<Boolean, IMerchantService>(useTrainingMode =>
+            {
+                if (useTrainingMode)
+                {
+                    return new DummyMerchantService();
+                }
+                else
+                {
+                    return MauiProgram.Container.Services.GetService<IMerchantService>();
+                }
+            }));
+
             builder.Services.AddSingleton<ISecurityServiceClient, SecurityServiceClient>();
             builder.Services.AddSingleton<IEstateClient, EstateClient>();
             builder.Services.AddSingleton<IMemoryCacheService, MemoryCacheService>();
+
+            return builder;
+        }
+
+        public static MauiAppBuilder ConfigureTrainingServices(this MauiAppBuilder builder)
+        {
+            builder.Services.AddSingleton<IConfigurationService, DummyConfigurationService>();
+            builder.Services.AddSingleton<IAuthenticationService, DummyAuthenticationService>();
+            builder.Services.AddSingleton<ITransactionService, DummyTransactionService>();
+            builder.Services.AddSingleton<IMerchantService, DummyMerchantService>();
 
             return builder;
         }

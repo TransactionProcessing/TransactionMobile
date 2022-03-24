@@ -4,8 +4,7 @@
              x:Class="TransactionMobile.Maui.Pages.LoginPage"
              Title="LoginPage"
              Shell.NavBarIsVisible="False"
-             Shell.FlyoutItemIsVisible="False"
-             BackgroundColor="White">
+             Shell.FlyoutItemIsVisible="False">
     <ContentPage.Content>
         <!-- Main structure-->
         <VerticalStackLayout x:Name="MainLayout">
@@ -32,6 +31,27 @@
                            Style="{DynamicResource PasswordEntryStyle}"
                            Text="{Binding Password}">
                     </Entry>
+
+                    <!--<HorizontalStackLayout  x:Name="SwitchLayout">
+                        <Label Text="Use Training Mode?"/>
+                    
+                        <Switch x:Name="UseTrainingMode"
+                                AutomationId="UseTrainingModeSwitch"/>
+                    </HorizontalStackLayout>-->
+
+                    <HorizontalStackLayout Margin="20"
+                           Spacing="10">
+                        <!--<Rectangle Fill="Red"
+                  HeightRequest="30"
+                  WidthRequest="30" />
+                        <Label Text="Red"
+              FontSize="Large" />-->
+                        <Label Text="Use Training Mode?" VerticalOptions="Center" HorizontalOptions="Start"/>
+
+                        <Switch x:Name="UseTrainingMode" VerticalOptions="Center" HorizontalOptions="Start" AutomationId="UseTrainingModeSwitch"
+                                IsToggled="{Binding UseTrainingMode}"
+                                />
+                    </HorizontalStackLayout>
 
                     <Button Text="Continue" Style="{StaticResource StandardButton}" Command="{Binding LoginCommand}"/>
                     <!--<Label Grid.ColumnSpan="2" Grid.Row="3" Text="Forgot your password?" TextColor="{StaticResource P}" FontAttributes="Bold"/>-->
