@@ -2,16 +2,16 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TransactionMobile.Maui.Pages.Support.SupportPage"
-             Shell.NavBarIsVisible="True"
-             BackgroundColor="White">
+             xmlns:userControls="clr-namespace:TransactionMobile.Maui.Controls;assembly=TransactionMobile.Maui"
+             Shell.NavBarIsVisible="False">
     <VerticalStackLayout>
 
+        <userControls:TitleLabel Text="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+        
         <!--Main image-->
         <Image Source="Resources/techsupport.jpg" VerticalOptions="Start" Aspect="AspectFit"/>
-
-        <!-- Title-->
-        <Label Text="Support" FontSize="34" HorizontalOptions="Center" FontAttributes="Bold" Padding="20,0,0,20"/>
-
+        
+        
         <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
                CornerRadius="20" Opacity="0.9" BackgroundColor="#E5E9F0">
             <VerticalStackLayout x:Name="SubLayout" Spacing="5">

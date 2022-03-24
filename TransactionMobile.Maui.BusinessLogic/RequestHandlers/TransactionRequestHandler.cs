@@ -13,18 +13,20 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
 {
     #region Fields
 
-    private readonly ITransactionService TransactionService;
+    private readonly Func<Boolean,ITransactionService> TransactionServiceResolver;
     private readonly IDatabaseContext DatabaseContext;
-
+    private readonly IMemoryCacheService MemoryCacheService;
     #endregion
 
     #region Constructors
 
-    public TransactionRequestHandler(ITransactionService transactionService,
-                                     IDatabaseContext databaseContext)
+    public TransactionRequestHandler(Func<Boolean, ITransactionService> transactionServiceResolver,
+                                     IDatabaseContext databaseContext,
+                                     IMemoryCacheService memoryCacheService)
     {
-        this.TransactionService = transactionService;
+        this.TransactionServiceResolver = transactionServiceResolver;
         this.DatabaseContext = databaseContext;
+        this.MemoryCacheService = memoryCacheService;
     }
 
     #endregion
@@ -34,7 +36,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
     public async Task<Boolean> Handle(PerformMobileTopupRequest request,
                                       CancellationToken cancellationToken)
     {
-        (TransactionRecord transactionRecord, Int64 transactionNumber) transaction = await this.CreateTransactionRecord(request, cancellationToken);
+        this.MemoryCacheService.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
+        (TransactionRecord transactionRecord, Int64 transactionNumber) transaction = await this.CreateTransactionRecord(request, useTrainingMode, cancellationToken);
 
         // TODO: Factory
         PerformMobileTopupRequestModel model = new PerformMobileTopupRequestModel
@@ -51,7 +54,9 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                    TransactionNumber = request.TransactionNumber
                                                };
 
-        Boolean result = await this.TransactionService.PerformMobileTopup(model, cancellationToken);
+        
+        var transactionService = this.TransactionServiceResolver(useTrainingMode);
+        Boolean result = await transactionService.PerformMobileTopup(model, cancellationToken);
 
         await this.UpdateTransactionRecord(transaction.transactionRecord, result, cancellationToken);
 
@@ -59,6 +64,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
     }
 
     private async Task<(TransactionRecord transactionRecord, Int64 transactionNumber)> CreateTransactionRecord(LogonTransactionRequest request,
+        Boolean useTrainingMode,
                                                                                                                CancellationToken cancellationToken)
     {
         TransactionRecord transactionRecord = new TransactionRecord
@@ -66,14 +72,16 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                   ApplicationVersion = request.ApplicationVersion,
                                                   DeviceIdentifier = request.DeviceIdentifier,
                                                   TransactionDateTime = request.TransactionDateTime,
-                                                  TransactionType = 1
-                                              };
+                                                  TransactionType = 1,
+            IsTrainingMode = useTrainingMode
+        };
         Int64 transactionNumber = await this.DatabaseContext.CreateTransaction(transactionRecord);
 
         return (transactionRecord, transactionNumber);
     }
 
     private async Task<(TransactionRecord transactionRecord, Int64 transactionNumber)> CreateTransactionRecord(PerformMobileTopupRequest request,
+        Boolean useTrainingMode,
                                                                                                                CancellationToken cancellationToken)
     {
         TransactionRecord transactionRecord = new TransactionRecord
@@ -87,7 +95,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                   ContractId = request.ContractId,
                                                   CustomerAccountNumber = request.CustomerAccountNumber,
                                                   CustomerEmailAddress = request.CustomerEmailAddress,
-                                                  OperatorIdentifier = request.OperatorIdentifier
+                                                  OperatorIdentifier = request.OperatorIdentifier,
+                                                  IsTrainingMode = useTrainingMode
                                               };
         Int64 transactionNumber = await this.DatabaseContext.CreateTransaction(transactionRecord);
 
@@ -95,6 +104,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
     }
 
     private async Task<(TransactionRecord transactionRecord, Int64 transactionNumber)> CreateTransactionRecord(PerformVoucherIssueRequest request,
+        Boolean useTrainingMode,
                                                                                                                CancellationToken cancellationToken)
     {
         TransactionRecord transactionRecord = new TransactionRecord
@@ -109,7 +119,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                   RecipientEmailAddress = request.RecipientEmailAddress,
                                                   RecipientMobileNumber = request.RecipientMobileNumber,
                                                   CustomerEmailAddress = request.CustomerEmailAddress,
-                                                  OperatorIdentifier = request.OperatorIdentifier
+                                                  OperatorIdentifier = request.OperatorIdentifier,
+                                                  IsTrainingMode = useTrainingMode
                                               };
         Int64 transactionNumber = await this.DatabaseContext.CreateTransaction(transactionRecord);
 
@@ -140,7 +151,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
     public async Task<PerformLogonResponseModel> Handle(LogonTransactionRequest request,
                                                         CancellationToken cancellationToken)
     {
-        (TransactionRecord transactionRecord, Int64 transactionNumber) transaction = await this.CreateTransactionRecord(request, cancellationToken);
+        this.MemoryCacheService.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
+        (TransactionRecord transactionRecord, Int64 transactionNumber) transaction = await this.CreateTransactionRecord(request, useTrainingMode, cancellationToken);
 
         // TODO: Factory
         PerformLogonRequestModel model = new PerformLogonRequestModel
@@ -150,8 +162,9 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                              TransactionDateTime = request.TransactionDateTime,
                                              TransactionNumber = transaction.transactionNumber.ToString()
                                          };
-
-        PerformLogonResponseModel result = await this.TransactionService.PerformLogon(model, cancellationToken);
+                
+        var transactionService = this.TransactionServiceResolver(useTrainingMode);
+        PerformLogonResponseModel result = await transactionService.PerformLogon(model, cancellationToken);
 
         await this.UpdateTransactionRecord(transaction.transactionRecord, result, cancellationToken);
 
@@ -163,7 +176,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
     public async Task<Boolean> Handle(PerformVoucherIssueRequest request,
                                       CancellationToken cancellationToken)
     {
-        (TransactionRecord transactionRecord, Int64 transactionNumber) transaction = await this.CreateTransactionRecord(request, cancellationToken);
+        this.MemoryCacheService.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
+        (TransactionRecord transactionRecord, Int64 transactionNumber) transaction = await this.CreateTransactionRecord(request, useTrainingMode, cancellationToken);
         // TODO: Factory
         PerformVoucherIssueRequestModel model = new PerformVoucherIssueRequestModel
                                                 {
@@ -180,7 +194,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                     TransactionNumber = transaction.transactionNumber.ToString()
                                                 };
 
-        Boolean result = await this.TransactionService.PerformVoucherIssue(model, cancellationToken);
+        var transactionService = this.TransactionServiceResolver(useTrainingMode);
+        Boolean result = await transactionService.PerformVoucherIssue(model, cancellationToken);
 
         await this.UpdateTransactionRecord(transaction.transactionRecord, result, cancellationToken);
 
@@ -190,6 +205,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
     public async Task<Boolean> Handle(PerformReconciliationRequest request,
                                       CancellationToken cancellationToken)
     {
+        this.MemoryCacheService.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
+
         List<TransactionRecord> storedTransactions = await this.DatabaseContext.GetTransactions();
 
         if (storedTransactions.Any() == false)
@@ -197,10 +214,14 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
             return true;
         }
 
+        // Filter based on training mode
+        storedTransactions = storedTransactions.Where(t => t.IsTrainingMode == useTrainingMode).ToList();
+
         // TODO: convert these to operator totals
         List<OperatorTotalModel> operatorTotals = (from t in storedTransactions
                                                    where t.IsSuccessful = true &&
                                                                           t.TransactionType != 1 // Filter out logons
+                                                                          && t.IsTrainingMode == useTrainingMode
                                                    group t by new
                                                               {
                                                                   t.ContractId,
@@ -230,13 +251,14 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                TransactionCount = grandTotals.TransactionCount,
                                                OperatorTotals = operatorTotals
                                            };
-        // Send to the host
-        Boolean result = await this.TransactionService.PerformReconciliation(model, cancellationToken);
+        // Send to the host        
+        var transactionService = this.TransactionServiceResolver(useTrainingMode);
+        Boolean result = await transactionService.PerformReconciliation(model, cancellationToken);
 
         // Clear store (if successful)
         if (result)
         {
-            await this.DatabaseContext.ClearStoredTransactions();
+            await this.DatabaseContext.ClearStoredTransactions(storedTransactions);
         }
 
         return result;

@@ -19,12 +19,17 @@ public class MerchantRequestHandlerTests
     public async Task MerchantRequestHandler_GetContractProductsRequest_Handle_IsHandled()
     {
         Mock<IMerchantService> merchantService = new Mock<IMerchantService>();
+        Func<Boolean, IMerchantService> merchantServiceResolver = new Func<bool, IMerchantService>((param) =>
+        {
+            return merchantService.Object;
+        });
+        
         merchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
                        .ReturnsAsync(TestData.ContractProductList);
         Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
         
 
-        MerchantRequestHandler handler = new MerchantRequestHandler(merchantService.Object, memoryCacheService.Object);
+        MerchantRequestHandler handler = new MerchantRequestHandler(merchantServiceResolver, memoryCacheService.Object);
 
         GetContractProductsRequest request = GetContractProductsRequest.Create();
 
@@ -37,10 +42,14 @@ public class MerchantRequestHandlerTests
     public async Task MerchantRequestHandler_GetMerchantBalanceRequest_Handle_IsHandled()
     {
         Mock<IMerchantService> merchantService = new Mock<IMerchantService>();
+        Func<Boolean, IMerchantService> merchantServiceResolver = new Func<bool, IMerchantService>((param) =>
+        {
+            return merchantService.Object;
+        });
         merchantService.Setup(m => m.GetMerchantBalance(It.IsAny<CancellationToken>()))
                        .ReturnsAsync(TestData.MerchantBalance);
         Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
-        MerchantRequestHandler handler = new MerchantRequestHandler(merchantService.Object, memoryCacheService.Object);
+        MerchantRequestHandler handler = new MerchantRequestHandler(merchantServiceResolver, memoryCacheService.Object);
 
         GetMerchantBalanceRequest request = GetMerchantBalanceRequest.Create();
 

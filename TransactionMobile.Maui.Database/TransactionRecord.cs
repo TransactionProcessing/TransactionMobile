@@ -36,5 +36,7 @@
 
         public String ResponseMessage { get; set; }
 
+        public Boolean IsTrainingMode { get; set; }
+
     }
 }

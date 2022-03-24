@@ -15,7 +15,7 @@ namespace TransactionMobile.Maui.Database
         Task UpdateTransaction(TransactionRecord transactionRecord);
 
         Task<List<TransactionRecord>> GetTransactions();
-        Task ClearStoredTransactions();
+        Task ClearStoredTransactions(List<TransactionRecord> transactionRecords);
 
         Task<List<LogMessage>> GetLogMessages(Int32 batchSize);
 

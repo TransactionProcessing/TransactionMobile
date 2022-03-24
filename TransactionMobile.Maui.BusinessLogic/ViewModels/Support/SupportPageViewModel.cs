@@ -36,6 +36,7 @@ namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Support
             this.UploadLogsCommand = new AsyncCommand(this.UploadLogsCommandExecute);
             this.Mediator = mediator;
             this.NavigationService = navigationService;
+            this.Title = "Support";
         }
 
         public ICommand UploadLogsCommand { get; }

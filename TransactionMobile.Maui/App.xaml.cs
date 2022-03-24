@@ -6,14 +6,31 @@ namespace TransactionMobile.Maui;
 
 using Pages.AppHome;
 using Pages.Transactions.Admin;
+using TransactionMobile.Maui.BusinessLogic.Services;
+using TransactionMobile.Maui.Controls;
 
 public partial class App : Application
 {
 	public App()
     {
         InitializeComponent();
-		
-		MainPage = new AppShell();
+
+        Microsoft.Maui.Handlers.EntryHandler.ElementMapper.AppendToMapping("TrainingMode", (handler, view) =>
+        {
+            if (view is TitleLabel)
+            {
+                var memoryCache = MauiProgram.Container.Services.GetService<IMemoryCacheService>();
+
+                memoryCache.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
+
+                if (useTrainingMode)
+                {
+                    ((TitleLabel)view).Text = $"{((TitleLabel)view).Text} - Training Mode";
+                }
+            }
+        });
+
+        MainPage = new AppShell();
 
         Routing.RegisterRoute(nameof(MobileTopupSelectOperatorPage), typeof(MobileTopupSelectOperatorPage));
         Routing.RegisterRoute(nameof(MobileTopupSelectProductPage), typeof(MobileTopupSelectProductPage));
@@ -30,3 +47,4 @@ public partial class App : Application
         Routing.RegisterRoute(nameof(AdminPage), typeof(AdminPage));
     }
 }
+

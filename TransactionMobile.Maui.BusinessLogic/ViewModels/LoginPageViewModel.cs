@@ -27,8 +27,10 @@
 
         private String password;
 
+        private Boolean useTrainingMode;
+
         #region Constructors
-        
+
         public LoginPageViewModel(IMediator mediator, INavigationService navigationService, IMemoryCacheService memoryCacheService,
                                   IDeviceService deviceService,IApplicationInfoService applicationInfoService)
         {
@@ -60,6 +62,12 @@
             set => this.SetProperty(ref this.password, value);
         }
 
+        public Boolean UseTrainingMode
+        {
+            get => this.useTrainingMode;
+            set => this.SetProperty(ref this.useTrainingMode, value);
+        }
+
         #endregion
 
         #region Methods
@@ -67,7 +75,9 @@
         private async Task LoginCommandExecute()
         {
             Shared.Logger.Logger.LogInformation("LoginCommandExecute called");
-            
+
+            this.MemoryCacheService.Set("UseTrainingMode", this.useTrainingMode);
+
             // TODO: this method needs refactored
             String deviceIdentifier = this.DeviceService.GetIdentifier();
             GetConfigurationRequest getConfigurationRequest = GetConfigurationRequest.Create(deviceIdentifier);
@@ -109,6 +119,8 @@
             // TODO: Cache the result, but will add this to a timer call to keep up to date...
             GetMerchantBalanceRequest getMerchantBalanceRequest = GetMerchantBalanceRequest.Create();
             await this.Mediator.Send(getMerchantBalanceRequest);
+
+            // TODO: Need to set the application as in training mode somehow
 
             await this.NavigationService.GoToHome();
         }

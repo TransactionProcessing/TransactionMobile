@@ -3,11 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TransactionMobile.Maui.Pages.Transactions.MobileTopup.MobileTopupPerformTopupPage"
              xmlns:behaviors="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
-             Title="{Binding Title}"
-             Shell.NavBarIsVisible="False"
-             BackgroundColor="White">
+             xmlns:userControls="clr-namespace:TransactionMobile.Maui.Controls;assembly=TransactionMobile.Maui"
+             Shell.NavBarIsVisible="False">
     <VerticalStackLayout x:Name="MainLayout">
-    <Label Text="{Binding Title}" FontSize="24" HorizontalOptions="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+        <userControls:TitleLabel Text="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
     <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
            CornerRadius="20" Opacity="0.9" BackgroundColor="#E5E9F0">
         <VerticalStackLayout Spacing="10">

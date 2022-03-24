@@ -12,13 +12,16 @@ namespace TransactionMobile.Maui.BusinessLogic.RequestHandlers
 {
     public class SupportRequestHandler : IRequestHandler<UploadLogsRequest, Boolean>
     {
-        private readonly IConfigurationService ConfigurationService;
+        private readonly Func<Boolean, IConfigurationService> ConfigurationServiceResolver;
         private readonly IDatabaseContext DatabaseContext;
-        public SupportRequestHandler(IConfigurationService configurationService,
-                                     IDatabaseContext databaseContext)
+        private readonly IMemoryCacheService MemoryCacheService;
+        public SupportRequestHandler(Func<Boolean, IConfigurationService> configurationServiceResolver,
+                                     IDatabaseContext databaseContext,
+                                     IMemoryCacheService memoryCacheService)
         {
-            this.ConfigurationService = configurationService;
+            this.ConfigurationServiceResolver = configurationServiceResolver;
             this.DatabaseContext = databaseContext;
+            this.MemoryCacheService = memoryCacheService;
         }
 
         public async Task<Boolean> Handle(UploadLogsRequest request, CancellationToken cancellationToken)
@@ -42,8 +45,9 @@ namespace TransactionMobile.Maui.BusinessLogic.RequestHandlers
                     EntryDateTime = l.EntryDateTime,
                     Id = l.Id
                 }));
-
-                await this.ConfigurationService.PostDiagnosticLogs(request.DeviceIdentifier, logMessageModels, CancellationToken.None);
+                this.MemoryCacheService.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
+                var configurationService = this.ConfigurationServiceResolver(useTrainingMode);
+                await configurationService.PostDiagnosticLogs(request.DeviceIdentifier, logMessageModels, CancellationToken.None);
 
                 // Clear the logs that have been uploaded
                 await this.DatabaseContext.RemoveUploadedMessages(logEntries);

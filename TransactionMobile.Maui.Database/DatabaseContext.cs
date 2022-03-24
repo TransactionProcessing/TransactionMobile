@@ -37,9 +37,12 @@
             return this.Connection.Table<TransactionRecord>().ToList();
         }
 
-        public async Task ClearStoredTransactions()
+        public async Task ClearStoredTransactions(List<TransactionRecord> transactionRecords)
         {
-            this.Connection.DeleteAll<TransactionRecord>();
+            foreach (var transactionRecord in transactionRecords)
+            {
+                this.Connection.Delete<TransactionRecord>(transactionRecord.TransactionNumber);
+            }
         }
 
         public async Task<List<LogMessage>> GetLogMessages(int batchSize)
