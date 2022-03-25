@@ -54,4 +54,4 @@ jobs:
         uses: actions/upload-artifact@v2.3.1
         with:
           name: windows-ci-build
-          path: src/TransactionMobile.Maui/bin/Release/net6.0-windows*/**/TransactionMobile.Maui*.msix
+          path: TransactionMobile.Maui/bin/Release/net6.0-windows*/**/TransactionMobile.Maui*.msix
