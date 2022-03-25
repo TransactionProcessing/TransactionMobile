@@ -46,7 +46,7 @@ jobs:
       - name: Build Code
         run: |          
           #"C:/Program Files/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/MSBuild.exe TransactionMobile.Maui/TransactionMobile.Maui.csproj -r -p:Configuration=Release -p:RestorePackages=true -p:TargetFramework=net6.0-windows10.0.19041 /p:RestoreSources=https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json"
-          "C:/Program Files/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/MSBuild.exe TransactionMobile.Maui/TransactionMobile.Maui.csproj -restore -p:Configuration=Release  /p:AppxBundlePlatforms="x64|ARM" /p:AppxPackageDir=C:/AppxPackages /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload /p:GenerateAppxPackageOnBuild=true /p:UapAppxPackageBuildMode=StoreUpload /p:RestoreSources=https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json"
+          "C:/Program Files/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/MSBuild.exe TransactionMobile.Maui/TransactionMobile.Maui.csproj -restore -p:Configuration=Release  /p:AppxBundlePlatforms=x86|x64|ARM /p:AppxPackageDir=C:/AppxPackages /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload /p:GenerateAppxPackageOnBuild=true /p:UapAppxPackageBuildMode=StoreUpload /p:RestoreSources=https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json"
 
       - name: Run Unit Tests
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
