@@ -65,7 +65,7 @@ jobs:
         with:
           uses: svenstaro/upload-release-action@v2
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: TransactionMobile.Maui/bin/Release/net6.0-android/*Signed.apk
+          file: TransactionMobile.Maui/bin/Release/net6.0-android/com.transactionprocessing.pos-Signed.apk
           asset_name: Transaction Mobile POS v${{ github.ref }}.apk
           tag: ${{ github.ref }}
           overwrite: true
@@ -125,7 +125,7 @@ jobs:
         with:
           uses: svenstaro/upload-release-action@v2
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: TransactionMobile.Maui/bin/Release/net6.0-windows*/**/TransactionMobile.Maui*.msix
+          file: TransactionMobile.Maui/bin/Release/net6.0-windows*/**/TransactionMobile.Maui_1.0.0.0_AnyCPU.msix
           asset_name: Transaction Mobile POS v${{ github.ref }}.msix
           tag: ${{ github.ref }}
           overwrite: true
@@ -162,13 +162,19 @@ jobs:
       #  with:
       #    name: macos-ci-build
       #    path: TransactionMobile.Maui/bin/Release/net6.0-maccatalyst/**/*.app/
-
+      - name: Zip release
+        uses: thedoctor0/zip-release@master
+        with:
+          path: TransactionMobile.Maui/bin/Release/net6.0-maccatalyst/maccatalyst-x64\TransactionMobile.Maui.app
+          type: 'zip'
+          filename: 'release.zip'
+          
       - name: Upload MacCatalyst Artifact
         with:
          uses: svenstaro/upload-release-action@v2
          repo_token: ${{ secrets.GITHUB_TOKEN }}
-         file: TransactionMobile.Maui/bin/Release/net6.0-maccatalyst/**/*.app/
-         asset_name: Transaction Mobile POS v${{ github.ref }}.app
+         file: release.zip
+         asset_name: Transaction Mobile POS v${{ github.ref }}.zip
          tag: ${{ github.ref }}
          overwrite: true
          
@@ -205,11 +211,18 @@ jobs:
       #    name: ios-ci-build
       #    path: TransactionMobile.Maui/bin/Release/net6.0-ios/**/*.app/
 
-      - name: Upload iOS Artifact
+      - name: Zip release
+        uses: thedoctor0/zip-release@master
+        with:
+          path: TransactionMobile.Maui/bin/Release/net6.0-ios/iossimulator-x64\TransactionMobile.Maui.app
+          type: 'zip'
+          filename: 'release.zip'
+          
+      - name: Upload MacCatalyst Artifact
         with:
          uses: svenstaro/upload-release-action@v2
          repo_token: ${{ secrets.GITHUB_TOKEN }}
-         file: TransactionMobile.Maui/bin/Release/net6.0-ios/**/*.app/
-         asset_name: Transaction Mobile POS v${{ github.ref }}.app
+         file: release.zip
+         asset_name: Transaction Mobile POS v${{ github.ref }}.zip
          tag: ${{ github.ref }}
          overwrite: true
