@@ -13,7 +13,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionMobile.Maui.Busi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionMobile.Maui.BusinessLogic", "TransactionMobile.Maui.BusinessLogic\TransactionMobile.Maui.BusinessLogic.csproj", "{902D54CF-CD5F-4932-B1DC-01A3937AC054}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionMobile.Maui.Database", "TransactionMobile.Maui.Database\TransactionMobile.Maui.Database.csproj", "{692DD081-BA36-4289-9A81-96C9F604E864}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionMobile.Maui.Database", "TransactionMobile.Maui.Database\TransactionMobile.Maui.Database.csproj", "{692DD081-BA36-4289-9A81-96C9F604E864}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{354A147A-375C-4002-9019-215F84AC389C}"
+	ProjectSection(SolutionItems) = preProject
+		Nuget.config = Nuget.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
