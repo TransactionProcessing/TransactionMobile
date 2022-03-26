@@ -1,4 +1,4 @@
-name: Build & Test Pull Requests
+name: Build & Test Pull Requests - Android
 
 on:
   pull_request:
@@ -17,7 +17,7 @@ jobs:
     name: Android Build
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.1
@@ -26,9 +26,9 @@ jobs:
           msbuild-architecture: x64
 
       - name: Setup .NET 6
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: 6.0.200-preview.22055.15
+          dotnet-version: 6.0.*
           include-prerelease: true
           
       - uses: actions/setup-java@v2
@@ -38,12 +38,8 @@ jobs:
 
       - name: Install MAUI Workloads
         run: |
-          dotnet workload install maui --ignore-failed-sources
-          dotnet workload install maui-android --ignore-failed-sources 
-          dotnet workload install maui-desktop --ignore-failed-sources 
-          dotnet workload install maui-ios --ignore-failed-sources 
-          dotnet workload install maui-mobile --ignore-failed-sources 
-          dotnet workload install maui-windows --ignore-failed-sources
+          dotnet workload install android --ignore-failed-sources
+          dotnet workload install maui --ignore-failed-sources 
 
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln --source https://api.nuget.org/v3/index.json --source https://www.myget.org/F/transactionprocessing/api/v3/index.json --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json

@@ -1,4 +1,4 @@
-name: Build & Test Pull Requests
+name: Build & Test Pull Requests - iOS
 
 on:
   pull_request:
@@ -39,8 +39,8 @@ jobs:
       - name: Run Unit Tests
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
 
-      - name: Upload iOS Artifact
-        uses: actions/upload-artifact@v2.3.1
-        with:
-          name: ios-ci-build
-          path: src/TransactionMobile.Maui/bin/Release/net6.0-ios/**/*.app/
+      #- name: Upload iOS Artifact
+      #  uses: actions/upload-artifact@v2.3.1
+      #  with:
+      #    name: ios-ci-build
+      #    path: src/TransactionMobile.Maui/bin/Release/net6.0-ios/**/*.app/

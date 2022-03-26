@@ -1,4 +1,4 @@
-name: Build & Test Pull Requests
+name: Build & Test Pull Requests - Windows
 
 on:
   pull_request:
