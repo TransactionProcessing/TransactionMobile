@@ -1,0 +1,179 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+env:
+  DOTNET_NOLOGO: true                     # Disable the .NET logo
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
+  DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry  
+  
+jobs:
+  release_android:
+    runs-on: windows-2022
+    name: "Android Release"
+    env:
+        ASPNETCORE_ENVIRONMENT: "Production"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+    
+     - name: Get the version
+       id: get_version
+       run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}        
+       
+     - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          vs-prerelease: true
+          msbuild-architecture: x64
+
+     - name: Setup .NET 6
+       uses: actions/setup-dotnet@v2
+       with:
+         dotnet-version: 6.0.*
+         include-prerelease: true
+          
+     - uses: actions/setup-java@v2
+       with:
+         distribution: 'microsoft'
+         java-version: '11'
+
+     - name: Install MAUI Workloads
+       run: |
+          dotnet workload install android --ignore-failed-sources
+          dotnet workload install maui --ignore-failed-sources 
+
+     - name: Restore Dependencies
+       run: dotnet restore TransactionMobile.Maui.sln
+
+     - name: Build Code
+       run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-android --no-restore
+
+     - name: Run Unit Tests
+       run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
+
+     - name: Upload Android Artifact
+       uses: actions/upload-artifact@v2.3.1
+       with:
+         name: android-ci-build
+         path: TransactionMobile.Maui/bin/Release/net6.0-android/*Signed.a*
+
+  release_windows:
+    runs-on: windows-2022
+    name: "Windows Release"
+    env:
+        ASPNETCORE_ENVIRONMENT: "Production"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+    
+     - name: Get the version
+       id: get_version
+       run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}        
+       
+     - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          vs-prerelease: true
+          msbuild-architecture: x64
+
+     - name: Setup .NET 6
+       uses: actions/setup-dotnet@v2
+       with:
+         dotnet-version: 6.0.*
+         include-prerelease: true
+          
+     - uses: actions/setup-java@v2
+       with:
+         distribution: 'microsoft'
+         java-version: '11'
+
+     - name: Install MAUI Workloads
+        run: |
+          dotnet workload install maui --ignore-failed-sources
+
+     - name: Restore Dependencies
+       run: dotnet restore TransactionMobile.Maui.sln
+
+     - name: Build Code
+       run: msbuild TransactionMobile.Maui/TransactionMobile.Maui.csproj -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true
+
+     - name: Run Unit Tests
+       run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
+
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v2.3.1
+        with:
+          name: windows-ci-build
+          path: |
+            TransactionMobile.Maui/bin/Release/net6.0-windows*/**/TransactionMobile.Maui*.msix
+
+  released-mac:
+    runs-on: macos-11
+    name: MacCatalyst Release
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3        
+
+      - name: Setup .NET 6
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+          include-prerelease: true
+          
+      - name: Install MAUI Workloads
+        run: |
+          dotnet workload install maccatalyst --ignore-failed-sources
+          dotnet workload install maui --ignore-failed-sources
+
+      - name: Restore Dependencies
+        run: dotnet restore TransactionMobile.Maui.sln
+        
+      - name: Build Code
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-maccatalyst --no-restore
+        
+      - name: Run Unit Tests
+        run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
+
+      - name: Upload MacCatalyst Artifact
+        uses: actions/upload-artifact@v2.3.1
+        with:
+          name: macos-ci-build
+          path: TransactionMobile.Maui/bin/Release/net6.0-maccatalyst/**/*.app/
+         
+  release-ios:
+    runs-on: macos-11
+    name: iOS Release
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup .NET 6
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.*
+          include-prerelease: true          
+      
+      - name: Install MAUI Workloads
+        run: |
+          dotnet workload install ios --ignore-failed-sources
+          dotnet workload install maui --ignore-failed-sources
+
+      - name: Restore Dependencies
+        run: dotnet restore TransactionMobile.Maui.sln
+        
+      - name: Build Code
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-ios --no-restore
+        
+      - name: Run Unit Tests
+        run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
+
+      - name: Upload iOS Artifact
+        uses: actions/upload-artifact@v2.3.1
+        with:
+          name: ios-ci-build
+          path: TransactionMobile.Maui/bin/Release/net6.0-ios/**/*.app/
