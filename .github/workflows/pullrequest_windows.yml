@@ -48,4 +48,4 @@ jobs:
         with:
           name: windows-ci-build
           path: |
-            *.msix
+            TransactionMobile.Maui/bin/Release/net6.0-windows*/**/TransactionMobile.Maui*.msix
