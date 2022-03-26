@@ -1,4 +1,4 @@
-name: Build & Test Pull Requests
+name: Build & Test Pull Requests - iOS
 
 on:
   pull_request:
@@ -17,19 +17,13 @@ jobs:
     name: iOS Build
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup .NET 6
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: 6.0.200-preview.22055.15
-          include-prerelease: true
-
-      - name: Setup .NET 6
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 6.0.x
-          include-prerelease: true
+          dotnet-version: 6.0.*
+          include-prerelease: true          
       
       - name: Install MAUI Workloads
         run: |
@@ -37,7 +31,7 @@ jobs:
           dotnet workload install maui --ignore-failed-sources
 
       - name: Restore Dependencies
-        run: dotnet restore TransactionMobile.Maui.sln --source https://api.nuget.org/v3/index.json --source https://www.myget.org/F/transactionprocessing/api/v3/index.json --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+        run: dotnet restore TransactionMobile.Maui.sln
         
       - name: Build Code
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-ios --no-restore
@@ -45,8 +39,8 @@ jobs:
       - name: Run Unit Tests
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
 
-#      #- name: Upload iOS Artifact
-#      #  uses: actions/upload-artifact@v2.3.1
-#      #  with:
-#      #    name: ios-ci-build
-#      #    path: src/MauiBeach/bin/Release/net6.0-ios/**/*.app/
+      #- name: Upload iOS Artifact
+      #  uses: actions/upload-artifact@v2.3.1
+      #  with:
+      #    name: ios-ci-build
+      #    path: src/TransactionMobile.Maui/bin/Release/net6.0-ios/**/*.app/

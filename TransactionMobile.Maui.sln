@@ -13,7 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionMobile.Maui.Busi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionMobile.Maui.BusinessLogic", "TransactionMobile.Maui.BusinessLogic\TransactionMobile.Maui.BusinessLogic.csproj", "{902D54CF-CD5F-4932-B1DC-01A3937AC054}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionMobile.Maui.Database", "TransactionMobile.Maui.Database\TransactionMobile.Maui.Database.csproj", "{692DD081-BA36-4289-9A81-96C9F604E864}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{354A147A-375C-4002-9019-215F84AC389C}"
+	ProjectSection(SolutionItems) = preProject
+		Nuget.config = Nuget.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +38,6 @@ Global
 		{902D54CF-CD5F-4932-B1DC-01A3937AC054}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{902D54CF-CD5F-4932-B1DC-01A3937AC054}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{902D54CF-CD5F-4932-B1DC-01A3937AC054}.Release|Any CPU.Build.0 = Release|Any CPU
-		{692DD081-BA36-4289-9A81-96C9F604E864}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{692DD081-BA36-4289-9A81-96C9F604E864}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{692DD081-BA36-4289-9A81-96C9F604E864}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{692DD081-BA36-4289-9A81-96C9F604E864}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,7 +46,6 @@ Global
 		{73668181-7A26-435D-83E3-CF141AC8FD0B} = {1CBEF4C1-7D90-4A78-AA55-D81F1447A70E}
 		{0894F054-5C4D-4DDD-A8E9-636416189234} = {AB312EE3-CBA4-469A-8694-67C5466298C5}
 		{902D54CF-CD5F-4932-B1DC-01A3937AC054} = {1CBEF4C1-7D90-4A78-AA55-D81F1447A70E}
-		{692DD081-BA36-4289-9A81-96C9F604E864} = {1CBEF4C1-7D90-4A78-AA55-D81F1447A70E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}
