@@ -62,8 +62,8 @@ jobs:
       #   path: TransactionMobile.Maui/bin/Release/net6.0-android/*Signed.a*
       
       - name: Upload Android Artifact
-        with:
-          uses: svenstaro/upload-release-action@v2
+        uses: svenstaro/upload-release-action@v2
+        with:          
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: TransactionMobile.Maui/bin/Release/net6.0-android/com.transactionprocessing.pos-Signed.apk
           asset_name: Transaction Mobile POS v${{ github.ref }}.apk
@@ -122,8 +122,8 @@ jobs:
       #      TransactionMobile.Maui/bin/Release/net6.0-windows*/**/TransactionMobile.Maui*.msix
 
       - name: Upload Windows Artifact
+        uses: svenstaro/upload-release-action@v2
         with:
-          uses: svenstaro/upload-release-action@v2
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: TransactionMobile.Maui/bin/Release/net6.0-windows*/**/TransactionMobile.Maui_1.0.0.0_AnyCPU.msix
           asset_name: Transaction Mobile POS v${{ github.ref }}.msix
@@ -170,8 +170,8 @@ jobs:
           filename: 'release.zip'
           
       - name: Upload MacCatalyst Artifact
+        uses: svenstaro/upload-release-action@v2      
         with:
-         uses: svenstaro/upload-release-action@v2
          repo_token: ${{ secrets.GITHUB_TOKEN }}
          file: release.zip
          asset_name: Transaction Mobile POS v${{ github.ref }}.zip
@@ -219,8 +219,9 @@ jobs:
           filename: 'release.zip'
           
       - name: Upload MacCatalyst Artifact
+      - name: Upload iOS Artifact
+        uses: svenstaro/upload-release-action@v2      
         with:
-         uses: svenstaro/upload-release-action@v2
          repo_token: ${{ secrets.GITHUB_TOKEN }}
          file: release.zip
          asset_name: Transaction Mobile POS v${{ github.ref }}.zip
