@@ -218,7 +218,6 @@ jobs:
           type: 'zip'
           filename: 'release.zip'
           
-      - name: Upload MacCatalyst Artifact
       - name: Upload iOS Artifact
         uses: svenstaro/upload-release-action@v2      
         with:
