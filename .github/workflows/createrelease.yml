@@ -66,7 +66,7 @@ jobs:
         with:          
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: TransactionMobile.Maui/bin/Release/net6.0-android/com.transactionprocessing.pos-Signed.apk
-          asset_name: Transaction Mobile POS v${{ github.ref }}.apk
+          asset_name: Transaction Mobile POS Android v${{ github.ref }}.apk
           tag: ${{ github.ref }}
           overwrite: true
 
@@ -126,7 +126,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: TransactionMobile.Maui/bin/Release/net6.0-windows*/**/TransactionMobile.Maui_1.0.0.0_AnyCPU.msix
-          asset_name: Transaction Mobile POS v${{ github.ref }}.msix
+          asset_name: Transaction Mobile POS Windows v${{ github.ref }}.msix
           tag: ${{ github.ref }}
           overwrite: true
 
@@ -174,7 +174,7 @@ jobs:
         with:
          repo_token: ${{ secrets.GITHUB_TOKEN }}
          file: release.zip
-         asset_name: Transaction Mobile POS v${{ github.ref }}.zip
+         asset_name: Transaction Mobile POS MacCatalyst v${{ github.ref }}.zip
          tag: ${{ github.ref }}
          overwrite: true
          
@@ -223,6 +223,6 @@ jobs:
         with:
          repo_token: ${{ secrets.GITHUB_TOKEN }}
          file: release.zip
-         asset_name: Transaction Mobile POS v${{ github.ref }}.zip
+         asset_name: Transaction Mobile POS iOS v${{ github.ref }}.zip
          tag: ${{ github.ref }}
          overwrite: true
