@@ -22,7 +22,8 @@ jobs:
     
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}        
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}     
+        shell: bash
        
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.1
@@ -77,6 +78,7 @@ jobs:
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}        
+        shell: bash
        
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.1
