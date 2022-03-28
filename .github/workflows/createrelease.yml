@@ -119,7 +119,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: TransactionMobile.Maui/bin/Release/net6.0-windows*/**/TransactionMobile.Maui_1.0.0.0_AnyCPU.msix
+          file: release.zip
           asset_name: Transaction Mobile POS Windows v${{ steps.get_version.outputs.VERSION }}.msix
           tag: ${{ github.ref }}
           overwrite: true
