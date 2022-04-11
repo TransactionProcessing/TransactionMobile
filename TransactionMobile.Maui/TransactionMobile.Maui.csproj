@@ -18,6 +18,7 @@
 
 		<!-- Versions -->
 		<ApplicationVersion>1</ApplicationVersion>
+		<ApplicationDisplayVersion>1</ApplicationDisplayVersion>
 
 		<!-- Required for C# Hot Reload -->
 		<UseInterpreter Condition="'$(Configuration)' == 'Debug'">True</UseInterpreter>
