@@ -50,6 +50,12 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln
 
+      - name: Set Application Version
+        uses: TransactionProcessing/actions@0.0.4
+        with:
+          filepath: 'TransactionMobile.Maui/TransactionMobile.Maui.csproj'
+          versionnumber: ${{ steps.get_version.outputs.VERSION }}
+
       - name: Build Code
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-android --no-restore
 
@@ -104,6 +110,12 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln
 
+      - name: Set Application Version
+        uses: TransactionProcessing/actions@0.0.4
+        with:
+          filepath: 'TransactionMobile.Maui/TransactionMobile.Maui.csproj'
+          versionnumber: ${{ steps.get_version.outputs.VERSION }}
+
       - name: Build Code
         run: msbuild TransactionMobile.Maui/TransactionMobile.Maui.csproj -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true
 
@@ -150,7 +162,13 @@ jobs:
 
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln
-        
+
+      - name: Set Application Version
+        uses: TransactionProcessing/actions@0.0.4
+        with:
+          filepath: 'TransactionMobile.Maui/TransactionMobile.Maui.csproj'
+          versionnumber: ${{ steps.get_version.outputs.VERSION }}
+
       - name: Build Code
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-maccatalyst --no-restore
         
@@ -197,7 +215,13 @@ jobs:
 
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln
-        
+      
+      - name: Set Application Version
+        uses: TransactionProcessing/actions@0.0.4
+        with:
+          filepath: 'TransactionMobile.Maui/TransactionMobile.Maui.csproj'
+          versionnumber: ${{ steps.get_version.outputs.VERSION }}
+          
       - name: Build Code
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-ios --no-restore
         
