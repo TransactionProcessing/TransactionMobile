@@ -51,7 +51,7 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln
 
       - name: Set Application Version
-        uses: TransactionProcessing/actions@0.0.4
+        uses: TransactionProcessing/actions@1.0.0
         with:
           filepath: 'TransactionMobile.Maui/TransactionMobile.Maui.csproj'
           versionnumber: ${{ steps.get_version.outputs.VERSION }}
@@ -111,7 +111,7 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln
 
       - name: Set Application Version
-        uses: TransactionProcessing/actions@0.0.4
+        uses: TransactionProcessing/actions@1.0.0
         with:
           filepath: 'TransactionMobile.Maui/TransactionMobile.Maui.csproj'
           versionnumber: ${{ steps.get_version.outputs.VERSION }}
@@ -164,7 +164,7 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln
 
       - name: Set Application Version
-        uses: TransactionProcessing/actions@0.0.4
+        uses: TransactionProcessing/actions@1.0.0
         with:
           filepath: 'TransactionMobile.Maui/TransactionMobile.Maui.csproj'
           versionnumber: ${{ steps.get_version.outputs.VERSION }}
@@ -217,7 +217,7 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln
       
       - name: Set Application Version
-        uses: TransactionProcessing/actions@0.0.4
+        uses: TransactionProcessing/actions@1.0.0
         with:
           filepath: 'TransactionMobile.Maui/TransactionMobile.Maui.csproj'
           versionnumber: ${{ steps.get_version.outputs.VERSION }}
