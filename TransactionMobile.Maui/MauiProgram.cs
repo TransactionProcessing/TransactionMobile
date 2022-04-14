@@ -16,7 +16,7 @@ public static class MauiProgram
 	private static MauiAppBuilder Builder;
 	public static MauiApp CreateMauiApp()
 	{
-#if ANDROID && DEBUG
+#if ANDROID
         Platforms.Services.DangerousAndroidMessageHandlerEmitter.Register();
         Platforms.Services.DangerousTrustProvider.Register();
 #endif
