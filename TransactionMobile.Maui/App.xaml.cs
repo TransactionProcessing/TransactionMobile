@@ -1,4 +1,5 @@
-﻿using TransactionMobile.Maui.Pages.Reports;
+﻿using Microsoft.Maui.Platform;
+using TransactionMobile.Maui.Pages.Reports;
 using TransactionMobile.Maui.Pages.Transactions.MobileTopup;
 using TransactionMobile.Maui.Pages.Transactions.Voucher;
 
@@ -15,7 +16,7 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        Microsoft.Maui.Handlers.EntryHandler.ElementMapper.AppendToMapping("TrainingMode", (handler, view) =>
+        Microsoft.Maui.Handlers.LabelHandler.ElementMapper.AppendToMapping("TrainingMode", (handler, view) =>
         {
             if (view is TitleLabel)
             {
@@ -30,6 +31,42 @@ public partial class App : Application
             }
         });
 
+        Microsoft.Maui.Handlers.EntryHandler.ElementMapper.AppendToMapping("AutomationIdEntry", (handler, view) =>
+        {
+            if (view is Entry)
+            {
+                var e = (Entry) view;
+                if (String.IsNullOrEmpty(e.AutomationId) == false)
+                {
+                    SemanticProperties.SetHint(e,e.AutomationId);
+                }
+            }
+        });
+
+        Microsoft.Maui.Handlers.LabelHandler.ElementMapper.AppendToMapping("AutomationIdLabel", (handler, view) =>
+        {
+            if (view is Label)
+            {
+                var e = (Label) view;
+                if (String.IsNullOrEmpty(e.AutomationId) == false)
+                {
+                    SemanticProperties.SetDescription(e, e.AutomationId);
+                }
+            }
+        });
+
+        Microsoft.Maui.Handlers.ButtonHandler.ElementMapper.AppendToMapping("AutomationIdButton", (handler, view) =>
+        {
+            if (view is Button)
+            {
+                var e = (Button) view;
+                if (String.IsNullOrEmpty(e.AutomationId) == false)
+                {
+                    SemanticProperties.SetDescription(e, e.AutomationId);
+                }
+            }
+        });
+        
         MainPage = new AppShell();
 
         Routing.RegisterRoute(nameof(MobileTopupSelectOperatorPage), typeof(MobileTopupSelectOperatorPage));

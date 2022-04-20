@@ -12,7 +12,8 @@
             <Image Source="Resources/loginimage.jpg" VerticalOptions="Start" Aspect="AspectFit"/>
 
             <!-- Title-->
-            <Label Text="Log In" FontSize="34" HorizontalOptions="Center" FontAttributes="Bold" Padding="20,0,0,20"/>
+            <Label Text="Log In" FontSize="34" HorizontalOptions="Center" FontAttributes="Bold" Padding="20,0,0,20" 
+                   AutomationId="LoginLabel"/>
 
             <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
                    CornerRadius="20" Opacity="0.9" BackgroundColor="#E5E9F0">
