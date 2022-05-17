@@ -61,7 +61,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
 
                     String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                     String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..",
-                        @"TransactionMobile.Maui/bin/Release/net6.0-android/publish/");
+                        @"TransactionMobile.Maui/bin/Release/net6.0-android/");
 
 
                     var apkPath = Path.Combine(binariesFolder, "com.transactionprocessing.pos.apk");

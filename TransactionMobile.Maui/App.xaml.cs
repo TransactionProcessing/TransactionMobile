@@ -5,6 +5,7 @@ using TransactionMobile.Maui.Pages.Transactions.Voucher;
 
 namespace TransactionMobile.Maui;
 
+using Microsoft.Maui.Handlers;
 using Pages.AppHome;
 using Pages.Transactions.Admin;
 using TransactionMobile.Maui.BusinessLogic.Services;
@@ -31,42 +32,97 @@ public partial class App : Application
             }
         });
 
-        Microsoft.Maui.Handlers.EntryHandler.ElementMapper.AppendToMapping("AutomationIdEntry", (handler, view) =>
+#if ANDROID
+        ViewHandler.ViewMapper.ModifyMapping("AutomationId", (handler, view, previousAction) =>
         {
-            if (view is Entry)
+            if (handler.PlatformView is Android.Views.View androidView)
             {
-                var e = (Entry) view;
-                if (String.IsNullOrEmpty(e.AutomationId) == false)
-                {
-                    SemanticProperties.SetHint(e,e.AutomationId);
-                }
+                if (String.IsNullOrWhiteSpace(view.AutomationId))
+                    return;
+
+                if (AndroidX.Core.View.ViewCompat.GetAccessibilityDelegate(androidView) is not AutomationIdDelegate)
+                    AndroidX.Core.View.ViewCompat.SetAccessibilityDelegate(androidView, new AutomationIdDelegate());
+
+
+                if (AndroidX.Core.View.ViewCompat.GetAccessibilityDelegate(androidView) is AutomationIdDelegate td)
+                    td.AutomationId = view.AutomationId;
+
+                androidView.ContentDescription = view.AutomationId;
             }
         });
 
-        Microsoft.Maui.Handlers.LabelHandler.ElementMapper.AppendToMapping("AutomationIdLabel", (handler, view) =>
+        EntryHandler.Mapper.ModifyMapping("AutomationId", (handler, view, previousAction) =>
+                                                          {
+                                                              if (handler.PlatformView is Android.Views.View androidView)
+                                                              {
+                                                                  if (String.IsNullOrWhiteSpace(view.AutomationId))
+                                                                      return;
+
+                                                                  if (AndroidX.Core.View.ViewCompat.GetAccessibilityDelegate(androidView) is not AutomationIdDelegate)
+                                                                      AndroidX.Core.View.ViewCompat.SetAccessibilityDelegate(androidView, new AutomationIdDelegate());
+
+
+                                                                  if (AndroidX.Core.View.ViewCompat.GetAccessibilityDelegate(androidView) is AutomationIdDelegate td)
+                                                                      td.AutomationId = view.AutomationId;
+
+                                                                  androidView.ContentDescription = view.AutomationId;
+                                                              }
+                                                          });
+
+        SwitchHandler.Mapper.ModifyMapping("AutomationId", (handler, view, previousAction) =>
+                                                          {
+                                                              if (handler.PlatformView is Android.Views.View androidView)
+                                                              {
+                                                                  if (String.IsNullOrWhiteSpace(view.AutomationId))
+                                                                      return;
+
+                                                                  if (AndroidX.Core.View.ViewCompat.GetAccessibilityDelegate(androidView) is not AutomationIdDelegate)
+                                                                      AndroidX.Core.View.ViewCompat.SetAccessibilityDelegate(androidView, new AutomationIdDelegate());
+
+
+                                                                  if (AndroidX.Core.View.ViewCompat.GetAccessibilityDelegate(androidView) is AutomationIdDelegate td)
+                                                                      td.AutomationId = view.AutomationId;
+
+                                                                  androidView.ContentDescription = view.AutomationId;
+                                                              }
+                                                          });
+
+        LabelHandler.Mapper.ModifyMapping("AutomationId", (handler, view, previousAction) =>
         {
-            if (view is Label)
+            if (handler.PlatformView is Android.Views.View androidView)
             {
-                var e = (Label) view;
-                if (String.IsNullOrEmpty(e.AutomationId) == false)
-                {
-                    SemanticProperties.SetDescription(e, e.AutomationId);
-                }
+                if (String.IsNullOrWhiteSpace(view.AutomationId))
+                    return;
+
+                if (AndroidX.Core.View.ViewCompat.GetAccessibilityDelegate(androidView) is not AutomationIdDelegate)
+                    AndroidX.Core.View.ViewCompat.SetAccessibilityDelegate(androidView, new AutomationIdDelegate());
+
+
+                if (AndroidX.Core.View.ViewCompat.GetAccessibilityDelegate(androidView) is AutomationIdDelegate td)
+                    td.AutomationId = view.AutomationId;
+
+                androidView.ContentDescription = view.AutomationId;
             }
         });
 
-        Microsoft.Maui.Handlers.ButtonHandler.ElementMapper.AppendToMapping("AutomationIdButton", (handler, view) =>
+        ButtonHandler.Mapper.ModifyMapping("AutomationId", (handler, view, previousAction) =>
         {
-            if (view is Button)
+            if (handler.PlatformView is Android.Views.View androidView)
             {
-                var e = (Button) view;
-                if (String.IsNullOrEmpty(e.AutomationId) == false)
-                {
-                    SemanticProperties.SetDescription(e, e.AutomationId);
-                }
+                if (String.IsNullOrWhiteSpace(view.AutomationId))
+                    return;
+
+                if (AndroidX.Core.View.ViewCompat.GetAccessibilityDelegate(androidView) is not AutomationIdDelegate)
+                    AndroidX.Core.View.ViewCompat.SetAccessibilityDelegate(androidView, new AutomationIdDelegate());
+
+
+                if (AndroidX.Core.View.ViewCompat.GetAccessibilityDelegate(androidView) is AutomationIdDelegate td)
+                    td.AutomationId = view.AutomationId;
+
+                androidView.ContentDescription = view.AutomationId;
             }
         });
-        
+#endif     
         MainPage = new AppShell();
 
         Routing.RegisterRoute(nameof(MobileTopupSelectOperatorPage), typeof(MobileTopupSelectOperatorPage));
@@ -84,4 +140,21 @@ public partial class App : Application
         Routing.RegisterRoute(nameof(AdminPage), typeof(AdminPage));
     }
 }
+
+#if ANDROID
+public class AutomationIdDelegate : MauiAccessibilityDelegateCompat
+{
+    public string AutomationId { get; internal set; }
+
+    public override void OnInitializeAccessibilityNodeInfo(Android.Views.View host, AndroidX.Core.View.Accessibility.AccessibilityNodeInfoCompat info)
+    {
+        base.OnInitializeAccessibilityNodeInfo(host, info);
+
+        if (!String.IsNullOrWhiteSpace(AutomationId))
+        {
+            info.ViewIdResourceName = $"{host.Context.PackageName}:id/{AutomationId}";
+        }
+    }
+}
+#endif
 

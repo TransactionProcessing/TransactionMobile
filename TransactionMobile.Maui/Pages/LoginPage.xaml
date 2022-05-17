@@ -54,7 +54,7 @@
                                 />
                     </HorizontalStackLayout>
 
-                    <Button Text="Continue" Style="{StaticResource StandardButton}" Command="{Binding LoginCommand}"/>
+                    <Button Text="Continue" Style="{StaticResource StandardButton}" Command="{Binding LoginCommand}" AutomationId="LoginButton"/>
                     <!--<Label Grid.ColumnSpan="2" Grid.Row="3" Text="Forgot your password?" TextColor="{StaticResource P}" FontAttributes="Bold"/>-->
                 </VerticalStackLayout>
             </Frame>

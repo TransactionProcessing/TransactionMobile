@@ -13,13 +13,22 @@ namespace TransactionMobile.Maui.UITests.Steps
     public class LoginSteps
     {
         LoginPage loginPage = new LoginPage();
-        //MainPage mainPage = new MainPage();
+        MainPage mainPage = new MainPage();
 
         [Given(@"I am on the Login Screen")]
         public async Task GivenIAmOnTheLoginScreen()
         {
             await this.loginPage.AssertOnPage();
         }
+
+        [Given(@"the application is in training mode")]
+        public async Task GivenTheApplicationIsInTrainingMode() {
+            var isTrainingModeOn = await this.loginPage.IsTrainingModeOn();
+            
+            if (isTrainingModeOn == false)
+                await this.loginPage.SetTrainingModeOn();
+        }
+
 
         [When(@"I enter '(.*)' as the Email Address")]
         public async Task WhenIEnterAsTheEmailAddress(String emailAddress)
@@ -42,7 +51,7 @@ namespace TransactionMobile.Maui.UITests.Steps
         [Then(@"the Merchant Home Page is displayed")]
         public async Task ThenTheMerchantHomePageIsDisplayed()
         {
-            //await this.mainPage.AssertOnPage();
+            await this.mainPage.AssertOnPage();
         }
 
         [Then(@"the available balance is shown as (.*)")]

@@ -17,21 +17,21 @@ namespace TransactionMobile.Maui.UITests
 
         public async Task AssertOnPage(TimeSpan? timeout = null)
         {
+            using (StreamWriter sw = new StreamWriter("C:\\Temp\\PageSource.log"))
+            {
+                sw.WriteLine(AppiumDriverWrapper.Driver.PageSource);
+            }
+
             timeout = timeout ?? TimeSpan.FromSeconds(60);
 
             await Retry.For(async () =>
             {
                 String message = "Unable to verify on page: " + this.GetType().Name;
 
-                Should.NotThrow(() => this.WaitForElementByAccessibilityId(this.Trait,"Label"), message);
+                Should.NotThrow(() => this.WaitForElementByAccessibilityId(this.Trait), message);
             },
                             TimeSpan.FromMinutes(1),
                             timeout).ConfigureAwait(false);
-
-            using (StreamWriter sw = new StreamWriter("C:\\Temp\\PageSource.log"))
-            {
-                sw.WriteLine(AppiumDriverWrapper.Driver.PageSource);
-            }
         }
 
         /// <summary>
@@ -46,9 +46,9 @@ namespace TransactionMobile.Maui.UITests
             Should.NotThrow(() => this.WaitForNoElementByAccessibilityId(this.Trait), message);
         }
 
-        public async Task<IWebElement> WaitForElementByAccessibilityId(String accessibilityId, String type,TimeSpan? timeout = null)
+        public async Task<IWebElement> WaitForElementByAccessibilityId(String accessibilityId, TimeSpan? timeout = null)
         {
-            return await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId(accessibilityId,type, timeout);
+            return await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId(accessibilityId, timeout);
         }
         
         public async Task<String> GetPageSource()

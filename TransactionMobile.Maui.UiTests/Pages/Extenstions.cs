@@ -23,36 +23,16 @@ public static class Extenstions
     //}
 
     public static async Task<IWebElement> WaitForElementByAccessibilityId(this AppiumDriver driver,
-                                                                          String selector,
-                                                                          String type,
-                                                                          TimeSpan? timeout = null)
-    {
-        
+                                                               String selector,
+                                                               TimeSpan? timeout = null) {
+        IWebElement? element = null;
         timeout ??= TimeSpan.FromSeconds(60);
-        IWebElement element = null;
+
         await Retry.For(async () =>
-        {
-            /*
-            String className = "Button";
-            if (type == "Label")
-            {
-                className = "TextView";
-            }
-            else if (type == "Entry")
-            {
-                className = "EditText";
-            }
-
-            var elements = driver.FindElements(By.ClassName($"android.widget.{className}"));
-            element = driver.FindElement(MobileBy.AccessibilityId(selector));
-            var x = elements[0];
-            var y = elements[1];
-            */
-            element = driver.FindElement(MobileBy.AccessibilityId(selector));
-            element.ShouldNotBeNull();
-            //                var pageSource = driver.PageSource;
-        });
-
+                        {
+                            element = driver.FindElement(MobileBy.AccessibilityId(selector));
+                            element.ShouldNotBeNull();
+                        });
         return element;
     }
 
