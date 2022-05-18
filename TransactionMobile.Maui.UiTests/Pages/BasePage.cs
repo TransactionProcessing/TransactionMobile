@@ -68,7 +68,15 @@ namespace TransactionMobile.Maui.UITests
 
         public void HideKeyboard()
         {
-            AppiumDriverWrapper.Driver.HideKeyboard();
+            //AppiumDriverWrapper.Driver.HideKeyboard();
+            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android)
+            {
+                AppiumDriverWrapper.Driver.HideKeyboard();
+            }
+            else if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.iOS)
+            {
+                AppiumDriverWrapper.Driver.FindElement(By.Name("Done")).Click();
+            }
         }
 
         public IWebElement GetAlert()
