@@ -39,43 +39,66 @@ namespace TransactionMobile.Maui.UiTests.Drivers
                     appiumService.OutputDataReceived += (sender, args) => { streamWriter.WriteLine(args.Data); };
                 }
 
-                if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android)
-                {
-                    // Do Android stuff to start up
-                    var driverOptions = new AppiumOptions();
-                    driverOptions.AddAdditionalAppiumOption("adbExecTimeout", TimeSpan.FromMinutes(5).Milliseconds);
-                    driverOptions.AutomationName = "UIAutomator2";
-                    driverOptions.PlatformName = "Android";
-                    driverOptions.PlatformVersion = "9.0";
-                    driverOptions.DeviceName = "emulator-5554";
-
-
-                    // TODO: Only do this locally
-                    //driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
-                    driverOptions.AddAdditionalAppiumOption("appPackage", "com.transactionprocessing.pos");
-                    //driverOptions.AddAdditionalAppiumOption("forceEspressoRebuild", true);
-                    driverOptions.AddAdditionalAppiumOption("enforceAppInstall", true);
-                    //driverOptions.AddAdditionalAppiumOption("noSign", true);
-                    //driverOptions.AddAdditionalAppiumOption("espressoBuildConfig",
-                    //    "{ \"additionalAppDependencies\": [ \"com.google.android.material:material:1.0.0\", \"androidx.lifecycle:lifecycle-extensions:2.1.0\" ] }");
-
-                    String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                    String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..",
-                        @"TransactionMobile.Maui/bin/Release/net6.0-android/");
-
-
-                    var apkPath = Path.Combine(binariesFolder, "com.transactionprocessing.pos.apk");
-                    driverOptions.App = apkPath;
-                    AppiumDriverWrapper.Driver =
-                        new OpenQA.Selenium.Appium.Android.AndroidDriver(appiumService, driverOptions,
-                            TimeSpan.FromMinutes(5));
+                if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
+                    AppiumDriverWrapper.SetupAndroidDriver(appiumService);
                 }
+                else if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.iOS) {
+                    AppiumDriverWrapper.SetupiOSDriver(appiumService);
+                }
+
             }
             catch (Exception e)
             {
                 streamWriter.Close();
                 throw;
             }
+        }
+
+        private static void SetupiOSDriver(AppiumLocalService appiumService) {
+
+            var driverOptions = new AppiumOptions();
+            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.PlatformName, "iOS");
+            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.DeviceName, "iPhone 11");
+            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.PlatformVersion, "14.4");
+
+            String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net6.0-ios/iossimulator-x64");
+            var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.app");
+            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.App, apkPath);
+            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
+            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.AutomationName, "XCUITest");
+            driverOptions.AddAdditionalAppiumOption("useNewWDA", true);
+            driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 999999999);
+            driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 999999999);
+            driverOptions.AddAdditionalAppiumOption("restart", true);
+
+            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, driverOptions, TimeSpan.FromMinutes(5));
+        }
+
+        private static void SetupAndroidDriver(AppiumLocalService appiumService) {
+            // Do Android stuff to start up
+            var driverOptions = new AppiumOptions();
+            driverOptions.AddAdditionalAppiumOption("adbExecTimeout", TimeSpan.FromMinutes(5).Milliseconds);
+            driverOptions.AutomationName = "UIAutomator2";
+            driverOptions.PlatformName = "Android";
+            driverOptions.PlatformVersion = "9.0";
+            driverOptions.DeviceName = "emulator-5554";
+
+            // TODO: Only do this locally
+            //driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
+            driverOptions.AddAdditionalAppiumOption("appPackage", "com.transactionprocessing.pos");
+            //driverOptions.AddAdditionalAppiumOption("forceEspressoRebuild", true);
+            driverOptions.AddAdditionalAppiumOption("enforceAppInstall", true);
+            //driverOptions.AddAdditionalAppiumOption("noSign", true);
+            //driverOptions.AddAdditionalAppiumOption("espressoBuildConfig",
+            //    "{ \"additionalAppDependencies\": [ \"com.google.android.material:material:1.0.0\", \"androidx.lifecycle:lifecycle-extensions:2.1.0\" ] }");
+
+            String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net6.0-android/");
+
+            var apkPath = Path.Combine(binariesFolder, "com.transactionprocessing.pos.apk");
+            driverOptions.App = apkPath;
+            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.Android.AndroidDriver(appiumService, driverOptions, TimeSpan.FromMinutes(5));
         }
 
         public void StopApp()
