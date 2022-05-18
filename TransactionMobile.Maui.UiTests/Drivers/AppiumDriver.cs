@@ -65,11 +65,11 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net6.0-ios/iossimulator-x64/");
             var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.app");
             driverOptions.App = apkPath;
-            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
-            driverOptions.AddAdditionalAppiumOption("useNewWDA", true);
-            driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 999999999);
-            driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 999999999);
-            driverOptions.AddAdditionalAppiumOption("restart", true);
+            //driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
+            //driverOptions.AddAdditionalAppiumOption("useNewWDA", true);
+            //driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 999999999);
+            //driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 999999999);
+            //driverOptions.AddAdditionalAppiumOption("restart", true);
             
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, driverOptions, TimeSpan.FromMinutes(5));
         }
