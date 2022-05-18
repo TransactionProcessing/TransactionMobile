@@ -55,18 +55,18 @@ namespace TransactionMobile.Maui.UiTests.Drivers
         }
 
         private static void SetupiOSDriver(AppiumLocalService appiumService) {
-
             var driverOptions = new AppiumOptions();
-            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.PlatformName, "iOS");
-            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.DeviceName, "iPhone 11");
-            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.PlatformVersion, "14.4");
+            driverOptions.AutomationName = "XCUITest";
+            driverOptions.PlatformName = "iOS";
+            driverOptions.PlatformVersion = "14.4";
+            driverOptions.DeviceName = "iPhone 11";
+
 
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net6.0-ios/iossimulator-x64");
             var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.app");
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.App, apkPath);
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
-            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.AutomationName, "XCUITest");
             driverOptions.AddAdditionalAppiumOption("useNewWDA", true);
             driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 999999999);
             driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 999999999);
