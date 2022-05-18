@@ -73,9 +73,8 @@ namespace TransactionMobile.Maui.Platforms.Services
             return "Unknown";
         }
         
-        public static partial String Identifier()
-        {
-            return UIDevice.CurrentDevice.IdentifierForVendor.AsString().Replace("-", "");
+        public static partial String Identifier() {
+            return "Testing";//UIDevice.CurrentDevice.IdentifierForVendor.AsString().Replace("-", "");
         }
 
         private static string GetModel(string version)
