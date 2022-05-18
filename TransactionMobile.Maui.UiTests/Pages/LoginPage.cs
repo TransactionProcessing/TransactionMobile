@@ -79,7 +79,7 @@ public class LoginPage : BasePage
 
     public async Task ClickLoginButton()
     {
-        this.HideKeyboard();
+        //this.HideKeyboard();
         IWebElement element = await this.WaitForElementByAccessibilityId(this.LoginButton);
         element.Click();
     }
