@@ -31,7 +31,7 @@ public class LoginPage : BasePage
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.UseTrainingModeSwitch);
         String? text = element.Text;
-
+        Console.WriteLine($"IsTrainingModeOn- Switch value is [{text}]");
         if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
             if (text == "OFF") {
                 return false;
@@ -54,6 +54,7 @@ public class LoginPage : BasePage
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.UseTrainingModeSwitch);
         var text = element.Text;
+        Console.WriteLine($"SetTrainingModeOn - Switch value is [{text}]");
         element.Click();
     }
 
