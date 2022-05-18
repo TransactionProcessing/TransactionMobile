@@ -17,16 +17,11 @@ namespace TransactionMobile.Maui.UITests
 
         public async Task AssertOnPage(TimeSpan? timeout = null)
         {
-            using (StreamWriter sw = new StreamWriter("C:\\Temp\\PageSource.log"))
-            {
-                sw.WriteLine(AppiumDriverWrapper.Driver.PageSource);
-            }
-
             timeout = timeout ?? TimeSpan.FromSeconds(60);
 
             await Retry.For(async () =>
             {
-                String message = "Unable to verify on page: " + this.GetType().Name;
+                String message = $"Unable to verify on page: {this.GetType().Name} {Environment.NewLine} Source: {AppiumDriverWrapper.Driver.PageSource}";
 
                 Should.NotThrow(() => this.WaitForElementByAccessibilityId(this.Trait), message);
             },
