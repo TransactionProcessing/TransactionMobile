@@ -71,7 +71,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 999999999);
             //driverOptions.AddAdditionalAppiumOption("restart", true);
             
-            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, driverOptions, TimeSpan.FromMinutes(5));
+            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
         }
 
         private static void SetupAndroidDriver(AppiumLocalService appiumService) {
