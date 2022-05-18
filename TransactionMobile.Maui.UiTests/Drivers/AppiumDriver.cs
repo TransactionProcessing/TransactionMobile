@@ -62,7 +62,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.DeviceName = "iPhone 11";
             
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net6.0-ios/iossimulator-x64");
+            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net6.0-ios/iossimulator-x64/");
             var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.app");
             driverOptions.App = apkPath;
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
