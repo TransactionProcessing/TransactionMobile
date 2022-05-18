@@ -54,8 +54,13 @@ public class LoginPage : BasePage
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.UseTrainingModeSwitch);
         var text = element.Text;
-        Console.WriteLine($"SetTrainingModeOn - Switch value is [{text}]");
+        Console.WriteLine($"SetTrainingModeOn - Switch value is [{text}] before Click");
         element.Click();
+
+        element = await this.WaitForElementByAccessibilityId(this.UseTrainingModeSwitch);
+        text = element.Text;
+
+        Console.WriteLine($"SetTrainingModeOn - Switch value is [{text}] after Click");
     }
 
     public async Task SetTrainingModeOff()
