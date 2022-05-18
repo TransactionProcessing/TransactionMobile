@@ -32,8 +32,20 @@ public class LoginPage : BasePage
         IWebElement element = await this.WaitForElementByAccessibilityId(this.UseTrainingModeSwitch);
         String? text = element.Text;
 
-        if (text == "OFF") {
-            return false;}
+        if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
+            if (text == "OFF") {
+                return false;
+            }
+
+            return true;
+        }
+        if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.iOS) {
+            if (text == "0") {
+                return false;
+            }
+
+            return true;
+        }
 
         return true;
     }
