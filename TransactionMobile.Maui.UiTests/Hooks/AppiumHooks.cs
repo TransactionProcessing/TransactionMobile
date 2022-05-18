@@ -17,7 +17,6 @@ namespace TransactionMobile.Maui.UiTests.Hooks
         public AppiumHooks(AppiumDriverWrapper appiumDriver)
         {
             _appiumDriver = appiumDriver;
-            AppiumDriverWrapper.MobileTestPlatform = MobileTestPlatform.Android;
         }
 
         [BeforeScenario()]
