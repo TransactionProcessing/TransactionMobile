@@ -4,7 +4,7 @@
              x:Class="TransactionMobile.Maui.Pages.LoginPage"
              Title="LoginPage"
              Shell.NavBarIsVisible="False"
-             Shell.FlyoutItemIsVisible="False">
+             Shell.FlyoutItemIsVisible="True">
     <ContentPage.Content>
         <!-- Main structure-->
         <VerticalStackLayout x:Name="MainLayout">

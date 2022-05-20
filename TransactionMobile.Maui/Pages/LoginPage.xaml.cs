@@ -9,8 +9,8 @@ public partial class LoginPage : ContentPage
 	public LoginPage(LoginPageViewModel vm)
 	{
 		InitializeComponent();
-		BindingContext = vm;
-	}
+        BindingContext = vm;
+    }
 
 	protected override async void OnAppearing()
 	{

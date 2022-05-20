@@ -5,7 +5,9 @@ using TransactionMobile.Maui.Pages.Transactions.Voucher;
 
 namespace TransactionMobile.Maui;
 
+using BusinessLogic.ViewModels;
 using Microsoft.Maui.Handlers;
+using Pages;
 using Pages.AppHome;
 using Pages.Transactions.Admin;
 using TransactionMobile.Maui.BusinessLogic.Services;
@@ -123,7 +125,16 @@ public partial class App : Application
             }
         });
 #endif     
-        MainPage = new AppShell();
+        var memoryCache = MauiProgram.Container.Services.GetService<IMemoryCacheService>();
+        memoryCache.TryGetValue("isLoggedIn", out bool isLoggedIn);
+        if (isLoggedIn)
+        {
+            MainPage = new AppShell();
+        }
+        else {
+            var loginPageViewModel = MauiProgram.Container.Services.GetService<LoginPageViewModel>();
+            MainPage = new LoginPage(loginPageViewModel);
+        }
 
         Routing.RegisterRoute(nameof(MobileTopupSelectOperatorPage), typeof(MobileTopupSelectOperatorPage));
         Routing.RegisterRoute(nameof(MobileTopupSelectProductPage), typeof(MobileTopupSelectProductPage));
@@ -138,6 +149,7 @@ public partial class App : Application
         Routing.RegisterRoute(nameof(VoucherIssueFailedPage), typeof(VoucherIssueFailedPage));
 
         Routing.RegisterRoute(nameof(AdminPage), typeof(AdminPage));
+        Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
     }
 }
 
