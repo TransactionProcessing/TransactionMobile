@@ -29,6 +29,10 @@
 		<SupportedOSPlatformVersion Condition="$(TargetFramework.Contains('-windows'))">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$(TargetFramework.Contains('-windows'))">10.0.17763.0</TargetPlatformMinVersion>
 		<RunAOTCompilation>False</RunAOTCompilation>
+
+		<!-- (Optional) Pin to a specific version -->
+		<!--<MauiVersion>6.0.300-rc.3.5667</MauiVersion>-->
+
 	</PropertyGroup>
 
 	<ItemGroup>
