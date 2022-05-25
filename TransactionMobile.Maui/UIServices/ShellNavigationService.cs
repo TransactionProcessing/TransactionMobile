@@ -11,7 +11,7 @@ public class ShellNavigationService : INavigationService
     public async Task GoToHome()
     {
         Application.Current.MainPage = new AppShell();
-        await NavigateTo("//home");
+        await NavigateTo("///main/home");
     }
 
     public async Task GoToMobileTopupFailedPage()

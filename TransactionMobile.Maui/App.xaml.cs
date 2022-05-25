@@ -124,9 +124,11 @@ public partial class App : Application
                 androidView.ContentDescription = view.AutomationId;
             }
         });
+
 #endif     
         var memoryCache = MauiProgram.Container.Services.GetService<IMemoryCacheService>();
         memoryCache.TryGetValue("isLoggedIn", out bool isLoggedIn);
+        
         if (isLoggedIn)
         {
             MainPage = new AppShell();

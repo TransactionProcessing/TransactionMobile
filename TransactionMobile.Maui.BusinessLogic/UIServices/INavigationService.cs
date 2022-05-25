@@ -36,6 +36,5 @@ public interface INavigationService
                                          Guid productId,
                                          Decimal voucherAmount);
 
-
     #endregion
 }
