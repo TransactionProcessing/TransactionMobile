@@ -9,7 +9,7 @@
         <!-- Main structure-->
         <VerticalStackLayout x:Name="MainLayout">
             <!--Main image-->
-            <Image Source="Resources/loginimage.jpg" VerticalOptions="Start" Aspect="AspectFit"/>
+            <Image Source="loginimage.jpg" VerticalOptions="Start" Aspect="AspectFit"/>
 
             <!-- Title-->
             <Label Text="Log In" FontSize="34" HorizontalOptions="Center" FontAttributes="Bold" Padding="20,0,0,20" 
