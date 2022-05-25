@@ -21,7 +21,6 @@ public static class MauiProgram
         Platforms.Services.DangerousTrustProvider.Register();
 #endif
 
-        //raw.SetProvider(new SQLite3Provider_sqlite3());
         Builder = MauiApp.CreateBuilder();
 		Builder.UseMauiApp<App>()
 			.ConfigureRequestHandlers()

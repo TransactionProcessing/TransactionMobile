@@ -14,13 +14,10 @@
 	-->
     </Shell.Resources>
 
-    <TabBar>
-        <ShellContent ContentTemplate="{DataTemplate login:LoginPage}"
-                      Route="login" />
-    </TabBar>
-    <TabBar>
-        <ShellContent ContentTemplate="{DataTemplate home:HomePage}" Title="Home"
-                      Route="home" Icon="homebutton.svg" />
+    <TabBar Route="main">
+
+        <!--ShellContent ContentTemplate="{DataTemplate home:HomePage}" Title="Home"
+                       Icon="homebutton.svg" Route="home"/>
 
         <ShellContent ContentTemplate="{DataTemplate transactions:TransactionsPage}" Title="Transactions"
                       Route="transactions" Icon="transactionsbutton.svg" />
@@ -32,6 +29,26 @@
                       Route="myaccount" Icon="profilebutton.svg"/>
 
         <ShellContent ContentTemplate="{DataTemplate support:SupportPage}" Title="Support"
-                      Route="support" Icon="supportbutton.svg"/>
+                      Route="support" Icon="supportbutton.svg"/>-->
+
+        <ShellContent ContentTemplate="{DataTemplate home:HomePage}" Title="Home"
+                       Route="home"/>
+
+        <ShellContent ContentTemplate="{DataTemplate transactions:TransactionsPage}" Title="Transactions"
+                      Route="transactions" />
+
+        <ShellContent ContentTemplate="{DataTemplate reports:ReportsPage}" Title="Reports"
+                      Route="reports" />
+
+        <ShellContent ContentTemplate="{DataTemplate myaccount:MyAccountPage}" Title="My Account"
+                      Route="myaccount" />
+
+        <ShellContent ContentTemplate="{DataTemplate support:SupportPage}" Title="Support"
+                      Route="support" />
     </TabBar>
+
+    <ShellItem Route="loginpage">
+        <ShellContent ContentTemplate="{DataTemplate login:LoginPage}" />
+    </ShellItem>
+
 </Shell>

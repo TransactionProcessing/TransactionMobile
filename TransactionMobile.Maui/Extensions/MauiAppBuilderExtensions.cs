@@ -32,7 +32,7 @@
 
         public static MauiAppBuilder ConfigureDatabase(this MauiAppBuilder builder)
         {
-            String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "transactionpos.db");
+            String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "transactionpos1.db");
             Func<Database.LogLevel> logLevelFunc = new Func<Database.LogLevel>( () =>
                 {
                 return Database.LogLevel.Debug;

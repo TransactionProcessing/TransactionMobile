@@ -13,17 +13,26 @@ env:
 jobs:
   # MAUI Android Build
   build-android:
-    runs-on: windows-2022
+    #runs-on: windows-2022
+    runs-on: macos-12
     name: Android Build
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.1
+      - uses: malinskiy/action-android/install-sdk@release/0.1.1
+      - run: sdkmanager "platform-tools" "platforms;android-31"
+      - run: sdkmanager "build-tools;30.0.2"
+      - run: adb devices
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
         with:
-          vs-prerelease: true
-          msbuild-architecture: x64
+          node-version: '12.12.0'
+
+      - name: Set up Appium
+        run: |
+          npm install -g appium --unsafe-perm=true --allow-root
 
       - name: Setup .NET 6
         uses: actions/setup-dotnet@v2
@@ -49,6 +58,15 @@ jobs:
 
       - name: Run Unit Tests
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
+        
+      - name: Run Integration Tests - Android
+        uses: malinskiy/action-android/emulator-run-cmd@release/0.1.1
+        with:
+          cmd: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)
+          api: 28
+          tag: default
+          abi: x86   
+          verbose: true
 
       #- name: Upload Android Artifact
       #  uses: actions/upload-artifact@v2.3.1

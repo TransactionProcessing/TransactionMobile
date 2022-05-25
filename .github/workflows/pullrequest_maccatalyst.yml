@@ -13,7 +13,7 @@ env:
 jobs:
   # MAUI MacCatalyst Build
   build-mac:
-    runs-on: macos-11
+    runs-on: macos-12
     name: MacCatalyst Build
     steps:
       - name: Checkout

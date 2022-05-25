@@ -10,7 +10,8 @@ public class ShellNavigationService : INavigationService
 
     public async Task GoToHome()
     {
-        await NavigateTo("//home");
+        Application.Current.MainPage = new AppShell();
+        await NavigateTo("///main/home");
     }
 
     public async Task GoToMobileTopupFailedPage()
@@ -82,8 +83,15 @@ public class ShellNavigationService : INavigationService
 
     private async Task NavigateTo(String route)
     {
-        Shared.Logger.Logger.LogInformation($"navigating to {route}");
-        await Shell.Current.GoToAsync(route);
+        try {
+            Shared.Logger.Logger.LogInformation($"navigating to {route}");
+            await Shell.Current.GoToAsync(route);
+        }
+        catch(Exception e) {
+            
+        }
+        
+        
     }
 
     #endregion

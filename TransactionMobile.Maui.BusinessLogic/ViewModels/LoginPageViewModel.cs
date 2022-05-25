@@ -122,6 +122,8 @@
 
             // TODO: Need to set the application as in training mode somehow
 
+            this.MemoryCacheService.Set("IsLoggedIn", true);
+
             await this.NavigationService.GoToHome();
         }
         
