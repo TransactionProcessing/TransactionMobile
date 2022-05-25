@@ -16,36 +16,22 @@
 
     <TabBar Route="main">
 
-        <!--ShellContent ContentTemplate="{DataTemplate home:HomePage}" Title="Home"
-                       Icon="homebutton.svg" Route="home"/>
-
-        <ShellContent ContentTemplate="{DataTemplate transactions:TransactionsPage}" Title="Transactions"
-                      Route="transactions" Icon="transactionsbutton.svg" />
-
-        <ShellContent ContentTemplate="{DataTemplate reports:ReportsPage}" Title="Reports"
-                      Route="reports" Icon="reportbutton.svg"/>
-
-        <ShellContent ContentTemplate="{DataTemplate myaccount:MyAccountPage}" Title="My Account"
-                      Route="myaccount" Icon="profilebutton.svg"/>
-
-        <ShellContent ContentTemplate="{DataTemplate support:SupportPage}" Title="Support"
-                      Route="support" Icon="supportbutton.svg"/>-->
-
         <ShellContent ContentTemplate="{DataTemplate home:HomePage}" Title="Home"
-                       Route="home"/>
+                       Route="home" Icon="homebutton"/>
 
         <ShellContent ContentTemplate="{DataTemplate transactions:TransactionsPage}" Title="Transactions"
-                      Route="transactions" />
+                      Route="transactions" Icon="transactionsbutton"/>
 
         <ShellContent ContentTemplate="{DataTemplate reports:ReportsPage}" Title="Reports"
-                      Route="reports" />
+                      Route="reports" Icon="reportbutton"  />
 
         <ShellContent ContentTemplate="{DataTemplate myaccount:MyAccountPage}" Title="My Account"
-                      Route="myaccount" />
+                      Route="myaccount" Icon="profilebutton"/>
 
         <ShellContent ContentTemplate="{DataTemplate support:SupportPage}" Title="Support"
-                      Route="support" />
+                      Route="support" Icon="supportbutton" />
     </TabBar>
+
 
     <ShellItem Route="loginpage">
         <ShellContent ContentTemplate="{DataTemplate login:LoginPage}" />
