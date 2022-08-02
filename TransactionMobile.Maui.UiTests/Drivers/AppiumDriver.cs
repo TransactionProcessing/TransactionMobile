@@ -70,6 +70,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 999999999);
             driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 999999999);
             driverOptions.AddAdditionalAppiumOption("restart", true);
+            driverOptions.AddAdditionalAppiumOption("simulatorStartupTimeout", 5 * 60 * 1000);
             
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
         }
