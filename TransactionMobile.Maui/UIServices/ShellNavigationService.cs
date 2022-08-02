@@ -1,5 +1,6 @@
 ﻿namespace TransactionMobile.Maui.UIServices;
 
+using Pages;
 using Pages.Transactions.Admin;
 using Pages.Transactions.MobileTopup;
 using Pages.Transactions.Voucher;
@@ -79,6 +80,10 @@ public class ShellNavigationService : INavigationService
                                                   Decimal voucherAmount)
     {
         await NavigateTo($"{nameof(VoucherPerformIssuePage)}?OperatorIdentifier={operatorIdentifier}&ContractId={contractId}&ProductId={productId}&VoucherAmount={voucherAmount}");
+    }
+
+    public async Task GoToLoginPage() {
+        await NavigateTo(nameof(LoginPage));
     }
 
     private async Task NavigateTo(String route)

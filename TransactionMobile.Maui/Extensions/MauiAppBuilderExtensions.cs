@@ -25,6 +25,8 @@
     using TransactionMobile.Maui.Pages.Transactions.Admin;
     using TransactionMobile.Maui.Pages.Support;
     using System;
+    using BusinessLogic.ViewModels.MyAccount;
+    using Pages.MyAccount;
 
     public static class MauiAppBuilderExtensions
     {
@@ -228,6 +230,7 @@
 
             builder.Services.AddTransient<SupportPageViewModel>();
 
+            builder.Services.AddTransient<MyAccountPageViewModel>();
 
             return builder;
         }
@@ -252,6 +255,8 @@
             builder.Services.AddTransient<AdminPage>();
 
             builder.Services.AddTransient<SupportPage>();
+
+            builder.Services.AddTransient<MyAccountPage>();
 
             return builder;
         }

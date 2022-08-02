@@ -1,5 +1,6 @@
 namespace TransactionMobile.Maui.Pages.Transactions.Voucher;
 
+using BusinessLogic.Common;
 using BusinessLogic.Models;
 using BusinessLogic.ViewModels.Transactions;
 
@@ -37,9 +38,9 @@ public partial class VoucherSelectOperatorPage : ContentPage
             Binding commandParameter = new Binding()
                                        {
                                            Source = new ItemSelected<ContractOperatorModel>(){ 
-                                                                            SelectedItem = modelOperator,
-                                                                            SelectedItemIndex = rowCount
-                                                                        }
+                                                                                                 SelectedItem = modelOperator,
+                                                                                                 SelectedItemIndex = rowCount
+                                                                                             }
                                        };
 
             Binding command = new Binding

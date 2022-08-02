@@ -2,6 +2,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests;
 
 using System.Threading;
 using System.Threading.Tasks;
+using Common;
 using Maui.UIServices;
 using MediatR;
 using Models;

@@ -14,6 +14,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests
     using ViewModels.Transactions;
     using Xunit;
     using TransactionMobile.Maui.BusinessLogic.Services;
+    using ViewModels.MyAccount;
 
     public class AdminPageViewModelTests
     {
@@ -33,6 +34,21 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests
 
             viewModel.ReconciliationCommand.Execute(null);
             navigationService.Verify(n => n.GoToHome(), Times.Once);
+        }
+    }
+
+    public class MyAccountPageViewModelTests
+    {
+        [Fact]
+        public void MyAccountPageViewModel_LogoutCommand_Execute_IsExecuted()
+        {
+            Mock<INavigationService> navigationService = new Mock<INavigationService>();
+            Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
+            MyAccountPageViewModel viewModel = new MyAccountPageViewModel(navigationService.Object,
+                                                                          memoryCacheService.Object);
+
+            viewModel.LogoutCommand.Execute(null);
+            navigationService.Verify(n => n.GoToLoginPage(), Times.Once);
         }
     }
 }

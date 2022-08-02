@@ -9,21 +9,20 @@
 
   <ItemGroup>
     <PackageReference Include="Appium.WebDriver" Version="5.0.0-beta01" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
     <PackageReference Include="Shouldly" Version="4.0.3" />
-    <PackageReference Include="coverlet.collector" Version="3.1.0">
+    <PackageReference Include="coverlet.collector" Version="3.1.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SpecFlow.NUnit" Version="3.9.69" />
-    <PackageReference Include="SpecFlow.NUnit.Runners" Version="3.9.69" />
+    <PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
+    <PackageReference Include="SpecFlow.NUnit.Runners" Version="3.9.74" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Common\" />
     <Folder Include="Features\" />
     <Folder Include="Steps\" />
-    <Folder Include="Pages\" />
   </ItemGroup>
 
 </Project>

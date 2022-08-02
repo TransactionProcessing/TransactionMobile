@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions;
 
 using System.Windows.Input;
+using Common;
 using Maui.UIServices;
 using MediatR;
 using Models;
@@ -71,10 +72,4 @@ public class MobileTopupSelectOperatorPageViewModel : BaseViewModel
     }
 
     #endregion
-}
-
-public class ItemSelected<T>
-{
-    public T SelectedItem;
-    public Int32 SelectedItemIndex;
 }

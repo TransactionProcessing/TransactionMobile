@@ -22,9 +22,9 @@ public class MainPage : BasePage
     /// </summary>
     public MainPage()
     {
-        this.TransactionsButton = "TransactionsButton";
+        this.TransactionsButton = "Transactions";
         this.ReportsButton = "ReportsButton";
-        this.ProfileButton = "ProfileButton";
+        this.ProfileButton = "My Account";
         this.SupportButton = "SupportButton";
         this.AvailableBalanceLabel = "AvailableBalanceValueLabel";
     }
@@ -41,10 +41,9 @@ public class MainPage : BasePage
         //element.Click();
     }
 
-    public void ClickProfileButton()
-    {
-        //app.WaitForElement(this.ProfileButton);
-        //app.Tap(this.ProfileButton);
+    public async Task ClickProfileButton() {
+        var element = await this.WaitForElementByAccessibilityId(this.ProfileButton);
+        element.Click();
     }
 
     public void ClickSupportButton()
