@@ -3,7 +3,6 @@ Feature: Login
 
 Background: 
 
-@PRTest
 Scenario: Login as Merchant
 	Given I am on the Login Screen
 	And the application is in training mode
