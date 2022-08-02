@@ -1,5 +1,6 @@
 namespace TransactionMobile.Maui.Pages.Transactions.Voucher;
 
+using BusinessLogic.Common;
 using BusinessLogic.Models;
 using BusinessLogic.ViewModels.Transactions;
 

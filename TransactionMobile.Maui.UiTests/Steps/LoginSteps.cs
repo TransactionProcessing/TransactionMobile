@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace TransactionMobile.Maui.UITests.Steps
 {
     using TechTalk.SpecFlow;
+    using UiTests.Pages;
 
     [Binding]
     [Scope(Tag = "login")]
@@ -14,6 +15,7 @@ namespace TransactionMobile.Maui.UITests.Steps
     {
         LoginPage loginPage = new LoginPage();
         MainPage mainPage = new MainPage();
+        ProfilePage profilePage = new ProfilePage();
 
         [Given(@"I am on the Login Screen")]
         public async Task GivenIAmOnTheLoginScreen()
@@ -60,5 +62,26 @@ namespace TransactionMobile.Maui.UITests.Steps
             //Decimal availableBalance = await this.mainPage.GetAvailableBalanceValue(TimeSpan.FromSeconds(120)).ConfigureAwait(false);
             //availableBalance.ShouldBe(expectedAvailableBalance);
         }
+
+        [When(@"I tap on Profile")]
+        public async Task WhenITapOnProfile() {
+            await this.mainPage.ClickProfileButton();
+        }
+
+        [Then(@"the My Profile Page is displayed")]
+        public async Task ThenTheMyProfilePageIsDisplayed() {
+            await this.profilePage.AssertOnPage();
+        }
+
+        [When(@"I tap on Logout")]
+        public async Task WhenITapOnLogout() {
+            await this.profilePage.ClickLogoutButton();
+        }
+
+        [Then(@"the Login Screen is displayed")]
+        public async Task ThenTheLoginScreenIsDisplayed() {
+            await this.loginPage.AssertOnPage();
+        }
+
     }
 }

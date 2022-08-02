@@ -36,5 +36,7 @@ public interface INavigationService
                                          Guid productId,
                                          Decimal voucherAmount);
 
+    Task GoToLoginPage();
+
     #endregion
 }

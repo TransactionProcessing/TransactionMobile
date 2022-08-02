@@ -1,5 +1,6 @@
 namespace TransactionMobile.Maui.Pages.Transactions.MobileTopup;
 
+using BusinessLogic.Common;
 using BusinessLogic.Models;
 using BusinessLogic.ViewModels.Transactions;
 
@@ -37,9 +38,9 @@ public partial class MobileTopupSelectOperatorPage : ContentPage
             Binding commandParameter = new Binding()
                                        {
                                            Source = new ItemSelected<ContractOperatorModel>(){ 
-                                                                            SelectedItem = modelOperator,
-                                                                            SelectedItemIndex = rowCount
-                                                                        }
+                                                                                                 SelectedItem = modelOperator,
+                                                                                                 SelectedItemIndex = rowCount
+                                                                                             }
                                        };
 
             Binding command = new Binding
