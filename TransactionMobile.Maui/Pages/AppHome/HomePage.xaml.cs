@@ -1,13 +1,25 @@
 namespace TransactionMobile.Maui.Pages.AppHome;
 
+using BusinessLogic.ViewModels;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
+using Microsoft.AppCenter.Distribute;
+
 public partial class HomePage : ContentPage
 {
-	public HomePage()
-	{
-		InitializeComponent();
-	}
+    private HomePageViewModel viewModel => BindingContext as HomePageViewModel;
 
-    protected override void OnAppearing() {
-        base.OnAppearing();
+    public HomePage(HomePageViewModel vm)
+    {
+        InitializeComponent();
+        BindingContext = vm;
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await this.viewModel.Initialise(CancellationToken.None);
+    }
+
 }

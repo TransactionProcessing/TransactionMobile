@@ -19,6 +19,7 @@ public partial class MobileTopupSelectProductPage : ContentPage
         base.OnAppearing();
         await viewModel.Initialise(CancellationToken.None);
         this.LoadProducts(viewModel);
+        
     }
 
     private void LoadProducts(MobileTopupSelectProductPageViewModel viewModel)

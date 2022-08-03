@@ -26,6 +26,7 @@
     using TransactionMobile.Maui.Pages.Support;
     using System;
     using BusinessLogic.ViewModels.MyAccount;
+    using Pages.AppHome;
     using Pages.MyAccount;
 
     public static class MauiAppBuilderExtensions
@@ -182,7 +183,7 @@
 
         public static MauiAppBuilder ConfigureUIServices(this MauiAppBuilder builder)
         {
-        //    builder.Services.AddSingleton<IDialogService, DialogService>();
+            builder.Services.AddSingleton<IDialogService, DialogService>();
             builder.Services.AddSingleton<INavigationService, ShellNavigationService>();
             builder.Services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
             return builder;
@@ -232,6 +233,8 @@
 
             builder.Services.AddTransient<MyAccountPageViewModel>();
 
+            builder.Services.AddTransient<HomePageViewModel>();
+
             return builder;
         }
 
@@ -257,6 +260,8 @@
             builder.Services.AddTransient<SupportPage>();
 
             builder.Services.AddTransient<MyAccountPage>();
+
+            builder.Services.AddTransient<HomePage>();
 
             return builder;
         }

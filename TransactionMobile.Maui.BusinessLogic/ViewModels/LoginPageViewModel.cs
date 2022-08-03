@@ -3,6 +3,10 @@
     using System.Windows.Input;
     using Maui.UIServices;
     using MediatR;
+    using Microsoft.AppCenter;
+    using Microsoft.AppCenter.Analytics;
+    using Microsoft.AppCenter.Crashes;
+    using Microsoft.AppCenter.Distribute;
     using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.Primitives;
     using Models;
@@ -125,6 +129,7 @@
             this.MemoryCacheService.Set("IsLoggedIn", true);
 
             await this.NavigationService.GoToHome();
+
         }
         
         private async void AccessTokenExpired(Object key,
@@ -162,5 +167,75 @@
         }
         
         #endregion
+    }
+
+    public class HomePageViewModel : BaseViewModel
+    {
+        private readonly IMemoryCacheService MemoryCacheService;
+
+        private readonly IDialogService DialogService;
+
+        public HomePageViewModel(IMemoryCacheService memoryCacheService,
+                                 IDialogService dialogService) {
+            this.MemoryCacheService = memoryCacheService;
+            this.DialogService = dialogService;
+        }
+
+        public async Task Initialise(CancellationToken cancellationToken) {
+
+            this.MemoryCacheService.TryGetValue("Configuration", out Configuration configuration);
+
+            if (configuration.EnableAutoUpdates) {
+                await Distribute.SetEnabledAsync(true);
+                Distribute.CheckForUpdate();
+                Distribute.ReleaseAvailable = OnReleaseAvailable;
+                Distribute.UpdateTrack = UpdateTrack.Public;
+            }
+            else {
+                Distribute.DisableAutomaticCheckForUpdate();
+            }
+
+            AppCenter.Start("android=f920cc96-de56-42fe-87d4-b49105761205;"+
+                            "ios=dd940171-ca8c-4219-9851-f83769464f37" +
+                            "uwp=3ad27ea3-3f24-4579-a88a-530025bd00d4;" +
+                            "macos=244fdee2-f897-431a-8bab-5081fc90b329", typeof(Analytics), typeof(Crashes), typeof(Distribute));
+        }
+
+        private Boolean OnReleaseAvailable(ReleaseDetails releaseDetails) {
+            // Look at releaseDetails public properties to get version information, release notes text or release notes URL
+            String versionName = releaseDetails.ShortVersion;
+            String versionCodeOrBuildNumber = releaseDetails.Version;
+            String releaseNotes = releaseDetails.ReleaseNotes;
+            Uri releaseNotesUrl = releaseDetails.ReleaseNotesUrl;
+
+            // custom dialog
+            String title = "Version " + versionName + " available!";
+            Task answer;
+
+            // On mandatory update, user can't postpone
+            if (releaseDetails.MandatoryUpdate) {
+                answer = this.DialogService.ShowDialog(title, releaseNotes, "Download and Install");
+            }
+            else {
+                answer = this.DialogService.ShowDialog(title, releaseNotes, "Download and Install", "Later");
+            }
+
+            answer.ContinueWith(task => {
+                                    // If mandatory or if answer was positive
+                                    if (releaseDetails.MandatoryUpdate || (task as Task<Boolean>).Result) {
+                                        // Notify SDK that user selected update
+                                        Distribute.NotifyUpdateAction(UpdateAction.Update);
+                                    }
+                                    else {
+                                        // Notify SDK that user selected postpone (for 1 day)
+                                        // This method call is ignored by the SDK if the update is mandatory
+                                        Distribute.NotifyUpdateAction(UpdateAction.Postpone);
+                                    }
+                                });
+
+            // Return true if you're using your own dialog, false otherwise
+            return true;
+        }
+
     }
 }
