@@ -6,10 +6,6 @@ using TransactionMobile.Maui.Pages.Transactions.Voucher;
 namespace TransactionMobile.Maui;
 
 using BusinessLogic.ViewModels;
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
-using Microsoft.AppCenter.Distribute;
 using Microsoft.Maui.Handlers;
 using Pages;
 using Pages.AppHome;

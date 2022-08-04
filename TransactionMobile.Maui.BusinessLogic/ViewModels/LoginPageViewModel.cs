@@ -4,11 +4,10 @@
     using Maui.UIServices;
     using MediatR;
     using Microsoft.AppCenter;
-    using Microsoft.AppCenter.Analytics;
-    using Microsoft.AppCenter.Crashes;
     using Microsoft.AppCenter.Distribute;
     using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.Primitives;
+    using Microsoft.Maui.Devices;
     using Models;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
@@ -195,11 +194,16 @@
                 Distribute.DisableAutomaticCheckForUpdate();
             }
 
-            AppCenter.Start("android=f920cc96-de56-42fe-87d4-b49105761205;"+
-                            "ios=dd940171-ca8c-4219-9851-f83769464f37" +
-                            "uwp=3ad27ea3-3f24-4579-a88a-530025bd00d4;" +
-                            "macos=244fdee2-f897-431a-8bab-5081fc90b329", typeof(Analytics), typeof(Crashes), typeof(Distribute));
+            if (this.IsIOS() == false) {
+                // TODO: Move the keys to config service
+                AppCenter.Configure("android=f920cc96-de56-42fe-87d4-b49105761205;" + "ios=dd940171-ca8c-4219-9851-f83769464f37;" +
+                                    "uwp=3ad27ea3-3f24-4579-a88a-530025bd00d4;" + "macos=244fdee2-f897-431a-8bab-5081fc90b329;");
+                AppCenter.Start(typeof(Distribute));
+            }
         }
+
+        private bool IsIOS() =>
+            DeviceInfo.Current.Platform == DevicePlatform.iOS;
 
         private Boolean OnReleaseAvailable(ReleaseDetails releaseDetails) {
             // Look at releaseDetails public properties to get version information, release notes text or release notes URL

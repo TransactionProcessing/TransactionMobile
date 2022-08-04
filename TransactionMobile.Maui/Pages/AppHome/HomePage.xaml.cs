@@ -1,10 +1,6 @@
 namespace TransactionMobile.Maui.Pages.AppHome;
 
 using BusinessLogic.ViewModels;
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
-using Microsoft.AppCenter.Distribute;
 
 public partial class HomePage : ContentPage
 {
