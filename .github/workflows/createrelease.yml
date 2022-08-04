@@ -99,10 +99,10 @@ jobs:
          dotnet-version: 6.0.400-preview.22330.6
          include-prerelease: true
           
-      - uses: actions/setup-java@v2
-        with:
-         distribution: 'microsoft'
-         java-version: '11'
+      #- uses: actions/setup-java@v2
+      #  with:
+      #   distribution: 'microsoft'
+      #   java-version: '11'
 
       - run: dotnet tool update -g dotnet-vs
       - run: vs install preview --quiet +Microsoft.VisualStudio.Component.ManagedDesktop.Core +Microsoft.NetCore.Component.DevelopmentTools
