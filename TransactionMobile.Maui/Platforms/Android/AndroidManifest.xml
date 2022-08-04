@@ -7,11 +7,7 @@
 	             android:label="Transaction Processing POS">
 		<activity
 			android:name="com.microsoft.appcenter.distribute.DeepLinkActivity"
-			android:exported="true">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
+			android:exported="false">
 		</activity>
 		<receiver android:enabled="true" android:exported="false"
 		          android:name="com.microsoft.appcenter.distribute.DownloadManagerReceiver"/>

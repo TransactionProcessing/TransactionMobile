@@ -4,18 +4,27 @@ using BusinessLogic.ViewModels;
 
 public partial class HomePage : ContentPage
 {
-    private HomePageViewModel viewModel => BindingContext as HomePageViewModel;
+    #region Constructors
 
-    public HomePage(HomePageViewModel vm)
-    {
-        InitializeComponent();
-        BindingContext = vm;
+    public HomePage(HomePageViewModel vm) {
+        this.InitializeComponent();
+        this.BindingContext = vm;
     }
 
-    protected override async void OnAppearing()
-    {
+    #endregion
+
+    #region Properties
+
+    private HomePageViewModel viewModel => this.BindingContext as HomePageViewModel;
+
+    #endregion
+
+    #region Methods
+
+    protected override async void OnAppearing() {
         base.OnAppearing();
         await this.viewModel.Initialise(CancellationToken.None);
     }
 
+    #endregion
 }
