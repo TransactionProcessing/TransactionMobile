@@ -1,6 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1" package="com.transactionprocessing.pos">
-	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="31" />
-	<application android:allowBackup="true" android:usesCleartextTraffic="true" android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true" android:label="Transaction Processing POS"></application>
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1"
+          package="com.transactionprocessing.pos">
+	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="31"/>
+	<application android:allowBackup="true" android:usesCleartextTraffic="true" android:icon="@mipmap/appicon"
+	             android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true"
+	             android:label="Transaction Processing POS">
+		<activity
+			android:name="com.microsoft.appcenter.distribute.DeepLinkActivity"
+			android:exported="false">
+		</activity>
+		<receiver android:enabled="true" android:exported="false"
+		          android:name="com.microsoft.appcenter.distribute.DownloadManagerReceiver"/>
+	</application>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 </manifest>

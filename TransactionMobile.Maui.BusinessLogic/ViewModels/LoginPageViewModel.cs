@@ -125,6 +125,7 @@
             this.MemoryCacheService.Set("IsLoggedIn", true);
 
             await this.NavigationService.GoToHome();
+
         }
         
         private async void AccessTokenExpired(Object key,
