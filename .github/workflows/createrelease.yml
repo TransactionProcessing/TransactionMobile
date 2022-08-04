@@ -85,7 +85,7 @@ jobs:
           versionnumber: ${{ steps.get_version.outputs.VERSION }}
 
       - name: Build Windows
-        run: dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-windows10.0.19041 --no-restore
+        run: dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-windows10.0.19041.0 --no-restore
 
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v3
