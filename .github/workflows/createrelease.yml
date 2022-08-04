@@ -99,26 +99,17 @@ jobs:
          dotnet-version: 6.0.400-preview.22330.6
          include-prerelease: true
           
-      #- uses: actions/setup-java@v2
-      #  with:
-      #   distribution: 'microsoft'
-      #   java-version: '11'
+      - uses: actions/setup-java@v2
+        with:
+         distribution: 'microsoft'
+         java-version: '11'
 
-      - run: dotnet tool update -g dotnet-vs
-      - run: vs install preview --quiet +Microsoft.VisualStudio.Component.ManagedDesktop.Core +Microsoft.NetCore.Component.DevelopmentTools
+      #- run: dotnet tool update -g dotnet-vs
+      #- run: vs install preview --quiet +Microsoft.VisualStudio.Component.ManagedDesktop.Core +Microsoft.NetCore.Component.DevelopmentTools
           
       - name: Install MAUI Workloads
         run: |
           dotnet workload install maui --ignore-failed-sources
-
-      - name: Restore Dependencies
-        run: dotnet restore TransactionMobile.Maui.sln
-
-      #- name: Build Code
-      #  run: msbuild TransactionMobile.Maui/TransactionMobile.Maui.csproj -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true
-      - name: Build Code
-        run: |
-          "C:/Program Files/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/MSBuild.exe TransactionMobile.Maui/TransactionMobile.Maui.csproj -r -p:Configuration=Release -p:RestorePackages=true -p:TargetFramework=net6.0-windows10.0.19041 /p:RestoreSources=https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json"
 
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln
@@ -130,8 +121,17 @@ jobs:
           versionnumber: ${{ steps.get_version.outputs.VERSION }}
 
       - name: Build Code
-        run: |
-          "C:/Program Files/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/MSBuild.exe TransactionMobile.Maui/TransactionMobile.Maui.csproj -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true"
+        run: msbuild TransactionMobile.Maui/TransactionMobile.Maui.csproj -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true
+      #- name: Build Code
+      #  run: |
+      #    "C:/Program Files/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/MSBuild.exe TransactionMobile.Maui/TransactionMobile.Maui.csproj -r -p:Configuration=Release -p:RestorePackages=true -p:TargetFramework=net6.0-windows10.0.19041 /p:RestoreSources=https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json"
+
+      #- name: Restore Dependencies
+      #  run: dotnet restore TransactionMobile.Maui.sln
+
+      #- name: Build Code
+      #  run: |
+      #    "C:/Program Files/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/MSBuild.exe TransactionMobile.Maui/TransactionMobile.Maui.csproj -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true"
 
       - name: Run Unit Tests
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
