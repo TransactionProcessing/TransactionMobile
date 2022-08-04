@@ -202,12 +202,10 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-android|AnyCPU'">
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
-	  <MtouchLink>SdkOnly</MtouchLink>
-	  <TrimMode>link</TrimMode>
+	  <MtouchLink>None</MtouchLink>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-android|AnyCPU'">
-	  <MtouchLink>SdkOnly</MtouchLink>
-	  <TrimMode>link</TrimMode>
+		<MtouchLink>None</MtouchLink>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-ios|AnyCPU'">
 	  <MtouchLink>SdkOnly</MtouchLink>
