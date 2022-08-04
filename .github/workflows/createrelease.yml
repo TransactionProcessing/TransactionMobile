@@ -91,7 +91,7 @@ jobs:
         uses: microsoft/setup-msbuild@v1.1
         with:
           vs-prerelease: true
-          #msbuild-architecture: x64
+          msbuild-architecture: x64
 
       - name: Setup .NET 6
         uses: actions/setup-dotnet@v2
