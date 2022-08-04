@@ -159,7 +159,7 @@ jobs:
          versionnumber: ${{ steps.get_version.outputs.VERSION }}
       
       - name: Build iOS
-        run: dotnet build src/MauiBeach/MauiBeach.csproj -c Release -f net6.0-ios --no-restore /p:buildForSimulator=True /p:packageApp=True /p:ArchiveOnBuild=False
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-ios --no-restore /p:buildForSimulator=True /p:packageApp=True /p:ArchiveOnBuild=False
       
       - name: Upload MacCatalyst Artifact
         uses: actions/upload-artifact@v3
