@@ -8,8 +8,7 @@
 
   <Identity
     Name="597F8511-6166-4C10-AADD-C961E85539A5"
-    Publisher="CN=User Name"
-    Version="1.0.0.0" />
+    Publisher="CN=User Name" />
 
   <Properties>
     <DisplayName>TransactionMobile.Maui</DisplayName>
