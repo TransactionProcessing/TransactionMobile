@@ -9,6 +9,7 @@ namespace TransactionMobile.Maui.UITests
 {
     using Common;
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Interactions;
     using Shouldly;
 
     public abstract class BasePage
@@ -43,7 +44,10 @@ namespace TransactionMobile.Maui.UITests
 
         public async Task<IWebElement> WaitForElementByAccessibilityId(String accessibilityId, TimeSpan? timeout = null)
         {
-            return await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId(accessibilityId, timeout);
+            IWebElement element = await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId(accessibilityId, timeout);
+            TouchActions action = new TouchActions(AppiumDriverWrapper.Driver);
+            action.Scroll(element, 0, 0);
+            return element;
         }
         
         public async Task<String> GetPageSource()
@@ -63,7 +67,6 @@ namespace TransactionMobile.Maui.UITests
 
         public void HideKeyboard()
         {
-            //AppiumDriverWrapper.Driver.HideKeyboard();
             if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android)
             {
                 AppiumDriverWrapper.Driver.HideKeyboard();
