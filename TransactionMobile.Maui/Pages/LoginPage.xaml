@@ -6,58 +6,45 @@
              Shell.NavBarIsVisible="False"
              Shell.FlyoutItemIsVisible="True">
     <ContentPage.Content>
-        <!-- Main structure-->
-        <VerticalStackLayout x:Name="MainLayout">
-            <!--Main image-->
-            <Image Source="loginimage.jpg" VerticalOptions="Start" Aspect="AspectFit"/>
+        <ScrollView Margin="20">
+            <!-- Main structure-->
+            <VerticalStackLayout x:Name="MainLayout">
+                <!--Main image-->
+                <Image Source="loginimage.jpg" VerticalOptions="Start" Aspect="AspectFit"/>
 
-            <!-- Title-->
-            <Label Text="Log In" FontSize="34" HorizontalOptions="Center" FontAttributes="Bold" Padding="20,0,0,20" 
+                <!-- Title-->
+                <Label Text="Log In" FontSize="34" HorizontalOptions="Center" FontAttributes="Bold" Padding="20,0,0,20" 
                    AutomationId="LoginLabel"/>
 
-            <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
+                <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
                    CornerRadius="20" Opacity="0.9" BackgroundColor="#E5E9F0">
-                <VerticalStackLayout x:Name="SubLayout">
+                    <VerticalStackLayout x:Name="SubLayout">
 
-                    <Entry x:Name="UserNameEntry"
+                        <Entry x:Name="UserNameEntry"
                            Placeholder="User name or email address"
                            AutomationId="UserNameEntry"
                            Style="{DynamicResource UserNameEntryStyle}"
                            Text="{Binding UserName}">
-                    </Entry>
+                        </Entry>
 
-                    <Entry x:Name="PasswordEntry"
+                        <Entry x:Name="PasswordEntry"
                            Placeholder="******"
                            AutomationId="PasswordEntry"
                            Style="{DynamicResource PasswordEntryStyle}"
                            Text="{Binding Password}">
-                    </Entry>
+                        </Entry>
+                        <HorizontalStackLayout Margin="20" Spacing="10">
+                            <Label Text="Use Training Mode?" VerticalOptions="Center" HorizontalOptions="Start"/>
 
-                    <!--<HorizontalStackLayout  x:Name="SwitchLayout">
-                        <Label Text="Use Training Mode?"/>
-                    
-                        <Switch x:Name="UseTrainingMode"
-                                AutomationId="UseTrainingModeSwitch"/>
-                    </HorizontalStackLayout>-->
-
-                    <HorizontalStackLayout Margin="20"
-                           Spacing="10">
-                        <!--<Rectangle Fill="Red"
-                  HeightRequest="30"
-                  WidthRequest="30" />
-                        <Label Text="Red"
-              FontSize="Large" />-->
-                        <Label Text="Use Training Mode?" VerticalOptions="Center" HorizontalOptions="Start"/>
-
-                        <Switch x:Name="UseTrainingMode" VerticalOptions="Center" HorizontalOptions="Start" AutomationId="UseTrainingModeSwitch"
+                            <Switch x:Name="UseTrainingMode" VerticalOptions="Center" HorizontalOptions="Start" AutomationId="UseTrainingModeSwitch"
                                 IsToggled="{Binding UseTrainingMode}"
                                 />
-                    </HorizontalStackLayout>
+                        </HorizontalStackLayout>
 
-                    <Button Text="Continue" Style="{StaticResource StandardButton}" Command="{Binding LoginCommand}" AutomationId="LoginButton"/>
-                    <!--<Label Grid.ColumnSpan="2" Grid.Row="3" Text="Forgot your password?" TextColor="{StaticResource P}" FontAttributes="Bold"/>-->
-                </VerticalStackLayout>
-            </Frame>
-        </VerticalStackLayout>
+                        <Button Text="Continue" Style="{StaticResource StandardButton}" Command="{Binding LoginCommand}" AutomationId="LoginButton"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>
