@@ -89,6 +89,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption("appPackage", "com.transactionprocessing.pos");
             //driverOptions.AddAdditionalAppiumOption("forceEspressoRebuild", true);
             driverOptions.AddAdditionalAppiumOption("enforceAppInstall", true);
+            driverOptions.AddAdditionalAppiumOption("uiautomator2ServerInstallTimeout", "40000");
             //driverOptions.AddAdditionalAppiumOption("noSign", true);
             //driverOptions.AddAdditionalAppiumOption("espressoBuildConfig",
             //    "{ \"additionalAppDependencies\": [ \"com.google.android.material:material:1.0.0\", \"androidx.lifecycle:lifecycle-extensions:2.1.0\" ] }");

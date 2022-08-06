@@ -5,6 +5,7 @@ namespace TransactionMobile.Maui.UITests;
 using System;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 
 public class LoginPage : BasePage
 {
@@ -78,7 +79,6 @@ public class LoginPage : BasePage
 
     public async Task ClickLoginButton()
     {
-        //this.HideKeyboard();
         IWebElement element = await this.WaitForElementByAccessibilityId(this.LoginButton);
         element.Click();
     }
