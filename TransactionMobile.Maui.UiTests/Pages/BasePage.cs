@@ -9,6 +9,7 @@ namespace TransactionMobile.Maui.UITests
 {
     using Common;
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Interactions;
     using Shouldly;
 
     public abstract class BasePage
@@ -41,8 +42,7 @@ namespace TransactionMobile.Maui.UITests
             Should.NotThrow(() => this.WaitForNoElementByAccessibilityId(this.Trait), message);
         }
 
-        public async Task<IWebElement> WaitForElementByAccessibilityId(String accessibilityId, TimeSpan? timeout = null)
-        {
+        public async Task<IWebElement> WaitForElementByAccessibilityId(String accessibilityId, TimeSpan? timeout = null) {
             return await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId(accessibilityId, timeout);
         }
         
@@ -63,7 +63,6 @@ namespace TransactionMobile.Maui.UITests
 
         public void HideKeyboard()
         {
-            //AppiumDriverWrapper.Driver.HideKeyboard();
             if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android)
             {
                 AppiumDriverWrapper.Driver.HideKeyboard();
