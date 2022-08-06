@@ -30,7 +30,7 @@ public static class Extenstions
         IWebElement? element = null;
         timeout ??= TimeSpan.FromSeconds(60);
         await Retry.For(async () => {
-                            for (int i = 0; i < 5; i++) {
+                            for (int i = 0; i < 10; i++) {
                                 driver.ScrollDown();
                                 element = driver.FindElement(MobileBy.AccessibilityId(selector));
                                 element.ShouldNotBeNull();
