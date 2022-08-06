@@ -6,7 +6,7 @@
              Shell.NavBarIsVisible="False"
              Shell.FlyoutItemIsVisible="True">
     <ContentPage.Content>
-        <ScrollView Margin="20">
+        <ScrollView>
             <!-- Main structure-->
             <VerticalStackLayout x:Name="MainLayout">
                 <!--Main image-->
