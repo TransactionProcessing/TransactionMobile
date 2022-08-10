@@ -17,4 +17,6 @@ public class Configuration
     public LogLevel LogLevel { get; set; }
 
     public Boolean EnableAutoUpdates { get; set; }
+
+    public Boolean ShowDebugMessages { get; set; }
 }

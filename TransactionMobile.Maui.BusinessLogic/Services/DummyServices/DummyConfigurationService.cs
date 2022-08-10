@@ -13,7 +13,8 @@
                    {
                        ClientId = "dummyClientId",
                        ClientSecret = "dummyClientSecret",
-                       EnableAutoUpdates = false,
+                       EnableAutoUpdates = true,
+                       ShowDebugMessages = true,
                        EstateManagementUri = "http://localhost:5000",
                        EstateReportingUri = "http://localhost:5006",
                        LogLevel = LogLevel.Debug,
