@@ -78,7 +78,6 @@ public class HomePageViewModel : BaseViewModel
     private Boolean IsIOS() => DeviceInfo.Current.Platform == DevicePlatform.iOS;
 
     private Boolean OnReleaseAvailable(ReleaseDetails releaseDetails) {
-        ShowDebugMessage("inside OnReleaseAvailable").Wait();
         // Look at releaseDetails public properties to get version information, release notes text or release notes URL
         String versionName = releaseDetails.ShortVersion;
         String versionCodeOrBuildNumber = releaseDetails.Version;
