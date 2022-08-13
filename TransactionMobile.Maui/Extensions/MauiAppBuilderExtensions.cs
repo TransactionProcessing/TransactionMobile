@@ -28,12 +28,12 @@
     using BusinessLogic.ViewModels.MyAccount;
     using Pages.AppHome;
     using Pages.MyAccount;
-    using Xamarin.Android.Net;
     using System.Net.Http;
+#if ANDROID
     using Javax.Net.Ssl;
-    using Org.Apache.Http.Conn.Ssl;
     using Platforms.Services;
-
+    using Xamarin.Android.Net;
+#endif
     public static class MauiAppBuilderExtensions
     {
         #region Methods
@@ -273,10 +273,12 @@
 #endregion
     }
 
+#if ANDROID
     public class CustomAndroidMessageHandler : AndroidMessageHandler
     {
         protected override IHostnameVerifier GetSSLHostnameVerifier(HttpsURLConnection connection) {
             return new DangerousHostNameVerifier();
         }
     }
+#endif
 }
