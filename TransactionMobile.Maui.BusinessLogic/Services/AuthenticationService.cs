@@ -32,8 +32,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             {
                 this.MemoryCacheService.TryGetValue<Configuration>("Configuration", out Configuration configuration);
 
-                username = "merchantuser@v28emulatormerchant.co.uk";
-                password = "123456";
+                //username = "merchantuser@v28emulatormerchant.co.uk";
+                //password = "123456";
 
                 Shared.Logger.Logger.LogInformation($"About to request token for {username}");
                 Shared.Logger.Logger.LogDebug($"Token Request details UserName: {username} Password: {password} ClientId: {configuration.ClientId} ClientSecret: {configuration.ClientSecret}");

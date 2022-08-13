@@ -28,6 +28,11 @@
     using BusinessLogic.ViewModels.MyAccount;
     using Pages.AppHome;
     using Pages.MyAccount;
+    using Xamarin.Android.Net;
+    using System.Net.Http;
+    using Javax.Net.Ssl;
+    using Org.Apache.Http.Conn.Ssl;
+    using Platforms.Services;
 
     public static class MauiAppBuilderExtensions
     {
@@ -47,27 +52,14 @@
                         
             return builder;
         }
-        
-        public static MauiAppBuilder ConfigureAppServices(this MauiAppBuilder builder)
-        {
-            HttpClientHandler httpClientHandler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = (message,
-                                                             certificate2,
-                                                             arg3,
-                                                             arg4) =>
-                                                            {
-                                                                return true;
-                                                            }
-            };
+
+        public static MauiAppBuilder ConfigureAppServices(this MauiAppBuilder builder) {
             
-            HttpClient httpClient = new HttpClient(httpClientHandler);
+            HttpClient httpClient = CreateHttpClient();
             builder.Services.AddSingleton<HttpClient>(httpClient);
             builder.Services.AddSingleton<Func<String, String>>(
                                                                 new Func<String, String>(configSetting =>
                                                                                          {
-                                                                                             
-
                                                                                              if (configSetting == "ConfigServiceUrl")
                                                                                              {
                                                                                                  return "https://5r8nmm.deta.dev";
@@ -105,11 +97,6 @@
 
                                                                                              return string.Empty;
                                                                                          }));
-
-            //builder.Services.AddSingleton<IConfigurationService, DummyConfigurationService>();
-            //builder.Services.AddSingleton<IAuthenticationService, DummyAuthenticationService>();
-            //builder.Services.AddSingleton<ITransactionService, DummyTransactionService>();
-            //builder.Services.AddSingleton<IMerchantService, DummyMerchantService>();
 
             builder.Services.AddSingleton<IConfigurationService, ConfigurationService>();
             builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
@@ -171,14 +158,31 @@
             return builder;
         }
 
-        public static MauiAppBuilder ConfigureTrainingServices(this MauiAppBuilder builder)
-        {
-            builder.Services.AddSingleton<IConfigurationService, DummyConfigurationService>();
-            builder.Services.AddSingleton<IAuthenticationService, DummyAuthenticationService>();
-            builder.Services.AddSingleton<ITransactionService, DummyTransactionService>();
-            builder.Services.AddSingleton<IMerchantService, DummyMerchantService>();
+        private static HttpClient CreateHttpClient() {
 
-            return builder;
+#if ANDROID
+            CustomAndroidMessageHandler androidMessageHandler = new() {
+
+                                                                          ServerCertificateCustomValidationCallback = (sender,
+                                                                              certificate,
+                                                                              chain,
+                                                                              errors) => true,
+
+                                                                      };
+            return new HttpClient(androidMessageHandler);
+#else
+            HttpMessageHandler httpMessageHandler = new SocketsHttpHandler
+                                                    {
+                                                        SslOptions = new SslClientAuthenticationOptions
+                                                                     {
+                                                                         RemoteCertificateValidationCallback = (sender,
+                                                                                                                certificate,
+                                                                                                                chain,
+                                                                                                                errors) => true,
+                                                                     }
+                                                    };
+            return new HttpClient(httpMessageHandler);
+#endif
         }
 
         public static MauiAppBuilder ConfigureUIServices(this MauiAppBuilder builder)
@@ -266,6 +270,13 @@
             return builder;
         }
 
-        #endregion
+#endregion
+    }
+
+    public class CustomAndroidMessageHandler : AndroidMessageHandler
+    {
+        protected override IHostnameVerifier GetSSLHostnameVerifier(HttpsURLConnection connection) {
+            return new DangerousHostNameVerifier();
+        }
     }
 }
