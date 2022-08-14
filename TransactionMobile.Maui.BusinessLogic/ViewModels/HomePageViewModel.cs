@@ -29,7 +29,8 @@ public class HomePageViewModel : BaseViewModel
     public async Task ShowDebugMessage(String message) {
         this.MemoryCacheService.TryGetValue("Configuration", out Configuration configuration);
 
-        if (configuration.ShowDebugMessages) {
+        if (configuration.ShowDebugMessages)
+        {
             await this.DialogService.ShowDialog("Debug", message, "OK");
         }
     }
@@ -42,17 +43,11 @@ public class HomePageViewModel : BaseViewModel
         this.MemoryCacheService.TryGetValue("Configuration", out Configuration configuration);
 
         if (configuration.EnableAutoUpdates) {
-            await ShowDebugMessage("EnableAutoUpdates is true");
             await Distribute.SetEnabledAsync(true);
-            await ShowDebugMessage("Distibute Enabled Set");
             Distribute.ReleaseAvailable = this.OnReleaseAvailable;
             Distribute.NoReleaseAvailable = NoReleaseAvailable;
             Distribute.UpdateTrack = UpdateTrack.Public;
-            await ShowDebugMessage("Calling Check for update");
             Distribute.CheckForUpdate();
-            
-            await ShowDebugMessage("CheckForUpdate called");
-
         }
         else {
             Distribute.DisableAutomaticCheckForUpdate();
@@ -67,7 +62,7 @@ public class HomePageViewModel : BaseViewModel
             }
         }
         catch(Exception ex) {
-            await ShowDebugMessage(ex.Message);
+            Shared.Logger.Logger.LogError(ex);
         }
     }
 
@@ -78,6 +73,7 @@ public class HomePageViewModel : BaseViewModel
     private Boolean IsIOS() => DeviceInfo.Current.Platform == DevicePlatform.iOS;
 
     private Boolean OnReleaseAvailable(ReleaseDetails releaseDetails) {
+        Shared.Logger.Logger.LogInformation("In OnReleaseAvailable");
         // Look at releaseDetails public properties to get version information, release notes text or release notes URL
         String versionName = releaseDetails.ShortVersion;
         String versionCodeOrBuildNumber = releaseDetails.Version;
@@ -89,25 +85,34 @@ public class HomePageViewModel : BaseViewModel
         Task answer;
 
         // On mandatory update, user can't postpone
-        if (releaseDetails.MandatoryUpdate) {
+        if (releaseDetails.MandatoryUpdate)
+        {
+            Shared.Logger.Logger.LogInformation("In OnReleaseAvailable - mandatory update");
             answer = this.DialogService.ShowDialog(title, releaseNotes, "Download and Install");
         }
-        else {
+        else
+        {
+            Shared.Logger.Logger.LogInformation("In OnReleaseAvailable - non mandatory update");
             answer = this.DialogService.ShowDialog(title, releaseNotes, "Download and Install", "Later");
         }
 
-        answer.ContinueWith(task => {
-                                // If mandatory or if answer was positive
-                                if (releaseDetails.MandatoryUpdate || (task as Task<Boolean>).Result) {
-                                    // Notify SDK that user selected update
-                                    Distribute.NotifyUpdateAction(UpdateAction.Update);
-                                }
-                                else {
-                                    // Notify SDK that user selected postpone (for 1 day)
-                                    // This method call is ignored by the SDK if the update is mandatory
-                                    Distribute.NotifyUpdateAction(UpdateAction.Postpone);
-                                }
-                            });
+        answer.ContinueWith(task =>
+        {
+            // If mandatory or if answer was positive
+            if (releaseDetails.MandatoryUpdate || (task as Task<Boolean>).Result)
+            {
+                Shared.Logger.Logger.LogInformation("In OnReleaseAvailable - updating");
+                // Notify SDK that user selected update
+                Distribute.NotifyUpdateAction(UpdateAction.Update);
+            }
+            else
+            {
+                // Notify SDK that user selected postpone (for 1 day)
+                // This method call is ignored by the SDK if the update is mandatory
+                Shared.Logger.Logger.LogInformation("In OnReleaseAvailable - postponing");
+                Distribute.NotifyUpdateAction(UpdateAction.Postpone);
+            }
+        });
 
         // Return true if you're using your own dialog, false otherwise
         return true;
