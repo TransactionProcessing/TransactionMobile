@@ -23,9 +23,9 @@ public partial class App : Application
         {
             if (view is TitleLabel)
             {
-                var memoryCache = MauiProgram.Container.Services.GetService<IMemoryCacheService>();
+                var applicationCache = MauiProgram.Container.Services.GetService<IApplicationCache>();
 
-                memoryCache.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
+                Boolean useTrainingMode = applicationCache.GetUseTrainingMode();
 
                 if (useTrainingMode)
                 {
@@ -126,15 +126,15 @@ public partial class App : Application
         });
 
 #endif     
-        var memoryCache = MauiProgram.Container.Services.GetService<IMemoryCacheService>();
-        memoryCache.TryGetValue("isLoggedIn", out bool isLoggedIn);
+        IApplicationCache applicationCache = MauiProgram.Container.Services.GetService<IApplicationCache>();
+        Boolean isLoggedIn = applicationCache.GetIsLoggedIn();
         
         if (isLoggedIn)
         {
             MainPage = new AppShell();
         }
         else {
-            var loginPageViewModel = MauiProgram.Container.Services.GetService<LoginPageViewModel>();
+            LoginPageViewModel loginPageViewModel = MauiProgram.Container.Services.GetService<LoginPageViewModel>();
             MainPage = new LoginPage(loginPageViewModel);
         }
 

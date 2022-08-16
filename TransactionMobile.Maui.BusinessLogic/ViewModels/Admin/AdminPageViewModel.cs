@@ -16,8 +16,6 @@
 
         private readonly INavigationService NavigationService;
 
-        private readonly IMemoryCacheService MemoryCacheService;
-        
         private readonly IDeviceService DeviceService;
 
         private readonly IApplicationInfoService ApplicationInfoService;
@@ -25,12 +23,10 @@
         #region Constructors
 
         public AdminPageViewModel(IMediator mediator, INavigationService navigationService,
-                                  IMemoryCacheService memoryCacheService,
                                   IDeviceService deviceService, IApplicationInfoService applicationInfoService)
         {
             this.Mediator = mediator;
             this.NavigationService = navigationService;
-            this.MemoryCacheService = memoryCacheService;
             this.DeviceService = deviceService;
             this.ApplicationInfoService = applicationInfoService;
             this.ReconciliationCommand = new AsyncCommand(this.ReconciliationCommandExecute);

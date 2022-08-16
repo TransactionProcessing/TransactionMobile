@@ -29,9 +29,9 @@ public class LoginRequestHandlerTests
 
         authenticationService.Setup(a => a.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.AccessToken);
         configurationService.Setup(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(new Configuration());
-        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
 
-        LoginRequestHandler handler = new LoginRequestHandler(authenticationServiceResolver, configurationServiceResolver, memoryCacheService.Object);
+        LoginRequestHandler handler = new LoginRequestHandler(authenticationServiceResolver, configurationServiceResolver, applicationCache.Object);
             
         LoginRequest request = LoginRequest.Create(TestData.UserName,TestData.Password);
 
@@ -57,9 +57,9 @@ public class LoginRequestHandlerTests
         });
         authenticationService.Setup(a => a.RefreshAccessToken(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.AccessToken);
         configurationService.Setup(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(new Configuration());
-        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
 
-        LoginRequestHandler handler = new LoginRequestHandler(authenticationServiceResolver, configurationServiceResolver, memoryCacheService.Object);
+        LoginRequestHandler handler = new LoginRequestHandler(authenticationServiceResolver, configurationServiceResolver, applicationCache.Object);
 
         RefreshTokenRequest request = RefreshTokenRequest.Create(TestData.RefreshToken);
 
@@ -85,9 +85,9 @@ public class LoginRequestHandlerTests
         });
         authenticationService.Setup(a => a.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.AccessToken);
         configurationService.Setup(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(new Configuration());
-        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
 
-        LoginRequestHandler handler = new LoginRequestHandler(authenticationServiceResolver, configurationServiceResolver, memoryCacheService.Object);
+        LoginRequestHandler handler = new LoginRequestHandler(authenticationServiceResolver, configurationServiceResolver, applicationCache.Object);
 
         GetConfigurationRequest request = GetConfigurationRequest.Create(TestData.DeviceIdentifier);
 

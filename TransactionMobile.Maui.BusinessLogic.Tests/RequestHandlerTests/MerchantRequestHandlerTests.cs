@@ -26,10 +26,9 @@ public class MerchantRequestHandlerTests
         
         merchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
                        .ReturnsAsync(TestData.ContractProductList);
-        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
         
-
-        MerchantRequestHandler handler = new MerchantRequestHandler(merchantServiceResolver, memoryCacheService.Object);
+        MerchantRequestHandler handler = new MerchantRequestHandler(merchantServiceResolver, applicationCache.Object);
 
         GetContractProductsRequest request = GetContractProductsRequest.Create();
 
@@ -48,8 +47,8 @@ public class MerchantRequestHandlerTests
         });
         merchantService.Setup(m => m.GetMerchantBalance(It.IsAny<CancellationToken>()))
                        .ReturnsAsync(TestData.MerchantBalance);
-        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
-        MerchantRequestHandler handler = new MerchantRequestHandler(merchantServiceResolver, memoryCacheService.Object);
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        MerchantRequestHandler handler = new MerchantRequestHandler(merchantServiceResolver, applicationCache.Object);
 
         GetMerchantBalanceRequest request = GetMerchantBalanceRequest.Create();
 

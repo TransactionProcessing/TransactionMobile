@@ -19,8 +19,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
     {
         private readonly Func<String, String> BaseAddressResolver;
 
-        private readonly IMemoryCacheService MemoryCacheService;
-
+        private readonly IApplicationCache ApplicationCache;
+        
         private String BuildRequestUrl(String route)
         {
             String baseAddress = this.BaseAddressResolver("TransactionProcessorACL");
@@ -46,10 +46,10 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
         public TransactionService(Func<String, String> baseAddressResolver,
                                   HttpClient httpClient,
-                                  IMemoryCacheService memoryCacheService) : base(httpClient)
+                                  IApplicationCache applicationCache) : base(httpClient)
         {
             this.BaseAddressResolver = baseAddressResolver;
-            this.MemoryCacheService = memoryCacheService;
+            this.ApplicationCache = applicationCache;
 
             // Add the API version header
             this.HttpClient.DefaultRequestHeaders.Add("api-version", "1.0");
@@ -83,7 +83,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 StringContent httpContent = new StringContent(requestSerialised, Encoding.UTF8, "application/json");
 
                 // Add the access token to the client headers
-                this.MemoryCacheService.TryGetValue<TokenResponseModel>("AccessToken", out TokenResponseModel accessToken);
+                TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
 
                 Shared.Logger.Logger.LogDebug($"Logon Transaction Request details:  Uri {requestUri} Payload {requestSerialised} Access Token {accessToken.AccessToken}");
 
@@ -161,7 +161,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 StringContent httpContent = new StringContent(requestSerialised, Encoding.UTF8, "application/json");
 
                 // Add the access token to the client headers
-                this.MemoryCacheService.TryGetValue<TokenResponseModel>("AccessToken", out TokenResponseModel accessToken);
+                TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
 
                 Shared.Logger.Logger.LogDebug($"Mobile Topup Transaction Request details:  Uri {requestUri} Payload {requestSerialised} Access Token {accessToken.AccessToken}");
 
@@ -231,7 +231,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 StringContent httpContent = new StringContent(requestSerialised, Encoding.UTF8, "application/json");
 
                 // Add the access token to the client headers
-                this.MemoryCacheService.TryGetValue<TokenResponseModel>("AccessToken", out TokenResponseModel accessToken);
+                TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
 
                 Shared.Logger.Logger.LogDebug($"Reconciliation Transaction Request details:  Uri {requestUri} Payload {requestSerialised} Access Token {accessToken.AccessToken}");
 
@@ -301,7 +301,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 StringContent httpContent = new StringContent(requestSerialised, Encoding.UTF8, "application/json");
 
                 // Add the access token to the client headers
-                this.MemoryCacheService.TryGetValue<TokenResponseModel>("AccessToken", out TokenResponseModel accessToken);
+                TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
 
                 Shared.Logger.Logger.LogDebug($"Voucher Transaction Request details:  Uri {requestUri} Payload {requestSerialised} Access Token {accessToken.AccessToken}");
 

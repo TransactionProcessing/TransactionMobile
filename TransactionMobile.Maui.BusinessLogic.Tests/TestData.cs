@@ -20,6 +20,11 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
                 RefreshToken = TestData.RefreshToken
             };
 
+        public static Configuration Configuration = new Configuration();
+        public static Configuration NullConfiguration = null;
+
+        public static TokenResponseModel NullAccessToken => null;
+
         public static String Token = "Token";
 
         public static String RefreshToken = "RefreshToken";
@@ -115,6 +120,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
                                                                            TestData.Operator3Product_200KES
                                                                        };
 
+        public static List<ContractProductModel> ContractProductListEmpty = new List<ContractProductModel>();
+
         public static ContractOperatorModel ContractOperatorModel = new ContractOperatorModel
                                                                     {
                                                                         OperatorIdentfier = TestData.OperatorIdentifier1,
@@ -173,6 +180,16 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
                 IsSuccessful = true,
                 RequireApplicationUpdate = false,
                 ResponseMessage = "SUCCESS"
+            };
+
+        public static PerformLogonResponseModel PerformLogonResponseModelFailed =>
+            new PerformLogonResponseModel
+            {
+                EstateId = TestData.EstateId,
+                MerchantId = TestData.MerchantId,
+                IsSuccessful = false,
+                RequireApplicationUpdate = false,
+                ResponseMessage = "FAILED"
             };
     }
 }

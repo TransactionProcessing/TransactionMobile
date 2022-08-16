@@ -17,11 +17,13 @@
     {
         private readonly INavigationService NavigationService;
 
-        private readonly IMemoryCacheService MemoryCacheService;
-        
+        private readonly IApplicationCache ApplicationCache;
+
         private readonly IDeviceService DeviceService;
 
         private readonly IApplicationInfoService ApplicationInfoService;
+
+        private readonly IDialogService DialogService;
 
         private String userName;
 
@@ -31,13 +33,15 @@
 
         #region Constructors
 
-        public LoginPageViewModel(IMediator mediator, INavigationService navigationService, IMemoryCacheService memoryCacheService,
-                                  IDeviceService deviceService,IApplicationInfoService applicationInfoService)
+        public LoginPageViewModel(IMediator mediator, INavigationService navigationService, IApplicationCache applicationCache,
+                                  IDeviceService deviceService,IApplicationInfoService applicationInfoService,
+                                  IDialogService dialogService)
         {
             this.NavigationService = navigationService;
-            this.MemoryCacheService = memoryCacheService;
+            this.ApplicationCache = applicationCache;
             this.DeviceService = deviceService;
             this.ApplicationInfoService = applicationInfoService;
+            this.DialogService = dialogService;
             this.LoginCommand = new AsyncCommand(this.LoginCommandExecute);
             this.Mediator = mediator;
         }
@@ -72,60 +76,110 @@
 
         #region Methods
 
-        private async Task LoginCommandExecute()
-        {
-            Shared.Logger.Logger.LogInformation("LoginCommandExecute called");
+        private void CacheUseTrainingMode() => this.ApplicationCache.SetUseTrainingMode(this.useTrainingMode);
 
-            this.MemoryCacheService.Set("UseTrainingMode", this.useTrainingMode);
-
-            // TODO: this method needs refactored
+        private async Task GetConfiguration() {
             String deviceIdentifier = this.DeviceService.GetIdentifier();
             GetConfigurationRequest getConfigurationRequest = GetConfigurationRequest.Create(deviceIdentifier);
             Configuration configuration = await this.Mediator.Send(getConfigurationRequest);
-            
-            // Cache the config object
-            this.MemoryCacheService.Set("Configuration", configuration);
 
+            if (configuration == null) {
+                throw new ApplicationException("Error getting device configuration.");
+            }
+
+            // Cache the config object
+            this.ApplicationCache.SetConfiguration(configuration);
+        }
+
+        private async Task GetUserToken() {
             LoginRequest loginRequest = LoginRequest.Create(this.UserName, this.Password);
             TokenResponseModel token = await this.Mediator.Send(loginRequest);
 
-            //if (token == null)
-            //{
-            // TODO: Some kind of error handling
-            //}
+            if (token == null) {
+                throw new ApplicationException($"Login failed for user {this.UserName}");
+            }
+
             // Cache the token
             this.CacheAccessToken(token);
+        }
 
+        private async Task PerformLogonTransaction() {
             // Logon Transaction
-            LogonTransactionRequest logonTransactionRequest = LogonTransactionRequest.Create(DateTime.Now, "1", 
+            String deviceIdentifier = this.DeviceService.GetIdentifier();
+            LogonTransactionRequest logonTransactionRequest = LogonTransactionRequest.Create(DateTime.Now, "1",
                                                                                              deviceIdentifier,
                                                                                              this.ApplicationInfoService.VersionString);
             PerformLogonResponseModel logonResponse = await this.Mediator.Send(logonTransactionRequest);
 
             if (logonResponse.IsSuccessful == false)
             {
-                // TODO: Throw an error here
+                throw new ApplicationException($"Error during Logon Transaction. Error Msg: {logonResponse.ResponseMessage}");
             }
-
+            
             // Set the user information
-            this.MemoryCacheService.Set("EstateId", logonResponse.EstateId);
-            this.MemoryCacheService.Set("MerchantId", logonResponse.MerchantId);
+            this.ApplicationCache.SetEstateId(logonResponse.EstateId);
+            this.ApplicationCache.SetMerchantId(logonResponse.MerchantId);
+        }
 
+        private async Task GetMerchantContractProducts() {
             // Get Contracts
             GetContractProductsRequest getContractProductsRequest = GetContractProductsRequest.Create();
-            await this.Mediator.Send(getContractProductsRequest);
-            
+            List<ContractProductModel> products = await this.Mediator.Send(getContractProductsRequest);
+
+            if (products.Any() == false)
+            {
+                throw new ApplicationException($"Error getting contract products.");
+            }
+
+            this.CacheContractData(products);
+        }
+
+        private void CacheContractData(List<ContractProductModel> contractProductModels)
+        {
+            DateTime expirationTime = DateTime.Now.AddMinutes(60);
+            CancellationChangeToken expirationToken = new CancellationChangeToken(new CancellationTokenSource(TimeSpan.FromMinutes(60)).Token);
+            MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
+                                                        // Pin to cache.
+                                                        .SetPriority(CacheItemPriority.NeverRemove)
+                                                        // Set the actual expiration time
+                                                        .SetAbsoluteExpiration(expirationTime)
+                                                        // Force eviction to run
+                                                        .AddExpirationToken(expirationToken);
+
+            this.ApplicationCache.SetContractProducts(contractProductModels, cacheEntryOptions);
+        }
+
+        private async Task GetMerchantBalance() {
             // Get the merchant balance
             // TODO: Cache the result, but will add this to a timer call to keep up to date...
             GetMerchantBalanceRequest getMerchantBalanceRequest = GetMerchantBalanceRequest.Create();
             await this.Mediator.Send(getMerchantBalanceRequest);
+        }
 
-            // TODO: Need to set the application as in training mode somehow
+        private async Task LoginCommandExecute()
+        {
+            try {
+                Shared.Logger.Logger.LogInformation("LoginCommandExecute called");
 
-            this.MemoryCacheService.Set("IsLoggedIn", true);
+                this.CacheUseTrainingMode();
 
-            await this.NavigationService.GoToHome();
+                await this.GetConfiguration();
 
+                await this.GetUserToken();
+
+                await this.PerformLogonTransaction();
+                
+                await this.GetMerchantContractProducts();
+                
+                await this.GetMerchantBalance();
+                
+                this.ApplicationCache.SetIsLoggedIn(true);
+
+                await this.NavigationService.GoToHome();
+            }
+            catch(ApplicationException aex) {
+                await this.DialogService.ShowWarningToast(aex.Message);
+            }
         }
         
         private async void AccessTokenExpired(Object key,
@@ -159,7 +213,7 @@
                                                         // Add eviction callback
                                                         .RegisterPostEvictionCallback(callback:this.AccessTokenExpired);
 
-            this.MemoryCacheService.Set("AccessToken", token, cacheEntryOptions);
+            this.ApplicationCache.SetAccessToken(token, cacheEntryOptions);
         }
         
         #endregion

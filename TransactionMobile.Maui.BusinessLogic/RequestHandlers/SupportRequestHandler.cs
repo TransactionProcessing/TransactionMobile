@@ -14,21 +14,23 @@ namespace TransactionMobile.Maui.BusinessLogic.RequestHandlers
     {
         private readonly Func<Boolean, IConfigurationService> ConfigurationServiceResolver;
         private readonly IDatabaseContext DatabaseContext;
-        private readonly IMemoryCacheService MemoryCacheService;
+
+        private readonly IApplicationCache ApplicationCache;
+
         public SupportRequestHandler(Func<Boolean, IConfigurationService> configurationServiceResolver,
                                      IDatabaseContext databaseContext,
-                                     IMemoryCacheService memoryCacheService)
+                                     IApplicationCache applicationCache)
         {
             this.ConfigurationServiceResolver = configurationServiceResolver;
             this.DatabaseContext = databaseContext;
-            this.MemoryCacheService = memoryCacheService;
+            this.ApplicationCache = applicationCache;
         }
 
         public async Task<Boolean> Handle(UploadLogsRequest request, CancellationToken cancellationToken)
         {
             while (true)
             {
-                var logEntries = await this.DatabaseContext.GetLogMessages(10); // TODO: Configurable batch size
+                List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(10); // TODO: Configurable batch size
 
                 if (logEntries.Any() == false)
                 {
@@ -45,8 +47,8 @@ namespace TransactionMobile.Maui.BusinessLogic.RequestHandlers
                     EntryDateTime = l.EntryDateTime,
                     Id = l.Id
                 }));
-                this.MemoryCacheService.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
-                var configurationService = this.ConfigurationServiceResolver(useTrainingMode);
+                Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+                IConfigurationService configurationService = this.ConfigurationServiceResolver(useTrainingMode);
                 await configurationService.PostDiagnosticLogs(request.DeviceIdentifier, logMessageModels, CancellationToken.None);
 
                 // Clear the logs that have been uploaded

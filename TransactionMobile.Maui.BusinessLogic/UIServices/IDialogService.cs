@@ -14,16 +14,16 @@ public interface IDialogService
                              String cancelString);
 
     Task ShowErrorToast(String message,
-                        Action? action,
-                        String? actionButtonText,
-                        TimeSpan? duration,
-                        CancellationToken cancellationToken);
+                        Action? action = null,
+                        String? actionButtonText = "OK",
+                        TimeSpan? duration = null,
+                        CancellationToken cancellationToken = default);
 
     Task ShowInformationToast(String message,
-                              Action? action,
-                              String? actionButtonText,
-                              TimeSpan? duration,
-                              CancellationToken cancellationToken);
+                              Action? action = null,
+                              String? actionButtonText = "OK",
+                              TimeSpan? duration = null,
+                              CancellationToken cancellationToken = default);
 
     Task<String> ShowPrompt(String title,
                             String message,
@@ -35,10 +35,10 @@ public interface IDialogService
                             String initialValue = "");
 
     Task ShowWarningToast(String message,
-                          Action? action,
-                          String? actionButtonText,
-                          TimeSpan? duration,
-                          CancellationToken cancellationToken);
+                          Action? action = null,
+                          String? actionButtonText = "OK",
+                          TimeSpan? duration = null,
+                          CancellationToken cancellationToken = default);
 
     #endregion
 }
