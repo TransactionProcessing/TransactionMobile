@@ -156,7 +156,6 @@
             await this.Mediator.Send(getMerchantBalanceRequest);
         }
 
-
         private async Task LoginCommandExecute()
         {
             try {

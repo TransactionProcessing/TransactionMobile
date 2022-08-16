@@ -54,7 +54,6 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
         IMerchantService merchantService = this.MerchantServiceResolver(useTrainingMode);
         return await merchantService.GetMerchantBalance(cancellationToken);
     }
-
-
+    
     #endregion
 }

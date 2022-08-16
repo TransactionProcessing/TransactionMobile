@@ -120,10 +120,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
                                                                            TestData.Operator3Product_200KES
                                                                        };
 
-        public static List<ContractProductModel> ContractProductListEmpty = new List<ContractProductModel>
-                                                                       {
-                                                                           
-                                                                       };
+        public static List<ContractProductModel> ContractProductListEmpty = new List<ContractProductModel>();
 
         public static ContractOperatorModel ContractOperatorModel = new ContractOperatorModel
                                                                     {
