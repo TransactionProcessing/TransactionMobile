@@ -21,6 +21,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
     
+      - name: Setup Keystore File
+        run: |
+          echo "${{secrets.KEYSTORE_FILE }}" > transactionprocessing.keystore.asc
+          gpg -d --passphrase "${{ secrets.KEYSTORE_PASSWORD_GPG }}" --batch transactionprocessing.keystore.asc > transactionprocessing.keystore
+      
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}     
@@ -45,7 +50,7 @@ jobs:
           isWindows: false
 
       - name: Build Android
-        run: dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-android --no-restore
+        run: dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-android --no-restore /p:AndroidSigningKeyStore=transactionprocessing.keystore /:AndroidSigningKeyAlias:ghactionskey /p:AndroidSigningKeyPass="${{ secrets.KEYSTORE_PASSWORD }}" 
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v3
