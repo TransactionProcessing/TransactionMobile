@@ -19,4 +19,6 @@ public class Configuration
     public Boolean EnableAutoUpdates { get; set; }
 
     public Boolean ShowDebugMessages { get; set; }
+
+    public AppCenterConfiguration AppCenterConfig { get; set; }
 }
