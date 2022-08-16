@@ -10,15 +10,14 @@
     {
         private readonly INavigationService NavigationService;
 
-        private readonly IMemoryCacheService MemoryCacheService;
+        private readonly IApplicationCache ApplicationCache;
 
         #region Constructors
 
-        public MyAccountPageViewModel(INavigationService navigationService,
-                                      IMemoryCacheService memoryCacheService)
+        public MyAccountPageViewModel(INavigationService navigationService,IApplicationCache applicationCache)
         {
             this.NavigationService = navigationService;
-            this.MemoryCacheService = memoryCacheService;
+            this.ApplicationCache = applicationCache;
             this.LogoutCommand = new AsyncCommand(this.LogoutCommandExecute);
             this.Title = "My Account";
         }
@@ -36,7 +35,7 @@
         private async Task LogoutCommandExecute()
         {
             Shared.Logger.Logger.LogInformation("LogoutCommand called");
-            this.MemoryCacheService.Set<String>("AccessToken", null);
+            this.ApplicationCache.SetAccessToken(null);
             
             await this.NavigationService.GoToLoginPage();
         }

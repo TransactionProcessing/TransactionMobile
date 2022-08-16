@@ -15,18 +15,20 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
 
     private readonly Func<Boolean,ITransactionService> TransactionServiceResolver;
     private readonly IDatabaseContext DatabaseContext;
-    private readonly IMemoryCacheService MemoryCacheService;
+
+    private readonly IApplicationCache ApplicationCache;
+
     #endregion
 
     #region Constructors
 
     public TransactionRequestHandler(Func<Boolean, ITransactionService> transactionServiceResolver,
                                      IDatabaseContext databaseContext,
-                                     IMemoryCacheService memoryCacheService)
+                                     IApplicationCache applicationCache)
     {
         this.TransactionServiceResolver = transactionServiceResolver;
         this.DatabaseContext = databaseContext;
-        this.MemoryCacheService = memoryCacheService;
+        this.ApplicationCache = applicationCache;
     }
 
     #endregion
@@ -34,9 +36,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
     #region Methods
 
     public async Task<Boolean> Handle(PerformMobileTopupRequest request,
-                                      CancellationToken cancellationToken)
-    {
-        this.MemoryCacheService.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
+                                      CancellationToken cancellationToken) {
+        Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
         (TransactionRecord transactionRecord, Int64 transactionNumber) transaction = await this.CreateTransactionRecord(request, useTrainingMode, cancellationToken);
 
         // TODO: Factory
@@ -151,7 +152,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
     public async Task<PerformLogonResponseModel> Handle(LogonTransactionRequest request,
                                                         CancellationToken cancellationToken)
     {
-        this.MemoryCacheService.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
+        Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
         (TransactionRecord transactionRecord, Int64 transactionNumber) transaction = await this.CreateTransactionRecord(request, useTrainingMode, cancellationToken);
 
         // TODO: Factory
@@ -176,7 +177,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
     public async Task<Boolean> Handle(PerformVoucherIssueRequest request,
                                       CancellationToken cancellationToken)
     {
-        this.MemoryCacheService.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
+        Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
         (TransactionRecord transactionRecord, Int64 transactionNumber) transaction = await this.CreateTransactionRecord(request, useTrainingMode, cancellationToken);
         // TODO: Factory
         PerformVoucherIssueRequestModel model = new PerformVoucherIssueRequestModel
@@ -205,7 +206,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
     public async Task<Boolean> Handle(PerformReconciliationRequest request,
                                       CancellationToken cancellationToken)
     {
-        this.MemoryCacheService.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
+        Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
 
         List<TransactionRecord> storedTransactions = await this.DatabaseContext.GetTransactions();
 

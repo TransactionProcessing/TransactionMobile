@@ -11,17 +11,16 @@
     {
         private readonly Func<Boolean, IConfigurationService> ConfigurationServiceResolver;
 
-        private readonly IMemoryCacheService MemoryCacheService;
+        private readonly IApplicationCache ApplicationCache;
 
         #region Constructors
         public LoginRequestHandler(Func<Boolean,IAuthenticationService> authenticationServiceResolver,
                                    Func<Boolean, IConfigurationService> configurationServiceResolver,
-                                   IMemoryCacheService memoryCacheService)
+                                   IApplicationCache applicationCache)
         {
             this.ConfigurationServiceResolver = configurationServiceResolver;
-
+            this.ApplicationCache = applicationCache;
             this.AuthenticationServiceResolver = authenticationServiceResolver;
-            this.MemoryCacheService = memoryCacheService;
         }
 
         #endregion
@@ -35,11 +34,10 @@
         #region Methods
 
         public async Task<TokenResponseModel> Handle(LoginRequest request,
-                                                     CancellationToken cancellationToken)
-        {
-            this.MemoryCacheService.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
+                                                     CancellationToken cancellationToken) {
+            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
 
-            var authenticationService = this.AuthenticationServiceResolver(useTrainingMode);
+            IAuthenticationService authenticationService = this.AuthenticationServiceResolver(useTrainingMode);
 
             TokenResponseModel token = await authenticationService.GetToken(request.UserName, request.Password, cancellationToken);
 
@@ -49,9 +47,9 @@
         public async Task<Configuration> Handle(GetConfigurationRequest request,
                                                 CancellationToken cancellationToken)
         {
-            this.MemoryCacheService.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
+            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
 
-            var configurationService = this.ConfigurationServiceResolver(useTrainingMode);
+            IConfigurationService configurationService = this.ConfigurationServiceResolver(useTrainingMode);
 
             return await configurationService.GetConfiguration(request.DeviceIdentifier, cancellationToken);
         }
@@ -61,9 +59,9 @@
         public async Task<TokenResponseModel> Handle(RefreshTokenRequest request,
                                                      CancellationToken cancellationToken)
         {
-            this.MemoryCacheService.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
-            
-            var authenticationService = this.AuthenticationServiceResolver(useTrainingMode);
+            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+
+            IAuthenticationService authenticationService = this.AuthenticationServiceResolver(useTrainingMode);
 
             TokenResponseModel token = await authenticationService.RefreshAccessToken(request.RefreshToken, cancellationToken);
 

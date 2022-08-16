@@ -12,22 +12,22 @@ public class HomePageViewModel : BaseViewModel
 {
     #region Fields
 
-    private readonly IDialogService DialogService;
+    private readonly IApplicationCache ApplicationCache;
 
-    private readonly IMemoryCacheService MemoryCacheService;
+    private readonly IDialogService DialogService;
 
     #endregion
 
     #region Constructors
 
-    public HomePageViewModel(IMemoryCacheService memoryCacheService,
+    public HomePageViewModel(IApplicationCache applicationCache,
                              IDialogService dialogService) {
-        this.MemoryCacheService = memoryCacheService;
+        this.ApplicationCache = applicationCache;
         this.DialogService = dialogService;
     }
 
     public async Task ShowDebugMessage(String message) {
-        this.MemoryCacheService.TryGetValue("Configuration", out Configuration configuration);
+        Configuration configuration = this.ApplicationCache.GetConfiguration();
 
         if (configuration.ShowDebugMessages)
         {
@@ -40,7 +40,7 @@ public class HomePageViewModel : BaseViewModel
     #region Methods
 
     public async Task Initialise(CancellationToken cancellationToken) {
-        this.MemoryCacheService.TryGetValue("Configuration", out Configuration configuration);
+        Configuration configuration = this.ApplicationCache.GetConfiguration();
 
         if (configuration.EnableAutoUpdates) {
             await Distribute.SetEnabledAsync(true);

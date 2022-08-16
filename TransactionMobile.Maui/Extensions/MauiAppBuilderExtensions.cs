@@ -65,12 +65,12 @@
                                                                                                  return "https://5r8nmm.deta.dev";
                                                                                              }
 
-                                                                                             IMemoryCacheService memoryCacheService = MauiProgram.Container.Services
-                                                                                                 .GetService<IMemoryCacheService>();
+                                                                                             IApplicationCache applicationCache = MauiProgram.Container.Services
+                                                                                                 .GetService<IApplicationCache>();
 
-                                                                                             Boolean configFound = memoryCacheService.TryGetValue<Configuration>("Configuration", out Configuration configuration);
+                                                                                             Configuration configuration = applicationCache.GetConfiguration();
 
-                                                                                             if (configFound && configuration != null)
+                                                                                             if (configuration != null)
                                                                                              {
                                                                                                  if (configSetting == "SecurityService")
                                                                                                  {
@@ -153,7 +153,7 @@
 
             builder.Services.AddSingleton<ISecurityServiceClient, SecurityServiceClient>();
             builder.Services.AddSingleton<IEstateClient, EstateClient>();
-            builder.Services.AddSingleton<IMemoryCacheService, MemoryCacheService>();
+            builder.Services.AddSingleton<IApplicationCache, ApplicationCache>();
 
             return builder;
         }

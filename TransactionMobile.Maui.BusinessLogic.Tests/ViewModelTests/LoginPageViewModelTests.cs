@@ -22,11 +22,14 @@ public class LoginPageViewModelTests
     {
         Mock<IMediator> mediator = new Mock<IMediator>();
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
         Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
         Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
-        LoginPageViewModel viewModel = new LoginPageViewModel(mediator.Object, navigationService.Object, memoryCacheService.Object,
-                                                              deviceService.Object,applicationInfoService.Object);
+        Mock<IDialogService> dialogService = new Mock<IDialogService>();
+
+        LoginPageViewModel viewModel = new LoginPageViewModel(mediator.Object, navigationService.Object, applicationCache.Object,
+                                                              deviceService.Object,applicationInfoService.Object,
+                                                              dialogService.Object);
         Logger.Initialise(NullLogger.Instance);
         mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new Configuration());
         mediator.Setup(m => m.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.AccessToken);

@@ -2,6 +2,7 @@
 {
     using BusinessLogic.UIServices;
     using CommunityToolkit.Maui.Alerts;
+    using CommunityToolkit.Maui.Core;
 
     public class DialogService : IDialogService
     {
@@ -21,23 +22,25 @@
         }
 
         public async Task ShowErrorToast(String message,
-                                         Action action,
-                                         String actionButtonText,
-                                         TimeSpan? duration,
-                                         CancellationToken cancellationToken) {
+                                         Action? action = null,
+                                         String? actionButtonText = "OK",
+                                         TimeSpan? duration = null,
+                                         CancellationToken cancellationToken = default)
+        {
             await Application.Current.MainPage.DisplaySnackbar(message,
                                                                action,
                                                                actionButtonText,
                                                                duration,
-                                                               SnackBarOptionsHelper.GetInfoSnackbarOptions,
+                                                               SnackBarOptionsHelper.GetErrorSnackbarOptions,
                                                                cancellationToken);
         }
 
         public async Task ShowInformationToast(String message,
-                                               Action action,
-                                               String actionButtonText,
-                                               TimeSpan? duration,
-                                               CancellationToken cancellationToken) {
+                                               Action? action = null,
+                                               String? actionButtonText = "OK",
+                                               TimeSpan? duration = null,
+                                               CancellationToken cancellationToken = default)
+        {
             await Application.Current.MainPage.DisplaySnackbar(message,
                                                                action,
                                                                actionButtonText,
@@ -58,15 +61,20 @@
         }
 
         public async Task ShowWarningToast(String message,
-                                           Action action,
-                                           String actionButtonText,
-                                           TimeSpan? duration,
-                                           CancellationToken cancellationToken) {
+                                           Action? action = null,
+                                           String? actionButtonText = "OK",
+                                           TimeSpan? duration = null,
+                                           CancellationToken cancellationToken = default)
+        {
+            if (duration == null)
+            {
+                duration = TimeSpan.FromSeconds(10);
+            }
             await Application.Current.MainPage.DisplaySnackbar(message,
                                                                action,
                                                                actionButtonText,
                                                                duration,
-                                                               SnackBarOptionsHelper.GetInfoSnackbarOptions,
+                                                               SnackBarOptionsHelper.GetWarningSnackbarOptions,
                                                                cancellationToken);
         }
 

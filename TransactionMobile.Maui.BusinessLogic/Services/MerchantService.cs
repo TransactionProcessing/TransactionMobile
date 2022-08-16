@@ -9,20 +9,20 @@ public class MerchantService : IMerchantService
 {
     private readonly IEstateClient EstateClient;
 
-    private readonly IMemoryCacheService MemoryCacheService;
-
-    public MerchantService(IEstateClient estateClient, IMemoryCacheService memoryCacheService)
+    private readonly IApplicationCache ApplicationCache;
+    
+    public MerchantService(IEstateClient estateClient, IApplicationCache applicationCache)
     {
         this.EstateClient = estateClient;
-        this.MemoryCacheService = memoryCacheService;
+        this.ApplicationCache = applicationCache;
     }
     public async Task<List<ContractProductModel>> GetContractProducts(CancellationToken cancellationToken)
     {
         List<ContractProductModel> result = new List<ContractProductModel>();
 
-        this.MemoryCacheService.TryGetValue<TokenResponseModel>("AccessToken", out TokenResponseModel accessToken);
-        this.MemoryCacheService.TryGetValue<Guid>("EstateId", out Guid estateId);
-        this.MemoryCacheService.TryGetValue<Guid>("MerchantId", out Guid merchantId);
+        TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
+        Guid estateId = this.ApplicationCache.GetEstateId();
+        Guid merchantId = this.ApplicationCache.GetMerchantId();
 
         Shared.Logger.Logger.LogInformation($"About to request merchant contracts");
         Shared.Logger.Logger.LogDebug($"Merchant Contract Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
@@ -90,9 +90,9 @@ public class MerchantService : IMerchantService
 
     public async Task<Decimal> GetMerchantBalance(CancellationToken cancellationToken)
     {
-        this.MemoryCacheService.TryGetValue<TokenResponseModel>("AccessToken", out TokenResponseModel accessToken);
-        this.MemoryCacheService.TryGetValue<Guid>("EstateId", out Guid estateId);
-        this.MemoryCacheService.TryGetValue<Guid>("MerchantId", out Guid merchantId);
+        TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
+        Guid estateId = this.ApplicationCache.GetEstateId();
+        Guid merchantId = this.ApplicationCache.GetMerchantId();
 
         Shared.Logger.Logger.LogInformation($"About to request merchant merchant balance");
         Shared.Logger.Logger.LogDebug($"Merchant Balance Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");

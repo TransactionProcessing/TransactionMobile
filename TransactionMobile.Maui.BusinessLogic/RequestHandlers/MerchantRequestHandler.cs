@@ -13,15 +13,15 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
 
     private readonly Func<Boolean,IMerchantService> MerchantServiceResolver;
 
-    private readonly IMemoryCacheService MemoryCacheService;
-
+    private readonly IApplicationCache ApplicationCache;
+    
     #endregion
 
     #region Constructors
-    public MerchantRequestHandler(Func<Boolean, IMerchantService> merchantServiceResolver,IMemoryCacheService memoryCacheService)
+    public MerchantRequestHandler(Func<Boolean, IMerchantService> merchantServiceResolver,IApplicationCache applicationCache)
     {
         this.MerchantServiceResolver = merchantServiceResolver;
-        this.MemoryCacheService = memoryCacheService;
+        this.ApplicationCache = applicationCache;
     }
 
     #endregion
@@ -31,16 +31,13 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
     public async Task<List<ContractProductModel>> Handle(GetContractProductsRequest request,
                                                          CancellationToken cancellationToken)
     {
-        this.MemoryCacheService.TryGetValue<List<ContractProductModel>>("ContractProducts", out List<ContractProductModel> products);
-        this.MemoryCacheService.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
-        
-        var merchantService = this.MerchantServiceResolver(useTrainingMode);
+        List<ContractProductModel> products = this.ApplicationCache.GetContractProducts();
+        Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+        IMerchantService merchantService = this.MerchantServiceResolver(useTrainingMode);
 
         if (products == null || products.Any() == false)
         {
             products = await merchantService.GetContractProducts(cancellationToken);
-
-            this.CacheContractData(products);
         }
 
         if (request.ProductType.HasValue)
@@ -52,28 +49,12 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
     }
 
     public async Task<Decimal> Handle(GetMerchantBalanceRequest request,
-                                      CancellationToken cancellationToken)
-    {
-        this.MemoryCacheService.TryGetValue("UseTrainingMode", out Boolean useTrainingMode);
-        var merchantService = this.MerchantServiceResolver(useTrainingMode);
-
+                                      CancellationToken cancellationToken) {
+        Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+        IMerchantService merchantService = this.MerchantServiceResolver(useTrainingMode);
         return await merchantService.GetMerchantBalance(cancellationToken);
     }
 
-    private void CacheContractData(List<ContractProductModel> contractProductModels)
-    {
-        DateTime expirationTime = DateTime.Now.AddMinutes(60);
-        CancellationChangeToken expirationToken = new CancellationChangeToken(new CancellationTokenSource(TimeSpan.FromMinutes(60)).Token);
-        MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
-                                                    // Pin to cache.
-                                                    .SetPriority(CacheItemPriority.NeverRemove)
-                                                    // Set the actual expiration time
-                                                    .SetAbsoluteExpiration(expirationTime)
-                                                    // Force eviction to run
-                                                    .AddExpirationToken(expirationToken);
-
-        this.MemoryCacheService.Set("ContractProducts", contractProductModels, cacheEntryOptions);
-    }
 
     #endregion
 }

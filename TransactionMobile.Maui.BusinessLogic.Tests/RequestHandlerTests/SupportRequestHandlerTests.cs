@@ -25,9 +25,9 @@ public class SupportRequestHandlerTests
 
         Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
         databaseContext.Setup(d => d.GetLogMessages(It.IsAny<Int32>())).ReturnsAsync(new List<Database.LogMessage>());
-        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
 
-        SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, memoryCacheService.Object);
+        SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, applicationCache.Object);
 
         UploadLogsRequest request = UploadLogsRequest.Create(TestData.DeviceIdentifier);
 
@@ -59,9 +59,9 @@ public class SupportRequestHandlerTests
             new Database.LogMessage()
         }).ReturnsAsync(new List<Database.LogMessage>());
 
-        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
 
-        SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, memoryCacheService.Object);
+        SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, applicationCache.Object);
 
         UploadLogsRequest request = UploadLogsRequest.Create(TestData.DeviceIdentifier);
 
@@ -101,9 +101,9 @@ public class SupportRequestHandlerTests
             new Database.LogMessage(),
         }).ReturnsAsync(new List<Database.LogMessage>());
 
-        Mock<IMemoryCacheService> memoryCacheService = new Mock<IMemoryCacheService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
 
-        SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, memoryCacheService.Object);
+        SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, applicationCache.Object);
 
         UploadLogsRequest request = UploadLogsRequest.Create(TestData.DeviceIdentifier);
 

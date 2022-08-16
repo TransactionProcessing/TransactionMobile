@@ -16,12 +16,12 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
     {
         private readonly ISecurityServiceClient SecurityServiceClient;
 
-        private readonly IMemoryCacheService MemoryCacheService;
+        private readonly IApplicationCache ApplicationCache;
 
-        public AuthenticationService(ISecurityServiceClient securityServiceClient, IMemoryCacheService memoryCacheService)
+        public AuthenticationService(ISecurityServiceClient securityServiceClient, IApplicationCache applicationCache)
         {
             this.SecurityServiceClient = securityServiceClient;
-            this.MemoryCacheService = memoryCacheService;
+            this.ApplicationCache = applicationCache;
         }
 
         public async Task<TokenResponseModel> GetToken(String username,
@@ -30,7 +30,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
         {
             try
             {
-                this.MemoryCacheService.TryGetValue<Configuration>("Configuration", out Configuration configuration);
+                Configuration configuration = this.ApplicationCache.GetConfiguration();
 
                 //username = "merchantuser@v28emulatormerchant.co.uk";
                 //password = "123456";
@@ -63,7 +63,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
         public async Task<TokenResponseModel> RefreshAccessToken(String refreshToken,
                                                                  CancellationToken cancellationToken)
         {
-            this.MemoryCacheService.TryGetValue<Configuration>("Configuration", out Configuration configuration);
+            Configuration configuration = this.ApplicationCache.GetConfiguration();
             try
             {
                 Shared.Logger.Logger.LogInformation($"About to request refresh token");
