@@ -51,12 +51,23 @@ jobs:
 
       - name: Build Android
         run: dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-android --no-restore /p:AndroidSigningKeyStore=transactionprocessing.keystore /p:AndroidSigningKeyPass="${{ secrets.KEYSTORE_PASSWORD }}" 
-
+      
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v3
         with:
           name: android-ci-build
           path: TransactionMobile.Maui/bin/Release/net6.0-android/com.transactionprocessing.pos-Signed.apk
+          
+      - name: Upload Artifact to App Center
+        uses: Coxxs/AppCenter-Github-Action@v1
+        with:
+          appName: Transaction Processing/POS - Android
+          token: ${{secrets.APPCENTER_ANDROID_TOKEN}}
+          group: Merchants
+          file: TransactionMobile.Maui/bin/Release/net6.0-android/com.transactionprocessing.pos-Signed.apk
+          notifyTesters: true
+          debug: false  
+          gitReleaseNotes: true
 
   release_windows:
     runs-on: windows-2022
@@ -99,6 +110,17 @@ jobs:
         with:
           name: windows-ci-build
           path: TransactionMobile.Maui/bin/Release/net6.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile*/TransactionMobile*.msix	
+          
+      - name: Upload Artifact to App Center
+        uses: Coxxs/AppCenter-Github-Action@v1
+        with:
+          appName: Transaction Processing/POS - Windows
+          token: ${{secrets.APPCENTER_WINDOWS_TOKEN}}
+          group: Merchants
+          file: TransactionMobile.Maui/bin/Release/net6.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile*/TransactionMobile*.msix	
+          notifyTesters: true
+          debug: false  
+          gitReleaseNotes: true          
 
   released-mac:
     runs-on: macos-11
