@@ -61,7 +61,7 @@ jobs:
       - name: Upload Artifact to App Center
         uses: Coxxs/AppCenter-Github-Action@v1
         with:
-          appName: "POS-Android"
+          appName: "Transaction-Processing/POS-Android"
           token: ${{secrets.APPCENTER_ANDROID_TOKEN}}
           group: Merchants
           file: TransactionMobile.Maui/bin/Release/net6.0-android/com.transactionprocessing.pos-Signed.apk
