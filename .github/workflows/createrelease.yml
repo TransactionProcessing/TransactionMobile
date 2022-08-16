@@ -117,7 +117,7 @@ jobs:
           appName: "Transaction-Processing/POS-Windows"
           token: ${{secrets.APPCENTER_WINDOWS_TOKEN}}
           group: Merchants
-          file: "TransactionMobile.Maui/bin/Release/net6.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_${{ steps.get_version.outputs.VERSION }}_Test/TransactionMobile.Maui_${{ steps.get_version.outputs.VERSION }}_x64.msix"	
+          file: "TransactionMobile.Maui/bin/Release/net6.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_${{ steps.get_version.outputs.VERSION }}.0_Test/TransactionMobile.Maui_${{ steps.get_version.outputs.VERSION }}.0_x64.msix"	
           notifyTesters: true
           debug: false  
           gitReleaseNotes: true          
