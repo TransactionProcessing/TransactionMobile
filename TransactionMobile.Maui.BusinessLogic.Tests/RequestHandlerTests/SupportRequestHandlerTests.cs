@@ -47,16 +47,16 @@ public class SupportRequestHandlerTests
         Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
         databaseContext.SetupSequence(d => d.GetLogMessages(It.IsAny<Int32>())).ReturnsAsync(new List<Database.LogMessage>()
         {
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage()
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()}
         }).ReturnsAsync(new List<Database.LogMessage>());
 
         Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
@@ -82,23 +82,23 @@ public class SupportRequestHandlerTests
         Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
         databaseContext.SetupSequence(d => d.GetLogMessages(It.IsAny<Int32>())).ReturnsAsync(new List<Database.LogMessage>()
         {
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage(),
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
         }).ReturnsAsync(new List<Database.LogMessage>()
         {
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage(),
-            new Database.LogMessage(),
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
+            new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
         }).ReturnsAsync(new List<Database.LogMessage>());
 
         Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
