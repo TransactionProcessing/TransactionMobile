@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TransactionMobile.Maui.Pages.Support.ViewLogsPage"
+             xmlns:userControls="clr-namespace:TransactionMobile.Maui.Controls;assembly=TransactionMobile.Maui"
+             Shell.NavBarIsVisible="False">
+    <StackLayout Margin="20">
+    <userControls:TitleLabel Text="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"
+                                 VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+        <ListView ItemsSource="{Binding LogMessages}" HasUnevenRows="true" VerticalScrollBarVisibility="Always">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout>
+                            <Label Text="{Binding Path=EntryDateTime, StringFormat='{0:dd/MM/yyyy hh:MM:ss}'}" FontAttributes="Bold" TextColor="{Binding TextColor}"/>
+                            <Label Text="{Binding LogLevel}" TextColor="{Binding TextColor}"/>
+                            <Label Text="{Binding Message}" LineBreakMode="WordWrap" TextColor="{Binding TextColor}"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+    </StackLayout>
+</ContentPage>

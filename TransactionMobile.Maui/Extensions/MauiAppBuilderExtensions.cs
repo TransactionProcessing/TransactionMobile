@@ -29,6 +29,7 @@
     using Pages.AppHome;
     using Pages.MyAccount;
     using System.Net.Http;
+    using LogMessage = BusinessLogic.Models.LogMessage;
 #if ANDROID
     using Javax.Net.Ssl;
     using Platforms.Services;
@@ -207,7 +208,9 @@
             builder.Services.AddSingleton<IRequestHandler<LogonTransactionRequest, PerformLogonResponseModel>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<PerformVoucherIssueRequest, Boolean>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<PerformReconciliationRequest, Boolean>, TransactionRequestHandler>();
+
             builder.Services.AddSingleton<IRequestHandler<UploadLogsRequest, Boolean>, SupportRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<ViewLogsRequest, List<LogMessage>>, SupportRequestHandler>();
 
             builder.Services.AddSingleton<ServiceFactory>(ctx => { return t => ctx.GetService(t); });
 
@@ -234,6 +237,7 @@
             builder.Services.AddTransient<AdminPageViewModel>();
 
             builder.Services.AddTransient<SupportPageViewModel>();
+            builder.Services.AddTransient<ViewLogsPageViewModel>();
 
             builder.Services.AddTransient<MyAccountPageViewModel>();
 
@@ -262,6 +266,7 @@
             builder.Services.AddTransient<AdminPage>();
 
             builder.Services.AddTransient<SupportPage>();
+            builder.Services.AddTransient<ViewLogsPage>();
 
             builder.Services.AddTransient<MyAccountPage>();
 
@@ -270,7 +275,7 @@
             return builder;
         }
 
-#endregion
+        #endregion
     }
 
 #if ANDROID

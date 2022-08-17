@@ -1,20 +1,18 @@
-namespace TransactionMobile.Maui.Pages.Support;
-
-using BusinessLogic.ViewModels.Support;
-
-public partial class SupportPage : ContentPage
+namespace TransactionMobile.Maui.Pages.Support
 {
-    private SupportPageViewModel viewModel => BindingContext as SupportPageViewModel;
+    using BusinessLogic.ViewModels.Support;
 
-    public SupportPage(SupportPageViewModel vm)
+    public partial class SupportPage : ContentPage
     {
-        InitializeComponent();
-        BindingContext = vm;
-    }
+        private SupportPageViewModel viewModel => BindingContext as SupportPageViewModel;
 
-    protected override void OnAppearing()
-    {
-        SupportPageViewModel vm = MauiProgram.Container.Services.GetRequiredService<SupportPageViewModel>();
-        BindingContext = vm;
+        public SupportPage(SupportPageViewModel vm) {
+            InitializeComponent();
+            BindingContext = vm;
+        }
+
+        //protected override async void OnAppearing() {
+            //SupportPageViewModel vm = MauiProgram.Container.Services.GetRequiredService<SupportPageViewModel>();
+        //}
     }
 }

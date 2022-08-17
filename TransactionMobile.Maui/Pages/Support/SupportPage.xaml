@@ -25,8 +25,9 @@
 
                 <Label Text="{Binding NumberTransactionsStored, Mode=OneTime}"
                        VerticalOptions="Center"/>
-                
-                <Button Text="Upload Logs" Style="{StaticResource StandardButton}" Command="{Binding UploadLogsCommand}"/>
+
+                <Button Text="Upload Logs" Style="{StaticResource StandardButton}" Command="{Binding UploadLogsCommand}" IsVisible="{Binding ShowUploadLogsButton}"/>
+                <Button Text="View Logs" Style="{StaticResource StandardButton}" Command="{Binding ViewLogsCommand}" IsVisible="{Binding ShowViewLogsButton}"/>
             </VerticalStackLayout>
         </Frame>
     </VerticalStackLayout>

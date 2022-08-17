@@ -11,11 +11,9 @@ namespace TransactionMobile.Maui.BusinessLogic.Models
         #region Properties
 
         public DateTime EntryDateTime { get; set; }
-
         public Int32 Id { get; set; }
-
-        public String LogLevel { get; set; }
-
+        public LogLevel LogLevel { get; set; }
+        public String LogLevelString { get; set; }
         public String Message { get; set; }
 
         #endregion
@@ -27,7 +25,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Models
             {
                 EntryDateTime = DateTime.UtcNow,
                 Message = message,
-                LogLevel = logLevel.ToString()
+                LogLevel = logLevel,
+                LogLevelString = logLevel.ToString()
             };
         }
 

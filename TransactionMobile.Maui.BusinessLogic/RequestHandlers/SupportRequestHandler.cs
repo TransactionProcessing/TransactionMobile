@@ -10,7 +10,8 @@ using TransactionMobile.Maui.Database;
 
 namespace TransactionMobile.Maui.BusinessLogic.RequestHandlers
 {
-    public class SupportRequestHandler : IRequestHandler<UploadLogsRequest, Boolean>
+    public class SupportRequestHandler : IRequestHandler<UploadLogsRequest, Boolean>,
+                                         IRequestHandler<ViewLogsRequest, List<Models.LogMessage>>
     {
         private readonly Func<Boolean, IConfigurationService> ConfigurationServiceResolver;
         private readonly IDatabaseContext DatabaseContext;
@@ -42,7 +43,8 @@ namespace TransactionMobile.Maui.BusinessLogic.RequestHandlers
 
                 logEntries.ForEach(l => logMessageModels.Add(new Models.LogMessage
                 {
-                    LogLevel = l.LogLevel,
+                    LogLevel = Enum.Parse<Models.LogLevel>(l.LogLevel),
+                    LogLevelString = l.LogLevel,
                     Message = l.Message,
                     EntryDateTime = l.EntryDateTime,
                     Id = l.Id
@@ -56,6 +58,23 @@ namespace TransactionMobile.Maui.BusinessLogic.RequestHandlers
             }
 
             return true;
+        }
+
+        public async Task<List<Models.LogMessage>> Handle(ViewLogsRequest request,
+                                                    CancellationToken cancellationToken) {
+            List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(50); // TODO: Configurable batch size
+
+            List<Models.LogMessage> logMessageModels = new List<Models.LogMessage>();
+
+            logEntries.ForEach(l => logMessageModels.Add(new Models.LogMessage {
+                                                                                   LogLevel = Enum.Parse<Models.LogLevel>(l.LogLevel),
+                                                                                   LogLevelString = l.LogLevel,
+                                                                                   Message = l.Message,
+                                                                                   EntryDateTime = l.EntryDateTime,
+                                                                                   Id = l.Id
+                                                                               }));
+
+            return logMessageModels.OrderByDescending(l => l.EntryDateTime).ToList();
         }
     }
 }
