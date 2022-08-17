@@ -31,13 +31,13 @@ jobs:
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}     
         shell: bash
 
-      - name: Setup .NET 6
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: 6.0.x
+      #- name: Setup .NET 6
+      #  uses: actions/setup-dotnet@v2
+      #  with:
+      #    dotnet-version: 6.0.x
           
-      - name: Install MAUI Workload
-        run: dotnet workload install maui --ignore-failed-sources 
+      #- name: Install MAUI Workload
+      #  run: dotnet workload install maui --ignore-failed-sources 
 
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln
@@ -84,13 +84,13 @@ jobs:
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}        
         shell: bash
        
-      - name: Setup .NET 6
-        uses: actions/setup-dotnet@v2
-        with:
-         dotnet-version: 6.0.x
+      #- name: Setup .NET 6
+      #  uses: actions/setup-dotnet@v2
+      #  with:
+      #   dotnet-version: 6.0.x
          
-      - name: Install MAUI Workload
-        run: dotnet workload install maui --ignore-failed-sources
+      #- name: Install MAUI Workload
+      #  run: dotnet workload install maui --ignore-failed-sources
 
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln
@@ -133,13 +133,13 @@ jobs:
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}        
         
-      - name: Setup .NET 6
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 6.0.x
+      #- name: Setup .NET 6
+      #  uses: actions/setup-dotnet@v1
+      #  with:
+      #    dotnet-version: 6.0.x
           
-      - name: Install MAUI Workload
-        run: dotnet workload install maui --ignore-failed-sources
+      #- name: Install MAUI Workload
+      #  run: dotnet workload install maui --ignore-failed-sources
 
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln
@@ -171,13 +171,13 @@ jobs:
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}        
               
-      - name: Setup .NET 6
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 6.0.x
+      #- name: Setup .NET 6
+      #  uses: actions/setup-dotnet@v1
+      #  with:
+      #    dotnet-version: 6.0.x
                 
-      - name: Install MAUI Workload
-        run: dotnet workload install maui --ignore-failed-sources
+      #- name: Install MAUI Workload
+      #  run: dotnet workload install maui --ignore-failed-sources
       
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln

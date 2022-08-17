@@ -19,16 +19,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3        
 
-      - name: Setup .NET 6
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 6.0.400-preview.22330.6
-          include-prerelease: true
+      #- name: Setup .NET 6
+      #  uses: actions/setup-dotnet@v1
+      #  with:
+      #    dotnet-version: 6.0.400-preview.22330.6
+      #    include-prerelease: true
           
-      - name: Install MAUI Workloads
-        run: |
-          dotnet workload install maccatalyst --ignore-failed-sources
-          dotnet workload install maui --ignore-failed-sources
+      #- name: Install MAUI Workloads
+      #  run: |
+      #    dotnet workload install maccatalyst --ignore-failed-sources
+      #    dotnet workload install maui --ignore-failed-sources
 
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln
