@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.BusinessLogic.Requests
 {
-
     public class UploadLogsRequest : IRequest<Boolean>
     {
         private UploadLogsRequest(String deviceIdentifier)

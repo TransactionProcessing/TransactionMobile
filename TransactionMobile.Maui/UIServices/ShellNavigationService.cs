@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.UIServices;
 
 using Pages;
+using Pages.Support;
 using Pages.Transactions.Admin;
 using Pages.Transactions.MobileTopup;
 using Pages.Transactions.Voucher;
@@ -84,6 +85,10 @@ public class ShellNavigationService : INavigationService
 
     public async Task GoToLoginPage() {
         await NavigateTo(nameof(LoginPage));
+    }
+
+    public async Task GoToViewLogsPage() {
+        await NavigateTo(nameof(ViewLogsPage));
     }
 
     private async Task NavigateTo(String route)

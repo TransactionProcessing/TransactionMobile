@@ -38,5 +38,7 @@ public interface INavigationService
 
     Task GoToLoginPage();
 
+    Task GoToViewLogsPage();
+
     #endregion
 }

@@ -11,6 +11,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests
     using TransactionMobile.Maui.Database;
     using Shared.Logger;
     using System.Collections.Generic;
+    using Services;
 
     public class SupportPageViewModelTests
     {
@@ -22,9 +23,14 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests
             Mock<IMediator> mediator = new Mock<IMediator>();
             Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
             Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
+            Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
             Logger.Initialise(NullLogger.Instance);
-            SupportPageViewModel viewModel = new SupportPageViewModel(deviceService.Object,applicationInfoService.Object,
-                databaseContext.Object, mediator.Object,navigationService.Object);
+            SupportPageViewModel viewModel = new SupportPageViewModel(deviceService.Object,
+                                                                      applicationInfoService.Object,
+                                                                      databaseContext.Object,
+                                                                      mediator.Object,
+                                                                      navigationService.Object,
+                                                                      applicationCache.Object);
 
             viewModel.UploadLogsCommand.Execute(null);
             

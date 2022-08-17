@@ -9,6 +9,7 @@ using BusinessLogic.ViewModels;
 using Microsoft.Maui.Handlers;
 using Pages;
 using Pages.AppHome;
+using Pages.Support;
 using Pages.Transactions.Admin;
 using TransactionMobile.Maui.BusinessLogic.Services;
 using TransactionMobile.Maui.Controls;
@@ -152,6 +153,8 @@ public partial class App : Application
 
         Routing.RegisterRoute(nameof(AdminPage), typeof(AdminPage));
         Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
+
+        Routing.RegisterRoute(nameof(ViewLogsPage), typeof(ViewLogsPage));
     }
 }
 
