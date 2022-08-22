@@ -203,7 +203,8 @@
 
             builder.Services.AddSingleton<IRequestHandler<GetContractProductsRequest, List<ContractProductModel>>, MerchantRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<GetMerchantBalanceRequest, Decimal>, MerchantRequestHandler>();
-            
+            builder.Services.AddSingleton<IRequestHandler<GetMerchantDetailsRequest, MerchantDetailsModel>, MerchantRequestHandler>();
+
             builder.Services.AddSingleton<IRequestHandler<PerformMobileTopupRequest, Boolean>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<LogonTransactionRequest, PerformLogonResponseModel>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<PerformVoucherIssueRequest, Boolean>, TransactionRequestHandler>();
@@ -240,6 +241,9 @@
             builder.Services.AddTransient<ViewLogsPageViewModel>();
 
             builder.Services.AddTransient<MyAccountPageViewModel>();
+            builder.Services.AddTransient<MyAccountAddressPageViewModel>();
+            builder.Services.AddTransient<MyAccountContactPageViewModel>();
+            builder.Services.AddTransient<MyAccountDetailsPageViewModel>();
 
             builder.Services.AddTransient<HomePageViewModel>();
 
@@ -269,6 +273,9 @@
             builder.Services.AddTransient<ViewLogsPage>();
 
             builder.Services.AddTransient<MyAccountPage>();
+            builder.Services.AddTransient<MyAccountAddressesPage>();
+            builder.Services.AddTransient<MyAccountContactPage>();
+            builder.Services.AddTransient<MyAccountDetailsPage>();
 
             builder.Services.AddTransient<HomePage>();
 

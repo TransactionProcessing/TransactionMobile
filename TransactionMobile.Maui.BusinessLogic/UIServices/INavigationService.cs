@@ -40,5 +40,9 @@ public interface INavigationService
 
     Task GoToViewLogsPage();
 
+    Task GoToMyAccountAddresses();
+    Task GoToMyAccountContacts();
+    Task GoToMyAccountDetails();
+
     #endregion
 }

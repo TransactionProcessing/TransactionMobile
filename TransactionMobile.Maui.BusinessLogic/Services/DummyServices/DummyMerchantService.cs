@@ -96,4 +96,28 @@ public class DummyMerchantService : IMerchantService
     {
         return 100;
     }
+
+    public async Task<MerchantDetailsModel> GetMerchantDetails(CancellationToken cancellationToken) {
+        MerchantDetailsModel model = new MerchantDetailsModel {
+                                                                  Address = new AddressModel {
+                                                                                                 AddressLine1 = "test address line 1",
+                                                                                                 AddressLine2 = null,
+                                                                                                 AddressLine3 = null,
+                                                                                                 AddressLine4 = null,
+                                                                                                 PostalCode = "TE57 1NG",
+                                                                                                 Region = "Region",
+                                                                                                 Town = "Town"
+                                                                                             },
+                                                                  Contact = new ContactModel {
+                                                                                                 Name = "Test Contact",
+                                                                                                 EmailAddress = "stuart_ferguson1@outlook.com",
+                                                                                                 MobileNumber = "123456789"
+                                                                                             },
+                                                                  LastStatementDate = DateTime.Now.AddDays(-30),
+                                                                  NextStatementDate = DateTime.Now.AddDays(30),
+                                                                  MerchantName = "Dummy Merchant",
+                                                                  SettlementSchedule = "Monthly"
+                                                              };
+        return model;
+    }
 }

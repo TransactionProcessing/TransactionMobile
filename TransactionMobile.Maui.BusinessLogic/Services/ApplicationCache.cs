@@ -79,6 +79,15 @@
             this.Set("MerchantId", value, options);
         }
 
+        public MerchantDetailsModel GetMerchantDetails() {
+            return this.TryGetValue<MerchantDetailsModel>("MerchantDetails");
+        }
+
+        public void SetMerchantDetails(MerchantDetailsModel value,
+                                       MemoryCacheEntryOptions options = default) {
+            this.Set("MerchantDetails", value, options);
+        }
+
         public void SetUseTrainingMode(Boolean value,
                                        MemoryCacheEntryOptions options = default) {
             this.Set("UseTrainingMode", value, options);

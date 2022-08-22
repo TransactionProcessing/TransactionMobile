@@ -104,4 +104,8 @@ public class MerchantService : IMerchantService
 
         return merchantBalance.AvailableBalance;
     }
+
+    public Task<MerchantDetailsModel> GetMerchantDetails(CancellationToken cancellationToken) {
+        throw new NotImplementedException();
+    }
 }

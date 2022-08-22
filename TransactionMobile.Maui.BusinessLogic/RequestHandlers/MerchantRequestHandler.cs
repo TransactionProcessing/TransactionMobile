@@ -7,7 +7,9 @@ using Models;
 using Requests;
 using Services;
 
-public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest, List<ContractProductModel>>, IRequestHandler<GetMerchantBalanceRequest, Decimal>
+public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest, List<ContractProductModel>>, 
+                                      IRequestHandler<GetMerchantBalanceRequest, Decimal>,
+                                      IRequestHandler<GetMerchantDetailsRequest, MerchantDetailsModel>
 {
     #region Fields
 
@@ -54,6 +56,16 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
         IMerchantService merchantService = this.MerchantServiceResolver(useTrainingMode);
         return await merchantService.GetMerchantBalance(cancellationToken);
     }
-    
+
+
+    public async Task<MerchantDetailsModel> Handle(GetMerchantDetailsRequest request,
+                                                   CancellationToken cancellationToken) {
+        Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+        IMerchantService merchantService = this.MerchantServiceResolver(useTrainingMode);
+        
+        MerchantDetailsModel merchantDetails = await merchantService.GetMerchantDetails(cancellationToken);
+
+        return merchantDetails;
+    }
     #endregion
 }

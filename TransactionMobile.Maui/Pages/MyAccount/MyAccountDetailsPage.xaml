@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TransactionMobile.Maui.Pages.MyAccount.MyAccountDetailsPage"
+             xmlns:userControls="clr-namespace:TransactionMobile.Maui.Controls;assembly=TransactionMobile.Maui"
+             Shell.NavBarIsVisible="False">
+    <VerticalStackLayout>
+        <userControls:TitleLabel Text="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+
+        <Label Text="{Binding Balance}"
+               HorizontalTextAlignment="Start"
+               HorizontalOptions="Fill"/>
+        <Label Text="{Binding AvailableBalance}"
+               HorizontalTextAlignment="Start"
+               HorizontalOptions="Fill"/>
+        <Label Text="{Binding NextStatementDate}"
+               HorizontalTextAlignment="Start"
+               HorizontalOptions="Fill"/>
+        <Label Text="{Binding LastStatementDate}"
+               HorizontalTextAlignment="Start"
+               HorizontalOptions="Fill"/>
+        <Label Text="{Binding MerchantName}"
+               HorizontalTextAlignment="Start"
+               HorizontalOptions="Fill"/>
+        <Label Text="{Binding SettlementSchedule}"
+               HorizontalTextAlignment="Start"
+               HorizontalOptions="Fill"/>
+    </VerticalStackLayout>
+</ContentPage>

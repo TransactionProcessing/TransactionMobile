@@ -78,4 +78,34 @@
 
         #endregion
     }
+
+    public class MerchantDetailsModel
+    {
+        public Decimal Balance { get; set; }
+        public Decimal AvailableBalance { get; set; }
+        public String MerchantName { get; set; }
+        public DateTime NextStatementDate { get; set; }
+        public DateTime LastStatementDate { get; set; }
+        public String SettlementSchedule { get; set; }
+        public AddressModel Address { get; set; }
+        public ContactModel Contact { get; set; }
+    }
+
+    public class AddressModel
+    {
+        public String AddressLine1 { get; set; }
+        public String AddressLine2 { get; set; }
+        public String AddressLine3 { get; set; }
+        public String AddressLine4 { get; set; }
+        public String PostalCode { get; set; }
+        public String Region { get; set; }
+        public String Town { get; set; }
+    }
+
+    public class ContactModel
+    {
+        public String EmailAddress { get; set; }
+        public String Name { get; set; }
+        public String MobileNumber { get; set; }
+    }
 }

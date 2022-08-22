@@ -9,6 +9,7 @@ using BusinessLogic.ViewModels;
 using Microsoft.Maui.Handlers;
 using Pages;
 using Pages.AppHome;
+using Pages.MyAccount;
 using Pages.Support;
 using Pages.Transactions.Admin;
 using TransactionMobile.Maui.BusinessLogic.Services;
@@ -139,6 +140,7 @@ public partial class App : Application
             MainPage = new LoginPage(loginPageViewModel);
         }
 
+        // TODO: Investigate if this could be done automatically (maybe with exclusions for top level pages)
         Routing.RegisterRoute(nameof(MobileTopupSelectOperatorPage), typeof(MobileTopupSelectOperatorPage));
         Routing.RegisterRoute(nameof(MobileTopupSelectProductPage), typeof(MobileTopupSelectProductPage));
         Routing.RegisterRoute(nameof(MobileTopupPerformTopupPage), typeof(MobileTopupPerformTopupPage));
@@ -155,6 +157,10 @@ public partial class App : Application
         Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
 
         Routing.RegisterRoute(nameof(ViewLogsPage), typeof(ViewLogsPage));
+
+        Routing.RegisterRoute(nameof(MyAccountAddressesPage), typeof(MyAccountAddressesPage));
+        Routing.RegisterRoute(nameof(MyAccountContactPage), typeof(MyAccountContactPage));
+        Routing.RegisterRoute(nameof(MyAccountDetailsPage), typeof(MyAccountDetailsPage));
     }
 }
 
