@@ -101,9 +101,9 @@ public class DummyMerchantService : IMerchantService
         MerchantDetailsModel model = new MerchantDetailsModel {
                                                                   Address = new AddressModel {
                                                                                                  AddressLine1 = "test address line 1",
-                                                                                                 AddressLine2 = null,
-                                                                                                 AddressLine3 = null,
-                                                                                                 AddressLine4 = null,
+                                                                                                 AddressLine2 = "test address line 2",
+                                                                                                 AddressLine3 = "test address line 3",
+                                                                                                 AddressLine4 = "test address line 4",
                                                                                                  PostalCode = "TE57 1NG",
                                                                                                  Region = "Region",
                                                                                                  Town = "Town"

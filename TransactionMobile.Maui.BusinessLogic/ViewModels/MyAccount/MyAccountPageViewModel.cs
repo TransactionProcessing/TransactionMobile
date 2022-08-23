@@ -113,7 +113,8 @@
                 AccountOptions.Addresses => this.NavigationService.GoToMyAccountAddresses(),
                 AccountOptions.Contacts => this.NavigationService.GoToMyAccountContacts(),
                 AccountOptions.AccountInfo => this.NavigationService.GoToMyAccountDetails(),
-                AccountOptions.Logout => this.LogoutCommandExecute()
+                AccountOptions.Logout => this.LogoutCommandExecute(),
+                _ => Task.Factory.StartNew(() => Logger.LogWarning($"Unsupported option selected {selectedOption}"))
             };
 
             await navigationTask;

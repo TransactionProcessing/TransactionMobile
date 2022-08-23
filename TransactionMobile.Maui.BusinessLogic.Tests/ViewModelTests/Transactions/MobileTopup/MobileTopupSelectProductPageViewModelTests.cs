@@ -1,4 +1,4 @@
-namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests;
+namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions.MobileTopup;
 
 using System;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ public class MobileTopupSelectProductPageViewModelTests
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         MobileTopupSelectProductPageViewModel viewModel = new MobileTopupSelectProductPageViewModel(mediator.Object, navigationService.Object);
 
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object>
+        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
                                            {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1}
                                        });
@@ -41,7 +41,7 @@ public class MobileTopupSelectProductPageViewModelTests
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         MobileTopupSelectProductPageViewModel viewModel = new MobileTopupSelectProductPageViewModel(mediator.Object, navigationService.Object);
 
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object>
+        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
                                            {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1}
                                        });
@@ -60,7 +60,7 @@ public class MobileTopupSelectProductPageViewModelTests
         Logger.Initialise(NullLogger.Instance);
         MobileTopupSelectProductPageViewModel viewModel = new MobileTopupSelectProductPageViewModel(mediator.Object, navigationService.Object);
 
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object>
+        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
                                            {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1}
                                        });
@@ -70,15 +70,15 @@ public class MobileTopupSelectProductPageViewModelTests
         viewModel.Products.Count.ShouldBe(3);
 
         ItemSelected<ContractProductModel> selectedContractProduct = new ItemSelected<ContractProductModel>
-                                                                     {
-                                                                         SelectedItemIndex = 1,
-                                                                         SelectedItem = TestData.Operator1Product_100KES
-                                                                     };
+        {
+            SelectedItemIndex = 1,
+            SelectedItem = TestData.Operator1Product_100KES
+        };
 
         viewModel.ProductSelectedCommand.Execute(selectedContractProduct);
 
-        navigationService.Verify(n=> n.GoToMobileTopupPerformTopupPage(It.IsAny<String>(), It.IsAny<Guid>(),
-                                                                       It.IsAny<Guid>(),It.IsAny<Decimal>()), Times.Once);
+        navigationService.Verify(n => n.GoToMobileTopupPerformTopupPage(It.IsAny<string>(), It.IsAny<Guid>(),
+                                                                       It.IsAny<Guid>(), It.IsAny<decimal>()), Times.Once);
 
     }
 }

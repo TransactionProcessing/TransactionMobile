@@ -224,25 +224,23 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-android|AnyCPU'">
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	  <MtouchLink>None</MtouchLink>
+	  <PublishTrimmed>True</PublishTrimmed>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-android|AnyCPU'">
 		<MtouchLink>None</MtouchLink>
+		<PublishTrimmed>False</PublishTrimmed>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-ios|AnyCPU'">
-	  <MtouchLink>SdkOnly</MtouchLink>
-	  <TrimMode>link</TrimMode>
+	  <MtouchLink>None</MtouchLink>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-ios|AnyCPU'">
 	  <MtouchLink>SdkOnly</MtouchLink>
-	  <TrimMode>link</TrimMode>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-maccatalyst|AnyCPU'">
 	  <MtouchLink>SdkOnly</MtouchLink>
-	  <TrimMode>link</TrimMode>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-maccatalyst|AnyCPU'">
 	  <MtouchLink>SdkOnly</MtouchLink>
-	  <TrimMode>link</TrimMode>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows10.0.19041|AnyCPU'">
 	  <MtouchLink>SdkOnly</MtouchLink>

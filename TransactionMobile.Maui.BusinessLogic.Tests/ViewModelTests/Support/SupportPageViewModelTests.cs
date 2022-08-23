@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests
+namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Support
 {
     using Maui.UIServices;
     using MediatR;
@@ -33,7 +33,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests
                                                                       applicationCache.Object);
 
             viewModel.UploadLogsCommand.Execute(null);
-            
+
             navigationService.Verify(n => n.GoToHome(), Times.Once);
         }
     }

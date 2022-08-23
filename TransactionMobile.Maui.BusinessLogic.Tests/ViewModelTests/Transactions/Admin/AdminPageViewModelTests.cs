@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests
+namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions.Admin
 {
     using Maui.UIServices;
     using MediatR;

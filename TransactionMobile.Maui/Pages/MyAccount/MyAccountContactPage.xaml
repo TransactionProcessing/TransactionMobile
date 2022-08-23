@@ -7,14 +7,36 @@
     <VerticalStackLayout>
         <userControls:TitleLabel Text="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
 
-        <Label Text="{Binding Contact.EmailAddress}"
-               HorizontalTextAlignment="Start"
-               HorizontalOptions="Fill"/>
-        <Label Text="{Binding Contact.Name}"
-               HorizontalTextAlignment="Start"
-               HorizontalOptions="Fill"/>
-        <Label Text="{Binding Contact.MobileNumber}"
-               HorizontalTextAlignment="Start"
-               HorizontalOptions="Fill"/>
+        <Frame HasShadow="True" Padding="50,20,50,20" Margin="10,0,0,10" VerticalOptions="CenterAndExpand" 
+               CornerRadius="20" Opacity="0.9" BackgroundColor="#f5f8fa">
+            <VerticalStackLayout x:Name="SubLayout">
+                <Label Text="Primary Contact" HorizontalTextAlignment="Center"
+                       HorizontalOptions="Fill" FontAttributes="Bold" FontSize="20"
+                       Margin="10,0,0,10"/>
+
+                <Label Text="Name:" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"/>
+                <Label Text="{Binding Contact.Name}"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill" Margin="0,0,0,10"/>
+
+                <Label Text="Email Address:" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"/>
+                <Label Text="{Binding Contact.EmailAddress}"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"  Margin="0,0,0,10"/>
+
+                <Label Text="Mobile Number:" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"/>
+                <Label Text="{Binding Contact.MobileNumber}"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"  Margin="0,0,0,10"/>
+            </VerticalStackLayout>
+        </Frame>
+        <Button Text="Edit Contact" Style="{StaticResource MyAccountButtonStyle}" 
+                Margin="10,0,0,10" AutomationId="EditContactButton"/>
     </VerticalStackLayout>
 </ContentPage>

@@ -1,4 +1,4 @@
-namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests;
+namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions.MobileTopup;
 
 using System.Threading;
 using System.Threading.Tasks;
@@ -44,10 +44,10 @@ public class MobileTopupSelectOperatorPageViewModelTests
         viewModel.Operators.Count.ShouldBe(3);
 
         ItemSelected<ContractOperatorModel> selectedContractOperator = new ItemSelected<ContractOperatorModel>
-                                                                       {
-                                                                           SelectedItemIndex = 1,
-                                                                           SelectedItem = TestData.ContractOperatorModel
-                                                                       };
+        {
+            SelectedItemIndex = 1,
+            SelectedItem = TestData.ContractOperatorModel
+        };
 
         viewModel.OperatorSelectedCommand.Execute(selectedContractOperator);
 

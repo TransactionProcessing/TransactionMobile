@@ -1,4 +1,4 @@
-namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests;
+namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions.MobileTopup;
 
 using Maui.UIServices;
 using Moq;

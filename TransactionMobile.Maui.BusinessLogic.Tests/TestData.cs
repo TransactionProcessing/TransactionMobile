@@ -191,6 +191,56 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
                 RequireApplicationUpdate = false,
                 ResponseMessage = "FAILED"
             };
+
+        public static MerchantDetailsModel MerchantDetailsModel => new MerchantDetailsModel {
+                                                                                                MerchantName = TestData.MerchantName,
+                                                                                                Contact = new ContactModel {
+                                                                                                              Name = TestData.ContactName,
+                                                                                                              EmailAddress = TestData.ContactEmailAddress,
+                                                                                                              MobileNumber = TestData.ContactMobileNumber
+                                                                                                },
+                                                                                                Address = new AddressModel {
+                                                                                                              AddressLine2 = TestData.AddressLine2,
+                                                                                                              Town = TestData.Town,
+                                                                                                              AddressLine4 = TestData.AddressLine4,
+                                                                                                              PostalCode = TestData.PostalCode,
+                                                                                                              Region = TestData.Region,
+                                                                                                              AddressLine3 = TestData.AddressLine3,
+                                                                                                              AddressLine1 = TestData.AddressLine1
+                                                                                                          },
+                                                                                                AvailableBalance = TestData.AvailableBalance,
+                                                                                                Balance = TestData.Balance,
+                                                                                                LastStatementDate = TestData.LastStatementDate,
+                                                                                                NextStatementDate = TestData.NextStatementDate,
+                                                                                                SettlementSchedule = TestData.SettlementSchedule
+                                                                                            };
+
+        public static Decimal Balance = 100.00m;
+
+        public static Decimal AvailableBalance = 99.00m;
+
+        public static String MerchantName = "Test Merchant";
+
+        public static DateTime NextStatementDate = new DateTime(2022, 09, 01);
+        public static DateTime LastStatementDate = new DateTime(2022, 08, 01);
+
+        public static String SettlementSchedule = "Monthly";
+
+        // Address
+        public static String AddressLine1 = "Address Line 1";
+        public static String AddressLine2 = "Address Line 2";
+        public static String AddressLine3 = "Address Line 3";
+        public static String AddressLine4 = "Address Line 4";
+        public static String PostalCode = "TE57 1NG";
+        public static String Region = "Region";
+        public static String Town = "Town";
+
+        // Contact
+        public static String ContactEmailAddress = "testcontact@myemail.com";
+
+        public static String ContactName = "Mr Test Contact";
+
+        public static String ContactMobileNumber = "077777777";
     }
 }
  

@@ -1,4 +1,4 @@
-namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests;
+namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions.MobileTopup;
 
 using System;
 using System.Collections.Generic;
@@ -23,7 +23,7 @@ public class MobileTopupPerformTopupPageViewModelTests
         Logger.Initialise(NullLogger.Instance);
         MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object);
 
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object>
+        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
@@ -44,13 +44,13 @@ public class MobileTopupPerformTopupPageViewModelTests
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         Logger.Initialise(NullLogger.Instance);
         MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object);
-        Boolean isCompletedCalled = false;
+        bool isCompletedCalled = false;
         viewModel.OnCustomerEmailAddressEntryCompleted = () =>
                                                          {
                                                              isCompletedCalled = true;
                                                          };
 
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object>
+        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
@@ -68,13 +68,13 @@ public class MobileTopupPerformTopupPageViewModelTests
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         Logger.Initialise(NullLogger.Instance);
         MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object);
-        Boolean isCompletedCalled = false;
+        bool isCompletedCalled = false;
         viewModel.OnCustomerMobileNumberEntryCompleted = () =>
                                                          {
                                                              isCompletedCalled = true;
                                                          };
 
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object>
+        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
@@ -92,13 +92,13 @@ public class MobileTopupPerformTopupPageViewModelTests
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         Logger.Initialise(NullLogger.Instance);
         MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object);
-        Boolean isCompletedCalled = false;
+        bool isCompletedCalled = false;
         viewModel.OnTopupAmountEntryCompleted = () =>
                                                 {
                                                     isCompletedCalled = true;
                                                 };
 
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object>
+        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
@@ -117,7 +117,7 @@ public class MobileTopupPerformTopupPageViewModelTests
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         Logger.Initialise(NullLogger.Instance);
         MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object);
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object>
+        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
@@ -125,8 +125,8 @@ public class MobileTopupPerformTopupPageViewModelTests
                                            {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
                                        });
         viewModel.PerformTopupCommand.Execute(null);
-        mediator.Verify(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>()),Times.Once);
-        navigationService.Verify(v => v.GoToMobileTopupSuccessPage(),Times.Once);
+        mediator.Verify(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        navigationService.Verify(v => v.GoToMobileTopupSuccessPage(), Times.Once);
     }
 
     [Fact]
@@ -137,7 +137,7 @@ public class MobileTopupPerformTopupPageViewModelTests
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         Logger.Initialise(NullLogger.Instance);
         MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object);
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object>
+        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},

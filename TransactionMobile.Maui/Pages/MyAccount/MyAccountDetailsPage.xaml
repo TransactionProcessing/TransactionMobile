@@ -7,23 +7,54 @@
     <VerticalStackLayout>
         <userControls:TitleLabel Text="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
 
-        <Label Text="{Binding Balance}"
-               HorizontalTextAlignment="Start"
-               HorizontalOptions="Fill"/>
-        <Label Text="{Binding AvailableBalance}"
-               HorizontalTextAlignment="Start"
-               HorizontalOptions="Fill"/>
-        <Label Text="{Binding NextStatementDate}"
-               HorizontalTextAlignment="Start"
-               HorizontalOptions="Fill"/>
-        <Label Text="{Binding LastStatementDate}"
-               HorizontalTextAlignment="Start"
-               HorizontalOptions="Fill"/>
-        <Label Text="{Binding MerchantName}"
-               HorizontalTextAlignment="Start"
-               HorizontalOptions="Fill"/>
-        <Label Text="{Binding SettlementSchedule}"
-               HorizontalTextAlignment="Start"
-               HorizontalOptions="Fill"/>
+        <Frame HasShadow="True" Padding="50,20,50,20" Margin="10,0,0,10" VerticalOptions="CenterAndExpand" 
+               CornerRadius="20" Opacity="0.9" BackgroundColor="#f5f8fa">
+            <VerticalStackLayout x:Name="SubLayout">
+
+                <Label Text="Name:" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"/>
+                <Label Text="{Binding MerchantName}"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"  Margin="0,0,0,10"/>
+
+                <Label Text="Balance:" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"/>
+                <Label Text="{Binding Balance}"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill" Margin="0,0,0,10"/>
+
+                <Label Text="Available Balance:" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"/>
+                <Label Text="{Binding AvailableBalance}"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"  Margin="0,0,0,10"/>
+
+                <Label Text="Last Statement:" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"/>
+                <Label Text="{Binding LastStatementDate, StringFormat='{0:dd/MM/yyyy}'}"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"  Margin="0,0,0,10"/>
+
+                <Label Text="Next Statement:" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"/>
+                <Label Text="{Binding NextStatementDate, StringFormat='{0:dd/MM/yyyy}'}"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"  Margin="0,0,0,10"/>
+
+                <Label Text="Settlement Schedule:" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"/>
+                <Label Text="{Binding SettlementSchedule}"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"  Margin="0,0,0,10"/>
+            </VerticalStackLayout>
+        </Frame>
+        <Button Text="Edit Details" Style="{StaticResource MyAccountButtonStyle}" 
+                Margin="10,0,0,10" AutomationId="EditDetailsButton"/>
     </VerticalStackLayout>
 </ContentPage>
