@@ -1,7 +1,6 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Requests;
 
 using MediatR;
-using TransactionMobile.Maui.BusinessLogic.Models;
 
 public class GetMerchantBalanceRequest : IRequest<Decimal>
 {
@@ -25,15 +24,4 @@ public class GetMerchantBalanceRequest : IRequest<Decimal>
     }
 
     #endregion
-}
-
-public class GetMerchantDetailsRequest : IRequest<MerchantDetailsModel>
-{
-    public GetMerchantDetailsRequest() {
-        
-    }
-
-    public static GetMerchantDetailsRequest Create() {
-        return new GetMerchantDetailsRequest();
-    }
 }

@@ -4,17 +4,28 @@ using BusinessLogic.ViewModels.MyAccount;
 
 public partial class MyAccountContactPage : ContentPage
 {
-    private MyAccountContactPageViewModel viewModel => BindingContext as MyAccountContactPageViewModel;
+    #region Constructors
 
     public MyAccountContactPage(MyAccountContactPageViewModel vm) {
-        InitializeComponent();
+        this.InitializeComponent();
 
-        BindingContext = vm;
-
+        this.BindingContext = vm;
     }
+
+    #endregion
+
+    #region Properties
+
+    private MyAccountContactPageViewModel viewModel => this.BindingContext as MyAccountContactPageViewModel;
+
+    #endregion
+
+    #region Methods
 
     protected override async void OnAppearing() {
         base.OnAppearing();
-        await viewModel.Initialise(CancellationToken.None);
+        await this.viewModel.Initialise(CancellationToken.None);
     }
+
+    #endregion
 }
