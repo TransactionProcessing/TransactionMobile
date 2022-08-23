@@ -54,6 +54,7 @@ public partial class MyAccountPage : ContentPage
 
             button.SetBinding(Button.CommandProperty, command);
             button.SetBinding(Button.CommandParameterProperty, commandParameter);
+            button.AutomationId = $"{modelOption.Title.Replace(" ", "")}Button";
 
             this.MyAccountOptionsList.Add(button);
 
