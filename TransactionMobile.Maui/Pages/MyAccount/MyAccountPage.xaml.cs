@@ -34,7 +34,7 @@ public partial class MyAccountPage : ContentPage
             {
                 Text = modelOption.Title,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                AutomationId = modelOption.Title,
+                AutomationId = $"{modelOption.Title.Replace(" ", "")}Button",
             };
             button.SetDynamicResource(VisualElement.StyleProperty, "MyAccountButtonStyle");
 
@@ -54,7 +54,6 @@ public partial class MyAccountPage : ContentPage
 
             button.SetBinding(Button.CommandProperty, command);
             button.SetBinding(Button.CommandParameterProperty, commandParameter);
-            button.AutomationId = $"{modelOption.Title.Replace(" ", "")}Button";
 
             this.MyAccountOptionsList.Add(button);
 
