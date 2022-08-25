@@ -108,7 +108,7 @@ public class TransactionRequestHandlerTests
         Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
         Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
         transactionService.Setup(t => t.PerformReconciliation(It.IsAny<PerformReconciliationRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
-        databaseContext.Setup(d => d.GetTransactions()).ReturnsAsync(new List<TransactionRecord>());
+        databaseContext.Setup(d => d.GetTransactions(It.IsAny<Boolean>())).ReturnsAsync(new List<TransactionRecord>());
         TransactionRequestHandler handler = new TransactionRequestHandler(transactionServiceResolver, databaseContext.Object, applicationCache.Object);
 
         PerformReconciliationRequest request = PerformReconciliationRequest.Create(TestData.TransactionDateTime,
@@ -132,7 +132,7 @@ public class TransactionRequestHandlerTests
         Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
         transactionService.Setup(t => t.PerformReconciliation(It.IsAny<PerformReconciliationRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
-        databaseContext.Setup(d => d.GetTransactions()).ReturnsAsync(TestData.StoredTransactions);
+        databaseContext.Setup(d => d.GetTransactions(It.IsAny<Boolean>())).ReturnsAsync(TestData.StoredTransactions);
         TransactionRequestHandler handler = new TransactionRequestHandler(transactionServiceResolver, databaseContext.Object, applicationCache.Object);
 
         PerformReconciliationRequest request = PerformReconciliationRequest.Create(TestData.TransactionDateTime,

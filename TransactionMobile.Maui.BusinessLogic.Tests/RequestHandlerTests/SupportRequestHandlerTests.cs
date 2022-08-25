@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Database;
+using Microsoft.Data.Sqlite;
 using Moq;
 using RequestHandlers;
 using Requests;
@@ -24,7 +25,7 @@ public class SupportRequestHandlerTests
         });
 
         Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
-        databaseContext.Setup(d => d.GetLogMessages(It.IsAny<Int32>())).ReturnsAsync(new List<Database.LogMessage>());
+        databaseContext.Setup(d => d.GetLogMessages(It.IsAny<Int32>(), It.IsAny<Boolean>())).ReturnsAsync(new List<Database.LogMessage>());
         Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
 
         SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, applicationCache.Object);
@@ -45,7 +46,7 @@ public class SupportRequestHandlerTests
             return configurationService.Object;
         });
         Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
-        databaseContext.SetupSequence(d => d.GetLogMessages(It.IsAny<Int32>())).ReturnsAsync(new List<Database.LogMessage>()
+        databaseContext.SetupSequence(d => d.GetLogMessages(It.IsAny<Int32>(), It.IsAny<Boolean>())).ReturnsAsync(new List<Database.LogMessage>()
         {
             new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
             new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
@@ -80,7 +81,7 @@ public class SupportRequestHandlerTests
             return configurationService.Object;
         });
         Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
-        databaseContext.SetupSequence(d => d.GetLogMessages(It.IsAny<Int32>())).ReturnsAsync(new List<Database.LogMessage>()
+        databaseContext.SetupSequence(d => d.GetLogMessages(It.IsAny<Int32>(), It.IsAny<Boolean>())).ReturnsAsync(new List<Database.LogMessage>()
         {
             new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
             new Database.LogMessage{LogLevel = LogLevel.Debug.ToString()},
@@ -111,5 +112,41 @@ public class SupportRequestHandlerTests
 
         response.ShouldBeTrue();
         databaseContext.Verify(d => d.RemoveUploadedMessages(It.IsAny<List<Database.LogMessage>>()), Times.Exactly(2));
+    }
+
+    [Theory]
+    [InlineData(true, 4)]
+    [InlineData(false, 3)]
+    public async Task SupportRequestHandlerTests_ViewLogsRequest_Handle_IsHandled(Boolean isTrainingMode, Int32 expectedNumberMessages) {
+        Mock<IConfigurationService> configurationService = new Mock<IConfigurationService>();
+        Func<Boolean, IConfigurationService> configurationServiceResolver = new Func<bool, IConfigurationService>((param) =>
+        {
+            return configurationService.Object;
+        });
+        Func<Database.LogLevel> logLevelFunc = new Func<Database.LogLevel>(() =>
+                                                                           {
+                                                                               return Database.LogLevel.Debug;
+                                                                           });
+        IDatabaseContext databaseContext = new DatabaseContext(":memory:", logLevelFunc);
+        await databaseContext.InitialiseDatabase();
+
+        List<LogMessage> logMessages = new List<LogMessage>();
+        logMessages.Add(new LogMessage { LogLevel = LogLevel.Debug.ToString()});
+        logMessages.Add(new LogMessage { LogLevel = LogLevel.Debug.ToString() });
+        logMessages.Add(new LogMessage { LogLevel = LogLevel.Debug.ToString() });
+        logMessages.Add(new LogMessage { LogLevel = LogLevel.Debug.ToString(), IsTrainingMode = true});
+        logMessages.Add(new LogMessage { LogLevel = LogLevel.Debug.ToString(), IsTrainingMode = true });
+        logMessages.Add(new LogMessage { LogLevel = LogLevel.Debug.ToString(), IsTrainingMode = true });
+        logMessages.Add(new LogMessage { LogLevel = LogLevel.Debug.ToString(), IsTrainingMode = true });
+        await databaseContext.InsertLogMessages(logMessages);
+        
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        applicationCache.Setup(a => a.GetUseTrainingMode()).Returns(isTrainingMode);
+        SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext, applicationCache.Object);
+
+        ViewLogsRequest request = ViewLogsRequest.Create();
+        List<Models.LogMessage>? result = await handler.Handle(request, CancellationToken.None);
+
+        result.Count.ShouldBe(expectedNumberMessages);
     }
 }

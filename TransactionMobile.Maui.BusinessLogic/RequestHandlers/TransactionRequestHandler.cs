@@ -208,21 +208,17 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
     {
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
 
-        List<TransactionRecord> storedTransactions = await this.DatabaseContext.GetTransactions();
+        List<TransactionRecord> storedTransactions = await this.DatabaseContext.GetTransactions(useTrainingMode);
 
         if (storedTransactions.Any() == false)
         {
             return true;
         }
-
-        // Filter based on training mode
-        storedTransactions = storedTransactions.Where(t => t.IsTrainingMode == useTrainingMode).ToList();
-
+        
         // TODO: convert these to operator totals
         List<OperatorTotalModel> operatorTotals = (from t in storedTransactions
                                                    where t.IsSuccessful = true &&
                                                                           t.TransactionType != 1 // Filter out logons
-                                                                          && t.IsTrainingMode == useTrainingMode
                                                    group t by new
                                                               {
                                                                   t.ContractId,
