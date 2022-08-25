@@ -14,3 +14,13 @@ public partial class LoginFeature : BaseTestFixture
     {
     }
 }
+
+[TestFixture(MobileTestPlatform.Android, Category = "Android")]
+[TestFixture(MobileTestPlatform.iOS, Category = "iOS")]
+public partial class ProfileFeature : BaseTestFixture
+{
+    public ProfileFeature(MobileTestPlatform mobileTestPlatform)
+        : base(mobileTestPlatform)
+    {
+    }
+}

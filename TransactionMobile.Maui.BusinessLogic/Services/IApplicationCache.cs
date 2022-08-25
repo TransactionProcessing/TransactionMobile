@@ -32,4 +32,8 @@ public interface IApplicationCache
     Guid GetMerchantId();
 
     void SetMerchantId(Guid value, MemoryCacheEntryOptions options = default);
+
+    MerchantDetailsModel GetMerchantDetails();
+
+    void SetMerchantDetails(MerchantDetailsModel value, MemoryCacheEntryOptions options = default);
 }

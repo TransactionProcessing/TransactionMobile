@@ -23,6 +23,8 @@ namespace TransactionMobile.Maui.UiTests.Features
     [NUnit.Framework.DescriptionAttribute("Login")]
     [NUnit.Framework.CategoryAttribute("background")]
     [NUnit.Framework.CategoryAttribute("login")]
+    [NUnit.Framework.CategoryAttribute("toolbar")]
+    [NUnit.Framework.CategoryAttribute("profile")]
     public partial class LoginFeature
     {
         
@@ -30,7 +32,9 @@ namespace TransactionMobile.Maui.UiTests.Features
         
         private static string[] featureTags = new string[] {
                 "background",
-                "login"};
+                "login",
+                "toolbar",
+                "profile"};
         
 #line 1 "Login.feature"
 #line hidden

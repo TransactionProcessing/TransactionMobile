@@ -17,7 +17,7 @@
     <TabBar Route="main">
 
         <ShellContent ContentTemplate="{DataTemplate home:HomePage}" Title="Home"
-                       Route="home" Icon="homebutton"/>
+                      Route="home" Icon="homebutton"/>
 
         <ShellContent ContentTemplate="{DataTemplate transactions:TransactionsPage}" Title="Transactions"
                       Route="transactions" Icon="transactionsbutton"/>
@@ -29,7 +29,7 @@
                       Route="myaccount" Icon="profilebutton"/>
 
         <ShellContent ContentTemplate="{DataTemplate support:SupportPage}" Title="Support"
-                      Route="support" Icon="supportbutton" />
+                      Route="support" Icon="supportbutton"   />
     </TabBar>
 
 

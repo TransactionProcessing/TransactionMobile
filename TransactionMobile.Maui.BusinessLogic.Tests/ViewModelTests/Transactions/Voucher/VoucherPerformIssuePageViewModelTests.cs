@@ -1,4 +1,4 @@
-namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests;
+namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions.Voucher;
 
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ public class VoucherPerformIssuePageViewModelTests
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         VoucherPerformIssuePageViewModel viewModel = new VoucherPerformIssuePageViewModel(mediator.Object, navigationService.Object);
 
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object>
+        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
@@ -43,13 +43,13 @@ public class VoucherPerformIssuePageViewModelTests
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         Logger.Initialise(NullLogger.Instance);
         VoucherPerformIssuePageViewModel viewModel = new VoucherPerformIssuePageViewModel(mediator.Object, navigationService.Object);
-        Boolean isCompletedCalled = false;
+        bool isCompletedCalled = false;
         viewModel.OnCustomerEmailAddressEntryCompleted = () =>
                                                          {
                                                              isCompletedCalled = true;
                                                          };
 
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object>
+        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
@@ -67,13 +67,13 @@ public class VoucherPerformIssuePageViewModelTests
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         Logger.Initialise(NullLogger.Instance);
         VoucherPerformIssuePageViewModel viewModel = new VoucherPerformIssuePageViewModel(mediator.Object, navigationService.Object);
-        Boolean isCompletedCalled = false;
+        bool isCompletedCalled = false;
         viewModel.OnRecipientMobileNumberEntryCompleted = () =>
                                                           {
                                                               isCompletedCalled = true;
                                                           };
 
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object>
+        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
@@ -91,13 +91,13 @@ public class VoucherPerformIssuePageViewModelTests
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         Logger.Initialise(NullLogger.Instance);
         VoucherPerformIssuePageViewModel viewModel = new VoucherPerformIssuePageViewModel(mediator.Object, navigationService.Object);
-        Boolean isCompletedCalled = false;
+        bool isCompletedCalled = false;
         viewModel.OnRecipientEmailAddressEntryCompleted = () =>
                                                           {
                                                               isCompletedCalled = true;
                                                           };
 
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object>
+        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
@@ -115,13 +115,13 @@ public class VoucherPerformIssuePageViewModelTests
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         Logger.Initialise(NullLogger.Instance);
         VoucherPerformIssuePageViewModel viewModel = new VoucherPerformIssuePageViewModel(mediator.Object, navigationService.Object);
-        Boolean isCompletedCalled = false;
+        bool isCompletedCalled = false;
         viewModel.OnVoucherAmountEntryCompleted = () =>
                                                   {
                                                       isCompletedCalled = true;
                                                   };
 
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object>
+        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
@@ -140,7 +140,7 @@ public class VoucherPerformIssuePageViewModelTests
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         Logger.Initialise(NullLogger.Instance);
         VoucherPerformIssuePageViewModel viewModel = new VoucherPerformIssuePageViewModel(mediator.Object, navigationService.Object);
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object>
+        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
@@ -161,7 +161,7 @@ public class VoucherPerformIssuePageViewModelTests
         Logger.Initialise(NullLogger.Instance);
 
         VoucherPerformIssuePageViewModel viewModel = new VoucherPerformIssuePageViewModel(mediator.Object, navigationService.Object);
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object>
+        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
                                            {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},

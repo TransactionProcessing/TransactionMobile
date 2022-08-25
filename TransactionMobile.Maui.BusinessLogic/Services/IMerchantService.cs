@@ -13,5 +13,7 @@ public interface IMerchantService
 
     Task<Decimal> GetMerchantBalance(CancellationToken cancellationToken);
 
+    Task<MerchantDetailsModel> GetMerchantDetails(CancellationToken cancellationToken);
+
     #endregion
 }

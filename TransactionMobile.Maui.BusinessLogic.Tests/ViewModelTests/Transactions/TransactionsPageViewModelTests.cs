@@ -1,4 +1,4 @@
-namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests;
+namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions;
 
 using Maui.UIServices;
 using Moq;
@@ -14,7 +14,7 @@ public class TransactionsPageViewModelTests
     {
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         TransactionsPageViewModel viewModel = new TransactionsPageViewModel(navigationService.Object);
-            
+
         viewModel.AdminCommand.Execute(null);
         navigationService.Verify(n => n.GoToAdminPage(), Times.Once);
     }

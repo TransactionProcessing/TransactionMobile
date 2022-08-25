@@ -46,6 +46,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
                     AppiumDriverWrapper.SetupiOSDriver(appiumService);
                 }
 
+                //AppiumDriverWrapper.Driver.StartRecordingScreen();
             }
             catch (Exception e)
             {
@@ -105,6 +106,12 @@ namespace TransactionMobile.Maui.UiTests.Drivers
         public void StopApp()
         {
             AppiumDriverWrapper.Driver?.CloseApp();
+
+            //String video = AppiumDriverWrapper.Driver.StopRecordingScreen();
+            //byte[] decode = Convert.FromBase64String(video);
+
+            //String fileName = "c:\\temp\\VideoRecording_test.mp4";
+            //File.WriteAllBytes(fileName, decode); ;
         }
     }
 }

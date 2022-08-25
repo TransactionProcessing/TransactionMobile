@@ -96,4 +96,30 @@ public class DummyMerchantService : IMerchantService
     {
         return 100;
     }
+
+    public async Task<MerchantDetailsModel> GetMerchantDetails(CancellationToken cancellationToken) {
+        MerchantDetailsModel model = new MerchantDetailsModel {
+                                                                  Address = new AddressModel {
+                                                                                                 AddressLine1 = "test address line 1",
+                                                                                                 AddressLine2 = "test address line 2",
+                                                                                                 AddressLine3 = "test address line 3",
+                                                                                                 AddressLine4 = "test address line 4",
+                                                                                                 PostalCode = "TE57 1NG",
+                                                                                                 Region = "Region",
+                                                                                                 Town = "Town"
+                                                                                             },
+                                                                  Contact = new ContactModel {
+                                                                                                 Name = "Test Contact",
+                                                                                                 EmailAddress = "stuart_ferguson1@outlook.com",
+                                                                                                 MobileNumber = "123456789"
+                                                                                             },
+                                                                  LastStatementDate = new DateTime(2022,8,1),
+                                                                  NextStatementDate = new DateTime(2022, 9, 1),
+                                                                  MerchantName = "Dummy Merchant",
+                                                                  SettlementSchedule = "Monthly",
+                                                                  AvailableBalance = 100,
+                                                                  Balance = 99
+                                                              };
+        return model;
+    }
 }

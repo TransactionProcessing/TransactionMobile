@@ -5,13 +5,36 @@
              xmlns:userControls="clr-namespace:TransactionMobile.Maui.Controls;assembly=TransactionMobile.Maui"
              Shell.NavBarIsVisible="False">
     <VerticalStackLayout>
-        <userControls:TitleLabel Text="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-        <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
-               CornerRadius="20" Opacity="0.9" BackgroundColor="#E5E9F0">
-            <VerticalStackLayout Spacing="10">
-                <Button AutomationId="LogoutButton" Command="{Binding LogoutCommand}" x:Name="LogoutButton" Text="Logout" Style="{DynamicResource MobileTopupButtonStyle}"/>
-            </VerticalStackLayout>
-        </Frame>
+        <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+
+        <HorizontalStackLayout>
+            <Label Text="Merchant Name:"
+                   HorizontalTextAlignment="Center"
+                   HorizontalOptions="Fill"
+                   FontAttributes="Bold" FontSize="15"
+                   Margin="0,0,5,5"/>
+            <Label Text="{Binding MerchantName}"
+                   HorizontalTextAlignment="Center"
+                   HorizontalOptions="Fill"
+                   FontSize="15"/>
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout>
+            <Label Text="Last Login:"
+                   HorizontalTextAlignment="Center"
+                   HorizontalOptions="Fill"
+                   FontAttributes="Bold" FontSize="15"
+                   Margin="0,0,5,10"/>
+            <Label Text="{Binding LastLogin, StringFormat='{0:dd/MM/yyyy HH:mm:ss}'}"
+                   HorizontalTextAlignment="Center"
+                   HorizontalOptions="Fill"
+                   FontSize="15"/>
+        </HorizontalStackLayout>
+        
+        
+
+        <VerticalStackLayout x:Name="MyAccountOptionsList" Spacing="10">
+        </VerticalStackLayout>
     </VerticalStackLayout>
 
 </ContentPage>

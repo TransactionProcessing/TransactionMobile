@@ -65,6 +65,15 @@
 	</ItemGroup>
 		
 	<ItemGroup>
+	  <Compile Update="Pages\MyAccount\MyAccountAddressesPage.xaml.cs">
+	    <DependentUpon>MyAccountAddressesPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\MyAccount\MyAccountDetailsPage.xaml.cs">
+	    <DependentUpon>MyAccountDetailsPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\MyAccount\MyAccountContactPage.xaml.cs">
+	    <DependentUpon>MyAccountContactPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\MyAccount\MyAccountPage.xaml.cs">
 	    <DependentUpon>MyAccountPage.xaml</DependentUpon>
 	  </Compile>
@@ -117,6 +126,15 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\LoginPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\MyAccount\MyAccountDetailsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\MyAccount\MyAccountContactPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\MyAccount\MyAccountAddressesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\MyAccount\MyAccountPage.xaml">
@@ -206,25 +224,23 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-android|AnyCPU'">
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	  <MtouchLink>None</MtouchLink>
+	  <PublishTrimmed>True</PublishTrimmed>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-android|AnyCPU'">
 		<MtouchLink>None</MtouchLink>
+		<PublishTrimmed>False</PublishTrimmed>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-ios|AnyCPU'">
-	  <MtouchLink>SdkOnly</MtouchLink>
-	  <TrimMode>link</TrimMode>
+	  <MtouchLink>None</MtouchLink>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-ios|AnyCPU'">
 	  <MtouchLink>SdkOnly</MtouchLink>
-	  <TrimMode>link</TrimMode>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-maccatalyst|AnyCPU'">
 	  <MtouchLink>SdkOnly</MtouchLink>
-	  <TrimMode>link</TrimMode>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-maccatalyst|AnyCPU'">
 	  <MtouchLink>SdkOnly</MtouchLink>
-	  <TrimMode>link</TrimMode>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows10.0.19041|AnyCPU'">
 	  <MtouchLink>SdkOnly</MtouchLink>
