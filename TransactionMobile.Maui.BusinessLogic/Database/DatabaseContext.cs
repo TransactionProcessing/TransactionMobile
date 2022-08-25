@@ -49,9 +49,9 @@
         {
             if (this.Connection == null)
                 return new List<LogMessage>();
-
-            List<LogMessage> messages = this.Connection.Table<LogMessage>().OrderBy(l => l.EntryDateTime).Take(batchSize).ToList();
-
+           
+            List<LogMessage> messages = this.Connection.Table<LogMessage>().OrderByDescending(l => l.EntryDateTime).Take(batchSize).ToList();
+            
             return messages;
         }
 

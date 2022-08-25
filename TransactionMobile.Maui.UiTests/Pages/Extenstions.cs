@@ -31,9 +31,11 @@ public static class Extenstions
         timeout ??= TimeSpan.FromSeconds(60);
         await Retry.For(async () => {
                             for (int i = 0; i < 10; i++) {
+
+                                String message = $"Unable to find element on page: {selector} {Environment.NewLine} Source: {AppiumDriverWrapper.Driver.PageSource}"; 
                                 driver.ScrollDown();
                                 element = driver.FindElement(MobileBy.AccessibilityId(selector));
-                                element.ShouldNotBeNull();
+                                element.ShouldNotBeNull(message);
                                 // All good so exit the loop
                                 break;
                             }
@@ -73,7 +75,7 @@ public static class Extenstions
                         {
                             IWebElement? element = driver.FindElement(MobileBy.AccessibilityId(selector));
                             element.ShouldBeNull();
-                        });
+                        }, timeout);
 
     }
 

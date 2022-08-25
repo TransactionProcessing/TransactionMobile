@@ -22,7 +22,7 @@ namespace TransactionMobile.Maui.UITests
 
             await Retry.For(async () =>
             {
-                String message = $"Unable to verify on page: {this.GetType().Name} {Environment.NewLine} Source: {AppiumDriverWrapper.Driver.PageSource}";
+                String message = $"Unable to verify on page: {this.GetType().Name} with trait {this.Trait} {Environment.NewLine} Source: {AppiumDriverWrapper.Driver.PageSource}";
 
                 Should.NotThrow(() => this.WaitForElementByAccessibilityId(this.Trait), message);
             },
@@ -36,8 +36,8 @@ namespace TransactionMobile.Maui.UITests
         /// <param name="timeout">Time to wait before the assertion fails</param>
         public void WaitForPageToLeave(TimeSpan? timeout = null)
         {
-            timeout = timeout ?? TimeSpan.FromSeconds(5);
-            var message = "Unable to verify *not* on page: " + this.GetType().Name;
+            timeout = timeout ?? TimeSpan.FromSeconds(60);
+            String message = "Unable to verify *not* on page: " + this.GetType().Name;
 
             Should.NotThrow(() => this.WaitForNoElementByAccessibilityId(this.Trait), message);
         }
@@ -86,6 +86,12 @@ namespace TransactionMobile.Maui.UITests
         public void NavigateBack()
         {
             AppiumDriverWrapper.Driver.Navigate().Back();
+        }
+
+        public async Task<String> GetLabelValue(String labelAutomationId)
+        {
+            IWebElement element = await this.WaitForElementByAccessibilityId(labelAutomationId);
+            return element.Text;
         }
     }
 }

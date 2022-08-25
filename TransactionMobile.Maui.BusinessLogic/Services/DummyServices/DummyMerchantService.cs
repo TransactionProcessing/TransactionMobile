@@ -113,10 +113,12 @@ public class DummyMerchantService : IMerchantService
                                                                                                  EmailAddress = "stuart_ferguson1@outlook.com",
                                                                                                  MobileNumber = "123456789"
                                                                                              },
-                                                                  LastStatementDate = DateTime.Now.AddDays(-30),
-                                                                  NextStatementDate = DateTime.Now.AddDays(30),
+                                                                  LastStatementDate = new DateTime(2022,8,1),
+                                                                  NextStatementDate = new DateTime(2022, 9, 1),
                                                                   MerchantName = "Dummy Merchant",
-                                                                  SettlementSchedule = "Monthly"
+                                                                  SettlementSchedule = "Monthly",
+                                                                  AvailableBalance = 100,
+                                                                  Balance = 99
                                                               };
         return model;
     }

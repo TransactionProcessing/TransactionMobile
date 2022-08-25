@@ -1,5 +1,6 @@
 ﻿namespace TransactionMobile.Maui.UIServices;
 
+using BusinessLogic.ViewModels.MyAccount;
 using Pages;
 using Pages.MyAccount;
 using Pages.Support;
@@ -29,7 +30,7 @@ public class ShellNavigationService : INavigationService
     }
 
     public async Task GoToMobileTopupSelectOperatorPage() {
-        await NavigateTo(nameof(MobileTopupSelectOperatorPage));
+        await NavigateTo($"transactions/{nameof(MobileTopupSelectOperatorPage)}");
     }
 
     public async Task GoToAdminPage() {
@@ -82,7 +83,8 @@ public class ShellNavigationService : INavigationService
     }
 
     public async Task GoToMyAccountAddresses() {
-        await NavigateTo(nameof(MyAccountAddressesPage));
+        MyAccountAddressesPage p = (MyAccountAddressesPage)MauiProgram.Container.Services.GetService(typeof(MyAccountAddressesPage));
+        await NavigateTo(p);
     }
 
     public async Task GoToMyAccountContacts() {
@@ -97,10 +99,23 @@ public class ShellNavigationService : INavigationService
         try {
             Shared.Logger.Logger.LogInformation($"navigating to {route}");
             await Shell.Current.GoToAsync(route);
-        }
+            }
         catch(Exception e) {
             Exception ex = new Exception("Error navigating to {route}", e);
             Shared.Logger.Logger.LogError(ex);
+        }
+    }
+
+    private async Task NavigateTo(ContentPage page){
+        try
+        {
+            //Shared.Logger.Logger.LogInformation($"navigating to {route}");
+            await Shell.Current.Navigation.PushAsync(page);
+        }
+        catch (Exception e)
+        {
+            //Exception ex = new Exception("Error navigating to {route}", e);
+            Shared.Logger.Logger.LogError(e);
         }
     }
     #endregion
