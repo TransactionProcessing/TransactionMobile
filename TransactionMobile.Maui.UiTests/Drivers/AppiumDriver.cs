@@ -86,7 +86,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.DeviceName = "emulator-5554";
             
             // TODO: Only do this locally
-            //driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
+            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
             driverOptions.AddAdditionalAppiumOption("appPackage", "com.transactionprocessing.pos");
             //driverOptions.AddAdditionalAppiumOption("forceEspressoRebuild", true);
             driverOptions.AddAdditionalAppiumOption("enforceAppInstall", true);
