@@ -25,7 +25,6 @@ Scenario: View Merchant Contacts
 	| Name         | EmailAddress                 | MobileNumber |
 	| Test Contact | stuart_ferguson1@outlook.com | 123456789    |
 
-@PRTest
 Scenario: View Merchant Details
 	When I tap on the Account Info button
 	Then the Account Info Page is displayed

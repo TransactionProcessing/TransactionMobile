@@ -55,7 +55,7 @@
 
         public String ApplicationName => $"{this.ApplicationInfoService.ApplicationName} v{this.ApplicationInfoService.VersionString}";
 
-        public String NumberTransactionsStored => $"Transactions Stored: {this.DatabaseContext.GetTransactions().Result.Count()}";
+        public String NumberTransactionsStored => $"Transactions Stored: {this.DatabaseContext.GetTransactions(this.ApplicationCache.GetUseTrainingMode()).Result.Count()}";
 
         public String Platform {
             get {

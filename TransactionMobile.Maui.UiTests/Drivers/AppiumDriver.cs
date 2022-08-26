@@ -79,14 +79,14 @@ namespace TransactionMobile.Maui.UiTests.Drivers
         private static void SetupAndroidDriver(AppiumLocalService appiumService) {
             // Do Android stuff to start up
             var driverOptions = new AppiumOptions();
-            driverOptions.AddAdditionalAppiumOption("adbExecTimeout", TimeSpan.FromMinutes(5).Milliseconds);
+            driverOptions.AddAdditionalAppiumOption("adbExecTimeout", TimeSpan.FromMinutes(5).TotalMilliseconds);
             driverOptions.AutomationName = "UIAutomator2";
             driverOptions.PlatformName = "Android";
             driverOptions.PlatformVersion = "9.0";
             driverOptions.DeviceName = "emulator-5554";
-
+            
             // TODO: Only do this locally
-            //driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
+            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
             driverOptions.AddAdditionalAppiumOption("appPackage", "com.transactionprocessing.pos");
             //driverOptions.AddAdditionalAppiumOption("forceEspressoRebuild", true);
             driverOptions.AddAdditionalAppiumOption("enforceAppInstall", true);

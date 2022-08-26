@@ -36,7 +36,8 @@ public static class MauiProgram
 
 		// Setup static logger
 		IDatabaseContext databaseContext = MauiProgram.Container.Services.GetService<IDatabaseContext>();
-		Logger.Initialise(new DatabaseLogger(databaseContext));
+        IApplicationCache applicationCache = MauiProgram.Container.Services.GetService<IApplicationCache>();
+        Logger.Initialise(new DatabaseLogger(databaseContext,applicationCache));
 
 		return Container;
 	}

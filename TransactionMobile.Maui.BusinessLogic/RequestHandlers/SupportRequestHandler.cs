@@ -29,9 +29,11 @@ namespace TransactionMobile.Maui.BusinessLogic.RequestHandlers
 
         public async Task<Boolean> Handle(UploadLogsRequest request, CancellationToken cancellationToken)
         {
+            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+
             while (true)
             {
-                List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(10); // TODO: Configurable batch size
+                List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(10, useTrainingMode); // TODO: Configurable batch size
 
                 if (logEntries.Any() == false)
                 {
@@ -49,7 +51,6 @@ namespace TransactionMobile.Maui.BusinessLogic.RequestHandlers
                     EntryDateTime = l.EntryDateTime,
                     Id = l.Id
                 }));
-                Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
                 IConfigurationService configurationService = this.ConfigurationServiceResolver(useTrainingMode);
                 await configurationService.PostDiagnosticLogs(request.DeviceIdentifier, logMessageModels, CancellationToken.None);
 
@@ -62,7 +63,9 @@ namespace TransactionMobile.Maui.BusinessLogic.RequestHandlers
 
         public async Task<List<Models.LogMessage>> Handle(ViewLogsRequest request,
                                                     CancellationToken cancellationToken) {
-            List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(50); // TODO: Configurable batch size
+            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+
+            List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(50, useTrainingMode); // TODO: Configurable batch size
 
             List<Models.LogMessage> logMessageModels = new List<Models.LogMessage>();
 
