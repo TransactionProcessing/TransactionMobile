@@ -3,7 +3,10 @@ namespace TransactionMobile.Maui;
 //using Android.Media;
 using System.Diagnostics;
 using System.Windows.Input;
+using BusinessLogic.UIServices;
 using Newtonsoft.Json;
+using Pages;
+using TransactionMobile.Maui.UIServices;
 using Shell = Microsoft.Maui.Controls.Shell;
 
 public partial class AppShell : Shell
@@ -13,22 +16,27 @@ public partial class AppShell : Shell
 		InitializeComponent();
 	}
 
-    protected override void OnNavigating(ShellNavigatingEventArgs args) {
+    protected override async void OnNavigating(ShellNavigatingEventArgs args) {
+        base.OnNavigating(args);
+        
         Shared.Logger.Logger.LogDebug($"In OnNavigating - Source [{args.Source.ToString()}] {JsonConvert.SerializeObject(args)}");
         if (args.Source == ShellNavigationSource.ShellSectionChanged) {
-            var existingPages = Navigation.NavigationStack.ToList();
-            foreach (var page in existingPages)
+            List<Page> existingPages = Navigation.NavigationStack.ToList();
+            foreach (Page page in existingPages)
             {
+                if (page is (LoginPage))
+                    continue;
+                
                 if (page != null) {
                     Navigation.RemovePage(page);
                 }
             }
         }
-        base.OnNavigating(args);
     }
 
     protected override void OnNavigated(ShellNavigatedEventArgs args) {
         Shared.Logger.Logger.LogDebug($"In OnNavigated - Source [{args.Source.ToString()}] {JsonConvert.SerializeObject(args)}");
+        
         base.OnNavigated(args);
     }
 }

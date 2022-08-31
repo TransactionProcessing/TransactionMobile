@@ -24,35 +24,27 @@ namespace TransactionMobile.Maui.UiTests.Drivers
         public static MobileTestPlatform MobileTestPlatform;
         public static AppiumDriver Driver;
 
-        public void StartApp()
-        {
+        public static String PacakageName;
 
-            var streamWriter = new StreamWriter("C:\\Temp\\Debugging.log", append:true);
-            try
-            {
-                
-                AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723).Build();
+        public void StartApp() {
+            AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723).Build();
 
-                if (appiumService.IsRunning == false)
-                {
-                    appiumService.Start();
-                    appiumService.OutputDataReceived += (sender, args) => { Console.WriteLine(args.Data); };
-                }
-
-                if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
-                    AppiumDriverWrapper.SetupAndroidDriver(appiumService);
-                }
-                else if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.iOS) {
-                    AppiumDriverWrapper.SetupiOSDriver(appiumService);
-                }
-
-                //AppiumDriverWrapper.Driver.StartRecordingScreen();
+            if (appiumService.IsRunning == false) {
+                appiumService.Start();
+                appiumService.OutputDataReceived += (sender,
+                                                     args) => {
+                                                        Console.WriteLine(args.Data);
+                                                    };
             }
-            catch (Exception e)
-            {
-                streamWriter.Close();
-                throw;
+
+            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
+                AppiumDriverWrapper.SetupAndroidDriver(appiumService);
             }
+            else if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.iOS) {
+                AppiumDriverWrapper.SetupiOSDriver(appiumService);
+            }
+
+            //AppiumDriverWrapper.Driver.StartRecordingScreen();
         }
 
         private static void SetupiOSDriver(AppiumLocalService appiumService) {
@@ -88,12 +80,8 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             // TODO: Only do this locally
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
             driverOptions.AddAdditionalAppiumOption("appPackage", "com.transactionprocessing.pos");
-            //driverOptions.AddAdditionalAppiumOption("forceEspressoRebuild", true);
             driverOptions.AddAdditionalAppiumOption("enforceAppInstall", true);
             driverOptions.AddAdditionalAppiumOption("uiautomator2ServerInstallTimeout", "40000");
-            //driverOptions.AddAdditionalAppiumOption("noSign", true);
-            //driverOptions.AddAdditionalAppiumOption("espressoBuildConfig",
-            //    "{ \"additionalAppDependencies\": [ \"com.google.android.material:material:1.0.0\", \"androidx.lifecycle:lifecycle-extensions:2.1.0\" ] }");
 
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net6.0-android/");
@@ -106,7 +94,8 @@ namespace TransactionMobile.Maui.UiTests.Drivers
         public void StopApp()
         {
             AppiumDriverWrapper.Driver?.CloseApp();
-
+            //AppiumDriverWrapper.Driver?.Close();
+            AppiumDriverWrapper.Driver?.Quit();
             //String video = AppiumDriverWrapper.Driver.StopRecordingScreen();
             //byte[] decode = Convert.FromBase64String(video);
 

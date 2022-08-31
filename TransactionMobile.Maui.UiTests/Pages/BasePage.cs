@@ -18,7 +18,7 @@ namespace TransactionMobile.Maui.UITests
 
         public async Task AssertOnPage(TimeSpan? timeout = null)
         {
-            timeout = timeout ?? TimeSpan.FromSeconds(60);
+            timeout = timeout ?? TimeSpan.FromMinutes(3);
 
             await Retry.For(async () =>
             {
@@ -26,8 +26,8 @@ namespace TransactionMobile.Maui.UITests
 
                 Should.NotThrow(() => this.WaitForElementByAccessibilityId(this.Trait), message);
             },
-                            TimeSpan.FromMinutes(1),
-                            timeout).ConfigureAwait(false);
+                            timeout,
+                            TimeSpan.FromSeconds(60)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -73,9 +73,16 @@ namespace TransactionMobile.Maui.UITests
             }
         }
 
-        public IWebElement GetAlert()
+        public void AcceptAlert()
         {
-            return AppiumDriverWrapper.Driver.FindElement(By.Name("OK"));
+            IAlert a = this.SwitchToAlert();
+            a.Accept();
+        }
+
+        public void DismissAlert()
+        {
+            IAlert a = this.SwitchToAlert();
+            a.Dismiss();
         }
 
         public IAlert SwitchToAlert()

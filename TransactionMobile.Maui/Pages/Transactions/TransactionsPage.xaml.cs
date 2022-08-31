@@ -1,8 +1,9 @@
 namespace TransactionMobile.Maui.Pages.Transactions;
 
 using BusinessLogic.ViewModels.Transactions;
+using TransactionMobile.Maui.Pages.Common;
 
-public partial class TransactionsPage : ContentPage
+public partial class TransactionsPage : NoBackWithoutLogoutPage
 {
     private TransactionsPageViewModel viewModel => BindingContext as TransactionsPageViewModel;
 

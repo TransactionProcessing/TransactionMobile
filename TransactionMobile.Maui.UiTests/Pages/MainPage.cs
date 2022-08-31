@@ -31,14 +31,14 @@ public class MainPage : BasePage
 
     public async Task ClickTransactionsButton()
     {
-        //var element = await this.WaitForElementByAccessibilityId(this.TransactionsButton);
-        //element.Click();
+        var element = await this.WaitForElementByAccessibilityId(this.TransactionsButton);
+        element.Click();
     }
 
     public async Task ClickReportsButton()
     {
-        //var element = await this.WaitForElementByAccessibilityId(this.ReportsButton);
-        //element.Click();
+        var element = await this.WaitForElementByAccessibilityId(this.ReportsButton);
+        element.Click();
     }
 
     public async Task ClickProfileButton() {
@@ -46,10 +46,10 @@ public class MainPage : BasePage
         element.Click();
     }
 
-    public void ClickSupportButton()
+    public async Task ClickSupportButton()
     {
-        //app.WaitForElement(this.SupportButton);
-        //app.Tap(this.SupportButton);
+        var element = await this.WaitForElementByAccessibilityId(this.SupportButton);
+        element.Click();
     }
 
     public async Task<Decimal> GetAvailableBalanceValue(TimeSpan? timeout = default(TimeSpan?))

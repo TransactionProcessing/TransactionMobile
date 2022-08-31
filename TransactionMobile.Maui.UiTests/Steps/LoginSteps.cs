@@ -17,6 +17,7 @@ namespace TransactionMobile.Maui.UITests.Steps
         MainPage mainPage = new MainPage();
 
         [Given(@"I am on the Login Screen")]
+        [Then("the Login Page is displayed")]
         public async Task GivenIAmOnTheLoginScreen() {
             await this.loginPage.AssertOnPage();
         }
