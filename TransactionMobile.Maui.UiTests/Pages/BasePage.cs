@@ -18,7 +18,7 @@ namespace TransactionMobile.Maui.UITests
 
         public async Task AssertOnPage(TimeSpan? timeout = null)
         {
-            timeout = timeout ?? TimeSpan.FromSeconds(60);
+            timeout = timeout ?? TimeSpan.FromMinutes(3);
 
             await Retry.For(async () =>
             {
@@ -26,8 +26,8 @@ namespace TransactionMobile.Maui.UITests
 
                 Should.NotThrow(() => this.WaitForElementByAccessibilityId(this.Trait), message);
             },
-                            TimeSpan.FromMinutes(1),
-                            timeout).ConfigureAwait(false);
+                            timeout,
+                            TimeSpan.FromSeconds(60)).ConfigureAwait(false);
         }
 
         /// <summary>
