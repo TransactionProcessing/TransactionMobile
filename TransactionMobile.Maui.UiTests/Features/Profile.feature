@@ -11,6 +11,7 @@ Background:
 	When I tap on Profile
 	Then the My Profile Page is displayed
 
+@PRTest
 Scenario: View Merchant Addresses
 	When I tap on the Addresses button
 	Then the Address List Page is displayed
