@@ -24,3 +24,13 @@ public partial class ProfileFeature : BaseTestFixture
     {
     }
 }
+
+[TestFixture(MobileTestPlatform.Android, Category = "Android")]
+[TestFixture(MobileTestPlatform.iOS, Category = "iOS")]
+public partial class PageNavigationFeature : BaseTestFixture
+{
+    public PageNavigationFeature(MobileTestPlatform mobileTestPlatform)
+        : base(mobileTestPlatform)
+    {
+    }
+}

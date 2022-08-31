@@ -1,12 +1,19 @@
 namespace TransactionMobile.Maui.Pages.AppHome;
 
+using BusinessLogic.Services;
+using BusinessLogic.UIServices;
 using BusinessLogic.ViewModels;
+using Common;
+using UIServices;
 
-public partial class HomePage : ContentPage
+public partial class HomePage : NoBackWithoutLogoutPage
 {
     #region Constructors
 
-    public HomePage(HomePageViewModel vm) {
+    public HomePage(HomePageViewModel vm,
+                    IDialogService dialogService,
+                    IApplicationCache applicationCache,
+                    INavigationService navigationService) {
         this.InitializeComponent();
         this.BindingContext = vm;
     }

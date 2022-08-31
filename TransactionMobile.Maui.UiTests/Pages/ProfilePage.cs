@@ -18,8 +18,11 @@ namespace TransactionMobile.Maui.UiTests.Pages
         protected override String Trait => "My Account";
 
         private readonly String LogoutButton;
+
         private readonly String AddressesButton;
+
         private readonly String ContactsButton;
+
         private readonly String AccountInfoButton;
 
 
@@ -30,28 +33,24 @@ namespace TransactionMobile.Maui.UiTests.Pages
             this.AccountInfoButton = "AccountInfoButton";
         }
 
-        public async Task ClickLogoutButton()
-        {
+        public async Task ClickLogoutButton() {
             IWebElement element = await this.WaitForElementByAccessibilityId(this.LogoutButton);
             element.Click();
         }
 
-        public async Task ClickAddressesButton()
-        {
+        public async Task ClickAddressesButton() {
             IWebElement element = await this.WaitForElementByAccessibilityId(this.AddressesButton);
             element.Click();
 
             var x = await AppiumDriverWrapper.Driver.GetPageSource();
         }
 
-        public async Task ClickContactsButton()
-        {
+        public async Task ClickContactsButton() {
             IWebElement element = await this.WaitForElementByAccessibilityId(this.ContactsButton);
             element.Click();
         }
 
-        public async Task ClickAccountInfoButton()
-        {
+        public async Task ClickAccountInfoButton() {
             IWebElement element = await this.WaitForElementByAccessibilityId(this.AccountInfoButton);
             element.Click();
         }
@@ -100,16 +99,16 @@ namespace TransactionMobile.Maui.UiTests.Pages
                 4 => await this.GetLabelValue(this.AddressLine4Label)
             };
         }
-        public async Task<String> GetAddressRegionValue()
-        {
+
+        public async Task<String> GetAddressRegionValue() {
             return await this.GetLabelValue(this.AddressRegionLabel);
         }
-        public async Task<String> GetAddressTownValue()
-        {
+
+        public async Task<String> GetAddressTownValue() {
             return await this.GetLabelValue(this.AddressTownLabel);
         }
-        public async Task<String> GetAddressPostalCodeValue()
-        {
+
+        public async Task<String> GetAddressPostalCodeValue() {
             return await this.GetLabelValue(this.AddressPostalCodeLabel);
         }
     }
@@ -133,21 +132,19 @@ namespace TransactionMobile.Maui.UiTests.Pages
             this.ContactMobileNumberLabel = "ContactMobileNumberLabel";
         }
 
-        public async Task IsPrimaryContactShown()
-        {
+        public async Task IsPrimaryContactShown() {
             await this.WaitForElementByAccessibilityId(this.PrimaryContactLabel);
         }
 
-        public async Task<String> GetContactNameValue()
-        {
+        public async Task<String> GetContactNameValue() {
             return await this.GetLabelValue(this.ContactNameLabel);
         }
-        public async Task<String> GetContactEmailAddressValue()
-        {
+
+        public async Task<String> GetContactEmailAddressValue() {
             return await this.GetLabelValue(this.ContactEmailAddressLabel);
         }
-        public async Task<String> GetContactMobileNumberValue()
-        {
+
+        public async Task<String> GetContactMobileNumberValue() {
             return await this.GetLabelValue(this.ContactMobileNumberLabel);
         }
     }
@@ -157,10 +154,15 @@ namespace TransactionMobile.Maui.UiTests.Pages
         protected override String Trait => "My Details";
 
         public readonly String MerchantNameLabel;
+
         public readonly String BalanceLabel;
+
         public readonly String AvailableBalanceLabel;
+
         public readonly String LastStatementDateLabel;
+
         public readonly String NextStatementDateLabel;
+
         public readonly String SettlementScheduleLabel;
 
         public ProfileAccountInfoPage() {
@@ -172,33 +174,27 @@ namespace TransactionMobile.Maui.UiTests.Pages
             this.SettlementScheduleLabel = "SettlementScheduleLabel";
         }
 
-        public async Task<String> GetMerchantNameValue()
-        {
+        public async Task<String> GetMerchantNameValue() {
             return await this.GetLabelValue(this.MerchantNameLabel);
         }
 
-        public async Task<String> GetBalanceValue()
-        {
+        public async Task<String> GetBalanceValue() {
             return await this.GetLabelValue(this.BalanceLabel);
         }
 
-        public async Task<String> GetAvailableBalanceValue()
-        {
+        public async Task<String> GetAvailableBalanceValue() {
             return await this.GetLabelValue(this.AvailableBalanceLabel);
         }
 
-        public async Task<String> GetLastStatementDateValue()
-        {
+        public async Task<String> GetLastStatementDateValue() {
             return await this.GetLabelValue(this.LastStatementDateLabel);
         }
 
-        public async Task<String> GetNextStatementDateValue()
-        {
+        public async Task<String> GetNextStatementDateValue() {
             return await this.GetLabelValue(this.NextStatementDateLabel);
         }
 
-        public async Task<String> GetSettlementScheduleValue()
-        {
+        public async Task<String> GetSettlementScheduleValue() {
             return await this.GetLabelValue(this.SettlementScheduleLabel);
         }
     }

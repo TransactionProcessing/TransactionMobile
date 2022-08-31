@@ -1,6 +1,8 @@
+using TransactionMobile.Maui.Pages.Common;
+
 namespace TransactionMobile.Maui.Pages.Reports;
 
-public partial class ReportsPage : ContentPage
+public partial class ReportsPage : NoBackWithoutLogoutPage
 {
 	public ReportsPage()
 	{

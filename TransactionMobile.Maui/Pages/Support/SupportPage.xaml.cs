@@ -1,8 +1,9 @@
 namespace TransactionMobile.Maui.Pages.Support
 {
     using BusinessLogic.ViewModels.Support;
+    using TransactionMobile.Maui.Pages.Common;
 
-    public partial class SupportPage : ContentPage
+    public partial class SupportPage : NoBackWithoutLogoutPage
     {
         private SupportPageViewModel viewModel => BindingContext as SupportPageViewModel;
 

@@ -3,8 +3,9 @@ namespace TransactionMobile.Maui.Pages.MyAccount;
 using BusinessLogic.Common;
 using BusinessLogic.Models;
 using BusinessLogic.ViewModels.MyAccount;
+using Common;
 
-public partial class MyAccountPage : ContentPage
+public partial class MyAccountPage : NoBackWithoutLogoutPage
 {
     private MyAccountPageViewModel viewModel => BindingContext as MyAccountPageViewModel;
 

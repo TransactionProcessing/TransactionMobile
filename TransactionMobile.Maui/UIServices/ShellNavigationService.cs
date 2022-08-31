@@ -30,7 +30,7 @@ public class ShellNavigationService : INavigationService
     }
 
     public async Task GoToMobileTopupSelectOperatorPage() {
-        await NavigateTo($"transactions/{nameof(MobileTopupSelectOperatorPage)}");
+        await NavigateTo($"{nameof(MobileTopupSelectOperatorPage)}");
     }
 
     public async Task GoToAdminPage() {
@@ -75,7 +75,8 @@ public class ShellNavigationService : INavigationService
     }
 
     public async Task GoToLoginPage() {
-        await NavigateTo(nameof(LoginPage));
+        Application.Current.MainPage = new AppShell();
+        await NavigateTo("///loginpage");
     }
 
     public async Task GoToViewLogsPage() {
@@ -118,5 +119,17 @@ public class ShellNavigationService : INavigationService
             Shared.Logger.Logger.LogError(e);
         }
     }
+
+    private void ClearNavigationStack() {
+        List<Page> existingPages = Shell.Current.Navigation.NavigationStack.ToList();
+        foreach (Page page in existingPages)
+        {
+            if (page != null)
+            {
+                Shell.Current.Navigation.RemovePage(page);
+            }
+        }
+    }
+
     #endregion
 }

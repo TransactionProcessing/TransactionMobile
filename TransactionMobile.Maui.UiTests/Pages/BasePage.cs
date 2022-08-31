@@ -73,9 +73,16 @@ namespace TransactionMobile.Maui.UITests
             }
         }
 
-        public IWebElement GetAlert()
+        public void AcceptAlert()
         {
-            return AppiumDriverWrapper.Driver.FindElement(By.Name("OK"));
+            IAlert a = this.SwitchToAlert();
+            a.Accept();
+        }
+
+        public void DismissAlert()
+        {
+            IAlert a = this.SwitchToAlert();
+            a.Dismiss();
         }
 
         public IAlert SwitchToAlert()
