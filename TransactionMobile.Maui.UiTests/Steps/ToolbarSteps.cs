@@ -18,5 +18,4 @@ public class ToolbarSteps
     public async Task WhenITapOnTransactions() {
         await this.mainPage.ClickTransactionsButton();
     }
-
 }

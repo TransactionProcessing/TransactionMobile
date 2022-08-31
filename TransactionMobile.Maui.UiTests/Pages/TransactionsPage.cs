@@ -13,17 +13,10 @@ public class TransactionsPage : BasePage
 
     public TransactionsPage() {
         this.MobileTopupButton = "MobileTopupButton";
-
-
     }
     public async Task ClickMobileTopupButton()
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.MobileTopupButton);
         element.Click();
     }
-}
-
-public class TransactionsSelectMobileTopupOperatorPage : BasePage
-{
-    protected override String Trait => "Select an Operator";
 }

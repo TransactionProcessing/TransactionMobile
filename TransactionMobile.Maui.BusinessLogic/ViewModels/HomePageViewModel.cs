@@ -43,7 +43,6 @@ public class HomePageViewModel : BaseViewModel
             await this.DialogService.ShowDialog("Debug", message, "OK");
         }
     }
-
     public async Task<Boolean> BackButtonClicked() {
         
         var g = await this.DialogService.ShowDialog("Title", "Message", "yes", "no");

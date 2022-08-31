@@ -1,8 +1,10 @@
-﻿using OpenQA.Selenium.Appium;
+﻿using NUnit.Framework;
+using OpenQA.Selenium.Appium;
 using TransactionMobile.Maui.UiTests.Drivers;
 
 namespace TransactionMobile.Maui.UITests.Common
 {
+    [NonParallelizable]
     public abstract class BaseTestFixture
     {
         #region Constructors

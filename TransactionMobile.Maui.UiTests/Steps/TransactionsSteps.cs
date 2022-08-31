@@ -26,5 +26,4 @@ public class TransactionsSteps
     public async Task ThenTheTransactionSelectMobileTopupOperatorPageIsDisplayed() {
         await this.transactionsSelectMobileTopupOperatorPage.AssertOnPage();
     }
-
 }
