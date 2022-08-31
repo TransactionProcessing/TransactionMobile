@@ -28,7 +28,7 @@ public partial class ProfileFeature : BaseTestFixture
 }
 
 [TestFixture(MobileTestPlatform.Android, Category = "Android")]
-[TestFixture(MobileTestPlatform.iOS, Category = "iOS")]
+//[TestFixture(MobileTestPlatform.iOS, Category = "iOS")]
 [NonParallelizable]
 public partial class PageNavigationFeature : BaseTestFixture
 {
