@@ -13,6 +13,7 @@ using Requests;
 using Services;
 using Shared.Logger;
 using Shouldly;
+using UIServices;
 using ViewModels.MyAccount;
 using Xunit;
 
@@ -25,10 +26,14 @@ public class MyAccountPageViewModelTests
         Logger.Initialise(NullLogger.Instance);
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        Mock<IDialogService> dialogService = new Mock<IDialogService>();
         Mock<IMediator> mediator = new Mock<IMediator>();
+
+        MyAccountPageViewModel viewModel = new MyAccountPageViewModel(navigationService.Object, applicationCache.Object,
+                                                                      dialogService.Object,
+                                                                      mediator.Object);
         mediator.Setup(m => m.Send(It.IsAny<GetMerchantDetailsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.MerchantDetailsModel);
 
-        MyAccountPageViewModel viewModel = new MyAccountPageViewModel(navigationService.Object, applicationCache.Object, mediator.Object);
         await viewModel.Initialise(CancellationToken.None);
 
         viewModel.MerchantName.ShouldBe(TestData.MerchantDetailsModel.MerchantName);
@@ -41,8 +46,12 @@ public class MyAccountPageViewModelTests
         Logger.Initialise(NullLogger.Instance);
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        Mock<IDialogService> dialogService = new Mock<IDialogService>();
         Mock<IMediator> mediator = new Mock<IMediator>();
-        MyAccountPageViewModel viewModel = new MyAccountPageViewModel(navigationService.Object, applicationCache.Object, mediator.Object);
+
+        MyAccountPageViewModel viewModel = new MyAccountPageViewModel(navigationService.Object, applicationCache.Object,
+                                                                      dialogService.Object,
+                                                                      mediator.Object);
         viewModel.OptionSelectedCommand.Execute(this.CreateItemSelected(MyAccountPageViewModel.AccountOptions.AccountInfo));
 
         navigationService.Verify(n => n.GoToMyAccountDetails(), Times.Once);
@@ -53,9 +62,12 @@ public class MyAccountPageViewModelTests
         Logger.Initialise(NullLogger.Instance);
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        Mock<IDialogService> dialogService = new Mock<IDialogService>();
         Mock<IMediator> mediator = new Mock<IMediator>();
 
-        MyAccountPageViewModel viewModel = new MyAccountPageViewModel(navigationService.Object, applicationCache.Object, mediator.Object);
+        MyAccountPageViewModel viewModel = new MyAccountPageViewModel(navigationService.Object, applicationCache.Object,
+                                                                      dialogService.Object, 
+                                                                      mediator.Object);
         viewModel.OptionSelectedCommand.Execute(this.CreateItemSelected(MyAccountPageViewModel.AccountOptions.Addresses));
 
         navigationService.Verify(n => n.GoToMyAccountAddresses(), Times.Once);
@@ -66,9 +78,12 @@ public class MyAccountPageViewModelTests
         Logger.Initialise(NullLogger.Instance);
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        Mock<IDialogService> dialogService = new Mock<IDialogService>();
         Mock<IMediator> mediator = new Mock<IMediator>();
 
-        MyAccountPageViewModel viewModel = new MyAccountPageViewModel(navigationService.Object, applicationCache.Object, mediator.Object);
+        MyAccountPageViewModel viewModel = new MyAccountPageViewModel(navigationService.Object, applicationCache.Object,
+                                                                      dialogService.Object,
+                                                                      mediator.Object);
         viewModel.OptionSelectedCommand.Execute(this.CreateItemSelected(MyAccountPageViewModel.AccountOptions.Contacts));
 
         navigationService.Verify(n => n.GoToMyAccountContacts(), Times.Once);
@@ -79,12 +94,33 @@ public class MyAccountPageViewModelTests
         Logger.Initialise(NullLogger.Instance);
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        Mock<IDialogService> dialogService = new Mock<IDialogService>();
         Mock<IMediator> mediator = new Mock<IMediator>();
-        MyAccountPageViewModel viewModel = new MyAccountPageViewModel(navigationService.Object, applicationCache.Object, mediator.Object);
+
+        MyAccountPageViewModel viewModel = new MyAccountPageViewModel(navigationService.Object, applicationCache.Object,
+                                                                      dialogService.Object,
+                                                                      mediator.Object);
 
         viewModel.OptionSelectedCommand.Execute(this.CreateItemSelected(MyAccountPageViewModel.AccountOptions.Logout));
 
         navigationService.Verify(n => n.GoToLoginPage(), Times.Once);
+    }
+
+    [Fact]
+    public async Task MyAccountPageViewModel_BackButtonCommand_HomePageIsShown()
+    {
+        Logger.Initialise(NullLogger.Instance);
+        Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        Mock<IDialogService> dialogService = new Mock<IDialogService>();
+        Mock<IMediator> mediator = new Mock<IMediator>();
+        MyAccountPageViewModel viewModel = new MyAccountPageViewModel(navigationService.Object, applicationCache.Object,
+                                                                      dialogService.Object,
+                                                                      mediator.Object);
+
+        viewModel.BackButtonCommand.Execute(null);
+
+        navigationService.Verify(n=> n.GoToHome(),Times.Once);
     }
 
     private ItemSelected<ListViewItem> CreateItemSelected(MyAccountPageViewModel.AccountOptions selectedOption) {

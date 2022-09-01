@@ -8,6 +8,7 @@ using MediatR;
 using Models;
 using Moq;
 using Requests;
+using Services;
 using Shared.Logger;
 using Shouldly;
 using UIServices;
@@ -22,7 +23,10 @@ public class VoucherSelectOperatorPageViewModelTests
         Mock<IMediator> mediator = new Mock<IMediator>();
         mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.ContractProductList);
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        VoucherSelectOperatorPageViewModel viewModel = new VoucherSelectOperatorPageViewModel(mediator.Object, navigationService.Object);
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
+        VoucherSelectOperatorPageViewModel viewModel = new VoucherSelectOperatorPageViewModel(mediator.Object, navigationService.Object,applicationCache.Object,
+                                                                                              dialogSevice.Object);
 
         await viewModel.Initialise(CancellationToken.None);
         mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
@@ -36,8 +40,11 @@ public class VoucherSelectOperatorPageViewModelTests
         Mock<IMediator> mediator = new Mock<IMediator>();
         mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.ContractProductList);
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
         Logger.Initialise(NullLogger.Instance);
-        VoucherSelectOperatorPageViewModel viewModel = new VoucherSelectOperatorPageViewModel(mediator.Object, navigationService.Object);
+        VoucherSelectOperatorPageViewModel viewModel = new VoucherSelectOperatorPageViewModel(mediator.Object, navigationService.Object,applicationCache.Object,
+                                                                                              dialogSevice.Object);
 
         await viewModel.Initialise(CancellationToken.None);
 
@@ -52,5 +59,22 @@ public class VoucherSelectOperatorPageViewModelTests
         viewModel.OperatorSelectedCommand.Execute(selectedContractOperator);
 
         navigationService.Verify(n => n.GoToVoucherSelectProductPage(TestData.OperatorIdentifier1), Times.Once);
+    }
+
+    [Fact]
+    public void VoucherSelectOperatorPageViewModel_BackButtonCommand_Execute_IsExecuted()
+    {
+        Mock<IMediator> mediator = new Mock<IMediator>();
+        mediator.Setup(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
+        Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        Mock<IDialogService> dialogService = new Mock<IDialogService>();
+        Logger.Initialise(NullLogger.Instance);
+        VoucherSelectOperatorPageViewModel viewModel = new VoucherSelectOperatorPageViewModel(mediator.Object,
+                                                                                              navigationService.Object, applicationCache.Object,
+                                                                                              dialogService.Object);
+        viewModel.BackButtonCommand.Execute(null);
+
+        navigationService.Verify(v => v.GoBack(), Times.Once);
     }
 }

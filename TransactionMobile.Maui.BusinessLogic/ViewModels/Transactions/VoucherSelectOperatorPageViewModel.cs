@@ -8,24 +8,25 @@ using Models;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
 using Requests;
+using Services;
 using UIServices;
 
-public class VoucherSelectOperatorPageViewModel : BaseViewModel
+public class VoucherSelectOperatorPageViewModel : ExtendedBaseViewModel
 {
     #region Fields
 
     private readonly IMediator Mediator;
 
-    private readonly INavigationService NavigationService;
-
     #endregion
 
     #region Constructors
 
-    public VoucherSelectOperatorPageViewModel(IMediator mediator, INavigationService navigationService)
+    public VoucherSelectOperatorPageViewModel(IMediator mediator, INavigationService navigationService,
+                                              IApplicationCache applicationCache,
+                                              IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
+
     {
         this.Mediator = mediator;
-        this.NavigationService = navigationService;
         this.OperatorSelectedCommand = new AsyncCommand<ItemSelected<ContractOperatorModel>>(this.OperatorSelectedCommandExecute);
         this.Title = "Select an Operator";
     }

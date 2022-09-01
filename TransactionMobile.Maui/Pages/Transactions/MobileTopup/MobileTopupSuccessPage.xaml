@@ -4,22 +4,24 @@
              x:Class="TransactionMobile.Maui.Pages.Transactions.MobileTopup.MobileTopupSuccessPage"
              xmlns:userControls="clr-namespace:TransactionMobile.Maui.Controls;assembly=TransactionMobile.Maui"
              Shell.NavBarIsVisible="False">
-    <VerticalStackLayout x:Name="MainLayout">
-        <userControls:TitleLabel Text="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center" VerticalOptions="End"
+    <ScrollView>
+        <VerticalStackLayout x:Name="MainLayout">
+            <userControls:TitleLabel Text="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center" VerticalOptions="End"
                FontAttributes="Bold" Padding="20,0,0,20"/>
-        <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" CornerRadius="20"
+            <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" CornerRadius="20"
                Opacity="0.9" BackgroundColor="#E5E9F0">
-            <VerticalStackLayout Spacing="10">
+                <VerticalStackLayout Spacing="10">
 
-                <Image Source="Resources/PaymentSuccess.svg" VerticalOptions="Start" Aspect="AspectFit"/>
+                    <Image Source="Resources/PaymentSuccess.svg" VerticalOptions="Start" Aspect="AspectFit"/>
 
-                <!--  Payment description label  -->
-                <Label Margin="17,8"
+                    <!--  Payment description label  -->
+                    <Label Margin="17,8"
                        Text="Thank you for your topup. An automated payment receipt will be sent to your email entered."/>
 
-                <Button x:Name="CompleteButton" Margin="0,16" Text="Complete" Command="{Binding CompletedCommand}"
+                    <Button x:Name="CompleteButton" Margin="0,16" Text="Complete" Command="{Binding CompletedCommand}"
                         Style="{DynamicResource MobileTopupButtonStyle}" AutomationId="CompleteButton"/>
-            </VerticalStackLayout>
-        </Frame>
-    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

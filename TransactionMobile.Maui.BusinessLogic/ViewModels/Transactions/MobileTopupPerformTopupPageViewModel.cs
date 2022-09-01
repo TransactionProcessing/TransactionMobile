@@ -8,10 +8,11 @@ using Microsoft.Maui.Controls;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
 using Requests;
+using Services;
 using UIServices;
 using Command = Microsoft.Maui.Controls.Command;
 
-public class MobileTopupPerformTopupPageViewModel : BaseViewModel, IQueryAttributable
+public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQueryAttributable
 {
     #region Fields
 
@@ -20,8 +21,6 @@ public class MobileTopupPerformTopupPageViewModel : BaseViewModel, IQueryAttribu
     private String customerMobileNumber;
 
     private readonly IMediator Mediator;
-
-    private readonly INavigationService NavigationService;
 
     private Decimal topupAmount;
 
@@ -37,10 +36,12 @@ public class MobileTopupPerformTopupPageViewModel : BaseViewModel, IQueryAttribu
         this.TopupAmount = Decimal.Parse(HttpUtility.UrlDecode(query[nameof(TopupAmount)].ToString()));
     }
 
-    public MobileTopupPerformTopupPageViewModel(IMediator mediator, INavigationService navigationService)
+    public MobileTopupPerformTopupPageViewModel(IMediator mediator,
+                                                INavigationService navigationService,
+        IApplicationCache applicationCache,
+                      IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
     {
         this.Mediator = mediator;
-        this.NavigationService = navigationService;
         this.PerformTopupCommand = new AsyncCommand(this.PerformTopupCommandExecute);
         this.CustomerMobileNumberEntryCompletedCommand = new Command(this.CustomerMobileNumberEntryCompletedCommandExecute);
         this.TopupAmountEntryCompletedCommand = new Command(this.TopupAmountEntryCompletedCommandExecute);

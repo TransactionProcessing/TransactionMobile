@@ -7,10 +7,11 @@ using MediatR;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
 using Requests;
+using Services;
 using UIServices;
 using Command = Microsoft.Maui.Controls.Command;
 
-public class VoucherPerformIssuePageViewModel : BaseViewModel, IQueryAttributable
+public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAttributable
 {
     #region Fields
 
@@ -21,9 +22,7 @@ public class VoucherPerformIssuePageViewModel : BaseViewModel, IQueryAttributabl
     private String recipientEmailAddress;
 
     private readonly IMediator Mediator;
-
-    private readonly INavigationService NavigationService;
-
+    
     private Decimal voucherAmount;
 
     #endregion
@@ -38,10 +37,12 @@ public class VoucherPerformIssuePageViewModel : BaseViewModel, IQueryAttributabl
         this.VoucherAmount = Decimal.Parse(HttpUtility.UrlDecode(query[nameof(this.VoucherAmount)].ToString()));
     }
 
-    public VoucherPerformIssuePageViewModel(IMediator mediator, INavigationService navigationService)
+    public VoucherPerformIssuePageViewModel(INavigationService navigationService,
+                                            IApplicationCache applicationCache,
+                                            IDialogService dialogService,
+                                            IMediator mediator) : base(applicationCache, dialogService, navigationService)
     {
         this.Mediator = mediator;
-        this.NavigationService = navigationService;
         this.IssueVoucherCommand = new AsyncCommand(this.IssueVoucherCommandExecute);
         this.RecipientMobileNumberEntryCompletedCommand = new Command(this.RecipientMobileNumberEntryCompletedCommandExecute);
         this.RecipientEmailAddressEntryCompletedCommand = new Command(this.RecipientEmailAddressEntryCompletedCommandExecute);

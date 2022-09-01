@@ -1,11 +1,14 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Support;
 
+using Maui.UIServices;
 using MediatR;
 using Models;
 using MvvmHelpers;
 using Requests;
+using Services;
+using UIServices;
 
-public class ViewLogsPageViewModel : BaseViewModel
+public class ViewLogsPageViewModel : ExtendedBaseViewModel
 {
     #region Fields
 
@@ -15,7 +18,9 @@ public class ViewLogsPageViewModel : BaseViewModel
 
     #region Constructors
 
-    public ViewLogsPageViewModel(IMediator mediator) {
+    public ViewLogsPageViewModel(IMediator mediator, INavigationService navigationService,
+    IApplicationCache applicationCache,
+                      IDialogService dialogService) : base(applicationCache, dialogService, navigationService) {
         this.Mediator = mediator;
         this.Title = "View Logs";
     }

@@ -57,5 +57,26 @@ public partial class VoucherSelectProductPage : ContentPage
 
             rowCount++;
         }
+        this.ProductsList.Add(this.AddBackButton());
+    }
+
+    private Button AddBackButton()
+    {
+        Button button = new Button
+                        {
+                            Text = "Back",
+                            HorizontalOptions = LayoutOptions.FillAndExpand,
+                            AutomationId = "BackButton",
+                        };
+        button.SetDynamicResource(VisualElement.StyleProperty, "VoucherButtonStyle");
+
+        Binding backButtonCommand = new Binding
+                                    {
+                                        Source = viewModel.BackButtonCommand
+                                    };
+
+        button.SetBinding(Button.CommandProperty, backButtonCommand);
+
+        return button;
     }
 }

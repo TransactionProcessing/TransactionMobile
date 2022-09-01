@@ -5,12 +5,11 @@ using MediatR;
 using Models;
 using MvvmHelpers;
 using Services;
+using UIServices;
 
-public class MyAccountDetailsPageViewModel : BaseViewModel
+public class MyAccountDetailsPageViewModel : ExtendedBaseViewModel
 {
     #region Fields
-
-    private readonly IApplicationCache ApplicationCache;
 
     private Decimal availableBalance;
 
@@ -18,11 +17,7 @@ public class MyAccountDetailsPageViewModel : BaseViewModel
 
     private DateTime lastStatementDate;
 
-    private readonly IMediator Mediator;
-
     private String merchantName;
-
-    private readonly INavigationService NavigationService;
 
     private DateTime nextStatementDate;
 
@@ -34,10 +29,7 @@ public class MyAccountDetailsPageViewModel : BaseViewModel
 
     public MyAccountDetailsPageViewModel(INavigationService navigationService,
                                          IApplicationCache applicationCache,
-                                         IMediator mediator) {
-        this.NavigationService = navigationService;
-        this.ApplicationCache = applicationCache;
-        this.Mediator = mediator;
+                                         IDialogService dialogService) : base(applicationCache, dialogService, navigationService) {
         this.Title = "My Details";
     }
 

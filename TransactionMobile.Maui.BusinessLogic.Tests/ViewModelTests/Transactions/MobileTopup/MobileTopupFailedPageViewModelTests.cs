@@ -2,6 +2,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
 
 using Maui.UIServices;
 using Moq;
+using Services;
 using Shared.Logger;
 using UIServices;
 using ViewModels.Transactions;
@@ -13,6 +14,7 @@ public class MobileTopupFailedPageViewModelTests
     public void MobileTopupFailedPageViewModel_CancelledCommand_Execute_IsExecuted()
     {
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+
         Logger.Initialise(NullLogger.Instance);
         MobileTopupFailedPageViewModel viewModel = new MobileTopupFailedPageViewModel(navigationService.Object);
 

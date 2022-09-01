@@ -8,24 +8,23 @@ using Models;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
 using Requests;
+using Services;
 using UIServices;
 
-public class MobileTopupSelectOperatorPageViewModel : BaseViewModel
+public class MobileTopupSelectOperatorPageViewModel : ExtendedBaseViewModel
 {
     #region Fields
 
     private readonly IMediator Mediator;
 
-    private readonly INavigationService NavigationService;
-
     #endregion
 
     #region Constructors
 
-    public MobileTopupSelectOperatorPageViewModel(IMediator mediator, INavigationService navigationService)
+    public MobileTopupSelectOperatorPageViewModel(IMediator mediator, INavigationService navigationService, IDialogService dialogService,
+                                                  IApplicationCache applicationCache): base(applicationCache,dialogService, navigationService)
     {
         this.Mediator = mediator;
-        this.NavigationService = navigationService;
         this.OperatorSelectedCommand = new AsyncCommand<ItemSelected<ContractOperatorModel>>(this.OperatorSelectedCommandExecute);
         this.Title = "Select an Operator";
     }

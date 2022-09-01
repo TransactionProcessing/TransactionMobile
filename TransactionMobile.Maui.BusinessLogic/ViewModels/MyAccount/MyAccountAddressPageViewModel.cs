@@ -3,38 +3,41 @@
 using Maui.UIServices;
 using MediatR;
 using Models;
-using MvvmHelpers;
 using Services;
+using UIServices;
 
-public class MyAccountAddressPageViewModel : BaseViewModel
+public class MyAccountAddressPageViewModel : ExtendedBaseViewModel
 {
-    private readonly INavigationService NavigationService;
+    #region Fields
 
-    private readonly IApplicationCache ApplicationCache;
+    private AddressModel address;
 
     private readonly IMediator Mediator;
+
+    #endregion
 
     #region Constructors
 
     public MyAccountAddressPageViewModel(INavigationService navigationService,
                                          IApplicationCache applicationCache,
-                                         IMediator mediator) {
-        this.NavigationService = navigationService;
-        this.ApplicationCache = applicationCache;
+                                         IDialogService dialogService,
+                                         IMediator mediator) : base(applicationCache, dialogService, navigationService) {
         this.Mediator = mediator;
         this.Title = "My Addresses";
     }
-    
+
     #endregion
 
-    private AddressModel address;
+    #region Properties
 
-    public AddressModel Address{
+    public AddressModel Address {
         get => this.address;
         set => this.SetProperty(ref this.address, value);
     }
 
-    #region Properties
+    #endregion
+
+    #region Methods
 
     public async Task Initialise(CancellationToken cancellationToken) {
         MerchantDetailsModel merchantDetails = this.ApplicationCache.GetMerchantDetails();
