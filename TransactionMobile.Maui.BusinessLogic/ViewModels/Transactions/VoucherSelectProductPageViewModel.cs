@@ -9,15 +9,14 @@ using Models;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
 using Requests;
+using Services;
 using UIServices;
 
-public class VoucherSelectProductPageViewModel : BaseViewModel, IQueryAttributable
+public class VoucherSelectProductPageViewModel : ExtendedBaseViewModel, IQueryAttributable
 {
     #region Fields
 
     private readonly IMediator Mediator;
-
-    private readonly INavigationService NavigationService;
 
     #endregion
 
@@ -28,10 +27,11 @@ public class VoucherSelectProductPageViewModel : BaseViewModel, IQueryAttributab
         this.OperatorIdentifier = HttpUtility.UrlDecode(query[nameof(this.OperatorIdentifier)].ToString());
     }
 
-    public VoucherSelectProductPageViewModel(IMediator mediator, INavigationService navigationService)
+    public VoucherSelectProductPageViewModel(IMediator mediator, INavigationService navigationService,
+                                             IApplicationCache applicationCache,
+                                             IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
     {
         this.Mediator = mediator;
-        this.NavigationService = navigationService;
         this.ProductSelectedCommand = new AsyncCommand<ItemSelected<ContractProductModel>>(this.ProductSelectedCommandExecute);
         this.Title = "Select a Product";
     }

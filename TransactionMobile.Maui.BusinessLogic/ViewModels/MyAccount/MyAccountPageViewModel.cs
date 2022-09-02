@@ -12,12 +12,11 @@
     using Requests;
     using Services;
     using Shared.Logger;
+    using UIServices;
 
-    public class MyAccountPageViewModel : BaseViewModel
+    public class MyAccountPageViewModel : ExtendedBaseViewModel
     {
         #region Fields
-
-        private readonly IApplicationCache ApplicationCache;
 
         private DateTime lastLogin;
 
@@ -25,17 +24,14 @@
 
         private String merchantName;
 
-        private readonly INavigationService NavigationService;
-
         #endregion
 
         #region Constructors
 
         public MyAccountPageViewModel(INavigationService navigationService,
                                       IApplicationCache applicationCache,
-                                      IMediator mediator) {
-            this.NavigationService = navigationService;
-            this.ApplicationCache = applicationCache;
+                                      IDialogService dialogService,
+                                      IMediator mediator) : base(applicationCache, dialogService, navigationService) {
             this.Mediator = mediator;
             this.OptionSelectedCommand = new AsyncCommand<ItemSelected<ListViewItem>>(this.OptionSelectedCommandExecute);
             this.Title = "My Account";

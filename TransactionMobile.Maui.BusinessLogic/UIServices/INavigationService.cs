@@ -4,6 +4,8 @@ public interface INavigationService
 {
     #region Methods
 
+    Task GoBack();
+
     Task GoToHome();
 
     Task GoToMobileTopupFailedPage();

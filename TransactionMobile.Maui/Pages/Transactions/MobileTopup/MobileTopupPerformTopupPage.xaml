@@ -5,55 +5,58 @@
              xmlns:behaviors="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
              xmlns:userControls="clr-namespace:TransactionMobile.Maui.Controls;assembly=TransactionMobile.Maui"
              Shell.NavBarIsVisible="False">
-    <VerticalStackLayout x:Name="MainLayout">
-        <userControls:TitleLabel Text="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-    <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
+    <ScrollView>
+        <VerticalStackLayout x:Name="MainLayout">
+            <userControls:TitleLabel Text="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+            <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
            CornerRadius="20" Opacity="0.9" BackgroundColor="#E5E9F0">
-        <VerticalStackLayout Spacing="10">
-            <Entry x:Name="CustomerMobileNumberEntry"
+                <VerticalStackLayout Spacing="10">
+                    <Entry x:Name="CustomerMobileNumberEntry"
                Placeholder="Customer Mobile Number"
                Style="{DynamicResource MobileNumberEntryStyle}"
                AutomationId="CustomerMobileNumberEntry"
                Text="{Binding CustomerMobileNumber}"
                Keyboard="Numeric">
-                <Entry.Behaviors>
-                    <behaviors:EventToCommandBehavior             
+                        <Entry.Behaviors>
+                            <behaviors:EventToCommandBehavior             
                     EventName="Completed"  
                     Command="{Binding CustomerMobileNumberEntryCompletedCommand}" />
-                </Entry.Behaviors>
-            </Entry>
-            
-            <Entry x:Name="TopupAmountEntry"
+                        </Entry.Behaviors>
+                    </Entry>
+
+                    <Entry x:Name="TopupAmountEntry"
                Placeholder="100"
                AutomationId="TopupAmountEntry"
                Style="{DynamicResource AmountEntryStyle}"
                Text="{Binding TopupAmount}"
                Keyboard="Numeric">
-                <Entry.Behaviors>
-                    <behaviors:EventToCommandBehavior             
+                        <Entry.Behaviors>
+                            <behaviors:EventToCommandBehavior             
                     EventName="Completed"  
                     Command="{Binding TopupAmountEntryCompletedCommand}" />
-                </Entry.Behaviors>
-            </Entry>
-            
-            <Entry x:Name="CustomerEmailAddressEntry"
+                        </Entry.Behaviors>
+                    </Entry>
+
+                    <Entry x:Name="CustomerEmailAddressEntry"
                Placeholder="customeremail@email.com"
                AutomationId="CustomerEmailAddressEntry"
                Style="{DynamicResource EmailAddressEntryStyle}"
                Text="{Binding CustomerEmailAddress}">
-                <Entry.Behaviors>
-                    <behaviors:EventToCommandBehavior             
+                        <Entry.Behaviors>
+                            <behaviors:EventToCommandBehavior             
                     EventName="Completed"  
                     Command="{Binding CustomerEmailAddressEntryCompletedCommand}" />
-                </Entry.Behaviors>
-            </Entry>
-            
-            <Button x:Name="PerformTopupButton" 
+                        </Entry.Behaviors>
+                    </Entry>
+
+                    <Button x:Name="PerformTopupButton" 
                 Text="Perform Topup"
                 Style="{DynamicResource MobileTopupButtonStyle}"
                 Command="{Binding PerformTopupCommand}"
                 AutomationId="PerformTopupButton"/>
+                <Button Text="Back" Style="{StaticResource MobileTopupButtonStyle}" Command="{Binding BackButtonCommand}"/>
+                </VerticalStackLayout>
+            </Frame>
         </VerticalStackLayout>
-    </Frame>
-    </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

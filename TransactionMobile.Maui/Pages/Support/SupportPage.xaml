@@ -5,31 +5,34 @@
                                xmlns:userControls="clr-namespace:TransactionMobile.Maui.Controls;assembly=TransactionMobile.Maui"
                                xmlns:views="clr-namespace:TransactionMobile.Maui.Pages.Common"
                                Shell.NavBarIsVisible="False">
-    <VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout>
 
-        <userControls:TitleLabel Text="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-        
-        <!--Main image-->
-        <Image Source="techsupport.jpg" VerticalOptions="Start" Aspect="AspectFit"/>
-        
-        
-        <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
+            <userControls:TitleLabel Text="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+
+            <!--Main image-->
+            <Image Source="techsupport.jpg" VerticalOptions="Start" Aspect="AspectFit"/>
+
+
+            <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
                CornerRadius="20" Opacity="0.9" BackgroundColor="#E5E9F0">
-            <VerticalStackLayout x:Name="SubLayout" Spacing="5">
+                <VerticalStackLayout x:Name="SubLayout" Spacing="5">
 
-                <Label Text="{Binding ApplicationName, Mode=OneTime}"
+                    <Label Text="{Binding ApplicationName, Mode=OneTime}"
                        HorizontalTextAlignment="Center"
                        HorizontalOptions="Fill"/>
-                
-                <Label Text="{Binding Platform, Mode=OneTime}"
+
+                    <Label Text="{Binding Platform, Mode=OneTime}"
                        VerticalOptions="Center"/>
 
-                <Label Text="{Binding NumberTransactionsStored, Mode=OneTime}"
+                    <Label Text="{Binding NumberTransactionsStored, Mode=OneTime}"
                        VerticalOptions="Center"/>
 
-                <Button Text="Upload Logs" Style="{StaticResource StandardButton}" Command="{Binding UploadLogsCommand}" IsVisible="{Binding ShowUploadLogsButton}"/>
-                <Button Text="View Logs" Style="{StaticResource StandardButton}" Command="{Binding ViewLogsCommand}" IsVisible="{Binding ShowViewLogsButton}"/>
-            </VerticalStackLayout>
-        </Frame>
-    </VerticalStackLayout>
+                    <Button Text="Upload Logs" Style="{StaticResource StandardButton}" Command="{Binding UploadLogsCommand}" IsVisible="{Binding ShowUploadLogsButton}"/>
+                    <Button Text="View Logs" Style="{StaticResource StandardButton}" Command="{Binding ViewLogsCommand}" IsVisible="{Binding ShowViewLogsButton}"/>
+                    <Button Text="Back" Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
 </views:NoBackWithoutLogoutPage>

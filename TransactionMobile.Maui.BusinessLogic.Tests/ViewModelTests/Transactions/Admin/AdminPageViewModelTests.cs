@@ -24,13 +24,37 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
             Mock<IMediator> mediator = new Mock<IMediator>();
             Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
             Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
+            Mock<IDialogService> dialogService = new Mock<IDialogService>();
+            Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
             AdminPageViewModel viewModel = new AdminPageViewModel(mediator.Object,
                                                                   navigationService.Object,
+                                                                  applicationCache.Object,
+                                                                  dialogService.Object,
                                                                   deviceService.Object,
                                                                   applicationInfoService.Object);
 
             viewModel.ReconciliationCommand.Execute(null);
             navigationService.Verify(n => n.GoToHome(), Times.Once);
+        }
+
+        [Fact]
+        public void AdminPageViewModel_BackButtonCommand_Execute_IsExecuted()
+        {
+            Mock<INavigationService> navigationService = new Mock<INavigationService>();
+            Mock<IMediator> mediator = new Mock<IMediator>();
+            Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
+            Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
+            Mock<IDialogService> dialogService = new Mock<IDialogService>();
+            Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+            AdminPageViewModel viewModel = new AdminPageViewModel(mediator.Object,
+                                                                  navigationService.Object,
+                                                                  applicationCache.Object,
+                                                                  dialogService.Object,
+                                                                  deviceService.Object,
+                                                                  applicationInfoService.Object);
+
+            viewModel.BackButtonCommand.Execute(null);
+            navigationService.Verify(n => n.GoBack(), Times.Once);
         }
     }
 }

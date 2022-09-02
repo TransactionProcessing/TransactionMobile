@@ -7,6 +7,7 @@ using Maui.UIServices;
 using MediatR;
 using Moq;
 using Requests;
+using Services;
 using Shared.Logger;
 using Shouldly;
 using UIServices;
@@ -20,8 +21,13 @@ public class MobileTopupPerformTopupPageViewModelTests
     {
         Mock<IMediator> mediator = new Mock<IMediator>();
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
         Logger.Initialise(NullLogger.Instance);
-        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object);
+        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object,
+                                                                                                  navigationService.Object,
+                                                                                                  applicationCache.Object,
+                                                                                                  dialogSevice.Object);
 
         viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
@@ -42,8 +48,11 @@ public class MobileTopupPerformTopupPageViewModelTests
     {
         Mock<IMediator> mediator = new Mock<IMediator>();
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
         Logger.Initialise(NullLogger.Instance);
-        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object);
+        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object,
+                                                                                                  applicationCache.Object,dialogSevice.Object);
         bool isCompletedCalled = false;
         viewModel.OnCustomerEmailAddressEntryCompleted = () =>
                                                          {
@@ -66,9 +75,12 @@ public class MobileTopupPerformTopupPageViewModelTests
     {
         Mock<IMediator> mediator = new Mock<IMediator>();
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
         Logger.Initialise(NullLogger.Instance);
-        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object);
-        bool isCompletedCalled = false;
+        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object,applicationCache.Object,
+                                                                                                  dialogSevice.Object);
+        Boolean isCompletedCalled = false;
         viewModel.OnCustomerMobileNumberEntryCompleted = () =>
                                                          {
                                                              isCompletedCalled = true;
@@ -90,9 +102,13 @@ public class MobileTopupPerformTopupPageViewModelTests
     {
         Mock<IMediator> mediator = new Mock<IMediator>();
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
         Logger.Initialise(NullLogger.Instance);
-        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object);
-        bool isCompletedCalled = false;
+        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object,
+                                                                                                  applicationCache.Object,
+                                                                                                  dialogSevice.Object);
+        Boolean isCompletedCalled = false;
         viewModel.OnTopupAmountEntryCompleted = () =>
                                                 {
                                                     isCompletedCalled = true;
@@ -115,8 +131,12 @@ public class MobileTopupPerformTopupPageViewModelTests
         Mock<IMediator> mediator = new Mock<IMediator>();
         mediator.Setup(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
         Logger.Initialise(NullLogger.Instance);
-        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object);
+        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object,
+                                                                                                  applicationCache.Object,
+                                                                                                  dialogSevice.Object);
         viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
@@ -135,8 +155,12 @@ public class MobileTopupPerformTopupPageViewModelTests
         Mock<IMediator> mediator = new Mock<IMediator>();
         mediator.Setup(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
         Logger.Initialise(NullLogger.Instance);
-        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object);
+        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object,
+                                                                                                  applicationCache.Object,
+                                                                                                  dialogSevice.Object);
         viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
                                            {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
@@ -147,5 +171,22 @@ public class MobileTopupPerformTopupPageViewModelTests
         viewModel.PerformTopupCommand.Execute(null);
         mediator.Verify(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         navigationService.Verify(v => v.GoToMobileTopupFailedPage(), Times.Once);
+    }
+
+    [Fact]
+    public void MobileTopupPerformTopupPageViewModel_BackButtonCommand_Execute_IsExecuted()
+    {
+        Mock<IMediator> mediator = new Mock<IMediator>();
+        mediator.Setup(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
+        Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
+        Logger.Initialise(NullLogger.Instance);
+        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object,
+                                                                                                  applicationCache.Object,
+                                                                                                  dialogSevice.Object);
+        
+        viewModel.BackButtonCommand.Execute(null);
+        navigationService.Verify(v => v.GoBack(), Times.Once);
     }
 }

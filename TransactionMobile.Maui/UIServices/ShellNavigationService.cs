@@ -12,6 +12,10 @@ public class ShellNavigationService : INavigationService
 {
     #region Methods
 
+    public async Task GoBack() {
+        await Shell.Current.Navigation.PopAsync();
+    }
+
     public async Task GoToHome() {
         Application.Current.MainPage = new AppShell();
         await NavigateTo("///main/home");

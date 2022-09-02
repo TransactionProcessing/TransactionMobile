@@ -8,6 +8,7 @@ using Moq;
 using Services;
 using Shared.Logger;
 using Shouldly;
+using UIServices;
 using ViewModels.MyAccount;
 using Xunit;
 
@@ -20,10 +21,12 @@ public class MyAccountAddressPageViewModelTests
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
         applicationCache.Setup(a => a.GetMerchantDetails()).Returns(TestData.MerchantDetailsModel);
+        Mock<IDialogService> dialogService = new Mock<IDialogService>();
         Mock<IMediator> mediator = new Mock<IMediator>();
 
         MyAccountAddressPageViewModel viewModel = new MyAccountAddressPageViewModel(navigationService.Object,
                                                                                     applicationCache.Object,
+                                                                                    dialogService.Object,
                                                                                     mediator.Object);
         await viewModel.Initialise(CancellationToken.None);
 
@@ -36,5 +39,22 @@ public class MyAccountAddressPageViewModelTests
         viewModel.Address.Region.ShouldBe(TestData.Region);
         viewModel.Address.Town.ShouldBe(TestData.Town);
         viewModel.Address.PostalCode.ShouldBe(TestData.PostalCode);
+    }
+
+    [Fact]
+    public async Task MyAccountAddressPageViewModel_BackButtonCommand_PreviousPageIsShown()
+    {
+        Logger.Initialise(NullLogger.Instance);
+        Mock<INavigationService> navigationService = new Mock<INavigationService>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        Mock<IDialogService> dialogService = new Mock<IDialogService>();
+        Mock<IMediator> mediator = new Mock<IMediator>();
+        MyAccountAddressPageViewModel viewModel = new MyAccountAddressPageViewModel(navigationService.Object, applicationCache.Object,
+                                                                                    dialogService.Object,
+                                                                                    mediator.Object);
+
+        viewModel.BackButtonCommand.Execute(null);
+
+        navigationService.Verify(n => n.GoBack(), Times.Once);
     }
 }

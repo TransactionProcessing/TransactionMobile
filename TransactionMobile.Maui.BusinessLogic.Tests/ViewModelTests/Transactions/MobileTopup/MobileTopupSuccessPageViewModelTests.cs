@@ -2,6 +2,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
 
 using Maui.UIServices;
 using Moq;
+using Services;
 using Shared.Logger;
 using UIServices;
 using ViewModels.Transactions;

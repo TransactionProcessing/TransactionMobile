@@ -5,15 +5,10 @@ using MediatR;
 using MvvmHelpers;
 using Services;
 using TransactionMobile.Maui.BusinessLogic.Models;
+using TransactionMobile.Maui.BusinessLogic.UIServices;
 
-public class MyAccountContactPageViewModel : BaseViewModel
+public class MyAccountContactPageViewModel : ExtendedBaseViewModel
 {
-    private readonly INavigationService NavigationService;
-
-    private readonly IApplicationCache ApplicationCache;
-
-    private readonly IMediator Mediator;
-
     private ContactModel contact;
 
     public ContactModel Contact {
@@ -23,12 +18,9 @@ public class MyAccountContactPageViewModel : BaseViewModel
 
     #region Constructors
 
-    public MyAccountContactPageViewModel(INavigationService navigationService, IApplicationCache applicationCache,
-                                         IMediator mediator)
-    {
-        this.NavigationService = navigationService;
-        this.ApplicationCache = applicationCache;
-        this.Mediator = mediator;
+    public MyAccountContactPageViewModel(INavigationService navigationService,
+                                         IApplicationCache applicationCache,
+                                         IDialogService dialogService) : base(applicationCache, dialogService, navigationService) {
         this.Title = "My Contacts";
     }
 

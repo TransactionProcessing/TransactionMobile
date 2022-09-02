@@ -4,17 +4,17 @@
     using Maui.UIServices;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
+    using Services;
     using UIServices;
 
-    public class TransactionsPageViewModel : BaseViewModel
+    public class TransactionsPageViewModel : ExtendedBaseViewModel
     {
-        private readonly INavigationService NavigationService;
-
         #region Constructors
 
-        public TransactionsPageViewModel(INavigationService navigationService)
+        public TransactionsPageViewModel(INavigationService navigationService,
+                                         IApplicationCache applicationCache,
+                                         IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
         {
-            this.NavigationService = navigationService;
             this.MobileTopupCommand = new AsyncCommand(this.MobileTopupCommandExecute);
             this.MobileWalletCommand = new AsyncCommand(this.MobileWalletCommandExecute);
             this.BillPaymentCommand = new AsyncCommand(this.BillPaymentCommandExecute);

@@ -1,38 +1,22 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels;
 
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
 using Maui.UIServices;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Distribute;
 using Models;
-using MvvmHelpers;
-using MvvmHelpers.Commands;
 using Services;
-using Shared.Logger;
 using UIServices;
 
-public class HomePageViewModel : BaseViewModel
+public class HomePageViewModel : ExtendedBaseViewModel
 {
-    #region Fields
-
-    private readonly IApplicationCache ApplicationCache;
-
-    private readonly IDialogService DialogService;
-
-    private readonly INavigationService NavigationService;
-
-    #endregion
-
     #region Constructors
-
+    
     public HomePageViewModel(IApplicationCache applicationCache,
                              IDialogService dialogService,
-                             INavigationService navigationService)
+                             INavigationService navigationService) :base(applicationCache,dialogService, navigationService)
     {
-        this.ApplicationCache = applicationCache;
-        this.DialogService = dialogService;
-        this.NavigationService = navigationService;
+        
     }
 
     public async Task ShowDebugMessage(String message) {
@@ -42,19 +26,6 @@ public class HomePageViewModel : BaseViewModel
         {
             await this.DialogService.ShowDialog("Debug", message, "OK");
         }
-    }
-    public async Task<Boolean> BackButtonClicked() {
-        
-        var g = await this.DialogService.ShowDialog("Title", "Message", "yes", "no");
-        if (g) {
-            Logger.LogInformation("LogoutCommand called");
-            this.ApplicationCache.SetAccessToken(null);
-
-            await this.NavigationService.GoToLoginPage();
-            return false;
-        }
-
-        return true;
     }
 
     #endregion

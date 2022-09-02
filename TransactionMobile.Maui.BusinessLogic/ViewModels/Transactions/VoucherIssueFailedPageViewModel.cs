@@ -4,6 +4,7 @@ using System.Windows.Input;
 using Maui.UIServices;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
+using Services;
 using UIServices;
 
 public class VoucherIssueFailedPageViewModel : BaseViewModel

@@ -10,12 +10,10 @@
     using Services;
     using UIServices;
 
-    public class AdminPageViewModel : BaseViewModel
+    public class AdminPageViewModel : ExtendedBaseViewModel
     {
         private readonly IMediator Mediator;
-
-        private readonly INavigationService NavigationService;
-
+        
         private readonly IDeviceService DeviceService;
 
         private readonly IApplicationInfoService ApplicationInfoService;
@@ -23,10 +21,12 @@
         #region Constructors
 
         public AdminPageViewModel(IMediator mediator, INavigationService navigationService,
-                                  IDeviceService deviceService, IApplicationInfoService applicationInfoService)
+                                  IApplicationCache applicationCache,
+                                  IDialogService dialogService,
+                                  IDeviceService deviceService, IApplicationInfoService applicationInfoService) :
+            base(applicationCache,dialogService, navigationService)
         {
             this.Mediator = mediator;
-            this.NavigationService = navigationService;
             this.DeviceService = deviceService;
             this.ApplicationInfoService = applicationInfoService;
             this.ReconciliationCommand = new AsyncCommand(this.ReconciliationCommandExecute);

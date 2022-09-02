@@ -4,14 +4,15 @@
              x:Class="TransactionMobile.Maui.Pages.Transactions.Admin.AdminPage"
              xmlns:userControls="clr-namespace:TransactionMobile.Maui.Controls;assembly=TransactionMobile.Maui"
              Shell.NavBarIsVisible="False">
-    <!-- This might be better as a flex layout if we had images-->
-    <VerticalStackLayout>
-        <userControls:TitleLabel Text="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-    <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
+    <ScrollView>
+        <VerticalStackLayout>
+            <userControls:TitleLabel Text="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+            <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
            CornerRadius="20" Opacity="0.9" BackgroundColor="#E5E9F0">
-            <VerticalStackLayout Spacing="10">
-                <Button AutomationId="ReconciliationButton" Command="{Binding ReconciliationCommand}" x:Name="ReconciliationButton" Text="Reconciliation" Style="{DynamicResource AdminButtonStyle}"/>
-            </VerticalStackLayout>
-    </Frame>
-    </VerticalStackLayout>
+                <VerticalStackLayout Spacing="10">
+                    <Button AutomationId="ReconciliationButton" Command="{Binding ReconciliationCommand}" x:Name="ReconciliationButton" Text="Reconciliation" Style="{DynamicResource AdminButtonStyle}"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

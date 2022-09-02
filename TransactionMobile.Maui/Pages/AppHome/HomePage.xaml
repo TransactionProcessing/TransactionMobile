@@ -10,5 +10,6 @@
         <Label Text="Welcome to .NET MAUI!"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
+        <Button Text="Exit Application" Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}"/>
     </StackLayout>
 </views:NoBackWithoutLogoutPage>

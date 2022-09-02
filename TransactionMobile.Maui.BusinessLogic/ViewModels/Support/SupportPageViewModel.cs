@@ -12,11 +12,9 @@
     using Shared.Logger;
     using UIServices;
 
-    public class SupportPageViewModel : BaseViewModel
+    public class SupportPageViewModel : ExtendedBaseViewModel
     {
         #region Fields
-
-        private readonly IApplicationCache ApplicationCache;
 
         private readonly IApplicationInfoService ApplicationInfoService;
 
@@ -25,9 +23,7 @@
         private readonly IDeviceService DeviceService;
 
         private readonly IMediator Mediator;
-
-        private readonly INavigationService NavigationService;
-
+        
         #endregion
 
         #region Constructors
@@ -37,15 +33,15 @@
                                     IDatabaseContext databaseContext,
                                     IMediator mediator,
                                     INavigationService navigationService,
-                                    IApplicationCache applicationCache) {
+                                    IApplicationCache applicationCache,
+                                    IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
+        {
             this.DeviceService = deviceService;
             this.ApplicationInfoService = applicationInfoService;
             this.DatabaseContext = databaseContext;
             this.UploadLogsCommand = new AsyncCommand(this.UploadLogsCommandExecute);
             this.ViewLogsCommand = new AsyncCommand(this.ViewLogsCommandExecute);
             this.Mediator = mediator;
-            this.NavigationService = navigationService;
-            this.ApplicationCache = applicationCache;
             this.Title = "Support";
         }
 

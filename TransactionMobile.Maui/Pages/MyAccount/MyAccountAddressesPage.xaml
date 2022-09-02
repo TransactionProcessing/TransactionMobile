@@ -4,40 +4,43 @@
              x:Class="TransactionMobile.Maui.Pages.MyAccount.MyAccountAddressesPage"
              xmlns:userControls="clr-namespace:TransactionMobile.Maui.Controls;assembly=TransactionMobile.Maui"
              Shell.NavBarIsVisible="False">
-    <VerticalStackLayout>
-        <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+    <ScrollView>
+        <VerticalStackLayout>
+            <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
 
-        <Frame HasShadow="True" Padding="50,20,50,20" Margin="10,0,0,10" VerticalOptions="CenterAndExpand" 
+            <Frame HasShadow="True" Padding="50,20,50,20" Margin="10,0,0,10" VerticalOptions="CenterAndExpand" 
                CornerRadius="20" Opacity="0.9" BackgroundColor="#f5f8fa">
-            <VerticalStackLayout x:Name="SubLayout">
-                <Label Text="Primary Address" HorizontalTextAlignment="Center"
+                <VerticalStackLayout x:Name="SubLayout">
+                    <Label Text="Primary Address" HorizontalTextAlignment="Center"
                        HorizontalOptions="Fill" FontAttributes="Bold" FontSize="20"
                        Margin="10,0,0,10" AutomationId="PrimaryAddressLabel"/>
 
-                <Label Text="{Binding Address.AddressLine1}"
+                    <Label Text="{Binding Address.AddressLine1}"
                        HorizontalTextAlignment="Start"
                        HorizontalOptions="Fill" AutomationId="AddressLine1Label"/>
-                <Label Text="{Binding Address.AddressLine2}" x:Name="AddressLine2"
+                    <Label Text="{Binding Address.AddressLine2}" x:Name="AddressLine2"
                HorizontalTextAlignment="Start"
                HorizontalOptions="Fill"  AutomationId="AddressLine2Label"/>
-                <Label Text="{Binding Address.AddressLine3}"  x:Name="AddressLine3"
+                    <Label Text="{Binding Address.AddressLine3}"  x:Name="AddressLine3"
                HorizontalTextAlignment="Start"
                HorizontalOptions="Fill" AutomationId="AddressLine3Label"/>
-                <Label Text="{Binding Address.AddressLine4}"  x:Name="AddressLine4"
+                    <Label Text="{Binding Address.AddressLine4}"  x:Name="AddressLine4"
                HorizontalTextAlignment="Start"
                HorizontalOptions="Fill" AutomationId="AddressLine4Label"/>
-                <Label Text="{Binding Address.PostalCode}"
+                    <Label Text="{Binding Address.PostalCode}"
                HorizontalTextAlignment="Start"
                HorizontalOptions="Fill"  AutomationId="AddressPostCodeLabel"/>
-                <Label Text="{Binding Address.Region}"
+                    <Label Text="{Binding Address.Region}"
                HorizontalTextAlignment="Start"
                HorizontalOptions="Fill"  AutomationId="AddressRegionLabel"/>
-                <Label Text="{Binding Address.Town}"
+                    <Label Text="{Binding Address.Town}"
                HorizontalTextAlignment="Start"
                HorizontalOptions="Fill" AutomationId="AddressTownLabel"/>
-            </VerticalStackLayout>
-        </Frame>
-        <Button Text="Edit Address" Style="{StaticResource MyAccountButtonStyle}" 
+                </VerticalStackLayout>
+            </Frame>
+            <Button Text="Edit Address" Style="{StaticResource MyAccountButtonStyle}" 
                 Margin="10,0,0,10" AutomationId="EditAddressButton"/>
-    </VerticalStackLayout>
+            <Button Text="Back" AutomationId="BackButton" Style="{StaticResource MyAccountButtonStyle}" Command="{Binding BackButtonCommand}"/>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

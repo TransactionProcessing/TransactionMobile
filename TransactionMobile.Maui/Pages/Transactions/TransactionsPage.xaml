@@ -5,19 +5,22 @@
                                xmlns:userControls="clr-namespace:TransactionMobile.Maui.Controls;assembly=TransactionMobile.Maui"
                                xmlns:views="clr-namespace:TransactionMobile.Maui.Pages.Common"
                                Shell.NavBarIsVisible="False">
-    <!-- This might be better as a flex layout if we had images-->
-    <VerticalStackLayout>
-        <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-    <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
+    <ScrollView>
+        <!-- This might be better as a flex layout if we had images-->
+        <VerticalStackLayout>
+            <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+            <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
            CornerRadius="20" Opacity="0.9" BackgroundColor="#E5E9F0">
-            <VerticalStackLayout Spacing="10">
-            
-                <Button AutomationId="MobileTopupButton" Command="{Binding MobileTopupCommand}" x:Name="MobileTopupButton" Text="Mobile Topup" Style="{DynamicResource MobileTopupButtonStyle}"/>
-                <Button AutomationId="MobileWalletButton" Command="{Binding MobileWalletCommand}" x:Name="MobileWalletButton" Text="Mobile Wallet" Style="{DynamicResource MobileWalletButtonStyle}"/>
-                <Button AutomationId="BillPaymentButton" Command="{Binding BillPaymentCommand}" x:Name="BillPaymentButton" Text="Bill Payment" Style="{DynamicResource BillPaymentButtonStyle}"/>
-                <Button AutomationId="VoucherButton" Command="{Binding VoucherCommand}" x:Name="VoucherButton" Text="Voucher" Style="{DynamicResource VoucherButtonStyle}"/>
-                <Button AutomationId="AdminButton" Command="{Binding AdminCommand}" x:Name="AdminButton" Text="Admin" Style="{DynamicResource AdminButtonStyle}"/>
-           </VerticalStackLayout>
-    </Frame>
-    </VerticalStackLayout>
+                <VerticalStackLayout Spacing="10">
+
+                    <Button AutomationId="MobileTopupButton" Command="{Binding MobileTopupCommand}" x:Name="MobileTopupButton" Text="Mobile Topup" Style="{DynamicResource MobileTopupButtonStyle}"/>
+                    <Button AutomationId="MobileWalletButton" Command="{Binding MobileWalletCommand}" x:Name="MobileWalletButton" Text="Mobile Wallet" Style="{DynamicResource MobileWalletButtonStyle}"/>
+                    <Button AutomationId="BillPaymentButton" Command="{Binding BillPaymentCommand}" x:Name="BillPaymentButton" Text="Bill Payment" Style="{DynamicResource BillPaymentButtonStyle}"/>
+                    <Button AutomationId="VoucherButton" Command="{Binding VoucherCommand}" x:Name="VoucherButton" Text="Voucher" Style="{DynamicResource VoucherButtonStyle}"/>
+                    <Button AutomationId="AdminButton" Command="{Binding AdminCommand}" x:Name="AdminButton" Text="Admin" Style="{DynamicResource AdminButtonStyle}"/>
+                    <Button Text="Back" AutomationId="BackButton"  Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
 </views:NoBackWithoutLogoutPage>

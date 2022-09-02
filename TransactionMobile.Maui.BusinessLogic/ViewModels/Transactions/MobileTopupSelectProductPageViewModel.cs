@@ -10,15 +10,14 @@ using Models;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
 using Requests;
+using Services;
 using UIServices;
 
-public class MobileTopupSelectProductPageViewModel : BaseViewModel, IQueryAttributable
+public class MobileTopupSelectProductPageViewModel : ExtendedBaseViewModel, IQueryAttributable
 {
     #region Fields
 
     private readonly IMediator Mediator;
-
-    private readonly INavigationService NavigationService;
 
     #endregion
 
@@ -29,10 +28,10 @@ public class MobileTopupSelectProductPageViewModel : BaseViewModel, IQueryAttrib
         this.OperatorIdentifier = HttpUtility.UrlDecode(query[nameof(OperatorIdentifier)].ToString());
     }
 
-    public MobileTopupSelectProductPageViewModel(IMediator mediator, INavigationService navigationService)
+    public MobileTopupSelectProductPageViewModel(IMediator mediator, INavigationService navigationService,
+                                                 IApplicationCache applicationCache, IDialogService dialogService) :base(applicationCache, dialogService, navigationService)
     {
         this.Mediator = mediator;
-        this.NavigationService = navigationService;
         this.ProductSelectedCommand = new AsyncCommand<ItemSelected<ContractProductModel>>(this.ProductSelectedCommandExecute);
         this.Title = "Select a Product";
     }
