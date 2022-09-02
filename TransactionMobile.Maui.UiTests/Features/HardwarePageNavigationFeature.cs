@@ -5,13 +5,12 @@ using NUnit.Framework;
 using UITests.Common;
 
 [TestFixture(MobileTestPlatform.Android, Category = "Android")]
-[TestFixture(MobileTestPlatform.iOS, Category = "iOS")]
 [NonParallelizable]
-public partial class LoginFeature : BaseTestFixture
+public partial class HardwarePageNavigationFeature : BaseTestFixture
 {
     #region Constructors
 
-    public LoginFeature(MobileTestPlatform mobileTestPlatform) : base(mobileTestPlatform) {
+    public HardwarePageNavigationFeature(MobileTestPlatform mobileTestPlatform) : base(mobileTestPlatform) {
     }
 
     #endregion
