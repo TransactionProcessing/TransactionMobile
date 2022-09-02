@@ -7,11 +7,11 @@ using UITests.Common;
 [TestFixture(MobileTestPlatform.Android, Category = "Android")]
 [TestFixture(MobileTestPlatform.iOS, Category = "iOS")]
 [NonParallelizable]
-public partial class LoginFeature : BaseTestFixture
+public partial class ProfileFeature : BaseTestFixture
 {
     #region Constructors
 
-    public LoginFeature(MobileTestPlatform mobileTestPlatform) : base(mobileTestPlatform) {
+    public ProfileFeature(MobileTestPlatform mobileTestPlatform) : base(mobileTestPlatform) {
     }
 
     #endregion

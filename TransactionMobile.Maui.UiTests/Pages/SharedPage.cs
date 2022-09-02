@@ -14,12 +14,21 @@ namespace TransactionMobile.Maui.UiTests.Pages
 
     public class SharedPage : BasePage
     {
-        protected override String Trait { get; }
-        
+        protected override String Trait => String.Empty;
+        private readonly String BackButton;
+
+        public SharedPage() {
+            this.BackButton = "BackButton";
+        }
         public void LogoutMessageIsDisplayed(String logoutAlertTitle,
                                              String logoutAlertMessage) {
             IAlert a = this.SwitchToAlert();
             a.Text.ShouldBe($"{logoutAlertTitle}{Environment.NewLine}{logoutAlertMessage}");
+        }
+
+        public async Task ClickBackButton() {
+            IWebElement element = await this.WaitForElementByAccessibilityId(this.BackButton);
+            element.Click();
         }
     }
 }

@@ -21,10 +21,15 @@ namespace TransactionMobile.Maui.UiTests.Steps
     {
         private SharedPage sharedPage = new SharedPage();
 
-        [When(@"I click on the back button")]
-        public void WhenIClickOnTheBackButton()
+        [When(@"I click on the device back button")]
+        public void WhenIClickOnTheDeviceBackButton()
         {
             this.sharedPage.NavigateBack();
+        }
+
+        [When(@"I click on the back button")]
+        public async Task WhenIClickOnTheBackButton() {
+            await this.sharedPage.ClickBackButton();
         }
 
         [Then(@"The application closes")]
