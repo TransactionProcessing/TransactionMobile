@@ -31,9 +31,9 @@ public class VoucherIssueSelectProductPageViewModelTests
         VoucherSelectProductPageViewModel viewModel = new VoucherSelectProductPageViewModel(mediator.Object, navigationService.Object,applicationCache.Object, dialogSevice.Object);
 
         viewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
-                                                                          {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1}
+                                                                          {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                                                       });
-        viewModel.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier1);
+        viewModel.ProductDetails.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier1);
     }
 
     [Fact]
@@ -46,7 +46,7 @@ public class VoucherIssueSelectProductPageViewModelTests
         VoucherSelectProductPageViewModel viewModel = new VoucherSelectProductPageViewModel(mediator.Object, navigationService.Object, applicationCache.Object, dialogSevice.Object);
 
         viewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
-                                                                          {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1}
+                                                                          {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                                                       });
         await viewModel.Initialise(CancellationToken.None);
         mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
@@ -65,7 +65,7 @@ public class VoucherIssueSelectProductPageViewModelTests
         VoucherSelectProductPageViewModel viewModel = new VoucherSelectProductPageViewModel(mediator.Object, navigationService.Object, applicationCache.Object, dialogSevice.Object);
 
         viewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
-                                                                          {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1}
+                                                                          {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                                                       });
         await viewModel.Initialise(CancellationToken.None);
         mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
@@ -79,7 +79,7 @@ public class VoucherIssueSelectProductPageViewModelTests
 
         viewModel.ProductSelectedCommand.Execute(selectedContractProduct);
 
-        navigationService.Verify(n => n.GoToVoucherIssueVoucherPage(It.IsAny<String>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<Decimal>()), Times.Once);
+        navigationService.Verify(n => n.GoToVoucherIssueVoucherPage(It.IsAny<ProductDetails>(),It.IsAny<Decimal>()), Times.Once);
     }
 
     [Fact]

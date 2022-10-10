@@ -32,7 +32,7 @@ public class TransactionsPageViewModelTests
         TransactionsPageViewModel viewModel = new TransactionsPageViewModel(navigationService.Object, applicationCache.Object, dialogSevice.Object);
 
         viewModel.BillPaymentCommand.Execute(null);
-        navigationService.Verify(n => n.GoToHome(), Times.Once);
+        navigationService.Verify(n => n.GoToBillPaymentSelectOperatorPage(), Times.Once);
     }
 
     [Fact]

@@ -25,15 +25,15 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
     
     private Decimal voucherAmount;
 
+    public ProductDetails ProductDetails { get; private set; }
+
     #endregion
 
     #region Constructors
 
     public void ApplyQueryAttributes(IDictionary<string, Object> query)
     {
-        this.ContractId = HttpUtility.UrlDecode(query[nameof(this.ContractId)].ToString());
-        this.ProductId = HttpUtility.UrlDecode(query[nameof(this.ProductId)].ToString());
-        this.OperatorIdentifier = HttpUtility.UrlDecode(query[nameof(this.OperatorIdentifier)].ToString());
+        this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
         this.VoucherAmount = Decimal.Parse(HttpUtility.UrlDecode(query[nameof(this.VoucherAmount)].ToString()));
     }
 
@@ -54,9 +54,7 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
     #endregion
 
     #region Properties
-
-    public String ContractId { get; set; }
-
+    
     public String CustomerEmailAddress
     {
         get => this.customerEmailAddress;
@@ -88,12 +86,8 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
     public Action OnRecipientMobileNumberEntryCompleted { get; set; }
 
     public Action OnVoucherAmountEntryCompleted { get; set; }
-
-    public String OperatorIdentifier { get; set; }
-
+    
     public ICommand IssueVoucherCommand { get; }
-
-    public String ProductId { get; set; }
 
     public Decimal VoucherAmount
     {
@@ -130,12 +124,9 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
         Shared.Logger.Logger.LogInformation("IssueVoucherCommandExecute called");
         // TODO: Create Command and Send
         PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(DateTime.Now,
-                                                                               "1",
-                                                                               "",
-                                                                               "",
-                                                                               Guid.Parse(this.ContractId),
-                                                                               Guid.Parse(this.ProductId),
-                                                                               this.OperatorIdentifier,
+                                                                               this.ProductDetails.ContractId,
+                                                                               this.ProductDetails.ProductId,
+                                                                               this.ProductDetails.OperatorIdentifier,
                                                                                this.RecipientMobileNumber,
                                                                                this.recipientMobileNumber,
                                                                                this.VoucherAmount,

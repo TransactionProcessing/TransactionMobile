@@ -27,15 +27,13 @@ public class VoucherPerformIssuePageViewModelTests
 
         viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
-                                           {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
-                                           {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
+                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                            {nameof(viewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
                                        });
 
-        viewModel.ContractId.ShouldBe(TestData.OperatorId1ContractId.ToString());
-        viewModel.ProductId.ShouldBe(TestData.Operator1Product_100KES.ProductId.ToString());
-        viewModel.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier1);
+        viewModel.ProductDetails.ContractId.ShouldBe(TestData.OperatorId1ContractId);
+        viewModel.ProductDetails.ProductId.ShouldBe(TestData.Operator1Product_100KES.ProductId);
+        viewModel.ProductDetails.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier1);
         viewModel.VoucherAmount.ShouldBe(TestData.Operator1Product_100KES.Value);
     }
 
@@ -57,9 +55,7 @@ public class VoucherPerformIssuePageViewModelTests
 
         viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
-                                           {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
-                                           {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
+                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                            {nameof(viewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
                                        });
         viewModel.CustomerEmailAddressEntryCompletedCommand.Execute(null);
@@ -85,9 +81,7 @@ public class VoucherPerformIssuePageViewModelTests
 
         viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
-                                           {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
-                                           {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
+                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                            {nameof(viewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
                                        });
         viewModel.RecipientMobileNumberEntryCompletedCommand.Execute(null);
@@ -112,9 +106,7 @@ public class VoucherPerformIssuePageViewModelTests
 
         viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
-                                           {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
-                                           {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
+                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                            {nameof(viewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
                                        });
         viewModel.RecipientEmailAddressEntryCompletedCommand.Execute(null);
@@ -139,9 +131,7 @@ public class VoucherPerformIssuePageViewModelTests
 
         viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
-                                           {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
-                                           {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
+                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                            {nameof(viewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
                                        });
         viewModel.VoucherAmountEntryCompletedCommand.Execute(null);
@@ -161,9 +151,7 @@ public class VoucherPerformIssuePageViewModelTests
                                                                                           dialogService.Object, mediator.Object);
         viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
-                                           {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
-                                           {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
+                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                            {nameof(viewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
                                        });
         viewModel.IssueVoucherCommand.Execute(null);
@@ -184,9 +172,7 @@ public class VoucherPerformIssuePageViewModelTests
                                                                                           dialogService.Object, mediator.Object);
         viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
-                                           {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
-                                           {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
+                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                            {nameof(viewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
                                        });
         viewModel.IssueVoucherCommand.Execute(null);

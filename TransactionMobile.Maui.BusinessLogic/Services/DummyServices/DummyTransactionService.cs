@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Services.DummyServices;
 
 using Models;
+using ViewModels.Transactions;
 
 public class DummyTransactionService : ITransactionService
 {
@@ -43,6 +44,37 @@ public class DummyTransactionService : ITransactionService
             return false;
         }
 
+        return true;
+    }
+
+    public async Task<PerformBillPaymentGetAccountResponseModel> PerformBillPaymentGetAccount(PerformBillPaymentGetAccountModel model,
+                                                                                        CancellationToken cancellationToken) {
+        if (model.CustomerAccountNumber == "123456") {
+            return new PerformBillPaymentGetAccountResponseModel {
+                                                                     BillDetails = null,
+                                                                     IsSuccessful = false
+                                                                 };
+        }
+
+        return new PerformBillPaymentGetAccountResponseModel {
+                                                                 BillDetails = new BillDetails {
+                                                                                                   AccountName = "Mr Test Customer",
+                                                                                                   AccountNumber = model.CustomerAccountNumber,
+                                                                                                   Balance = "100.00",
+                                                                                                   DueDate = DateTime.Now.AddDays(3).ToString("dd-MM-yyyy"),
+
+                                                                                               },
+                                                                 IsSuccessful = true
+                                                             };
+    }
+
+    public async Task<Boolean> PerformBillPaymentMakePayment(PerformBillPaymentMakePaymentModel model,
+                                                       CancellationToken cancellationToken) {
+
+        if (model.PaymentAmount== 99.99m)
+        {
+            return false;
+        }
         return true;
     }
 

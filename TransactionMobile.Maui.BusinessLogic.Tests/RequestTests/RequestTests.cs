@@ -65,25 +65,16 @@ public class RequestTests
     [Fact]
     public void LogonTransactionRequest_Create_IsCreated()
     {
-        LogonTransactionRequest request = LogonTransactionRequest.Create(TestData.TransactionDateTime,
-                                                                         TestData.TransactionNumber,
-                                                                         TestData.DeviceIdentifier,
-                                                                         TestData.ApplicationVersion);
+        LogonTransactionRequest request = LogonTransactionRequest.Create(TestData.TransactionDateTime);
 
         request.ShouldNotBeNull();
         request.TransactionDateTime.ShouldBe(TestData.TransactionDateTime);
-        request.TransactionNumber.ShouldBe(TestData.TransactionNumber);
-        request.DeviceIdentifier.ShouldBe(TestData.DeviceIdentifier);
-        request.ApplicationVersion.ShouldBe(TestData.ApplicationVersion);
     }
 
     [Fact]
     public void PerformMobileTopupRequest_Create_IsCreated()
     {
         PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(TestData.TransactionDateTime,
-                                                                             TestData.TransactionNumber,
-                                                                             TestData.DeviceIdentifier,
-                                                                             TestData.ApplicationVersion,
                                                                              TestData.OperatorId1ContractId,
                                                                              TestData.Operator1Product_100KES.ProductId,
                                                                              TestData.OperatorIdentifier1,
@@ -93,9 +84,6 @@ public class RequestTests
 
         request.ShouldNotBeNull();
         request.TransactionDateTime.ShouldBe(TestData.TransactionDateTime);
-        request.TransactionNumber.ShouldBe(TestData.TransactionNumber);
-        request.DeviceIdentifier.ShouldBe(TestData.DeviceIdentifier);
-        request.ApplicationVersion.ShouldBe(TestData.ApplicationVersion);
         request.ContractId.ShouldBe(TestData.OperatorId1ContractId);
         request.ProductId.ShouldBe(TestData.Operator1Product_100KES.ProductId);
         request.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier1);
@@ -108,9 +96,6 @@ public class RequestTests
     public void PerformVoucherIssueRequest_Create_IsCreated()
     {
         PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(TestData.TransactionDateTime,
-                                                                               TestData.TransactionNumber,
-                                                                               TestData.DeviceIdentifier,
-                                                                               TestData.ApplicationVersion,
                                                                                TestData.OperatorId3ContractId,
                                                                                TestData.Operator3Product_200KES.ProductId,
                                                                                TestData.OperatorIdentifier3,
@@ -121,9 +106,6 @@ public class RequestTests
 
         request.ShouldNotBeNull();
         request.TransactionDateTime.ShouldBe(TestData.TransactionDateTime);
-        request.TransactionNumber.ShouldBe(TestData.TransactionNumber);
-        request.DeviceIdentifier.ShouldBe(TestData.DeviceIdentifier);
-        request.ApplicationVersion.ShouldBe(TestData.ApplicationVersion);
         request.ContractId.ShouldBe(TestData.OperatorId3ContractId);
         request.ProductId.ShouldBe(TestData.Operator3Product_200KES.ProductId);
         request.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier3);
@@ -131,6 +113,44 @@ public class RequestTests
         request.RecipientEmailAddress.ShouldBe(TestData.RecipientEmailAddress);
         request.VoucherAmount.ShouldBe(TestData.Operator3Product_200KES.Value);
         request.CustomerEmailAddress.ShouldBe(TestData.CustomerEmailAddress);
+    }
+
+    [Fact]
+    public void PerformBillPaymentMakePaymentRequest_Create_IsCreated() {
+        PerformBillPaymentMakePaymentRequest request = PerformBillPaymentMakePaymentRequest.Create(TestData.TransactionDateTime,
+                                                                                                   TestData.OperatorId3ContractId,
+                                                                                                   TestData.Operator3Product_200KES.ProductId,
+                                                                                                   TestData.OperatorIdentifier3,
+                                                                                                   TestData.CustomerAccountNumber,
+                                                                                                   TestData.CustomerAccountName,
+                                                                                                   TestData.CustomerMobileNumber,
+                                                                                                   TestData.PaymentAmount);
+
+        request.ShouldNotBeNull();
+        request.TransactionDateTime.ShouldBe(TestData.TransactionDateTime);
+        request.ContractId.ShouldBe(TestData.OperatorId3ContractId);
+        request.ProductId.ShouldBe(TestData.Operator3Product_200KES.ProductId);
+        request.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier3);
+        request.CustomerAccountNumber.ShouldBe(TestData.CustomerAccountNumber);
+        request.CustomerAccountName.ShouldBe(TestData.CustomerAccountName);
+        request.CustomerMobileNumber.ShouldBe(TestData.CustomerMobileNumber);
+        request.PaymentAmount.ShouldBe(TestData.PaymentAmount);
+    }
+
+    [Fact]
+    public void PerformBillPaymentGetAccountRequest_Create_IsCreated() {
+        PerformBillPaymentGetAccountRequest request = PerformBillPaymentGetAccountRequest.Create(TestData.TransactionDateTime,
+                                                                                                 TestData.OperatorId3ContractId,
+                                                                                                 TestData.Operator3Product_200KES.ProductId,
+                                                                                                 TestData.OperatorIdentifier3,
+                                                                                                 TestData.CustomerAccountNumber);
+
+        request.ShouldNotBeNull();
+        request.TransactionDateTime.ShouldBe(TestData.TransactionDateTime);
+        request.ContractId.ShouldBe(TestData.OperatorId3ContractId);
+        request.ProductId.ShouldBe(TestData.Operator3Product_200KES.ProductId);
+        request.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier3);
+        request.CustomerAccountNumber.ShouldBe(TestData.CustomerAccountNumber);
     }
 
     [Fact]

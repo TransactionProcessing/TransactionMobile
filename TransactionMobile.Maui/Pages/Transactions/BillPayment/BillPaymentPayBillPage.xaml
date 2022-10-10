@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TransactionMobile.Maui.Pages.Transactions.BillPayment.BillPaymentPayBillPage"
+             xmlns:behaviors="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
+             xmlns:userControls="clr-namespace:TransactionMobile.Maui.Controls;assembly=TransactionMobile.Maui"
+             Shell.NavBarIsVisible="False">
+    <ScrollView>
+        <VerticalStackLayout x:Name="MainLayout">
+            <userControls:TitleLabel Text="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"
+                                     VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+            <Frame HasShadow="True" Padding="50,20,50,20" Margin="10,0,0,10" VerticalOptions="CenterAndExpand" 
+                   CornerRadius="20" Opacity="0.9" BackgroundColor="#f5f8fa">
+                <VerticalStackLayout x:Name="SubLayout">
+                    <Label Text="Bill Details" HorizontalTextAlignment="Center"
+                           HorizontalOptions="Fill" FontAttributes="Bold" FontSize="20"
+                           Margin="10,0,0,10" AutomationId="PrimaryAddressLabel"/>
+                    
+                    <Label Text="{Binding BillDetails.AccountNumber, StringFormat='Account Number: {0}'}"
+                           HorizontalTextAlignment="Start"
+                           HorizontalOptions="Fill" AutomationId="AccountNumber"/>
+                    <Label Text="{Binding BillDetails.AccountName, StringFormat='Account Holder: {0}'}"
+                           HorizontalTextAlignment="Start"
+                           HorizontalOptions="Fill" AutomationId="AccountName"/>
+                    <Label Text="{Binding BillDetails.Balance, StringFormat='Balance: {0} KES'}"
+                           HorizontalTextAlignment="Start"
+                           HorizontalOptions="Fill" AutomationId="Balance"/>
+                    <Label Text="{Binding BillDetails.DueDate, StringFormat='Due Date: {0}'}"
+                           HorizontalTextAlignment="Start"
+                           HorizontalOptions="Fill" AutomationId="DueDate"/>
+                    <Entry x:Name="CustomerMobileNumberEntry"
+                           Placeholder="Customer Mobile Number"
+                           AutomationId="CustomerMobileNumberEntry"
+                           Style="{DynamicResource CustomerMobileNumberEntryStyle}"
+                           Text="{Binding CustomerMobileNumber}"
+                           Keyboard="Numeric">
+                        <Entry.Behaviors>
+                            <behaviors:EventToCommandBehavior             
+                                EventName="Completed"  
+                                Command="{Binding CustomerMobileNumberEntryCompletedCommand}" />
+                        </Entry.Behaviors>
+                    </Entry>
+
+                    <Entry x:Name="PaymentAmountEntry"
+                           Placeholder="100"
+                           AutomationId="VoucherAmountEntry"
+                           Style="{DynamicResource AmountEntryStyle}"
+                           Text="{Binding PaymentAmount}"
+                           Keyboard="Numeric">
+                        <Entry.Behaviors>
+                            <behaviors:EventToCommandBehavior             
+                                EventName="Completed"  
+                                Command="{Binding PaymentAmountEntryCompletedCommand}" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Button x:Name="MakePaymentButton" Text="Make Payment" Command="{Binding MakeBillPaymentCommand}"
+                            Style="{DynamicResource BillPaymentButtonStyle}" AutomationId="MakePaymentButton"/>
+                    <Button Text="Back" Style="{StaticResource BillPaymentButtonStyle}"
+                            Command="{Binding BackButtonCommand}"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

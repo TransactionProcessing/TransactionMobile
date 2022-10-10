@@ -29,6 +29,7 @@
     using Pages.AppHome;
     using Pages.MyAccount;
     using System.Net.Http;
+    using Pages.Transactions.BillPayment;
     using LogMessage = BusinessLogic.Models.LogMessage;
 #if ANDROID
     using Javax.Net.Ssl;
@@ -209,6 +210,8 @@
             builder.Services.AddSingleton<IRequestHandler<LogonTransactionRequest, PerformLogonResponseModel>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<PerformVoucherIssueRequest, Boolean>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<PerformReconciliationRequest, Boolean>, TransactionRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentGetAccountRequest, PerformBillPaymentGetAccountResponseModel>, TransactionRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentMakePaymentRequest, Boolean>, TransactionRequestHandler>();
 
             builder.Services.AddSingleton<IRequestHandler<UploadLogsRequest, Boolean>, SupportRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<ViewLogsRequest, List<LogMessage>>, SupportRequestHandler>();
@@ -234,6 +237,13 @@
             builder.Services.AddTransient<VoucherPerformIssuePageViewModel>();
             builder.Services.AddTransient<VoucherIssueSuccessPageViewModel>();
             builder.Services.AddTransient<VoucherIssueFailedPageViewModel>();
+
+            builder.Services.AddTransient<BillPaymentSelectOperatorPageViewModel>();
+            builder.Services.AddTransient<BillPaymentSelectProductPageViewModel>();
+            builder.Services.AddTransient<BillPaymentGetAccountPageViewModel>();
+            builder.Services.AddTransient<BillPaymentPayBillPageViewModel>();
+            builder.Services.AddTransient<BillPaymentSuccessPageViewModel>();
+            builder.Services.AddTransient<BillPaymentFailedPageViewModel>();
 
             builder.Services.AddTransient<AdminPageViewModel>();
 
@@ -266,6 +276,13 @@
             builder.Services.AddTransient<VoucherPerformIssuePage>();
             builder.Services.AddTransient<VoucherIssueSuccessPage>();
             builder.Services.AddTransient<VoucherIssueFailedPage>();
+
+            builder.Services.AddTransient<BillPaymentSelectOperatorPage>();
+            builder.Services.AddTransient<BillPaymentSelectProductPage>();
+            builder.Services.AddTransient<BillPaymentGetAccountPage>();
+            builder.Services.AddTransient<BillPaymentPayBillPage>();
+            builder.Services.AddTransient<BillPaymentSuccessPage>();
+            builder.Services.AddTransient<BillPaymentFailedPage>();
 
             builder.Services.AddTransient<AdminPage>();
 

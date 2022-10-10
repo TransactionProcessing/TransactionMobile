@@ -9,6 +9,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
     using Database;
     using Microsoft.Win32.SafeHandles;
     using Models;
+    using ViewModels.Transactions;
 
     public static class TestData
     {
@@ -47,6 +48,13 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
         public static Guid OperatorId1ContractId = Guid.Parse("D57DAC9B-4039-4120-B5A8-F7FDF1D3A3C2");
         public static Guid OperatorId2ContractId = Guid.Parse("2471F981-DDA8-4B87-91F4-DD5DCB984FC1");
         public static Guid OperatorId3ContractId = Guid.Parse("(0BCACE74-CBF1-4F2C-AC1C-733BF1F53133)");
+
+        public static ProductDetails Operator1ProductDetails =>
+            new ProductDetails() {
+                                     ProductId = Operator1Product_100KES.ProductId,
+                                     ContractId = Operator1Product_100KES.ContractId,
+                                     OperatorIdentifier = Operator1Product_100KES.OperatorIdentfier
+                                 };
 
         public static ContractProductModel Operator1Product_100KES = new ContractProductModel
                                                                      {
@@ -192,6 +200,20 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
                 ResponseMessage = "FAILED"
             };
 
+        public static PerformBillPaymentGetAccountResponseModel PerformBillPaymentGetAccountResponseModel =>
+            new PerformBillPaymentGetAccountResponseModel {
+                                                              BillDetails = TestData.BillDetails,
+                                                              IsSuccessful = true
+                                                          };
+
+        public static PerformBillPaymentGetAccountResponseModel PerformBillPaymentGetAccountResponseModelFailed =>
+            new PerformBillPaymentGetAccountResponseModel
+            {
+                BillDetails = null,
+                IsSuccessful = false
+            };
+
+
         public static MerchantDetailsModel MerchantDetailsModel => new MerchantDetailsModel {
                                                                                                 MerchantName = TestData.MerchantName,
                                                                                                 Contact = new ContactModel {
@@ -241,6 +263,24 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
         public static String ContactName = "Mr Test Contact";
 
         public static String ContactMobileNumber = "077777777";
+
+        public static String CustomerAccountName = "Mr Test Customer";
+
+        public static String AccountBalance = "100 KES";
+
+        public static String AccountDueDate = "20/09/2022";
+
+        public static String CustomerMobileNumber = "077777777";
+
+        public static Decimal PaymentAmount = 50.00m;
+
+        public static BillDetails BillDetails =>
+            new BillDetails {
+                                AccountNumber = TestData.CustomerAccountNumber,
+                                AccountName = TestData.CustomerAccountName,
+                                Balance = TestData.AccountBalance,
+                                DueDate = TestData.AccountDueDate
+                            };
     }
 }
  

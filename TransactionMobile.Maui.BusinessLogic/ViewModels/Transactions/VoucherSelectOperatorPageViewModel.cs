@@ -68,7 +68,11 @@ public class VoucherSelectOperatorPageViewModel : ExtendedBaseViewModel
     private async Task OperatorSelectedCommandExecute(ItemSelected<ContractOperatorModel> e)
     {
         Shared.Logger.Logger.LogInformation("OperatorSelectedCommandExecute called");
-        await this.NavigationService.GoToVoucherSelectProductPage(e.SelectedItem.OperatorIdentfier);
+        ProductDetails productDetails = new ProductDetails()
+                                        {
+                                            OperatorIdentifier = e.SelectedItem.OperatorIdentfier
+                                        };
+        await this.NavigationService.GoToVoucherSelectProductPage(productDetails);
     }
 
     #endregion

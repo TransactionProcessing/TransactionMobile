@@ -88,7 +88,19 @@ public class DummyMerchantService : IMerchantService
                        ProductDisplayText = "Custom",
                        ProductId = Guid.Parse("63821A48-D35E-451D-9E88-C8DCB548E7ED"),
                        ProductType = ProductType.MobileTopup
+                   },
+                   new ContractProductModel
+                   {
+                       ContractId = Guid.Parse("0615E7F6-2749-4507-8588-E019E8110C95"),
+                       IsFixedValue = false,
+                       OperatorId = Guid.Parse("C485F21B-EF17-448D-8B8C-E217A07C1863"),
+                       OperatorIdentfier = "PataPawaPostPay",
+                       OperatorName = "Pata Pawa PostPay",
+                       ProductDisplayText = "Pay Bill",
+                       ProductId = Guid.Parse("DE92018C-513E-44B2-B96D-F5B3621C48A2"),
+                       ProductType = ProductType.BillPayment
                    }
+
                };
     }
 

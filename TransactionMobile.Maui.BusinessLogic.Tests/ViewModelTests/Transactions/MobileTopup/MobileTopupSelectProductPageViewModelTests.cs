@@ -33,9 +33,9 @@ public class MobileTopupSelectProductPageViewModelTests
                                                                                                     dialogSevice.Object);
 
         viewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
-                                                                          {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1}
+                                                                          {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                                                       });
-        viewModel.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier1);
+        viewModel.ProductDetails.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier1);
     }
 
     [Fact]
@@ -48,7 +48,7 @@ public class MobileTopupSelectProductPageViewModelTests
         MobileTopupSelectProductPageViewModel viewModel = new MobileTopupSelectProductPageViewModel(mediator.Object, navigationService.Object, applicationCache.Object, dialogSevice.Object);
 
         viewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
-                                                                          {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1}
+                                                                          {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                                                       });
         await viewModel.Initialise(CancellationToken.None);
         mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
@@ -67,7 +67,7 @@ public class MobileTopupSelectProductPageViewModelTests
         MobileTopupSelectProductPageViewModel viewModel = new MobileTopupSelectProductPageViewModel(mediator.Object, navigationService.Object, applicationCache.Object, dialogSevice.Object);
 
         viewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
-                                                                          {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1}
+                                                                          {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                                                       });
         await viewModel.Initialise(CancellationToken.None);
         mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
@@ -81,7 +81,7 @@ public class MobileTopupSelectProductPageViewModelTests
 
         viewModel.ProductSelectedCommand.Execute(selectedContractProduct);
 
-        navigationService.Verify(n => n.GoToMobileTopupPerformTopupPage(It.IsAny<String>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<Decimal>()), Times.Once);
+        navigationService.Verify(n => n.GoToMobileTopupPerformTopupPage(It.IsAny<ProductDetails>(),It.IsAny<Decimal>()), Times.Once);
     }
 
     [Fact]

@@ -24,15 +24,15 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
 
     private Decimal topupAmount;
 
+    public ProductDetails ProductDetails { get; set; }
+
     #endregion
 
     #region Constructors
 
     public void ApplyQueryAttributes(IDictionary<string, Object> query)
     {
-        this.ContractId = HttpUtility.UrlDecode(query[nameof(ContractId)].ToString());
-        this.ProductId = HttpUtility.UrlDecode(query[nameof(ProductId)].ToString());
-        this.OperatorIdentifier = HttpUtility.UrlDecode(query[nameof(OperatorIdentifier)].ToString());
+        this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
         this.TopupAmount = Decimal.Parse(HttpUtility.UrlDecode(query[nameof(TopupAmount)].ToString()));
     }
 
@@ -52,9 +52,7 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
     #endregion
 
     #region Properties
-
-    public String ContractId { get; set; }
-
+    
     public String CustomerEmailAddress
     {
         get => this.customerEmailAddress;
@@ -77,11 +75,7 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
 
     public Action OnTopupAmountEntryCompleted { get; set; }
 
-    public String OperatorIdentifier { get; set; }
-
     public ICommand PerformTopupCommand { get; }
-
-    public String ProductId { get; set; }
 
     public Decimal TopupAmount
     {
@@ -110,14 +104,11 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
     private async Task PerformTopupCommandExecute()
     {
         Shared.Logger.Logger.LogInformation("PerformTopupCommandExecute called");
-        // TODO: Create Command and Send
+        // Create Command and Send
         PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(DateTime.Now,
-                                                                             "1",
-                                                                             "",
-                                                                             "",
-                                                                             Guid.Parse(this.ContractId),
-                                                                             Guid.Parse(this.ProductId),
-                                                                             this.OperatorIdentifier,
+                                                                             this.ProductDetails.ContractId,
+                                                                             this.ProductDetails.ProductId,
+                                                                             this.ProductDetails.OperatorIdentifier,
                                                                              this.CustomerMobileNumber,
                                                                              this.TopupAmount,
                                                                              this.CustomerEmailAddress);

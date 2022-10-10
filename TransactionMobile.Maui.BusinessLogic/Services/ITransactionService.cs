@@ -15,6 +15,10 @@
 
         Task<Boolean> PerformVoucherIssue(PerformVoucherIssueRequestModel model, CancellationToken cancellationToken);
 
+        Task<PerformBillPaymentGetAccountResponseModel> PerformBillPaymentGetAccount(PerformBillPaymentGetAccountModel model, CancellationToken cancellationToken);
+
+        Task<Boolean> PerformBillPaymentMakePayment(PerformBillPaymentMakePaymentModel model, CancellationToken cancellationToken);
+
         #endregion
     }
 }

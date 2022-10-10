@@ -7,9 +7,6 @@ public class PerformVoucherIssueRequest : IRequest<Boolean>
     #region Constructors
 
     private PerformVoucherIssueRequest(DateTime transactionDateTime,
-                                       String transactionNumber,
-                                       String deviceIdentifier,
-                                       String applicationVersion,
                                        Guid contractId,
                                        Guid productId,
                                        String operatorIdentifier,
@@ -18,10 +15,7 @@ public class PerformVoucherIssueRequest : IRequest<Boolean>
                                        Decimal voucherAmount,
                                        String customerEmailAddress)
     {
-        this.ApplicationVersion = applicationVersion;
-        this.DeviceIdentifier = deviceIdentifier;
         this.TransactionDateTime = transactionDateTime;
-        this.TransactionNumber = transactionNumber;
         this.ContractId = contractId;
         this.ProductId = productId;
         this.OperatorIdentifier = operatorIdentifier;
@@ -35,8 +29,6 @@ public class PerformVoucherIssueRequest : IRequest<Boolean>
 
     #region Properties
 
-    public String ApplicationVersion { get; }
-
     public Guid ContractId { get; }
 
     public String RecipientMobileNumber { get; }
@@ -45,15 +37,11 @@ public class PerformVoucherIssueRequest : IRequest<Boolean>
 
     public String CustomerEmailAddress { get; }
 
-    public String DeviceIdentifier { get; }
-
     public String OperatorIdentifier { get; }
 
     public Guid ProductId { get; }
 
     public DateTime TransactionDateTime { get; }
-
-    public String TransactionNumber { get; }
 
     public Decimal VoucherAmount { get; }
 
@@ -62,9 +50,6 @@ public class PerformVoucherIssueRequest : IRequest<Boolean>
     #region Methods
 
     public static PerformVoucherIssueRequest Create(DateTime transactionDateTime,
-                                                    String transactionNumber,
-                                                    String deviceIdentifier,
-                                                    String applicationVersion,
                                                     Guid contractId,
                                                     Guid productId,
                                                     String operatorIdentifier,
@@ -74,9 +59,6 @@ public class PerformVoucherIssueRequest : IRequest<Boolean>
                                                     String customerEmailAddress)
     {
         return new PerformVoucherIssueRequest(transactionDateTime,
-                                              transactionNumber,
-                                              deviceIdentifier,
-                                              applicationVersion,
                                               contractId,
                                               productId,
                                               operatorIdentifier,

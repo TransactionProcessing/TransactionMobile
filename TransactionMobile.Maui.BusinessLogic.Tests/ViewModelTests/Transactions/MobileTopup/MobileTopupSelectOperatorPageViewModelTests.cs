@@ -55,8 +55,8 @@ public class MobileTopupSelectOperatorPageViewModelTests
         };
 
         viewModel.OperatorSelectedCommand.Execute(selectedContractOperator);
-
-        navigationService.Verify(n => n.GoToMobileTopupSelectProductPage(TestData.OperatorIdentifier1), Times.Once);
+        
+        navigationService.Verify(n => n.GoToMobileTopupSelectProductPage(It.IsAny<ProductDetails>()), Times.Once);
     }
 
     [Fact]

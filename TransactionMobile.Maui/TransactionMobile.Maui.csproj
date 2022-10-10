@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0-android;net6.0-ios;net6.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks>net6.0-ios;net6.0-maccatalyst;net6.0-android31.0</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net6.0-windows10.0.19041.0</TargetFrameworks>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>TransactionMobile.Maui</RootNamespace>
@@ -18,7 +18,7 @@
 
 		<!-- Versions -->
 		<ApplicationVersion>1</ApplicationVersion>
-		<ApplicationDisplayVersion>1</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
 
 		<!-- Required for C# Hot Reload -->
 		<UseInterpreter Condition="'$(Configuration)' == 'Debug'">True</UseInterpreter>
@@ -59,10 +59,6 @@
 		<PackageReference Include="Microsoft.AppCenter.Distribute" Version="4.1.0" />
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\TransactionMobile.Maui.BusinessLogic\TransactionMobile.Maui.BusinessLogic.csproj" />
-	</ItemGroup>
 		
 	<ItemGroup>
 	  <Compile Update="Pages\MyAccount\MyAccountAddressesPage.xaml.cs">
@@ -85,6 +81,24 @@
 	  </Compile>
 	  <Compile Update="Pages\Transactions\Admin\AdminPage.xaml.cs">
 	    <DependentUpon>AdminPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\Transactions\BillPayment\BillPaymentPayBillPage.xaml.cs">
+	    <DependentUpon>BillPaymentPayBillPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\Transactions\BillPayment\BillPaymentSelectOperatorPage.xaml.cs">
+	    <DependentUpon>BillPaymentSelectOperatorPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\Transactions\BillPayment\BillPaymentSelectProductPage.xaml.cs">
+	    <DependentUpon>BillPaymentSelectProductPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\Transactions\BillPayment\BillPaymentGetAccountPage.xaml.cs">
+	    <DependentUpon>BillPaymentGetAccountPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\Transactions\BillPayment\BillPaymentFailedPage.xaml.cs">
+	    <DependentUpon>BillPaymentFailedPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\Transactions\BillPayment\BillPaymentSuccessPage.xaml.cs">
+	    <DependentUpon>BillPaymentSuccessPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Pages\Transactions\MobileTopup\MobileTopupPerformTopupPage.xaml.cs">
 	    <DependentUpon>MobileTopupPerformTopupPage.xaml</DependentUpon>
@@ -153,6 +167,24 @@
 	  <MauiXaml Update="Pages\Transactions\Admin\AdminPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\Transactions\BillPayment\BillPaymentPayBillPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Transactions\BillPayment\BillPaymentSelectOperatorPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Transactions\BillPayment\BillPaymentSelectProductPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Transactions\BillPayment\BillPaymentGetAccountPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Transactions\BillPayment\BillPaymentFailedPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Transactions\BillPayment\BillPaymentSuccessPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\Transactions\MobileTopup\MobileTopupPerformTopupPage.xaml">
 	    <SubType>Designer</SubType>
 	    <Generator>MSBuild:Compile</Generator>
@@ -199,6 +231,10 @@
 
 	<ItemGroup>
 	  <Folder Include="Models\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\TransactionMobile.Maui.BusinessLogic\TransactionMobile.Maui.BusinessLogic.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup Condition="$(TargetFramework.Contains('-windows'))">

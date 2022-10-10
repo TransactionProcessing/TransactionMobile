@@ -2,6 +2,7 @@
 using TransactionMobile.Maui.Pages.Reports;
 using TransactionMobile.Maui.Pages.Transactions.MobileTopup;
 using TransactionMobile.Maui.Pages.Transactions.Voucher;
+using TransactionMobile.Maui.Pages.Transactions.BillPayment;
 
 namespace TransactionMobile.Maui;
 
@@ -152,6 +153,13 @@ public partial class App : Application
         Routing.RegisterRoute(nameof(VoucherPerformIssuePage), typeof(VoucherPerformIssuePage));
         Routing.RegisterRoute(nameof(VoucherIssueSuccessPage), typeof(VoucherIssueSuccessPage));
         Routing.RegisterRoute(nameof(VoucherIssueFailedPage), typeof(VoucherIssueFailedPage));
+
+        Routing.RegisterRoute(nameof(BillPaymentSelectOperatorPage), typeof(BillPaymentSelectOperatorPage));
+        Routing.RegisterRoute(nameof(BillPaymentSelectProductPage), typeof(BillPaymentSelectProductPage));
+        Routing.RegisterRoute(nameof(BillPaymentGetAccountPage), typeof(BillPaymentGetAccountPage));
+        Routing.RegisterRoute(nameof(BillPaymentPayBillPage), typeof(BillPaymentPayBillPage));
+        Routing.RegisterRoute(nameof(BillPaymentSuccessPage), typeof(BillPaymentSuccessPage));
+        Routing.RegisterRoute(nameof(BillPaymentFailedPage), typeof(BillPaymentFailedPage));
 
         Routing.RegisterRoute(nameof(AdminPage), typeof(AdminPage));
         Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
