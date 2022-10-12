@@ -1,5 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Models;
 
+using ViewModels.Transactions;
+
 public class PerformLogonResponseModel
 {
     #region Properties
@@ -15,4 +17,11 @@ public class PerformLogonResponseModel
     public Boolean RequireApplicationUpdate { get; set; }
 
     #endregion
+}
+
+public class PerformBillPaymentGetAccountResponseModel
+{
+    public Boolean IsSuccessful { get; set; }
+
+    public BillDetails BillDetails{ get; set; }
 }

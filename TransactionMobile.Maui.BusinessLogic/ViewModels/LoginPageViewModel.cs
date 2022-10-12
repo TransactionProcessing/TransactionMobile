@@ -106,9 +106,7 @@
         private async Task PerformLogonTransaction() {
             // Logon Transaction
             String deviceIdentifier = this.DeviceService.GetIdentifier();
-            LogonTransactionRequest logonTransactionRequest = LogonTransactionRequest.Create(DateTime.Now, "1",
-                                                                                             deviceIdentifier,
-                                                                                             this.ApplicationInfoService.VersionString);
+            LogonTransactionRequest logonTransactionRequest = LogonTransactionRequest.Create(DateTime.Now);
             PerformLogonResponseModel logonResponse = await this.Mediator.Send(logonTransactionRequest);
 
             if (logonResponse.IsSuccessful == false)

@@ -66,7 +66,11 @@ public class MobileTopupSelectOperatorPageViewModel : ExtendedBaseViewModel
     private async Task OperatorSelectedCommandExecute(ItemSelected<ContractOperatorModel> e)
     {
         Shared.Logger.Logger.LogInformation("OperatorSelectedCommandExecute called");
-        await this.NavigationService.GoToMobileTopupSelectProductPage(e.SelectedItem.OperatorIdentfier);
+        ProductDetails productDetails = new ProductDetails() {
+                                                                 OperatorIdentifier = e.SelectedItem.OperatorIdentfier
+                                                             };
+
+        await this.NavigationService.GoToMobileTopupSelectProductPage(productDetails);
 
     }
 

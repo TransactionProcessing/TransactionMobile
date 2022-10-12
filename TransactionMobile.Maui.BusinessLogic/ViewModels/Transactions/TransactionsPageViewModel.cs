@@ -50,7 +50,7 @@
         private async Task BillPaymentCommandExecute()
         {
             Shared.Logger.Logger.LogInformation("AdminCommandExecute called");
-            await this.NavigationService.GoToHome();
+            await this.NavigationService.GoToBillPaymentSelectOperatorPage();
         }
 
         private async Task MobileTopupCommandExecute()

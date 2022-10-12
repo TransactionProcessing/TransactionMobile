@@ -58,7 +58,7 @@ public class VoucherSelectOperatorPageViewModelTests
 
         viewModel.OperatorSelectedCommand.Execute(selectedContractOperator);
 
-        navigationService.Verify(n => n.GoToVoucherSelectProductPage(TestData.OperatorIdentifier1), Times.Once);
+        navigationService.Verify(n => n.GoToVoucherSelectProductPage(It.IsAny<ProductDetails>()), Times.Once);
     }
 
     [Fact]

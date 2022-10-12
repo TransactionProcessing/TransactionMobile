@@ -31,15 +31,13 @@ public class MobileTopupPerformTopupPageViewModelTests
 
         viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
-                                           {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
-                                           {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
+                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                            {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
                                        });
 
-        viewModel.ContractId.ShouldBe(TestData.OperatorId1ContractId.ToString());
-        viewModel.ProductId.ShouldBe(TestData.Operator1Product_100KES.ProductId.ToString());
-        viewModel.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier1);
+        viewModel.ProductDetails.ContractId.ShouldBe(TestData.OperatorId1ContractId);
+        viewModel.ProductDetails.ProductId.ShouldBe(TestData.Operator1Product_100KES.ProductId);
+        viewModel.ProductDetails.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier1);
         viewModel.TopupAmount.ShouldBe(TestData.Operator1Product_100KES.Value);
     }
 
@@ -61,9 +59,7 @@ public class MobileTopupPerformTopupPageViewModelTests
 
         viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
-                                           {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
-                                           {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
+                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                            {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
                                        });
         viewModel.CustomerEmailAddressEntryCompletedCommand.Execute(null);
@@ -88,9 +84,7 @@ public class MobileTopupPerformTopupPageViewModelTests
 
         viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
-                                           {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
-                                           {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
+                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                            {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
                                        });
         viewModel.CustomerMobileNumberEntryCompletedCommand.Execute(null);
@@ -116,9 +110,7 @@ public class MobileTopupPerformTopupPageViewModelTests
 
         viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
-                                           {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
-                                           {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
+                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                            {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
                                        });
         viewModel.TopupAmountEntryCompletedCommand.Execute(null);
@@ -139,9 +131,7 @@ public class MobileTopupPerformTopupPageViewModelTests
                                                                                                   dialogSevice.Object);
         viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
-                                           {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
-                                           {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
+                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                            {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
                                        });
         viewModel.PerformTopupCommand.Execute(null);
@@ -163,9 +153,7 @@ public class MobileTopupPerformTopupPageViewModelTests
                                                                                                   dialogSevice.Object);
         viewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                        {
-                                           {nameof(viewModel.ContractId), TestData.OperatorId1ContractId},
-                                           {nameof(viewModel.ProductId), TestData.Operator1Product_100KES.ProductId},
-                                           {nameof(viewModel.OperatorIdentifier), TestData.OperatorIdentifier1},
+                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                            {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
                                        });
         viewModel.PerformTopupCommand.Execute(null);

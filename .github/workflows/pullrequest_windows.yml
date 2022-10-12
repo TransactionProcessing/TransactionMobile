@@ -27,11 +27,10 @@ jobs:
       - name: Setup .NET 6
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: 6.0.400-preview.22330.6
-          include-prerelease: true                
+          dotnet-version: 6.0.401                
  
-      - run: dotnet tool update -g dotnet-vs
-      - run: vs install preview --quiet +Microsoft.VisualStudio.Component.ManagedDesktop.Core +Microsoft.NetCore.Component.DevelopmentTools
+      #- run: dotnet tool update -g dotnet-vs
+      #- run: vs install preview --quiet +Microsoft.VisualStudio.Component.ManagedDesktop.Core +Microsoft.NetCore.Component.DevelopmentTools
           
       - name: Install MAUI Workloads
         run: |

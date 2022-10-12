@@ -19,13 +19,15 @@ public class MobileTopupSelectProductPageViewModel : ExtendedBaseViewModel, IQue
 
     private readonly IMediator Mediator;
 
+    public ProductDetails ProductDetails { get; private set; }
+
     #endregion
 
     #region Constructors
 
     public void ApplyQueryAttributes(IDictionary<string, Object> query)
     {
-        this.OperatorIdentifier = HttpUtility.UrlDecode(query[nameof(OperatorIdentifier)].ToString());
+        this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
     }
 
     public MobileTopupSelectProductPageViewModel(IMediator mediator, INavigationService navigationService,
@@ -39,9 +41,7 @@ public class MobileTopupSelectProductPageViewModel : ExtendedBaseViewModel, IQue
     #endregion
 
     #region Properties
-
-    public String OperatorIdentifier { get; private set; }
-
+    
     public List<ContractProductModel> Products { get; private set; }
 
     public ICommand ProductSelectedCommand { get; }
@@ -56,7 +56,7 @@ public class MobileTopupSelectProductPageViewModel : ExtendedBaseViewModel, IQue
 
         List<ContractProductModel> products = await this.Mediator.Send(request, cancellationToken);
 
-        products = products.Where(p => p.OperatorIdentfier == this.OperatorIdentifier).ToList();
+        products = products.Where(p => p.OperatorIdentfier == this.ProductDetails.OperatorIdentifier).ToList();
 
         this.Products = products;
     }
@@ -64,7 +64,14 @@ public class MobileTopupSelectProductPageViewModel : ExtendedBaseViewModel, IQue
     private async Task ProductSelectedCommandExecute(ItemSelected<ContractProductModel> e)
     {
         Shared.Logger.Logger.LogInformation("ProductSelectedCommandExecute called");
-        await this.NavigationService.GoToMobileTopupPerformTopupPage(e.SelectedItem.OperatorIdentfier, e.SelectedItem.ContractId, e.SelectedItem.ProductId, e.SelectedItem.Value);
+        ProductDetails productDetails = new ProductDetails()
+                                        {
+                                            OperatorIdentifier = e.SelectedItem.OperatorIdentfier,
+                                            ContractId = e.SelectedItem.ContractId,
+                                            ProductId = e.SelectedItem.ProductId
+                                        };
+
+        await this.NavigationService.GoToMobileTopupPerformTopupPage(productDetails, e.SelectedItem.Value);
     }
 
     #endregion
