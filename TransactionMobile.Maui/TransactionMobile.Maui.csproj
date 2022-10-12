@@ -269,12 +269,6 @@
 		<MtouchLink>None</MtouchLink>
 		<PublishTrimmed>False</PublishTrimmed>
 	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-ios|AnyCPU'">
-	  <MtouchLink>None</MtouchLink>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-ios|AnyCPU'">
-	  <MtouchLink>SdkOnly</MtouchLink>
-	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-maccatalyst|AnyCPU'">
 	  <MtouchLink>SdkOnly</MtouchLink>
 	</PropertyGroup>
@@ -289,4 +283,15 @@
 	  <MtouchLink>SdkOnly</MtouchLink>
 	  <TrimMode>link</TrimMode>
 	</PropertyGroup>-->
+
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-ios|AnyCPU'">
+		<MtouchLink>None</MtouchLink>
+		<PublishTrimmed>true</PublishTrimmed>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-ios|AnyCPU'">
+		<MtouchLink>SdkOnly</MtouchLink>
+		<PublishTrimmed>true</PublishTrimmed>
+	</PropertyGroup>
+
 </Project>
