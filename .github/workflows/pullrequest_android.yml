@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v3
 
       - uses: malinskiy/action-android/install-sdk@release/0.1.1
-      - run: sdkmanager "platform-tools" "platforms;android-31"
+      - run: sdkmanager "platform-tools" "platforms;android-33"
       - run: sdkmanager "build-tools;30.0.2"
       - run: adb devices
 
@@ -34,10 +34,10 @@ jobs:
         run: |
           npm install -g appium --unsafe-perm=true --allow-root
 
-      - name: Setup .NET 6
+      - name: Setup .NET 7
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: 6.0.x          
+          dotnet-version: 7.0.100            
           
       - uses: actions/setup-java@v2
         with:
@@ -53,7 +53,7 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln --source https://api.nuget.org/v3/index.json --source https://www.myget.org/F/transactionprocessing/api/v3/index.json --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-android --no-restore
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-android --no-restore
 
       - name: Run Unit Tests
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj

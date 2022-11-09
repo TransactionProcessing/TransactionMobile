@@ -19,10 +19,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3        
 
-      - name: Setup .NET 6
+      - name: Setup .NET 7
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 7.0.100  
           
       - name: Install MAUI Workloads
         run: |
@@ -32,7 +32,7 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln
         
       - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-maccatalyst --no-restore
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-maccatalyst --no-restore
         
       - name: Run Unit Tests
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
