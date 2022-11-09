@@ -50,13 +50,13 @@ jobs:
           isWindows: false
 
       - name: Build Android
-        run: dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-android --no-restore /p:AndroidSigningKeyStore=transactionprocessing.keystore /p:AndroidSigningKeyPass="${{ secrets.KEYSTORE_PASSWORD }}" 
+        run: dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-android --no-restore /p:AndroidSigningKeyStore=transactionprocessing.keystore /p:AndroidSigningKeyPass="${{ secrets.KEYSTORE_PASSWORD }}" 
       
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v3
         with:
           name: android-ci-build
-          path: TransactionMobile.Maui/bin/Release/net6.0-android/com.transactionprocessing.pos-Signed.apk
+          path: TransactionMobile.Maui/bin/Release/net7.0-android/com.transactionprocessing.pos-Signed.apk
           
       - name: Upload Artifact to App Center
         uses: Coxxs/AppCenter-Github-Action@v1
@@ -64,7 +64,7 @@ jobs:
           appName: "Transaction-Processing/POS-Android"
           token: ${{secrets.APPCENTER_ANDROID_TOKEN}}
           group: Merchants
-          file: TransactionMobile.Maui/bin/Release/net6.0-android/com.transactionprocessing.pos-Signed.apk
+          file: TransactionMobile.Maui/bin/Release/net7.0-android/com.transactionprocessing.pos-Signed.apk
           notifyTesters: true
           debug: false  
           gitReleaseNotes: true
@@ -84,10 +84,10 @@ jobs:
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}        
         shell: bash
        
-      - name: Setup .NET 6
+      - name: Setup .NET 7
         uses: actions/setup-dotnet@v2
         with:
-         dotnet-version: 6.0.x
+          dotnet-version: 7.0.100  
          
       - name: Install MAUI Workload
         run: dotnet workload install maui --ignore-failed-sources
@@ -103,13 +103,13 @@ jobs:
           isWindows: true
 
       - name: Build Windows
-        run: dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-windows10.0.19041.0 --no-restore
+        run: dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 --no-restore
 
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v3
         with:
           name: windows-ci-build
-          path: TransactionMobile.Maui/bin/Release/net6.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile*/TransactionMobile*.msix	
+          path: TransactionMobile.Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile*/TransactionMobile*.msix
           
       - name: Upload Artifact to App Center
         uses: Coxxs/AppCenter-Github-Action@v1
@@ -117,7 +117,7 @@ jobs:
           appName: "Transaction-Processing/POS-Windows"
           token: ${{secrets.APPCENTER_WINDOWS_TOKEN}}
           group: Merchants
-          file: "TransactionMobile.Maui/bin/Release/net6.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_${{ steps.get_version.outputs.VERSION }}.0_Test/TransactionMobile.Maui_${{ steps.get_version.outputs.VERSION }}.0_x64.msix"	
+          file: "TransactionMobile.Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_${{ steps.get_version.outputs.VERSION }}.0_Test/TransactionMobile.Maui_${{ steps.get_version.outputs.VERSION }}.0_x64.msix"	
           notifyTesters: true
           debug: false  
           gitReleaseNotes: true          
@@ -133,10 +133,10 @@ jobs:
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}        
         
-      - name: Setup .NET 6
-        uses: actions/setup-dotnet@v1
+      - name: Setup .NET 7
+        uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 7.0.100  
           
       - name: Install MAUI Workload
         run: dotnet workload install maui --ignore-failed-sources
@@ -152,13 +152,13 @@ jobs:
           isWindows: false
 
       - name: Build MacCatalyst
-        run: dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-maccatalyst --no-restore
+        run: dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-maccatalyst --no-restore
 
       - name: Upload MacCatalyst Artifact
         uses: actions/upload-artifact@v3
         with:
           name: macos-ci-build
-          path: TransactionMobile.Maui/bin/Release/net6.0-maccatalyst/maccatalyst-x64/publish/*.pkg
+          path: TransactionMobile.Maui/bin/Release/net7.0-maccatalyst/maccatalyst-x64/publish/*.pkg
               
   release-ios:
     runs-on: macos-11
@@ -171,10 +171,10 @@ jobs:
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}        
               
-      - name: Setup .NET 6
-        uses: actions/setup-dotnet@v1
+      - name: Setup .NET 7
+        uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 7.0.100  
                 
       - name: Install MAUI Workload
         run: dotnet workload install maui --ignore-failed-sources
@@ -190,10 +190,10 @@ jobs:
          isWindows: false
       
       - name: Build iOS
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net6.0-ios --no-restore /p:buildForSimulator=True /p:packageApp=True /p:ArchiveOnBuild=False
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-ios --no-restore /p:buildForSimulator=True /p:packageApp=True /p:ArchiveOnBuild=False
       
       - name: Upload MacCatalyst Artifact
         uses: actions/upload-artifact@v3
         with:
           name: iOS-ci-build
-          path: TransactionMobile.Maui/bin/Release/net6.0-ios/iossimulator-x64/**/*.app
+          path: TransactionMobile.Maui/bin/Release/net7.0-ios/iossimulator-x64/**/*.app

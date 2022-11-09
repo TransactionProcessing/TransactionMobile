@@ -43,7 +43,7 @@ jobs:
       #  run: msbuild TransactionMobile.Maui/TransactionMobile.Maui.csproj -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true
       - name: Build Code
         run: |
-          "C:/Program Files/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/MSBuild.exe TransactionMobile.Maui/TransactionMobile.Maui.csproj -r -p:Configuration=Release -p:RestorePackages=true -p:TargetFramework=net6.0-windows10.0.19041 /p:RestoreSources=https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json"
+          "C:/Program Files/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/MSBuild.exe TransactionMobile.Maui/TransactionMobile.Maui.csproj -r -p:Configuration=Release -p:RestorePackages=true -p:TargetFramework=net7.0-windows10.0.19041 /p:RestoreSources=https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json"
 
       - name: Run Unit Tests
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
