@@ -24,10 +24,10 @@ jobs:
         with:
           vs-prerelease: true
 
-      - name: Setup .NET 6
+      - name: Setup .NET 7
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: 6.0.401                
+          dotnet-version: 7.0.100              
  
       #- run: dotnet tool update -g dotnet-vs
       #- run: vs install preview --quiet +Microsoft.VisualStudio.Component.ManagedDesktop.Core +Microsoft.NetCore.Component.DevelopmentTools

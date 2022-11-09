@@ -32,10 +32,10 @@ jobs:
         run: |
           npm install -g appium --unsafe-perm=true --allow-root
 
-      - name: Setup .NET 6
+      - name: Setup .NET 7
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: 6.0.x     
+          dotnet-version: 7.0.100       
       
       - name: Install MAUI Workloads
         run: |
