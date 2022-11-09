@@ -55,7 +55,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.DeviceName = "iPhone 11";
             
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net6.0-ios/iossimulator-x64/");
+            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net7.0-ios/iossimulator-x64/");
             var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.app");
             driverOptions.App = apkPath;
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
@@ -84,7 +84,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption("uiautomator2ServerInstallTimeout", "40000");
 
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net6.0-android/");
+            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net7.0-android/");
 
             var apkPath = Path.Combine(binariesFolder, "com.transactionprocessing.pos-Signed.apk");
             driverOptions.App = apkPath;
