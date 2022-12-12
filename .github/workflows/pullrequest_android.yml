@@ -20,6 +20,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup Docker
+        run: |
+          brew install docker
+          colima start
+
       - uses: malinskiy/action-android/install-sdk@release/0.1.1
       - run: sdkmanager "platform-tools" "platforms;android-33"
       - run: sdkmanager "build-tools;30.0.2"
@@ -55,17 +60,17 @@ jobs:
       - name: Build Code
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-android --no-restore
 
-      - name: Run Unit Tests
-        run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
+      #- name: Run Unit Tests
+      #  run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
         
-      #- name: Run Integration Tests - Android
-      #  uses: malinskiy/action-android/emulator-run-cmd@release/0.1.1
-      #  with:
-      #    cmd: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)
-      #    api: 28
-      #    tag: default
-      #    abi: x86   
-      #    verbose: true
+      - name: Run Integration Tests - Android
+        uses: malinskiy/action-android/emulator-run-cmd@release/0.1.1
+        with:
+          cmd: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)
+          api: 28
+          tag: default
+          abi: x86   
+          verbose: true
 
       #- name: Upload Android Artifact
       #  uses: actions/upload-artifact@v2.3.1

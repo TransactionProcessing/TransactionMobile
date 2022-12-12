@@ -21,20 +21,12 @@ namespace TransactionMobile.Maui.UiTests.Features
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Profile")]
-    [NUnit.Framework.CategoryAttribute("background")]
-    [NUnit.Framework.CategoryAttribute("login")]
-    [NUnit.Framework.CategoryAttribute("profile")]
-    [NUnit.Framework.CategoryAttribute("toolbar")]
     public partial class ProfileFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-        private static string[] featureTags = new string[] {
-                "background",
-                "login",
-                "profile",
-                "toolbar"};
+        private static string[] featureTags = ((string[])(null));
         
 #line 1 "Profile.feature"
 #line hidden
@@ -85,39 +77,13 @@ namespace TransactionMobile.Maui.UiTests.Features
         {
 #line 4
 #line hidden
-#line 5
- testRunner.Given("I am on the Login Screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 6
- testRunner.And("the application is in training mode", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 7
- testRunner.When("I enter \'merchantuser@testmerchant1.co.uk\' as the Email Address", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 8
- testRunner.And("I enter \'123456\' as the Password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 9
- testRunner.And("I tap on Login", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 10
- testRunner.Then("the Merchant Home Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-#line 11
- testRunner.When("I tap on Profile", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 12
- testRunner.Then("the My Profile Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
         }
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("View Merchant Addresses")]
-        [NUnit.Framework.CategoryAttribute("PRTest")]
         public void ViewMerchantAddresses()
         {
-            string[] tagsOfScenario = new string[] {
-                    "PRTest"};
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View Merchant Addresses", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 15
@@ -132,31 +98,6 @@ this.ScenarioInitialize(scenarioInfo);
                 this.ScenarioStart();
 #line 4
 this.FeatureBackground();
-#line hidden
-#line 16
- testRunner.When("I tap on the Addresses button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 17
- testRunner.Then("the Address List Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-                TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
-                            "AddressLine1",
-                            "AddressLine2",
-                            "AddressLine3",
-                            "AddressLine4",
-                            "AddressTown",
-                            "AddressRegion",
-                            "AddressPostCode"});
-                table1.AddRow(new string[] {
-                            "test address line 1",
-                            "test address line 2",
-                            "test address line 3",
-                            "test address line 4",
-                            "Town",
-                            "Region",
-                            "TE57 1NG"});
-#line 18
- testRunner.And("the Primary Address is displayed", ((string)(null)), table1, "And ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -182,23 +123,6 @@ this.ScenarioInitialize(scenarioInfo);
 #line 4
 this.FeatureBackground();
 #line hidden
-#line 23
- testRunner.When("I tap on the Contacts button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 24
- testRunner.Then("the Contact List Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-                TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Name",
-                            "EmailAddress",
-                            "MobileNumber"});
-                table2.AddRow(new string[] {
-                            "Test Contact",
-                            "stuart_ferguson1@outlook.com",
-                            "123456789"});
-#line 25
- testRunner.And("the Primary Contact is displayed", ((string)(null)), table2, "And ");
-#line hidden
             }
             this.ScenarioCleanup();
         }
@@ -222,29 +146,6 @@ this.ScenarioInitialize(scenarioInfo);
                 this.ScenarioStart();
 #line 4
 this.FeatureBackground();
-#line hidden
-#line 30
- testRunner.When("I tap on the Account Info button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 31
- testRunner.Then("the Account Info Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-                TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Name",
-                            "Balance",
-                            "AvailableBalance",
-                            "LastStatementDate",
-                            "NextStatementDate",
-                            "SettlementSchedule"});
-                table3.AddRow(new string[] {
-                            "Dummy Merchant",
-                            "99",
-                            "100",
-                            "01/08/2022",
-                            "01/09/2022",
-                            "Monthly"});
-#line 32
- testRunner.And("the Account Info is displayed", ((string)(null)), table3, "And ");
 #line hidden
             }
             this.ScenarioCleanup();
