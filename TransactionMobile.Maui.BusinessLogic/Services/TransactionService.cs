@@ -7,6 +7,7 @@
     using Common;
     using Models;
     using Newtonsoft.Json;
+    using RequestHandlers;
     using Shared.Logger;
     using TransactionProcessorACL.DataTransferObjects;
     using TransactionProcessorACL.DataTransferObjects.Responses;
@@ -37,84 +38,112 @@
 
         #region Methods
 
-        public async Task<PerformBillPaymentGetAccountResponseModel> PerformBillPaymentGetAccount(PerformBillPaymentGetAccountModel model,
-                                                                                                  CancellationToken cancellationToken) {
+        public async Task<Result<PerformBillPaymentGetAccountResponseModel>> PerformBillPaymentGetAccount(PerformBillPaymentGetAccountModel model,
+                                                                                                          CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform bill payment get account transaction");
 
-            SaleTransactionResponseMessage responseMessage = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
+            Result<PerformBillPaymentGetAccountResponseModel> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, PerformBillPaymentGetAccountResponseModel>(model.ToSaleTransactionRequest(), cancellationToken);
 
-            Logger.LogInformation("Bill payment get account transaction performed successfully");
+            if (result.Success)
+            {
+                Logger.LogInformation("Bill payment - get account transaction performed successfully");
+            }
+            else
+            {
+                Logger.LogWarning("Error performing bill payment - get account transaction");
+            }
 
-            // Convert to model
-            PerformBillPaymentGetAccountResponseModel response = new PerformBillPaymentGetAccountResponseModel {
-                                                                                                                   BillDetails = responseMessage
-                                                                                                                       .AdditionalResponseMetaData.ToBillDetails(),
-                                                                                                                   IsSuccessful = responseMessage.ResponseCode == "0000"
-                                                                                                               };
-
-            return response;
+            return result;
         }
 
-        public async Task<Boolean> PerformBillPaymentMakePayment(PerformBillPaymentMakePaymentModel model,
-                                                                 CancellationToken cancellationToken) {
+        public async Task<Result<SaleTransactionResponseMessage>> PerformBillPaymentMakePayment(PerformBillPaymentMakePaymentModel model,
+                                                                                                CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform bill payment make payment transaction");
 
-            SaleTransactionResponseMessage response = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
+            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
 
-            Logger.LogInformation("Bill payment make payment transaction performed successfully");
+            if (result.Success)
+            {
+                Logger.LogInformation("Bill payment - make payment transaction performed successfully");
+            }
+            else
+            {
+                Logger.LogWarning("Error performing bill payment - make payment transaction");
+            }
 
-            return response.ResponseCode == "0000";
+            return result;
         }
 
-        public async Task<PerformLogonResponseModel> PerformLogon(PerformLogonRequestModel model,
-                                                                  CancellationToken cancellationToken) {
+        public async Task<Result<PerformLogonResponseModel>> PerformLogon(PerformLogonRequestModel model,
+                                                                          CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform logon transaction");
 
-            SaleTransactionResponseMessage response =  await this.SendTransactionRequest<LogonTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToLogonTransactionRequest(), cancellationToken);
-            
-            Logger.LogInformation("Logon transaction performed successfully");
+            Result<PerformLogonResponseModel> result =  await this.SendTransactionRequest<LogonTransactionRequestMessage, PerformLogonResponseModel>(model.ToLogonTransactionRequest(), cancellationToken);
 
-            return new PerformLogonResponseModel {
-                                                     EstateId = response.EstateId,
-                                                     IsSuccessful = response.ResponseCode == "0000",
-                                                     MerchantId = response.MerchantId,
-                                                     ResponseMessage = response.ResponseMessage,
-                                                 };
+            if (result.Success)
+            {
+                Logger.LogInformation("Logon transaction performed successfully");
+            }
+            else
+            {
+                Logger.LogWarning("Error performing Logon transaction");
+            }
+
+            return result;
         }
 
-        public async Task<Boolean> PerformMobileTopup(PerformMobileTopupRequestModel model,
-                                                      CancellationToken cancellationToken) {
+        public async Task<Result<SaleTransactionResponseMessage>> PerformMobileTopup(PerformMobileTopupRequestModel model,
+                                                                                     CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform mobile top-up transaction");
 
-            SaleTransactionResponseMessage response = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
+            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
 
-            Logger.LogInformation("Mobile top-up transaction performed successfully");
+            if (result.Success)
+            {
+                Logger.LogInformation("Mobile top-up transaction performed successfully");
+            }
+            else
+            {
+                Logger.LogWarning("Error performing Mobile top-up transaction");
+            }
 
-            return response.ResponseCode == "0000";
+            return result;
         }
 
-        public async Task<Boolean> PerformReconciliation(PerformReconciliationRequestModel model,
-                                                         CancellationToken cancellationToken) {
+        public async Task<Result<ReconciliationResponseMessage>> PerformReconciliation(PerformReconciliationRequestModel model,
+                                                                                       CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform reconciliation transaction");
 
-            ReconciliationResponseMessage response = await this.SendTransactionRequest<ReconciliationRequestMessage, ReconciliationResponseMessage>(model.ToReconciliationRequest(), cancellationToken);
+            Result<ReconciliationResponseMessage> result = await this.SendTransactionRequest<ReconciliationRequestMessage, ReconciliationResponseMessage>(model.ToReconciliationRequest(), cancellationToken);
 
-            Logger.LogInformation("Reconciliation transaction performed successfully");
+            if (result.Success)
+            {
+                Logger.LogInformation("Reconciliation transaction performed successfully");
+            }
+            else
+            {
+                Logger.LogWarning("Error performing Reconciliation transaction");
+            }
 
-            return response.ResponseCode == "0000";
+            return result;
         }
 
-        public async Task<Boolean> PerformVoucherIssue(PerformVoucherIssueRequestModel model,
-                                                       CancellationToken cancellationToken) {
+        public async Task<Result<SaleTransactionResponseMessage>> PerformVoucherIssue(PerformVoucherIssueRequestModel model,
+                                                                                      CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform voucher transaction");
 
-            SaleTransactionResponseMessage response = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
+            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
 
-            Logger.LogInformation("Voucher transaction performed successfully");
+            if (result.Success) {
+                Logger.LogInformation("Voucher transaction performed successfully");
+            }
+            else {
+                Logger.LogWarning("Error performing Voucher transaction");    
+            }
 
-            return response.ResponseCode == "0000";
+            return result;
         }
-
+        
         protected override async Task<String> HandleResponse(HttpResponseMessage responseMessage,
                                                              CancellationToken cancellationToken) {
             if (responseMessage.StatusCode == HttpStatusCode.HttpVersionNotSupported) {
@@ -132,7 +161,7 @@
             return requestUri;
         }
 
-        private async Task<TResponse> SendTransactionRequest<TRequest, TResponse>(TRequest request,
+        private async Task<Result<TResponse>> SendTransactionRequest<TRequest, TResponse>(TRequest request,
                                                                                   CancellationToken cancellationToken) {
             String requestUri = this.BuildRequestUrl("/api/transactions");
 
@@ -156,19 +185,19 @@
 
                 // Process the response
                 String content = await this.HandleResponse(httpResponse, cancellationToken);
-                
+
                 Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content}");
-                
-                return JsonConvert.DeserializeObject<TResponse>(content);
+
+                return new SuccessResult<TResponse>(JsonConvert.DeserializeObject<TResponse>(content));
 
             }
             catch(Exception ex) {
                 // An exception has occurred, add some additional information to the message
-                Exception exception = new Exception("Error posting transaction.", ex);
+                ApplicationException exception = new ApplicationException("Error posting transaction.", ex);
 
                 Logger.LogError(exception);
 
-                throw exception;
+                return new ErrorResult<TResponse>("Error posting transaction");
             }
         }
 

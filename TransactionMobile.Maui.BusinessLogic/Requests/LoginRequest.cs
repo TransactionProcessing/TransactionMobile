@@ -2,8 +2,9 @@
 {
     using MediatR;
     using Models;
+    using RequestHandlers;
 
-    public class LoginRequest : IRequest<TokenResponseModel>
+    public class LoginRequest : IRequest<Result<TokenResponseModel>>
     {
         #region Constructors
 

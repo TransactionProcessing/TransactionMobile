@@ -1,8 +1,9 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Requests;
 
 using MediatR;
+using RequestHandlers;
 
-public class GetMerchantBalanceRequest : IRequest<Decimal>
+public class GetMerchantBalanceRequest : IRequest<Result<Decimal>>
 {
     #region Constructors
 

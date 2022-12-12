@@ -8,15 +8,19 @@ using Xunit;
 
 public class BillPaymentFailedPageViewModelTests
 {
+    private readonly Mock<INavigationService> NavigationService;
+
+    private readonly BillPaymentFailedPageViewModel ViewModel;
+    public BillPaymentFailedPageViewModelTests() {
+        this.NavigationService = new Mock<INavigationService>();
+        Logger.Initialise(NullLogger.Instance);
+        this.ViewModel = new BillPaymentFailedPageViewModel(this.NavigationService.Object);
+    }
+
     [Fact]
     public void BillPaymentFailedPageViewModel_CancelledCommand_Execute_IsExecuted()
     {
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-
-        Logger.Initialise(NullLogger.Instance);
-        BillPaymentFailedPageViewModel viewModel = new BillPaymentFailedPageViewModel(navigationService.Object);
-
-        viewModel.CancelledCommand.Execute(null);
-        navigationService.Verify(n => n.PopToRoot(), Times.Once);
+        this.ViewModel.CancelledCommand.Execute(null);
+        this.NavigationService.Verify(n => n.PopToRoot(), Times.Once);
     }
 }

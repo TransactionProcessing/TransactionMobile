@@ -14,47 +14,49 @@ using Xunit;
 
 public class MyAccountAddressPageViewModelTests
 {
+    private readonly Mock<INavigationService> NavigationService;
+    private readonly Mock<IApplicationCache> ApplicationCache;
+    private readonly Mock<IDialogService> DialogService;
+    private readonly Mock<IMediator> Mediator;
+    private readonly MyAccountAddressPageViewModel ViewModel;
+
+    public MyAccountAddressPageViewModelTests()
+    {
+        Logger.Initialise(NullLogger.Instance);
+        this.NavigationService = new Mock<INavigationService>();
+        this.ApplicationCache = new Mock<IApplicationCache>();
+        this.DialogService = new Mock<IDialogService>();
+        this.Mediator = new Mock<IMediator>();
+
+        this.ViewModel = new MyAccountAddressPageViewModel(this.NavigationService.Object,
+                                                           this.ApplicationCache.Object,
+                                                           this.DialogService.Object,
+                                                           this.Mediator.Object);
+    }
+
     [Fact]
     public async Task MyAccountAddressPageViewModel_Initialise_IsInitialised()
     {
-        Logger.Initialise(NullLogger.Instance);
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        applicationCache.Setup(a => a.GetMerchantDetails()).Returns(TestData.MerchantDetailsModel);
-        Mock<IDialogService> dialogService = new Mock<IDialogService>();
-        Mock<IMediator> mediator = new Mock<IMediator>();
+        this.ApplicationCache.Setup(a => a.GetMerchantDetails()).Returns(TestData.MerchantDetailsModel);
 
-        MyAccountAddressPageViewModel viewModel = new MyAccountAddressPageViewModel(navigationService.Object,
-                                                                                    applicationCache.Object,
-                                                                                    dialogService.Object,
-                                                                                    mediator.Object);
-        await viewModel.Initialise(CancellationToken.None);
+        await this.ViewModel.Initialise(CancellationToken.None);
 
-        applicationCache.Verify(a => a.GetMerchantDetails(), Times.Once);
-        viewModel.Address.ShouldNotBeNull();
-        viewModel.Address.AddressLine1.ShouldBe(TestData.AddressLine1);
-        viewModel.Address.AddressLine2.ShouldBe(TestData.AddressLine2);
-        viewModel.Address.AddressLine3.ShouldBe(TestData.AddressLine3);
-        viewModel.Address.AddressLine4.ShouldBe(TestData.AddressLine4);
-        viewModel.Address.Region.ShouldBe(TestData.Region);
-        viewModel.Address.Town.ShouldBe(TestData.Town);
-        viewModel.Address.PostalCode.ShouldBe(TestData.PostalCode);
+        this.ApplicationCache.Verify(a => a.GetMerchantDetails(), Times.Once);
+        this.ViewModel.Address.ShouldNotBeNull();
+        this.ViewModel.Address.AddressLine1.ShouldBe(TestData.AddressLine1);
+        this.ViewModel.Address.AddressLine2.ShouldBe(TestData.AddressLine2);
+        this.ViewModel.Address.AddressLine3.ShouldBe(TestData.AddressLine3);
+        this.ViewModel.Address.AddressLine4.ShouldBe(TestData.AddressLine4);
+        this.ViewModel.Address.Region.ShouldBe(TestData.Region);
+        this.ViewModel.Address.Town.ShouldBe(TestData.Town);
+        this.ViewModel.Address.PostalCode.ShouldBe(TestData.PostalCode);
     }
 
     [Fact]
     public async Task MyAccountAddressPageViewModel_BackButtonCommand_PreviousPageIsShown()
     {
-        Logger.Initialise(NullLogger.Instance);
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDialogService> dialogService = new Mock<IDialogService>();
-        Mock<IMediator> mediator = new Mock<IMediator>();
-        MyAccountAddressPageViewModel viewModel = new MyAccountAddressPageViewModel(navigationService.Object, applicationCache.Object,
-                                                                                    dialogService.Object,
-                                                                                    mediator.Object);
+        this.ViewModel.BackButtonCommand.Execute(null);
 
-        viewModel.BackButtonCommand.Execute(null);
-
-        navigationService.Verify(n => n.GoBack(), Times.Once);
+        this.NavigationService.Verify(n => n.GoBack(), Times.Once);
     }
 }

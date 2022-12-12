@@ -10,14 +10,19 @@ using Xunit;
 
 public class MobileTopupSuccessPageViewModelTests
 {
+    private readonly Mock<INavigationService> NavigationService;
+
+    private readonly MobileTopupSuccessPageViewModel ViewModel;
+    public MobileTopupSuccessPageViewModelTests() {
+        this.NavigationService = new Mock<INavigationService>();
+        Logger.Initialise(NullLogger.Instance);
+        this.ViewModel = new MobileTopupSuccessPageViewModel(this.NavigationService.Object);
+    }
+    
     [Fact]
     public void MobileTopupSuccessPageViewModel_CompletedCommand_Execute_IsExecuted()
     {
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Logger.Initialise(NullLogger.Instance);
-        MobileTopupSuccessPageViewModel viewModel = new MobileTopupSuccessPageViewModel(navigationService.Object);
-
-        viewModel.CompletedCommand.Execute(null);
-        navigationService.Verify(n => n.PopToRoot(), Times.Once);
+        this.ViewModel.CompletedCommand.Execute(null);
+        this.NavigationService.Verify(n => n.PopToRoot(), Times.Once);
     }
 }

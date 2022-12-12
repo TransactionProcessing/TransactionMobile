@@ -2,13 +2,16 @@
 
 using System.Web;
 using System.Windows.Input;
+using Common;
 using Maui.UIServices;
 using MediatR;
 using Microsoft.Maui.Controls;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
+using RequestHandlers;
 using Requests;
 using Services;
+using TransactionProcessorACL.DataTransferObjects.Responses;
 using UIServices;
 using Command = Microsoft.Maui.Controls.Command;
 
@@ -113,12 +116,11 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
                                                                              this.TopupAmount,
                                                                              this.CustomerEmailAddress);
 
-        Boolean response = await this.Mediator.Send(request);
+        Result<SaleTransactionResponseMessage> response = await this.Mediator.Send(request);
 
-        if (response)
+        if (response.Success && response.Data.IsSuccessfulTransaction())
         {
             await this.NavigationService.GoToMobileTopupSuccessPage();
-
         }
         else
         {

@@ -8,6 +8,7 @@ using MediatR;
 using Models;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
+using RequestHandlers;
 using Requests;
 using Services;
 using UIServices;
@@ -54,8 +55,9 @@ public class BillPaymentSelectProductPageViewModel : ExtendedBaseViewModel, IQue
     {
         GetContractProductsRequest request = GetContractProductsRequest.Create(ProductType.BillPayment);
 
-        List<ContractProductModel> products = await this.Mediator.Send(request, cancellationToken);
-
+        Result<List<ContractProductModel>> productsresult = await this.Mediator.Send(request, cancellationToken);
+        // TODO: Handle the failure result
+        List<ContractProductModel> products = productsresult.Data;
         products = products.Where(p => p.OperatorIdentfier == this.ProductDetails.OperatorIdentifier).ToList();
 
         this.Products = products;

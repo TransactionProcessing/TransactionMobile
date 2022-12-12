@@ -14,41 +14,47 @@ using Xunit;
 
 public class MyAccountDetailsPageViewModelTests
 {
+    private readonly Mock<INavigationService> NavigationService;
+
+    private readonly Mock<IApplicationCache> ApplicationCache;
+
+    private readonly Mock<IDialogService> DialogService;
+
+    private readonly MyAccountDetailsPageViewModel ViewModel;
+
+    public MyAccountDetailsPageViewModelTests()
+    {
+        Logger.Initialise(NullLogger.Instance);
+        this.NavigationService = new Mock<INavigationService>();
+        this.ApplicationCache = new Mock<IApplicationCache>();
+        this.DialogService = new Mock<IDialogService>();
+
+        this.ViewModel = new MyAccountDetailsPageViewModel(this.NavigationService.Object,
+                                                           this.ApplicationCache.Object,
+                                                           this.DialogService.Object);
+    }
+
     [Fact]
     public async Task MyAccountDetailsPageViewModel_Initialise_IsInitialised()
     {
-        Logger.Initialise(NullLogger.Instance);
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        applicationCache.Setup(a => a.GetMerchantDetails()).Returns(TestData.MerchantDetailsModel);
-        Mock<IDialogService> dialogService = new Mock<IDialogService>();
+        this.ApplicationCache.Setup(a => a.GetMerchantDetails()).Returns(TestData.MerchantDetailsModel);
 
-        MyAccountDetailsPageViewModel viewModel = new MyAccountDetailsPageViewModel(navigationService.Object,
-                                                                                    applicationCache.Object,
-                                                                                    dialogService.Object);
-        await viewModel.Initialise(CancellationToken.None);
+        await this.ViewModel.Initialise(CancellationToken.None);
 
-        applicationCache.Verify(a => a.GetMerchantDetails(), Times.Once);
-        viewModel.Balance.ShouldBe(TestData.Balance);
-        viewModel.AvailableBalance.ShouldBe(TestData.AvailableBalance);
-        viewModel.MerchantName.ShouldBe(TestData.MerchantName);
-        viewModel.LastStatementDate.ShouldBe(TestData.LastStatementDate);
-        viewModel.NextStatementDate.ShouldBe(TestData.NextStatementDate);
-        viewModel.SettlementSchedule.ShouldBe(TestData.SettlementSchedule);
+        this.ApplicationCache.Verify(a => a.GetMerchantDetails(), Times.Once);
+        this.ViewModel.Balance.ShouldBe(TestData.Balance);
+        this.ViewModel.AvailableBalance.ShouldBe(TestData.AvailableBalance);
+        this.ViewModel.MerchantName.ShouldBe(TestData.MerchantName);
+        this.ViewModel.LastStatementDate.ShouldBe(TestData.LastStatementDate);
+        this.ViewModel.NextStatementDate.ShouldBe(TestData.NextStatementDate);
+        this.ViewModel.SettlementSchedule.ShouldBe(TestData.SettlementSchedule);
     }
 
     [Fact]
     public async Task MyAccountDetailsPageViewModel_BackButtonCommand_PreviousPageIsShown()
     {
-        Logger.Initialise(NullLogger.Instance);
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDialogService> dialogService = new Mock<IDialogService>();
-        MyAccountDetailsPageViewModel viewModel = new MyAccountDetailsPageViewModel(navigationService.Object, applicationCache.Object,
-                                                                                    dialogService.Object);
+        this.ViewModel.BackButtonCommand.Execute(null);
 
-        viewModel.BackButtonCommand.Execute(null);
-
-        navigationService.Verify(n => n.GoBack(), Times.Once);
+        this.NavigationService.Verify(n => n.GoBack(), Times.Once);
     }
 }

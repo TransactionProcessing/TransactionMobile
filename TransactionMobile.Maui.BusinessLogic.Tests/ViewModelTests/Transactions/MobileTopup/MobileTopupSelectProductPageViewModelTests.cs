@@ -9,6 +9,7 @@ using Maui.UIServices;
 using MediatR;
 using Models;
 using Moq;
+using RequestHandlers;
 using Requests;
 using Services;
 using Shared.Logger;
@@ -21,83 +22,78 @@ public class MobileTopupSelectProductPageViewModelTests
 {
     #region Methods
 
+    private readonly Mock<IMediator> Mediator;
+
+    private readonly Mock<INavigationService> NavigationService;
+
+    private readonly Mock<IApplicationCache> ApplicationCache;
+
+    private readonly Mock<IDialogService> DialogSevice;
+
+    private readonly MobileTopupSelectProductPageViewModel ViewModel;
+
+    public MobileTopupSelectProductPageViewModelTests() {
+        this.Mediator = new Mock<IMediator>();
+        this.NavigationService = new Mock<INavigationService>();
+        this.ApplicationCache = new Mock<IApplicationCache>();
+        this.DialogSevice = new Mock<IDialogService>();
+        this.ViewModel = new MobileTopupSelectProductPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object);
+    }
+
     [Fact]
     public async Task MobileTopupSelectProductPageViewModel_ApplyQueryAttributes_QueryAttributesApplied() {
-        Mock<IMediator> mediator = new Mock<IMediator>();
-        mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.ContractProductList);
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
-        MobileTopupSelectProductPageViewModel viewModel = new MobileTopupSelectProductPageViewModel(mediator.Object, navigationService.Object,
-                                                                                                    applicationCache.Object,
-                                                                                                    dialogSevice.Object);
-
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
-                                                                          {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                                      });
-        viewModel.ProductDetails.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier1);
+        
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+        
+        this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
+                                                                               {nameof(ProductDetails), TestData.Operator1ProductDetails},
+                                                                           });
+        this.ViewModel.ProductDetails.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier1);
     }
 
     [Fact]
     public async Task MobileTopupSelectProductPageViewModel_Initialise_IsInitialised() {
-        Mock<IMediator> mediator = new Mock<IMediator>();
-        mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.ContractProductList);
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
-        MobileTopupSelectProductPageViewModel viewModel = new MobileTopupSelectProductPageViewModel(mediator.Object, navigationService.Object, applicationCache.Object, dialogSevice.Object);
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+        
+        this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
+                                                                               {nameof(ProductDetails), TestData.Operator1ProductDetails},
+                                                                           });
+        await this.ViewModel.Initialise(CancellationToken.None);
+        this.Mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
 
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
-                                                                          {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                                      });
-        await viewModel.Initialise(CancellationToken.None);
-        mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-
-        viewModel.Products.Count.ShouldBe(3);
+        this.ViewModel.Products.Count.ShouldBe(3);
     }
 
     [Fact]
     public async Task MobileTopupSelectProductPageViewModel_ProductSelectedCommand_Execute_IsExecuted() {
-        Mock<IMediator> mediator = new Mock<IMediator>();
-        mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.ContractProductList);
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
-        Logger.Initialise(NullLogger.Instance);
-        MobileTopupSelectProductPageViewModel viewModel = new MobileTopupSelectProductPageViewModel(mediator.Object, navigationService.Object, applicationCache.Object, dialogSevice.Object);
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+        
+        this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
+                                                                               {nameof(ProductDetails), TestData.Operator1ProductDetails},
+                                                                           });
+        await this.ViewModel.Initialise(CancellationToken.None);
+        this.Mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
 
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
-                                                                          {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                                      });
-        await viewModel.Initialise(CancellationToken.None);
-        mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-
-        viewModel.Products.Count.ShouldBe(3);
+        this.ViewModel.Products.Count.ShouldBe(3);
 
         ItemSelected<ContractProductModel> selectedContractProduct = new ItemSelected<ContractProductModel> {
                                                                                                                 SelectedItemIndex = 1,
                                                                                                                 SelectedItem = TestData.Operator1Product_100KES
                                                                                                             };
 
-        viewModel.ProductSelectedCommand.Execute(selectedContractProduct);
+        this.ViewModel.ProductSelectedCommand.Execute(selectedContractProduct);
 
-        navigationService.Verify(n => n.GoToMobileTopupPerformTopupPage(It.IsAny<ProductDetails>(),It.IsAny<Decimal>()), Times.Once);
+        this.NavigationService.Verify(n => n.GoToMobileTopupPerformTopupPage(It.IsAny<ProductDetails>(),It.IsAny<Decimal>()), Times.Once);
     }
 
     [Fact]
     public async Task MobileTopupSelectProductPageViewModel_BackButtonCommand_Execute_IsExecuted()
     {
-        Mock<IMediator> mediator = new Mock<IMediator>();
-        mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.ContractProductList);
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
-        Logger.Initialise(NullLogger.Instance);
-        MobileTopupSelectProductPageViewModel viewModel = new MobileTopupSelectProductPageViewModel(mediator.Object, navigationService.Object, applicationCache.Object, dialogSevice.Object);
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+        
+        this.ViewModel.BackButtonCommand.Execute(null);
 
-        viewModel.BackButtonCommand.Execute(null);
-
-        navigationService.Verify(n => n.GoBack(), Times.Once);
+        this.NavigationService.Verify(n => n.GoBack(), Times.Once);
     }
 
     #endregion

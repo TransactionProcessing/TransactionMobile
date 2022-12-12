@@ -5,6 +5,7 @@ using Maui.UIServices;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
 using MyAccount;
+using RequestHandlers;
 using Services;
 using Shared.Logger;
 using Support;
@@ -68,6 +69,21 @@ public class ExtendedBaseViewModel : BaseViewModel
 
             await this.NavigationService.GoToLoginPage();
         }
+    }
+
+    public virtual void HandleResult<T>(Result<T> result)
+    {
+        if (result == null) {
+            ErrorResult<T> errorResult = new ErrorResult<T>("Result from function call was null");
+            throw new ApplicationException(errorResult.Message);
+        }
+
+        if (result.Failure)
+        {
+            ErrorResult<T> errorResult = (ErrorResult<T>)result;
+            throw new ApplicationException(errorResult.Message);
+        }
+        // Success so carry on
     }
 
     #endregion

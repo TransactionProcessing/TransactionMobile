@@ -11,21 +11,34 @@ using Xunit;
 
 public class ViewLogsPageViewModelTests
 {
+    private readonly Mock<INavigationService> NavigationService;
+
+    private readonly Mock<IMediator> Mediator;
+
+    private readonly Mock<IApplicationCache> ApplicationCache;
+
+    private readonly Mock<IDialogService> DialogService;
+
+    private readonly ViewLogsPageViewModel ViewModel;
+
+    public ViewLogsPageViewModelTests() {
+        this.NavigationService = new Mock<INavigationService>();
+        this.Mediator = new Mock<IMediator>();
+        this.ApplicationCache = new Mock<IApplicationCache>();
+        this.DialogService = new Mock<IDialogService>();
+        
+        Logger.Initialise(NullLogger.Instance);
+        this.ViewModel = new ViewLogsPageViewModel(this.Mediator.Object,
+                                                   this.NavigationService.Object,
+                                                   this.ApplicationCache.Object,
+                                                   this.DialogService.Object);
+    }
+
     [Fact]
     public void ViewLogsPageViewModel_BackButtonCommand_Execute_IsExecuted()
     {
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IMediator> mediator = new Mock<IMediator>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDialogService> dialogService = new Mock<IDialogService>();
-        Logger.Initialise(NullLogger.Instance);
-        ViewLogsPageViewModel viewModel = new ViewLogsPageViewModel(mediator.Object,
-                                                                    navigationService.Object,
-                                                                    applicationCache.Object,
-                                                                    dialogService.Object);
+        this.ViewModel.BackButtonCommand.Execute(null);
 
-        viewModel.BackButtonCommand.Execute(null);
-
-        navigationService.Verify(n => n.GoBack(), Times.Once);
+        this.NavigationService.Verify(n => n.GoBack(), Times.Once);
     }
 }

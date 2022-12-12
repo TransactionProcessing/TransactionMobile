@@ -6,175 +6,146 @@ using System.Threading;
 using Maui.UIServices;
 using MediatR;
 using Moq;
+using RequestHandlers;
 using Requests;
 using Services;
 using Shared.Logger;
 using Shouldly;
+using TransactionProcessorACL.DataTransferObjects.Responses;
 using UIServices;
 using ViewModels.Transactions;
 using Xunit;
 
 public class MobileTopupPerformTopupPageViewModelTests
 {
+    private readonly Mock<IMediator> Mediator;
+
+    private readonly Mock<INavigationService> NavigationService;
+
+    private readonly Mock<IApplicationCache> ApplicationCache;
+    private readonly Mock<IDialogService> DialogSevice;
+    private readonly MobileTopupPerformTopupPageViewModel ViewModel;
+
+    public MobileTopupPerformTopupPageViewModelTests() {
+        
+        this.Mediator = new Mock<IMediator>();
+        this.NavigationService = new Mock<INavigationService>();
+        this.ApplicationCache = new Mock<IApplicationCache>();
+        this.DialogSevice = new Mock<IDialogService>();
+        Logger.Initialise(NullLogger.Instance);
+        this.ViewModel = new MobileTopupPerformTopupPageViewModel(this.Mediator.Object,
+                                                                  this.NavigationService.Object,
+                                                                  this.ApplicationCache.Object,
+                                                                  this.DialogSevice.Object);
+    }
     [Fact]
     public void MobileTopupPerformTopupPageViewModel_ApplyQueryAttributes_QueryAttributesApplied()
     {
-        Mock<IMediator> mediator = new Mock<IMediator>();
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
-        Logger.Initialise(NullLogger.Instance);
-        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object,
-                                                                                                  navigationService.Object,
-                                                                                                  applicationCache.Object,
-                                                                                                  dialogSevice.Object);
+        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
+                                            {
+                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
+                                                {nameof(this.ViewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
+                                            });
 
-        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                       {
-                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                           {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
-                                       });
-
-        viewModel.ProductDetails.ContractId.ShouldBe(TestData.OperatorId1ContractId);
-        viewModel.ProductDetails.ProductId.ShouldBe(TestData.Operator1Product_100KES.ProductId);
-        viewModel.ProductDetails.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier1);
-        viewModel.TopupAmount.ShouldBe(TestData.Operator1Product_100KES.Value);
+        this.ViewModel.ProductDetails.ContractId.ShouldBe(TestData.OperatorId1ContractId);
+        this.ViewModel.ProductDetails.ProductId.ShouldBe(TestData.Operator1Product_100KES.ProductId);
+        this.ViewModel.ProductDetails.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier1);
+        this.ViewModel.TopupAmount.ShouldBe(TestData.Operator1Product_100KES.Value);
     }
 
     [Fact]
     public void MobileTopupPerformTopupPageViewModel_CustomerEmailAddressEntryCompletedCommand_Execute_IsExecuted()
     {
-        Mock<IMediator> mediator = new Mock<IMediator>();
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
-        Logger.Initialise(NullLogger.Instance);
-        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object,
-                                                                                                  applicationCache.Object,dialogSevice.Object);
         bool isCompletedCalled = false;
-        viewModel.OnCustomerEmailAddressEntryCompleted = () =>
-                                                         {
-                                                             isCompletedCalled = true;
-                                                         };
+        this.ViewModel.OnCustomerEmailAddressEntryCompleted = () =>
+                                                              {
+                                                                  isCompletedCalled = true;
+                                                              };
 
-        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                       {
-                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                           {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
-                                       });
-        viewModel.CustomerEmailAddressEntryCompletedCommand.Execute(null);
+        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
+                                            {
+                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
+                                                {nameof(this.ViewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
+                                            });
+        this.ViewModel.CustomerEmailAddressEntryCompletedCommand.Execute(null);
         isCompletedCalled.ShouldBeTrue();
     }
 
     [Fact]
     public void MobileTopupPerformTopupPageViewModel_CustomerMobileNumberEntryCompletedCommand_Execute_IsExecuted()
     {
-        Mock<IMediator> mediator = new Mock<IMediator>();
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
-        Logger.Initialise(NullLogger.Instance);
-        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object,applicationCache.Object,
-                                                                                                  dialogSevice.Object);
         Boolean isCompletedCalled = false;
-        viewModel.OnCustomerMobileNumberEntryCompleted = () =>
-                                                         {
-                                                             isCompletedCalled = true;
-                                                         };
+        this.ViewModel.OnCustomerMobileNumberEntryCompleted = () =>
+                                                              {
+                                                                  isCompletedCalled = true;
+                                                              };
 
-        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                       {
-                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                           {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
-                                       });
-        viewModel.CustomerMobileNumberEntryCompletedCommand.Execute(null);
+        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
+                                            {
+                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
+                                                {nameof(this.ViewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
+                                            });
+        this.ViewModel.CustomerMobileNumberEntryCompletedCommand.Execute(null);
         isCompletedCalled.ShouldBeTrue();
     }
 
     [Fact]
     public void MobileTopupPerformTopupPageViewModel_TopupAmountEntryCompletedCommand_Execute_IsExecuted()
     {
-        Mock<IMediator> mediator = new Mock<IMediator>();
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
-        Logger.Initialise(NullLogger.Instance);
-        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object,
-                                                                                                  applicationCache.Object,
-                                                                                                  dialogSevice.Object);
         Boolean isCompletedCalled = false;
-        viewModel.OnTopupAmountEntryCompleted = () =>
-                                                {
-                                                    isCompletedCalled = true;
-                                                };
+        this.ViewModel.OnTopupAmountEntryCompleted = () =>
+                                                     {
+                                                         isCompletedCalled = true;
+                                                     };
 
-        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                       {
-                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                           {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
-                                       });
-        viewModel.TopupAmountEntryCompletedCommand.Execute(null);
+        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
+                                            {
+                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
+                                                {nameof(this.ViewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
+                                            });
+        this.ViewModel.TopupAmountEntryCompletedCommand.Execute(null);
         isCompletedCalled.ShouldBeTrue();
     }
 
     [Fact]
     public void MobileTopupPerformTopupPageViewModel_PerformTopupCommand_Execute_SuccessfulTopup_IsExecuted()
     {
-        Mock<IMediator> mediator = new Mock<IMediator>();
-        mediator.Setup(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
-        Logger.Initialise(NullLogger.Instance);
-        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object,
-                                                                                                  applicationCache.Object,
-                                                                                                  dialogSevice.Object);
-        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                       {
-                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                           {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
-                                       });
-        viewModel.PerformTopupCommand.Execute(null);
-        mediator.Verify(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-        navigationService.Verify(v => v.GoToMobileTopupSuccessPage(), Times.Once);
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<SaleTransactionResponseMessage>(new SaleTransactionResponseMessage() {
+            ResponseCode = "0000"
+        }));
+
+        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
+                                            {
+                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
+                                                {nameof(this.ViewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
+                                            });
+        this.ViewModel.PerformTopupCommand.Execute(null);
+        this.Mediator.Verify(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.NavigationService.Verify(v => v.GoToMobileTopupSuccessPage(), Times.Once);
     }
 
     [Fact]
     public void MobileTopupPerformTopupPageViewModel_PerformTopupCommand_Execute_FailedTopup_IsExecuted()
     {
-        Mock<IMediator> mediator = new Mock<IMediator>();
-        mediator.Setup(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
-        Logger.Initialise(NullLogger.Instance);
-        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object,
-                                                                                                  applicationCache.Object,
-                                                                                                  dialogSevice.Object);
-        viewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                       {
-                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                           {nameof(viewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
-                                       });
-        viewModel.PerformTopupCommand.Execute(null);
-        mediator.Verify(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-        navigationService.Verify(v => v.GoToMobileTopupFailedPage(), Times.Once);
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<SaleTransactionResponseMessage>(new SaleTransactionResponseMessage()
+            {
+                ResponseCode = "0001"
+            }));
+
+        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
+                                            {
+                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
+                                                {nameof(this.ViewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
+                                            });
+        this.ViewModel.PerformTopupCommand.Execute(null);
+        this.Mediator.Verify(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.NavigationService.Verify(v => v.GoToMobileTopupFailedPage(), Times.Once);
     }
 
     [Fact]
     public void MobileTopupPerformTopupPageViewModel_BackButtonCommand_Execute_IsExecuted()
     {
-        Mock<IMediator> mediator = new Mock<IMediator>();
-        mediator.Setup(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDialogService> dialogSevice = new Mock<IDialogService>();
-        Logger.Initialise(NullLogger.Instance);
-        MobileTopupPerformTopupPageViewModel viewModel = new MobileTopupPerformTopupPageViewModel(mediator.Object, navigationService.Object,
-                                                                                                  applicationCache.Object,
-                                                                                                  dialogSevice.Object);
-        
-        viewModel.BackButtonCommand.Execute(null);
-        navigationService.Verify(v => v.GoBack(), Times.Once);
+        this.ViewModel.BackButtonCommand.Execute(null);
+        this.NavigationService.Verify(v => v.GoBack(), Times.Once);
     }
 }

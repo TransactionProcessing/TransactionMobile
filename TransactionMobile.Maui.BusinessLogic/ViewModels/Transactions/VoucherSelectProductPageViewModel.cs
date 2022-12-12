@@ -54,8 +54,8 @@ public class VoucherSelectProductPageViewModel : ExtendedBaseViewModel, IQueryAt
     {
         GetContractProductsRequest request = GetContractProductsRequest.Create(ProductType.Voucher);
 
-        List<ContractProductModel> products = await this.Mediator.Send(request, cancellationToken);
-
+        var result = await this.Mediator.Send(request, cancellationToken);
+        var products = result.Data;
         products = products.Where(p => p.OperatorIdentfier == this.ProductDetails.OperatorIdentifier).ToList();
 
         this.Products = products;

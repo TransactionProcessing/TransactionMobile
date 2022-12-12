@@ -2,6 +2,7 @@
 
 using System.Web;
 using System.Windows.Input;
+using Common;
 using Maui.UIServices;
 using MediatR;
 using MvvmHelpers;
@@ -132,9 +133,9 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
                                                                                this.VoucherAmount,
                                                                                this.CustomerEmailAddress);
 
-        Boolean response = await this.Mediator.Send(request);
+        var result = await this.Mediator.Send(request);
 
-        if (response)
+        if (result.Success && result.Data.IsSuccessfulTransaction())
         {
             await this.NavigationService.GoToVoucherIssueSuccessPage();
 

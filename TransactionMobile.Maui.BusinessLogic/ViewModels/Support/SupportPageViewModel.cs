@@ -51,7 +51,7 @@
 
         public String ApplicationName => $"{this.ApplicationInfoService.ApplicationName} v{this.ApplicationInfoService.VersionString}";
 
-        public String NumberTransactionsStored => $"Transactions Stored: {this.DatabaseContext.GetTransactions(this.ApplicationCache.GetUseTrainingMode()).Result.Count()}";
+        public String NumberTransactionsStored => $"Transactions Stored: {this.DatabaseContext.GetTransactions().Result.Count()}";
 
         public String Platform {
             get {
@@ -64,9 +64,9 @@
             }
         }
 
-        public Boolean ShowUploadLogsButton => this.ApplicationCache.GetUseTrainingMode() == false;
+        //public Boolean ShowUploadLogsButton => this.ApplicationCache.GetUseTrainingMode() == false;
 
-        public Boolean ShowViewLogsButton => this.ApplicationCache.GetUseTrainingMode();
+        //public Boolean ShowViewLogsButton => this.ApplicationCache.GetUseTrainingMode();
 
         public ICommand UploadLogsCommand { get; }
 

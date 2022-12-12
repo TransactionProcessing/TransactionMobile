@@ -34,8 +34,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 {
                     EntryDateTime = item.EntryDateTime,
                     LogLevel = item.LogLevel.ToString(),
-                    Message = item.Message,
-                    IsTrainingMode = this.ApplicationCache.GetUseTrainingMode()
+                    Message = item.Message
                 });
             }
             this.DatabaseContext.InsertLogMessages(logMessages);
@@ -48,8 +47,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             {
                 EntryDateTime = logMessageModel.EntryDateTime,
                 LogLevel = logMessageModel.LogLevel.ToString(),
-                Message = logMessageModel.Message,
-                IsTrainingMode = this.ApplicationCache.GetUseTrainingMode()
+                Message = logMessageModel.Message
             };
             this.DatabaseContext.InsertLogMessage(logMessage);
         }
@@ -64,8 +62,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 {
                     EntryDateTime = item.EntryDateTime,
                     LogLevel = item.LogLevel.ToString(),
-                    Message = item.Message,
-                    IsTrainingMode = this.ApplicationCache.GetUseTrainingMode()
+                    Message = item.Message
                 });
             }
             this.DatabaseContext.InsertLogMessages(logMessages);
@@ -78,8 +75,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             {
                 EntryDateTime = logMessageModel.EntryDateTime,
                 LogLevel = logMessageModel.LogLevel.ToString(),
-                Message = logMessageModel.Message,
-                IsTrainingMode = this.ApplicationCache.GetUseTrainingMode()
+                Message = logMessageModel.Message
             };
             this.DatabaseContext.InsertLogMessage(logMessage);
         }
@@ -91,8 +87,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             {
                 EntryDateTime = logMessageModel.EntryDateTime,
                 LogLevel = logMessageModel.LogLevel.ToString(),
-                Message = logMessageModel.Message,
-                IsTrainingMode = this.ApplicationCache.GetUseTrainingMode()
+                Message = logMessageModel.Message
             };
             this.DatabaseContext.InsertLogMessage(logMessage);
         }
@@ -104,8 +99,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             {
                 EntryDateTime = logMessageModel.EntryDateTime,
                 LogLevel = logMessageModel.LogLevel.ToString(),
-                Message = logMessageModel.Message,
-                IsTrainingMode = this.ApplicationCache.GetUseTrainingMode()
+                Message = logMessageModel.Message
             };
             this.DatabaseContext.InsertLogMessage(logMessage);
         }

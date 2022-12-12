@@ -21,6 +21,44 @@
 	  <TargetFramework>net7.0</TargetFramework>
 	  <UseMaui>true</UseMaui>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="ViewModelTests\**" />
+    <EmbeddedResource Remove="ViewModelTests\**" />
+    <MauiCss Remove="ViewModelTests\**" />
+    <MauiXaml Remove="ViewModelTests\**" />
+    <None Remove="ViewModelTests\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="HomePageViewModelTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ViewModelTests\HomePageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\LoginPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\MyAccount\MyAccountAddressPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\MyAccount\MyAccountContactPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\MyAccount\MyAccountDetailsPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\MyAccount\MyAccountPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Support\SupportPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Support\ViewLogsPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\Admin\AdminPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentFailedPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentGetAccountPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentPayBillPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentSelectOperatorPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentSelectProductPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentSuccessPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\MobileTopup\MobileTopupFailedPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\MobileTopup\MobileTopupPerformTopupPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\MobileTopup\MobileTopupSelectOperatorPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\MobileTopup\MobileTopupSelectProductPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\MobileTopup\MobileTopupSuccessPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\TransactionsPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\Voucher\VoucherIssueFailedPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\Voucher\VoucherIssueSelectProductPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\Voucher\VoucherIssueSuccessPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\Voucher\VoucherPerformIssuePageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\Voucher\VoucherSelectOperatorPageViewModelTests.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="6.0.8" />

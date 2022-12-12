@@ -1,5 +1,6 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels
 {
+    using System.Diagnostics;
     using System.Windows.Input;
     using Maui.UIServices;
     using MediatR;
@@ -8,12 +9,14 @@
     using Models;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
+    using RequestHandlers;
     using Requests;
     using Services;
+    using Shared.Logger;
     using TransactionMobile.Maui.Database;
     using UIServices;
 
-    public class LoginPageViewModel : BaseViewModel
+    public class LoginPageViewModel : ExtendedBaseViewModel
     {
         private readonly INavigationService NavigationService;
 
@@ -35,7 +38,7 @@
 
         public LoginPageViewModel(IMediator mediator, INavigationService navigationService, IApplicationCache applicationCache,
                                   IDeviceService deviceService,IApplicationInfoService applicationInfoService,
-                                  IDialogService dialogService)
+                                  IDialogService dialogService) : base(applicationCache,dialogService,navigationService)
         {
             this.NavigationService = navigationService;
             this.ApplicationCache = applicationCache;
@@ -76,60 +79,55 @@
 
         #region Methods
 
-        private void CacheUseTrainingMode() => this.ApplicationCache.SetUseTrainingMode(this.useTrainingMode);
-
-        private async Task GetConfiguration() {
+        private async Task<Result<Configuration>> GetConfiguration() {
             String deviceIdentifier = this.DeviceService.GetIdentifier();
             GetConfigurationRequest getConfigurationRequest = GetConfigurationRequest.Create(deviceIdentifier);
-            Configuration configuration = await this.Mediator.Send(getConfigurationRequest);
+            var configurationResult = await this.Mediator.Send(getConfigurationRequest);
 
-            if (configuration == null) {
-                throw new ApplicationException("Error getting device configuration.");
+            if (configurationResult.Success) {
+                // Cache the config object
+                this.ApplicationCache.SetConfiguration(configurationResult.Data);
             }
 
-            // Cache the config object
-            this.ApplicationCache.SetConfiguration(configuration);
+            return configurationResult;
         }
 
-        private async Task GetUserToken() {
+        private async Task<Result<TokenResponseModel>> GetUserToken() {
             LoginRequest loginRequest = LoginRequest.Create(this.UserName, this.Password);
-            TokenResponseModel token = await this.Mediator.Send(loginRequest);
+            Result<TokenResponseModel> tokenResult = await this.Mediator.Send(loginRequest);
 
-            if (token == null) {
-                throw new ApplicationException($"Login failed for user {this.UserName}");
+            if (tokenResult.Success) {
+                // Cache the token
+                this.CacheAccessToken(tokenResult.Data);
             }
 
-            // Cache the token
-            this.CacheAccessToken(token);
+            return tokenResult;
         }
 
-        private async Task PerformLogonTransaction() {
+        private async Task<Result<PerformLogonResponseModel>> PerformLogonTransaction() {
             // Logon Transaction
-            String deviceIdentifier = this.DeviceService.GetIdentifier();
             LogonTransactionRequest logonTransactionRequest = LogonTransactionRequest.Create(DateTime.Now);
-            PerformLogonResponseModel logonResponse = await this.Mediator.Send(logonTransactionRequest);
+            Result<PerformLogonResponseModel> logonResult = await this.Mediator.Send(logonTransactionRequest);
 
-            if (logonResponse.IsSuccessful == false)
-            {
-                throw new ApplicationException($"Error during Logon Transaction. Error Msg: {logonResponse.ResponseMessage}");
+            if (logonResult.Success) {
+                // Set the user information
+                this.ApplicationCache.SetEstateId(logonResult.Data.EstateId);
+                this.ApplicationCache.SetMerchantId(logonResult.Data.MerchantId);
             }
-            
-            // Set the user information
-            this.ApplicationCache.SetEstateId(logonResponse.EstateId);
-            this.ApplicationCache.SetMerchantId(logonResponse.MerchantId);
+
+            return logonResult;
         }
 
-        private async Task GetMerchantContractProducts() {
+        private async Task<Result<List<ContractProductModel>>> GetMerchantContractProducts() {
             // Get Contracts
             GetContractProductsRequest getContractProductsRequest = GetContractProductsRequest.Create();
-            List<ContractProductModel> products = await this.Mediator.Send(getContractProductsRequest);
+            Result<List<ContractProductModel>> productsResult = await this.Mediator.Send(getContractProductsRequest);
 
-            if (products.Any() == false)
-            {
-                throw new ApplicationException($"Error getting contract products.");
+            if (productsResult.Success) {
+                this.CacheContractData(productsResult.Data);
             }
 
-            this.CacheContractData(products);
+            return productsResult;
         }
 
         private void CacheContractData(List<ContractProductModel> contractProductModels)
@@ -147,39 +145,59 @@
             this.ApplicationCache.SetContractProducts(contractProductModels, cacheEntryOptions);
         }
 
-        private async Task GetMerchantBalance() {
+        private async Task<Result<Decimal>> GetMerchantBalance() {
             // Get the merchant balance
             // TODO: Cache the result, but will add this to a timer call to keep up to date...
             GetMerchantBalanceRequest getMerchantBalanceRequest = GetMerchantBalanceRequest.Create();
-            await this.Mediator.Send(getMerchantBalanceRequest);
+            Result<Decimal> getMerchantBalanceResult = await this.Mediator.Send(getMerchantBalanceRequest);
+
+            return getMerchantBalanceResult;
         }
 
         private async Task LoginCommandExecute()
         {
+            Stopwatch sw = Stopwatch.StartNew();
+            WriteTimingTrace(sw, "Start of LoginCommandExecute");
             try {
                 Shared.Logger.Logger.LogInformation("LoginCommandExecute called");
-
-                this.CacheUseTrainingMode();
-
-                await this.GetConfiguration();
-
-                await this.GetUserToken();
-
-                await this.PerformLogonTransaction();
                 
-                await this.GetMerchantContractProducts();
+                Result<Configuration> configurationResult = await this.GetConfiguration();
+                this.HandleResult(configurationResult);
                 
-                await this.GetMerchantBalance();
-                
+                WriteTimingTrace(sw, "After GetConfiguration");
+                Result<TokenResponseModel> getTokenResult = await this.GetUserToken();
+                this.HandleResult(getTokenResult);
+
+                WriteTimingTrace(sw, "After GetUserToken");
+                Result<PerformLogonResponseModel> logonResult = await this.PerformLogonTransaction();
+                this.HandleResult(logonResult);
+
+                WriteTimingTrace(sw, "After PerformLogonTransaction");
+                Result<List<ContractProductModel>> getMerchantContractProductsResult = await this.GetMerchantContractProducts();
+                this.HandleResult(getMerchantContractProductsResult);
+
+                WriteTimingTrace(sw, "After GetMerchantContractProducts");
+                Result<Decimal> getMerchantBalanceResult =  await this.GetMerchantBalance();
+                this.HandleResult(getMerchantBalanceResult);
+
+                WriteTimingTrace(sw, "After GetMerchantBalance");
                 this.ApplicationCache.SetIsLoggedIn(true);
 
+                WriteTimingTrace(sw, "After SetIsLoggedIn");
                 await this.NavigationService.GoToHome();
             }
             catch(ApplicationException aex) {
+                Logger.LogError(aex);
                 await this.DialogService.ShowWarningToast(aex.Message);
             }
         }
         
+        private void WriteTimingTrace(Stopwatch sw, String message) {
+            sw.Stop();
+            Shared.Logger.Logger.LogWarning($"{message} - Elapsed ms [{sw.ElapsedMilliseconds}]");
+            sw.Start();
+        }
+
         private async void AccessTokenExpired(Object key,
                                         Object value,
                                         EvictionReason reason,
@@ -191,9 +209,11 @@
                 TokenResponseModel token = value as TokenResponseModel;
 
                 RefreshTokenRequest request = RefreshTokenRequest.Create(token.RefreshToken);
-                TokenResponseModel newToken = await this.Mediator.Send(request, CancellationToken.None);
+                Result<TokenResponseModel> newTokenResult = await this.Mediator.Send(request, CancellationToken.None);
 
-                this.CacheAccessToken(newToken);
+                if (newTokenResult.Success) {
+                    this.CacheAccessToken(newTokenResult.Data);
+                }
             }
         }
 

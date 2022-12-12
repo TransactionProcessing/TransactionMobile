@@ -6,6 +6,7 @@ using Maui.UIServices;
 using MediatR;
 using Models;
 using MvvmHelpers.Commands;
+using RequestHandlers;
 using Requests;
 using Services;
 using UIServices;
@@ -46,7 +47,9 @@ public class BillPaymentSelectOperatorPageViewModel : ExtendedBaseViewModel
     {
         GetContractProductsRequest request = GetContractProductsRequest.Create(ProductType.BillPayment);
 
-        List<ContractProductModel> products = await this.Mediator.Send(request, cancellationToken);
+        Result<List<ContractProductModel>> productsresult = await this.Mediator.Send(request, cancellationToken);
+        // TODO: Handle the failure result
+        List<ContractProductModel> products = productsresult.Data;
 
         // TODO: Should this logic live in the Reqest handler ???
         List<ContractOperatorModel> operators = products.GroupBy(c => new

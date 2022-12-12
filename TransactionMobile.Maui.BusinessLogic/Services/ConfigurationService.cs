@@ -10,6 +10,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
     using ClientProxyBase;
     using Models;
     using Newtonsoft.Json;
+    using RequestHandlers;
 
     public class ConfigurationService : ClientProxyBase, IConfigurationService
     {
@@ -45,8 +46,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             return await base.HandleResponse(responseMessage, cancellationToken);
         }
 
-        public async Task<Configuration> GetConfiguration(String deviceIdentifier,
-                                                          CancellationToken cancellationToken)
+        public async Task<Result<Configuration>> GetConfiguration(String deviceIdentifier,
+                                                                  CancellationToken cancellationToken)
         {
             Configuration response = null;
             String requestUri = this.BuildRequestUrl($"/configuration/{deviceIdentifier}");
@@ -67,18 +68,17 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
                 Shared.Logger.Logger.LogInformation($"Configuration for device identifier {deviceIdentifier} requested successfully");
                 Shared.Logger.Logger.LogDebug($"Configuration Response: [{content}]");
+
+                return new SuccessResult<Configuration>(response);
             }
             catch (Exception ex)
             {
                 // An exception has occurred, add some additional information to the message
                 Exception exception = new Exception($"Error getting configuration for device Id {deviceIdentifier}.", ex);
-
                 Shared.Logger.Logger.LogError(exception);
 
-                throw exception;
+                return new ErrorResult<Configuration>("Error getting configuration data");
             }
-
-            return response;
         }
 
         public async Task PostDiagnosticLogs(String deviceIdentifier,
