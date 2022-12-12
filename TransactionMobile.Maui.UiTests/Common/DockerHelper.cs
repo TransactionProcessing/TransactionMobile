@@ -10,7 +10,6 @@ namespace TransactionMobile.Maui.UiTests.Common
     using System.Threading;
     using EstateManagement.Client;
     using EstateManagement.DataTransferObjects;
-    using EstateReporting.Database.Entities;
     using SecurityService.Client;
     using SecurityService.DataTransferObjects.Responses;
     using Shared.IntegrationTesting;
