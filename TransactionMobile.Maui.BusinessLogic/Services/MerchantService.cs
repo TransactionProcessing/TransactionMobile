@@ -82,7 +82,9 @@ public class MerchantService : IMerchantService
 
             MerchantBalanceResponse merchantBalance = new MerchantBalanceResponse {
                                                                                       AvailableBalance = 0,
-                                                                                  };//await this.EstateClient.GetMerchantBalance(accessToken.AccessToken, estateId, merchantId, cancellationToken);
+                                                                                      Balance = 0
+                                                                                  };
+            //await this.EstateClient.GetMerchantBalance(accessToken.AccessToken, estateId, merchantId, cancellationToken);
 
             Logger.LogInformation("Balance for merchant requested successfully");
             Logger.LogDebug($"Merchant Balance Response: [{JsonConvert.SerializeObject(merchantBalance)}]");
