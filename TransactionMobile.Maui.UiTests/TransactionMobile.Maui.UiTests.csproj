@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.0"/>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.0" />
 	  <PackageReference Include="SecurityService.Client" Version="1.1.2-build20" />
 	  <PackageReference Include="TransactionProcessor.Client" Version="1.1.12" />
 	  <PackageReference Include="EstateManagement.Client" Version="1.1.5" />
@@ -33,6 +33,12 @@
     <Compile Update="Features\PageNavigation.feature.cs">
       <DependentUpon>PageNavigation.feature</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
