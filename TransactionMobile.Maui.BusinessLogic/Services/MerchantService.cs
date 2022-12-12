@@ -80,16 +80,16 @@ public class MerchantService : IMerchantService
             Logger.LogInformation("About to request merchant balance");
             Logger.LogDebug($"Merchant Balance Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
 
-            MerchantBalanceResponse merchantBalance = new MerchantBalanceResponse {
-                                                                                      AvailableBalance = 0,
-                                                                                      Balance = 0
-                                                                                  };
+            //MerchantBalanceResponse merchantBalance = new MerchantBalanceResponse {
+            //                                                                          AvailableBalance = 0,
+            //                                                                          Balance = 0
+            //                                                                      };
             //await this.EstateClient.GetMerchantBalance(accessToken.AccessToken, estateId, merchantId, cancellationToken);
 
             Logger.LogInformation("Balance for merchant requested successfully");
-            Logger.LogDebug($"Merchant Balance Response: [{JsonConvert.SerializeObject(merchantBalance)}]");
+            //Logger.LogDebug($"Merchant Balance Response: [{JsonConvert.SerializeObject(merchantBalance)}]");
 
-            return new SuccessResult<Decimal>(merchantBalance.AvailableBalance);
+            return new SuccessResult<Decimal>(0);
         }
         catch(Exception ex) {
             Logger.LogError(ex);
