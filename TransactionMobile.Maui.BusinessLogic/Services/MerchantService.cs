@@ -80,7 +80,9 @@ public class MerchantService : IMerchantService
             Logger.LogInformation("About to request merchant balance");
             Logger.LogDebug($"Merchant Balance Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
 
-            MerchantBalanceResponse merchantBalance = await this.EstateClient.GetMerchantBalance(accessToken.AccessToken, estateId, merchantId, cancellationToken);
+            MerchantBalanceResponse merchantBalance = new MerchantBalanceResponse {
+                                                                                      AvailableBalance = 0,
+                                                                                  };//await this.EstateClient.GetMerchantBalance(accessToken.AccessToken, estateId, merchantId, cancellationToken);
 
             Logger.LogInformation("Balance for merchant requested successfully");
             Logger.LogDebug($"Merchant Balance Response: [{JsonConvert.SerializeObject(merchantBalance)}]");
@@ -112,8 +114,8 @@ public class MerchantService : IMerchantService
                                                                       NextStatementDate = merchantResponse.NextStatementDate,
                                                                       LastStatementDate = new DateTime(),
                                                                       SettlementSchedule = merchantResponse.SettlementSchedule.ToString(),
-                                                                      AvailableBalance = merchantResponse.AvailableBalance,
-                                                                      Balance = merchantResponse.Balance,
+                                                                      //AvailableBalance = merchantResponse.AvailableBalance,
+                                                                      //Balance = merchantResponse.Balance,
                                                                       Contact = new ContactModel {
                                                                                                      Name = merchantResponse.Contacts.First().ContactName,
                                                                                                      EmailAddress = merchantResponse.Contacts.First().ContactEmailAddress,
