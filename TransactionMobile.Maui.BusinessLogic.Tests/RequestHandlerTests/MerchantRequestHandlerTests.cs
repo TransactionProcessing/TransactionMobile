@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
 using Models;
 using Moq;
 using RequestHandlers;
@@ -15,45 +14,52 @@ using Xunit;
 
 public class MerchantRequestHandlerTests
 {
+    #region Fields
+
+    private readonly Mock<IApplicationCache> ApplicationCache;
+
+    private readonly MerchantRequestHandler MerchantRequestHandler;
+
+    private readonly Mock<IMerchantService> MerchantService;
+
+    #endregion
+
+    #region Constructors
+
+    public MerchantRequestHandlerTests() {
+        this.MerchantService = new Mock<IMerchantService>();
+        this.ApplicationCache = new Mock<IApplicationCache>();
+        this.MerchantRequestHandler = new MerchantRequestHandler(this.MerchantService.Object, this.ApplicationCache.Object);
+    }
+
+    #endregion
+
+    #region Methods
+
     [Fact]
-    public async Task MerchantRequestHandler_GetContractProductsRequest_Handle_IsHandled()
-    {
-        Mock<IMerchantService> merchantService = new Mock<IMerchantService>();
-        Func<Boolean, IMerchantService> merchantServiceResolver = new Func<bool, IMerchantService>((param) =>
-        {
-            return merchantService.Object;
-        });
-        
-        merchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
-                       .ReturnsAsync(TestData.ContractProductList);
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        
-        MerchantRequestHandler handler = new MerchantRequestHandler(merchantServiceResolver, applicationCache.Object);
+    public async Task MerchantRequestHandler_GetContractProductsRequest_Handle_IsHandled() {
+        this.MerchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
 
         GetContractProductsRequest request = GetContractProductsRequest.Create();
 
-        List<ContractProductModel> contractProductModels = await handler.Handle(request, CancellationToken.None);
+        Result<List<ContractProductModel>> result = await this.MerchantRequestHandler.Handle(request, CancellationToken.None);
 
-        contractProductModels.Count.ShouldBe(TestData.ContractProductList.Count);
+        result.Success.ShouldBeTrue();
+        result.Data.Count.ShouldBe(TestData.ContractProductList.Count);
     }
 
     [Fact]
-    public async Task MerchantRequestHandler_GetMerchantBalanceRequest_Handle_IsHandled()
-    {
-        Mock<IMerchantService> merchantService = new Mock<IMerchantService>();
-        Func<Boolean, IMerchantService> merchantServiceResolver = new Func<bool, IMerchantService>((param) =>
-        {
-            return merchantService.Object;
-        });
-        merchantService.Setup(m => m.GetMerchantBalance(It.IsAny<CancellationToken>()))
-                       .ReturnsAsync(TestData.MerchantBalance);
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        MerchantRequestHandler handler = new MerchantRequestHandler(merchantServiceResolver, applicationCache.Object);
+    public async Task MerchantRequestHandler_GetMerchantBalanceRequest_Handle_IsHandled() {
+        this.MerchantService.Setup(m => m.GetMerchantBalance(It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<Decimal>(TestData.MerchantBalance));
 
         GetMerchantBalanceRequest request = GetMerchantBalanceRequest.Create();
 
-        Decimal merchantBalance = await handler.Handle(request, CancellationToken.None);
+        Result<Decimal> result = await this.MerchantRequestHandler.Handle(request, CancellationToken.None);
 
-        merchantBalance.ShouldBe(TestData.MerchantBalance);
+        result.Success.ShouldBeTrue();
+        result.Data.ShouldBe(TestData.MerchantBalance);
     }
+
+    #endregion
 }

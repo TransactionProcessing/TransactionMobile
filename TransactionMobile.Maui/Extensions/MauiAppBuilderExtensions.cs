@@ -7,7 +7,6 @@
     using BusinessLogic.RequestHandlers;
     using BusinessLogic.Requests;
     using BusinessLogic.Services;
-    using BusinessLogic.Services.DummyServices;
     using BusinessLogic.UIServices;
     using BusinessLogic.ViewModels;
     using BusinessLogic.ViewModels.Admin;
@@ -30,6 +29,7 @@
     using Pages.MyAccount;
     using System.Net.Http;
     using Pages.Transactions.BillPayment;
+    using TransactionProcessorACL.DataTransferObjects.Responses;
     using LogMessage = BusinessLogic.Models.LogMessage;
 #if ANDROID
     using Javax.Net.Ssl;
@@ -45,7 +45,7 @@
             String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "transactionpos1.db");
             Func<Database.LogLevel> logLevelFunc = new Func<Database.LogLevel>( () =>
                 {
-                return Database.LogLevel.Debug;
+                return Database.LogLevel.Warn;
             });                      
 
             IDatabaseContext database = new DatabaseContext(connectionString, logLevelFunc);
@@ -104,55 +104,6 @@
             builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
             builder.Services.AddSingleton<ITransactionService, TransactionService>();
             builder.Services.AddSingleton<IMerchantService, MerchantService>();
-
-            builder.Services.AddSingleton<Func<Boolean, IConfigurationService>>(new Func<Boolean, IConfigurationService>(useTrainingMode =>
-            {
-                if (useTrainingMode)
-                {
-                    return new DummyConfigurationService();
-                }
-                else
-                {
-                    return MauiProgram.Container.Services.GetService<IConfigurationService>();
-                }
-            }));
-
-            builder.Services.AddSingleton<Func<Boolean, IAuthenticationService>>(new Func<Boolean, IAuthenticationService>(useTrainingMode =>
-            {
-                if (useTrainingMode)
-                {
-                    return new DummyAuthenticationService();
-                }
-                else
-                {
-                    return MauiProgram.Container.Services.GetService<IAuthenticationService>();
-                }
-            }));
-
-            builder.Services.AddSingleton<Func<Boolean, ITransactionService>>(new Func<Boolean, ITransactionService>(useTrainingMode =>
-            {
-                if (useTrainingMode)
-                {
-                    return new DummyTransactionService();
-                }
-                else
-                {
-                    return MauiProgram.Container.Services.GetService<ITransactionService>();
-                }
-            }));
-
-            builder.Services.AddSingleton<Func<Boolean, IMerchantService>>(new Func<Boolean, IMerchantService>(useTrainingMode =>
-            {
-                if (useTrainingMode)
-                {
-                    return new DummyMerchantService();
-                }
-                else
-                {
-                    return MauiProgram.Container.Services.GetService<IMerchantService>();
-                }
-            }));
-
             builder.Services.AddSingleton<ISecurityServiceClient, SecurityServiceClient>();
             builder.Services.AddSingleton<IEstateClient, EstateClient>();
             builder.Services.AddSingleton<IApplicationCache, ApplicationCache>();
@@ -198,20 +149,20 @@
         public static MauiAppBuilder ConfigureRequestHandlers(this MauiAppBuilder builder)
         {
             builder.Services.AddSingleton<IMediator, Mediator>();
-            builder.Services.AddSingleton<IRequestHandler<GetConfigurationRequest, Configuration>, LoginRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<LoginRequest, TokenResponseModel>, LoginRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<RefreshTokenRequest, TokenResponseModel>, LoginRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<GetConfigurationRequest, Result<Configuration>>, LoginRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<LoginRequest, Result<TokenResponseModel>>, LoginRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<RefreshTokenRequest, Result<TokenResponseModel>>, LoginRequestHandler>();
 
-            builder.Services.AddSingleton<IRequestHandler<GetContractProductsRequest, List<ContractProductModel>>, MerchantRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<GetMerchantBalanceRequest, Decimal>, MerchantRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<GetMerchantDetailsRequest, MerchantDetailsModel>, MerchantRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<GetContractProductsRequest, Result<List<ContractProductModel>>>, MerchantRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<GetMerchantBalanceRequest, Result<Decimal>>, MerchantRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<GetMerchantDetailsRequest, Result<MerchantDetailsModel>>, MerchantRequestHandler>();
 
-            builder.Services.AddSingleton<IRequestHandler<PerformMobileTopupRequest, Boolean>, TransactionRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<LogonTransactionRequest, PerformLogonResponseModel>, TransactionRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<PerformVoucherIssueRequest, Boolean>, TransactionRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<PerformReconciliationRequest, Boolean>, TransactionRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentGetAccountRequest, PerformBillPaymentGetAccountResponseModel>, TransactionRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentMakePaymentRequest, Boolean>, TransactionRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<PerformMobileTopupRequest, Result<SaleTransactionResponseMessage>>, TransactionRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<LogonTransactionRequest, Result<PerformLogonResponseModel>>, TransactionRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<PerformVoucherIssueRequest, Result<SaleTransactionResponseMessage>>, TransactionRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<PerformReconciliationRequest, Result<ReconciliationResponseMessage>>, TransactionRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentGetAccountRequest, Result<PerformBillPaymentGetAccountResponseModel>>, TransactionRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentMakePaymentRequest, Result<SaleTransactionResponseMessage>>, TransactionRequestHandler>();
 
             builder.Services.AddSingleton<IRequestHandler<UploadLogsRequest, Boolean>, SupportRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<ViewLogsRequest, List<LogMessage>>, SupportRequestHandler>();

@@ -54,7 +54,8 @@ public class MobileTopupSelectProductPageViewModel : ExtendedBaseViewModel, IQue
     {
         GetContractProductsRequest request = GetContractProductsRequest.Create(ProductType.MobileTopup);
 
-        List<ContractProductModel> products = await this.Mediator.Send(request, cancellationToken);
+        var productsresult = await this.Mediator.Send(request, cancellationToken);
+        List<ContractProductModel> products = productsresult.Data;
 
         products = products.Where(p => p.OperatorIdentfier == this.ProductDetails.OperatorIdentifier).ToList();
 

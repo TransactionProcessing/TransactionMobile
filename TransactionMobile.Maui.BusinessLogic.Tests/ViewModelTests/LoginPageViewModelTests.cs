@@ -1,12 +1,14 @@
 namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests;
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Maui.UIServices;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
 using Models;
 using Moq;
+using RequestHandlers;
 using Requests;
 using Shared.Logger;
 using TransactionMobile.Maui.BusinessLogic.Services;
@@ -17,162 +19,132 @@ using Xunit;
 
 public class LoginPageViewModelTests
 {
+    private LoginPageViewModel ViewModel;
+
+    private readonly Mock<IMediator> Mediator;
+
+    private readonly Mock<INavigationService> NavigationService;
+
+    private readonly Mock<IApplicationCache> ApplicationCache;
+
+    private readonly Mock<IDeviceService> DeviceService;
+
+    private readonly Mock<IApplicationInfoService> ApplicationInfoService;
+
+    private readonly Mock<IDialogService> DialogService;
+    public LoginPageViewModelTests() {
+        this.Mediator = new Mock<IMediator>();
+        this.NavigationService = new Mock<INavigationService>();
+        this.ApplicationCache = new Mock<IApplicationCache>();
+        this.DeviceService = new Mock<IDeviceService>();
+        this.ApplicationInfoService = new Mock<IApplicationInfoService>();
+        this.DialogService = new Mock<IDialogService>();
+
+        this.ViewModel = new LoginPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object,
+                                                              this.DeviceService.Object, this.ApplicationInfoService.Object,
+                                                              this.DialogService.Object);
+        Logger.Initialise(NullLogger.Instance);
+    }
+
     [Fact]
     public void LoginPageViewModel_LoginCommand_Execute_IsExecuted()
     {
-        Mock<IMediator> mediator = new Mock<IMediator>();
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
-        Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
-        Mock<IDialogService> dialogService = new Mock<IDialogService>();
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<Configuration>(new Configuration()));
+        this.Mediator.Setup(m => m.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<TokenResponseModel>(TestData.AccessToken));
+        this.Mediator.Setup(m => m.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformLogonResponseModel>(TestData.PerformLogonResponseModel));
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<Decimal>(TestData.MerchantBalance));
 
-        LoginPageViewModel viewModel = new LoginPageViewModel(mediator.Object, navigationService.Object, applicationCache.Object,
-                                                              deviceService.Object,applicationInfoService.Object,
-                                                              dialogService.Object);
-        Logger.Initialise(NullLogger.Instance);
-        mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new Configuration());
-        mediator.Setup(m => m.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.AccessToken);
-        mediator.Setup(m => m.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.PerformLogonResponseModel);
-        mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.ContractProductList);
-
-        viewModel.LoginCommand.Execute(null);
+        this.ViewModel.LoginCommand.Execute(null);
         
-        mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-        mediator.Verify(x => x.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-        mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-        mediator.Verify(x => x.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-        navigationService.Verify(n => n.GoToHome(), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
     }
 
     [Fact]
     public void LoginPageViewModel_LoginCommand_Execute_ErrorGettingConfig_WarningToastIsShown()
     {
-        Mock<IMediator> mediator = new Mock<IMediator>();
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
-        Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
-        Mock<IDialogService> dialogService = new Mock<IDialogService>();
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new ErrorResult<Configuration>("Error"));
 
-        LoginPageViewModel viewModel = new LoginPageViewModel(mediator.Object, navigationService.Object, applicationCache.Object,
-                                                              deviceService.Object, applicationInfoService.Object,
-                                                              dialogService.Object);
-        Logger.Initialise(NullLogger.Instance);
-        mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.NullConfiguration);
-        
-        viewModel.LoginCommand.Execute(null);
+        this.ViewModel.LoginCommand.Execute(null);
 
-        mediator.Verify(x => x.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-        mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Never);
-        navigationService.Verify(n => n.GoToHome(), Times.Never);
+        this.Mediator.Verify(x => x.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Never);
+        this.NavigationService.Verify(n => n.GoToHome(), Times.Never);
 
-        dialogService.Verify(n => n.ShowWarningToast(It.IsAny<String>(),
-                                                     null,
-                                                     "OK",
-                                                     null,
-               CancellationToken.None), Times.Once);
+        this.DialogService.Verify(n => n.ShowWarningToast(It.IsAny<String>(),
+                                                          null,
+                                                          "OK",
+                                                          null,
+                                                          CancellationToken.None), Times.Once);
     }
 
     [Fact]
     public void LoginPageViewModel_LoginCommand_Execute_ErrorGettingToken_WarningToastIsShown()
     {
-        Mock<IMediator> mediator = new Mock<IMediator>();
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
-        Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
-        Mock<IDialogService> dialogService = new Mock<IDialogService>();
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<Configuration>(new Configuration()));
+        this.Mediator.Setup(m => m.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new ErrorResult<TokenResponseModel>("Error"));
 
-        LoginPageViewModel viewModel = new LoginPageViewModel(mediator.Object, navigationService.Object, applicationCache.Object,
-                                                              deviceService.Object, applicationInfoService.Object,
-                                                              dialogService.Object);
-        Logger.Initialise(NullLogger.Instance);
-        
-        mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.Configuration);
-        mediator.Setup(m => m.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.NullAccessToken);
-        
-        viewModel.LoginCommand.Execute(null);
+        this.ViewModel.LoginCommand.Execute(null);
 
-        mediator.Verify(x => x.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-        mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-        mediator.Verify(x => x.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>()), Times.Never);
-        mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Never);
-        mediator.Verify(x => x.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>()), Times.Never);
-        navigationService.Verify(n => n.GoToHome(), Times.Never);
+        this.Mediator.Verify(x => x.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>()), Times.Never);
+        this.Mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Never);
+        this.Mediator.Verify(x => x.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>()), Times.Never);
+        this.NavigationService.Verify(n => n.GoToHome(), Times.Never);
 
-        dialogService.Verify(n => n.ShowWarningToast(It.IsAny<String>(),
-                                                     null,
-                                                     "OK",
-                                                     null,
-                                                     CancellationToken.None), Times.Once);
+        this.DialogService.Verify(n => n.ShowWarningToast(It.IsAny<String>(),
+                                                          null,
+                                                          "OK",
+                                                          null,
+                                                          CancellationToken.None), Times.Once);
     }
 
     [Fact]
     public void LoginPageViewModel_LoginCommand_Execute_ErrorDuringLogonTransaction_WarningToastIsShown()
     {
-        Mock<IMediator> mediator = new Mock<IMediator>();
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
-        Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
-        Mock<IDialogService> dialogService = new Mock<IDialogService>();
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<Configuration>(new Configuration()));
+        this.Mediator.Setup(m => m.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<TokenResponseModel>(TestData.AccessToken));
+        this.Mediator.Setup(m => m.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new ErrorResult<PerformLogonResponseModel>(""));
 
-        LoginPageViewModel viewModel = new LoginPageViewModel(mediator.Object, navigationService.Object, applicationCache.Object,
-                                                              deviceService.Object, applicationInfoService.Object,
-                                                              dialogService.Object);
-        Logger.Initialise(NullLogger.Instance);
+        this.ViewModel.LoginCommand.Execute(null);
 
-        mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.Configuration);
-        mediator.Setup(m => m.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.AccessToken);
-        mediator.Setup(m => m.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.PerformLogonResponseModelFailed);
-        
-        viewModel.LoginCommand.Execute(null);
+        this.Mediator.Verify(x => x.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Never);
+        this.Mediator.Verify(x => x.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>()), Times.Never);
+        this.NavigationService.Verify(n => n.GoToHome(), Times.Never);
 
-        mediator.Verify(x => x.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-        mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-        mediator.Verify(x => x.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-        mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Never);
-        mediator.Verify(x => x.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>()), Times.Never);
-        navigationService.Verify(n => n.GoToHome(), Times.Never);
-
-        dialogService.Verify(n => n.ShowWarningToast(It.IsAny<String>(),
-                                                     null,
-                                                     "OK",
-                                                     null,
-                                                     CancellationToken.None), Times.Once);
+        this.DialogService.Verify(n => n.ShowWarningToast(It.IsAny<String>(),
+                                                          null,
+                                                          "OK",
+                                                          null,
+                                                          CancellationToken.None), Times.Once);
     }
 
     [Fact]
     public void LoginPageViewModel_LoginCommand_Execute_ErrorDuringGetContractProducts_WarningToastIsShown()
     {
-        Mock<IMediator> mediator = new Mock<IMediator>();
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
-        Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
-        Mock<IDialogService> dialogService = new Mock<IDialogService>();
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<Configuration>(new Configuration()));
+        this.Mediator.Setup(m => m.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<TokenResponseModel>(TestData.AccessToken));
+        this.Mediator.Setup(m => m.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformLogonResponseModel>(TestData.PerformLogonResponseModel));
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new ErrorResult<List<ContractProductModel>>(""));
 
-        LoginPageViewModel viewModel = new LoginPageViewModel(mediator.Object, navigationService.Object, applicationCache.Object,
-                                                              deviceService.Object, applicationInfoService.Object,
-                                                              dialogService.Object);
-        Logger.Initialise(NullLogger.Instance);
+        this.ViewModel.LoginCommand.Execute(null);
 
-        mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.Configuration);
-        mediator.Setup(m => m.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.AccessToken);
-        mediator.Setup(m => m.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.PerformLogonResponseModel);
-        mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.ContractProductListEmpty);
+        this.Mediator.Verify(x => x.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>()), Times.Never);
+        this.NavigationService.Verify(n => n.GoToHome(), Times.Never);
 
-        viewModel.LoginCommand.Execute(null);
-
-        mediator.Verify(x => x.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-        mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-        mediator.Verify(x => x.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-        mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-        mediator.Verify(x => x.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>()), Times.Never);
-        navigationService.Verify(n => n.GoToHome(), Times.Never);
-
-        dialogService.Verify(n => n.ShowWarningToast(It.IsAny<String>(),
+        this.DialogService.Verify(n => n.ShowWarningToast(It.IsAny<String>(),
                                                      null,
                                                      "OK",
                                                      null,

@@ -9,6 +9,7 @@
     using Models;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
+    using RequestHandlers;
     using Requests;
     using Services;
     using Shared.Logger;
@@ -77,8 +78,9 @@
 
             GetMerchantDetailsRequest request = GetMerchantDetailsRequest.Create();
 
-            MerchantDetailsModel merchantDetailsModel = await this.Mediator.Send(request, cancellationToken);
-            this.MerchantName = merchantDetailsModel.MerchantName;
+            Result<MerchantDetailsModel> merchantDetailsResult = await this.Mediator.Send(request, cancellationToken);
+            // TODO: handle failure result
+            this.MerchantName = merchantDetailsResult.Data.MerchantName;
 
             DateTime expirationTime = DateTime.Now.AddMinutes(60);
             CancellationChangeToken expirationToken = new CancellationChangeToken(new CancellationTokenSource(TimeSpan.FromMinutes(60)).Token);
@@ -90,7 +92,7 @@
                                                         // Force eviction to run
                                                         .AddExpirationToken(expirationToken);
 
-            this.ApplicationCache.SetMerchantDetails(merchantDetailsModel, cacheEntryOptions);
+            this.ApplicationCache.SetMerchantDetails(merchantDetailsResult.Data, cacheEntryOptions);
 
             this.LastLogin = DateTime.Now; // TODO: might cache this in the application
         }

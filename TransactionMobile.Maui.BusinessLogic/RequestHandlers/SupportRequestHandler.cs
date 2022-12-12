@@ -13,27 +13,25 @@ namespace TransactionMobile.Maui.BusinessLogic.RequestHandlers
     public class SupportRequestHandler : IRequestHandler<UploadLogsRequest, Boolean>,
                                          IRequestHandler<ViewLogsRequest, List<Models.LogMessage>>
     {
-        private readonly Func<Boolean, IConfigurationService> ConfigurationServiceResolver;
+        private readonly IConfigurationService ConfigurationService;
         private readonly IDatabaseContext DatabaseContext;
 
         private readonly IApplicationCache ApplicationCache;
 
-        public SupportRequestHandler(Func<Boolean, IConfigurationService> configurationServiceResolver,
+        public SupportRequestHandler(IConfigurationService configurationService,
                                      IDatabaseContext databaseContext,
                                      IApplicationCache applicationCache)
         {
-            this.ConfigurationServiceResolver = configurationServiceResolver;
+            this.ConfigurationService = configurationService;
             this.DatabaseContext = databaseContext;
             this.ApplicationCache = applicationCache;
         }
 
         public async Task<Boolean> Handle(UploadLogsRequest request, CancellationToken cancellationToken)
         {
-            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
-
             while (true)
             {
-                List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(10, useTrainingMode); // TODO: Configurable batch size
+                List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(10); // TODO: Configurable batch size
 
                 if (logEntries.Any() == false)
                 {
@@ -51,8 +49,8 @@ namespace TransactionMobile.Maui.BusinessLogic.RequestHandlers
                     EntryDateTime = l.EntryDateTime,
                     Id = l.Id
                 }));
-                IConfigurationService configurationService = this.ConfigurationServiceResolver(useTrainingMode);
-                await configurationService.PostDiagnosticLogs(request.DeviceIdentifier, logMessageModels, CancellationToken.None);
+                
+                await this.ConfigurationService.PostDiagnosticLogs(request.DeviceIdentifier, logMessageModels, CancellationToken.None);
 
                 // Clear the logs that have been uploaded
                 await this.DatabaseContext.RemoveUploadedMessages(logEntries);
@@ -63,9 +61,7 @@ namespace TransactionMobile.Maui.BusinessLogic.RequestHandlers
 
         public async Task<List<Models.LogMessage>> Handle(ViewLogsRequest request,
                                                     CancellationToken cancellationToken) {
-            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
-
-            List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(50, useTrainingMode); // TODO: Configurable batch size
+            List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(50); // TODO: Configurable batch size
 
             List<Models.LogMessage> logMessageModels = new List<Models.LogMessage>();
 

@@ -2,8 +2,9 @@
 
 using MediatR;
 using Models;
+using RequestHandlers;
 
-public class GetMerchantDetailsRequest : IRequest<MerchantDetailsModel>
+public class GetMerchantDetailsRequest : IRequest<Result<MerchantDetailsModel>>
 {
     #region Constructors
 

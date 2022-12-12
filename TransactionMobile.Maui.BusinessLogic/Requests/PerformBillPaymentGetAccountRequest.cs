@@ -2,8 +2,9 @@
 
 using MediatR;
 using Models;
+using RequestHandlers;
 
-public class PerformBillPaymentGetAccountRequest : IRequest<PerformBillPaymentGetAccountResponseModel>
+public class PerformBillPaymentGetAccountRequest : IRequest<Result<PerformBillPaymentGetAccountResponseModel>>
 {
     #region Constructors
 

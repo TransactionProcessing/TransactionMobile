@@ -47,7 +47,8 @@ public class VoucherSelectOperatorPageViewModel : ExtendedBaseViewModel
     {
         GetContractProductsRequest request = GetContractProductsRequest.Create(ProductType.Voucher);
 
-        List<ContractProductModel> products = await this.Mediator.Send(request, cancellationToken);
+        var productsresult = await this.Mediator.Send(request, cancellationToken);
+        List<ContractProductModel> products = productsresult.Data;
 
         // TODO: Should this logic live in the Reqest handler ???
         List<ContractOperatorModel> operators = products.GroupBy(c => new

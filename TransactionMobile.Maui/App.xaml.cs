@@ -21,22 +21,7 @@ public partial class App : Application
 	public App()
     {
         InitializeComponent();
-
-        Microsoft.Maui.Handlers.LabelHandler.ElementMapper.AppendToMapping("TrainingMode", (handler, view) =>
-        {
-            if (view is TitleLabel)
-            {
-                var applicationCache = MauiProgram.Container.Services.GetService<IApplicationCache>();
-
-                Boolean useTrainingMode = applicationCache.GetUseTrainingMode();
-
-                if (useTrainingMode)
-                {
-                    ((TitleLabel)view).Text = $"{((TitleLabel)view).Text} - Training Mode";
-                }
-            }
-        });
-
+        
 #if ANDROID
         ViewHandler.ViewMapper.ModifyMapping("AutomationId", (handler, view, previousAction) =>
         {

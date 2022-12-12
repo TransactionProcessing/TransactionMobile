@@ -2,8 +2,9 @@
 
 using MediatR;
 using Models;
+using RequestHandlers;
 
-public class GetConfigurationRequest : IRequest<Configuration>
+public class GetConfigurationRequest : IRequest<Result<Configuration>>
 {
     public String DeviceIdentifier { get; private set; }
 

@@ -2,25 +2,24 @@
 
 using Database;
 using Models;
+using RequestHandlers;
 using Requests;
 using TransactionProcessorACL.DataTransferObjects;
+using TransactionProcessorACL.DataTransferObjects.Responses;
 using ViewModels.Transactions;
 
 public static class Extensions
 {
-    public static TransactionRecord ToTransactionRecord(this LogonTransactionRequest request,
-                                                        Boolean useTrainingMode) {
+    public static TransactionRecord ToTransactionRecord(this LogonTransactionRequest request) {
         TransactionRecord transactionRecord = new TransactionRecord {
                                                                         TransactionDateTime = request.TransactionDateTime,
-                                                                        TransactionType = 1,
-                                                                        IsTrainingMode = useTrainingMode
+                                                                        TransactionType = 1
                                                                     };
 
         return transactionRecord;
     }
 
-    public static TransactionRecord ToTransactionRecord(this PerformMobileTopupRequest request,
-                                                        Boolean useTrainingMode) {
+    public static TransactionRecord ToTransactionRecord(this PerformMobileTopupRequest request) {
         TransactionRecord transactionRecord = new TransactionRecord {
                                                                         TransactionDateTime = request.TransactionDateTime,
                                                                         TransactionType = 2,
@@ -29,15 +28,13 @@ public static class Extensions
                                                                         ContractId = request.ContractId,
                                                                         CustomerAccountNumber = request.CustomerAccountNumber,
                                                                         CustomerEmailAddress = request.CustomerEmailAddress,
-                                                                        OperatorIdentifier = request.OperatorIdentifier,
-                                                                        IsTrainingMode = useTrainingMode,
+                                                                        OperatorIdentifier = request.OperatorIdentifier
                                                                     };
 
         return transactionRecord;
     }
 
-    public static TransactionRecord ToTransactionRecord(this PerformVoucherIssueRequest request,
-                                                        Boolean useTrainingMode) {
+    public static TransactionRecord ToTransactionRecord(this PerformVoucherIssueRequest request) {
         TransactionRecord transactionRecord = new TransactionRecord {
                                                                         TransactionDateTime = request.TransactionDateTime,
                                                                         TransactionType = 2,
@@ -47,15 +44,13 @@ public static class Extensions
                                                                         RecipientEmailAddress = request.RecipientEmailAddress,
                                                                         RecipientMobileNumber = request.RecipientMobileNumber,
                                                                         CustomerEmailAddress = request.CustomerEmailAddress,
-                                                                        OperatorIdentifier = request.OperatorIdentifier,
-                                                                        IsTrainingMode = useTrainingMode
+                                                                        OperatorIdentifier = request.OperatorIdentifier
                                                                     };
 
         return transactionRecord;
     }
 
-    public static TransactionRecord ToTransactionRecord(this PerformBillPaymentGetAccountRequest request,
-                                                        Boolean useTrainingMode) {
+    public static TransactionRecord ToTransactionRecord(this PerformBillPaymentGetAccountRequest request) {
         TransactionRecord transactionRecord = new TransactionRecord
                                               {
                                                   TransactionDateTime = request.TransactionDateTime,
@@ -64,14 +59,12 @@ public static class Extensions
                                                   ProductId = request.ProductId,
                                                   ContractId = request.ContractId,
                                                   OperatorIdentifier = request.OperatorIdentifier,
-                                                  IsTrainingMode = useTrainingMode,
                                                   CustomerAccountNumber = request.CustomerAccountNumber,
                                               };
         return transactionRecord;
     }
 
-    public static TransactionRecord ToTransactionRecord(this PerformBillPaymentMakePaymentRequest request,
-                                                        Boolean useTrainingMode) {
+    public static TransactionRecord ToTransactionRecord(this PerformBillPaymentMakePaymentRequest request) {
         TransactionRecord transactionRecord = new TransactionRecord
                                               {
                                                   TransactionDateTime = request.TransactionDateTime,
@@ -80,7 +73,6 @@ public static class Extensions
                                                   ProductId = request.ProductId,
                                                   ContractId = request.ContractId,
                                                   OperatorIdentifier = request.OperatorIdentifier,
-                                                  IsTrainingMode = useTrainingMode,
                                                   CustomerAccountNumber = request.CustomerAccountNumber
                                               };
         return transactionRecord;
@@ -88,20 +80,27 @@ public static class Extensions
 
 
     public static TransactionRecord UpdateFrom(this TransactionRecord transactionRecord,
-                                               PerformLogonResponseModel result)
-    {
-        transactionRecord.IsSuccessful = result.IsSuccessful;
-        transactionRecord.ResponseMessage = result.ResponseMessage;
-        transactionRecord.EstateId = result.EstateId;
-        transactionRecord.MerchantId = result.MerchantId;
+                                               Result<PerformLogonResponseModel> result) {
+        transactionRecord.IsSuccessful = result.Data.IsSuccessful;
+        transactionRecord.ResponseMessage = result.Data.ResponseMessage;
+        transactionRecord.EstateId = result.Data.EstateId;
+        transactionRecord.MerchantId = result.Data.MerchantId;
 
         return transactionRecord;
     }
 
     public static TransactionRecord UpdateFrom(this TransactionRecord transactionRecord,
-                                               Boolean result)
+                                               Result<SaleTransactionResponseMessage> result)
     {
-        transactionRecord.IsSuccessful = result;
+        transactionRecord.IsSuccessful = result.Data.ResponseCode == "0000";
+
+        return transactionRecord;
+    }
+
+    public static TransactionRecord UpdateFrom(this TransactionRecord transactionRecord,
+                                               Result<PerformBillPaymentGetAccountResponseModel> result)
+    {
+        transactionRecord.IsSuccessful = result.Data.IsSuccessful;
 
         return transactionRecord;
     }
@@ -268,4 +267,11 @@ public static class Extensions
         return billDetails;
     }
 
+    public static Boolean IsSuccessfulTransaction(this SaleTransactionResponseMessage transactionResponse) {
+        return transactionResponse.ResponseCode == "0000";
+    }
+
+    public static Boolean IsSuccessfulReconciliation(this ReconciliationResponseMessage reconciliationResponse) {
+        return reconciliationResponse.ResponseCode == "0000";
+    }
 }

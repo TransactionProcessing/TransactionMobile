@@ -1,11 +1,14 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions;
 
 using System.Windows.Input;
+using Common;
 using Maui.UIServices;
 using MediatR;
 using MvvmHelpers.Commands;
+using RequestHandlers;
 using Requests;
 using Services;
+using TransactionProcessorACL.DataTransferObjects.Responses;
 using UIServices;
 
 public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttributable
@@ -68,9 +71,9 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
                                                                                                    this.CustomerMobileNumber,
                                                                                                    this.PaymentAmount);
 
-        Boolean response = await this.Mediator.Send(request);
+        Result<SaleTransactionResponseMessage> result = await this.Mediator.Send(request);
 
-        if (response) {
+        if (result.Success && result.Data.IsSuccessfulTransaction()) {
             await this.NavigationService.GoToBillPaymentSuccessPage();
         }
         else {

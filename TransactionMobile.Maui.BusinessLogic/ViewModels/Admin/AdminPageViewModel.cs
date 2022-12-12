@@ -6,8 +6,10 @@
     using Microsoft.Extensions.Caching.Memory;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
+    using RequestHandlers;
     using Requests;
     using Services;
+    using TransactionProcessorACL.DataTransferObjects.Responses;
     using UIServices;
 
     public class AdminPageViewModel : ExtendedBaseViewModel
@@ -48,14 +50,12 @@
             PerformReconciliationRequest request =
                 PerformReconciliationRequest.Create(DateTime.Now, this.DeviceService.GetIdentifier(), this.ApplicationInfoService.VersionString);
 
-            Boolean response = await this.Mediator.Send(request);
+            Result<ReconciliationResponseMessage> result = await this.Mediator.Send(request);
 
             // TODO: Act on the response (display message or something)...
             await this.NavigationService.GoToHome();
         }
-
         
-
         #endregion
     }
 }

@@ -5,6 +5,7 @@ using Maui.UIServices;
 using MediatR;
 using Models;
 using MvvmHelpers.Commands;
+using RequestHandlers;
 using Requests;
 using Services;
 using Shared.Logger;
@@ -61,16 +62,16 @@ public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel, IQueryA
                                                                                                  this.ProductDetails.OperatorIdentifier,
                                                                                                  this.CustomerAccountNumber);
 
-        PerformBillPaymentGetAccountResponseModel response = await this.Mediator.Send(request);
+        Result<PerformBillPaymentGetAccountResponseModel> result = await this.Mediator.Send(request);
 
-        if (response.IsSuccessful) {
+        if (result.Success && result.Data.IsSuccessful) {
             ProductDetails productDetails = new ProductDetails {
                                                                    ContractId = this.ProductDetails.ContractId,
                                                                    ProductId = this.ProductDetails.ProductId,
                                                                    OperatorIdentifier = this.ProductDetails.OperatorIdentifier
                                                                };
 
-            await this.NavigationService.GoToBillPaymentPayBillPage(productDetails, response.BillDetails);
+            await this.NavigationService.GoToBillPaymentPayBillPage(productDetails, result.Data.BillDetails);
         }
         else {
             await this.NavigationService.GoToBillPaymentFailedPage();

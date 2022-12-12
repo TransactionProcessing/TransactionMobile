@@ -10,15 +10,20 @@ using Xunit;
 
 public class MobileTopupFailedPageViewModelTests
 {
+    private readonly Mock<INavigationService> NavigationService;
+
+    private readonly MobileTopupFailedPageViewModel ViewModel;
+    public MobileTopupFailedPageViewModelTests()
+    {
+        this.NavigationService = new Mock<INavigationService>();
+        Logger.Initialise(NullLogger.Instance);
+        this.ViewModel = new MobileTopupFailedPageViewModel(this.NavigationService.Object);
+    }
+
     [Fact]
     public void MobileTopupFailedPageViewModel_CancelledCommand_Execute_IsExecuted()
     {
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-
-        Logger.Initialise(NullLogger.Instance);
-        MobileTopupFailedPageViewModel viewModel = new MobileTopupFailedPageViewModel(navigationService.Object);
-
-        viewModel.CancelledCommand.Execute(null);
-        navigationService.Verify(n => n.PopToRoot(), Times.Once);
+        this.ViewModel.CancelledCommand.Execute(null);
+        this.NavigationService.Verify(n => n.PopToRoot(), Times.Once);
     }
 }

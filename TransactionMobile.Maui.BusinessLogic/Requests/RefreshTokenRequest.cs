@@ -2,8 +2,9 @@
 
 using MediatR;
 using Models;
+using RequestHandlers;
 
-public class RefreshTokenRequest : IRequest<TokenResponseModel>
+public class RefreshTokenRequest : IRequest<Result<TokenResponseModel>>
 {
     #region Constructors
 

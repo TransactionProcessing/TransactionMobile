@@ -7,6 +7,7 @@ using MediatR;
 using Models;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
+using RequestHandlers;
 using Requests;
 using Services;
 using UIServices;
@@ -45,9 +46,10 @@ public class MobileTopupSelectOperatorPageViewModel : ExtendedBaseViewModel
     {
         GetContractProductsRequest request = GetContractProductsRequest.Create(ProductType.MobileTopup);
 
-        List<ContractProductModel> products = await this.Mediator.Send(request, cancellationToken);
+        Result<List<ContractProductModel>> productsresult = await this.Mediator.Send(request, cancellationToken);
+        List<ContractProductModel> products = productsresult.Data;
 
-        // TODO: Should this logic live in the Reqest handler ???
+        // TODO: Should this logic live in the Request handler ???
         List<ContractOperatorModel> operators = products.GroupBy(c => new
             {
                 c.OperatorName,

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Common;
 using Database;
 using Models;
 using Moq;
@@ -11,52 +12,61 @@ using RequestHandlers;
 using Requests;
 using Services;
 using Shouldly;
+using TransactionProcessorACL.DataTransferObjects.Responses;
 using UIServices;
 using Xunit;
+using static SQLite.SQLite3;
 
 public class TransactionRequestHandlerTests
 {
+    private Mock<ITransactionService> TransactionService;
+
+    private Mock<IDatabaseContext> DatabaseContext;
+
+    private Mock<IApplicationCache> ApplicationCache;
+
+    private Mock<IApplicationInfoService> ApplicationInfoService;
+
+    private Mock<IDeviceService> DeviceService;
+
+    private TransactionRequestHandler TransactionRequestHandler;
+
+    public TransactionRequestHandlerTests() {
+        this.TransactionService = new Mock<ITransactionService>();
+        this.DatabaseContext = new Mock<IDatabaseContext>();
+        this.ApplicationCache = new Mock<IApplicationCache>();
+        this.ApplicationInfoService = new Mock<IApplicationInfoService>();
+        this.DeviceService = new Mock<IDeviceService>();
+
+        this.TransactionRequestHandler = new TransactionRequestHandler(this.TransactionService.Object, 
+                                                                          this.DatabaseContext.Object, 
+                                                                          this.ApplicationCache.Object,
+                                                                          this.ApplicationInfoService.Object,
+                                                                          this.DeviceService.Object);
+
+    }
+
     [Fact]
     public async Task TransactionRequestHandler_LogonTransactionRequest_Handle_IsHandled()
     {
-        Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
-        Func<Boolean, ITransactionService> transactionServiceResolver = new Func<bool, ITransactionService>((param) =>
-        {
-            return transactionService.Object;
-        });
-        Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
-        Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
-        transactionService.Setup(t => t.PerformLogon(It.IsAny<PerformLogonRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.PerformLogonResponseModel);
-        TransactionRequestHandler handler = new TransactionRequestHandler(transactionServiceResolver, databaseContext.Object, applicationCache.Object,
-                                                                          applicationInfoService.Object,
-                                                                          deviceService.Object);
-
+        this.TransactionService.Setup(t => t.PerformLogon(It.IsAny<PerformLogonRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(
+         new SuccessResult<PerformLogonResponseModel>(TestData.PerformLogonResponseModel));
+     
         LogonTransactionRequest request = LogonTransactionRequest.Create(TestData.TransactionDateTime);
 
-        PerformLogonResponseModel? response = await handler.Handle(request, CancellationToken.None);
+        Result<PerformLogonResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        response.IsSuccessful.ShouldBeTrue();
+        result.Success.ShouldBeTrue();
+        result.Data.IsSuccessful.ShouldBeTrue();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformMobileTopupRequest_Handle_IsHandled()
     {
-        Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
-        Func<Boolean, ITransactionService> transactionServiceResolver = new Func<bool, ITransactionService>((param) =>
-        {
-            return transactionService.Object;
-        });
-        Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        transactionService.Setup(t => t.PerformMobileTopup(It.IsAny<PerformMobileTopupRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
-        Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
-        Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
-        TransactionRequestHandler handler = new TransactionRequestHandler(transactionServiceResolver, databaseContext.Object, applicationCache.Object,
-                                                                          applicationInfoService.Object,
-                                                                          deviceService.Object);
-
+        this.TransactionService.Setup(t => t.PerformMobileTopup(It.IsAny<PerformMobileTopupRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<SaleTransactionResponseMessage>(new SaleTransactionResponseMessage {
+            ResponseCode = "0000"
+        }));
+     
         PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(TestData.TransactionDateTime,
                                                                              TestData.OperatorId1ContractId,
                                                                              TestData.Operator1Product_100KES.ProductId,
@@ -65,28 +75,19 @@ public class TransactionRequestHandlerTests
                                                                              TestData.Operator1Product_100KES.Value,
                                                                              TestData.CustomerEmailAddress);
 
-        Boolean response = await handler.Handle(request, CancellationToken.None);
+        Result<SaleTransactionResponseMessage> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        response.ShouldBeTrue();
+        result.Success.ShouldBeTrue();
+        result.Data.IsSuccessfulTransaction().ShouldBeTrue();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformVoucherIssueRequest_Handle_IsHandled()
     {
-        Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
-        Func<Boolean, ITransactionService> transactionServiceResolver = new Func<bool, ITransactionService>((param) =>
-        {
-            return transactionService.Object;
-        });
-        Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
-        Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
-
-        transactionService.Setup(t => t.PerformVoucherIssue(It.IsAny<PerformVoucherIssueRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
-        TransactionRequestHandler handler = new TransactionRequestHandler(transactionServiceResolver, databaseContext.Object, applicationCache.Object,
-                                                                          applicationInfoService.Object,
-                                                                          deviceService.Object);
+        this.TransactionService.Setup(t => t.PerformVoucherIssue(It.IsAny<PerformVoucherIssueRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<SaleTransactionResponseMessage>(new SaleTransactionResponseMessage
+            {
+                ResponseCode = "0000"
+            }));
 
         PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(TestData.TransactionDateTime,
                                                                                TestData.OperatorId3ContractId,
@@ -97,29 +98,17 @@ public class TransactionRequestHandlerTests
                                                                                TestData.Operator3Product_200KES.Value,
                                                                                TestData.CustomerEmailAddress);
 
-        Boolean response = await handler.Handle(request, CancellationToken.None);
+        Result<SaleTransactionResponseMessage> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        response.ShouldBeTrue();
+        result.Success.ShouldBeTrue();
+        result.Data.IsSuccessfulTransaction().ShouldBeTrue();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformBillPaymentGetAccountRequest_Handle_IsHandled()
     {
-        Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
-        Func<Boolean, ITransactionService> transactionServiceResolver = new Func<bool, ITransactionService>((param) =>
-        {
-            return transactionService.Object;
-        });
-        Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
-        Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
-
-        transactionService.Setup(t => t.PerformBillPaymentGetAccount(It.IsAny<PerformBillPaymentGetAccountModel>(), It.IsAny<CancellationToken>()))
-                          .ReturnsAsync(TestData.PerformBillPaymentGetAccountResponseModel);
-        TransactionRequestHandler handler = new TransactionRequestHandler(transactionServiceResolver, databaseContext.Object, applicationCache.Object,
-                                                                          applicationInfoService.Object,
-                                                                          deviceService.Object);
+        this.TransactionService.Setup(t => t.PerformBillPaymentGetAccount(It.IsAny<PerformBillPaymentGetAccountModel>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new SuccessResult<PerformBillPaymentGetAccountResponseModel>(TestData.PerformBillPaymentGetAccountResponseModel));
 
         PerformBillPaymentGetAccountRequest request = PerformBillPaymentGetAccountRequest.Create(TestData.TransactionDateTime,
                                                                                                  TestData.OperatorId1ContractId,
@@ -127,31 +116,19 @@ public class TransactionRequestHandlerTests
                                                                                                  TestData.OperatorIdentifier1,
                                                                                                  TestData.CustomerAccountNumber);
 
-        PerformBillPaymentGetAccountResponseModel? response = await handler.Handle(request, CancellationToken.None);
+        Result<PerformBillPaymentGetAccountResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        response.ShouldNotBeNull();
-        response.BillDetails.ShouldNotBeNull();
-        response.IsSuccessful.ShouldBeTrue();
+        result.Success.ShouldBeTrue();
+        result.Data.IsSuccessful.ShouldBeTrue();
+        result.Data.BillDetails.ShouldNotBeNull();
+        
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformBillPaymentGetAccountRequest_GetAccountFailed_Handle_IsHandled()
     {
-        Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
-        Func<Boolean, ITransactionService> transactionServiceResolver = new Func<bool, ITransactionService>((param) =>
-        {
-            return transactionService.Object;
-        });
-        Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
-        Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
-
-        transactionService.Setup(t => t.PerformBillPaymentGetAccount(It.IsAny<PerformBillPaymentGetAccountModel>(), It.IsAny<CancellationToken>()))
-                          .ReturnsAsync(TestData.PerformBillPaymentGetAccountResponseModelFailed);
-        TransactionRequestHandler handler = new TransactionRequestHandler(transactionServiceResolver, databaseContext.Object, applicationCache.Object,
-                                                                          applicationInfoService.Object,
-                                                                          deviceService.Object);
+        this.TransactionService.Setup(t => t.PerformBillPaymentGetAccount(It.IsAny<PerformBillPaymentGetAccountModel>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new SuccessResult<PerformBillPaymentGetAccountResponseModel>(TestData.PerformBillPaymentGetAccountResponseModelFailed));
 
         PerformBillPaymentGetAccountRequest request = PerformBillPaymentGetAccountRequest.Create(TestData.TransactionDateTime,
                                                                                                  TestData.OperatorId1ContractId,
@@ -159,31 +136,20 @@ public class TransactionRequestHandlerTests
                                                                                                  TestData.OperatorIdentifier1,
                                                                                                  TestData.CustomerAccountNumber);
 
-        PerformBillPaymentGetAccountResponseModel? response = await handler.Handle(request, CancellationToken.None);
+        Result<PerformBillPaymentGetAccountResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        response.ShouldNotBeNull();
-        response.BillDetails.ShouldBeNull();
-        response.IsSuccessful.ShouldBeFalse();
+        result.Success.ShouldBeTrue();
+        result.Data.IsSuccessful.ShouldBeFalse();
+        result.Data.BillDetails.ShouldBeNull();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformBillPaymentMakePaymentRequest_Handle_IsHandled()
     {
-        Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
-        Func<Boolean, ITransactionService> transactionServiceResolver = new Func<bool, ITransactionService>((param) =>
+        this.TransactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<SaleTransactionResponseMessage>(new SaleTransactionResponseMessage
         {
-            return transactionService.Object;
-        });
-        Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
-        Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
-
-        transactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>()))
-                          .ReturnsAsync(true);
-        TransactionRequestHandler handler = new TransactionRequestHandler(transactionServiceResolver, databaseContext.Object, applicationCache.Object,
-                                                                          applicationInfoService.Object,
-                                                                          deviceService.Object);
+            ResponseCode = "0000"
+        }));
 
         PerformBillPaymentMakePaymentRequest request = PerformBillPaymentMakePaymentRequest.Create(TestData.TransactionDateTime,
                                                                                                    TestData.OperatorId1ContractId,
@@ -194,29 +160,19 @@ public class TransactionRequestHandlerTests
                                                                                                    TestData.CustomerMobileNumber,
                                                                                                    TestData.PaymentAmount);
 
-        Boolean response = await handler.Handle(request, CancellationToken.None);
+        Result<SaleTransactionResponseMessage> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        response.ShouldBeTrue();
+        result.Success.ShouldBeTrue();
+        result.Data.IsSuccessfulTransaction().ShouldBeTrue();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformBillPaymentMakePaymentRequest_PaymentFailed_Handle_IsHandled()
     {
-        Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
-        Func<Boolean, ITransactionService> transactionServiceResolver = new Func<bool, ITransactionService>((param) =>
-        {
-            return transactionService.Object;
-        });
-        Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
-        Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
-
-        transactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>()))
-                          .ReturnsAsync(false);
-        TransactionRequestHandler handler = new TransactionRequestHandler(transactionServiceResolver, databaseContext.Object, applicationCache.Object,
-                                                                          applicationInfoService.Object,
-                                                                          deviceService.Object);
+        this.TransactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<SaleTransactionResponseMessage>(new SaleTransactionResponseMessage
+            {
+                ResponseCode = "0001"
+            }));
 
         PerformBillPaymentMakePaymentRequest request = PerformBillPaymentMakePaymentRequest.Create(TestData.TransactionDateTime,
                                                                                                    TestData.OperatorId1ContractId,
@@ -227,63 +183,43 @@ public class TransactionRequestHandlerTests
                                                                                                    TestData.CustomerMobileNumber,
                                                                                                    TestData.PaymentAmount);
 
-        Boolean response = await handler.Handle(request, CancellationToken.None);
+        Result<SaleTransactionResponseMessage> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        response.ShouldBeFalse();
+        result.Failure.ShouldBeTrue();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformReconciliationRequest_NoTransactions_Handle_IsHandled()
     {
-        Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
-        Func<Boolean, ITransactionService> transactionServiceResolver = new Func<bool, ITransactionService>((param) =>
-        {
-            return transactionService.Object;
-        });
-        Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
-        Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
-        transactionService.Setup(t => t.PerformReconciliation(It.IsAny<PerformReconciliationRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
-        databaseContext.Setup(d => d.GetTransactions(It.IsAny<Boolean>())).ReturnsAsync(new List<TransactionRecord>());
-        TransactionRequestHandler handler = new TransactionRequestHandler(transactionServiceResolver, databaseContext.Object, applicationCache.Object,
-                                                                          applicationInfoService.Object,
-                                                                          deviceService.Object);
+        this.TransactionService.Setup(t => t.PerformReconciliation(It.IsAny<PerformReconciliationRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<ReconciliationResponseMessage>(new ReconciliationResponseMessage {
+            ResponseCode = "0000"
+        }));
+        this.DatabaseContext.Setup(d => d.GetTransactions()).ReturnsAsync(new List<TransactionRecord>());
 
         PerformReconciliationRequest request = PerformReconciliationRequest.Create(TestData.TransactionDateTime,
                                                                                    TestData.DeviceIdentifier,
                                                                                    TestData.ApplicationVersion);
 
-        Boolean response = await handler.Handle(request, CancellationToken.None);
+        Result<ReconciliationResponseMessage> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        response.ShouldBeTrue();
+        result.Success.ShouldBeTrue();
+        result.Data.IsSuccessfulReconciliation().ShouldBeTrue();
     }
 
     [Fact]
-    public async Task TransactionRequestHandler_PerformReconciliationRequest_TransactionsStored_Handle_IsHandled()
-    {
-        Mock<ITransactionService> transactionService = new Mock<ITransactionService>();
-        Func<Boolean, ITransactionService> transactionServiceResolver = new Func<bool, ITransactionService>((param) =>
-        {
-            return transactionService.Object;
-        });
-        Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
-        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-        Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
-        Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
-        transactionService.Setup(t => t.PerformReconciliation(It.IsAny<PerformReconciliationRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
+    public async Task TransactionRequestHandler_PerformReconciliationRequest_TransactionsStored_Handle_IsHandled() {
+        this.TransactionService.Setup(t => t.PerformReconciliation(It.IsAny<PerformReconciliationRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<ReconciliationResponseMessage>(new ReconciliationResponseMessage
+            {
+                ResponseCode = "0000"
+            }));
 
-        databaseContext.Setup(d => d.GetTransactions(It.IsAny<Boolean>())).ReturnsAsync(TestData.StoredTransactions);
-        TransactionRequestHandler handler = new TransactionRequestHandler(transactionServiceResolver, databaseContext.Object, applicationCache.Object,
-                                                                          applicationInfoService.Object,
-                                                                          deviceService.Object);
+        this.DatabaseContext.Setup(d => d.GetTransactions()).ReturnsAsync(TestData.StoredTransactions);
 
-        PerformReconciliationRequest request = PerformReconciliationRequest.Create(TestData.TransactionDateTime,
-                                                                                   TestData.DeviceIdentifier,
-                                                                                   TestData.ApplicationVersion);
+        PerformReconciliationRequest request = PerformReconciliationRequest.Create(TestData.TransactionDateTime, TestData.DeviceIdentifier, TestData.ApplicationVersion);
 
-        Boolean response = await handler.Handle(request, CancellationToken.None);
+        Result<ReconciliationResponseMessage> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        response.ShouldBeTrue();
+        result.Success.ShouldBeTrue();
+        result.Data.IsSuccessfulReconciliation().ShouldBeTrue();
     }
 }

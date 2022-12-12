@@ -2,8 +2,9 @@
 
 using MediatR;
 using Models;
+using RequestHandlers;
 
-public class GetContractProductsRequest : IRequest<List<ContractProductModel>>
+public class GetContractProductsRequest : IRequest<Result<List<ContractProductModel>>>
 {
     #region Constructors
 

@@ -17,53 +17,55 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Support
 
     public class SupportPageViewModelTests
     {
+        private readonly Mock<INavigationService> NavigationService;
+
+        private readonly Mock<IDatabaseContext> DatabaseContext;
+
+        private readonly Mock<IMediator> Mediator;
+
+        private readonly Mock<IDeviceService> DeviceService;
+
+        private readonly Mock<IApplicationInfoService> ApplicationInfoService;
+
+        private readonly Mock<IApplicationCache> ApplicationCache;
+
+        private readonly Mock<IDialogService> DialogService;
+
+        private readonly SupportPageViewModel ViewModel;
+
+        public SupportPageViewModelTests() {
+            this.NavigationService = new Mock<INavigationService>();
+            this.DatabaseContext = new Mock<IDatabaseContext>();
+            this.Mediator = new Mock<IMediator>();
+            this.DeviceService = new Mock<IDeviceService>();
+            this.ApplicationInfoService = new Mock<IApplicationInfoService>();
+            this.ApplicationCache = new Mock<IApplicationCache>();
+            this.DialogService = new Mock<IDialogService>();
+            Logger.Initialise(NullLogger.Instance);
+            this.ViewModel = new SupportPageViewModel(this.DeviceService.Object,
+                                                      this.ApplicationInfoService.Object,
+                                                      this.DatabaseContext.Object,
+                                                      this.Mediator.Object,
+                                                      this.NavigationService.Object,
+                                                      this.ApplicationCache.Object,
+                                                      this.DialogService.Object);
+        }
+
         [Fact]
         public void SupportPageViewModel_UploadLogsCommand_Execute_IsExecuted()
         {
-            Mock<INavigationService> navigationService = new Mock<INavigationService>();
-            Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
-            Mock<IMediator> mediator = new Mock<IMediator>();
-            Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
-            Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
-            Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-            Mock<IDialogService> dialogService = new Mock<IDialogService>();
-            Logger.Initialise(NullLogger.Instance);
-            SupportPageViewModel viewModel = new SupportPageViewModel(deviceService.Object,
-                                                                      applicationInfoService.Object,
-                                                                      databaseContext.Object,
-                                                                      mediator.Object,
-                                                                      navigationService.Object,
-                                                                      applicationCache.Object,
-                                                                      dialogService.Object);
+            this.ViewModel.UploadLogsCommand.Execute(null);
 
-            viewModel.UploadLogsCommand.Execute(null);
-
-            mediator.Verify(m => m.Send(It.IsAny<UploadLogsRequest>(),It.IsAny<CancellationToken>()),Times.Once);
-            navigationService.Verify(n => n.GoToHome(), Times.Once);
+            this.Mediator.Verify(m => m.Send(It.IsAny<UploadLogsRequest>(),It.IsAny<CancellationToken>()),Times.Once);
+            this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
         }
 
         [Fact]
         public void SupportPageViewModel_BackButtonCommand_Execute_IsExecuted()
         {
-            Mock<INavigationService> navigationService = new Mock<INavigationService>();
-            Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
-            Mock<IMediator> mediator = new Mock<IMediator>();
-            Mock<IDeviceService> deviceService = new Mock<IDeviceService>();
-            Mock<IApplicationInfoService> applicationInfoService = new Mock<IApplicationInfoService>();
-            Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-            Mock<IDialogService> dialogService = new Mock<IDialogService>();
-            Logger.Initialise(NullLogger.Instance);
-            SupportPageViewModel viewModel = new SupportPageViewModel(deviceService.Object,
-                                                                      applicationInfoService.Object,
-                                                                      databaseContext.Object,
-                                                                      mediator.Object,
-                                                                      navigationService.Object,
-                                                                      applicationCache.Object,
-                                                                      dialogService.Object);
+            this.ViewModel.BackButtonCommand.Execute(null);
 
-            viewModel.BackButtonCommand.Execute(null);
-
-            navigationService.Verify(n => n.GoToHome(), Times.Once);
+            this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
         }
     }
 }

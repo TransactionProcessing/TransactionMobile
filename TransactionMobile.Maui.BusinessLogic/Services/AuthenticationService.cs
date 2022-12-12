@@ -9,6 +9,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
     using Microsoft.Extensions.Caching.Memory;
     using Models;
     using Newtonsoft.Json;
+    using RequestHandlers;
     using SecurityService.Client;
     using SecurityService.DataTransferObjects.Responses;
 
@@ -24,9 +25,9 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             this.ApplicationCache = applicationCache;
         }
 
-        public async Task<TokenResponseModel> GetToken(String username,
-                                                       String password,
-                                                       CancellationToken cancellationToken)
+        public async Task<Result<TokenResponseModel>> GetToken(String username,
+                                                               String password,
+                                                               CancellationToken cancellationToken)
         {
             try
             {
@@ -44,24 +45,24 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 Shared.Logger.Logger.LogInformation($"Token for {username} requested successfully");
                 Shared.Logger.Logger.LogDebug($"Token Response: [{JsonConvert.SerializeObject(token)}]");
 
-                return new TokenResponseModel
+                return new SuccessResult<TokenResponseModel>(new TokenResponseModel
                        {
                            AccessToken = token.AccessToken,
                            ExpiryInMinutes = token.ExpiresIn,
                            RefreshToken = token.RefreshToken
-                       };
+                       });
             }
             catch(Exception ex)
             {
                 Shared.Logger.Logger.LogError(new Exception($"Error getting Token", ex));
-                return null;
+                return new ErrorResult<TokenResponseModel>("Error getting Token");
             }
 
             
         }
 
-        public async Task<TokenResponseModel> RefreshAccessToken(String refreshToken,
-                                                                 CancellationToken cancellationToken)
+        public async Task<Result<TokenResponseModel>> RefreshAccessToken(String refreshToken,
+                                                                         CancellationToken cancellationToken)
         {
             Configuration configuration = this.ApplicationCache.GetConfiguration();
             try
@@ -74,17 +75,17 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 Shared.Logger.Logger.LogInformation($"Refresh Token requested successfully");
                 Shared.Logger.Logger.LogDebug($"Token Response: [{JsonConvert.SerializeObject(token)}]");
 
-                return new TokenResponseModel
-                {
-                    AccessToken = token.AccessToken,
-                    ExpiryInMinutes = token.ExpiresIn,
-                    RefreshToken = token.RefreshToken
-                };
+                return new SuccessResult<TokenResponseModel>(new TokenResponseModel
+                                                             {
+                                                                 AccessToken = token.AccessToken,
+                                                                 ExpiryInMinutes = token.ExpiresIn,
+                                                                 RefreshToken = token.RefreshToken
+                                                             });
             }
             catch (Exception ex)
             {
                 Shared.Logger.Logger.LogError(new Exception($"Error refreshing Token", ex));
-                return null;
+                return new ErrorResult<TokenResponseModel>("Error getting Token");
             }
         }
     }

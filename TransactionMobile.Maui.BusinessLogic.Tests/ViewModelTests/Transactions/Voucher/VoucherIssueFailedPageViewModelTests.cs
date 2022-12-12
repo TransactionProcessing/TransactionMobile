@@ -10,14 +10,20 @@ using Xunit;
 
 public class VoucherIssueFailedPageViewModelTests
 {
+    private readonly Mock<INavigationService> NavigationService;
+
+    private readonly VoucherIssueFailedPageViewModel ViewModel;
+
+    public VoucherIssueFailedPageViewModelTests() {
+        NavigationService = new Mock<INavigationService>();
+        Logger.Initialise(NullLogger.Instance);
+        this.ViewModel = new VoucherIssueFailedPageViewModel(this.NavigationService.Object);
+    }
+
     [Fact]
     public void VoucherIssueFailedPageViewModel_CancelledCommand_Execute_IsExecuted()
     {
-        Mock<INavigationService> navigationService = new Mock<INavigationService>();
-        Logger.Initialise(NullLogger.Instance);
-        VoucherIssueFailedPageViewModel viewModel = new VoucherIssueFailedPageViewModel(navigationService.Object);
-
-        viewModel.CancelledCommand.Execute(null);
-        navigationService.Verify(n => n.PopToRoot(), Times.Once);
+        this.ViewModel.CancelledCommand.Execute(null);
+        this.NavigationService.Verify(n => n.PopToRoot(), Times.Once);
     }
 }

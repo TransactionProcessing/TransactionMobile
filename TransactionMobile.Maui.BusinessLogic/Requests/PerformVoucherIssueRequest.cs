@@ -1,8 +1,10 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Requests;
 
 using MediatR;
+using RequestHandlers;
+using TransactionProcessorACL.DataTransferObjects.Responses;
 
-public class PerformVoucherIssueRequest : IRequest<Boolean>
+public class PerformVoucherIssueRequest : IRequest<Result<SaleTransactionResponseMessage>>
 {
     #region Constructors
 

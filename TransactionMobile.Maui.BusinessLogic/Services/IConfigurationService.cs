@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace TransactionMobile.Maui.BusinessLogic.Services;
 
 using Models;
+using RequestHandlers;
 
 public interface IConfigurationService
 {
@@ -16,8 +17,8 @@ public interface IConfigurationService
     /// <param name="deviceIdentifier">The device identifier.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns></returns>
-    Task<Configuration> GetConfiguration(String deviceIdentifier,
-                                         CancellationToken cancellationToken);
+    Task<Result<Configuration>> GetConfiguration(String deviceIdentifier,
+                                                 CancellationToken cancellationToken);
 
     /// <summary>
     /// Posts the diagnostic logs.
