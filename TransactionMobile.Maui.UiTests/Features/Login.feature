@@ -1,4 +1,4 @@
-﻿@background @login @toolbar @profile
+﻿@background @login @toolbar @profile @base
 Feature: Login
 
 Background: 

@@ -1,13 +1,11 @@
 ﻿using Ductus.FluentDocker.Services;
 using NLog;
-using Shared.IntegrationTesting;
 using Shared.Logger;
 using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 
 namespace TransactionMobile.Maui.UiTests.Common

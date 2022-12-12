@@ -15,7 +15,6 @@ using Shouldly;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 using UIServices;
 using Xunit;
-using static SQLite.SQLite3;
 
 public class TransactionRequestHandlerTests
 {

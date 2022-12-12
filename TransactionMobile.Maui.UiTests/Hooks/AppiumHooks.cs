@@ -19,13 +19,13 @@ namespace TransactionMobile.Maui.UiTests.Hooks
             _appiumDriver = appiumDriver;
         }
 
-        [BeforeScenario()]
+        [BeforeScenario(Order = 0)]
         public void StartApp()
         {
             _appiumDriver.StartApp();
         }
 
-        [AfterScenario()]
+        [AfterScenario(Order = 0)]
         public void ShutdownApp()
         {
             _appiumDriver.StopApp();
