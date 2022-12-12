@@ -29,12 +29,12 @@
     using Pages.MyAccount;
     using System.Net.Http;
     using Pages.Transactions.BillPayment;
+    using TransactionProcessorACL.DataTransferObjects.Responses;
     using LogMessage = BusinessLogic.Models.LogMessage;
 #if ANDROID
     using Javax.Net.Ssl;
     using Platforms.Services;
     using Xamarin.Android.Net;
-    using TransactionProcessorACL.DataTransferObjects.Responses;
 #endif
     public static class MauiAppBuilderExtensions
     {
