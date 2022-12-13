@@ -51,7 +51,7 @@ jobs:
 
       - name: Install MAUI Workloads
         run: |
-          dotnet workload install android --ignore-failed-sources
+          dotnet workloadx install android --ignore-failed-sources
           dotnet workload install maui --ignore-failed-sources 
 
       - name: Restore Dependencies
@@ -81,8 +81,7 @@ jobs:
       - name: test
         if: ${{ failure() }}
         run: |
-            cd /home/txnproc/trace/ 
-            ls
+            ls -R
 
       #- uses: actions/upload-artifact@v2
       #  if: ${{ failure() }}
