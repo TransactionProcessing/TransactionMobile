@@ -22,7 +22,10 @@ jobs:
 
       - name: Setup Docker
         run: |
-          sudo mkdir -p /home/txnproc/trace/  
+          cd home
+          mkdir txnproc
+          cd /home/txnproc
+          mkdir trace
           brewx install docker
           colima start
           
