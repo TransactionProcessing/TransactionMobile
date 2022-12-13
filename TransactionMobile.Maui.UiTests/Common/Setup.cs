@@ -22,6 +22,8 @@ namespace TransactionMobile.Maui.UiTests.Common
         [BeforeTestRun]
         protected static void GlobalSetup()
         {
+            Console.WriteLine("In Global Setup");
+
             ShouldlyConfiguration.DefaultTaskTimeout = TimeSpan.FromMinutes(1);
 
             DockerHelper dockerHelper = new DockerHelper();
@@ -36,6 +38,7 @@ namespace TransactionMobile.Maui.UiTests.Common
 
             Setup.DatabaseServerNetwork = dockerHelper.SetupTestNetwork("sharednetwork", true);
             Setup.DatabaseServerContainer = dockerHelper.SetupSqlServerContainer(Setup.DatabaseServerNetwork);
+            Console.WriteLine("After SetupSqlServerContainer");
         }
 
         public static String GetConnectionString(String databaseName)

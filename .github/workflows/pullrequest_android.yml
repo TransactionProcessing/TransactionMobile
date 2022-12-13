@@ -70,16 +70,10 @@ jobs:
           api: 28
           tag: default
           abi: x86   
-          verbose: true
+          verbose: false
 
       #- name: Upload Android Artifact
       #  uses: actions/upload-artifact@v2.3.1
       #  with:
       #    name: android-ci-build
       #    path: src/MauiBeach/bin/Release/net6.0-android/*Signed.a*
-
-      - uses: actions/upload-artifact@v2
-        if: ${{ failure() }}
-        with:
-          name: tracelogs
-          path: /home/txnproc/trace/  
