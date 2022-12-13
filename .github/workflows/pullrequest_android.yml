@@ -23,7 +23,7 @@ jobs:
       - name: Setup Docker
         run: |
           cd /home
-          mkdir txnproc
+          sudo mkdir txnproc
           cd /home/txnproc
           mkdir trace
           brewx install docker
