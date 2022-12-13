@@ -22,8 +22,10 @@ jobs:
 
       - name: Setup Docker
         run: |
+          mkdir /home/txnproc/trace/  
           brewx install docker
           colima start
+          
 
       - uses: malinskiy/action-android/install-sdk@release/0.1.1
       - run: sdkmanager "platform-tools" "platforms;android-33"
@@ -81,7 +83,7 @@ jobs:
       - name: test
         if: ${{ failure() }}
         run: |
-            cd / .
+            cd /home/txnproc/trace/
             ls -R
 
       #- uses: actions/upload-artifact@v2
