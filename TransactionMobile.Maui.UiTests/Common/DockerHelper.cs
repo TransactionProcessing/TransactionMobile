@@ -70,8 +70,7 @@ namespace TransactionMobile.Maui.UiTests.Common
         public override async Task StartContainersForScenarioRun(String scenarioName)
         {
             await base.StartContainersForScenarioRun(scenarioName);
-
-
+            
             // Setup the base address resolvers
             String EstateManagementBaseAddressResolver(String api) => $"http://127.0.0.1:{this.EstateManagementPort}";
             String SecurityServiceBaseAddressResolver(String api) => $"https://127.0.0.1:{this.SecurityServicePort}";
@@ -120,8 +119,7 @@ namespace TransactionMobile.Maui.UiTests.Common
         /// <summary>
         /// Stops the containers for scenario run.
         /// </summary>
-        public override async Task StopContainersForScenarioRun()
-        {
+        public override async Task StopContainersForScenarioRun() {
             await RemoveEstateReadModel().ConfigureAwait(false);
 
             base.StopContainersForScenarioRun();

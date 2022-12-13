@@ -77,3 +77,15 @@ jobs:
       #  with:
       #    name: android-ci-build
       #    path: src/MauiBeach/bin/Release/net6.0-android/*Signed.a*
+
+      - name: test
+        if: ${{ failure() }}
+        run: |
+            cd /home/txnproc/trace/ 
+            ls
+
+      #- uses: actions/upload-artifact@v2
+      #  if: ${{ failure() }}
+      #  with:
+      #    name: tracelogs
+      #    path: /home/txnproc/trace/   
