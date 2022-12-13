@@ -22,7 +22,7 @@ jobs:
 
       - name: Setup Docker
         run: |
-          cd home
+          cd /home
           mkdir txnproc
           cd /home/txnproc
           mkdir trace
