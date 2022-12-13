@@ -21,14 +21,11 @@ namespace TransactionMobile.Maui.UiTests.Common
         public static (String usename, String password) SqlCredentials = ("sa", "thisisalongpassword123!");
         public static (String url, String username, String password) DockerCredentials = ("https://www.docker.com", "stuartferguson", "Sc0tland");
         [BeforeTestRun]
-        protected static void GlobalSetup()
+        public static void GlobalSetup()
         {
-            Console.WriteLine("In Global Setup");
-
             ShouldlyConfiguration.DefaultTaskTimeout = TimeSpan.FromMinutes(1);
 
             DockerHelper dockerHelper = new DockerHelper();
-
             NlogLogger logger = new NlogLogger();
             logger.Initialise(LogManager.GetLogger("Specflow"), "Specflow");
             LogManager.AddHiddenAssembly(typeof(NlogLogger).Assembly);
@@ -39,7 +36,6 @@ namespace TransactionMobile.Maui.UiTests.Common
 
             Setup.DatabaseServerNetwork = dockerHelper.SetupTestNetwork("sharednetwork", true);
             Setup.DatabaseServerContainer = dockerHelper.SetupSqlServerContainer(Setup.DatabaseServerNetwork);
-            Console.WriteLine("After SetupSqlServerContainer");
         }
 
         public static String GetConnectionString(String databaseName)
