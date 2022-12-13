@@ -13,6 +13,7 @@ namespace TransactionMobile.Maui.UiTests.Common
     using Ductus.FluentDocker.Services.Extensions;
 
     [Binding]
+    [Scope(Tag = "base")]
     public class Setup
     {
         public static IContainerService DatabaseServerContainer;
