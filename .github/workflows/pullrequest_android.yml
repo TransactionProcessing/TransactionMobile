@@ -81,7 +81,7 @@ jobs:
       - name: test
         if: ${{ failure() }}
         run: |
-            cd ..
+            cd / .
             ls -R
 
       #- uses: actions/upload-artifact@v2
