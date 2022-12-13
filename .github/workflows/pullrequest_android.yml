@@ -22,7 +22,7 @@ jobs:
 
       - name: Setup Docker
         run: |
-          brew install docker
+          brewx install docker
           colima start
 
       - uses: malinskiy/action-android/install-sdk@release/0.1.1
@@ -51,7 +51,7 @@ jobs:
 
       - name: Install MAUI Workloads
         run: |
-          dotnet workloadx install android --ignore-failed-sources
+          dotnet workload install android --ignore-failed-sources
           dotnet workload install maui --ignore-failed-sources 
 
       - name: Restore Dependencies
