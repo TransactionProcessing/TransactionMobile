@@ -22,13 +22,13 @@ namespace TransactionMobile.Maui.UiTests.Hooks
         [BeforeScenario(Order = 0)]
         public void StartApp()
         {
-            //_appiumDriver.StartApp();
+            _appiumDriver.StartApp();
         }
 
         [AfterScenario(Order = 0)]
         public void ShutdownApp()
         {
-            //_appiumDriver.StopApp();
+            _appiumDriver.StopApp();
         }
     }
 }
