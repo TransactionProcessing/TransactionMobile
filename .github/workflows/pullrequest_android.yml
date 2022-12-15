@@ -22,13 +22,8 @@ jobs:
 
       - name: Setup Docker
         run: |
-          cd /home
-          sudo mkdir txnproc
-          cd /home/txnproc
-          mkdir trace
-          brewx install docker
-          colima start
-          
+         brew install docker
+         colima start --cpu 2 --memory 8 --disk 100
 
       - uses: malinskiy/action-android/install-sdk@release/0.1.1
       - run: sdkmanager "platform-tools" "platforms;android-33"
