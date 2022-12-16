@@ -73,10 +73,6 @@ namespace TransactionMobile.Maui.Platforms.Services
             return "Unknown";
         }
         
-        public static partial String Identifier() {
-            return "Testing";//UIDevice.CurrentDevice.IdentifierForVendor.AsString().Replace("-", "");
-        }
-
         private static string GetModel(string version)
         {
             if (version.StartsWith("iPhone"))

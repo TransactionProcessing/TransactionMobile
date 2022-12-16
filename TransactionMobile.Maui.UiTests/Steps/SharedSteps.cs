@@ -9,6 +9,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
 {
     using System.Threading;
     using Common;
+    using Drivers;
     using EstateManagement.DataTransferObjects;
     using EstateManagement.DataTransferObjects.Requests;
     using EstateManagement.DataTransferObjects.Responses;
@@ -534,6 +535,14 @@ namespace TransactionMobile.Maui.UiTests.Steps
                 }
             }
         }
+
+        [Given(@"I have assigned the following devices to the merchants")]
+        public void GivenIHaveAssignedTheFollowingDevicesToTheMerchants(Table table) {
+            
+
+            
+        }
+
 
         // TODO: Move to shared code
         public static T GetEnumValue<T>(TableRow row,

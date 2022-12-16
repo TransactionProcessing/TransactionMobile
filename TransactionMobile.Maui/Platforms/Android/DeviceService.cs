@@ -13,16 +13,6 @@ namespace TransactionMobile.Maui.Platforms.Services
 
     public static partial class DeviceInformationService
     {
-        public static partial String Identifier()
-        {
-            var context = Android.App.Application.Context;
-
-            string id = Android.Provider.Settings.Secure.GetString(context.ContentResolver, Settings.Secure.AndroidId);
-
-            id = "a39b64f487c99adc";
-
-            return id;
-        }
         public static partial String Model() => Build.Model;
         
         public static partial String Platform()

@@ -25,6 +25,7 @@ public class GenericSteps
     [BeforeScenario(Order = 0)]
     public async Task StartSystem()
     {
+        return;
         Setup.GlobalSetup();
 
         // Initialise a logger
@@ -50,6 +51,7 @@ public class GenericSteps
     [AfterScenario(Order = 0)]
     public async Task StopSystem()
     {
+        return;
         this.TestingContext.Logger.LogInformation("About to Stop Containers for Scenario Run");
         await this.TestingContext.DockerHelper.StopContainersForScenarioRun().ConfigureAwait(false);
         this.TestingContext.Logger.LogInformation("Containers for Scenario Run Stopped");

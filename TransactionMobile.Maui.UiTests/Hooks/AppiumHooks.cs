@@ -24,17 +24,17 @@ namespace TransactionMobile.Maui.UiTests.Hooks
         [BeforeScenario(Order = 1)]
         public void StartApp()
         {
-            this.TestingContext.Logger.LogInformation("About to Start App");
+            //this.TestingContext.Logger.LogInformation("About to Start App");
             this.AppiumDriver.StartApp();
-            this.TestingContext.Logger.LogInformation("App Started");
+            //this.TestingContext.Logger.LogInformation("App Started");
         }
 
         [AfterScenario(Order = 1)]
         public void ShutdownApp()
         {
-            this.TestingContext.Logger.LogInformation("About to Shutdown App");
+            //this.TestingContext.Logger.LogInformation("About to Shutdown App");
             this.AppiumDriver.StopApp();
-            this.TestingContext.Logger.LogInformation("App Shutdown");
+            //this.TestingContext.Logger.LogInformation("App Shutdown");
         }
     }
 }

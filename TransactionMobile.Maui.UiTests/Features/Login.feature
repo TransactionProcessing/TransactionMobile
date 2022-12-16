@@ -62,9 +62,9 @@ Background:
 	| Safaricom    | Test Merchant 1 | 00000001       | 10000001       | Test Estate 1 |
 	| Voucher      | Test Merchant 1 | 00000001       | 10000001       | Test Estate 1 |
 
-	#Given I have assigned the following devices to the merchants
-	#| DeviceIdentifier | MerchantName    | EstateName    |
-	#| 123456780        | Test Merchant 1 | Test Estate 1 |
+	Given I have assigned the following devices to the merchants
+	| MerchantName    | EstateName    |
+	| Test Merchant 1 | Test Estate 1 |
 
 	Given I have created the following security users
 	| EmailAddress                  | Password | GivenName    | FamilyName | EstateName    | MerchantName    |

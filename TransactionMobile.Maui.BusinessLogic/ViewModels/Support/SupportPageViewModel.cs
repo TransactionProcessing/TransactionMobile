@@ -79,7 +79,7 @@
         private async Task UploadLogsCommandExecute() {
             Logger.LogInformation("UploadLogsCommandExecute called");
 
-            UploadLogsRequest uploadLogsRequest = UploadLogsRequest.Create(this.DeviceService.GetIdentifier());
+            UploadLogsRequest uploadLogsRequest = UploadLogsRequest.Create(String.Empty);
 
             Boolean response = await this.Mediator.Send(uploadLogsRequest, CancellationToken.None);
 

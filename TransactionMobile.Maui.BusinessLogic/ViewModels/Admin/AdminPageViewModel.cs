@@ -48,7 +48,7 @@
         private async Task ReconciliationCommandExecute()
         {
             PerformReconciliationRequest request =
-                PerformReconciliationRequest.Create(DateTime.Now, this.DeviceService.GetIdentifier(), this.ApplicationInfoService.VersionString);
+                PerformReconciliationRequest.Create(DateTime.Now, String.Empty, this.ApplicationInfoService.VersionString);
 
             Result<ReconciliationResponseMessage> result = await this.Mediator.Send(request);
 

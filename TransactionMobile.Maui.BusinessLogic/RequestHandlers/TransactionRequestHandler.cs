@@ -64,7 +64,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                        TopupAmount = request.TopupAmount,
                                                        TransactionDateTime = request.TransactionDateTime,
                                                        TransactionNumber = transaction.transactionNumber.ToString(),
-                                                       DeviceIdentifier = this.DeviceService.GetIdentifier(),
+                                                       DeviceIdentifier = String.Empty,
                                                        ApplicationVersion = this.ApplicationInfoService.VersionString
                                                    };
 
@@ -79,7 +79,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
     private async Task<(Int64 transactionNumber, TransactionRecord transactionRecord)> CreateTransactionRecord(TransactionRecord transactionRecord) {
         
         transactionRecord.ApplicationVersion = this.ApplicationInfoService.VersionString;
-        transactionRecord.DeviceIdentifier = this.DeviceService.GetIdentifier();
+        transactionRecord.DeviceIdentifier = String.Empty;
         Int64 transactionNumber = await this.DatabaseContext.CreateTransaction(transactionRecord);
 
         return (transactionNumber, transactionRecord);
@@ -99,7 +99,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         {
             TransactionDateTime = request.TransactionDateTime,
             TransactionNumber = transaction.transactionNumber.ToString(),
-            DeviceIdentifier = this.DeviceService.GetIdentifier(),
+            DeviceIdentifier = String.Empty,
             ApplicationVersion = this.ApplicationInfoService.VersionString
         };
 
@@ -130,7 +130,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
             VoucherAmount = request.VoucherAmount,
             TransactionDateTime = request.TransactionDateTime,
             TransactionNumber = transaction.transactionNumber.ToString(),
-            DeviceIdentifier = this.DeviceService.GetIdentifier(),
+            DeviceIdentifier = String.Empty,
             ApplicationVersion = this.ApplicationInfoService.VersionString
         };
 
@@ -159,7 +159,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
             TransactionDateTime = request.TransactionDateTime,
             TransactionNumber = transaction.transactionNumber.ToString(),
             CustomerAccountNumber = request.CustomerAccountNumber,
-            DeviceIdentifier = this.DeviceService.GetIdentifier(),
+            DeviceIdentifier = String.Empty,
             ApplicationVersion = this.ApplicationInfoService.VersionString
         };
 
@@ -236,7 +236,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
             PaymentAmount = request.PaymentAmount,
             CustomerAccountName = request.CustomerAccountName,
             CustomerMobileNumber = request.CustomerMobileNumber,
-            DeviceIdentifier = this.DeviceService.GetIdentifier(),
+            DeviceIdentifier = String.Empty,
             ApplicationVersion = this.ApplicationInfoService.VersionString
         };
 

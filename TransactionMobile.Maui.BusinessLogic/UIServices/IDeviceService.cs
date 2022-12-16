@@ -11,7 +11,5 @@ namespace TransactionMobile.Maui.BusinessLogic.UIServices
         String GetModel();
 
         String GetPlatform();
-
-        String GetIdentifier();
     }
 }

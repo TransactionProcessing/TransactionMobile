@@ -80,7 +80,7 @@
         #region Methods
 
         private async Task<Result<Configuration>> GetConfiguration() {
-            String deviceIdentifier = this.DeviceService.GetIdentifier();
+            String deviceIdentifier = String.Empty;
             GetConfigurationRequest getConfigurationRequest = GetConfigurationRequest.Create(deviceIdentifier);
             var configurationResult = await this.Mediator.Send(getConfigurationRequest);
 

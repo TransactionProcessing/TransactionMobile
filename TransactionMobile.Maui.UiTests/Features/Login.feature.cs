@@ -307,13 +307,22 @@ namespace TransactionMobile.Maui.UiTests.Features
  testRunner.Given("I have assigned the following  operator to the merchants", ((string)(null)), table12, "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
+                        "MerchantName",
+                        "EstateName"});
+            table13.AddRow(new string[] {
+                        "Test Merchant 1",
+                        "Test Estate 1"});
+#line 65
+ testRunner.Given("I have assigned the following devices to the merchants", ((string)(null)), table13, "Given ");
+#line hidden
+            TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
                         "EmailAddress",
                         "Password",
                         "GivenName",
                         "FamilyName",
                         "EstateName",
                         "MerchantName"});
-            table13.AddRow(new string[] {
+            table14.AddRow(new string[] {
                         "merchantuser@testmerchant1.co.uk",
                         "123456",
                         "TestMerchant",
@@ -321,7 +330,7 @@ namespace TransactionMobile.Maui.UiTests.Features
                         "Test Estate 1",
                         "Test Merchant 1"});
 #line 69
- testRunner.Given("I have created the following security users", ((string)(null)), table13, "Given ");
+ testRunner.Given("I have created the following security users", ((string)(null)), table14, "Given ");
 #line hidden
         }
         

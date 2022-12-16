@@ -29,13 +29,5 @@ namespace TransactionMobile.Maui.Platforms.Services
 
             return version;
         }
-        
-
-        public static partial String Identifier()
-        {
-            var deviceInformation = new EasClientDeviceInformation();
-            string Id = deviceInformation.Id.ToString();
-            return Id;
-        }
     }
 }

@@ -41,7 +41,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             else if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.iOS) {
                 AppiumDriverWrapper.SetupiOSDriver(appiumService);
             }
-
+            
             //AppiumDriverWrapper.Driver.StartRecordingScreen();
         }
 
