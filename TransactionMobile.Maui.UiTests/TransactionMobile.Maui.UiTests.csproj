@@ -13,7 +13,7 @@
 
   <ItemGroup>
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.0" />
-	  <PackageReference Include="SecurityService.Client" Version="1.1.2-build20" />
+	  <PackageReference Include="SecurityService.Client" Version="2022.12.0" />
 	  <PackageReference Include="TransactionProcessor.Client" Version="1.1.12" />
 	  <PackageReference Include="EstateManagement.Client" Version="1.1.5" />
 	  <PackageReference Include="EventStoreProjections" Version="2022.12.0" />

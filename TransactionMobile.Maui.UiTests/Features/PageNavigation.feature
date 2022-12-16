@@ -1,4 +1,4 @@
-﻿@background @login @toolbar @profile @shared @transactions @shared
+﻿@background @login @toolbar @profile @shared @transactions @sharedapp
 Feature: PageNavigation
 
 # Home Page Back Button Tests

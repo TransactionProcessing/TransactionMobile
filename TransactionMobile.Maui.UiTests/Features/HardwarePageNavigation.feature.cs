@@ -27,7 +27,7 @@ namespace TransactionMobile.Maui.UiTests.Features
     [NUnit.Framework.CategoryAttribute("profile")]
     [NUnit.Framework.CategoryAttribute("shared")]
     [NUnit.Framework.CategoryAttribute("transactions")]
-    [NUnit.Framework.CategoryAttribute("shared")]
+    [NUnit.Framework.CategoryAttribute("sharedapp")]
     public partial class HardwarePageNavigationFeature
     {
         
@@ -40,7 +40,7 @@ namespace TransactionMobile.Maui.UiTests.Features
                 "profile",
                 "shared",
                 "transactions",
-                "shared"};
+                "sharedapp"};
         
 #line 1 "HardwarePageNavigation.feature"
 #line hidden
