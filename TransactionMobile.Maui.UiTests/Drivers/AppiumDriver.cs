@@ -24,17 +24,15 @@ namespace TransactionMobile.Maui.UiTests.Drivers
         public static MobileTestPlatform MobileTestPlatform;
         public static AppiumDriver Driver;
 
-        public static String PacakageName;
-
         public void StartApp() {
             AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723).Build();
 
             if (appiumService.IsRunning == false) {
                 appiumService.Start();
-                appiumService.OutputDataReceived += (sender,
-                                                     args) => {
-                                                        Console.WriteLine(args.Data);
-                                                    };
+                //appiumService.OutputDataReceived += (sender,
+                //                                     args) => {
+                //                                        Console.WriteLine(args.Data);
+                //                                    };
             }
 
             if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
