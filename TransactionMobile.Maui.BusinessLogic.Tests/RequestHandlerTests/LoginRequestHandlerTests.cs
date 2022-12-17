@@ -17,11 +17,25 @@ public class LoginRequestHandlerTests
     private Mock<IAuthenticationService> AuthenticationService = null;
     private Mock<IConfigurationService> ConfigurationService = null;
     private LoginRequestHandler LoginRequestHandler = null;
+    private readonly Mock<IApplicationCache> ApplicationCache;
+    private Func<Boolean, IAuthenticationService> AuthenticationServiceResolver;
+    private Func<Boolean, IConfigurationService> ConfigurationServiceResolver;
 
     public LoginRequestHandlerTests() {
         this.AuthenticationService = new Mock<IAuthenticationService>();
         this.ConfigurationService= new Mock<IConfigurationService>();
-        this.LoginRequestHandler = new LoginRequestHandler(this.AuthenticationService.Object, this.ConfigurationService.Object);
+        this.ApplicationCache = new Mock<IApplicationCache>();
+        this.AuthenticationServiceResolver = _ =>
+                                             {
+                                                 return this.AuthenticationService.Object;
+                                             };
+        this.ConfigurationServiceResolver = _ =>
+                                            {
+                                                return this.ConfigurationService.Object;
+                                            };
+
+
+        this.LoginRequestHandler = new LoginRequestHandler(this.AuthenticationServiceResolver, this.ConfigurationServiceResolver,this.ApplicationCache.Object);
     }
 
     [Fact]

@@ -194,7 +194,7 @@ public class TransactionRequestHandlerTests
         this.TransactionService.Setup(t => t.PerformReconciliation(It.IsAny<PerformReconciliationRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<ReconciliationResponseMessage>(new ReconciliationResponseMessage {
             ResponseCode = "0000"
         }));
-        this.DatabaseContext.Setup(d => d.GetTransactions()).ReturnsAsync(new List<TransactionRecord>());
+        this.DatabaseContext.Setup(d => d.GetTransactions(It.IsAny<Boolean>())).ReturnsAsync(new List<TransactionRecord>());
 
         PerformReconciliationRequest request = PerformReconciliationRequest.Create(TestData.TransactionDateTime,
                                                                                    TestData.DeviceIdentifier,
@@ -213,7 +213,7 @@ public class TransactionRequestHandlerTests
                 ResponseCode = "0000"
             }));
 
-        this.DatabaseContext.Setup(d => d.GetTransactions()).ReturnsAsync(TestData.StoredTransactions);
+        this.DatabaseContext.Setup(d => d.GetTransactions(It.IsAny<Boolean>())).ReturnsAsync(TestData.StoredTransactions);
 
         PerformReconciliationRequest request = PerformReconciliationRequest.Create(TestData.TransactionDateTime, TestData.DeviceIdentifier, TestData.ApplicationVersion);
 

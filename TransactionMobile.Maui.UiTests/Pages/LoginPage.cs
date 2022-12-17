@@ -15,8 +15,7 @@ public class LoginPage : BasePage
     private readonly String PasswordEntry;
     private readonly String LoginButton;
     private readonly String UseTrainingModeSwitch;
-    //private readonly String TestModeButton;
-    //private readonly String ErrorLabel;
+    private readonly String DeviceSerial;
 
     public LoginPage()
     {
@@ -24,8 +23,12 @@ public class LoginPage : BasePage
         this.PasswordEntry = "PasswordEntry";
         this.LoginButton = "LoginButton";
         this.UseTrainingModeSwitch = "UseTrainingModeSwitch";
-        //this.TestModeButton = "TestModeButton";
-        //this.ErrorLabel = "ErrorLabel";
+        this.DeviceSerial = "DeviceSerial";
+    }
+
+    public async Task<String> GetDeviceSerial() {
+        IWebElement element = await this.WaitForElementByAccessibilityId(this.DeviceSerial);
+        return element.Text;
     }
 
     public async Task<Boolean> IsTrainingModeOn()

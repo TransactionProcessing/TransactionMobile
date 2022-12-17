@@ -63,6 +63,9 @@
 	</ItemGroup>
 		
 	<ItemGroup>
+	  <Compile Update="Pages\Developer\DeveloperPage.xaml.cs">
+	    <DependentUpon>DeveloperPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\MyAccount\MyAccountAddressesPage.xaml.cs">
 	    <DependentUpon>MyAccountAddressesPage.xaml</DependentUpon>
 	  </Compile>
@@ -139,6 +142,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\AppHome\HomePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Developer\DeveloperPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\LoginPage.xaml">

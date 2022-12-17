@@ -62,6 +62,7 @@ public class ExtendedBaseViewModel : BaseViewModel
     }
 
     private async Task ShowLoginPage() {
+
         Boolean leave = await this.DialogService.ShowDialog("Title", "Logout Message", "yes", "no");
         if (leave) {
             Logger.LogInformation("LogoutCommand called");
