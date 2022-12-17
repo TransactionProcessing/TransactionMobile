@@ -48,10 +48,12 @@
             this.LoginCommand = new AsyncCommand(this.LoginCommandExecute);
             this.Mediator = mediator;
         }
-
+        
         #endregion
 
         #region Properties
+
+        public ICommand DeveloperPageCommand { get; }
 
         public ICommand LoginCommand { get; }
 
@@ -75,9 +77,12 @@
             set => this.SetProperty(ref this.useTrainingMode, value);
         }
 
+        public String DeviceIdentifier => this.DeviceService.GetIdentifier();
+
         #endregion
 
         #region Methods
+        private void CacheUseTrainingMode() => this.ApplicationCache.SetUseTrainingMode(this.useTrainingMode);
 
         private async Task<Result<Configuration>> GetConfiguration() {
             String deviceIdentifier = String.Empty;

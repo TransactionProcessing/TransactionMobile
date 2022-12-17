@@ -28,6 +28,7 @@
     using Pages.AppHome;
     using Pages.MyAccount;
     using System.Net.Http;
+    using BusinessLogic.Services.TrainingModeServices;
     using Pages.Transactions.BillPayment;
     using TransactionProcessorACL.DataTransferObjects.Responses;
     using LogMessage = BusinessLogic.Models.LogMessage;
@@ -104,6 +105,55 @@
             builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
             builder.Services.AddSingleton<ITransactionService, TransactionService>();
             builder.Services.AddSingleton<IMerchantService, MerchantService>();
+
+            builder.Services.AddSingleton<Func<Boolean, IConfigurationService>>(new Func<Boolean, IConfigurationService>(useTrainingMode =>
+                                                                                {
+                                                                                    if (useTrainingMode)
+                                                                                    {
+                                                                                        return new TrainingConfigurationService();
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        return MauiProgram.Container.Services.GetService<IConfigurationService>();
+                                                                                    }
+                                                                                }));
+
+            builder.Services.AddSingleton<Func<Boolean, IAuthenticationService>>(new Func<Boolean, IAuthenticationService>(useTrainingMode =>
+                                                                                 {
+                                                                                     if (useTrainingMode)
+                                                                                     {
+                                                                                         return new TrainingAuthenticationService();
+                                                                                     }
+                                                                                     else
+                                                                                     {
+                                                                                         return MauiProgram.Container.Services.GetService<IAuthenticationService>();
+                                                                                     }
+                                                                                 }));
+
+            builder.Services.AddSingleton<Func<Boolean, ITransactionService>>(new Func<Boolean, ITransactionService>(useTrainingMode =>
+                                                                              {
+                                                                                  if (useTrainingMode)
+                                                                                  {
+                                                                                      return new TrainingTransactionService();
+                                                                                  }
+                                                                                  else
+                                                                                  {
+                                                                                      return MauiProgram.Container.Services.GetService<ITransactionService>();
+                                                                                  }
+                                                                              }));
+
+            builder.Services.AddSingleton<Func<Boolean, IMerchantService>>(new Func<Boolean, IMerchantService>(useTrainingMode =>
+                                                                                                               {
+                                                                                                                   if (useTrainingMode)
+                                                                                                                   {
+                                                                                                                       return new TrainingMerchantService();
+                                                                                                                   }
+                                                                                                                   else
+                                                                                                                   {
+                                                                                                                       return MauiProgram.Container.Services.GetService<IMerchantService>();
+                                                                                                                   }
+                                                                                                               }));
+
             builder.Services.AddSingleton<ISecurityServiceClient, SecurityServiceClient>();
             builder.Services.AddSingleton<IEstateClient, EstateClient>();
             builder.Services.AddSingleton<IApplicationCache, ApplicationCache>();

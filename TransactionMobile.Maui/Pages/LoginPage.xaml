@@ -42,6 +42,8 @@
                         </HorizontalStackLayout>
 
                         <Button Text="Continue" Style="{StaticResource StandardButton}" Command="{Binding LoginCommand}" AutomationId="LoginButton"/>
+
+                        <Label AutomationId="DeviceSerial" VerticalOptions="Center" HorizontalOptions="Start" Text="{Binding DeviceIdentifier}"/>
                     </VerticalStackLayout>
                 </Frame>
             </VerticalStackLayout>
