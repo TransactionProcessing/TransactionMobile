@@ -5,9 +5,9 @@ using Models;
 
 public interface IApplicationCache
 {
-    //Boolean GetUseTrainingMode();
+    Boolean GetUseTrainingMode();
 
-    //void SetUseTrainingMode(Boolean value, MemoryCacheEntryOptions options = default);
+    void SetUseTrainingMode(Boolean value, MemoryCacheEntryOptions options = default);
 
     Boolean GetIsLoggedIn();
 

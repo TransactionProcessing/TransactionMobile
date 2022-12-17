@@ -10,16 +10,19 @@ using ViewModels.Transactions;
 
 public static class Extensions
 {
-    public static TransactionRecord ToTransactionRecord(this LogonTransactionRequest request) {
+    public static TransactionRecord ToTransactionRecord(this LogonTransactionRequest request,
+                                                        Boolean isTrainingMode) {
         TransactionRecord transactionRecord = new TransactionRecord {
                                                                         TransactionDateTime = request.TransactionDateTime,
-                                                                        TransactionType = 1
-                                                                    };
+                                                                        TransactionType = 1,
+                                                                        IsTrainingMode = isTrainingMode
+        };
 
         return transactionRecord;
     }
 
-    public static TransactionRecord ToTransactionRecord(this PerformMobileTopupRequest request) {
+    public static TransactionRecord ToTransactionRecord(this PerformMobileTopupRequest request,
+                                                        Boolean isTrainingMode) {
         TransactionRecord transactionRecord = new TransactionRecord {
                                                                         TransactionDateTime = request.TransactionDateTime,
                                                                         TransactionType = 2,
@@ -28,13 +31,14 @@ public static class Extensions
                                                                         ContractId = request.ContractId,
                                                                         CustomerAccountNumber = request.CustomerAccountNumber,
                                                                         CustomerEmailAddress = request.CustomerEmailAddress,
-                                                                        OperatorIdentifier = request.OperatorIdentifier
-                                                                    };
+                                                                        OperatorIdentifier = request.OperatorIdentifier,
+                                                                        IsTrainingMode = isTrainingMode
+        };
 
         return transactionRecord;
     }
 
-    public static TransactionRecord ToTransactionRecord(this PerformVoucherIssueRequest request) {
+    public static TransactionRecord ToTransactionRecord(this PerformVoucherIssueRequest request, Boolean isTrainingMode) {
         TransactionRecord transactionRecord = new TransactionRecord {
                                                                         TransactionDateTime = request.TransactionDateTime,
                                                                         TransactionType = 2,
@@ -44,13 +48,14 @@ public static class Extensions
                                                                         RecipientEmailAddress = request.RecipientEmailAddress,
                                                                         RecipientMobileNumber = request.RecipientMobileNumber,
                                                                         CustomerEmailAddress = request.CustomerEmailAddress,
-                                                                        OperatorIdentifier = request.OperatorIdentifier
-                                                                    };
+                                                                        OperatorIdentifier = request.OperatorIdentifier,
+                                                                        IsTrainingMode = isTrainingMode
+        };
 
         return transactionRecord;
     }
 
-    public static TransactionRecord ToTransactionRecord(this PerformBillPaymentGetAccountRequest request) {
+    public static TransactionRecord ToTransactionRecord(this PerformBillPaymentGetAccountRequest request, Boolean isTrainingMode) {
         TransactionRecord transactionRecord = new TransactionRecord
                                               {
                                                   TransactionDateTime = request.TransactionDateTime,
@@ -60,11 +65,12 @@ public static class Extensions
                                                   ContractId = request.ContractId,
                                                   OperatorIdentifier = request.OperatorIdentifier,
                                                   CustomerAccountNumber = request.CustomerAccountNumber,
-                                              };
+                                                  IsTrainingMode = isTrainingMode
+        };
         return transactionRecord;
     }
 
-    public static TransactionRecord ToTransactionRecord(this PerformBillPaymentMakePaymentRequest request) {
+    public static TransactionRecord ToTransactionRecord(this PerformBillPaymentMakePaymentRequest request, Boolean isTrainingMode) {
         TransactionRecord transactionRecord = new TransactionRecord
                                               {
                                                   TransactionDateTime = request.TransactionDateTime,
@@ -73,8 +79,9 @@ public static class Extensions
                                                   ProductId = request.ProductId,
                                                   ContractId = request.ContractId,
                                                   OperatorIdentifier = request.OperatorIdentifier,
-                                                  CustomerAccountNumber = request.CustomerAccountNumber
-                                              };
+                                                  CustomerAccountNumber = request.CustomerAccountNumber,
+                                                  IsTrainingMode = isTrainingMode
+        };
         return transactionRecord;
     }
 

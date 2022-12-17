@@ -13,15 +13,15 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
 
     private readonly IApplicationCache ApplicationCache;
 
-    private readonly IMerchantService MerchantService;
+    private readonly Func<Boolean, IMerchantService> MerchantServiceResolver;
 
     #endregion
 
     #region Constructors
 
-    public MerchantRequestHandler(IMerchantService merchantService,
+    public MerchantRequestHandler(Func<Boolean, IMerchantService> merchantServiceResolver,
                                   IApplicationCache applicationCache) {
-        this.MerchantService = merchantService;
+        this.MerchantServiceResolver = merchantServiceResolver;
         this.ApplicationCache = applicationCache;
     }
 
@@ -32,9 +32,12 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
     public async Task<Result<List<ContractProductModel>>> Handle(GetContractProductsRequest request,
                                                                  CancellationToken cancellationToken) {
         List<ContractProductModel> products = this.ApplicationCache.GetContractProducts();
-        
+
+        Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+        IMerchantService merchantService = this.MerchantServiceResolver(useTrainingMode);
+
         if (products == null || products.Any() == false) {
-            Result<List<ContractProductModel>> getProductsResult = await this.MerchantService.GetContractProducts(cancellationToken);
+            Result<List<ContractProductModel>> getProductsResult = await merchantService.GetContractProducts(cancellationToken);
             if (getProductsResult.Success) {
                 products = getProductsResult.Data;
             }
@@ -52,13 +55,19 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
 
     public async Task<Result<Decimal>> Handle(GetMerchantBalanceRequest request,
                                               CancellationToken cancellationToken) {
-        
-        return await this.MerchantService.GetMerchantBalance(cancellationToken);
+
+        Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+        IMerchantService merchantService = this.MerchantServiceResolver(useTrainingMode);
+
+        return await merchantService.GetMerchantBalance(cancellationToken);
     }
 
     public async Task<Result<MerchantDetailsModel>> Handle(GetMerchantDetailsRequest request,
                                                    CancellationToken cancellationToken) {
-        Result<MerchantDetailsModel> merchantDetails = await this.MerchantService.GetMerchantDetails(cancellationToken);
+        Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+        IMerchantService merchantService = this.MerchantServiceResolver(useTrainingMode);
+
+        Result<MerchantDetailsModel> merchantDetails = await merchantService.GetMerchantDetails(cancellationToken);
 
         return merchantDetails;
     }

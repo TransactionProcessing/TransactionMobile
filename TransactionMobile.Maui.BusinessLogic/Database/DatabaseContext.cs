@@ -36,18 +36,20 @@
             return SQLite3.LastInsertRowid(this.Connection.Handle);
         }
 
-        public async Task<List<LogMessage>> GetLogMessages(Int32 batchSize) {
+        public async Task<List<LogMessage>> GetLogMessages(Int32 batchSize, Boolean isTrainingMode) {
             if (this.Connection == null)
                 return new List<LogMessage>();
 
-            List<LogMessage> messages = this.Connection.Table<LogMessage>().OrderByDescending(l => l.EntryDateTime)
+            List<LogMessage> messages = this.Connection.Table<LogMessage>()
+                                            .Where(l => l.IsTrainingMode == isTrainingMode)
+                                            .OrderByDescending(l => l.EntryDateTime)
                                             .Take(batchSize).ToList();
 
             return messages;
         }
 
-        public async Task<List<TransactionRecord>> GetTransactions() {
-            return this.Connection.Table<TransactionRecord>().ToList();
+        public async Task<List<TransactionRecord>> GetTransactions(Boolean isTrainingMode) {
+            return this.Connection.Table<TransactionRecord>().Where(t => t.IsTrainingMode == isTrainingMode).ToList();
         }
         
         public async Task InitialiseDatabase() {

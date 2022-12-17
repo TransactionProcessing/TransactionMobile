@@ -22,6 +22,7 @@ public class MerchantRequestHandlerTests
 
     private readonly Mock<IMerchantService> MerchantService;
 
+    private Func<Boolean, IMerchantService> MerchantServiceResolver;
     #endregion
 
     #region Constructors
@@ -29,7 +30,11 @@ public class MerchantRequestHandlerTests
     public MerchantRequestHandlerTests() {
         this.MerchantService = new Mock<IMerchantService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
-        this.MerchantRequestHandler = new MerchantRequestHandler(this.MerchantService.Object, this.ApplicationCache.Object);
+        this.MerchantService = new Mock<IMerchantService>();
+        this.MerchantServiceResolver = (param) => {
+                                           return this.MerchantService.Object;
+                                       };
+        this.MerchantRequestHandler = new MerchantRequestHandler(this.MerchantServiceResolver, this.ApplicationCache.Object);
     }
 
     #endregion
