@@ -6,15 +6,24 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.UITests.Steps
 {
+    using System.Threading;
+    using EstateManagement.DataTransferObjects.Requests;
     using TechTalk.SpecFlow;
+    using TransactionMobile.Maui.UiTests.Common;
 
     [Binding]
     [Scope(Tag = "login")]
     public class LoginSteps
     {
+        private readonly TestingContext TestingContext;
+
         LoginPage loginPage = new LoginPage();
 
         MainPage mainPage = new MainPage();
+
+        public LoginSteps(TestingContext testingContext) {
+            this.TestingContext = testingContext;
+        }
 
         [Given(@"I am on the Login Screen")]
         [Then("the Login Page is displayed")]
@@ -22,6 +31,18 @@ namespace TransactionMobile.Maui.UITests.Steps
             await this.loginPage.AssertOnPage();
         }
 
+        [Given(@"my device is registered")]
+        public async Task GivenMyDeviceIsRegistered() {
+            String serial = await this.loginPage.GetDeviceSerial();
+            AddMerchantDeviceRequest request = new AddMerchantDeviceRequest {
+                                                                                DeviceIdentifier = serial
+                                                                            };
+            Guid estateId = this.TestingContext.GetAllEstateIds().Single();
+            EstateDetails estate = this.TestingContext.GetEstateDetails(estateId);
+            Guid merchantId = estate.GetAllMerchantIds().Single();
+            await this.TestingContext.DockerHelper.EstateClient.AddDeviceToMerchant(this.TestingContext.AccessToken, estateId, merchantId, request, CancellationToken.None);
+        }
+        
         [Given(@"the application is in training mode")]
         public async Task GivenTheApplicationIsInTrainingMode() {
             var isTrainingModeOn = await this.loginPage.IsTrainingModeOn();

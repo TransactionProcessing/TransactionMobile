@@ -12,6 +12,8 @@ namespace TransactionMobile.Maui.Platforms.Services
 
     public static partial class DeviceInformationService
     {
+        public static partial String Identifier() => "";
+
         // based on code from https://github.com/dannycabrera/Get-iOS-Model
 
         private const string HardwareProperty = "hw.machine";

@@ -8,6 +8,8 @@ namespace TransactionMobile.Maui.BusinessLogic.UIServices
 {
     public interface IDeviceService
     {
+        String GetIdentifier();
+
         String GetModel();
 
         String GetPlatform();

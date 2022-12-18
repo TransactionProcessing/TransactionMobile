@@ -453,6 +453,11 @@ namespace TransactionMobile.Maui.UiTests.Common
             return this.Contracts.Single(c => c.ContractId == contractId);
         }
 
+        public List<Guid> GetAllMerchantIds()
+        {
+            return this.Merchants.Select(m => m.Value).ToList();
+        }
+
         public Guid GetMerchantId(String merchantName)
         {
             return this.Merchants.Single(m => m.Key == merchantName).Value;
