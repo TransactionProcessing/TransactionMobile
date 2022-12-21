@@ -13,7 +13,8 @@ public partial class AppShell : Shell
 {
 	public AppShell()
 	{
-		InitializeComponent();
+        Console.WriteLine("In AppShell Ctor");
+        InitializeComponent();
 	}
 
     protected override async void OnNavigating(ShellNavigatingEventArgs args) {

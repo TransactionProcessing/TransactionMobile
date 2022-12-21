@@ -7,7 +7,13 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.UiTests.Common
 {
+    using System.Net.Sockets;
+    using System.Net;
+    using System.Runtime.CompilerServices;
     using System.Threading;
+    using Ductus.FluentDocker.Builders;
+    using Ductus.FluentDocker.Services;
+    using Ductus.FluentDocker.Services.Extensions;
     using EstateManagement.Client;
     using EstateManagement.DataTransferObjects;
     using SecurityService.Client;
@@ -63,40 +69,63 @@ namespace TransactionMobile.Maui.UiTests.Common
 
         #region Methods
 
+        public string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                this.Trace("{ip}");
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
+
         /// <summary>
         /// Starts the containers for scenario run.
         /// </summary>
         /// <param name="scenarioName">Name of the scenario.</param>
         public override async Task StartContainersForScenarioRun(String scenarioName)
         {
+            // Get the address of the host
+            var ipAddress = this.GetLocalIPAddress();
+            throw new Exception("Force fail");
+
             await base.StartContainersForScenarioRun(scenarioName);
-            
+            await SetupConfigHostContainer(this.TestNetworks);
+
             // Setup the base address resolvers
-            String EstateManagementBaseAddressResolver(String api) => $"http://127.0.0.1:{this.EstateManagementPort}";
-            String SecurityServiceBaseAddressResolver(String api) => $"https://127.0.0.1:{this.SecurityServicePort}";
-            String TransactionProcessorBaseAddressResolver(String api) => $"http://127.0.0.1:{this.TransactionProcessorPort}";
-            String TransactionProcessorAclBaseAddressResolver(String api) => $"http://127.0.0.1:{this.TransactionProcessorAclPort}";
 
             HttpClientHandler clientHandler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = (message,
-                                                             certificate2,
-                                                             arg3,
-                                                             arg4) =>
-                {
-                    return true;
-                }
+                                              {
+                                                  ServerCertificateCustomValidationCallback = (message,
+                                                                                               certificate2,
+                                                                                               arg3,
+                                                                                               arg4) =>
+                                                                                              {
+                                                                                                  return true;
+                                                                                              }
 
-            };
+                                              };
             HttpClient httpClient = new HttpClient(clientHandler);
-            this.EstateClient = new EstateClient(EstateManagementBaseAddressResolver, httpClient);
-            this.SecurityServiceClient = new SecurityServiceClient(SecurityServiceBaseAddressResolver, httpClient);
-            this.TransactionProcessorClient = new TransactionProcessorClient(TransactionProcessorBaseAddressResolver, httpClient);
+            this.EstateClient = new EstateClient(this.EstateManagementBaseAddressResolver, httpClient);
+            this.SecurityServiceClient = new SecurityServiceClient(this.SecurityServiceBaseAddressResolver, httpClient);
+            this.TransactionProcessorClient = new TransactionProcessorClient(this.TransactionProcessorBaseAddressResolver, httpClient);
 
             this.HttpClient = new HttpClient();
-            this.HttpClient.BaseAddress = new Uri(TransactionProcessorAclBaseAddressResolver(string.Empty));
+            this.HttpClient.BaseAddress = new Uri(this.TransactionProcessorAclBaseAddressResolver(string.Empty));
 
         }
+
+        public String TransactionProcessorBaseAddressResolver(String api) => $"http://127.0.0.1:{this.TransactionProcessorPort}";
+
+        public String TransactionProcessorAclBaseAddressResolver(String api) => $"http://127.0.0.1:{this.TransactionProcessorAclPort}";
+
+        public String SecurityServiceBaseAddressResolver(String api) => $"https://127.0.0.1:{this.SecurityServicePort}";
+
+        public String EstateManagementBaseAddressResolver(String api) => $"http://127.0.0.1:{this.EstateManagementPort}";
 
         private async Task RemoveEstateReadModel()
         {
@@ -123,6 +152,42 @@ namespace TransactionMobile.Maui.UiTests.Common
             await RemoveEstateReadModel().ConfigureAwait(false);
 
             base.StopContainersForScenarioRun();
+        }
+
+        public const int ConfigHostDockerPort = 9200;
+
+        public String ConfigHostContainerName;
+        public Int32 ConfigHostPort;
+        public async Task<IContainerService> SetupConfigHostContainer(List<INetworkService> networkServices)
+        {
+            this.Trace("About to Start Config Host Container");
+            List<String> environmentVariables = new List<String>();
+            environmentVariables.Add("AppSettings:InMemoryDatabase=true");
+            ConfigHostContainerName = $"mobileconfighost{this.TestId:N}";
+
+            ContainerBuilder configHostContainer = new Builder().UseContainer().WithName(ConfigHostContainerName)
+                                                                .WithEnvironment(environmentVariables.ToArray())
+                                                                .UseImageDetails(("mobileconfiguration",false))
+                                                                .ExposePort(ConfigHostDockerPort)
+                                                                .MountHostFolder(this.HostTraceFolder)
+                                                                .SetDockerCredentials(this.DockerCredentials);
+
+            // Now build and return the container                
+            IContainerService builtContainer = configHostContainer.Build().Start().WaitForPort($"{ConfigHostDockerPort}/tcp", 30000);
+
+            foreach (INetworkService networkService in networkServices)
+            {
+                networkService.Attach(builtContainer, false);
+            }
+
+            this.Trace("Config Host Container Started");
+            this.Containers.Add(builtContainer);
+
+            //  Do a health check here
+            this.ConfigHostPort = builtContainer.ToHostExposedEndpoint($"{ConfigHostDockerPort}/tcp").Port;
+
+            //await this.DoHealthCheck(ContainerType.CallbackHandler);
+            return builtContainer;
         }
 
         #endregion

@@ -16,7 +16,7 @@ public static class MauiProgram
 	private static MauiAppBuilder Builder;
 	public static MauiApp CreateMauiApp()
 	{
-		Builder = MauiApp.CreateBuilder();
+        Builder = MauiApp.CreateBuilder();
 		Builder.UseMauiApp<App>()
 			.ConfigureRequestHandlers()
 			.ConfigurePages()

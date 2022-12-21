@@ -28,6 +28,7 @@
     using Pages.AppHome;
     using Pages.MyAccount;
     using System.Net.Http;
+    using System.Runtime.CompilerServices;
     using BusinessLogic.Services.TrainingModeServices;
     using Pages.Transactions.BillPayment;
     using TransactionProcessorACL.DataTransferObjects.Responses;
@@ -63,13 +64,17 @@
             builder.Services.AddSingleton<Func<String, String>>(
                                                                 new Func<String, String>(configSetting =>
                                                                                          {
-                                                                                             if (configSetting == "ConfigServiceUrl")
-                                                                                             {
-                                                                                                 return "https://5r8nmm.deta.dev";
-                                                                                             }
-
                                                                                              IApplicationCache applicationCache = MauiProgram.Container.Services
                                                                                                  .GetService<IApplicationCache>();
+
+                                                                                             if (configSetting == "ConfigServiceUrl") {
+                                                                                                 String configHostUrl = applicationCache.GetConfigHostUrl();
+                                                                                                 if (String.IsNullOrEmpty(configHostUrl) == false) {
+                                                                                                     return configHostUrl;
+                                                                                                 }
+                                                                                                 //return "https://sferguson.ddns.net:9200";
+                                                                                                 return "http://192.168.0.10:9200";
+                                                                                             }
 
                                                                                              Configuration configuration = applicationCache.GetConfiguration();
 

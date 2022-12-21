@@ -32,6 +32,8 @@
 
         private String password;
 
+        private String configHostUrl;
+
         private Boolean useTrainingMode;
 
         #region Constructors
@@ -52,8 +54,6 @@
         #endregion
 
         #region Properties
-
-        public ICommand DeveloperPageCommand { get; }
 
         public ICommand LoginCommand { get; }
 
@@ -79,15 +79,24 @@
 
         public String DeviceIdentifier => this.DeviceService.GetIdentifier();
 
+        public String ConfigHostUrl
+        {
+            get => this.configHostUrl;
+            set => this.SetProperty(ref this.configHostUrl, value);
+        }
+
         #endregion
 
         #region Methods
         private void CacheUseTrainingMode() => this.ApplicationCache.SetUseTrainingMode(this.useTrainingMode);
 
         private async Task<Result<Configuration>> GetConfiguration() {
-            String deviceIdentifier = String.Empty;
-            GetConfigurationRequest getConfigurationRequest = GetConfigurationRequest.Create(deviceIdentifier);
-            var configurationResult = await this.Mediator.Send(getConfigurationRequest);
+            if (String.IsNullOrEmpty(ConfigHostUrl) == false) {
+                this.ApplicationCache.SetConfigHostUrl(ConfigHostUrl);
+            }
+
+            GetConfigurationRequest getConfigurationRequest = GetConfigurationRequest.Create(this.DeviceService.GetIdentifier());
+            Result<Configuration> configurationResult = await this.Mediator.Send(getConfigurationRequest);
 
             if (configurationResult.Success) {
                 // Cache the config object

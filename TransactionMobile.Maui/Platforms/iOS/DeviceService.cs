@@ -12,7 +12,10 @@ namespace TransactionMobile.Maui.Platforms.Services
 
     public static partial class DeviceInformationService
     {
-        public static partial String Identifier() => "";
+        public static partial String Identifier()
+        {
+            return UIDevice.CurrentDevice.IdentifierForVendor.AsString().Replace("-", "");
+        }
 
         // based on code from https://github.com/dannycabrera/Get-iOS-Model
 

@@ -70,6 +70,8 @@ Background:
 	| EmailAddress                  | Password | GivenName    | FamilyName | EstateName    | MerchantName    |
 	| merchantuser@testmerchant1.co.uk | 123456   | TestMerchant | User1      | Test Estate 1 | Test Merchant 1 |
 
+	Given I have created a config for my device
+
 #Scenario: Login as Merchant
 	#Given I am on the Login Screen
 	#And the application is in training mode

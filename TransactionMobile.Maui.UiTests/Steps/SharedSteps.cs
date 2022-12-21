@@ -7,17 +7,20 @@ using TechTalk.SpecFlow;
 
 namespace TransactionMobile.Maui.UiTests.Steps
 {
+    using System.Net.Http;
     using System.Threading;
     using Common;
     using Drivers;
     using EstateManagement.DataTransferObjects;
     using EstateManagement.DataTransferObjects.Requests;
     using EstateManagement.DataTransferObjects.Responses;
+    using Newtonsoft.Json;
     using SecurityService.DataTransferObjects;
     using SecurityService.DataTransferObjects.Requests;
     using SecurityService.DataTransferObjects.Responses;
     using Shared.IntegrationTesting;
     using Shouldly;
+    using UITests;
     using ClientDetails = Common.ClientDetails;
 
     [Binding]
@@ -25,6 +28,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
     public class SharedSteps
     {
         private readonly TestingContext TestingContext;
+        LoginPage loginPage = new LoginPage();
 
         public SharedSteps(TestingContext testingContext) {
             this.TestingContext = testingContext;
@@ -461,6 +465,55 @@ namespace TransactionMobile.Maui.UiTests.Steps
 
                 this.TestingContext.Logger.LogInformation($"Operator {operatorName} assigned to Estate {estateDetails.EstateName}");
             }
+        }
+        
+        [Given(@"I have created a config for my device")]
+        public async Task GivenIHaveCreatedAConfigForMyDevice() {
+            var deviceSerial = await this.loginPage.GetDeviceSerial();
+
+            //var clientDetails = this.TestingContext.GetClientDetails("mobileAppClient");
+            ClientDetails clientDetails = ClientDetails.Create("1","2", "3");
+            var configRequest = new {
+                                        clientId = clientDetails.ClientId,
+                                        clientSecret = clientDetails.ClientSecret,
+                                        deviceIdentifier = deviceSerial,
+                                        id = deviceSerial,
+                                        enableAutoUpdates = false,
+                                        logLevel = 3,
+                                        hostAddresses = new List<Object>()
+                                    };
+            configRequest.hostAddresses.Add(new {
+                                                    type = 1,
+                                                    uri = this.TestingContext.DockerHelper.EstateManagementBaseAddressResolver("")
+            });
+            configRequest.hostAddresses.Add(new
+                                            {
+                                                type = 2,
+                                                uri = this.TestingContext.DockerHelper.SecurityServiceBaseAddressResolver("")
+            });
+            configRequest.hostAddresses.Add(new
+                                            {
+                                                type = 3,
+                                                uri = this.TestingContext.DockerHelper.TransactionProcessorAclBaseAddressResolver("")
+            });
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"http://localhost:{this.TestingContext.DockerHelper.ConfigHostPort}/api/transactionmobileconfiguration");
+            request.Content = new StringContent(JsonConvert.SerializeObject(configRequest), Encoding.UTF8, "application/json");
+
+            HttpClientHandler clientHandler = new HttpClientHandler
+                                              {
+                                                  ServerCertificateCustomValidationCallback = (message,
+                                                                                               certificate2,
+                                                                                               arg3,
+                                                                                               arg4) =>
+                                                                                              {
+                                                                                                  return true;
+                                                                                              }
+
+                                              };
+            HttpClient httpClient = new HttpClient(clientHandler);
+
+            var response = await httpClient.SendAsync(request, CancellationToken.None);
         }
 
         [Given(@"I have created the following security users")]

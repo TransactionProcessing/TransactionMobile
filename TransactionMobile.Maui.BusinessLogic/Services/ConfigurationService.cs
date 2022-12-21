@@ -50,7 +50,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                                                                   CancellationToken cancellationToken)
         {
             Configuration response = null;
-            String requestUri = this.BuildRequestUrl($"/configuration/{deviceIdentifier}");
+            String requestUri = this.BuildRequestUrl($"/api/transactionmobileconfiguration/{deviceIdentifier}");
 
             try
             {
@@ -64,7 +64,35 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 String content = await this.HandleResponse(httpResponse, cancellationToken);
 
                 // call was successful so now deserialise the body to the response object
-                response = JsonConvert.DeserializeObject<Configuration>(content);
+                ConfigurationResponse apiResponse = JsonConvert.DeserializeObject<ConfigurationResponse>(content);
+
+                response = new Configuration() {
+                                                   ClientSecret = apiResponse.ClientSecret,
+                                                   ClientId = apiResponse.ClientId,
+                                                   EnableAutoUpdates = apiResponse.EnableAutoUpdates,
+                                                   EstateManagementUri = apiResponse.HostAddresses.Single(h => h.ServiceType == ServiceType.EstateManagement).Uri,
+                                                   SecurityServiceUri = apiResponse.HostAddresses.Single(h => h.ServiceType == ServiceType.Security).Uri,
+                                                   TransactionProcessorAclUri =
+                                                       apiResponse.HostAddresses.Single(h => h.ServiceType == ServiceType.TransactionProcessorAcl).Uri,
+                                               };
+
+                response.LogLevel = apiResponse.LogLevel switch
+                {
+                    LoggingLevel.Debug => LogLevel.Debug,
+                    LoggingLevel.Error => LogLevel.Error,
+                    LoggingLevel.Fatal => LogLevel.Fatal,
+                    LoggingLevel.Information => LogLevel.Info,
+                    LoggingLevel.Trace => LogLevel.Trace,
+                    LoggingLevel.Warning => LogLevel.Warn,
+                    _ => LogLevel.Info
+                };
+
+                response.AppCenterConfig = new AppCenterConfiguration() {
+                                                                            AndroidKey = apiResponse.ApplicationCentreConfiguration.AndroidKey,
+                                                                            MacOSKey = apiResponse.ApplicationCentreConfiguration.MacosKey,
+                                                                            WindowsKey = apiResponse.ApplicationCentreConfiguration.WindowsKey,
+                                                                            iOSKey = apiResponse.ApplicationCentreConfiguration.IosKey
+                                                                        };
 
                 Shared.Logger.Logger.LogInformation($"Configuration for device identifier {deviceIdentifier} requested successfully");
                 Shared.Logger.Logger.LogDebug($"Configuration Response: [{content}]");
@@ -98,5 +126,57 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
             await this.HandleResponse(httpResponse, cancellationToken);
         }
+    }
+
+    public class ConfigurationResponse
+    {
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
+
+        public string DeviceIdentifier { get; set; }
+
+        public bool EnableAutoUpdates { get; set; }
+
+        public List<HostAddress> HostAddresses { get; set; }
+
+        public string Id { get; set; }
+
+        public LoggingLevel LogLevel { get; set; }
+
+        public ApplicationCentreConfiguration ApplicationCentreConfiguration { get; set; }
+    }
+
+    public class HostAddress
+    {
+        public ServiceType ServiceType { get; set; }
+
+        public string Uri { get; set; }
+    }
+
+    public enum ServiceType
+    {
+        EstateManagement = 0,
+        Security = 1,
+        TransactionProcessorAcl = 2,
+        VoucherManagementAcl = 3,
+    }
+
+    public enum LoggingLevel
+    {
+        Fatal = 0,
+        Error = 1,
+        Warning = 2,
+        Information = 3,
+        Debug = 4,
+        Trace = 5
+    }
+
+    public class ApplicationCentreConfiguration
+    {
+        public String ApplicationId { get; set; }
+        public String AndroidKey { get; set; }
+        public String IosKey { get; set; }
+        public String MacosKey { get; set; }
+        public String WindowsKey { get; set; }
     }
 }

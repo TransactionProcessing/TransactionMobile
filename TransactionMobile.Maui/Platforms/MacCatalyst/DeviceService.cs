@@ -11,7 +11,11 @@ namespace TransactionMobile.Maui.Platforms.Services
 
     public static partial class DeviceInformationService
     {
-        public static partial String Identifier() => "";
+        public static partial String Identifier()
+        {
+            return "<Unknown>";
+        }
+
         public static partial String Model() => DeviceInfo.Model;
 
         public static partial String Platform() => $"{DeviceInfo.Platform} {DeviceInfo.VersionString}";

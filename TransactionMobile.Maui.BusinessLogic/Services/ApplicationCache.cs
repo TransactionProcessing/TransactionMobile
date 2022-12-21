@@ -45,6 +45,15 @@
             return this.TryGetValue<Guid>("MerchantId");
         }
 
+        public String GetConfigHostUrl() {
+            return this.TryGetValue<String>("ConfigHostUrl");
+        }
+
+        public void SetConfigHostUrl(String value,
+                                     MemoryCacheEntryOptions options = default) {
+            this.Set("ConfigHostUrl", value, options);
+        }
+
         public Boolean GetUseTrainingMode() {
             return this.TryGetValue<Boolean>("UseTrainingMode");
         }
