@@ -25,10 +25,10 @@ jobs:
         uses: haythem/public-ip@v1.3
 
       - name: Cache Public IP
-        run: echo ${{ steps.ip.outputs.ipv4 }} >> $ENV_IPADDR
+        run: echo "ENV_IPADDRESS=${{ steps.ip.outputs.ipv4 }}"
 
       - name: Test IP
-        run: echo $ENV_IPADDR
+        run: echo $ENV_IPADDRESS
           
 
       - name: Setup Docker
