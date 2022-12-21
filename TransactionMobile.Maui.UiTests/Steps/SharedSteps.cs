@@ -484,20 +484,20 @@ namespace TransactionMobile.Maui.UiTests.Steps
                                     };
             configRequest.hostAddresses.Add(new {
                                                     servicetype = 1,
-                                                    uri = this.TestingContext.DockerHelper.EstateManagementBaseAddressResolver("")
+                                                    uri = this.TestingContext.DockerHelper.EstateManagementBaseAddressResolver("").Replace("127.0.0.1", this.TestingContext.DockerHelper.LocalIPAddress)
             });
             configRequest.hostAddresses.Add(new
                                             {
                                                 servicetype = 2,
-                                                uri = this.TestingContext.DockerHelper.SecurityServiceBaseAddressResolver("")
+                                                uri = this.TestingContext.DockerHelper.SecurityServiceBaseAddressResolver("").Replace("127.0.0.1", this.TestingContext.DockerHelper.LocalIPAddress)
             });
             configRequest.hostAddresses.Add(new
                                             {
                                                 servicetype = 3,
-                                                uri = this.TestingContext.DockerHelper.TransactionProcessorAclBaseAddressResolver("")
+                                                uri = this.TestingContext.DockerHelper.TransactionProcessorAclBaseAddressResolver("").Replace("127.0.0.1", this.TestingContext.DockerHelper.LocalIPAddress)
             });
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"http://localhost:{this.TestingContext.DockerHelper.ConfigHostPort}/api/transactionmobileconfiguration");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"http://127.0.0.1:{this.TestingContext.DockerHelper.ConfigHostPort}/api/transactionmobileconfiguration");
             request.Content = new StringContent(JsonConvert.SerializeObject(configRequest), Encoding.UTF8, "application/json");
 
             HttpClientHandler clientHandler = new HttpClientHandler
@@ -528,7 +528,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
                 macoskey = "macos",
                 windowskey = "windows",
             };
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"http://localhost:{this.TestingContext.DockerHelper.ConfigHostPort}/api/applicationcentreconfiguration");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"http://127.0.0.1:{this.TestingContext.DockerHelper.ConfigHostPort}/api/applicationcentreconfiguration");
             request.Content = new StringContent(JsonConvert.SerializeObject(configRequest), Encoding.UTF8, "application/json");
 
             HttpClientHandler clientHandler = new HttpClientHandler

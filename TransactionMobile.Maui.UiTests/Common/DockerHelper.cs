@@ -131,13 +131,13 @@ namespace TransactionMobile.Maui.UiTests.Common
 
         }
 
-        public String TransactionProcessorBaseAddressResolver(String api) => $"http://{this.LocalIPAddress}:{this.TransactionProcessorPort}";
+        public String TransactionProcessorBaseAddressResolver(String api) => $"http://127.0.0.1:{this.TransactionProcessorPort}";
 
-        public String TransactionProcessorAclBaseAddressResolver(String api) => $"http://{this.LocalIPAddress}:{this.TransactionProcessorAclPort}";
+        public String TransactionProcessorAclBaseAddressResolver(String api) => $"http://127.0.0.1:{this.TransactionProcessorAclPort}";
 
-        public String SecurityServiceBaseAddressResolver(String api) => $"https://{this.LocalIPAddress}:{this.SecurityServicePort}";
+        public String SecurityServiceBaseAddressResolver(String api) => $"https://127.0.0.1:{this.SecurityServicePort}";
 
-        public String EstateManagementBaseAddressResolver(String api) => $"http://{this.LocalIPAddress}:{this.EstateManagementPort}";
+        public String EstateManagementBaseAddressResolver(String api) => $"http://127.0.0.1:{this.EstateManagementPort}";
 
         private async Task RemoveEstateReadModel()
         {
