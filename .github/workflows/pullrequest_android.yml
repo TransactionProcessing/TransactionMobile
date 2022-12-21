@@ -25,7 +25,7 @@ jobs:
         uses: haythem/public-ip@v1.3
 
       - name: Cache Public IP
-        run: echo "ENV_IPADDRESS=${{ steps.ip.outputs.ipv4 }}"
+        run: echo "ENV_IPADDRESS=${{ steps.ip.outputs.ipv4 }}" >> $GITHUB_ENV
 
       - name: Test IP
         run: echo $ENV_IPADDRESS
