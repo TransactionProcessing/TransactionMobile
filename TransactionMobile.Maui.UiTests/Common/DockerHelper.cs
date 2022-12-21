@@ -71,16 +71,26 @@ namespace TransactionMobile.Maui.UiTests.Common
 
         public string GetLocalIPAddress()
         {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (var ip in host.AddressList)
+            String result = String.Empty;
+            if (String.IsNullOrEmpty(Environment.GetEnvironmentVariable("ENV_IPADDRESS")))
             {
-                this.Trace($"{ip}");
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                // Nothing in environment so not running under CI
+                IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+                foreach (IPAddress ip in host.AddressList)
                 {
-                    return ip.ToString();
+                    this.Trace($"{ip}");
+                    if (ip.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        result = ip.ToString();
+                        break;
+                    }
                 }
             }
-            throw new Exception("No network adapters with an IPv4 address in the system!");
+            else {
+                result= Environment.GetEnvironmentVariable("ENV_IPADDRESS");
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -91,6 +101,7 @@ namespace TransactionMobile.Maui.UiTests.Common
         {
             // Get the address of the host
             var ipAddress = this.GetLocalIPAddress();
+            this.Trace(ipAddress);
             throw new Exception("Force fail");
 
             await base.StartContainersForScenarioRun(scenarioName);
