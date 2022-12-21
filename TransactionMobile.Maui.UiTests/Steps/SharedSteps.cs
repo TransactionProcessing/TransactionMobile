@@ -7,6 +7,7 @@ using TechTalk.SpecFlow;
 
 namespace TransactionMobile.Maui.UiTests.Steps
 {
+    using System.Net;
     using System.Net.Http;
     using System.Threading;
     using Common;
@@ -513,6 +514,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
             HttpClient httpClient = new HttpClient(clientHandler);
 
             var response = await httpClient.SendAsync(request, CancellationToken.None);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [Given(@"I have created a config for my application")]
@@ -543,6 +545,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
             HttpClient httpClient = new HttpClient(clientHandler);
 
             var response = await httpClient.SendAsync(request, CancellationToken.None);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [Given(@"I have created the following security users")]

@@ -163,7 +163,7 @@ namespace TransactionMobile.Maui.UiTests.Common
         public override async Task StopContainersForScenarioRun() {
             await RemoveEstateReadModel().ConfigureAwait(false);
 
-            base.StopContainersForScenarioRun();
+            await base.StopContainersForScenarioRun();
         }
 
         public const int ConfigHostDockerPort = 9200;
@@ -179,7 +179,7 @@ namespace TransactionMobile.Maui.UiTests.Common
 
             ContainerBuilder configHostContainer = new Builder().UseContainer().WithName(ConfigHostContainerName)
                                                                 .WithEnvironment(environmentVariables.ToArray())
-                                                                .UseImageDetails(("stuartferguson/mobileconfiguration",false))
+                                                                .UseImageDetails(("stuartferguson/mobileconfiguration:master",false))
                                                                 .ExposePort(ConfigHostDockerPort)
                                                                 .MountHostFolder(this.HostTraceFolder)
                                                                 .SetDockerCredentials(this.DockerCredentials);
