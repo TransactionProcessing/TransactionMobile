@@ -74,7 +74,7 @@ namespace TransactionMobile.Maui.UiTests.Common
             var host = Dns.GetHostEntry(Dns.GetHostName());
             foreach (var ip in host.AddressList)
             {
-                this.Trace("{ip}");
+                this.Trace($"{ip}");
                 if (ip.AddressFamily == AddressFamily.InterNetwork)
                 {
                     return ip.ToString();
