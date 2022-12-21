@@ -72,8 +72,8 @@
                                                                                                  if (String.IsNullOrEmpty(configHostUrl) == false) {
                                                                                                      return configHostUrl;
                                                                                                  }
-                                                                                                 //return "https://sferguson.ddns.net:9200";
-                                                                                                 return "http://192.168.0.10:9200";
+                                                                                                 return "https://sferguson.ddns.net:9200";
+                                                                                                 //return "http://192.168.0.10:9200";
                                                                                              }
 
                                                                                              Configuration configuration = applicationCache.GetConfiguration();

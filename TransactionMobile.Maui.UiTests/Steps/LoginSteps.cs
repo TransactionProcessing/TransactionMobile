@@ -33,7 +33,7 @@ namespace TransactionMobile.Maui.UITests.Steps
 
         [Given(@"my device is registered")]
         public async Task GivenMyDeviceIsRegistered() {
-            String configHostUrl = $"http://localhost:{this.TestingContext.DockerHelper.ConfigHostPort}";
+            String configHostUrl = $"http://{this.TestingContext.DockerHelper.LocalIPAddress}:{this.TestingContext.DockerHelper.ConfigHostPort}";
             await this.loginPage.SetConfigHostUrl(configHostUrl);
 
             String serial = await this.loginPage.GetDeviceSerial();

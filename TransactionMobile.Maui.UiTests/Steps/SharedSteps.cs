@@ -471,8 +471,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         public async Task GivenIHaveCreatedAConfigForMyDevice() {
             var deviceSerial = await this.loginPage.GetDeviceSerial();
 
-            //var clientDetails = this.TestingContext.GetClientDetails("mobileAppClient");
-            ClientDetails clientDetails = ClientDetails.Create("1","2", "3");
+            var clientDetails = this.TestingContext.GetClientDetails("mobileAppClient");
             var configRequest = new {
                                         clientId = clientDetails.ClientId,
                                         clientSecret = clientDetails.ClientSecret,
@@ -483,17 +482,17 @@ namespace TransactionMobile.Maui.UiTests.Steps
                                         hostAddresses = new List<Object>()
                                     };
             configRequest.hostAddresses.Add(new {
-                                                    type = 1,
+                                                    servicetype = 1,
                                                     uri = this.TestingContext.DockerHelper.EstateManagementBaseAddressResolver("")
             });
             configRequest.hostAddresses.Add(new
                                             {
-                                                type = 2,
+                                                servicetype = 2,
                                                 uri = this.TestingContext.DockerHelper.SecurityServiceBaseAddressResolver("")
             });
             configRequest.hostAddresses.Add(new
                                             {
-                                                type = 3,
+                                                servicetype = 3,
                                                 uri = this.TestingContext.DockerHelper.TransactionProcessorAclBaseAddressResolver("")
             });
 
@@ -511,6 +510,36 @@ namespace TransactionMobile.Maui.UiTests.Steps
                                                                                               }
 
                                               };
+            HttpClient httpClient = new HttpClient(clientHandler);
+
+            var response = await httpClient.SendAsync(request, CancellationToken.None);
+        }
+
+        [Given(@"I have created a config for my application")]
+        public async Task GivenIHaveCreatedAConfigForMyApplication()
+        {
+            var configRequest = new
+            {
+                applicationId = "transactionMobilePOS",
+                androidkey = "android",
+                ioskey = "ios",
+                macoskey = "macos",
+                windowskey = "windows",
+            };
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"http://localhost:{this.TestingContext.DockerHelper.ConfigHostPort}/api/applicationcentreconfiguration");
+            request.Content = new StringContent(JsonConvert.SerializeObject(configRequest), Encoding.UTF8, "application/json");
+
+            HttpClientHandler clientHandler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message,
+                                                             certificate2,
+                                                             arg3,
+                                                             arg4) =>
+                {
+                    return true;
+                }
+
+            };
             HttpClient httpClient = new HttpClient(clientHandler);
 
             var response = await httpClient.SendAsync(request, CancellationToken.None);

@@ -30,7 +30,6 @@ jobs:
       - name: Test IP
         run: echo $ENV_IPADDRESS
           
-
       - name: Setup Docker
         run: |
          brew install docker

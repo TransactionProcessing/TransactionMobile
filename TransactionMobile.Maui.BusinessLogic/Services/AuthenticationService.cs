@@ -33,8 +33,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             {
                 Configuration configuration = this.ApplicationCache.GetConfiguration();
 
-                username = "merchantuser@v28emulatormerchant.co.uk";
-                password = "123456";
+                //username = "merchantuser@v28emulatormerchant.co.uk";
+                //password = "123456";
 
                 Shared.Logger.Logger.LogInformation($"About to request token for {username}");
                 Shared.Logger.Logger.LogDebug($"Token Request details UserName: {username} Password: {password} ClientId: {configuration.ClientId} ClientSecret: {configuration.ClientSecret}");

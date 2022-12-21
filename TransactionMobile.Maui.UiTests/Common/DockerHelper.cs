@@ -93,6 +93,8 @@ namespace TransactionMobile.Maui.UiTests.Common
             return result;
         }
 
+        public String LocalIPAddress { get; private set; }
+
         /// <summary>
         /// Starts the containers for scenario run.
         /// </summary>
@@ -100,10 +102,9 @@ namespace TransactionMobile.Maui.UiTests.Common
         public override async Task StartContainersForScenarioRun(String scenarioName)
         {
             // Get the address of the host
-            var ipAddress = this.GetLocalIPAddress();
-            this.Trace(ipAddress);
-            throw new Exception("Force fail");
-
+            this.LocalIPAddress = this.GetLocalIPAddress();
+            this.Trace(this.LocalIPAddress);
+            
             await base.StartContainersForScenarioRun(scenarioName);
             await SetupConfigHostContainer(this.TestNetworks);
 
@@ -130,13 +131,13 @@ namespace TransactionMobile.Maui.UiTests.Common
 
         }
 
-        public String TransactionProcessorBaseAddressResolver(String api) => $"http://127.0.0.1:{this.TransactionProcessorPort}";
+        public String TransactionProcessorBaseAddressResolver(String api) => $"http://{this.LocalIPAddress}:{this.TransactionProcessorPort}";
 
-        public String TransactionProcessorAclBaseAddressResolver(String api) => $"http://127.0.0.1:{this.TransactionProcessorAclPort}";
+        public String TransactionProcessorAclBaseAddressResolver(String api) => $"http://{this.LocalIPAddress}:{this.TransactionProcessorAclPort}";
 
-        public String SecurityServiceBaseAddressResolver(String api) => $"https://127.0.0.1:{this.SecurityServicePort}";
+        public String SecurityServiceBaseAddressResolver(String api) => $"https://{this.LocalIPAddress}:{this.SecurityServicePort}";
 
-        public String EstateManagementBaseAddressResolver(String api) => $"http://127.0.0.1:{this.EstateManagementPort}";
+        public String EstateManagementBaseAddressResolver(String api) => $"http://{this.LocalIPAddress}:{this.EstateManagementPort}";
 
         private async Task RemoveEstateReadModel()
         {
@@ -178,7 +179,7 @@ namespace TransactionMobile.Maui.UiTests.Common
 
             ContainerBuilder configHostContainer = new Builder().UseContainer().WithName(ConfigHostContainerName)
                                                                 .WithEnvironment(environmentVariables.ToArray())
-                                                                .UseImageDetails(("mobileconfiguration",false))
+                                                                .UseImageDetails(("stuartferguson/mobileconfiguration",false))
                                                                 .ExposePort(ConfigHostDockerPort)
                                                                 .MountHostFolder(this.HostTraceFolder)
                                                                 .SetDockerCredentials(this.DockerCredentials);
