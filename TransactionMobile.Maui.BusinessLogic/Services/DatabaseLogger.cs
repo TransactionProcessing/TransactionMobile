@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Java.Lang;
 using Shared.Logger;
 using TransactionMobile.Maui.Database;
 
 namespace TransactionMobile.Maui.BusinessLogic.Services
 {
+    using Exception = System.Exception;
+
     public class DatabaseLogger : ILogger
     {
         private readonly IDatabaseContext DatabaseContext;
@@ -102,6 +105,54 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 Message = logMessageModel.Message
             };
             this.DatabaseContext.InsertLogMessage(logMessage);
+        }
+    }
+
+    public class ConsoleLogger : ILogger
+    {
+        public ConsoleLogger()
+        {
+            this.IsInitialised = true;
+        }
+
+        public bool IsInitialised { get; set; }
+
+        public void LogCritical(Exception exception)
+        {
+            var logMessageModels = Models.LogMessage.CreateErrorLogMessages(exception);
+            foreach (var item in logMessageModels)
+            {
+                Console.WriteLine($"{item.LogLevelString}|{item.Message}");
+            }
+        }
+
+        public void LogDebug(string message)
+        {
+            Console.WriteLine($"{LogLevel.Debug}|{message}");
+        }
+
+        public void LogError(Exception exception)
+        {
+            var logMessageModels = Models.LogMessage.CreateErrorLogMessages(exception);
+            foreach (var item in logMessageModels)
+            {
+                Console.WriteLine($"{item.LogLevelString}|{item.Message}");
+            }
+        }
+
+        public void LogInformation(string message)
+        {
+            Console.WriteLine($"{LogLevel.Info}|{message}");
+        }
+
+        public void LogTrace(string message)
+        {
+            Console.WriteLine($"{LogLevel.Trace}|{message}");
+        }
+
+        public void LogWarning(string message)
+        {
+            Console.WriteLine($"{LogLevel.Warn}|{message}");
         }
     }
 }
