@@ -96,7 +96,7 @@ jobs:
           api: 28
           tag: default
           abi: x86   
-          verbose: false
+          verbose: true
 
       #- name: Upload Android Artifact
       #  uses: actions/upload-artifact@v2.3.1
