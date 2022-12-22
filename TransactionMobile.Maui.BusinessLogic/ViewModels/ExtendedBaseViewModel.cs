@@ -7,7 +7,6 @@ using MvvmHelpers.Commands;
 using MyAccount;
 using RequestHandlers;
 using Services;
-using Shared.Logger;
 using Support;
 using Transactions;
 using UIServices;

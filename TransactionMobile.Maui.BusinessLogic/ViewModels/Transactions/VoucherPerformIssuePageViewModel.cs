@@ -104,25 +104,25 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
 
     private void CustomerEmailAddressEntryCompletedCommandExecute()
     {
-        Shared.Logger.Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
+        Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
         this.OnCustomerEmailAddressEntryCompleted();
     }
 
     private void RecipientMobileNumberEntryCompletedCommandExecute()
     {
-        Shared.Logger.Logger.LogInformation("RecipientMobileNumberEntryCompletedCommandExecute called");
+        Logger.LogInformation("RecipientMobileNumberEntryCompletedCommandExecute called");
         this.OnRecipientMobileNumberEntryCompleted();
     }
 
     private void RecipientEmailAddressEntryCompletedCommandExecute()
     {
-        Shared.Logger.Logger.LogInformation("RecipientEmailAddressEntryCompletedCommandExecute called");
+        Logger.LogInformation("RecipientEmailAddressEntryCompletedCommandExecute called");
         this.OnRecipientEmailAddressEntryCompleted();
     }
 
     private async Task IssueVoucherCommandExecute()
     {
-        Shared.Logger.Logger.LogInformation("IssueVoucherCommandExecute called");
+        Logger.LogInformation("IssueVoucherCommandExecute called");
         // TODO: Create Command and Send
         PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(DateTime.Now,
                                                                                this.ProductDetails.ContractId,
@@ -148,7 +148,7 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
 
     private void VoucherAmountEntryCompletedCommandExecute()
     {
-        Shared.Logger.Logger.LogInformation("VoucherAmountEntryCompletedCommandExecute called");
+        Logger.LogInformation("VoucherAmountEntryCompletedCommandExecute called");
         this.OnVoucherAmountEntryCompleted();
     }
 

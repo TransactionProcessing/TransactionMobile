@@ -4,11 +4,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Maui.UIServices;
 using MediatR;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Services;
-using Shared.Logger;
 using Shouldly;
 using UIServices;
+using ViewModels;
 using ViewModels.MyAccount;
 using Xunit;
 

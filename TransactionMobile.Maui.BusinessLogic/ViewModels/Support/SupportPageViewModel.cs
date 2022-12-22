@@ -9,7 +9,6 @@
     using MvvmHelpers.Commands;
     using Requests;
     using Services;
-    using Shared.Logger;
     using UIServices;
 
     public class SupportPageViewModel : ExtendedBaseViewModel

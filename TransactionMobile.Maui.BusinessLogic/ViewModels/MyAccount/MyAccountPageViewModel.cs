@@ -12,7 +12,6 @@
     using RequestHandlers;
     using Requests;
     using Services;
-    using Shared.Logger;
     using UIServices;
 
     public class MyAccountPageViewModel : ExtendedBaseViewModel

@@ -1,9 +1,9 @@
 namespace TransactionMobile.Maui.Pages.Common;
 
 using AppHome;
+using BusinessLogic.ViewModels;
 using MyAccount;
 using Reports;
-using Shared.Logger;
 using Support;
 using TransactionMobile.Maui.BusinessLogic.Services;
 using TransactionMobile.Maui.BusinessLogic.UIServices;

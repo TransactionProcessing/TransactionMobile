@@ -1,10 +1,11 @@
 namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions.Voucher;
 
 using Maui.UIServices;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Services;
-using Shared.Logger;
 using UIServices;
+using ViewModels;
 using ViewModels.Transactions;
 using Xunit;
 

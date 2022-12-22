@@ -6,6 +6,7 @@ using System.Threading;
 using Maui.UIServices;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging.Abstractions;
 using Models;
 using Moq;
 using RequestHandlers;
@@ -40,10 +41,10 @@ public class LoginPageViewModelTests
         this.ApplicationInfoService = new Mock<IApplicationInfoService>();
         this.DialogService = new Mock<IDialogService>();
 
-        this.ViewModel = new LoginPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object,
-                                                              this.DeviceService.Object, this.ApplicationInfoService.Object,
-                                                              this.DialogService.Object);
-        Logger.Initialise(NullLogger.Instance);
+        //this.ViewModel = new LoginPageViewModel(NullLogger.Instance, this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object,
+        //                                        this.DeviceService.Object, this.ApplicationInfoService.Object,
+        //                                        this.DialogService.Object);
+        //Logger.Initialise(NullLogger.Instance);
     }
 
     [Fact]

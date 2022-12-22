@@ -9,11 +9,12 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Support
     using Xunit;
     using TransactionMobile.Maui.BusinessLogic.ViewModels.Support;
     using TransactionMobile.Maui.Database;
-    using Shared.Logger;
     using System.Collections.Generic;
     using System.Threading;
+    using Microsoft.Extensions.Logging.Abstractions;
     using Requests;
     using Services;
+    using ViewModels;
 
     public class SupportPageViewModelTests
     {

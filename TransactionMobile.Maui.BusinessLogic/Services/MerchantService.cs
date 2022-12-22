@@ -5,7 +5,7 @@ using EstateManagement.DataTransferObjects.Responses;
 using Models;
 using Newtonsoft.Json;
 using RequestHandlers;
-using Shared.Logger;
+using ViewModels;
 
 public class MerchantService : IMerchantService
 {

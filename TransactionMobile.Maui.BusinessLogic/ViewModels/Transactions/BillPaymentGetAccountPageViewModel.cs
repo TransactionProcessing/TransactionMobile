@@ -8,7 +8,6 @@ using MvvmHelpers.Commands;
 using RequestHandlers;
 using Requests;
 using Services;
-using Shared.Logger;
 using UIServices;
 
 public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel, IQueryAttributable

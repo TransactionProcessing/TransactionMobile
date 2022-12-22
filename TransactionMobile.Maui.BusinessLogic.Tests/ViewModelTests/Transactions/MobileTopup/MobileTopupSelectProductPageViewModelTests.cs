@@ -12,7 +12,6 @@ using Moq;
 using RequestHandlers;
 using Requests;
 using Services;
-using Shared.Logger;
 using Shouldly;
 using UIServices;
 using ViewModels.Transactions;

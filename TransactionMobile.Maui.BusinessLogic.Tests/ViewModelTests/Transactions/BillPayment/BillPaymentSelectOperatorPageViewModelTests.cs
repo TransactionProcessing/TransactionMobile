@@ -14,7 +14,6 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
     using RequestHandlers;
     using Requests;
     using Services;
-    using Shared.Logger;
     using Shouldly;
     using UIServices;
     using ViewModels.Transactions;

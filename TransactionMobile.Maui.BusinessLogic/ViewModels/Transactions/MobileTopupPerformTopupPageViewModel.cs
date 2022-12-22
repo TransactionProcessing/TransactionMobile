@@ -94,19 +94,19 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
 
     private void CustomerEmailAddressEntryCompletedCommandExecute()
     {
-        Shared.Logger.Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
+        Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
         this.OnCustomerEmailAddressEntryCompleted();
     }
 
     private void CustomerMobileNumberEntryCompletedCommandExecute()
     {
-        Shared.Logger.Logger.LogInformation("CustomerMobileNumberEntryCompletedCommandExecute called");
+        Logger.LogInformation("CustomerMobileNumberEntryCompletedCommandExecute called");
         this.OnCustomerMobileNumberEntryCompleted();
     }
 
     private async Task PerformTopupCommandExecute()
     {
-        Shared.Logger.Logger.LogInformation("PerformTopupCommandExecute called");
+        Logger.LogInformation("PerformTopupCommandExecute called");
         // Create Command and Send
         PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(DateTime.Now,
                                                                              this.ProductDetails.ContractId,
@@ -130,7 +130,7 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
 
     private void TopupAmountEntryCompletedCommandExecute()
     {
-        Shared.Logger.Logger.LogInformation("TopupAmountEntryCompletedCommandExecute called");
+        Logger.LogInformation("TopupAmountEntryCompletedCommandExecute called");
         this.OnTopupAmountEntryCompleted();
     }
 

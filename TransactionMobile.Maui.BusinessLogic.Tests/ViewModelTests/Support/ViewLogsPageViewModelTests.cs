@@ -2,10 +2,11 @@
 
 using Maui.UIServices;
 using MediatR;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Services;
-using Shared.Logger;
 using UIServices;
+using ViewModels;
 using ViewModels.Support;
 using Xunit;
 

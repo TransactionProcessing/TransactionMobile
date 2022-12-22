@@ -9,7 +9,6 @@ using Moq;
 using RequestHandlers;
 using Requests;
 using Services;
-using Shared.Logger;
 using Shouldly;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 using UIServices;

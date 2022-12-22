@@ -8,9 +8,9 @@
     using Models;
     using Newtonsoft.Json;
     using RequestHandlers;
-    using Shared.Logger;
     using TransactionProcessorACL.DataTransferObjects;
     using TransactionProcessorACL.DataTransferObjects.Responses;
+    using ViewModels;
 
     public class TransactionService : ClientProxyBase, ITransactionService
     {

@@ -11,6 +11,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
     using Models;
     using Newtonsoft.Json;
     using RequestHandlers;
+    using ViewModels;
 
     public class ConfigurationService : ClientProxyBase, IConfigurationService
     {
@@ -54,8 +55,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
             try
             {
-                Shared.Logger.Logger.LogInformation($"About to request configuration for device identifier {deviceIdentifier}");
-                Shared.Logger.Logger.LogDebug($"Configuration Request details: Uri {requestUri}");
+                Logger.LogInformation($"About to request configuration for device identifier {deviceIdentifier}");
+                Logger.LogDebug($"Configuration Request details: Uri {requestUri}");
 
                 // Make the Http Call here
                 HttpResponseMessage httpResponse = await this.HttpClient.GetAsync(requestUri, cancellationToken);
@@ -94,8 +95,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                                                                             iOSKey = apiResponse.ApplicationCentreConfiguration.IosKey
                                                                         };
 
-                Shared.Logger.Logger.LogInformation($"Configuration for device identifier {deviceIdentifier} requested successfully");
-                Shared.Logger.Logger.LogDebug($"Configuration Response: [{content}]");
+                Logger.LogInformation($"Configuration for device identifier {deviceIdentifier} requested successfully");
+                Logger.LogDebug($"Configuration Response: [{content}]");
 
                 return new SuccessResult<Configuration>(response);
             }
@@ -103,7 +104,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             {
                 // An exception has occurred, add some additional information to the message
                 Exception exception = new Exception($"Error getting configuration for device Id {deviceIdentifier}.", ex);
-                Shared.Logger.Logger.LogError(exception);
+                Logger.LogError(exception);
 
                 return new ErrorResult<Configuration>("Error getting configuration data");
             }
