@@ -85,7 +85,7 @@ Background:
 @PRTest
 Scenario: Logout
 	Given I am on the Login Screen
-	And my device is registered
+	#And my device is registered
 	When I enter 'merchantuser@testmerchant1.co.uk' as the Email Address
 	And I enter '123456' as the Password
 	And I tap on Login
