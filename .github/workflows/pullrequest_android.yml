@@ -110,8 +110,9 @@ jobs:
           name: tracelogsios
           path: /Users/runner/txnproc/trace/
 
-      #- uses: actions/upload-artifact@v2
-      #  if: ${{ failure() }}
-      #  with:
-      #    name: tracelogs
-      #    path: /home/txnproc/trace/   
+      - name: Save logcat output
+        uses: actions/upload-artifact@master
+        if: failure()
+        with:
+          name: logcat
+          path: artifacts/logcat.log 
