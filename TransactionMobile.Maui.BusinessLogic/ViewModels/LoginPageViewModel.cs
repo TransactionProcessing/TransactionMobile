@@ -18,6 +18,8 @@
 
     public class LoginPageViewModel : ExtendedBaseViewModel
     {
+        private readonly ILogger<LoginPageViewModel> Logger;
+
         private readonly INavigationService NavigationService;
 
         private readonly IApplicationCache ApplicationCache;
@@ -43,6 +45,7 @@
                                   IDeviceService deviceService,IApplicationInfoService applicationInfoService,
                                   IDialogService dialogService) : base(applicationCache,dialogService,navigationService)
         {
+            this.Logger = logger;
             this.NavigationService = navigationService;
             this.ApplicationCache = applicationCache;
             this.DeviceService = deviceService;
@@ -50,7 +53,6 @@
             this.DialogService = dialogService;
             this.LoginCommand = new AsyncCommand(this.LoginCommandExecute);
             this.Mediator = mediator;
-            Logger.Initialise(logger);
         }
         
         #endregion
@@ -203,7 +205,7 @@
                 await this.NavigationService.GoToHome();
             }
             catch(ApplicationException aex) {
-                Logger.LogError(aex);
+                Logger.LogError("Error during logon", aex);
                 await this.DialogService.ShowWarningToast(aex.Message);
             }
         }
@@ -291,7 +293,7 @@
         /// <param name="exception">The exception.</param>
         public static void LogCritical(Exception exception)
         {
-            Logger.LoggerObject.LogCritical("", exception);
+            Logger.LoggerObject.LogCritical(exception,"");
         }
 
         /// <summary>
@@ -313,7 +315,7 @@
         {
             Logger.ValidateLoggerObject();
 
-            Logger.LoggerObject.LogError("", exception);
+            Logger.LoggerObject.LogError(exception,"");
         }
 
         /// <summary>

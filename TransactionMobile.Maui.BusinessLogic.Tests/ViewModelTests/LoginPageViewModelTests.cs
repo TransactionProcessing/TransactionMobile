@@ -11,7 +11,6 @@ using Models;
 using Moq;
 using RequestHandlers;
 using Requests;
-using Shared.Logger;
 using TransactionMobile.Maui.BusinessLogic.Services;
 using TransactionMobile.Maui.Database;
 using UIServices;
