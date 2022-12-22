@@ -20,9 +20,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Get Public IP
-        id: ip
-        uses: haythem/public-ip@v1.3
+      - name: Get IP
+        run: ipconfig getifaddr en0
 
       - name: Cache Public IP
         run: echo "ENV_IPADDRESS=${{ steps.ip.outputs.ipv4 }}" >> $GITHUB_ENV
