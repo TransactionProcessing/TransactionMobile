@@ -24,7 +24,7 @@ jobs:
         run: ipconfig getifaddr en0
 
       - name: Cache Public IP
-        run: echo "ENV_IPADDRESS=ipconfig getifaddr en0" >> $GITHUB_ENV
+        run: echo "ENV_IPADDRESS=$(ipconfig getifaddr en0)" >> $GITHUB_ENV
 
       - name: Test IP
         run: echo $ENV_IPADDRESS
