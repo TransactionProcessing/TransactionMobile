@@ -1,7 +1,9 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions
 {
     using System.Windows.Input;
+    using Logging;
     using Maui.UIServices;
+    using Microsoft.Extensions.Logging;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
     using Services;
@@ -11,11 +13,14 @@
     {
         private readonly INavigationService NavigationService;
 
+        private readonly ILoggerService Logger;
+
         #region Constructors
 
-        public VoucherIssueSuccessPageViewModel(INavigationService navigationService)
+        public VoucherIssueSuccessPageViewModel(INavigationService navigationService, ILoggerService logger)
         {
             this.NavigationService = navigationService;
+            this.Logger = logger;
             this.CompletedCommand = new AsyncCommand(this.CompletedCommandExecute);
             this.Title = "Voucher Issue Successful";
         }

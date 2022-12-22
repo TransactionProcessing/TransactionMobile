@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Admin
 {
     using System.Windows.Input;
+    using Logging;
     using Maui.UIServices;
     using MediatR;
     using Microsoft.Extensions.Caching.Memory;
@@ -25,8 +26,8 @@
         public AdminPageViewModel(IMediator mediator, INavigationService navigationService,
                                   IApplicationCache applicationCache,
                                   IDialogService dialogService,
-                                  IDeviceService deviceService, IApplicationInfoService applicationInfoService) :
-            base(applicationCache,dialogService, navigationService)
+                                  IDeviceService deviceService, IApplicationInfoService applicationInfoService, ILoggerService logger) :
+            base(applicationCache,dialogService, navigationService,logger)
         {
             this.Mediator = mediator;
             this.DeviceService = deviceService;

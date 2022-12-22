@@ -3,6 +3,7 @@
 using System.Web;
 using System.Windows.Input;
 using Common;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Microsoft.Maui.Controls;
@@ -31,7 +32,8 @@ public class MobileTopupSelectProductPageViewModel : ExtendedBaseViewModel, IQue
     }
 
     public MobileTopupSelectProductPageViewModel(IMediator mediator, INavigationService navigationService,
-                                                 IApplicationCache applicationCache, IDialogService dialogService) :base(applicationCache, dialogService, navigationService)
+                                                 IApplicationCache applicationCache, IDialogService dialogService
+        , ILoggerService logger) :base(applicationCache, dialogService, navigationService, logger)
     {
         this.Mediator = mediator;
         this.ProductSelectedCommand = new AsyncCommand<ItemSelected<ContractProductModel>>(this.ProductSelectedCommandExecute);

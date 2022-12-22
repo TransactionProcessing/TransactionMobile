@@ -3,6 +3,7 @@
 using System.Web;
 using System.Windows.Input;
 using Common;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using MvvmHelpers;
@@ -41,7 +42,8 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
     public VoucherPerformIssuePageViewModel(INavigationService navigationService,
                                             IApplicationCache applicationCache,
                                             IDialogService dialogService,
-                                            IMediator mediator) : base(applicationCache, dialogService, navigationService)
+                                            IMediator mediator,
+                                            ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger)
     {
         this.Mediator = mediator;
         this.IssueVoucherCommand = new AsyncCommand(this.IssueVoucherCommandExecute);

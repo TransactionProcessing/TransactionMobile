@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Logging;
 using Maui.UIServices;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Models;
 using Moq;
@@ -29,15 +31,16 @@ public class BillPaymentGetAccountPageViewModelTests
     private readonly Mock<IDialogService> DialogSevice;
 
     private readonly BillPaymentGetAccountPageViewModel ViewModel;
-
+    private readonly Mock<ILoggerService> LoggerService;
     public BillPaymentGetAccountPageViewModelTests() {
         this.Mediator = new Mock<IMediator>();
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
-        this.ViewModel = new BillPaymentGetAccountPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object, this.Mediator.Object);
-        Logger.Initialise(NullLogger.Instance);
+        this.LoggerService = new Mock<ILoggerService>();
+        this.ViewModel = new BillPaymentGetAccountPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object, this.Mediator.Object, this.LoggerService.Object);
     }
+
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_ApplyQueryAttributes_QueryAttributesApplied()
     {
@@ -56,14 +59,12 @@ public class BillPaymentGetAccountPageViewModelTests
     {
         this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentGetAccountRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentGetAccountResponseModel>(TestData.PerformBillPaymentGetAccountResponseModel));
         
-        BillPaymentGetAccountPageViewModel viewModel = new BillPaymentGetAccountPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object, this.Mediator.Object);
-
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
+        this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
                                                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                                                       });
-        viewModel.CustomerAccountNumber = TestData.CustomerAccountNumber;
+        this.ViewModel.CustomerAccountNumber = TestData.CustomerAccountNumber;
         
-        viewModel.GetAccountCommand.Execute(null);
+        this.ViewModel.GetAccountCommand.Execute(null);
         
         this.NavigationService.Verify(n => n.GoToBillPaymentPayBillPage(It.IsAny<ProductDetails>(), It.IsAny<BillDetails>()), Times.Once);
     }

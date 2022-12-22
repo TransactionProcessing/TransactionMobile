@@ -3,6 +3,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -26,7 +27,7 @@ public class VoucherPerformIssuePageViewModelTests
     private readonly Mock<IApplicationCache> ApplicationCache;
 
     private readonly Mock<IDialogService> DialogService;
-
+    private readonly Mock<ILoggerService> LoggerService;
     private readonly VoucherPerformIssuePageViewModel ViewModel;
 
     public VoucherPerformIssuePageViewModelTests() {
@@ -34,8 +35,9 @@ public class VoucherPerformIssuePageViewModelTests
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogService = new Mock<IDialogService>();
-        this.ViewModel = new VoucherPerformIssuePageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogService.Object, this.Mediator.Object);
-        Logger.Initialise(NullLogger.Instance);
+        this.LoggerService=new Mock<ILoggerService>();
+        this.ViewModel = new VoucherPerformIssuePageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogService.Object, this.Mediator.Object,
+                                                              this.LoggerService.Object);
     }
 
     [Fact]

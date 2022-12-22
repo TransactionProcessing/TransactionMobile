@@ -1,5 +1,6 @@
 ﻿namespace TransactionMobile.Maui.UIServices;
 
+using BusinessLogic.Logging;
 using BusinessLogic.ViewModels;
 using BusinessLogic.ViewModels.MyAccount;
 using BusinessLogic.ViewModels.Transactions;
@@ -13,8 +14,13 @@ using Pages.Transactions.Voucher;
 
 public class ShellNavigationService : INavigationService
 {
+    private readonly ILoggerService Logger;
+
     #region Methods
 
+    public ShellNavigationService(ILoggerService logger) {
+        this.Logger = logger;
+    }
     public async Task GoBack() {
         await Shell.Current.Navigation.PopAsync();
     }
@@ -161,8 +167,7 @@ public class ShellNavigationService : INavigationService
             await Shell.Current.GoToAsync(route);
             }
         catch(Exception e) {
-            Exception ex = new Exception("Error navigating to {route}", e);
-            Logger.LogError(ex);
+            Logger.LogError("Error navigating to {route}", e);
         }
     }
 
@@ -175,8 +180,7 @@ public class ShellNavigationService : INavigationService
         }
         catch (Exception e)
         {
-            Exception ex = new Exception("Error navigating to {route}", e);
-            Logger.LogError(ex);
+            Logger.LogError("Error navigating to {route}", e);
         }
     }
 
@@ -188,8 +192,7 @@ public class ShellNavigationService : INavigationService
         }
         catch (Exception e)
         {
-            //Exception ex = new Exception("Error navigating to {route}", e);
-            Logger.LogError(e);
+            Logger.LogError("Error navigating to {route}", e);
         }
     }
 

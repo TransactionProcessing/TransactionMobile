@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions;
 
 using System.Windows.Input;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Models;
@@ -25,7 +26,7 @@ public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel, IQueryA
     public BillPaymentGetAccountPageViewModel(INavigationService navigationService,
                                               IApplicationCache applicationCache,
                                               IDialogService dialogService,
-                                              IMediator mediator) : base(applicationCache, dialogService, navigationService) {
+                                              IMediator mediator, ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger) {
         this.Mediator = mediator;
         this.GetAccountCommand = new AsyncCommand(this.GetAccountCommandExecute);
         this.Title = "Get Customer Account";

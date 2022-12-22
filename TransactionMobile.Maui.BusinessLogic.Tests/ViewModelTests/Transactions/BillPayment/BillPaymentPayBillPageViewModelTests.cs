@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Logging;
 using Maui.UIServices;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using RequestHandlers;
@@ -29,14 +31,14 @@ public class BillPaymentPayBillPageViewModelTests
     private readonly Mock<IDialogService> DialogSevice;
 
     private readonly BillPaymentPayBillPageViewModel ViewModel;
-
+    private readonly Mock<ILoggerService> LoggerService;
     public BillPaymentPayBillPageViewModelTests() {
         this.Mediator = new Mock<IMediator>();
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
-        this.ViewModel = new BillPaymentPayBillPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object, this.Mediator.Object);
-        Logger.Initialise(NullLogger.Instance);
+        this.LoggerService= new Mock<ILoggerService>();
+        this.ViewModel = new BillPaymentPayBillPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object, this.Mediator.Object, this.LoggerService.Object);
     }
 
     [Fact]

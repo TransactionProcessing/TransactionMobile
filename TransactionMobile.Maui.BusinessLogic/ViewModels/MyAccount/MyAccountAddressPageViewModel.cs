@@ -1,5 +1,6 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.MyAccount;
 
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Models;
@@ -21,7 +22,7 @@ public class MyAccountAddressPageViewModel : ExtendedBaseViewModel
     public MyAccountAddressPageViewModel(INavigationService navigationService,
                                          IApplicationCache applicationCache,
                                          IDialogService dialogService,
-                                         IMediator mediator) : base(applicationCache, dialogService, navigationService) {
+                                         IMediator mediator, ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger) {
         this.Mediator = mediator;
         this.Title = "My Addresses";
     }

@@ -11,6 +11,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Support
     using TransactionMobile.Maui.Database;
     using System.Collections.Generic;
     using System.Threading;
+    using Logging;
     using Microsoft.Extensions.Logging.Abstractions;
     using Requests;
     using Services;
@@ -33,7 +34,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Support
         private readonly Mock<IDialogService> DialogService;
 
         private readonly SupportPageViewModel ViewModel;
-
+        private readonly Mock<ILoggerService> LoggerService;
         public SupportPageViewModelTests() {
             this.NavigationService = new Mock<INavigationService>();
             this.DatabaseContext = new Mock<IDatabaseContext>();
@@ -42,14 +43,15 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Support
             this.ApplicationInfoService = new Mock<IApplicationInfoService>();
             this.ApplicationCache = new Mock<IApplicationCache>();
             this.DialogService = new Mock<IDialogService>();
-            Logger.Initialise(NullLogger.Instance);
+            this.LoggerService = new Mock<ILoggerService>();
             this.ViewModel = new SupportPageViewModel(this.DeviceService.Object,
                                                       this.ApplicationInfoService.Object,
                                                       this.DatabaseContext.Object,
                                                       this.Mediator.Object,
                                                       this.NavigationService.Object,
                                                       this.ApplicationCache.Object,
-                                                      this.DialogService.Object);
+                                                      this.DialogService.Object,
+                                                      this.LoggerService.Object);
         }
 
         [Fact]

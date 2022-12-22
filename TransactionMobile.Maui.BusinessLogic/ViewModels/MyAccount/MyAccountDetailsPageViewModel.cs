@@ -1,5 +1,6 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.MyAccount;
 
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Models;
@@ -29,7 +30,8 @@ public class MyAccountDetailsPageViewModel : ExtendedBaseViewModel
 
     public MyAccountDetailsPageViewModel(INavigationService navigationService,
                                          IApplicationCache applicationCache,
-                                         IDialogService dialogService) : base(applicationCache, dialogService, navigationService) {
+                                         IDialogService dialogService,
+                                         ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger) {
         this.Title = "My Details";
     }
 

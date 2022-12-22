@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions.Admin
 {
+    using Logging;
     using Maui.UIServices;
     using MediatR;
     using Microsoft.Extensions.Caching.Memory;
@@ -29,6 +30,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
 
         private readonly Mock<IDialogService> DialogService;
 
+        private readonly Mock<ILoggerService> LoggerService;
+
         private readonly AdminPageViewModel ViewModel;
         public AdminPageViewModelTests() {
             this.NavigationService = new Mock<INavigationService>();
@@ -37,12 +40,14 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
             this.ApplicationInfoService = new Mock<IApplicationInfoService>();
             this.DialogService = new Mock<IDialogService>();
             this.ApplicationCache = new Mock<IApplicationCache>();
+            this.LoggerService = new Mock<ILoggerService>();
             this.ViewModel = new AdminPageViewModel(this.Mediator.Object,
                                                     this.NavigationService.Object,
                                                     this.ApplicationCache.Object,
                                                     this.DialogService.Object,
                                                     this.DeviceService.Object,
-                                                    this.ApplicationInfoService.Object);
+                                                    this.ApplicationInfoService.Object,
+                                                    this.LoggerService.Object);
         }
 
         [Fact]

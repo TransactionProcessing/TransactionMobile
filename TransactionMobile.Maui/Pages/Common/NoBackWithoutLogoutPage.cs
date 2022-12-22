@@ -43,7 +43,7 @@ public class NoBackWithoutLogoutPage : ContentPage
         Boolean leave = await dialogService.ShowDialog("Title", "Logout Message", "yes", "no");
         if (leave)
         {
-            Logger.LogInformation("LogoutCommand called");
+            //Logger.LogInformation("LogoutCommand called");
             applicationCache.SetAccessToken(null);
 
             await navigationService.GoToLoginPage();

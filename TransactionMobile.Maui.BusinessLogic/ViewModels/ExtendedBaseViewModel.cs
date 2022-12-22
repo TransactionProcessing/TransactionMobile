@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels;
 
 using System.Windows.Input;
+using Logging;
 using Maui.UIServices;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
@@ -21,14 +22,18 @@ public class ExtendedBaseViewModel : BaseViewModel
 
     protected readonly INavigationService NavigationService;
 
+    protected readonly ILoggerService Logger;
+
     #endregion
 
     #region Constructors
 
     public ExtendedBaseViewModel(IApplicationCache applicationCache,
                                  IDialogService dialogService,
-                                 INavigationService navigationService) {
+                                 INavigationService navigationService,
+                                 ILoggerService logger) {
         this.NavigationService = navigationService;
+        this.Logger = logger;
         this.ApplicationCache = applicationCache;
         this.DialogService = dialogService;
         this.BackButtonCommand = new AsyncCommand(this.BackButtonCommandExecute);

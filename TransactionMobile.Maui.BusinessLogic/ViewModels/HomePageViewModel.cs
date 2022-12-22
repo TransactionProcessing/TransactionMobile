@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels;
 
 using System.Runtime.CompilerServices;
+using Logging;
 using Maui.UIServices;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Distribute;
@@ -14,7 +15,8 @@ public class HomePageViewModel : ExtendedBaseViewModel
     
     public HomePageViewModel(IApplicationCache applicationCache,
                              IDialogService dialogService,
-                             INavigationService navigationService) :base(applicationCache,dialogService, navigationService)
+                             INavigationService navigationService,
+                             ILoggerService logger) :base(applicationCache,dialogService, navigationService, logger)
     {
         
     }
@@ -52,7 +54,7 @@ public class HomePageViewModel : ExtendedBaseViewModel
             }
         }
         catch(Exception ex) {
-            Logger.LogError(ex);
+            Logger.LogError("Error during initialise", ex);
         }
     }
 

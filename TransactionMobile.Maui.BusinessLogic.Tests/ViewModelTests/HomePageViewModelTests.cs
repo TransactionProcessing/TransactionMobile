@@ -1,6 +1,7 @@
 namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests;
 
 using System;
+using Logging;
 using Maui.UIServices;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
@@ -17,12 +18,13 @@ public class HomePageViewModelTests
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
         Mock<IDialogService> dialogService = new Mock<IDialogService>();
+        Mock<ILoggerService> loggerService = new Mock<ILoggerService>();
         dialogService.Setup(d => d.ShowDialog(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>())).ReturnsAsync(true);
         HomePageViewModel viewModel = new HomePageViewModel(applicationCache.Object,
                                                             dialogService.Object,
-                                                            navigationService.Object);
-        Logger.Initialise(NullLogger.Instance);
-
+                                                            navigationService.Object,
+                                                            loggerService.Object);
+        
         viewModel.BackButtonCommand.Execute(null);
 
         navigationService.Verify(n => n.GoToLoginPage(), Times.Once);
@@ -38,12 +40,12 @@ public class HomePageViewModelTests
         Mock<INavigationService> navigationService = new Mock<INavigationService>();
         Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
         Mock<IDialogService> dialogService = new Mock<IDialogService>();
+        Mock<ILoggerService> loggerService = new Mock<ILoggerService>();
         dialogService.Setup(d => d.ShowDialog(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>())).ReturnsAsync(false);
         HomePageViewModel viewModel = new HomePageViewModel(applicationCache.Object,
                                                             dialogService.Object,
-                                                            navigationService.Object);
-        Logger.Initialise(NullLogger.Instance);
-
+                                                            navigationService.Object,
+                                                            loggerService.Object);
         viewModel.BackButtonCommand.Execute(null);
 
         navigationService.VerifyNoOtherCalls();

@@ -3,6 +3,7 @@
 using System.Web;
 using System.Windows.Input;
 using Common;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Microsoft.Maui.Controls;
@@ -42,7 +43,7 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
     public MobileTopupPerformTopupPageViewModel(IMediator mediator,
                                                 INavigationService navigationService,
         IApplicationCache applicationCache,
-                      IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
+                      IDialogService dialogService, ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger)
     {
         this.Mediator = mediator;
         this.PerformTopupCommand = new AsyncCommand(this.PerformTopupCommandExecute);

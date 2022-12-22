@@ -2,6 +2,7 @@
 
 namespace TransactionMobile.Maui;
 
+using BusinessLogic.Logging;
 using BusinessLogic.UIServices;
 using CommunityToolkit.Maui;
 using MetroLog.MicrosoftExtensions;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using UIServices;
 using TransactionMobile.Maui.BusinessLogic.Services;
 using TransactionMobile.Maui.Database;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 public static class MauiProgram
 {
@@ -32,7 +34,12 @@ public static class MauiProgram
 			.Services.AddTransient<IDeviceService, DeviceService>()
 			   .AddMemoryCache();
 
-        Builder.Logging.AddConsoleLogger(_ => { });
+        Builder.Logging.AddConsoleLogger(opt => {
+											 opt.MinLevel = LogLevel.Debug;
+											 opt.MaxLevel = LogLevel.Critical;
+                                         });
+        
+        Builder.Services.AddSingleton<ILoggerService, MetroLogLoggerService>();
 
 		Container = Builder.Build();
 

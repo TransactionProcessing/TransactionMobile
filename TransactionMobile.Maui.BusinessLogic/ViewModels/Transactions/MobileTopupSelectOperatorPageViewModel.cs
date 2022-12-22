@@ -2,6 +2,7 @@
 
 using System.Windows.Input;
 using Common;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Models;
@@ -23,7 +24,8 @@ public class MobileTopupSelectOperatorPageViewModel : ExtendedBaseViewModel
     #region Constructors
 
     public MobileTopupSelectOperatorPageViewModel(IMediator mediator, INavigationService navigationService, IDialogService dialogService,
-                                                  IApplicationCache applicationCache): base(applicationCache,dialogService, navigationService)
+                                                  IApplicationCache applicationCache,
+                                                  ILoggerService logger) : base(applicationCache,dialogService, navigationService, logger)
     {
         this.Mediator = mediator;
         this.OperatorSelectedCommand = new AsyncCommand<ItemSelected<ContractOperatorModel>>(this.OperatorSelectedCommandExecute);

@@ -4,6 +4,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Common;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
@@ -32,17 +33,18 @@ public class MyAccountPageViewModelTests
     private Mock<IMediator> mediator;
 
     private MyAccountPageViewModel viewModel;
+    private readonly Mock<ILoggerService> LoggerService;
 
     public MyAccountPageViewModelTests() {
-        Logger.Initialise(NullLogger.Instance);
         navigationService = new Mock<INavigationService>();
         applicationCache = new Mock<IApplicationCache>();
         dialogService = new Mock<IDialogService>();
         mediator = new Mock<IMediator>();
-
+        LoggerService = new Mock<ILoggerService>();
         viewModel = new MyAccountPageViewModel(navigationService.Object, applicationCache.Object,
                                                                       dialogService.Object,
-                                                                      mediator.Object);
+                                                                      mediator.Object,
+                                               this.LoggerService.Object);
     }
 
     [Fact]

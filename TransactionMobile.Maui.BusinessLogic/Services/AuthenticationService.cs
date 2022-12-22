@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.BusinessLogic.Services
 {
+    using Logging;
     using Microsoft.Extensions.Caching.Memory;
     using Models;
     using Newtonsoft.Json;
@@ -16,12 +17,15 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
     public class AuthenticationService : IAuthenticationService
     {
+        private readonly ILoggerService Logger;
+
         private readonly ISecurityServiceClient SecurityServiceClient;
 
         private readonly IApplicationCache ApplicationCache;
 
-        public AuthenticationService(ISecurityServiceClient securityServiceClient, IApplicationCache applicationCache)
+        public AuthenticationService(ILoggerService logger, ISecurityServiceClient securityServiceClient, IApplicationCache applicationCache)
         {
+            this.Logger = logger;
             this.SecurityServiceClient = securityServiceClient;
             this.ApplicationCache = applicationCache;
         }
@@ -55,7 +59,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             }
             catch(Exception ex)
             {
-                Logger.LogError(new Exception($"Error getting Token", ex));
+                Logger.LogError($"Error getting Token", ex);
                 return new ErrorResult<TokenResponseModel>("Error getting Token");
             }
 
@@ -85,7 +89,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             }
             catch (Exception ex)
             {
-                Logger.LogError(new Exception($"Error refreshing Token", ex));
+                Logger.LogError($"Error refreshing Token", ex);
                 return new ErrorResult<TokenResponseModel>("Error getting Token");
             }
         }

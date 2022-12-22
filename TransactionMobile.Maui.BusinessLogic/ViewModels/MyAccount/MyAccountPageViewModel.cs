@@ -2,6 +2,7 @@
 {
     using System.Windows.Input;
     using Common;
+    using Logging;
     using Maui.UIServices;
     using MediatR;
     using Microsoft.Extensions.Caching.Memory;
@@ -31,7 +32,8 @@
         public MyAccountPageViewModel(INavigationService navigationService,
                                       IApplicationCache applicationCache,
                                       IDialogService dialogService,
-                                      IMediator mediator) : base(applicationCache, dialogService, navigationService) {
+                                      IMediator mediator,
+                                      ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger) {
             this.Mediator = mediator;
             this.OptionSelectedCommand = new AsyncCommand<ItemSelected<ListViewItem>>(this.OptionSelectedCommandExecute);
             this.Title = "My Account";

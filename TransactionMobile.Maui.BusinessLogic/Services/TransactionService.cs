@@ -5,6 +5,7 @@
     using System.Text;
     using ClientProxyBase;
     using Common;
+    using Logging;
     using Models;
     using Newtonsoft.Json;
     using RequestHandlers;
@@ -18,15 +19,19 @@
 
         private readonly IApplicationCache ApplicationCache;
 
+        private readonly ILoggerService Logger;
+
         private readonly Func<String, String> BaseAddressResolver;
 
         #endregion
 
         #region Constructors
 
-        public TransactionService(Func<String, String> baseAddressResolver,
+        public TransactionService(ILoggerService logger,
+                                  Func<String, String> baseAddressResolver,
                                   HttpClient httpClient,
                                   IApplicationCache applicationCache) : base(httpClient) {
+            this.Logger = logger;
             this.BaseAddressResolver = baseAddressResolver;
             this.ApplicationCache = applicationCache;
 
@@ -193,9 +198,7 @@
             }
             catch(Exception ex) {
                 // An exception has occurred, add some additional information to the message
-                ApplicationException exception = new ApplicationException("Error posting transaction.", ex);
-
-                Logger.LogError(exception);
+                Logger.LogError("Error posting transaction.", ex);
 
                 return new ErrorResult<TResponse>("Error posting transaction");
             }

@@ -2,6 +2,7 @@
 
 using EstateManagement.Client;
 using EstateManagement.DataTransferObjects.Responses;
+using Logging;
 using Models;
 using Newtonsoft.Json;
 using RequestHandlers;
@@ -13,14 +14,18 @@ public class MerchantService : IMerchantService
 
     private readonly IApplicationCache ApplicationCache;
 
+    private readonly ILoggerService Logger;
+
     private readonly IEstateClient EstateClient;
 
     #endregion
 
     #region Constructors
 
-    public MerchantService(IEstateClient estateClient,
+    public MerchantService(ILoggerService logger,
+        IEstateClient estateClient,
                            IApplicationCache applicationCache) {
+        this.Logger = logger;
         this.EstateClient = estateClient;
         this.ApplicationCache = applicationCache;
     }
@@ -64,7 +69,7 @@ public class MerchantService : IMerchantService
             return new SuccessResult<List<ContractProductModel>>(result);
         }
         catch(Exception ex) {
-            Logger.LogError(ex);
+            Logger.LogError("Error getting contract products",ex);
 
             return new ErrorResult<List<ContractProductModel>>("Error getting contract products");
         }
@@ -92,7 +97,7 @@ public class MerchantService : IMerchantService
             return new SuccessResult<Decimal>(0);
         }
         catch(Exception ex) {
-            Logger.LogError(ex);
+            Logger.LogError("Error getting merchant balance",ex);
             return new ErrorResult<Decimal>("Error getting merchant balance");
         }
     }
@@ -137,7 +142,7 @@ public class MerchantService : IMerchantService
             return new SuccessResult<MerchantDetailsModel>(model);
         }
         catch(Exception ex) {
-            Logger.LogError(ex);
+            Logger.LogError("Error getting merchant details",ex);
             return new ErrorResult<MerchantDetailsModel>("Error getting merchant details");
         }
     }

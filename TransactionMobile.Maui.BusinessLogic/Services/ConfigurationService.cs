@@ -8,18 +8,24 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 {
     using System.Net;
     using ClientProxyBase;
+    using Logging;
+    using Microsoft.Extensions.Logging;
     using Models;
     using Newtonsoft.Json;
     using RequestHandlers;
     using ViewModels;
+    using LogLevel = Models.LogLevel;
 
     public class ConfigurationService : ClientProxyBase, IConfigurationService
     {
+        private readonly ILoggerService Logger;
+
         private readonly Func<String, String> BaseAddressResolver;
 
-        public ConfigurationService(Func<String, String> baseAddressResolver,
-                                    HttpClient httpClient) : base(httpClient)
-        {
+        public ConfigurationService(ILoggerService logger, 
+                                    Func<String, String> baseAddressResolver,
+                                    HttpClient httpClient) : base(httpClient) {
+            this.Logger = logger;
             this.BaseAddressResolver = baseAddressResolver;
         }
 
@@ -103,8 +109,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             catch (Exception ex)
             {
                 // An exception has occurred, add some additional information to the message
-                Exception exception = new Exception($"Error getting configuration for device Id {deviceIdentifier}.", ex);
-                Logger.LogError(exception);
+                Logger.LogError($"Error getting configuration for device Id {deviceIdentifier}.",ex);
 
                 return new ErrorResult<Configuration>("Error getting configuration data");
             }

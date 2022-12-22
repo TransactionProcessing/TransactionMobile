@@ -3,6 +3,7 @@
     using System.Text;
     using System.Windows.Input;
     using Database;
+    using Logging;
     using Maui.UIServices;
     using MediatR;
     using MvvmHelpers;
@@ -33,7 +34,7 @@
                                     IMediator mediator,
                                     INavigationService navigationService,
                                     IApplicationCache applicationCache,
-                                    IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
+                                    IDialogService dialogService, ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger)
         {
             this.DeviceService = deviceService;
             this.ApplicationInfoService = applicationInfoService;

@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions
 {
     using System.Windows.Input;
+    using Logging;
     using Maui.UIServices;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
@@ -11,11 +12,14 @@
     {
         private readonly INavigationService NavigationService;
 
+        private readonly ILoggerService Logger;
+
         #region Constructors
 
-        public MobileTopupSuccessPageViewModel(INavigationService navigationService)
+        public MobileTopupSuccessPageViewModel(INavigationService navigationService, ILoggerService logger)
         {
             this.NavigationService = navigationService;
+            this.Logger = logger;
             this.CompletedCommand = new AsyncCommand(this.CompletedCommandExecute);
             this.Title = "Mobile Topup Successful";
         }

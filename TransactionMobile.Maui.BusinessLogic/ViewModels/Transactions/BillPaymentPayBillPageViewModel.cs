@@ -2,6 +2,7 @@
 
 using System.Windows.Input;
 using Common;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using MvvmHelpers.Commands;
@@ -38,7 +39,8 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
     public BillPaymentPayBillPageViewModel(INavigationService navigationService,
                                            IApplicationCache applicationCache,
                                            IDialogService dialogService,
-                                           IMediator mediator) : base(applicationCache, dialogService, navigationService)
+                                           IMediator mediator,
+                                           ILoggerService logger) : base(applicationCache, dialogService, navigationService,logger)
     {
         this.Mediator = mediator;
         this.MakeBillPaymentCommand = new AsyncCommand(this.MakeBillPaymentCommandExecute);

@@ -2,6 +2,7 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -22,16 +23,17 @@ public class MyAccountContactPageViewModelTests
     private readonly Mock<IDialogService> DialogService;
 
     private readonly MyAccountContactPageViewModel ViewModel;
+    private readonly Mock<ILoggerService> LoggerService;
     public MyAccountContactPageViewModelTests() {
-        Logger.Initialise(NullLogger.Instance);
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         
         this.DialogService = new Mock<IDialogService>();
-
+        this.LoggerService = new Mock<ILoggerService>();
         this.ViewModel = new MyAccountContactPageViewModel(this.NavigationService.Object,
                                                            this.ApplicationCache.Object,
-                                                           this.DialogService.Object);
+                                                           this.DialogService.Object,
+                                                           this.LoggerService.Object);
     }
 
     [Fact]

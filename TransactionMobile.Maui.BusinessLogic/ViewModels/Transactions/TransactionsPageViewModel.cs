@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions
 {
     using System.Windows.Input;
+    using Logging;
     using Maui.UIServices;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
@@ -13,7 +14,7 @@
 
         public TransactionsPageViewModel(INavigationService navigationService,
                                          IApplicationCache applicationCache,
-                                         IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
+                                         IDialogService dialogService, ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger)
         {
             this.MobileTopupCommand = new AsyncCommand(this.MobileTopupCommandExecute);
             this.MobileWalletCommand = new AsyncCommand(this.MobileWalletCommandExecute);

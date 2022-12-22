@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions;
 
 using System.Windows.Input;
+using Logging;
 using Maui.UIServices;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
@@ -11,10 +12,13 @@ public class MobileTopupFailedPageViewModel : BaseViewModel
 {
     private readonly INavigationService NavigationService;
 
+    private readonly ILoggerService Logger;
+
     #region Constructors
 
-    public MobileTopupFailedPageViewModel(INavigationService navigationService) {
+    public MobileTopupFailedPageViewModel(INavigationService navigationService, ILoggerService logger) {
         this.NavigationService = navigationService;
+        this.Logger = logger;
         this.CancelledCommand = new AsyncCommand(this.CancelledCommandExecute);
         this.Title = "Mobile Topup Failed";
     }

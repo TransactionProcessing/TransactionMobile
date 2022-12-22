@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Common;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -27,7 +28,7 @@ public class VoucherSelectOperatorPageViewModelTests
     private readonly Mock<IApplicationCache> ApplicationCache;
 
     private readonly Mock<IDialogService> DialogSevice;
-
+    private readonly Mock<ILoggerService> LoggerService;
     private readonly VoucherSelectOperatorPageViewModel ViewModel;
 
     public VoucherSelectOperatorPageViewModelTests() {
@@ -35,9 +36,9 @@ public class VoucherSelectOperatorPageViewModelTests
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
-        Logger.Initialise(NullLogger.Instance);
+        this.LoggerService = new Mock<ILoggerService>();
         this.ViewModel = new VoucherSelectOperatorPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object,
-                                                                this.DialogSevice.Object);
+                                                                this.DialogSevice.Object,this.LoggerService.Object);
 
     }
     [Fact]

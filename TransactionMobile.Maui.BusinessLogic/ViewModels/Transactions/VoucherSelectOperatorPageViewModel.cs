@@ -2,6 +2,7 @@
 
 using System.Windows.Input;
 using Common;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Models;
@@ -17,16 +18,19 @@ public class VoucherSelectOperatorPageViewModel : ExtendedBaseViewModel
 
     private readonly IMediator Mediator;
 
+    private readonly ILoggerService Logger;
+
     #endregion
 
     #region Constructors
 
     public VoucherSelectOperatorPageViewModel(IMediator mediator, INavigationService navigationService,
                                               IApplicationCache applicationCache,
-                                              IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
+                                              IDialogService dialogService, ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger)
 
     {
         this.Mediator = mediator;
+        this.Logger = logger;
         this.OperatorSelectedCommand = new AsyncCommand<ItemSelected<ContractOperatorModel>>(this.OperatorSelectedCommandExecute);
         this.Title = "Select an Operator";
     }

@@ -3,6 +3,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -26,18 +27,18 @@ public class MobileTopupPerformTopupPageViewModelTests
     private readonly Mock<IApplicationCache> ApplicationCache;
     private readonly Mock<IDialogService> DialogSevice;
     private readonly MobileTopupPerformTopupPageViewModel ViewModel;
-
+    private readonly Mock<ILoggerService> LoggerService;
     public MobileTopupPerformTopupPageViewModelTests() {
         
         this.Mediator = new Mock<IMediator>();
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
-        Logger.Initialise(NullLogger.Instance);
+        this.LoggerService = new Mock<ILoggerService>();
         this.ViewModel = new MobileTopupPerformTopupPageViewModel(this.Mediator.Object,
                                                                   this.NavigationService.Object,
                                                                   this.ApplicationCache.Object,
-                                                                  this.DialogSevice.Object);
+                                                                  this.DialogSevice.Object, this.LoggerService.Object);
     }
     [Fact]
     public void MobileTopupPerformTopupPageViewModel_ApplyQueryAttributes_QueryAttributesApplied()
