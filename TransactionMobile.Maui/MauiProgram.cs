@@ -33,20 +33,16 @@ public static class MauiProgram
 							   })
 			.Services.AddTransient<IDeviceService, DeviceService>()
 			   .AddMemoryCache();
-
+		
         Builder.Logging.AddConsoleLogger(opt => {
 											 opt.MinLevel = LogLevel.Debug;
 											 opt.MaxLevel = LogLevel.Critical;
-                                         });
+											 });
         
         Builder.Services.AddSingleton<ILoggerService, MetroLogLoggerService>();
 
 		Container = Builder.Build();
 
-		// Setup static logger
-		IDatabaseContext databaseContext = MauiProgram.Container.Services.GetService<IDatabaseContext>();
-        IApplicationCache applicationCache = MauiProgram.Container.Services.GetService<IApplicationCache>();
-        
 		return Container;
 	}
 }

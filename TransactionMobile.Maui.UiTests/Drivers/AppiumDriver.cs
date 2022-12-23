@@ -29,10 +29,10 @@ namespace TransactionMobile.Maui.UiTests.Drivers
 
             if (appiumService.IsRunning == false) {
                 appiumService.Start();
-                //appiumService.OutputDataReceived += (sender,
-                //                                     args) => {
-                //                                        Console.WriteLine(args.Data);
-                //                                    };
+                appiumService.OutputDataReceived += (sender,
+                                                     args) => {
+                                                        Console.WriteLine(args.Data);
+                                                    };
             }
 
             if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
