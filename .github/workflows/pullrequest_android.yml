@@ -90,7 +90,7 @@ jobs:
       #  run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
         
       - name: Run Integration Tests - Android
-        uses: malinskiy/action-android/emulator-run-cmd@release/0.1.1
+        uses: malinskiy/action-android/emulator-run-cmd@release/0.1.4
         with:
           cmd: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)
           api: 28
