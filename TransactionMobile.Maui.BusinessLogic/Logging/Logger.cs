@@ -1,6 +1,7 @@
 ﻿namespace Shared.Logger
 {
     using System;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// 
@@ -50,7 +51,7 @@
         {
             Logger.ValidateLoggerObject();
 
-            Logger.LoggerObject.LogCritical(exception);
+            Logger.LoggerObject.LogCritical(exception,exception.Message);
         }
 
         /// <summary>
@@ -72,7 +73,7 @@
         {
             Logger.ValidateLoggerObject();
 
-            Logger.LoggerObject.LogError(exception);
+            Logger.LoggerObject.LogError(exception,exception.Message);
         }
 
         /// <summary>
