@@ -33,12 +33,7 @@ public static class MauiProgram
 							   })
 			.Services.AddTransient<IDeviceService, DeviceService>()
 			   .AddMemoryCache();
-        MauiProgram.Builder.Logging.SetMinimumLevel(LogLevel.Trace);
-        MauiProgram.Builder.Logging.AddSimpleConsole();
-        //Builder.Logging.AddConsoleLogger(opt => {
-								//			 opt.MinLevel = LogLevel.Debug;
-								//			 opt.MaxLevel = LogLevel.Critical;
-								//			 });
+        MauiProgram.Builder.Logging.SetMinimumLevel(LogLevel.Trace).AddConsole();
         
         Builder.Services.AddSingleton<ILoggerService, MetroLogLoggerService>();
 

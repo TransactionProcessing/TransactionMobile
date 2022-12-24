@@ -87,6 +87,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             var apkPath = Path.Combine(binariesFolder, "com.transactionprocessing.pos-Signed.apk");
             driverOptions.App = apkPath;
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.Android.AndroidDriver(appiumService, driverOptions, TimeSpan.FromMinutes(5));
+            
         }
 
         public void StopApp()
