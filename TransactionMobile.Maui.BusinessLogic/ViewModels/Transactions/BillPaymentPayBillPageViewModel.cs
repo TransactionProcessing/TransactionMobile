@@ -50,19 +50,19 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
     }
 
     private async Task PaymentAmountEntryCompletedCommandExecute() {
-        Logger.LogInformation("PaymentAmountEntryCompletedCommandExecute called");
+        await Logger.LogInformation("PaymentAmountEntryCompletedCommandExecute called");
         this.OnPaymentAmountEntryCompleted();
     }
 
     private async Task CustomerMobileNumberEntryCompletedExecute() {
-        Logger.LogInformation("CustomerMobileNumberEntryCompletedExecute called");
+        await Logger.LogInformation("CustomerMobileNumberEntryCompletedExecute called");
         this.OnCustomerMobileNumberEntryCompleted();
     }
 
     #endregion
 
     private async Task MakeBillPaymentCommandExecute() {
-        Logger.LogInformation("MakeBillPaymentCommandExecute called");
+        await Logger.LogInformation("MakeBillPaymentCommandExecute called");
 
         PerformBillPaymentMakePaymentRequest request = PerformBillPaymentMakePaymentRequest.Create(DateTime.Now,
                                                                                                    this.ProductDetails.ContractId,

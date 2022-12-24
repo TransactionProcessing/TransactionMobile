@@ -47,9 +47,9 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
     {
         this.Mediator = mediator;
         this.PerformTopupCommand = new AsyncCommand(this.PerformTopupCommandExecute);
-        this.CustomerMobileNumberEntryCompletedCommand = new Command(this.CustomerMobileNumberEntryCompletedCommandExecute);
-        this.TopupAmountEntryCompletedCommand = new Command(this.TopupAmountEntryCompletedCommandExecute);
-        this.CustomerEmailAddressEntryCompletedCommand = new Command(this.CustomerEmailAddressEntryCompletedCommandExecute);
+        this.CustomerMobileNumberEntryCompletedCommand = new AsyncCommand(this.CustomerMobileNumberEntryCompletedCommandExecute);
+        this.TopupAmountEntryCompletedCommand = new AsyncCommand(this.TopupAmountEntryCompletedCommandExecute);
+        this.CustomerEmailAddressEntryCompletedCommand = new AsyncCommand(this.CustomerEmailAddressEntryCompletedCommandExecute);
         this.Title = "Enter Topup Details";
     }
 
@@ -93,21 +93,21 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
 
     #region Methods
 
-    private void CustomerEmailAddressEntryCompletedCommandExecute()
+    private async Task CustomerEmailAddressEntryCompletedCommandExecute()
     {
-        Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
+        await Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
         this.OnCustomerEmailAddressEntryCompleted();
     }
 
-    private void CustomerMobileNumberEntryCompletedCommandExecute()
+    private async Task CustomerMobileNumberEntryCompletedCommandExecute()
     {
-        Logger.LogInformation("CustomerMobileNumberEntryCompletedCommandExecute called");
+        await Logger.LogInformation("CustomerMobileNumberEntryCompletedCommandExecute called");
         this.OnCustomerMobileNumberEntryCompleted();
     }
 
     private async Task PerformTopupCommandExecute()
     {
-        Logger.LogInformation("PerformTopupCommandExecute called");
+        await Logger.LogInformation("PerformTopupCommandExecute called");
         // Create Command and Send
         PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(DateTime.Now,
                                                                              this.ProductDetails.ContractId,
@@ -129,9 +129,9 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
         }
     }
 
-    private void TopupAmountEntryCompletedCommandExecute()
+    private async Task TopupAmountEntryCompletedCommandExecute()
     {
-        Logger.LogInformation("TopupAmountEntryCompletedCommandExecute called");
+        await Logger.LogInformation("TopupAmountEntryCompletedCommandExecute called");
         this.OnTopupAmountEntryCompleted();
     }
 

@@ -66,7 +66,7 @@ public class VoucherSelectProductPageViewModel : ExtendedBaseViewModel, IQueryAt
 
     private async Task ProductSelectedCommandExecute(ItemSelected<ContractProductModel> e)
     {
-        Logger.LogInformation("ProductSelectedCommandExecute called");
+        await Logger.LogInformation("ProductSelectedCommandExecute called");
         ProductDetails productDetails = new ProductDetails()
                                         {
                                             OperatorIdentifier = e.SelectedItem.OperatorIdentfier,

@@ -44,31 +44,31 @@
 
         private async Task AdminCommandExecute()
         {
-            Logger.LogInformation("AdminCommandExecute called");
+            await Logger.LogInformation("AdminCommandExecute called");
             await this.NavigationService.GoToAdminPage();
         }
 
         private async Task BillPaymentCommandExecute()
         {
-            Logger.LogInformation("AdminCommandExecute called");
+            await Logger.LogInformation("AdminCommandExecute called");
             await this.NavigationService.GoToBillPaymentSelectOperatorPage();
         }
 
         private async Task MobileTopupCommandExecute()
         {
-            Logger.LogInformation("MobileTopupCommandExecute called");
+            await Logger.LogInformation("MobileTopupCommandExecute called");
             await this.NavigationService.GoToMobileTopupSelectOperatorPage();
         }
 
         private async Task MobileWalletCommandExecute()
         {
-            Logger.LogInformation("MobileWalletCommandExecute called");
+            await Logger.LogInformation("MobileWalletCommandExecute called");
             await this.NavigationService.GoToHome();
         }
 
         private async Task VoucherCommandExecute()
         {
-            Logger.LogInformation("VoucherCommandExecute called");
+            await Logger.LogInformation("VoucherCommandExecute called");
             await this.NavigationService.GoToVoucherSelectOperatorPage();
         }
 

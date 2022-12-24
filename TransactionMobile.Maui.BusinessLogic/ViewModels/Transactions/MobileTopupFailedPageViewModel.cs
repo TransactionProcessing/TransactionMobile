@@ -35,7 +35,7 @@ public class MobileTopupFailedPageViewModel : BaseViewModel
 
     private async Task CancelledCommandExecute()
     {
-        Logger.LogInformation("CancelledCommandExecute called");
+        await Logger.LogInformation("CancelledCommandExecute called");
         await this.NavigationService.PopToRoot();
     }
 

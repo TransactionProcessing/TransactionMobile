@@ -69,7 +69,7 @@ public class ExtendedBaseViewModel : BaseViewModel
 
         Boolean leave = await this.DialogService.ShowDialog("Title", "Logout Message", "yes", "no");
         if (leave) {
-            Logger.LogInformation("LogoutCommand called");
+            await Logger.LogInformation("LogoutCommand called");
             this.ApplicationCache.SetAccessToken(null);
 
             await this.NavigationService.GoToLoginPage();

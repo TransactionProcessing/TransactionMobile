@@ -165,42 +165,42 @@
             Stopwatch sw = Stopwatch.StartNew();
             WriteTimingTrace(sw, "Start of LoginCommandExecute");
             try {
-                Logger.LogInformation("LoginCommandExecute called");
+                await Logger.LogInformation("LoginCommandExecute called");
                 
                 Result<Configuration> configurationResult = await this.GetConfiguration();
                 this.HandleResult(configurationResult);
-                
-                WriteTimingTrace(sw, "After GetConfiguration");
+
+                await WriteTimingTrace(sw, "After GetConfiguration");
                 Result<TokenResponseModel> getTokenResult = await this.GetUserToken();
                 this.HandleResult(getTokenResult);
 
-                WriteTimingTrace(sw, "After GetUserToken");
+                await WriteTimingTrace(sw, "After GetUserToken");
                 Result<PerformLogonResponseModel> logonResult = await this.PerformLogonTransaction();
                 this.HandleResult(logonResult);
 
-                WriteTimingTrace(sw, "After PerformLogonTransaction");
+                await WriteTimingTrace(sw, "After PerformLogonTransaction");
                 Result<List<ContractProductModel>> getMerchantContractProductsResult = await this.GetMerchantContractProducts();
                 this.HandleResult(getMerchantContractProductsResult);
 
-                WriteTimingTrace(sw, "After GetMerchantContractProducts");
+                await WriteTimingTrace(sw, "After GetMerchantContractProducts");
                 Result<Decimal> getMerchantBalanceResult =  await this.GetMerchantBalance();
                 this.HandleResult(getMerchantBalanceResult);
 
-                WriteTimingTrace(sw, "After GetMerchantBalance");
+                await WriteTimingTrace(sw, "After GetMerchantBalance");
                 this.ApplicationCache.SetIsLoggedIn(true);
 
-                WriteTimingTrace(sw, "After SetIsLoggedIn");
+                await WriteTimingTrace(sw, "After SetIsLoggedIn");
                 await this.NavigationService.GoToHome();
             }
             catch(ApplicationException aex) {
-                Logger.LogError("Error during logon", aex);
+                await Logger.LogError("Error during logon", aex);
                 await this.DialogService.ShowWarningToast(aex.Message);
             }
         }
         
-        private void WriteTimingTrace(Stopwatch sw, String message) {
+        private async Task WriteTimingTrace(Stopwatch sw, String message) {
             sw.Stop();
-            Logger.LogWarning($"{message} - Elapsed ms [{sw.ElapsedMilliseconds}]");
+            await Logger.LogWarning($"{message} - Elapsed ms [{sw.ElapsedMilliseconds}]");
             sw.Start();
         }
 

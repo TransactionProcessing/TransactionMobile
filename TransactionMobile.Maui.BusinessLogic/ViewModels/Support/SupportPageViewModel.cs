@@ -77,7 +77,7 @@
         #region Methods
 
         private async Task UploadLogsCommandExecute() {
-            Logger.LogInformation("UploadLogsCommandExecute called");
+            await Logger.LogInformation("UploadLogsCommandExecute called");
 
             UploadLogsRequest uploadLogsRequest = UploadLogsRequest.Create(String.Empty);
 
@@ -88,7 +88,7 @@
         }
 
         private async Task ViewLogsCommandExecute() {
-            Logger.LogInformation("ViewLogsCommandExecute called");
+            await Logger.LogInformation("ViewLogsCommandExecute called");
 
             // TODO: Act on the response (display message or something)...
             await this.NavigationService.GoToViewLogsPage();

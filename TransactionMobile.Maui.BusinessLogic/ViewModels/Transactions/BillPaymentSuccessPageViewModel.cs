@@ -35,7 +35,7 @@ public class BillPaymentSuccessPageViewModel : BaseViewModel
 
     private async Task CompletedCommandExecute()
     {
-        Logger.LogInformation("CompletedCommandExecute called");
+        await Logger.LogInformation("CompletedCommandExecute called");
         await this.NavigationService.PopToRoot();
     }
 

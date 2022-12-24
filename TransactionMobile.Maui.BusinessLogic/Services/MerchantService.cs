@@ -42,13 +42,13 @@ public class MerchantService : IMerchantService
             Guid estateId = this.ApplicationCache.GetEstateId();
             Guid merchantId = this.ApplicationCache.GetMerchantId();
 
-            Logger.LogInformation("About to request merchant contracts");
-            Logger.LogDebug($"Merchant Contract Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
+            await Logger.LogInformation("About to request merchant contracts");
+            await Logger.LogDebug($"Merchant Contract Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
 
             List<ContractResponse> merchantContracts = await this.EstateClient.GetMerchantContracts(accessToken.AccessToken, estateId, merchantId, cancellationToken);
 
-            Logger.LogInformation($"{merchantContracts.Count} for merchant requested successfully");
-            Logger.LogDebug($"Merchant Contract Response: [{JsonConvert.SerializeObject(merchantContracts)}]");
+            await Logger.LogInformation($"{merchantContracts.Count} for merchant requested successfully");
+            await Logger.LogDebug($"Merchant Contract Response: [{JsonConvert.SerializeObject(merchantContracts)}]");
 
             foreach (ContractResponse contractResponse in merchantContracts) {
                 foreach (ContractProduct contractResponseProduct in contractResponse.Products) {
@@ -69,7 +69,7 @@ public class MerchantService : IMerchantService
             return new SuccessResult<List<ContractProductModel>>(result);
         }
         catch(Exception ex) {
-            Logger.LogError("Error getting contract products",ex);
+            await Logger.LogError("Error getting contract products",ex);
 
             return new ErrorResult<List<ContractProductModel>>("Error getting contract products");
         }
@@ -82,8 +82,8 @@ public class MerchantService : IMerchantService
             Guid merchantId = this.ApplicationCache.GetMerchantId();
 
 
-            Logger.LogInformation("About to request merchant balance");
-            Logger.LogDebug($"Merchant Balance Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
+            await Logger.LogInformation("About to request merchant balance");
+            await Logger.LogDebug($"Merchant Balance Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
 
             //MerchantBalanceResponse merchantBalance = new MerchantBalanceResponse {
             //                                                                          AvailableBalance = 0,
@@ -91,13 +91,13 @@ public class MerchantService : IMerchantService
             //                                                                      };
             //await this.EstateClient.GetMerchantBalance(accessToken.AccessToken, estateId, merchantId, cancellationToken);
 
-            Logger.LogInformation("Balance for merchant requested successfully");
+            await Logger.LogInformation("Balance for merchant requested successfully");
             //Logger.LogDebug($"Merchant Balance Response: [{JsonConvert.SerializeObject(merchantBalance)}]");
 
             return new SuccessResult<Decimal>(0);
         }
         catch(Exception ex) {
-            Logger.LogError("Error getting merchant balance",ex);
+            await Logger.LogError("Error getting merchant balance",ex);
             return new ErrorResult<Decimal>("Error getting merchant balance");
         }
     }
@@ -108,13 +108,13 @@ public class MerchantService : IMerchantService
             Guid estateId = this.ApplicationCache.GetEstateId();
             Guid merchantId = this.ApplicationCache.GetMerchantId();
 
-            Logger.LogInformation("About to request merchant details");
-            Logger.LogDebug($"Merchant Details Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
+            await Logger.LogInformation("About to request merchant details");
+            await Logger.LogDebug($"Merchant Details Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
 
             MerchantResponse merchantResponse = await this.EstateClient.GetMerchant(accessToken.AccessToken, estateId, merchantId, cancellationToken);
 
-            Logger.LogInformation("Merchant details requested successfully");
-            Logger.LogDebug($"Merchant Details Response: [{JsonConvert.SerializeObject(merchantResponse)}]");
+            await Logger.LogInformation("Merchant details requested successfully");
+            await Logger.LogDebug($"Merchant Details Response: [{JsonConvert.SerializeObject(merchantResponse)}]");
 
             MerchantDetailsModel model = new MerchantDetailsModel {
                                                                       MerchantName = merchantResponse.MerchantName,
@@ -142,7 +142,7 @@ public class MerchantService : IMerchantService
             return new SuccessResult<MerchantDetailsModel>(model);
         }
         catch(Exception ex) {
-            Logger.LogError("Error getting merchant details",ex);
+            await Logger.LogError("Error getting merchant details",ex);
             return new ErrorResult<MerchantDetailsModel>("Error getting merchant details");
         }
     }

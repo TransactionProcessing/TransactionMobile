@@ -34,22 +34,20 @@ jobs:
          brew install docker
          colima start --cpu 2 --memory 8 --disk 100
 
-      #- name: Pull images
-      #  run: |
-      #   docker pull stuartferguson/messagingservice:master
-      #   docker pull stuartferguson/estatemanagement:master
-      #   docker pull stuartferguson/securityservice:master
-      #   docker pull stuartferguson/transactionprocessor:master
-      #   docker pull stuartferguson/transactionprocessoracl:master
-      #   docker pull stuartferguson/testhosts:master
-      #   docker pull stuartferguson/vouchermanagementacl:master
-      #   docker pull stuartferguson/fileprocessor:master
-      #   docker pull stuartferguson/callbackhandler:master
-      #   docker pull stuartferguson/mobileconfiguration:master
-      #   docker pull stuartferguson/mobileconfiguration:master
-      #   docker pull stuartferguson/mobileconfiguration:master
-      #   docker pull mcr.microsoft.com/azure-sql-edge
-      #   docker pull eventstore/eventstore:21.10.0-buster-slim
+      - name: Pull images
+        run: |
+         docker pull stuartferguson/messagingservice:master
+         docker pull stuartferguson/estatemanagement:master
+         docker pull stuartferguson/securityservice:master
+         docker pull stuartferguson/transactionprocessor:master
+         docker pull stuartferguson/transactionprocessoracl:master
+         docker pull stuartferguson/testhosts:master
+         docker pull stuartferguson/vouchermanagementacl:master
+         docker pull stuartferguson/fileprocessor:master
+         docker pull stuartferguson/callbackhandler:master
+         docker pull stuartferguson/mobileconfiguration:master
+         docker pull mcr.microsoft.com/azure-sql-edge
+         docker pull eventstore/eventstore:21.10.0-buster-slim
 
       - uses: malinskiy/action-android/install-sdk@release/0.1.1
       - run: sdkmanager "platform-tools" "platforms;android-33"
@@ -104,11 +102,11 @@ jobs:
       #    name: android-ci-build
       #    path: src/MauiBeach/bin/Release/net6.0-android/*Signed.a*
 
-      #- uses: actions/upload-artifact@v2
-      #  if: ${{ failure() }}
-      #  with:
-      #    name: tracelogsios
-      #    path: /Users/runner/txnproc/trace/
+      - uses: actions/upload-artifact@v2
+        if: ${{ failure() }}
+        with:
+          name: tracelogsios
+          path: /Users/runner/txnproc/trace/
 
       - name: Save logcat output
         uses: actions/upload-artifact@master

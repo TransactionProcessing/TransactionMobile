@@ -41,14 +41,14 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 //username = "merchantuser@v28emulatormerchant.co.uk";
                 //password = "123456";
 
-                Logger.LogInformation($"About to request token for {username}");
-                Logger.LogDebug($"Token Request details UserName: {username} Password: {password} ClientId: {configuration.ClientId} ClientSecret: {configuration.ClientSecret}");
+                await Logger.LogInformation($"About to request token for {username}");
+                await Logger.LogDebug($"Token Request details UserName: {username} Password: {password} ClientId: {configuration.ClientId} ClientSecret: {configuration.ClientSecret}");
                 
                 TokenResponse token =
                     await this.SecurityServiceClient.GetToken(username, password, configuration.ClientId, configuration.ClientSecret, cancellationToken);
 
-                Logger.LogInformation($"Token for {username} requested successfully");
-                Logger.LogDebug($"Token Response: [{JsonConvert.SerializeObject(token)}]");
+                await Logger.LogInformation($"Token for {username} requested successfully");
+                await Logger.LogDebug($"Token Response: [{JsonConvert.SerializeObject(token)}]");
 
                 return new SuccessResult<TokenResponseModel>(new TokenResponseModel
                        {
@@ -59,7 +59,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             }
             catch(Exception ex)
             {
-                Logger.LogError($"Error getting Token", ex);
+                await Logger.LogError($"Error getting Token", ex);
                 return new ErrorResult<TokenResponseModel>("Error getting Token");
             }
 
@@ -72,13 +72,13 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             Configuration configuration = this.ApplicationCache.GetConfiguration();
             try
             {
-                Logger.LogInformation($"About to request refresh token");
-                Logger.LogDebug($"Refresh Token Request details Token: {refreshToken} ClientId: {configuration.ClientId} ClientSecret: {configuration.ClientSecret}");
+                await Logger.LogInformation($"About to request refresh token");
+                await Logger.LogDebug($"Refresh Token Request details Token: {refreshToken} ClientId: {configuration.ClientId} ClientSecret: {configuration.ClientSecret}");
 
                 TokenResponse token = await this.SecurityServiceClient.GetToken(configuration.ClientId, configuration.ClientSecret, refreshToken, cancellationToken);
 
-                Logger.LogInformation($"Refresh Token requested successfully");
-                Logger.LogDebug($"Token Response: [{JsonConvert.SerializeObject(token)}]");
+                await Logger.LogInformation($"Refresh Token requested successfully");
+                await Logger.LogDebug($"Token Response: [{JsonConvert.SerializeObject(token)}]");
 
                 return new SuccessResult<TokenResponseModel>(new TokenResponseModel
                                                              {
@@ -89,7 +89,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             }
             catch (Exception ex)
             {
-                Logger.LogError($"Error refreshing Token", ex);
+                await Logger.LogError($"Error refreshing Token", ex);
                 return new ErrorResult<TokenResponseModel>("Error getting Token");
             }
         }

@@ -71,7 +71,7 @@ public class BillPaymentSelectOperatorPageViewModel : ExtendedBaseViewModel
 
     private async Task OperatorSelectedCommandExecute(ItemSelected<ContractOperatorModel> e)
     {
-        Logger.LogInformation("OperatorSelectedCommandExecute called");
+        await Logger.LogInformation("OperatorSelectedCommandExecute called");
 
         ProductDetails productDetails = new() {
                                                   OperatorIdentifier = e.SelectedItem.OperatorIdentfier

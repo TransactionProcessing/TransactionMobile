@@ -54,7 +54,7 @@ public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel, IQueryA
     }
 
     private async Task GetAccountCommandExecute() {
-        Logger.LogInformation("GetAccountCommandExecute called");
+        await Logger.LogInformation("GetAccountCommandExecute called");
 
         PerformBillPaymentGetAccountRequest request = PerformBillPaymentGetAccountRequest.Create(DateTime.Now,
                                                                                                  this.ProductDetails.ContractId,

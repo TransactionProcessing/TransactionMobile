@@ -47,10 +47,10 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
     {
         this.Mediator = mediator;
         this.IssueVoucherCommand = new AsyncCommand(this.IssueVoucherCommandExecute);
-        this.RecipientMobileNumberEntryCompletedCommand = new Command(this.RecipientMobileNumberEntryCompletedCommandExecute);
-        this.RecipientEmailAddressEntryCompletedCommand = new Command(this.RecipientEmailAddressEntryCompletedCommandExecute);
-        this.VoucherAmountEntryCompletedCommand = new Command(this.VoucherAmountEntryCompletedCommandExecute);
-        this.CustomerEmailAddressEntryCompletedCommand = new Command(this.CustomerEmailAddressEntryCompletedCommandExecute);
+        this.RecipientMobileNumberEntryCompletedCommand = new AsyncCommand(this.RecipientMobileNumberEntryCompletedCommandExecute);
+        this.RecipientEmailAddressEntryCompletedCommand = new AsyncCommand(this.RecipientEmailAddressEntryCompletedCommandExecute);
+        this.VoucherAmountEntryCompletedCommand = new AsyncCommand(this.VoucherAmountEntryCompletedCommandExecute);
+        this.CustomerEmailAddressEntryCompletedCommand = new AsyncCommand(this.CustomerEmailAddressEntryCompletedCommandExecute);
         this.Title = "Enter Voucher Issue Details";
     }
 
@@ -104,27 +104,25 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
 
     #region Methods
 
-    private void CustomerEmailAddressEntryCompletedCommandExecute()
-    {
-        Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
+    private async Task CustomerEmailAddressEntryCompletedCommandExecute() {
+        await Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
         this.OnCustomerEmailAddressEntryCompleted();
     }
 
-    private void RecipientMobileNumberEntryCompletedCommandExecute()
-    {
-        Logger.LogInformation("RecipientMobileNumberEntryCompletedCommandExecute called");
+    private async Task RecipientMobileNumberEntryCompletedCommandExecute() {
+        await Logger.LogInformation("RecipientMobileNumberEntryCompletedCommandExecute called");
         this.OnRecipientMobileNumberEntryCompleted();
     }
 
-    private void RecipientEmailAddressEntryCompletedCommandExecute()
+    private async Task RecipientEmailAddressEntryCompletedCommandExecute()
     {
-        Logger.LogInformation("RecipientEmailAddressEntryCompletedCommandExecute called");
+         await Logger.LogInformation("RecipientEmailAddressEntryCompletedCommandExecute called");
         this.OnRecipientEmailAddressEntryCompleted();
     }
 
     private async Task IssueVoucherCommandExecute()
     {
-        Logger.LogInformation("IssueVoucherCommandExecute called");
+        await Logger.LogInformation("IssueVoucherCommandExecute called");
         // TODO: Create Command and Send
         PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(DateTime.Now,
                                                                                this.ProductDetails.ContractId,
@@ -148,9 +146,9 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
         }
     }
 
-    private void VoucherAmountEntryCompletedCommandExecute()
+    private async Task VoucherAmountEntryCompletedCommandExecute()
     {
-        Logger.LogInformation("VoucherAmountEntryCompletedCommandExecute called");
+        await Logger.LogInformation("VoucherAmountEntryCompletedCommandExecute called");
         this.OnVoucherAmountEntryCompleted();
     }
 

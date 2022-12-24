@@ -92,7 +92,7 @@ public class ShellNavigationService : INavigationService
     }
 
     public async Task PopToRoot() {
-        Logger.LogInformation($"navigating to root");
+        await Logger.LogInformation($"navigating to root");
         await Shell.Current.Navigation.PopToRootAsync();
     }
 
@@ -163,11 +163,11 @@ public class ShellNavigationService : INavigationService
 
     private async Task NavigateTo(String route) {
         try {
-            Logger.LogInformation($"navigating to {route}");
+            await Logger.LogInformation($"navigating to {route}");
             await Shell.Current.GoToAsync(route);
             }
         catch(Exception e) {
-            Logger.LogError("Error navigating to {route}", e);
+            await Logger.LogError("Error navigating to {route}", e);
         }
     }
 
@@ -175,24 +175,24 @@ public class ShellNavigationService : INavigationService
     {
         try
         {
-            Logger.LogInformation($"navigating to {route}");
+            await Logger.LogInformation($"navigating to {route}");
             await Shell.Current.GoToAsync(route, parameters);
         }
         catch (Exception e)
         {
-            Logger.LogError("Error navigating to {route}", e);
+            await Logger.LogError("Error navigating to {route}", e);
         }
     }
 
     private async Task NavigateTo(ContentPage page){
         try
         {
-            //Shared.Logger.Logger.LogInformation($"navigating to {route}");
+            //Logger.LogInformation($"navigating to {route}");
             await Shell.Current.Navigation.PushAsync(page);
         }
         catch (Exception e)
         {
-            Logger.LogError("Error navigating to {route}", e);
+            await Logger.LogError("Error navigating to {route}", e);
         }
     }
 

@@ -55,10 +55,10 @@ namespace TransactionMobile.Maui.BusinessLogic.Models
         /// </summary>
         /// <param name="exception">The exception.</param>
         /// <returns></returns>
-        public static List<LogMessage> CreateErrorLogMessages(Exception exception)
+        public static List<LogMessage> CreateErrorLogMessages(String message, Exception exception)
         {
             List<LogMessage> logMessages = new List<LogMessage>();
-
+            logMessages.Add(LogMessage.CreateLogMessage(message, Models.LogLevel.Error));
             Exception e = exception;
             while (e != null)
             {
@@ -84,10 +84,10 @@ namespace TransactionMobile.Maui.BusinessLogic.Models
         /// </summary>
         /// <param name="exception">The exception.</param>
         /// <returns></returns>
-        public static List<LogMessage> CreateFatalLogMessages(Exception exception)
+        public static List<LogMessage> CreateFatalLogMessages(String message,Exception exception)
         {
             List<LogMessage> logMessages = new List<LogMessage>();
-
+            logMessages.Add(LogMessage.CreateLogMessage(message, Models.LogLevel.Fatal));
             Exception e = exception;
             while (e != null)
             {
