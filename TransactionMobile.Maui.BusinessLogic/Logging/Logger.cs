@@ -51,7 +51,7 @@
         {
             Logger.ValidateLoggerObject();
 
-            Logger.LoggerObject.LogCritical(exception,exception.Message);
+            Logger.LoggerObject.LogCritical(exception);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@
         {
             Logger.ValidateLoggerObject();
 
-            Logger.LoggerObject.LogError(exception,exception.Message);
+            Logger.LoggerObject.LogError(exception);
         }
 
         /// <summary>

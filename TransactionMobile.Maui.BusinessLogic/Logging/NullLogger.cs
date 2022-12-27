@@ -16,21 +16,31 @@
                 return new NullLogger();
             }
         }
-        
-        public void Log<TState>(LogLevel logLevel,
-                                EventId eventId,
-                                TState state,
-                                Exception exception,
-                                Func<TState, Exception, String> formatter) {
+
+        public Boolean IsInitialised { get; set; }
+
+        public void LogCritical(Exception exception) {
             
         }
 
-        public Boolean IsEnabled(LogLevel logLevel) {
-            return true;
+        public void LogDebug(String message) {
+            
         }
 
-        public IDisposable BeginScope<TState>(TState state) where TState : notnull {
-            return null;
+        public void LogError(Exception exception) {
+            
+        }
+
+        public void LogInformation(String message) {
+            
+        }
+
+        public void LogTrace(String message) {
+            
+        }
+
+        public void LogWarning(String message) {
+            
         }
     }
 }

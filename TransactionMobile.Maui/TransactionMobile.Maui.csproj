@@ -60,6 +60,7 @@
 		<PackageReference Include="Microsoft.AppCenter" Version="4.1.0" />
 		<PackageReference Include="Microsoft.AppCenter.Distribute" Version="4.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+		<PackageReference Include="NLog.Targets.MauiLog" Version="1.0.2" />
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
 	</ItemGroup>
 		
@@ -246,6 +247,12 @@
 	  <ProjectReference Include="..\TransactionMobile.Maui.BusinessLogic\TransactionMobile.Maui.BusinessLogic.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="nlog.config">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 	<PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
 		<RuntimeIdentifier>maccatalyst-arm64</RuntimeIdentifier>
 	</PropertyGroup>
@@ -299,6 +306,12 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-ios|AnyCPU'">
 		<MtouchLink>SdkOnly</MtouchLink>
 		<PublishTrimmed>true</PublishTrimmed>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
+	  <DebugSymbols>False</DebugSymbols>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android|AnyCPU'">
+	  <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
 	</PropertyGroup>
 
 </Project>

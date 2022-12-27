@@ -33,21 +33,14 @@ public static class MauiProgram
 							   })
 			.Services.AddTransient<IDeviceService, DeviceService>()
 			   .AddMemoryCache();
+		
+        Container = Builder.Build();
 
-        Builder.Services.AddLogging(o => {
-                                        o.AddConsole();
-                                        o.SetMinimumLevel(LogLevel.Trace);
-                                    });
-
-		Container = Builder.Build();
-
-		// Setup static logger
-		//IDatabaseContext databaseContext = MauiProgram.Container.Services.GetService<IDatabaseContext>();
-        //IApplicationCache applicationCache = MauiProgram.Container.Services.GetService<IApplicationCache>();
-        //Logger.Initialise(new DatabaseLogger(databaseContext,applicationCache));
-		var logger = MauiProgram.Container.Services.GetService<ILoggerProvider>();
-        Logger.Initialise(logger.CreateLogger("Test"));
-
-		return Container;
+        // Setup static logger
+        IDatabaseContext databaseContext = MauiProgram.Container.Services.GetService<IDatabaseContext>();
+        IApplicationCache applicationCache = MauiProgram.Container.Services.GetService<IApplicationCache>();
+        Logger.Initialise(new DatabaseLogger(databaseContext,applicationCache));
+        
+        return Container;
 	}
 }

@@ -11,6 +11,10 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.UiTests.Drivers
 {
+    using System.Diagnostics;
+    using System.Runtime.CompilerServices;
+    using OpenQA.Selenium;
+
     public enum MobileTestPlatform
     {
         iOS,
@@ -28,13 +32,14 @@ namespace TransactionMobile.Maui.UiTests.Drivers
 
         public void StartApp() {
             AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723).Build();
-
+            
             if (appiumService.IsRunning == false) {
-                appiumService.Start();
+                var c = appiumService.ServiceUrl;
                 appiumService.OutputDataReceived += (sender,
                                                      args) => {
-                                                        Console.WriteLine(args.Data);
+                                                        Debug.WriteLine(args.Data);
                                                     };
+                appiumService.Start();
             }
 
             if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
@@ -76,12 +81,19 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.PlatformName = "Android";
             driverOptions.PlatformVersion = "9.0";
             driverOptions.DeviceName = "emulator-5554";
-            
+            driverOptions.SetLoggingPreference(LogType.Client, LogLevel.All);
+            driverOptions.SetLoggingPreference(LogType.Driver, LogLevel.All);
+            driverOptions.SetLoggingPreference(LogType.Profiler, LogLevel.All);
+            driverOptions.SetLoggingPreference(LogType.Server, LogLevel.All);
+            driverOptions.SetLoggingPreference(LogType.Browser, LogLevel.All);
+
+
             // TODO: Only do this locally
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
             driverOptions.AddAdditionalAppiumOption("appPackage", "com.transactionprocessing.pos");
             driverOptions.AddAdditionalAppiumOption("enforceAppInstall", true);
             driverOptions.AddAdditionalAppiumOption("uiautomator2ServerInstallTimeout", "40000");
+            //driverOptions.AddAdditionalAppiumOption("clearDeviceLogsOnStart", true);
 
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net7.0-android/");
@@ -89,17 +101,30 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             var apkPath = Path.Combine(binariesFolder, "com.transactionprocessing.pos-Signed.apk");
             driverOptions.App = apkPath;
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.Android.AndroidDriver(appiumService, driverOptions, TimeSpan.FromMinutes(5));
+
+            //var logtypes = AppiumDriverWrapper.Driver.Manage().Logs.AvailableLogTypes;
+            
         }
 
-        public void StopApp()
-        {
+        public void StopApp() {
+            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
+                var logs = AppiumDriverWrapper.Driver.Manage().Logs.GetLog("logcat");
+            }
+
+            //var logtypes = AppiumDriverWrapper.Driver.Manage().Logs().getAvailableLogTypes();
+            //System.out.println("suported log types: " + logtypes.toString()); // [logcat, bugreport, server, client]
+
+            // print first and last 10 lines of logs
+            //LogEntries logs = driver.manage().logs().get("logcat");
+
+
             AppiumDriverWrapper.Driver?.CloseApp();
             //AppiumDriverWrapper.Driver?.Close();
             AppiumDriverWrapper.Driver?.Quit();
             //String video = AppiumDriverWrapper.Driver.StopRecordingScreen();
             //byte[] decode = Convert.FromBase64String(video);
 
-            //String fileName = "c:\\temp\\VideoRecording_test.mp4";
+            //String fileName =     "c:\\temp\\VideoRecording_test.mp4";
             //File.WriteAllBytes(fileName, decode); ;
         }
     }
