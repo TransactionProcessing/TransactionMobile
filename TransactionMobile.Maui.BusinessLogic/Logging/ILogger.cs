@@ -71,7 +71,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Logging
         /// <summary>
         /// The logger object
         /// </summary>
-        private static ILogger LoggerObject;
+        private static List<ILogger> LoggerObjects;
 
         #endregion
 
@@ -96,7 +96,14 @@ namespace TransactionMobile.Maui.BusinessLogic.Logging
         /// <exception cref="ArgumentNullException">loggerObject</exception>
         public static void Initialise(ILogger loggerObject)
         {
-            Logger.LoggerObject = loggerObject ?? throw new ArgumentNullException(nameof(loggerObject));
+            if (loggerObject == null) {
+                throw new ArgumentNullException(nameof(loggerObject));
+            }
+
+            if (Logger.LoggerObjects == null) {
+                Logger.LoggerObjects = new List<ILogger>();
+            }
+            Logger.LoggerObjects.Add(loggerObject);
 
             Logger.IsInitialised = true;
         }
@@ -107,9 +114,10 @@ namespace TransactionMobile.Maui.BusinessLogic.Logging
         /// <param name="exception">The exception.</param>
         public static void LogCritical(String message, Exception exception)
         {
-            Logger.ValidateLoggerObject();
-
-            Logger.LoggerObject.LogCritical(message, exception);
+            foreach (ILogger loggerObject in Logger.LoggerObjects) {
+                loggerObject.LogCritical(message, exception);
+            }
+            
         }
 
         /// <summary>
@@ -118,9 +126,10 @@ namespace TransactionMobile.Maui.BusinessLogic.Logging
         /// <param name="message">The message.</param>
         public static void LogDebug(String message)
         {
-            Logger.ValidateLoggerObject();
-
-            Logger.LoggerObject.LogDebug(message);
+            foreach (ILogger loggerObject in Logger.LoggerObjects)
+            {
+                loggerObject.LogDebug(message);
+            }
         }
 
         /// <summary>
@@ -129,9 +138,9 @@ namespace TransactionMobile.Maui.BusinessLogic.Logging
         /// <param name="exception">The exception.</param>
         public static void LogError(String message, Exception exception)
         {
-            Logger.ValidateLoggerObject();
-
-            Logger.LoggerObject.LogError(message, exception);
+            foreach (ILogger loggerObject in Logger.LoggerObjects) {
+                loggerObject.LogError(message, exception);
+            }
         }
 
         /// <summary>
@@ -140,9 +149,10 @@ namespace TransactionMobile.Maui.BusinessLogic.Logging
         /// <param name="message">The message.</param>
         public static void LogInformation(String message)
         {
-            Logger.ValidateLoggerObject();
-
-            Logger.LoggerObject.LogInformation(message);
+            foreach (ILogger loggerObject in Logger.LoggerObjects)
+            {
+                loggerObject.LogInformation(message);
+            }
         }
 
         /// <summary>
@@ -151,9 +161,9 @@ namespace TransactionMobile.Maui.BusinessLogic.Logging
         /// <param name="message">The message.</param>
         public static void LogTrace(String message)
         {
-            Logger.ValidateLoggerObject();
-
-            Logger.LoggerObject.LogTrace(message);
+            foreach (ILogger loggerObject in Logger.LoggerObjects) {
+                loggerObject.LogTrace(message);
+            }
         }
 
         /// <summary>
@@ -162,20 +172,9 @@ namespace TransactionMobile.Maui.BusinessLogic.Logging
         /// <param name="message">The message.</param>
         public static void LogWarning(String message)
         {
-            Logger.ValidateLoggerObject();
-
-            Logger.LoggerObject.LogWarning(message);
-        }
-
-        /// <summary>
-        /// Validates the logger object.
-        /// </summary>
-        /// <exception cref="InvalidOperationException">Logger has not been initialised</exception>
-        private static void ValidateLoggerObject()
-        {
-            if (Logger.LoggerObject == null)
+            foreach (ILogger loggerObject in Logger.LoggerObjects)
             {
-                throw new InvalidOperationException("Logger has not been initialised");
+                loggerObject.LogWarning(message);
             }
         }
 
@@ -361,6 +360,84 @@ namespace TransactionMobile.Maui.BusinessLogic.Logging
                 Message = logMessageModel.Message
             };
             this.DatabaseContext.InsertLogMessage(logMessage);
+        }
+    }
+
+    public class ConsoleLogger : ILogger
+    {
+        public ConsoleLogger()
+        {
+            this.IsInitialised = true;
+        }
+
+        public bool IsInitialised { get; set; }
+
+        public void LogCritical(String message, Exception exception)
+        {
+            var logMessageModels = Models.LogMessage.CreateFatalLogMessages(message, exception);
+            var logMessages = new List<Database.LogMessage>();
+            foreach (var item in logMessageModels)
+            {
+                Console.WriteLine($"AppLog|{item.EntryDateTime}|{item.LogLevel}|{item.Message}");
+            }
+        }
+
+        public void LogDebug(string message)
+        {
+            var logMessageModel = Models.LogMessage.CreateDebugLogMessage(message);
+            var logMessage = new LogMessage
+            {
+                EntryDateTime = logMessageModel.EntryDateTime,
+                LogLevel = logMessageModel.LogLevel.ToString(),
+                Message = logMessageModel.Message
+            };
+            Console.WriteLine($"AppLog|{logMessage.EntryDateTime}|{logMessage.LogLevel}|{logMessage.Message}");
+        }
+
+        public void LogError(String message, Exception exception)
+        {
+            var logMessageModels = Models.LogMessage.CreateErrorLogMessages(message, exception);
+            var logMessages = new List<Database.LogMessage>();
+            foreach (var item in logMessageModels)
+            {
+                Console.WriteLine($"AppLog|{item.EntryDateTime}|{item.LogLevel}|{item.Message}");
+            }
+        }
+
+        public void LogInformation(string message)
+        {
+            var logMessageModel = Models.LogMessage.CreateInformationLogMessage(message);
+            var logMessage = new LogMessage
+            {
+                EntryDateTime = logMessageModel.EntryDateTime,
+                LogLevel = logMessageModel.LogLevel.ToString(),
+                Message = logMessageModel.Message
+            };
+            Console.WriteLine($"AppLog|{logMessage.EntryDateTime}|{logMessage.LogLevel}|{logMessage.Message}");
+        }
+
+        public void LogTrace(string message)
+        {
+            var logMessageModel = Models.LogMessage.CreateTraceLogMessage(message);
+            var logMessage = new LogMessage
+            {
+                EntryDateTime = logMessageModel.EntryDateTime,
+                LogLevel = logMessageModel.LogLevel.ToString(),
+                Message = logMessageModel.Message
+            };
+            Console.WriteLine($"AppLog|{logMessage.EntryDateTime}|{logMessage.LogLevel}|{logMessage.Message}");
+        }
+
+        public void LogWarning(string message)
+        {
+            var logMessageModel = Models.LogMessage.CreateWarningLogMessage(message);
+            var logMessage = new LogMessage
+            {
+                EntryDateTime = logMessageModel.EntryDateTime,
+                LogLevel = logMessageModel.LogLevel.ToString(),
+                Message = logMessageModel.Message
+            };
+            Console.WriteLine($"AppLog|{logMessage.EntryDateTime}|{logMessage.LogLevel}|{logMessage.Message}");
         }
     }
 }

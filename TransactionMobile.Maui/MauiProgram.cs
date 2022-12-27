@@ -35,6 +35,8 @@ public static class MauiProgram
 			   .AddMemoryCache();
         MauiProgram.Builder.Logging.SetMinimumLevel(LogLevel.Trace).AddConsole();
         
+		Logger.Initialise(new ConsoleLogger());
+
 		Container = Builder.Build();
 
 		return Container;
