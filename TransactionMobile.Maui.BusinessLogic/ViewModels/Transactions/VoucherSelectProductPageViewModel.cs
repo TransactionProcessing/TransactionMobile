@@ -33,8 +33,7 @@ public class VoucherSelectProductPageViewModel : ExtendedBaseViewModel, IQueryAt
     public VoucherSelectProductPageViewModel(IMediator mediator,
                                              INavigationService navigationService,
                                              IApplicationCache applicationCache,
-                                             IDialogService dialogService,
-                                             ILoggerService logger) : base(applicationCache, dialogService, navigationService,logger)
+                                             IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
     {
         this.Mediator = mediator;
         this.ProductSelectedCommand = new AsyncCommand<ItemSelected<ContractProductModel>>(this.ProductSelectedCommandExecute);
@@ -66,7 +65,7 @@ public class VoucherSelectProductPageViewModel : ExtendedBaseViewModel, IQueryAt
 
     private async Task ProductSelectedCommandExecute(ItemSelected<ContractProductModel> e)
     {
-        await Logger.LogInformation("ProductSelectedCommandExecute called");
+        Logger.LogInformation("ProductSelectedCommandExecute called");
         ProductDetails productDetails = new ProductDetails()
                                         {
                                             OperatorIdentifier = e.SelectedItem.OperatorIdentfier,

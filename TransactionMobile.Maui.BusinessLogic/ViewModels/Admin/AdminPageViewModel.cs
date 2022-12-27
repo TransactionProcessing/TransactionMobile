@@ -26,8 +26,8 @@
         public AdminPageViewModel(IMediator mediator, INavigationService navigationService,
                                   IApplicationCache applicationCache,
                                   IDialogService dialogService,
-                                  IDeviceService deviceService, IApplicationInfoService applicationInfoService, ILoggerService logger) :
-            base(applicationCache,dialogService, navigationService,logger)
+                                  IDeviceService deviceService, IApplicationInfoService applicationInfoService) :
+            base(applicationCache,dialogService, navigationService)
         {
             this.Mediator = mediator;
             this.DeviceService = deviceService;

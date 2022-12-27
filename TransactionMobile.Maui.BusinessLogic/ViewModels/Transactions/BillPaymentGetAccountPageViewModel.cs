@@ -26,7 +26,7 @@ public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel, IQueryA
     public BillPaymentGetAccountPageViewModel(INavigationService navigationService,
                                               IApplicationCache applicationCache,
                                               IDialogService dialogService,
-                                              IMediator mediator, ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger) {
+                                              IMediator mediator) : base(applicationCache, dialogService, navigationService) {
         this.Mediator = mediator;
         this.GetAccountCommand = new AsyncCommand(this.GetAccountCommandExecute);
         this.Title = "Get Customer Account";
@@ -54,7 +54,7 @@ public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel, IQueryA
     }
 
     private async Task GetAccountCommandExecute() {
-        await Logger.LogInformation("GetAccountCommandExecute called");
+        Logger.LogInformation("GetAccountCommandExecute called");
 
         PerformBillPaymentGetAccountRequest request = PerformBillPaymentGetAccountRequest.Create(DateTime.Now,
                                                                                                  this.ProductDetails.ContractId,

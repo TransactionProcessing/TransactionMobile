@@ -14,13 +14,13 @@ using Xunit;
 public class MobileTopupFailedPageViewModelTests
 {
     private readonly Mock<INavigationService> NavigationService;
-    private readonly Mock<ILoggerService> LoggerService;
+
     private readonly MobileTopupFailedPageViewModel ViewModel;
     public MobileTopupFailedPageViewModelTests()
     {
         this.NavigationService = new Mock<INavigationService>();
-        this.LoggerService = new Mock<ILoggerService>();
-        this.ViewModel = new MobileTopupFailedPageViewModel(this.NavigationService.Object, this.LoggerService.Object);
+
+        this.ViewModel = new MobileTopupFailedPageViewModel(this.NavigationService.Object);
     }
 
     [Fact]

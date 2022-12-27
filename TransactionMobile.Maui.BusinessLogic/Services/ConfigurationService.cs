@@ -16,18 +16,13 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
     using ViewModels;
     using LogLevel = Models.LogLevel;
 
-    public class LoggingService 
 
     public class ConfigurationService : ClientProxyBase, IConfigurationService
     {
-        private readonly ILoggerService Logger;
-
         private readonly Func<String, String> BaseAddressResolver;
 
-        public ConfigurationService(ILoggerService logger, 
-                                    Func<String, String> baseAddressResolver,
+        public ConfigurationService(Func<String, String> baseAddressResolver,
                                     HttpClient httpClient) : base(httpClient) {
-            this.Logger = logger;
             this.BaseAddressResolver = baseAddressResolver;
         }
 
@@ -63,8 +58,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
             try
             {
-                await Logger.LogInformation($"About to request configuration for device identifier {deviceIdentifier}");
-                await Logger.LogDebug($"Configuration Request details: Uri {requestUri}");
+                Logger.LogInformation($"About to request configuration for device identifier {deviceIdentifier}");
+                Logger.LogDebug($"Configuration Request details: Uri {requestUri}");
 
                 // Make the Http Call here
                 HttpResponseMessage httpResponse = await this.HttpClient.GetAsync(requestUri, cancellationToken);
@@ -103,15 +98,15 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                                                                             iOSKey = apiResponse.ApplicationCentreConfiguration.IosKey
                                                                         };
 
-                await Logger.LogInformation($"Configuration for device identifier {deviceIdentifier} requested successfully");
-                await Logger.LogDebug($"Configuration Response: [{content}]");
+                Logger.LogInformation($"Configuration for device identifier {deviceIdentifier} requested successfully");
+                Logger.LogDebug($"Configuration Response: [{content}]");
 
                 return new SuccessResult<Configuration>(response);
             }
             catch (Exception ex)
             {
                 // An exception has occurred, add some additional information to the message
-                await Logger.LogError($"Error getting configuration for device Id {deviceIdentifier}.",ex);
+                Logger.LogError($"Error getting configuration for device Id {deviceIdentifier}.",ex);
 
                 return new ErrorResult<Configuration>("Error getting configuration data");
             }

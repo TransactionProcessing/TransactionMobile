@@ -29,7 +29,6 @@ public class MobileTopupSelectProductPageViewModelTests
     private readonly Mock<IApplicationCache> ApplicationCache;
 
     private readonly Mock<IDialogService> DialogSevice;
-    private readonly Mock<ILoggerService> LoggerService;
 
     private readonly MobileTopupSelectProductPageViewModel ViewModel;
 
@@ -38,9 +37,7 @@ public class MobileTopupSelectProductPageViewModelTests
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
-        this.LoggerService = new Mock<ILoggerService>();
-        this.ViewModel = new MobileTopupSelectProductPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object,
-                                                                   this.LoggerService.Object);
+        this.ViewModel = new MobileTopupSelectProductPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object);
     }
 
     [Fact]

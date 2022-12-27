@@ -13,13 +13,13 @@ using Xunit;
 public class VoucherIssueFailedPageViewModelTests
 {
     private readonly Mock<INavigationService> NavigationService;
-    private readonly Mock<ILoggerService> LoggerService;
+    
     private readonly VoucherIssueFailedPageViewModel ViewModel;
 
     public VoucherIssueFailedPageViewModelTests() {
         NavigationService = new Mock<INavigationService>();
-        this.LoggerService= new Mock<ILoggerService>();
-        this.ViewModel = new VoucherIssueFailedPageViewModel(this.NavigationService.Object, this.LoggerService.Object);
+    
+        this.ViewModel = new VoucherIssueFailedPageViewModel(this.NavigationService.Object);
     }
 
     [Fact]

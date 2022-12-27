@@ -32,8 +32,7 @@
         public MyAccountPageViewModel(INavigationService navigationService,
                                       IApplicationCache applicationCache,
                                       IDialogService dialogService,
-                                      IMediator mediator,
-                                      ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger) {
+                                      IMediator mediator) : base(applicationCache, dialogService, navigationService) {
             this.Mediator = mediator;
             this.OptionSelectedCommand = new AsyncCommand<ItemSelected<ListViewItem>>(this.OptionSelectedCommandExecute);
             this.Title = "My Account";
@@ -99,7 +98,7 @@
         }
 
         private async Task LogoutCommandExecute() {
-            await Logger.LogInformation("LogoutCommand called");
+            Logger.LogInformation("LogoutCommand called");
             this.ApplicationCache.SetAccessToken(null);
 
             await this.NavigationService.GoToLoginPage();

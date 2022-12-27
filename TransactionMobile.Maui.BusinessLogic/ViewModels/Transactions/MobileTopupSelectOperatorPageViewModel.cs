@@ -24,8 +24,7 @@ public class MobileTopupSelectOperatorPageViewModel : ExtendedBaseViewModel
     #region Constructors
 
     public MobileTopupSelectOperatorPageViewModel(IMediator mediator, INavigationService navigationService, IDialogService dialogService,
-                                                  IApplicationCache applicationCache,
-                                                  ILoggerService logger) : base(applicationCache,dialogService, navigationService, logger)
+                                                  IApplicationCache applicationCache) : base(applicationCache,dialogService, navigationService)
     {
         this.Mediator = mediator;
         this.OperatorSelectedCommand = new AsyncCommand<ItemSelected<ContractOperatorModel>>(this.OperatorSelectedCommandExecute);
@@ -69,7 +68,7 @@ public class MobileTopupSelectOperatorPageViewModel : ExtendedBaseViewModel
 
     private async Task OperatorSelectedCommandExecute(ItemSelected<ContractOperatorModel> e)
     {
-        await Logger.LogInformation("OperatorSelectedCommandExecute called");
+        Logger.LogInformation("OperatorSelectedCommandExecute called");
         ProductDetails productDetails = new ProductDetails() {
                                                                  OperatorIdentifier = e.SelectedItem.OperatorIdentfier
                                                              };

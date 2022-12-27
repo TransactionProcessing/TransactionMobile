@@ -22,18 +22,14 @@ public class ExtendedBaseViewModel : BaseViewModel
 
     protected readonly INavigationService NavigationService;
 
-    protected readonly ILoggerService Logger;
-
     #endregion
 
     #region Constructors
 
     public ExtendedBaseViewModel(IApplicationCache applicationCache,
                                  IDialogService dialogService,
-                                 INavigationService navigationService,
-                                 ILoggerService logger) {
+                                 INavigationService navigationService) {
         this.NavigationService = navigationService;
-        this.Logger = logger;
         this.ApplicationCache = applicationCache;
         this.DialogService = dialogService;
         this.BackButtonCommand = new AsyncCommand(this.BackButtonCommandExecute);
@@ -69,7 +65,7 @@ public class ExtendedBaseViewModel : BaseViewModel
 
         Boolean leave = await this.DialogService.ShowDialog("Title", "Logout Message", "yes", "no");
         if (leave) {
-            await Logger.LogInformation("LogoutCommand called");
+            Logger.LogInformation("LogoutCommand called");
             this.ApplicationCache.SetAccessToken(null);
 
             await this.NavigationService.GoToLoginPage();

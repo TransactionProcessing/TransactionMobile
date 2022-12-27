@@ -34,7 +34,7 @@
                                     IMediator mediator,
                                     INavigationService navigationService,
                                     IApplicationCache applicationCache,
-                                    IDialogService dialogService, ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger)
+                                    IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
         {
             this.DeviceService = deviceService;
             this.ApplicationInfoService = applicationInfoService;
@@ -77,7 +77,7 @@
         #region Methods
 
         private async Task UploadLogsCommandExecute() {
-            await Logger.LogInformation("UploadLogsCommandExecute called");
+            Logger.LogInformation("UploadLogsCommandExecute called");
 
             UploadLogsRequest uploadLogsRequest = UploadLogsRequest.Create(String.Empty);
 
@@ -88,7 +88,7 @@
         }
 
         private async Task ViewLogsCommandExecute() {
-            await Logger.LogInformation("ViewLogsCommandExecute called");
+            Logger.LogInformation("ViewLogsCommandExecute called");
 
             // TODO: Act on the response (display message or something)...
             await this.NavigationService.GoToViewLogsPage();

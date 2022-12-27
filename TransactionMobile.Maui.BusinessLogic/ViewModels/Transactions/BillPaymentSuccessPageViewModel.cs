@@ -11,14 +11,11 @@ public class BillPaymentSuccessPageViewModel : BaseViewModel
 {
     private readonly INavigationService NavigationService;
 
-    private readonly ILoggerService Logger;
-
     #region Constructors
 
-    public BillPaymentSuccessPageViewModel(INavigationService navigationService, ILoggerService logger)
+    public BillPaymentSuccessPageViewModel(INavigationService navigationService)
     {
         this.NavigationService = navigationService;
-        this.Logger = logger;
         this.CompletedCommand = new AsyncCommand(this.CompletedCommandExecute);
         this.Title = "Bill Payment Successful";
     }
@@ -35,7 +32,7 @@ public class BillPaymentSuccessPageViewModel : BaseViewModel
 
     private async Task CompletedCommandExecute()
     {
-        await Logger.LogInformation("CompletedCommandExecute called");
+        Logger.LogInformation("CompletedCommandExecute called");
         await this.NavigationService.PopToRoot();
     }
 

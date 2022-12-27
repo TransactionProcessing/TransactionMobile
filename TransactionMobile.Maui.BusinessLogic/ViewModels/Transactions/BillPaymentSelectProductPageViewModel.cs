@@ -31,8 +31,7 @@ public class BillPaymentSelectProductPageViewModel : ExtendedBaseViewModel, IQue
 
     public BillPaymentSelectProductPageViewModel(IMediator mediator, INavigationService navigationService,
                                                  IApplicationCache applicationCache,
-                                                 IDialogService dialogService,
-                                                 ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger)
+                                                 IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
     {
         this.Mediator = mediator;
         this.ProductSelectedCommand = new AsyncCommand<ItemSelected<ContractProductModel>>(this.ProductSelectedCommandExecute);
@@ -67,7 +66,7 @@ public class BillPaymentSelectProductPageViewModel : ExtendedBaseViewModel, IQue
 
     private async Task ProductSelectedCommandExecute(ItemSelected<ContractProductModel> e)
     {
-        await Logger.LogInformation("ProductSelectedCommandExecute called");
+        Logger.LogInformation("ProductSelectedCommandExecute called");
         ProductDetails productDetails = new()
                                         {
                                             OperatorIdentifier = e.SelectedItem.OperatorIdentfier,

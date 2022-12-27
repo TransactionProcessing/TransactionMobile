@@ -22,20 +22,17 @@ public class ViewLogsPageViewModelTests
     private readonly Mock<IDialogService> DialogService;
 
     private readonly ViewLogsPageViewModel ViewModel;
-    private readonly Mock<ILoggerService> LoggerService;
 
     public ViewLogsPageViewModelTests() {
         this.NavigationService = new Mock<INavigationService>();
         this.Mediator = new Mock<IMediator>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogService = new Mock<IDialogService>();
-        this.LoggerService = new Mock<ILoggerService>();
         
         this.ViewModel = new ViewLogsPageViewModel(this.Mediator.Object,
                                                    this.NavigationService.Object,
                                                    this.ApplicationCache.Object,
-                                                   this.DialogService.Object,
-                                                   this.LoggerService.Object);
+                                                   this.DialogService.Object);
     }
 
     [Fact]

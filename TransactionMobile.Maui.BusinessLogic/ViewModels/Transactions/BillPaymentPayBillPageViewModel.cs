@@ -39,8 +39,7 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
     public BillPaymentPayBillPageViewModel(INavigationService navigationService,
                                            IApplicationCache applicationCache,
                                            IDialogService dialogService,
-                                           IMediator mediator,
-                                           ILoggerService logger) : base(applicationCache, dialogService, navigationService,logger)
+                                           IMediator mediator) : base(applicationCache, dialogService, navigationService)
     {
         this.Mediator = mediator;
         this.MakeBillPaymentCommand = new AsyncCommand(this.MakeBillPaymentCommandExecute);
@@ -50,19 +49,19 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
     }
 
     private async Task PaymentAmountEntryCompletedCommandExecute() {
-        await Logger.LogInformation("PaymentAmountEntryCompletedCommandExecute called");
+        Logger.LogInformation("PaymentAmountEntryCompletedCommandExecute called");
         this.OnPaymentAmountEntryCompleted();
     }
 
     private async Task CustomerMobileNumberEntryCompletedExecute() {
-        await Logger.LogInformation("CustomerMobileNumberEntryCompletedExecute called");
+        Logger.LogInformation("CustomerMobileNumberEntryCompletedExecute called");
         this.OnCustomerMobileNumberEntryCompleted();
     }
 
     #endregion
 
     private async Task MakeBillPaymentCommandExecute() {
-        await Logger.LogInformation("MakeBillPaymentCommandExecute called");
+        Logger.LogInformation("MakeBillPaymentCommandExecute called");
 
         PerformBillPaymentMakePaymentRequest request = PerformBillPaymentMakePaymentRequest.Create(DateTime.Now,
                                                                                                    this.ProductDetails.ContractId,

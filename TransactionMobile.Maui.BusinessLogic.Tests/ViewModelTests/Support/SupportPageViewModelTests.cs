@@ -34,7 +34,6 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Support
         private readonly Mock<IDialogService> DialogService;
 
         private readonly SupportPageViewModel ViewModel;
-        private readonly Mock<ILoggerService> LoggerService;
         public SupportPageViewModelTests() {
             this.NavigationService = new Mock<INavigationService>();
             this.DatabaseContext = new Mock<IDatabaseContext>();
@@ -43,15 +42,13 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Support
             this.ApplicationInfoService = new Mock<IApplicationInfoService>();
             this.ApplicationCache = new Mock<IApplicationCache>();
             this.DialogService = new Mock<IDialogService>();
-            this.LoggerService = new Mock<ILoggerService>();
             this.ViewModel = new SupportPageViewModel(this.DeviceService.Object,
                                                       this.ApplicationInfoService.Object,
                                                       this.DatabaseContext.Object,
                                                       this.Mediator.Object,
                                                       this.NavigationService.Object,
                                                       this.ApplicationCache.Object,
-                                                      this.DialogService.Object,
-                                                      this.LoggerService.Object);
+                                                      this.DialogService.Object);
         }
 
         [Fact]

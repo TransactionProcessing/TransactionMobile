@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.UiTests.Drivers
 {
+    using System.Collections.ObjectModel;
+    using OpenQA.Selenium;
+
     public enum MobileTestPlatform
     {
         iOS,
@@ -90,10 +93,18 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             
         }
 
+        public List<LogEntry> GetLogs() {
+            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
+                ReadOnlyCollection<LogEntry>? logs = AppiumDriverWrapper.Driver.Manage().Logs.GetLog("logcat");
+                return logs.ToList();
+            }
+
+            return null;
+        }
+
         public void StopApp()
         {
             AppiumDriverWrapper.Driver?.CloseApp();
-            //AppiumDriverWrapper.Driver?.Close();
             AppiumDriverWrapper.Driver?.Quit();
             //String video = AppiumDriverWrapper.Driver.StopRecordingScreen();
             //byte[] decode = Convert.FromBase64String(video);

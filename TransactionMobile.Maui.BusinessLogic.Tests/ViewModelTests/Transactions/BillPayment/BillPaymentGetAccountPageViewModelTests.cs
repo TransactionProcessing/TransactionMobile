@@ -31,14 +31,13 @@ public class BillPaymentGetAccountPageViewModelTests
     private readonly Mock<IDialogService> DialogSevice;
 
     private readonly BillPaymentGetAccountPageViewModel ViewModel;
-    private readonly Mock<ILoggerService> LoggerService;
+
     public BillPaymentGetAccountPageViewModelTests() {
         this.Mediator = new Mock<IMediator>();
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
-        this.LoggerService = new Mock<ILoggerService>();
-        this.ViewModel = new BillPaymentGetAccountPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object, this.Mediator.Object, this.LoggerService.Object);
+        this.ViewModel = new BillPaymentGetAccountPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object, this.Mediator.Object);
     }
 
     [Fact]

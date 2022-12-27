@@ -31,7 +31,7 @@ public class BillPaymentSelectProductPageViewModelTests
     private readonly Mock<IDialogService> DialogSevice;
 
     private readonly BillPaymentSelectProductPageViewModel ViewModel;
-    private readonly Mock<ILoggerService> LoggerService;
+
     public BillPaymentSelectProductPageViewModelTests()
     {
         this.Mediator = new Mock<IMediator>();
@@ -39,12 +39,10 @@ public class BillPaymentSelectProductPageViewModelTests
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
-        this.LoggerService = new Mock<ILoggerService>();
         this.ViewModel = new BillPaymentSelectProductPageViewModel(this.Mediator.Object,
                                                                    this.NavigationService.Object,
                                                                    this.ApplicationCache.Object,
-                                                                   this.DialogSevice.Object,
-                                                                   this.LoggerService.Object);
+                                                                   this.DialogSevice.Object);
     }
 
     [Fact]

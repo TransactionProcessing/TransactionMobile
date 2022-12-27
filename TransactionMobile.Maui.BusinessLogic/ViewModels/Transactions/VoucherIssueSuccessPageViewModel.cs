@@ -12,15 +12,12 @@
     public class VoucherIssueSuccessPageViewModel : BaseViewModel
     {
         private readonly INavigationService NavigationService;
-
-        private readonly ILoggerService Logger;
-
+        
         #region Constructors
 
-        public VoucherIssueSuccessPageViewModel(INavigationService navigationService, ILoggerService logger)
+        public VoucherIssueSuccessPageViewModel(INavigationService navigationService)
         {
             this.NavigationService = navigationService;
-            this.Logger = logger;
             this.CompletedCommand = new AsyncCommand(this.CompletedCommandExecute);
             this.Title = "Voucher Issue Successful";
         }
@@ -37,7 +34,7 @@
 
         private async Task CompletedCommandExecute()
         {
-            await Logger.LogInformation("CompletedCommandExecute called");
+            Logger.LogInformation("CompletedCommandExecute called");
             await this.NavigationService.PopToRoot();
         }
 

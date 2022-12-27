@@ -43,7 +43,7 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
     public MobileTopupPerformTopupPageViewModel(IMediator mediator,
                                                 INavigationService navigationService,
         IApplicationCache applicationCache,
-                      IDialogService dialogService, ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger)
+                      IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
     {
         this.Mediator = mediator;
         this.PerformTopupCommand = new AsyncCommand(this.PerformTopupCommandExecute);
@@ -95,19 +95,19 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
 
     private async Task CustomerEmailAddressEntryCompletedCommandExecute()
     {
-        await Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
+        Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
         this.OnCustomerEmailAddressEntryCompleted();
     }
 
     private async Task CustomerMobileNumberEntryCompletedCommandExecute()
     {
-        await Logger.LogInformation("CustomerMobileNumberEntryCompletedCommandExecute called");
+        Logger.LogInformation("CustomerMobileNumberEntryCompletedCommandExecute called");
         this.OnCustomerMobileNumberEntryCompleted();
     }
 
     private async Task PerformTopupCommandExecute()
     {
-        await Logger.LogInformation("PerformTopupCommandExecute called");
+        Logger.LogInformation("PerformTopupCommandExecute called");
         // Create Command and Send
         PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(DateTime.Now,
                                                                              this.ProductDetails.ContractId,
@@ -131,7 +131,7 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
 
     private async Task TopupAmountEntryCompletedCommandExecute()
     {
-        await Logger.LogInformation("TopupAmountEntryCompletedCommandExecute called");
+        Logger.LogInformation("TopupAmountEntryCompletedCommandExecute called");
         this.OnTopupAmountEntryCompleted();
     }
 

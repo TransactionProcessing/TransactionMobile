@@ -24,8 +24,7 @@ public class BillPaymentSelectOperatorPageViewModel : ExtendedBaseViewModel
 
     public BillPaymentSelectOperatorPageViewModel(IMediator mediator, INavigationService navigationService,
                                                   IApplicationCache applicationCache,
-                                                  IDialogService dialogService,
-                                                  ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger)
+                                                  IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
 
     {
         this.Mediator = mediator;
@@ -71,7 +70,7 @@ public class BillPaymentSelectOperatorPageViewModel : ExtendedBaseViewModel
 
     private async Task OperatorSelectedCommandExecute(ItemSelected<ContractOperatorModel> e)
     {
-        await Logger.LogInformation("OperatorSelectedCommandExecute called");
+        Logger.LogInformation("OperatorSelectedCommandExecute called");
 
         ProductDetails productDetails = new() {
                                                   OperatorIdentifier = e.SelectedItem.OperatorIdentfier

@@ -19,19 +19,15 @@
 
         private readonly IApplicationCache ApplicationCache;
 
-        private readonly ILoggerService Logger;
-
         private readonly Func<String, String> BaseAddressResolver;
 
         #endregion
 
         #region Constructors
 
-        public TransactionService(ILoggerService logger,
-                                  Func<String, String> baseAddressResolver,
+        public TransactionService(Func<String, String> baseAddressResolver,
                                   HttpClient httpClient,
                                   IApplicationCache applicationCache) : base(httpClient) {
-            this.Logger = logger;
             this.BaseAddressResolver = baseAddressResolver;
             this.ApplicationCache = applicationCache;
 
@@ -45,17 +41,17 @@
 
         public async Task<Result<PerformBillPaymentGetAccountResponseModel>> PerformBillPaymentGetAccount(PerformBillPaymentGetAccountModel model,
                                                                                                           CancellationToken cancellationToken) {
-            await Logger.LogInformation("About to perform bill payment get account transaction");
+            Logger.LogInformation("About to perform bill payment get account transaction");
 
             Result<PerformBillPaymentGetAccountResponseModel> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, PerformBillPaymentGetAccountResponseModel>(model.ToSaleTransactionRequest(), cancellationToken);
 
             if (result.Success)
             {
-                await Logger.LogInformation("Bill payment - get account transaction performed successfully");
+                Logger.LogInformation("Bill payment - get account transaction performed successfully");
             }
             else
-            {
-                await Logger.LogWarning("Error performing bill payment - get account transaction");
+            {   
+                Logger.LogWarning("Error performing bill payment - get account transaction");
             }
 
             return result;
@@ -63,17 +59,17 @@
 
         public async Task<Result<SaleTransactionResponseMessage>> PerformBillPaymentMakePayment(PerformBillPaymentMakePaymentModel model,
                                                                                                 CancellationToken cancellationToken) {
-            await Logger.LogInformation("About to perform bill payment make payment transaction");
+            Logger.LogInformation("About to perform bill payment make payment transaction");
 
             Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
 
             if (result.Success)
             {
-                await Logger.LogInformation("Bill payment - make payment transaction performed successfully");
+                Logger.LogInformation("Bill payment - make payment transaction performed successfully");
             }
             else
             {
-                await Logger.LogWarning("Error performing bill payment - make payment transaction");
+                Logger.LogWarning("Error performing bill payment - make payment transaction");
             }
 
             return result;
@@ -81,17 +77,17 @@
 
         public async Task<Result<PerformLogonResponseModel>> PerformLogon(PerformLogonRequestModel model,
                                                                           CancellationToken cancellationToken) {
-            await Logger.LogInformation("About to perform logon transaction");
+            Logger.LogInformation("About to perform logon transaction");
 
             Result<PerformLogonResponseModel> result =  await this.SendTransactionRequest<LogonTransactionRequestMessage, PerformLogonResponseModel>(model.ToLogonTransactionRequest(), cancellationToken);
 
             if (result.Success)
             {
-                await Logger.LogInformation("Logon transaction performed successfully");
+                Logger.LogInformation("Logon transaction performed successfully");
             }
             else
             {
-                await Logger.LogWarning("Error performing Logon transaction");
+                Logger.LogWarning("Error performing Logon transaction");
             }
 
             return result;
@@ -99,17 +95,17 @@
 
         public async Task<Result<SaleTransactionResponseMessage>> PerformMobileTopup(PerformMobileTopupRequestModel model,
                                                                                      CancellationToken cancellationToken) {
-            await Logger.LogInformation("About to perform mobile top-up transaction");
+            Logger.LogInformation("About to perform mobile top-up transaction");
 
             Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
 
             if (result.Success)
             {
-                await Logger.LogInformation("Mobile top-up transaction performed successfully");
+                Logger.LogInformation("Mobile top-up transaction performed successfully");
             }
             else
-            {
-                await Logger.LogWarning("Error performing Mobile top-up transaction");
+            { 
+                Logger.LogWarning("Error performing Mobile top-up transaction");
             }
 
             return result;
@@ -117,17 +113,17 @@
 
         public async Task<Result<ReconciliationResponseMessage>> PerformReconciliation(PerformReconciliationRequestModel model,
                                                                                        CancellationToken cancellationToken) {
-            await Logger.LogInformation("About to perform reconciliation transaction");
+            Logger.LogInformation("About to perform reconciliation transaction");
 
             Result<ReconciliationResponseMessage> result = await this.SendTransactionRequest<ReconciliationRequestMessage, ReconciliationResponseMessage>(model.ToReconciliationRequest(), cancellationToken);
 
             if (result.Success)
             {
-                await Logger.LogInformation("Reconciliation transaction performed successfully");
+                Logger.LogInformation("Reconciliation transaction performed successfully");
             }
             else
             {
-                await Logger.LogWarning("Error performing Reconciliation transaction");
+                Logger.LogWarning("Error performing Reconciliation transaction");
             }
 
             return result;
@@ -135,15 +131,15 @@
 
         public async Task<Result<SaleTransactionResponseMessage>> PerformVoucherIssue(PerformVoucherIssueRequestModel model,
                                                                                       CancellationToken cancellationToken) {
-            await Logger.LogInformation("About to perform voucher transaction");
+            Logger.LogInformation("About to perform voucher transaction");
 
             Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
 
             if (result.Success) {
-                await Logger.LogInformation("Voucher transaction performed successfully");
+                Logger.LogInformation("Voucher transaction performed successfully");
             }
             else {
-                await Logger.LogWarning("Error performing Voucher transaction");    
+                Logger.LogWarning("Error performing Voucher transaction");    
             }
 
             return result;
@@ -181,7 +177,7 @@
                 // Add the access token to the client headers
                 TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
 
-                await Logger.LogDebug($"Transaction Request details: Uri {requestUri} Payload {requestSerialised} Access Token {accessToken.AccessToken}");
+                Logger.LogDebug($"Transaction Request details: Uri {requestUri} Payload {requestSerialised} Access Token {accessToken.AccessToken}");
 
                 this.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
 
@@ -191,14 +187,14 @@
                 // Process the response
                 String content = await this.HandleResponse(httpResponse, cancellationToken);
 
-                await Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content}");
+                Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content}");
 
                 return new SuccessResult<TResponse>(JsonConvert.DeserializeObject<TResponse>(content));
 
             }
             catch(Exception ex) {
                 // An exception has occurred, add some additional information to the message
-                await Logger.LogError("Error posting transaction.", ex);
+                Logger.LogError("Error posting transaction.", ex);
 
                 return new ErrorResult<TResponse>("Error posting transaction");
             }

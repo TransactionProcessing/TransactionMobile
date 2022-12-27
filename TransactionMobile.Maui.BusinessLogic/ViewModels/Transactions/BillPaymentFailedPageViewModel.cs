@@ -11,14 +11,11 @@ public class BillPaymentFailedPageViewModel : BaseViewModel
 {
     private readonly INavigationService NavigationService;
 
-    private readonly ILoggerService Logger;
-
     #region Constructors
 
-    public BillPaymentFailedPageViewModel(INavigationService navigationService, ILoggerService logger)
+    public BillPaymentFailedPageViewModel(INavigationService navigationService)
     {
         this.NavigationService = navigationService;
-        this.Logger = logger;
         this.CancelledCommand = new AsyncCommand(this.CancelledCommandExecute);
         this.Title = "Bill Payment Failed";
     }
@@ -35,7 +32,7 @@ public class BillPaymentFailedPageViewModel : BaseViewModel
 
     private async Task CancelledCommandExecute()
     {
-        await Logger.LogInformation("CancelledCommandExecute called");
+        Logger.LogInformation("CancelledCommandExecute called");
         await this.NavigationService.PopToRoot();
     }
 

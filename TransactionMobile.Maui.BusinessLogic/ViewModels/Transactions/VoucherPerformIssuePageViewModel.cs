@@ -42,8 +42,7 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
     public VoucherPerformIssuePageViewModel(INavigationService navigationService,
                                             IApplicationCache applicationCache,
                                             IDialogService dialogService,
-                                            IMediator mediator,
-                                            ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger)
+                                            IMediator mediator) : base(applicationCache, dialogService, navigationService)
     {
         this.Mediator = mediator;
         this.IssueVoucherCommand = new AsyncCommand(this.IssueVoucherCommandExecute);
@@ -105,24 +104,24 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
     #region Methods
 
     private async Task CustomerEmailAddressEntryCompletedCommandExecute() {
-        await Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
+        Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
         this.OnCustomerEmailAddressEntryCompleted();
     }
 
     private async Task RecipientMobileNumberEntryCompletedCommandExecute() {
-        await Logger.LogInformation("RecipientMobileNumberEntryCompletedCommandExecute called");
+        Logger.LogInformation("RecipientMobileNumberEntryCompletedCommandExecute called");
         this.OnRecipientMobileNumberEntryCompleted();
     }
 
     private async Task RecipientEmailAddressEntryCompletedCommandExecute()
     {
-         await Logger.LogInformation("RecipientEmailAddressEntryCompletedCommandExecute called");
+         Logger.LogInformation("RecipientEmailAddressEntryCompletedCommandExecute called");
         this.OnRecipientEmailAddressEntryCompleted();
     }
 
     private async Task IssueVoucherCommandExecute()
     {
-        await Logger.LogInformation("IssueVoucherCommandExecute called");
+        Logger.LogInformation("IssueVoucherCommandExecute called");
         // TODO: Create Command and Send
         PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(DateTime.Now,
                                                                                this.ProductDetails.ContractId,
@@ -148,7 +147,7 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
 
     private async Task VoucherAmountEntryCompletedCommandExecute()
     {
-        await Logger.LogInformation("VoucherAmountEntryCompletedCommandExecute called");
+        Logger.LogInformation("VoucherAmountEntryCompletedCommandExecute called");
         this.OnVoucherAmountEntryCompleted();
     }
 

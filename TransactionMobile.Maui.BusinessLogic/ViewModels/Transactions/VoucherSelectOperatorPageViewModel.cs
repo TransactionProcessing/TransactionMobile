@@ -18,19 +18,16 @@ public class VoucherSelectOperatorPageViewModel : ExtendedBaseViewModel
 
     private readonly IMediator Mediator;
 
-    private readonly ILoggerService Logger;
-
     #endregion
 
     #region Constructors
 
     public VoucherSelectOperatorPageViewModel(IMediator mediator, INavigationService navigationService,
                                               IApplicationCache applicationCache,
-                                              IDialogService dialogService, ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger)
+                                              IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
 
     {
         this.Mediator = mediator;
-        this.Logger = logger;
         this.OperatorSelectedCommand = new AsyncCommand<ItemSelected<ContractOperatorModel>>(this.OperatorSelectedCommandExecute);
         this.Title = "Select an Operator";
     }
@@ -72,7 +69,7 @@ public class VoucherSelectOperatorPageViewModel : ExtendedBaseViewModel
 
     private async Task OperatorSelectedCommandExecute(ItemSelected<ContractOperatorModel> e)
     {
-        await Logger.LogInformation("OperatorSelectedCommandExecute called");
+        Logger.LogInformation("OperatorSelectedCommandExecute called");
         ProductDetails productDetails = new ProductDetails()
                                         {
                                             OperatorIdentifier = e.SelectedItem.OperatorIdentfier

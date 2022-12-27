@@ -32,8 +32,7 @@ public class MobileTopupSelectProductPageViewModel : ExtendedBaseViewModel, IQue
     }
 
     public MobileTopupSelectProductPageViewModel(IMediator mediator, INavigationService navigationService,
-                                                 IApplicationCache applicationCache, IDialogService dialogService
-        , ILoggerService logger) :base(applicationCache, dialogService, navigationService, logger)
+                                                 IApplicationCache applicationCache, IDialogService dialogService) :base(applicationCache, dialogService, navigationService)
     {
         this.Mediator = mediator;
         this.ProductSelectedCommand = new AsyncCommand<ItemSelected<ContractProductModel>>(this.ProductSelectedCommandExecute);
@@ -66,7 +65,7 @@ public class MobileTopupSelectProductPageViewModel : ExtendedBaseViewModel, IQue
 
     private async Task ProductSelectedCommandExecute(ItemSelected<ContractProductModel> e)
     {
-        await Logger.LogInformation("ProductSelectedCommandExecute called");
+        Logger.LogInformation("ProductSelectedCommandExecute called");
         ProductDetails productDetails = new ProductDetails()
                                         {
                                             OperatorIdentifier = e.SelectedItem.OperatorIdentfier,

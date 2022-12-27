@@ -11,14 +11,11 @@ using UIServices;
 public class MobileTopupFailedPageViewModel : BaseViewModel
 {
     private readonly INavigationService NavigationService;
-
-    private readonly ILoggerService Logger;
-
+    
     #region Constructors
 
-    public MobileTopupFailedPageViewModel(INavigationService navigationService, ILoggerService logger) {
+    public MobileTopupFailedPageViewModel(INavigationService navigationService) {
         this.NavigationService = navigationService;
-        this.Logger = logger;
         this.CancelledCommand = new AsyncCommand(this.CancelledCommandExecute);
         this.Title = "Mobile Topup Failed";
     }
@@ -35,7 +32,7 @@ public class MobileTopupFailedPageViewModel : BaseViewModel
 
     private async Task CancelledCommandExecute()
     {
-        await Logger.LogInformation("CancelledCommandExecute called");
+        Logger.LogInformation("CancelledCommandExecute called");
         await this.NavigationService.PopToRoot();
     }
 

@@ -12,14 +12,11 @@ public class VoucherIssueFailedPageViewModel : BaseViewModel
 {
     private readonly INavigationService NavigationService;
 
-    private readonly ILoggerService Logger;
-
     #region Constructors
 
-    public VoucherIssueFailedPageViewModel(INavigationService navigationService, ILoggerService logger)
+    public VoucherIssueFailedPageViewModel(INavigationService navigationService)
     {
         this.NavigationService = navigationService;
-        this.Logger = logger;
         this.CancelledCommand = new AsyncCommand(this.CancelledCommandExecute);
         this.Title = "Voucher Issue Failed";
     }
@@ -36,7 +33,7 @@ public class VoucherIssueFailedPageViewModel : BaseViewModel
 
     private async Task CancelledCommandExecute()
     {
-        await Logger.LogInformation("CancelledCommandExecute called");
+        Logger.LogInformation("CancelledCommandExecute called");
         await this.NavigationService.PopToRoot();
     }
 

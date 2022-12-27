@@ -31,7 +31,6 @@ public class VoucherIssueSelectProductPageViewModelTests
     private readonly Mock<IApplicationCache> ApplicationCache;
 
     private readonly Mock<IDialogService> DialogSevice;
-    private readonly Mock<ILoggerService> LoggerService;
     private readonly VoucherSelectProductPageViewModel ViewModel;
 
     public VoucherIssueSelectProductPageViewModelTests() {
@@ -40,9 +39,7 @@ public class VoucherIssueSelectProductPageViewModelTests
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
-        this.LoggerService = new Mock<ILoggerService>();
-        this.ViewModel = new VoucherSelectProductPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object,
-                                                               this.LoggerService.Object);
+        this.ViewModel = new VoucherSelectProductPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object);
         
     }
 

@@ -16,11 +16,11 @@ public class MobileTopupSuccessPageViewModelTests
     private readonly Mock<INavigationService> NavigationService;
 
     private readonly MobileTopupSuccessPageViewModel ViewModel;
-    private readonly Mock<ILoggerService> LoggerService;
+    
     public MobileTopupSuccessPageViewModelTests() {
         this.NavigationService = new Mock<INavigationService>();
-        this.LoggerService= new Mock<ILoggerService>();
-        this.ViewModel = new MobileTopupSuccessPageViewModel(this.NavigationService.Object,this.LoggerService.Object);
+        
+        this.ViewModel = new MobileTopupSuccessPageViewModel(this.NavigationService.Object);
     }
     
     [Fact]

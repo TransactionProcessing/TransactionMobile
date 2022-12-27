@@ -30,8 +30,7 @@ public class MyAccountDetailsPageViewModel : ExtendedBaseViewModel
 
     public MyAccountDetailsPageViewModel(INavigationService navigationService,
                                          IApplicationCache applicationCache,
-                                         IDialogService dialogService,
-                                         ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger) {
+                                         IDialogService dialogService) : base(applicationCache, dialogService, navigationService) {
         this.Title = "My Details";
     }
 

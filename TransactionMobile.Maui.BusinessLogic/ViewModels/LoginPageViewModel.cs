@@ -35,7 +35,7 @@
 
         public LoginPageViewModel(IMediator mediator, INavigationService navigationService, IApplicationCache applicationCache,
                                   IDeviceService deviceService,IApplicationInfoService applicationInfoService,
-                                  IDialogService dialogService, ILoggerService logger) : base(applicationCache,dialogService,navigationService, logger)
+                                  IDialogService dialogService) : base(applicationCache,dialogService,navigationService)
         {
             this.DeviceService = deviceService;
             this.ApplicationInfoService = applicationInfoService;
@@ -165,7 +165,7 @@
             Stopwatch sw = Stopwatch.StartNew();
             WriteTimingTrace(sw, "Start of LoginCommandExecute");
             try {
-                await Logger.LogInformation("LoginCommandExecute called");
+                Logger.LogInformation("LoginCommandExecute called");
                 
                 Result<Configuration> configurationResult = await this.GetConfiguration();
                 this.HandleResult(configurationResult);
@@ -193,14 +193,14 @@
                 await this.NavigationService.GoToHome();
             }
             catch(ApplicationException aex) {
-                await Logger.LogError("Error during logon", aex);
+                Logger.LogError("Error during logon", aex);
                 await this.DialogService.ShowWarningToast(aex.Message);
             }
         }
         
         private async Task WriteTimingTrace(Stopwatch sw, String message) {
             sw.Stop();
-            await Logger.LogWarning($"{message} - Elapsed ms [{sw.ElapsedMilliseconds}]");
+            Logger.LogWarning($"{message} - Elapsed ms [{sw.ElapsedMilliseconds}]");
             sw.Start();
         }
 

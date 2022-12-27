@@ -14,7 +14,7 @@
 
         public TransactionsPageViewModel(INavigationService navigationService,
                                          IApplicationCache applicationCache,
-                                         IDialogService dialogService, ILoggerService logger) : base(applicationCache, dialogService, navigationService, logger)
+                                         IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
         {
             this.MobileTopupCommand = new AsyncCommand(this.MobileTopupCommandExecute);
             this.MobileWalletCommand = new AsyncCommand(this.MobileWalletCommandExecute);
@@ -44,31 +44,31 @@
 
         private async Task AdminCommandExecute()
         {
-            await Logger.LogInformation("AdminCommandExecute called");
+            Logger.LogInformation("AdminCommandExecute called");
             await this.NavigationService.GoToAdminPage();
         }
 
         private async Task BillPaymentCommandExecute()
         {
-            await Logger.LogInformation("AdminCommandExecute called");
+            Logger.LogInformation("AdminCommandExecute called");
             await this.NavigationService.GoToBillPaymentSelectOperatorPage();
         }
 
         private async Task MobileTopupCommandExecute()
         {
-            await Logger.LogInformation("MobileTopupCommandExecute called");
+            Logger.LogInformation("MobileTopupCommandExecute called");
             await this.NavigationService.GoToMobileTopupSelectOperatorPage();
         }
 
         private async Task MobileWalletCommandExecute()
         {
-            await Logger.LogInformation("MobileWalletCommandExecute called");
+            Logger.LogInformation("MobileWalletCommandExecute called");
             await this.NavigationService.GoToHome();
         }
 
         private async Task VoucherCommandExecute()
         {
-            await Logger.LogInformation("VoucherCommandExecute called");
+            Logger.LogInformation("VoucherCommandExecute called");
             await this.NavigationService.GoToVoucherSelectOperatorPage();
         }
 

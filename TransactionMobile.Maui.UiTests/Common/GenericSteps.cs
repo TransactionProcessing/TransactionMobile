@@ -25,7 +25,7 @@ public class GenericSteps
     [BeforeScenario(Order = 0)]
     public async Task StartSystem()
     {
-        //Setup.GlobalSetup();
+        Setup.GlobalSetup();
 
         // Initialise a logger
         String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");

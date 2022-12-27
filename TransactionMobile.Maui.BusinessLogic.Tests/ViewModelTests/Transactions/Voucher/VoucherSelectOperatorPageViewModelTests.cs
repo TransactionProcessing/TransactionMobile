@@ -28,7 +28,7 @@ public class VoucherSelectOperatorPageViewModelTests
     private readonly Mock<IApplicationCache> ApplicationCache;
 
     private readonly Mock<IDialogService> DialogSevice;
-    private readonly Mock<ILoggerService> LoggerService;
+
     private readonly VoucherSelectOperatorPageViewModel ViewModel;
 
     public VoucherSelectOperatorPageViewModelTests() {
@@ -36,9 +36,8 @@ public class VoucherSelectOperatorPageViewModelTests
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
-        this.LoggerService = new Mock<ILoggerService>();
         this.ViewModel = new VoucherSelectOperatorPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object,
-                                                                this.DialogSevice.Object,this.LoggerService.Object);
+                                                                this.DialogSevice.Object);
 
     }
     [Fact]

@@ -21,19 +21,16 @@ public class MyAccountAddressPageViewModelTests
     private readonly Mock<IDialogService> DialogService;
     private readonly Mock<IMediator> Mediator;
     private readonly MyAccountAddressPageViewModel ViewModel;
-    private readonly Mock<ILoggerService> LoggerService;
     public MyAccountAddressPageViewModelTests()
     {
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogService = new Mock<IDialogService>();
         this.Mediator = new Mock<IMediator>();
-        this.LoggerService= new Mock<ILoggerService>();
         this.ViewModel = new MyAccountAddressPageViewModel(this.NavigationService.Object,
                                                            this.ApplicationCache.Object,
                                                            this.DialogService.Object,
-                                                           this.Mediator.Object,
-                                                           this.LoggerService.Object);
+                                                           this.Mediator.Object);
     }
 
     [Fact]

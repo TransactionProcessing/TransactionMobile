@@ -23,17 +23,14 @@ public class MyAccountContactPageViewModelTests
     private readonly Mock<IDialogService> DialogService;
 
     private readonly MyAccountContactPageViewModel ViewModel;
-    private readonly Mock<ILoggerService> LoggerService;
     public MyAccountContactPageViewModelTests() {
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         
         this.DialogService = new Mock<IDialogService>();
-        this.LoggerService = new Mock<ILoggerService>();
         this.ViewModel = new MyAccountContactPageViewModel(this.NavigationService.Object,
                                                            this.ApplicationCache.Object,
-                                                           this.DialogService.Object,
-                                                           this.LoggerService.Object);
+                                                           this.DialogService.Object);
     }
 
     [Fact]

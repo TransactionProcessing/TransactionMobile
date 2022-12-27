@@ -11,15 +11,12 @@
     public class MobileTopupSuccessPageViewModel : BaseViewModel
     {
         private readonly INavigationService NavigationService;
-
-        private readonly ILoggerService Logger;
-
+        
         #region Constructors
 
-        public MobileTopupSuccessPageViewModel(INavigationService navigationService, ILoggerService logger)
+        public MobileTopupSuccessPageViewModel(INavigationService navigationService)
         {
             this.NavigationService = navigationService;
-            this.Logger = logger;
             this.CompletedCommand = new AsyncCommand(this.CompletedCommandExecute);
             this.Title = "Mobile Topup Successful";
         }
@@ -36,7 +33,7 @@
 
         private async Task CompletedCommandExecute()
         {
-            await Logger.LogInformation("CompletedCommandExecute called");
+            Logger.LogInformation("CompletedCommandExecute called");
             await this.NavigationService.PopToRoot();
         }
 

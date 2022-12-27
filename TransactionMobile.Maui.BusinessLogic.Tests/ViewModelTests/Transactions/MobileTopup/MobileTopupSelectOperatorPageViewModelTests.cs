@@ -30,16 +30,13 @@ public class MobileTopupSelectOperatorPageViewModelTests
     private readonly Mock<IDialogService> DialogSevice;
 
     private readonly MobileTopupSelectOperatorPageViewModel ViewModel;
-    private readonly Mock<ILoggerService> LoggerService;
     public MobileTopupSelectOperatorPageViewModelTests() {
         this.Mediator = new Mock<IMediator>();
         
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
-        this.LoggerService= new Mock<ILoggerService>();
-        this.ViewModel = new MobileTopupSelectOperatorPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.DialogSevice.Object, this.ApplicationCache.Object,
-                                                                    this.LoggerService.Object);
+        this.ViewModel = new MobileTopupSelectOperatorPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.DialogSevice.Object, this.ApplicationCache.Object);
 
         
     }

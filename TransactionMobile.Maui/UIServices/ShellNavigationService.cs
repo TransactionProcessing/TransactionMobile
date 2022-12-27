@@ -14,12 +14,10 @@ using Pages.Transactions.Voucher;
 
 public class ShellNavigationService : INavigationService
 {
-    private readonly ILoggerService Logger;
-
     #region Methods
 
-    public ShellNavigationService(ILoggerService logger) {
-        this.Logger = logger;
+    public ShellNavigationService() {
+
     }
     public async Task GoBack() {
         await Shell.Current.Navigation.PopAsync();
@@ -92,7 +90,7 @@ public class ShellNavigationService : INavigationService
     }
 
     public async Task PopToRoot() {
-        await Logger.LogInformation($"navigating to root");
+        Logger.LogInformation($"navigating to root");
         await Shell.Current.Navigation.PopToRootAsync();
     }
 
@@ -163,11 +161,11 @@ public class ShellNavigationService : INavigationService
 
     private async Task NavigateTo(String route) {
         try {
-            await Logger.LogInformation($"navigating to {route}");
+            Logger.LogInformation($"navigating to {route}");
             await Shell.Current.GoToAsync(route);
             }
         catch(Exception e) {
-            await Logger.LogError("Error navigating to {route}", e);
+            Logger.LogError("Error navigating to {route}", e);
         }
     }
 
@@ -175,12 +173,12 @@ public class ShellNavigationService : INavigationService
     {
         try
         {
-            await Logger.LogInformation($"navigating to {route}");
+            Logger.LogInformation($"navigating to {route}");
             await Shell.Current.GoToAsync(route, parameters);
         }
         catch (Exception e)
         {
-            await Logger.LogError("Error navigating to {route}", e);
+            Logger.LogError("Error navigating to {route}", e);
         }
     }
 
@@ -192,7 +190,7 @@ public class ShellNavigationService : INavigationService
         }
         catch (Exception e)
         {
-            await Logger.LogError("Error navigating to {route}", e);
+            Logger.LogError("Error navigating to {route}", e);
         }
     }
 
