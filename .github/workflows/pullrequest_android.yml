@@ -57,7 +57,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '12.12.0'
+          node-version: '16.14.2'
 
       - name: Set up Appium
         run: |
