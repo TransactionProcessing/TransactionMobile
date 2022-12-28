@@ -483,17 +483,17 @@ namespace TransactionMobile.Maui.UiTests.Steps
                                         hostAddresses = new List<Object>()
                                     };
             configRequest.hostAddresses.Add(new {
-                                                    servicetype = 1,
+                                                    servicetype = 0,
                                                     uri = this.TestingContext.DockerHelper.EstateManagementBaseAddressResolver("").Replace("127.0.0.1", this.TestingContext.DockerHelper.LocalIPAddress)
             });
             configRequest.hostAddresses.Add(new
                                             {
-                                                servicetype = 2,
+                                                servicetype = 1,
                                                 uri = this.TestingContext.DockerHelper.SecurityServiceBaseAddressResolver("").Replace("127.0.0.1", this.TestingContext.DockerHelper.LocalIPAddress)
             });
             configRequest.hostAddresses.Add(new
                                             {
-                                                servicetype = 3,
+                                                servicetype = 2,
                                                 uri = this.TestingContext.DockerHelper.TransactionProcessorAclBaseAddressResolver("").Replace("127.0.0.1", this.TestingContext.DockerHelper.LocalIPAddress)
             });
 
