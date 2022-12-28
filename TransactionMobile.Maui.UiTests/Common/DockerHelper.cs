@@ -95,6 +95,17 @@ namespace TransactionMobile.Maui.UiTests.Common
 
         public String LocalIPAddress { get; private set; }
 
+        public override Task<IContainerService> SetupTransactionProcessorAclContainer(List<INetworkService> networkServices,
+                                                                                      Int32 securityServicePort = 5001,
+                                                                                      List<String> additionalEnvironmentVariables = null) {
+
+            this.Trace("In override SetupTransactionProcessorAclContainer");
+            additionalEnvironmentVariables = new List<String> {
+                                                                  "AppSettings:SkipVersionCheck=true"
+                                                              };
+            return base.SetupTransactionProcessorAclContainer(networkServices, securityServicePort, additionalEnvironmentVariables);
+        }
+
         /// <summary>
         /// Starts the containers for scenario run.
         /// </summary>
