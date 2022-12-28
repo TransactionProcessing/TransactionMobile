@@ -37,6 +37,7 @@ namespace TransactionMobile.Maui.UITests.Steps
             await this.loginPage.SetConfigHostUrl(configHostUrl);
 
             String serial = await this.loginPage.GetDeviceSerial();
+
             AddMerchantDeviceRequest request = new AddMerchantDeviceRequest {
                                                                                 DeviceIdentifier = serial
                                                                             };
