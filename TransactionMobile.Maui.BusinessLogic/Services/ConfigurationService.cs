@@ -63,13 +63,16 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
                 // Make the Http Call here
                 HttpResponseMessage httpResponse = await this.HttpClient.GetAsync(requestUri, cancellationToken);
-
+                Logger.LogDebug($"Configuration Response [{httpResponse.StatusCode}]");
+                
                 // Process the response
                 String content = await this.HandleResponse(httpResponse, cancellationToken);
+                Logger.LogDebug($"Configuration Response Content [{content}]");
 
                 // call was successful so now deserialise the body to the response object
                 ConfigurationResponse apiResponse = JsonConvert.DeserializeObject<ConfigurationResponse>(content);
 
+                Logger.LogDebug($"About to build Configuration");
                 response = new Configuration() {
                                                    ClientSecret = apiResponse.ClientSecret,
                                                    ClientId = apiResponse.ClientId,
@@ -80,6 +83,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                                                        apiResponse.HostAddresses.Single(h => h.ServiceType == ServiceType.TransactionProcessorAcl).Uri,
                                                };
 
+                Logger.LogDebug($"About to xlate log level");
                 response.LogLevel = apiResponse.LogLevel switch
                 {
                     LoggingLevel.Debug => LogLevel.Debug,
@@ -91,6 +95,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                     _ => LogLevel.Info
                 };
 
+                Logger.LogDebug($"About to xlate app centre config");
                 response.AppCenterConfig = new AppCenterConfiguration() {
                                                                             AndroidKey = apiResponse.ApplicationCentreConfiguration.AndroidKey,
                                                                             MacOSKey = apiResponse.ApplicationCentreConfiguration.MacosKey,
