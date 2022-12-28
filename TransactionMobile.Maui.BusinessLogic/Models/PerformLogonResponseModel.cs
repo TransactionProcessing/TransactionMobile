@@ -5,9 +5,7 @@ using ViewModels.Transactions;
 public class PerformLogonResponseModel
 {
     #region Properties
-    
-    public Boolean IsSuccessful { get; set; }
-
+    public String ResponseCode { get; set; }
     public String ResponseMessage { get; set; }
 
     public Guid EstateId { get; set; }
@@ -24,4 +22,11 @@ public class PerformBillPaymentGetAccountResponseModel
     public Boolean IsSuccessful { get; set; }
 
     public BillDetails BillDetails{ get; set; }
+}
+
+public static class Extenstions
+{
+    public static Boolean IsSuccessful(this PerformLogonResponseModel model) {
+        return model.ResponseCode == "0000";
+    }
 }

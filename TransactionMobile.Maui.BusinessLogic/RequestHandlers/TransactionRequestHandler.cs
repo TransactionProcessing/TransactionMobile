@@ -108,7 +108,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         Result<PerformLogonResponseModel> result = await this.TransactionService.PerformLogon(model, cancellationToken);
 
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
-        if (result.Success && result.Data.IsSuccessful == false)
+        if (result.Success && result.Data.IsSuccessful() == false)
         {
             return new ErrorResult<PerformLogonResponseModel>("Logon transaction not successful");
         }

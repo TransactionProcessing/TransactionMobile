@@ -88,7 +88,7 @@ public static class Extensions
 
     public static TransactionRecord UpdateFrom(this TransactionRecord transactionRecord,
                                                Result<PerformLogonResponseModel> result) {
-        transactionRecord.IsSuccessful = result.Data.IsSuccessful;
+        transactionRecord.IsSuccessful = result.Data.IsSuccessful();
         transactionRecord.ResponseMessage = result.Data.ResponseMessage;
         transactionRecord.EstateId = result.Data.EstateId;
         transactionRecord.MerchantId = result.Data.MerchantId;
