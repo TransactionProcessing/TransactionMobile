@@ -5,6 +5,7 @@ using Common;
 using Logging;
 using Maui.UIServices;
 using MediatR;
+using Models;
 using MvvmHelpers.Commands;
 using RequestHandlers;
 using Requests;
@@ -72,9 +73,9 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
                                                                                                    this.CustomerMobileNumber,
                                                                                                    this.PaymentAmount);
 
-        Result<SaleTransactionResponseMessage> result = await this.Mediator.Send(request);
+        Result<PerformBillPaymentMakePaymentResponseModel> result = await this.Mediator.Send(request);
 
-        if (result.Success && result.Data.IsSuccessfulTransaction()) {
+        if (result.Success && result.Data.IsSuccessful) {
             await this.NavigationService.GoToBillPaymentSuccessPage();
         }
         else {

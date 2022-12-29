@@ -193,41 +193,39 @@ namespace TransactionMobile.Maui.BusinessLogic.Services.TrainingModeServices
             return new SuccessResult<PerformLogonResponseModel>(new PerformLogonResponseModel {
                                                                                                   EstateId = Guid.Parse("D7E52254-E0BE-436A-9A34-CC291DA0D66A"),
                                                                                                   MerchantId = Guid.Parse("DD034A3B-D8EE-45A4-A29F-8774751CEE76"),
-                                                                                                  IsSuccessful = true,
-                                                                                                  ResponseMessage = "SUCCESS",
-                                                                                                  RequireApplicationUpdate = false
+                                                                                                  ResponseCode = "0000",
+                                                                                                  ResponseMessage = "SUCCESS"
                                                                                               });
         }
 
-        public async Task<Result<SaleTransactionResponseMessage>> PerformMobileTopup(PerformMobileTopupRequestModel model,
+        public async Task<Result<PerformMobileTopupResponseModel>> PerformMobileTopup(PerformMobileTopupRequestModel model,
                                                                                      CancellationToken cancellationToken) {
-            SaleTransactionResponseMessage responseMessage = new SaleTransactionResponseMessage {
-                                                                                                    ResponseCode = "0000",
-                                                                                                    ResponseMessage = "SUCCESS"
-                                                                                                };
+            PerformMobileTopupResponseModel responseModel = new() {
+                                                                      ResponseCode = "0000",
+                                                                      ResponseMessage = "SUCCESS"
+                                                                  };
 
 
-            return new SuccessResult<SaleTransactionResponseMessage>(responseMessage);
+            return new SuccessResult<PerformMobileTopupResponseModel>(responseModel);
         }
 
-        public async Task<Result<ReconciliationResponseMessage>> PerformReconciliation(PerformReconciliationRequestModel model,
+        public async Task<Result<PerformReconciliationResponseModel>> PerformReconciliation(PerformReconciliationRequestModel model,
                                                                                        CancellationToken cancellationToken) {
-            return new SuccessResult<ReconciliationResponseMessage>(new ReconciliationResponseMessage {
-                                                                                                          ResponseMessage = "SUCCESS",
-                                                                                                          ResponseCode = "0000"
-                                                                                                      });
+            return new SuccessResult<PerformReconciliationResponseModel>(new PerformReconciliationResponseModel {
+                                                                                                                    ResponseMessage = "SUCCESS",
+                                                                                                                    ResponseCode = "0000"
+                                                                                                                });
         }
 
-        public async Task<Result<SaleTransactionResponseMessage>> PerformVoucherIssue(PerformVoucherIssueRequestModel model,
+        public async Task<Result<PerformVoucherIssueResponseModel>> PerformVoucherIssue(PerformVoucherIssueRequestModel model,
                                                                                       CancellationToken cancellationToken) {
-            SaleTransactionResponseMessage responseMessage = new SaleTransactionResponseMessage
-                                                             {
-                                                                 ResponseCode = "0000",
-                                                                 ResponseMessage = "SUCCESS"
-                                                             };
-
-
-            return new SuccessResult<SaleTransactionResponseMessage>(responseMessage);
+            PerformVoucherIssueResponseModel responseMessage = new PerformVoucherIssueResponseModel
+            {
+                                                                   ResponseCode = "0000",
+                                                                   ResponseMessage = "SUCCESS"
+                                                               };
+            
+            return new SuccessResult<PerformVoucherIssueResponseModel>(responseMessage);
         }
 
         public async Task<Result<PerformBillPaymentGetAccountResponseModel>> PerformBillPaymentGetAccount(PerformBillPaymentGetAccountModel model,
@@ -249,16 +247,16 @@ namespace TransactionMobile.Maui.BusinessLogic.Services.TrainingModeServices
             return new SuccessResult<PerformBillPaymentGetAccountResponseModel>(responseMessage);
         }
 
-        public async Task<Result<SaleTransactionResponseMessage>> PerformBillPaymentMakePayment(PerformBillPaymentMakePaymentModel model,
+        public async Task<Result<PerformBillPaymentMakePaymentResponseModel>> PerformBillPaymentMakePayment(PerformBillPaymentMakePaymentModel model,
                                                                                                 CancellationToken cancellationToken) {
-            SaleTransactionResponseMessage responseMessage = new SaleTransactionResponseMessage
-                                                             {
-                                                                 ResponseCode = "0000",
-                                                                 ResponseMessage = "SUCCESS"
-                                                             };
+            PerformBillPaymentMakePaymentResponseModel responseMessage = new PerformBillPaymentMakePaymentResponseModel
+            {
+                                                                             ResponseCode = "0000",
+                                                                             ResponseMessage = "SUCCESS"
+                                                                         };
 
 
-            return new SuccessResult<SaleTransactionResponseMessage>(responseMessage);
+            return new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(responseMessage);
         }
     }
 }

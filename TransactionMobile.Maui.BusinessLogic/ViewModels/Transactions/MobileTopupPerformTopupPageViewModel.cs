@@ -117,9 +117,9 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
                                                                              this.TopupAmount,
                                                                              this.CustomerEmailAddress);
 
-        Result<SaleTransactionResponseMessage> response = await this.Mediator.Send(request);
+        var response = await this.Mediator.Send(request);
 
-        if (response.Success && response.Data.IsSuccessfulTransaction())
+        if (response.Success && response.Data.IsSuccessful)
         {
             await this.NavigationService.GoToMobileTopupSuccessPage();
         }

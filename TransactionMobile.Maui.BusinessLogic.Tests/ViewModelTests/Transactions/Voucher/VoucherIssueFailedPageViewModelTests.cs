@@ -9,6 +9,7 @@ using UIServices;
 using ViewModels;
 using ViewModels.Transactions;
 using Xunit;
+using NullLogger = Logging.NullLogger;
 
 public class VoucherIssueFailedPageViewModelTests
 {
@@ -20,6 +21,7 @@ public class VoucherIssueFailedPageViewModelTests
         NavigationService = new Mock<INavigationService>();
     
         this.ViewModel = new VoucherIssueFailedPageViewModel(this.NavigationService.Object);
+        Logger.Initialise(new NullLogger());
     }
 
     [Fact]

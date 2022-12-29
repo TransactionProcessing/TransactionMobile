@@ -9,6 +9,7 @@ using Maui.UIServices;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Models;
 using Moq;
 using RequestHandlers;
 using Requests;
@@ -95,7 +96,7 @@ public class BillPaymentPayBillPageViewModelTests
     [Fact]
     public void BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_SuccessfulPayment_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<SaleTransactionResponseMessage>(new SaleTransactionResponseMessage()
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel()
             {
                 ResponseCode = "0000"
             }));
@@ -113,7 +114,7 @@ public class BillPaymentPayBillPageViewModelTests
     [Fact]
     public void BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_FailedPayment_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<SaleTransactionResponseMessage>(new SaleTransactionResponseMessage() {
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel() {
             ResponseCode = "1010"
         }));
         

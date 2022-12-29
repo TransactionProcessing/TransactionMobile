@@ -2,9 +2,10 @@
 
 using MediatR;
 using RequestHandlers;
+using TransactionMobile.Maui.BusinessLogic.Models;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 
-public class PerformMobileTopupRequest : IRequest<Result<SaleTransactionResponseMessage>>
+public class PerformMobileTopupRequest : IRequest<Result<PerformMobileTopupResponseModel>>
 {
     #region Constructors
 

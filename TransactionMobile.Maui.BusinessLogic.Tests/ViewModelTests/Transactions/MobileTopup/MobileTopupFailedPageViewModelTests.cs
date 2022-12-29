@@ -10,6 +10,7 @@ using UIServices;
 using ViewModels;
 using ViewModels.Transactions;
 using Xunit;
+using NullLogger = Logging.NullLogger;
 
 public class MobileTopupFailedPageViewModelTests
 {
@@ -21,6 +22,7 @@ public class MobileTopupFailedPageViewModelTests
         this.NavigationService = new Mock<INavigationService>();
 
         this.ViewModel = new MobileTopupFailedPageViewModel(this.NavigationService.Object);
+        Logger.Initialise(new NullLogger());
     }
 
     [Fact]

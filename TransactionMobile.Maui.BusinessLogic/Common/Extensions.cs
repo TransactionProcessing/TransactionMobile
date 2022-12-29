@@ -88,7 +88,7 @@ public static class Extensions
 
     public static TransactionRecord UpdateFrom(this TransactionRecord transactionRecord,
                                                Result<PerformLogonResponseModel> result) {
-        transactionRecord.IsSuccessful = result.Data.IsSuccessful();
+        transactionRecord.IsSuccessful = result.Data.IsSuccessful;
         transactionRecord.ResponseMessage = result.Data.ResponseMessage;
         transactionRecord.EstateId = result.Data.EstateId;
         transactionRecord.MerchantId = result.Data.MerchantId;
@@ -97,9 +97,25 @@ public static class Extensions
     }
 
     public static TransactionRecord UpdateFrom(this TransactionRecord transactionRecord,
-                                               Result<SaleTransactionResponseMessage> result)
+                                               Result<PerformMobileTopupResponseModel> result)
     {
-        transactionRecord.IsSuccessful = result.Data.ResponseCode == "0000";
+        transactionRecord.IsSuccessful = result.Data.IsSuccessful;
+
+        return transactionRecord;
+    }
+
+    public static TransactionRecord UpdateFrom(this TransactionRecord transactionRecord,
+                                               Result<PerformVoucherIssueResponseModel> result)
+    {
+        transactionRecord.IsSuccessful = result.Data.IsSuccessful;
+
+        return transactionRecord;
+    }
+
+    public static TransactionRecord UpdateFrom(this TransactionRecord transactionRecord,
+                                               Result<PerformBillPaymentMakePaymentResponseModel> result)
+    {
+        transactionRecord.IsSuccessful = result.Data.IsSuccessful;
 
         return transactionRecord;
     }

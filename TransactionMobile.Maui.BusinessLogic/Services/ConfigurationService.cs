@@ -13,6 +13,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
     using Models;
     using Newtonsoft.Json;
     using RequestHandlers;
+    using TransactionMobile.Maui.BusinessLogic.Services.DataTransferObjects;
     using ViewModels;
     using LogLevel = Models.LogLevel;
 
@@ -134,57 +135,5 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 
             await this.HandleResponse(httpResponse, cancellationToken);
         }
-    }
-
-    public class ConfigurationResponse
-    {
-        public string ClientId { get; set; }
-        public string ClientSecret { get; set; }
-
-        public string DeviceIdentifier { get; set; }
-
-        public bool EnableAutoUpdates { get; set; }
-
-        public List<HostAddress> HostAddresses { get; set; }
-
-        public string Id { get; set; }
-
-        public LoggingLevel LogLevel { get; set; }
-
-        public ApplicationCentreConfiguration ApplicationCentreConfiguration { get; set; }
-    }
-
-    public class HostAddress
-    {
-        public ServiceType ServiceType { get; set; }
-
-        public string Uri { get; set; }
-    }
-
-    public enum ServiceType
-    {
-        EstateManagement = 0,
-        Security = 1,
-        TransactionProcessorAcl = 2,
-        VoucherManagementAcl = 3,
-    }
-
-    public enum LoggingLevel
-    {
-        Fatal = 0,
-        Error = 1,
-        Warning = 2,
-        Information = 3,
-        Debug = 4,
-        Trace = 5
-    }
-
-    public class ApplicationCentreConfiguration
-    {
-        public String ApplicationId { get; set; }
-        public String AndroidKey { get; set; }
-        public String IosKey { get; set; }
-        public String MacosKey { get; set; }
-        public String WindowsKey { get; set; }
     }
 }

@@ -185,8 +185,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
             {
                 EstateId = TestData.EstateId,
                 MerchantId = TestData.MerchantId,
-                IsSuccessful = true,
-                RequireApplicationUpdate = false,
+                ResponseCode = "0000",
                 ResponseMessage = "SUCCESS"
             };
 
@@ -195,8 +194,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
             {
                 EstateId = TestData.EstateId,
                 MerchantId = TestData.MerchantId,
-                IsSuccessful = false,
-                RequireApplicationUpdate = false,
+                ResponseCode = "1001",
                 ResponseMessage = "FAILED"
             };
 

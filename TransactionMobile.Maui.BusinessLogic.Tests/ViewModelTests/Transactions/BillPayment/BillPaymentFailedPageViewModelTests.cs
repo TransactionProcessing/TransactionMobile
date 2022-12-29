@@ -7,6 +7,7 @@ using Moq;
 using ViewModels;
 using ViewModels.Transactions;
 using Xunit;
+using NullLogger = Logging.NullLogger;
 
 public class BillPaymentFailedPageViewModelTests
 {
@@ -15,6 +16,7 @@ public class BillPaymentFailedPageViewModelTests
     public BillPaymentFailedPageViewModelTests() {
         this.NavigationService = new Mock<INavigationService>();
         this.ViewModel = new BillPaymentFailedPageViewModel(this.NavigationService.Object);
+        Logger.Initialise(new NullLogger());
     }
 
     [Fact]

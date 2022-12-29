@@ -19,6 +19,7 @@ using UIServices;
 using ViewModels;
 using ViewModels.Transactions;
 using Xunit;
+using NullLogger = Logging.NullLogger;
 
 public class BillPaymentGetAccountPageViewModelTests
 {
@@ -38,6 +39,8 @@ public class BillPaymentGetAccountPageViewModelTests
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
         this.ViewModel = new BillPaymentGetAccountPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object, this.Mediator.Object);
+
+        Logger.Initialise(new NullLogger());
     }
 
     [Fact]
