@@ -90,7 +90,7 @@ Scenario: Logout
 	And I enter '123456' as the Password
 	And I tap on Login
 	Then the Merchant Home Page is displayed
-#	When I tap on Profile
-#	Then the My Profile Page is displayed
-#	When I tap on Logout
-#	Then the Login Screen is displayed
+	When I tap on Profile
+	Then the My Profile Page is displayed
+	When I tap on Logout
+	Then the Login Screen is displayed

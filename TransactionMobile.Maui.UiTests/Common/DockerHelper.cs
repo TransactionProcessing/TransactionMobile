@@ -95,7 +95,19 @@ namespace TransactionMobile.Maui.UiTests.Common
 
         public String LocalIPAddress { get; private set; }
 
-        public override Task<IContainerService> SetupTransactionProcessorAclContainer(List<INetworkService> networkServices,
+        public override async Task<IContainerService> SetupFileProcessorContainer(List<INetworkService> networkServices,
+                                                                                  Int32 securityServicePort = 5001,
+                                                                                  List<String> additionalEnvironmentVariables = null) {
+            return null;
+        }
+
+        public override async Task<IContainerService> SetupVoucherManagementAclContainer(List<INetworkService> networkServices,
+                                                                                         Int32 securityServicePort = 5001,
+                                                                                         List<String> additionalEnvironmentVariables = null) {
+            return null;
+        }
+
+        public override async Task<IContainerService> SetupTransactionProcessorAclContainer(List<INetworkService> networkServices,
                                                                                       Int32 securityServicePort = 5001,
                                                                                       List<String> additionalEnvironmentVariables = null) {
 
@@ -103,7 +115,7 @@ namespace TransactionMobile.Maui.UiTests.Common
             additionalEnvironmentVariables = new List<String> {
                                                                   "AppSettings:SkipVersionCheck=true"
                                                               };
-            return base.SetupTransactionProcessorAclContainer(networkServices, securityServicePort, additionalEnvironmentVariables);
+            return await base.SetupTransactionProcessorAclContainer(networkServices, securityServicePort, additionalEnvironmentVariables);
         }
 
         /// <summary>
