@@ -48,9 +48,9 @@ jobs:
          docker pull mcr.microsoft.com/azure-sql-edge
          docker pull eventstore/eventstore:21.10.0-buster-slim
 
-      #- uses: maxim-lobanov/setup-xcode@v1
-      #  with:
-      #    xcode-version: '13.3'
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '13.3'
 
       - name: Set up Node.js
         uses: actions/setup-node@v1
