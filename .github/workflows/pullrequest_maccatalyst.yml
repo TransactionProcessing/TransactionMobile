@@ -12,30 +12,30 @@ env:
 
 jobs:
   # MAUI MacCatalyst Build
-#  build-mac:
-#    runs-on: macos-12
-#    name: MacCatalyst Build
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3        
+  build-mac:
+    runs-on: macos-12
+    name: MacCatalyst Build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3        
 
-#      - name: Setup .NET 7
-#        uses: actions/setup-dotnet@v2
-#        with:
-#          dotnet-version: 7.0.100  
+      - name: Setup .NET 7
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 7.0.100  
           
-#      - name: Install MAUI Workloads
-#        run: |
-#            dotnet workload install maui --ignore-failed-sources
+      - name: Install MAUI Workloads
+        run: |
+            dotnet workload install maui --ignore-failed-sources
 
-#      - name: Restore Dependencies
-#        run: dotnet restore TransactionMobile.Maui.sln
+      - name: Restore Dependencies
+        run: dotnet restore TransactionMobile.Maui.sln
         
-#      - name: Build Code
-#        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-maccatalyst --no-restore
+      - name: Build Code
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-maccatalyst --no-restore
         
-#      - name: Run Unit Tests
-#        run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
+      - name: Run Unit Tests
+        run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
 
 ##      #- name: Upload MacCatalyst Artifact
 ##      #  uses: actions/upload-artifact@v2.3.1
