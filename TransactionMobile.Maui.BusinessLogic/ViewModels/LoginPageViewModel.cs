@@ -2,9 +2,11 @@
 {
     using System.Diagnostics;
     using System.Windows.Input;
+    using Logging;
     using Maui.UIServices;
     using MediatR;
     using Microsoft.Extensions.Caching.Memory;
+    using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Primitives;
     using Models;
     using MvvmHelpers;
@@ -12,25 +14,20 @@
     using RequestHandlers;
     using Requests;
     using Services;
-    using Shared.Logger;
     using TransactionMobile.Maui.Database;
     using UIServices;
 
     public class LoginPageViewModel : ExtendedBaseViewModel
     {
-        private readonly INavigationService NavigationService;
-
-        private readonly IApplicationCache ApplicationCache;
-
         private readonly IDeviceService DeviceService;
 
         private readonly IApplicationInfoService ApplicationInfoService;
 
-        private readonly IDialogService DialogService;
-
         private String userName;
 
         private String password;
+
+        private String configHostUrl;
 
         private Boolean useTrainingMode;
 
@@ -40,11 +37,8 @@
                                   IDeviceService deviceService,IApplicationInfoService applicationInfoService,
                                   IDialogService dialogService) : base(applicationCache,dialogService,navigationService)
         {
-            this.NavigationService = navigationService;
-            this.ApplicationCache = applicationCache;
             this.DeviceService = deviceService;
             this.ApplicationInfoService = applicationInfoService;
-            this.DialogService = dialogService;
             this.LoginCommand = new AsyncCommand(this.LoginCommandExecute);
             this.Mediator = mediator;
         }
@@ -52,8 +46,6 @@
         #endregion
 
         #region Properties
-
-        public ICommand DeveloperPageCommand { get; }
 
         public ICommand LoginCommand { get; }
 
@@ -79,15 +71,24 @@
 
         public String DeviceIdentifier => this.DeviceService.GetIdentifier();
 
+        public String ConfigHostUrl
+        {
+            get => this.configHostUrl;
+            set => this.SetProperty(ref this.configHostUrl, value);
+        }
+
         #endregion
 
         #region Methods
         private void CacheUseTrainingMode() => this.ApplicationCache.SetUseTrainingMode(this.useTrainingMode);
 
         private async Task<Result<Configuration>> GetConfiguration() {
-            String deviceIdentifier = this.DeviceService.GetIdentifier();
-            GetConfigurationRequest getConfigurationRequest = GetConfigurationRequest.Create(deviceIdentifier);
-            var configurationResult = await this.Mediator.Send(getConfigurationRequest);
+            if (String.IsNullOrEmpty(ConfigHostUrl) == false) {
+                this.ApplicationCache.SetConfigHostUrl(ConfigHostUrl);
+            }
+
+            GetConfigurationRequest getConfigurationRequest = GetConfigurationRequest.Create(this.DeviceService.GetIdentifier());
+            Result<Configuration> configurationResult = await this.Mediator.Send(getConfigurationRequest);
 
             if (configurationResult.Success) {
                 // Cache the config object
@@ -164,42 +165,42 @@
             Stopwatch sw = Stopwatch.StartNew();
             WriteTimingTrace(sw, "Start of LoginCommandExecute");
             try {
-                Shared.Logger.Logger.LogInformation("LoginCommandExecute called");
+                Logger.LogInformation("LoginCommandExecute called");
                 
                 Result<Configuration> configurationResult = await this.GetConfiguration();
                 this.HandleResult(configurationResult);
-                
-                WriteTimingTrace(sw, "After GetConfiguration");
+
+                await WriteTimingTrace(sw, "After GetConfiguration");
                 Result<TokenResponseModel> getTokenResult = await this.GetUserToken();
                 this.HandleResult(getTokenResult);
 
-                WriteTimingTrace(sw, "After GetUserToken");
+                await WriteTimingTrace(sw, "After GetUserToken");
                 Result<PerformLogonResponseModel> logonResult = await this.PerformLogonTransaction();
                 this.HandleResult(logonResult);
 
-                WriteTimingTrace(sw, "After PerformLogonTransaction");
+                await WriteTimingTrace(sw, "After PerformLogonTransaction");
                 Result<List<ContractProductModel>> getMerchantContractProductsResult = await this.GetMerchantContractProducts();
                 this.HandleResult(getMerchantContractProductsResult);
 
-                WriteTimingTrace(sw, "After GetMerchantContractProducts");
+                await WriteTimingTrace(sw, "After GetMerchantContractProducts");
                 Result<Decimal> getMerchantBalanceResult =  await this.GetMerchantBalance();
                 this.HandleResult(getMerchantBalanceResult);
 
-                WriteTimingTrace(sw, "After GetMerchantBalance");
+                await WriteTimingTrace(sw, "After GetMerchantBalance");
                 this.ApplicationCache.SetIsLoggedIn(true);
 
-                WriteTimingTrace(sw, "After SetIsLoggedIn");
+                await WriteTimingTrace(sw, "After SetIsLoggedIn");
                 await this.NavigationService.GoToHome();
             }
             catch(ApplicationException aex) {
-                Logger.LogError(aex);
+                Logger.LogError("Error during logon", aex);
                 await this.DialogService.ShowWarningToast(aex.Message);
             }
         }
         
-        private void WriteTimingTrace(Stopwatch sw, String message) {
+        private async Task WriteTimingTrace(Stopwatch sw, String message) {
             sw.Stop();
-            Shared.Logger.Logger.LogWarning($"{message} - Elapsed ms [{sw.ElapsedMilliseconds}]");
+            Logger.LogWarning($"{message} - Elapsed ms [{sw.ElapsedMilliseconds}]");
             sw.Start();
         }
 

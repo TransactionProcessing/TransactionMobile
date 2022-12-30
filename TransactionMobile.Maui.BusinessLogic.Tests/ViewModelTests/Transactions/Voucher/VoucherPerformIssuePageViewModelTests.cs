@@ -3,16 +3,19 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Logging;
 using Maui.UIServices;
 using MediatR;
+using Microsoft.Extensions.Logging.Abstractions;
+using Models;
 using Moq;
 using RequestHandlers;
 using Requests;
 using Services;
-using Shared.Logger;
 using Shouldly;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 using UIServices;
+using ViewModels;
 using ViewModels.Transactions;
 using Xunit;
 
@@ -25,7 +28,6 @@ public class VoucherPerformIssuePageViewModelTests
     private readonly Mock<IApplicationCache> ApplicationCache;
 
     private readonly Mock<IDialogService> DialogService;
-
     private readonly VoucherPerformIssuePageViewModel ViewModel;
 
     public VoucherPerformIssuePageViewModelTests() {
@@ -34,7 +36,6 @@ public class VoucherPerformIssuePageViewModelTests
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogService = new Mock<IDialogService>();
         this.ViewModel = new VoucherPerformIssuePageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogService.Object, this.Mediator.Object);
-        Logger.Initialise(NullLogger.Instance);
     }
 
     [Fact]
@@ -127,7 +128,7 @@ public class VoucherPerformIssuePageViewModelTests
     [Fact]
     public void VoucherPerformIssuePageViewModel_IssueVoucherCommand_Execute_SuccessfulVoucher_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<SaleTransactionResponseMessage>(new SaleTransactionResponseMessage() {
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformVoucherIssueResponseModel>(new PerformVoucherIssueResponseModel() {
             ResponseCode = "0000"
         }));
 
@@ -144,7 +145,7 @@ public class VoucherPerformIssuePageViewModelTests
     [Fact]
     public void VoucherPerformIssuePageViewModel_IssueVoucherCommand_Execute_FailedVoucher_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<SaleTransactionResponseMessage>(new SaleTransactionResponseMessage()
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformVoucherIssueResponseModel>(new PerformVoucherIssueResponseModel()
             {
                 ResponseCode = "1010"
             }));

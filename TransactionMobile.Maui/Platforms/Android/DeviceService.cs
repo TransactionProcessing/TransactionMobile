@@ -19,10 +19,9 @@ namespace TransactionMobile.Maui.Platforms.Services
 
             string id = Android.Provider.Settings.Secure.GetString(context.ContentResolver, Settings.Secure.AndroidId);
 
-            id = "a39b64f487c99adc";
-
             return id;
         }
+
         public static partial String Model() => Build.Model;
         
         public static partial String Platform()

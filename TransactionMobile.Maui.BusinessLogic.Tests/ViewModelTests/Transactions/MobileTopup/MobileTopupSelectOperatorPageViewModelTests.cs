@@ -4,16 +4,18 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Common;
+using Logging;
 using Maui.UIServices;
 using MediatR;
+using Microsoft.Extensions.Logging.Abstractions;
 using Models;
 using Moq;
 using RequestHandlers;
 using Requests;
 using Services;
-using Shared.Logger;
 using Shouldly;
 using UIServices;
+using ViewModels;
 using ViewModels.Transactions;
 using Xunit;
 
@@ -28,7 +30,6 @@ public class MobileTopupSelectOperatorPageViewModelTests
     private readonly Mock<IDialogService> DialogSevice;
 
     private readonly MobileTopupSelectOperatorPageViewModel ViewModel;
-
     public MobileTopupSelectOperatorPageViewModelTests() {
         this.Mediator = new Mock<IMediator>();
         
@@ -37,7 +38,7 @@ public class MobileTopupSelectOperatorPageViewModelTests
         this.DialogSevice = new Mock<IDialogService>();
         this.ViewModel = new MobileTopupSelectOperatorPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.DialogSevice.Object, this.ApplicationCache.Object);
 
-        Logger.Initialise(NullLogger.Instance);
+        
     }
 
     [Fact]

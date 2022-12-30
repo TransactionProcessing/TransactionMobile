@@ -3,6 +3,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
@@ -10,12 +11,12 @@ using Models;
 using Moq;
 using RequestHandlers;
 using Requests;
-using Shared.Logger;
 using TransactionMobile.Maui.BusinessLogic.Services;
 using TransactionMobile.Maui.Database;
 using UIServices;
 using ViewModels;
 using Xunit;
+using NullLogger = Microsoft.Extensions.Logging.Abstractions.NullLogger;
 
 public class LoginPageViewModelTests
 {
@@ -41,9 +42,9 @@ public class LoginPageViewModelTests
         this.DialogService = new Mock<IDialogService>();
 
         this.ViewModel = new LoginPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object,
-                                                              this.DeviceService.Object, this.ApplicationInfoService.Object,
-                                                              this.DialogService.Object);
-        Logger.Initialise(NullLogger.Instance);
+                                                this.DeviceService.Object, this.ApplicationInfoService.Object,
+                                                this.DialogService.Object);
+        Logger.Initialise(new Logging.NullLogger());
     }
 
     [Fact]

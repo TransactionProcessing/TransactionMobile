@@ -3,6 +3,7 @@
 using System.Web;
 using System.Windows.Input;
 using Common;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Microsoft.Maui.Controls;
@@ -46,9 +47,9 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
     {
         this.Mediator = mediator;
         this.PerformTopupCommand = new AsyncCommand(this.PerformTopupCommandExecute);
-        this.CustomerMobileNumberEntryCompletedCommand = new Command(this.CustomerMobileNumberEntryCompletedCommandExecute);
-        this.TopupAmountEntryCompletedCommand = new Command(this.TopupAmountEntryCompletedCommandExecute);
-        this.CustomerEmailAddressEntryCompletedCommand = new Command(this.CustomerEmailAddressEntryCompletedCommandExecute);
+        this.CustomerMobileNumberEntryCompletedCommand = new AsyncCommand(this.CustomerMobileNumberEntryCompletedCommandExecute);
+        this.TopupAmountEntryCompletedCommand = new AsyncCommand(this.TopupAmountEntryCompletedCommandExecute);
+        this.CustomerEmailAddressEntryCompletedCommand = new AsyncCommand(this.CustomerEmailAddressEntryCompletedCommandExecute);
         this.Title = "Enter Topup Details";
     }
 
@@ -92,21 +93,21 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
 
     #region Methods
 
-    private void CustomerEmailAddressEntryCompletedCommandExecute()
+    private async Task CustomerEmailAddressEntryCompletedCommandExecute()
     {
-        Shared.Logger.Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
+        Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
         this.OnCustomerEmailAddressEntryCompleted();
     }
 
-    private void CustomerMobileNumberEntryCompletedCommandExecute()
+    private async Task CustomerMobileNumberEntryCompletedCommandExecute()
     {
-        Shared.Logger.Logger.LogInformation("CustomerMobileNumberEntryCompletedCommandExecute called");
+        Logger.LogInformation("CustomerMobileNumberEntryCompletedCommandExecute called");
         this.OnCustomerMobileNumberEntryCompleted();
     }
 
     private async Task PerformTopupCommandExecute()
     {
-        Shared.Logger.Logger.LogInformation("PerformTopupCommandExecute called");
+        Logger.LogInformation("PerformTopupCommandExecute called");
         // Create Command and Send
         PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(DateTime.Now,
                                                                              this.ProductDetails.ContractId,
@@ -116,9 +117,9 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
                                                                              this.TopupAmount,
                                                                              this.CustomerEmailAddress);
 
-        Result<SaleTransactionResponseMessage> response = await this.Mediator.Send(request);
+        var response = await this.Mediator.Send(request);
 
-        if (response.Success && response.Data.IsSuccessfulTransaction())
+        if (response.Success && response.Data.IsSuccessful)
         {
             await this.NavigationService.GoToMobileTopupSuccessPage();
         }
@@ -128,9 +129,9 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
         }
     }
 
-    private void TopupAmountEntryCompletedCommandExecute()
+    private async Task TopupAmountEntryCompletedCommandExecute()
     {
-        Shared.Logger.Logger.LogInformation("TopupAmountEntryCompletedCommandExecute called");
+        Logger.LogInformation("TopupAmountEntryCompletedCommandExecute called");
         this.OnTopupAmountEntryCompleted();
     }
 

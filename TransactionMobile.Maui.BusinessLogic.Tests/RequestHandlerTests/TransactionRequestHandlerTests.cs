@@ -15,7 +15,6 @@ using Shouldly;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 using UIServices;
 using Xunit;
-using static SQLite.SQLite3;
 
 public class TransactionRequestHandlerTests
 {
@@ -63,7 +62,8 @@ public class TransactionRequestHandlerTests
     [Fact]
     public async Task TransactionRequestHandler_PerformMobileTopupRequest_Handle_IsHandled()
     {
-        this.TransactionService.Setup(t => t.PerformMobileTopup(It.IsAny<PerformMobileTopupRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<SaleTransactionResponseMessage>(new SaleTransactionResponseMessage {
+        this.TransactionService.Setup(t => t.PerformMobileTopup(It.IsAny<PerformMobileTopupRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformMobileTopupResponseModel>(new PerformMobileTopupResponseModel
+            {
             ResponseCode = "0000"
         }));
      
@@ -75,17 +75,17 @@ public class TransactionRequestHandlerTests
                                                                              TestData.Operator1Product_100KES.Value,
                                                                              TestData.CustomerEmailAddress);
 
-        Result<SaleTransactionResponseMessage> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
+        Result<PerformMobileTopupResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
         result.Success.ShouldBeTrue();
-        result.Data.IsSuccessfulTransaction().ShouldBeTrue();
+        result.Data.IsSuccessful.ShouldBeTrue();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformVoucherIssueRequest_Handle_IsHandled()
     {
-        this.TransactionService.Setup(t => t.PerformVoucherIssue(It.IsAny<PerformVoucherIssueRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<SaleTransactionResponseMessage>(new SaleTransactionResponseMessage
-            {
+        this.TransactionService.Setup(t => t.PerformVoucherIssue(It.IsAny<PerformVoucherIssueRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformVoucherIssueResponseModel>(new PerformVoucherIssueResponseModel
+        {
                 ResponseCode = "0000"
             }));
 
@@ -98,10 +98,10 @@ public class TransactionRequestHandlerTests
                                                                                TestData.Operator3Product_200KES.Value,
                                                                                TestData.CustomerEmailAddress);
 
-        Result<SaleTransactionResponseMessage> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
+        Result<PerformVoucherIssueResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
         result.Success.ShouldBeTrue();
-        result.Data.IsSuccessfulTransaction().ShouldBeTrue();
+        result.Data.IsSuccessful.ShouldBeTrue();
     }
 
     [Fact]
@@ -146,7 +146,7 @@ public class TransactionRequestHandlerTests
     [Fact]
     public async Task TransactionRequestHandler_PerformBillPaymentMakePaymentRequest_Handle_IsHandled()
     {
-        this.TransactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<SaleTransactionResponseMessage>(new SaleTransactionResponseMessage
+        this.TransactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel
         {
             ResponseCode = "0000"
         }));
@@ -160,17 +160,17 @@ public class TransactionRequestHandlerTests
                                                                                                    TestData.CustomerMobileNumber,
                                                                                                    TestData.PaymentAmount);
 
-        Result<SaleTransactionResponseMessage> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
+        Result<PerformBillPaymentMakePaymentResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
         result.Success.ShouldBeTrue();
-        result.Data.IsSuccessfulTransaction().ShouldBeTrue();
+        result.Data.IsSuccessful.ShouldBeTrue();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformBillPaymentMakePaymentRequest_PaymentFailed_Handle_IsHandled()
     {
-        this.TransactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<SaleTransactionResponseMessage>(new SaleTransactionResponseMessage
-            {
+        this.TransactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel
+        {
                 ResponseCode = "0001"
             }));
 
@@ -183,7 +183,7 @@ public class TransactionRequestHandlerTests
                                                                                                    TestData.CustomerMobileNumber,
                                                                                                    TestData.PaymentAmount);
 
-        Result<SaleTransactionResponseMessage> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
+        Result<PerformBillPaymentMakePaymentResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
         result.Failure.ShouldBeTrue();
     }
@@ -191,7 +191,8 @@ public class TransactionRequestHandlerTests
     [Fact]
     public async Task TransactionRequestHandler_PerformReconciliationRequest_NoTransactions_Handle_IsHandled()
     {
-        this.TransactionService.Setup(t => t.PerformReconciliation(It.IsAny<PerformReconciliationRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<ReconciliationResponseMessage>(new ReconciliationResponseMessage {
+        this.TransactionService.Setup(t => t.PerformReconciliation(It.IsAny<PerformReconciliationRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformReconciliationResponseModel>(new PerformReconciliationResponseModel
+            {
             ResponseCode = "0000"
         }));
         this.DatabaseContext.Setup(d => d.GetTransactions(It.IsAny<Boolean>())).ReturnsAsync(new List<TransactionRecord>());
@@ -200,16 +201,16 @@ public class TransactionRequestHandlerTests
                                                                                    TestData.DeviceIdentifier,
                                                                                    TestData.ApplicationVersion);
 
-        Result<ReconciliationResponseMessage> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
+        Result<PerformReconciliationResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
         result.Success.ShouldBeTrue();
-        result.Data.IsSuccessfulReconciliation().ShouldBeTrue();
+        result.Data.IsSuccessful.ShouldBeTrue();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformReconciliationRequest_TransactionsStored_Handle_IsHandled() {
-        this.TransactionService.Setup(t => t.PerformReconciliation(It.IsAny<PerformReconciliationRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<ReconciliationResponseMessage>(new ReconciliationResponseMessage
-            {
+        this.TransactionService.Setup(t => t.PerformReconciliation(It.IsAny<PerformReconciliationRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformReconciliationResponseModel>(new PerformReconciliationResponseModel
+        {
                 ResponseCode = "0000"
             }));
 
@@ -217,9 +218,9 @@ public class TransactionRequestHandlerTests
 
         PerformReconciliationRequest request = PerformReconciliationRequest.Create(TestData.TransactionDateTime, TestData.DeviceIdentifier, TestData.ApplicationVersion);
 
-        Result<ReconciliationResponseMessage> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
+        Result<PerformReconciliationResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
         result.Success.ShouldBeTrue();
-        result.Data.IsSuccessfulReconciliation().ShouldBeTrue();
+        result.Data.IsSuccessful.ShouldBeTrue();
     }
 }

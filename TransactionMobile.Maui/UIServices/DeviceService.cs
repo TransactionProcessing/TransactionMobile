@@ -5,8 +5,7 @@ using Platforms.Services;
 
 public class DeviceService : IDeviceService
 {
-    public String GetIdentifier()
-    {
+    public String GetIdentifier() {
         return DeviceInformationService.Identifier();
     }
 

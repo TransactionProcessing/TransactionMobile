@@ -47,10 +47,3 @@ jobs:
 
       - name: Run Unit Tests
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
-        
-      - name: Upload Windows Artifact
-        uses: actions/upload-artifact@v2.3.1
-        with:
-          name: windows-ci-build
-          path: |
-            TransactionMobile.Maui/bin/Release/net6.0-windows*/**/TransactionMobile.Maui*.msix

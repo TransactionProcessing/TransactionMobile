@@ -13,6 +13,7 @@ using OpenQA.Selenium.Appium.Android;
 using OpenQA.Selenium.Appium.iOS;
 using OpenQA.Selenium.Appium.MultiTouch;
 using OpenQA.Selenium.Interactions;
+using Shared.IntegrationTesting;
 using Shouldly;
 
 public static class Extenstions

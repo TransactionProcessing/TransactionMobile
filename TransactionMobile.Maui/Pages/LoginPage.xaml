@@ -44,6 +44,7 @@
                         <Button Text="Continue" Style="{StaticResource StandardButton}" Command="{Binding LoginCommand}" AutomationId="LoginButton"/>
 
                         <Label AutomationId="DeviceSerial" VerticalOptions="Center" HorizontalOptions="Start" Text="{Binding DeviceIdentifier}"/>
+                        <Entry x:Name="ConfigHostUrlEntry" AutomationId="ConfigHostUrlEntry" Text="{Binding ConfigHostUrl}"/>
                     </VerticalStackLayout>
                 </Frame>
             </VerticalStackLayout>

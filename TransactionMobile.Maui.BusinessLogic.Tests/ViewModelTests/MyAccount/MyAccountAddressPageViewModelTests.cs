@@ -2,13 +2,15 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using Logging;
 using Maui.UIServices;
 using MediatR;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Services;
-using Shared.Logger;
 using Shouldly;
 using UIServices;
+using ViewModels;
 using ViewModels.MyAccount;
 using Xunit;
 
@@ -19,15 +21,12 @@ public class MyAccountAddressPageViewModelTests
     private readonly Mock<IDialogService> DialogService;
     private readonly Mock<IMediator> Mediator;
     private readonly MyAccountAddressPageViewModel ViewModel;
-
     public MyAccountAddressPageViewModelTests()
     {
-        Logger.Initialise(NullLogger.Instance);
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogService = new Mock<IDialogService>();
         this.Mediator = new Mock<IMediator>();
-
         this.ViewModel = new MyAccountAddressPageViewModel(this.NavigationService.Object,
                                                            this.ApplicationCache.Object,
                                                            this.DialogService.Object,

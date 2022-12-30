@@ -1,7 +1,9 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions
 {
     using System.Windows.Input;
+    using Logging;
     using Maui.UIServices;
+    using Microsoft.Extensions.Logging;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
     using Services;
@@ -10,7 +12,7 @@
     public class VoucherIssueSuccessPageViewModel : BaseViewModel
     {
         private readonly INavigationService NavigationService;
-
+        
         #region Constructors
 
         public VoucherIssueSuccessPageViewModel(INavigationService navigationService)
@@ -32,7 +34,7 @@
 
         private async Task CompletedCommandExecute()
         {
-            Shared.Logger.Logger.LogInformation("CompletedCommandExecute called");
+            Logger.LogInformation("CompletedCommandExecute called");
             await this.NavigationService.PopToRoot();
         }
 

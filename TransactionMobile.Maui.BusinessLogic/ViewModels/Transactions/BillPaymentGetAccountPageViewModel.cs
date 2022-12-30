@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions;
 
 using System.Windows.Input;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Models;
@@ -8,7 +9,6 @@ using MvvmHelpers.Commands;
 using RequestHandlers;
 using Requests;
 using Services;
-using Shared.Logger;
 using UIServices;
 
 public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel, IQueryAttributable

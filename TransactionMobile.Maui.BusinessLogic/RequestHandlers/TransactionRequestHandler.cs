@@ -11,12 +11,12 @@ using Microsoft.Maui.Platform;
 using UIServices;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 
-public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupRequest, Result<SaleTransactionResponseMessage>>,
+public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupRequest, Result<PerformMobileTopupResponseModel>>,
                                          IRequestHandler<LogonTransactionRequest, Result<PerformLogonResponseModel>>,
-                                         IRequestHandler<PerformVoucherIssueRequest, Result<SaleTransactionResponseMessage>>,
-                                         IRequestHandler<PerformReconciliationRequest, Result<ReconciliationResponseMessage>>,
+                                         IRequestHandler<PerformVoucherIssueRequest, Result<PerformVoucherIssueResponseModel>>,
+                                         IRequestHandler<PerformReconciliationRequest, Result<PerformReconciliationResponseModel>>,
                                          IRequestHandler<PerformBillPaymentGetAccountRequest, Result<PerformBillPaymentGetAccountResponseModel>>,
-                                         IRequestHandler<PerformBillPaymentMakePaymentRequest, Result<SaleTransactionResponseMessage>>
+                                         IRequestHandler<PerformBillPaymentMakePaymentRequest, Result<PerformBillPaymentMakePaymentResponseModel>>
 {
     #region Fields
 
@@ -50,8 +50,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
 
     #region Methods
 
-    public async Task<Result<SaleTransactionResponseMessage>> Handle(PerformMobileTopupRequest request,
-                                                                    CancellationToken cancellationToken) {
+    public async Task<Result<PerformMobileTopupResponseModel>> Handle(PerformMobileTopupRequest request,
+                                                                      CancellationToken cancellationToken) {
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
         (Int64 transactionNumber, TransactionRecord transactionRecord) transaction = await this.CreateTransactionRecord(request.ToTransactionRecord(useTrainingMode));
 
@@ -65,22 +65,29 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                        TopupAmount = request.TopupAmount,
                                                        TransactionDateTime = request.TransactionDateTime,
                                                        TransactionNumber = transaction.transactionNumber.ToString(),
-                                                       DeviceIdentifier = this.DeviceService.GetIdentifier(),
+                                                       DeviceIdentifier = String.Empty,
                                                        ApplicationVersion = this.ApplicationInfoService.VersionString
                                                    };
 
 
-        Result<SaleTransactionResponseMessage> result = await this.TransactionService.PerformMobileTopup(model, cancellationToken);
+        Result<PerformMobileTopupResponseModel> result = await this.TransactionService.PerformMobileTopup(model, cancellationToken);
         
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
 
-        return result;
+        if (result.Success && result.Data.IsSuccessful == false)
+        {
+            return new ErrorResult<PerformMobileTopupResponseModel>("Logon transaction not successful");
+        }
+
+        return new SuccessResult<PerformMobileTopupResponseModel>(result.Data);
+
+        
     }
 
     private async Task<(Int64 transactionNumber, TransactionRecord transactionRecord)> CreateTransactionRecord(TransactionRecord transactionRecord) {
         
         transactionRecord.ApplicationVersion = this.ApplicationInfoService.VersionString;
-        transactionRecord.DeviceIdentifier = this.DeviceService.GetIdentifier();
+        transactionRecord.DeviceIdentifier = String.Empty;
         Int64 transactionNumber = await this.DatabaseContext.CreateTransaction(transactionRecord);
 
         return (transactionNumber, transactionRecord);
@@ -116,8 +123,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         return new SuccessResult<PerformLogonResponseModel>(result.Data);
     }
 
-    public async Task<Result<SaleTransactionResponseMessage>> Handle(PerformVoucherIssueRequest request,
-                                                                     CancellationToken cancellationToken)
+    public async Task<Result<PerformVoucherIssueResponseModel>> Handle(PerformVoucherIssueRequest request,
+                                                                       CancellationToken cancellationToken)
     {
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
         (Int64 transactionNumber, TransactionRecord transactionRecord) transaction = await this.CreateTransactionRecord(request.ToTransactionRecord(useTrainingMode));
@@ -137,16 +144,16 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
             ApplicationVersion = this.ApplicationInfoService.VersionString
         };
 
-        Result<SaleTransactionResponseMessage> result = await this.TransactionService.PerformVoucherIssue(model, cancellationToken);
+        Result<PerformVoucherIssueResponseModel> result = await this.TransactionService.PerformVoucherIssue(model, cancellationToken);
 
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
 
-        if (result.Success && result.Data.IsSuccessfulTransaction() == false)
+        if (result.Success && result.Data.IsSuccessful == false)
         {
-            return new ErrorResult<SaleTransactionResponseMessage>("Voucher Issue not successful");
+            return new ErrorResult<PerformVoucherIssueResponseModel>("Voucher Issue not successful");
         }
 
-        return new SuccessResult<SaleTransactionResponseMessage>(result.Data);
+        return new SuccessResult<PerformVoucherIssueResponseModel>(result.Data);
     }
 
     public async Task<Result<PerformBillPaymentGetAccountResponseModel>> Handle(PerformBillPaymentGetAccountRequest request,
@@ -174,8 +181,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         return result;
     }
 
-    public async Task<Result<ReconciliationResponseMessage>> Handle(PerformReconciliationRequest request,
-                                      CancellationToken cancellationToken)
+    public async Task<Result<PerformReconciliationResponseModel>> Handle(PerformReconciliationRequest request,
+                                                                         CancellationToken cancellationToken)
     {
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
         List<TransactionRecord> storedTransactions = await this.DatabaseContext.GetTransactions(useTrainingMode);
@@ -214,10 +221,10 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         };
 
         // Send to the host        
-        Result<ReconciliationResponseMessage> result = await this.TransactionService.PerformReconciliation(model, cancellationToken);
+        Result<PerformReconciliationResponseModel> result = await this.TransactionService.PerformReconciliation(model, cancellationToken);
 
         // Clear store (if successful)
-        if (result.Success && result.Data.IsSuccessfulReconciliation())
+        if (result.Success && result.Data.IsSuccessful)
         {
             await this.DatabaseContext.ClearStoredTransactions(storedTransactions);
         }
@@ -225,8 +232,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         return result;
     }
 
-    public async Task<Result<SaleTransactionResponseMessage>> Handle(PerformBillPaymentMakePaymentRequest request,
-                                                                     CancellationToken cancellationToken)
+    public async Task<Result<PerformBillPaymentMakePaymentResponseModel>> Handle(PerformBillPaymentMakePaymentRequest request,
+                                                                                 CancellationToken cancellationToken)
     {
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
         (Int64 transactionNumber, TransactionRecord transactionRecord) transaction = await this.CreateTransactionRecord(request.ToTransactionRecord(useTrainingMode));
@@ -246,16 +253,16 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
             ApplicationVersion = this.ApplicationInfoService.VersionString
         };
 
-        Result<SaleTransactionResponseMessage> result = await this.TransactionService.PerformBillPaymentMakePayment(model, cancellationToken);
+        Result<PerformBillPaymentMakePaymentResponseModel> result = await this.TransactionService.PerformBillPaymentMakePayment(model, cancellationToken);
 
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
 
-        if (result.Success && result.Data.IsSuccessfulTransaction() == false)
+        if (result.Success && result.Data.IsSuccessful == false)
         {
-            return new ErrorResult<SaleTransactionResponseMessage>("Bill Payment not successful");
+            return new ErrorResult<PerformBillPaymentMakePaymentResponseModel>("Bill Payment not successful");
         }
 
-        return new SuccessResult<SaleTransactionResponseMessage>(result.Data);
+        return new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(result.Data);
 
     }
     #endregion

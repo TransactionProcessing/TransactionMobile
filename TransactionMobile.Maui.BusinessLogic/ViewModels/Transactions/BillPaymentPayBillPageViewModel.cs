@@ -2,8 +2,10 @@
 
 using System.Windows.Input;
 using Common;
+using Logging;
 using Maui.UIServices;
 using MediatR;
+using Models;
 using MvvmHelpers.Commands;
 using RequestHandlers;
 using Requests;
@@ -48,19 +50,19 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
     }
 
     private async Task PaymentAmountEntryCompletedCommandExecute() {
-        Shared.Logger.Logger.LogInformation("PaymentAmountEntryCompletedCommandExecute called");
+        Logger.LogInformation("PaymentAmountEntryCompletedCommandExecute called");
         this.OnPaymentAmountEntryCompleted();
     }
 
     private async Task CustomerMobileNumberEntryCompletedExecute() {
-        Shared.Logger.Logger.LogInformation("CustomerMobileNumberEntryCompletedExecute called");
+        Logger.LogInformation("CustomerMobileNumberEntryCompletedExecute called");
         this.OnCustomerMobileNumberEntryCompleted();
     }
 
     #endregion
 
     private async Task MakeBillPaymentCommandExecute() {
-        Shared.Logger.Logger.LogInformation("MakeBillPaymentCommandExecute called");
+        Logger.LogInformation("MakeBillPaymentCommandExecute called");
 
         PerformBillPaymentMakePaymentRequest request = PerformBillPaymentMakePaymentRequest.Create(DateTime.Now,
                                                                                                    this.ProductDetails.ContractId,
@@ -71,9 +73,9 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
                                                                                                    this.CustomerMobileNumber,
                                                                                                    this.PaymentAmount);
 
-        Result<SaleTransactionResponseMessage> result = await this.Mediator.Send(request);
+        Result<PerformBillPaymentMakePaymentResponseModel> result = await this.Mediator.Send(request);
 
-        if (result.Success && result.Data.IsSuccessfulTransaction()) {
+        if (result.Success && result.Data.IsSuccessful) {
             await this.NavigationService.GoToBillPaymentSuccessPage();
         }
         else {

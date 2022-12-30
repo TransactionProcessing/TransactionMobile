@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.UiTests.Drivers
 {
+    using System.Collections.ObjectModel;
+    using OpenQA.Selenium;
+
     public enum MobileTestPlatform
     {
         iOS,
@@ -23,8 +26,6 @@ namespace TransactionMobile.Maui.UiTests.Drivers
     {
         public static MobileTestPlatform MobileTestPlatform;
         public static AppiumDriver Driver;
-
-        public static String PacakageName;
 
         public void StartApp() {
             AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723).Build();
@@ -43,7 +44,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             else if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.iOS) {
                 AppiumDriverWrapper.SetupiOSDriver(appiumService);
             }
-
+            
             //AppiumDriverWrapper.Driver.StartRecordingScreen();
         }
 
@@ -89,18 +90,27 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             var apkPath = Path.Combine(binariesFolder, "com.transactionprocessing.pos-Signed.apk");
             driverOptions.App = apkPath;
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.Android.AndroidDriver(appiumService, driverOptions, TimeSpan.FromMinutes(5));
+            
+        }
+
+        public List<LogEntry> GetLogs() {
+            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
+                ReadOnlyCollection<LogEntry>? logs = AppiumDriverWrapper.Driver.Manage().Logs.GetLog("logcat");
+                return logs.ToList();
+            }
+
+            return null;
         }
 
         public void StopApp()
         {
-            AppiumDriverWrapper.Driver?.CloseApp();
-            //AppiumDriverWrapper.Driver?.Close();
-            AppiumDriverWrapper.Driver?.Quit();
-            //String video = AppiumDriverWrapper.Driver.StopRecordingScreen();
-            //byte[] decode = Convert.FromBase64String(video);
-
-            //String fileName = "c:\\temp\\VideoRecording_test.mp4";
-            //File.WriteAllBytes(fileName, decode); ;
+            try {
+                AppiumDriverWrapper.Driver?.CloseApp();
+                AppiumDriverWrapper.Driver?.Quit();
+            }
+            catch(Exception e) {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }

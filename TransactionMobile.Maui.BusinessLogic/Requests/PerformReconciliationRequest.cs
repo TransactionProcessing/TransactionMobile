@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 namespace TransactionMobile.Maui.BusinessLogic.Requests
 {
     using MediatR;
+    using Models;
     using RequestHandlers;
     using TransactionProcessorACL.DataTransferObjects.Responses;
 
-    public class PerformReconciliationRequest : IRequest<Result<ReconciliationResponseMessage>>
+    public class PerformReconciliationRequest : IRequest<Result<PerformReconciliationResponseModel>>
     {
         public String DeviceIdentifier { get; private set; }
         public DateTime TransactionDateTime { get; private set; }

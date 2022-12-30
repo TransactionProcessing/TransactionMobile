@@ -3,6 +3,7 @@
 using System.Web;
 using System.Windows.Input;
 using Common;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using MvvmHelpers;
@@ -45,10 +46,10 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
     {
         this.Mediator = mediator;
         this.IssueVoucherCommand = new AsyncCommand(this.IssueVoucherCommandExecute);
-        this.RecipientMobileNumberEntryCompletedCommand = new Command(this.RecipientMobileNumberEntryCompletedCommandExecute);
-        this.RecipientEmailAddressEntryCompletedCommand = new Command(this.RecipientEmailAddressEntryCompletedCommandExecute);
-        this.VoucherAmountEntryCompletedCommand = new Command(this.VoucherAmountEntryCompletedCommandExecute);
-        this.CustomerEmailAddressEntryCompletedCommand = new Command(this.CustomerEmailAddressEntryCompletedCommandExecute);
+        this.RecipientMobileNumberEntryCompletedCommand = new AsyncCommand(this.RecipientMobileNumberEntryCompletedCommandExecute);
+        this.RecipientEmailAddressEntryCompletedCommand = new AsyncCommand(this.RecipientEmailAddressEntryCompletedCommandExecute);
+        this.VoucherAmountEntryCompletedCommand = new AsyncCommand(this.VoucherAmountEntryCompletedCommandExecute);
+        this.CustomerEmailAddressEntryCompletedCommand = new AsyncCommand(this.CustomerEmailAddressEntryCompletedCommandExecute);
         this.Title = "Enter Voucher Issue Details";
     }
 
@@ -102,27 +103,25 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
 
     #region Methods
 
-    private void CustomerEmailAddressEntryCompletedCommandExecute()
-    {
-        Shared.Logger.Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
+    private async Task CustomerEmailAddressEntryCompletedCommandExecute() {
+        Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
         this.OnCustomerEmailAddressEntryCompleted();
     }
 
-    private void RecipientMobileNumberEntryCompletedCommandExecute()
-    {
-        Shared.Logger.Logger.LogInformation("RecipientMobileNumberEntryCompletedCommandExecute called");
+    private async Task RecipientMobileNumberEntryCompletedCommandExecute() {
+        Logger.LogInformation("RecipientMobileNumberEntryCompletedCommandExecute called");
         this.OnRecipientMobileNumberEntryCompleted();
     }
 
-    private void RecipientEmailAddressEntryCompletedCommandExecute()
+    private async Task RecipientEmailAddressEntryCompletedCommandExecute()
     {
-        Shared.Logger.Logger.LogInformation("RecipientEmailAddressEntryCompletedCommandExecute called");
+         Logger.LogInformation("RecipientEmailAddressEntryCompletedCommandExecute called");
         this.OnRecipientEmailAddressEntryCompleted();
     }
 
     private async Task IssueVoucherCommandExecute()
     {
-        Shared.Logger.Logger.LogInformation("IssueVoucherCommandExecute called");
+        Logger.LogInformation("IssueVoucherCommandExecute called");
         // TODO: Create Command and Send
         PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(DateTime.Now,
                                                                                this.ProductDetails.ContractId,
@@ -135,7 +134,7 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
 
         var result = await this.Mediator.Send(request);
 
-        if (result.Success && result.Data.IsSuccessfulTransaction())
+        if (result.Success && result.Data.IsSuccessful)
         {
             await this.NavigationService.GoToVoucherIssueSuccessPage();
 
@@ -146,9 +145,9 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
         }
     }
 
-    private void VoucherAmountEntryCompletedCommandExecute()
+    private async Task VoucherAmountEntryCompletedCommandExecute()
     {
-        Shared.Logger.Logger.LogInformation("VoucherAmountEntryCompletedCommandExecute called");
+        Logger.LogInformation("VoucherAmountEntryCompletedCommandExecute called");
         this.OnVoucherAmountEntryCompleted();
     }
 

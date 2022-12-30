@@ -7,6 +7,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
     using System.Collections.Generic;
     using System.Threading;
     using Common;
+    using Logging;
     using Maui.UIServices;
     using MediatR;
     using Models;
@@ -14,7 +15,6 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
     using RequestHandlers;
     using Requests;
     using Services;
-    using Shared.Logger;
     using Shouldly;
     using UIServices;
     using ViewModels.Transactions;
@@ -31,13 +31,17 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
         private readonly Mock<IDialogService> DialogSevice;
 
         private readonly BillPaymentSelectOperatorPageViewModel ViewModel;
-
+        
         public BillPaymentSelectOperatorPageViewModelTests() {
             this.Mediator = new Mock<IMediator>();
             this.NavigationService = new Mock<INavigationService>();
             this.ApplicationCache = new Mock<IApplicationCache>();
             this.DialogSevice = new Mock<IDialogService>();
-            this.ViewModel = new BillPaymentSelectOperatorPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object);
+        
+            this.ViewModel = new BillPaymentSelectOperatorPageViewModel(this.Mediator.Object,
+                                                                        this.NavigationService.Object,
+                                                                        this.ApplicationCache.Object,
+                                                                        this.DialogSevice.Object);
         }
 
         [Fact]

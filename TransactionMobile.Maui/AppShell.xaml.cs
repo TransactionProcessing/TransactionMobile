@@ -4,6 +4,7 @@ namespace TransactionMobile.Maui;
 using System.Diagnostics;
 using System.Windows.Input;
 using BusinessLogic.UIServices;
+using BusinessLogic.ViewModels;
 using Newtonsoft.Json;
 using Pages;
 using TransactionMobile.Maui.UIServices;
@@ -13,13 +14,14 @@ public partial class AppShell : Shell
 {
 	public AppShell()
 	{
-		InitializeComponent();
+        Console.WriteLine("In AppShell Ctor");
+        InitializeComponent();
 	}
 
     protected override async void OnNavigating(ShellNavigatingEventArgs args) {
         base.OnNavigating(args);
         
-        Shared.Logger.Logger.LogDebug($"In OnNavigating - Source [{args.Source.ToString()}] {JsonConvert.SerializeObject(args)}");
+        //Logger.LogDebug($"In OnNavigating - Source [{args.Source.ToString()}] {JsonConvert.SerializeObject(args)}");
         if (args.Source == ShellNavigationSource.ShellSectionChanged) {
             List<Page> existingPages = Navigation.NavigationStack.ToList();
             foreach (Page page in existingPages)
@@ -35,7 +37,7 @@ public partial class AppShell : Shell
     }
 
     protected override void OnNavigated(ShellNavigatedEventArgs args) {
-        Shared.Logger.Logger.LogDebug($"In OnNavigated - Source [{args.Source.ToString()}] {JsonConvert.SerializeObject(args)}");
+        //Logger.LogDebug($"In OnNavigated - Source [{args.Source.ToString()}] {JsonConvert.SerializeObject(args)}");
         
         base.OnNavigated(args);
     }

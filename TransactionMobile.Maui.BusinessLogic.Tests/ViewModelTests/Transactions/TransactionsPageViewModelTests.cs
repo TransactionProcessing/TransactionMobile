@@ -1,10 +1,12 @@
 namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions;
 
+using Logging;
 using Maui.UIServices;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Services;
-using Shared.Logger;
 using UIServices;
+using ViewModels;
 using ViewModels.Transactions;
 using Xunit;
 
@@ -14,13 +16,12 @@ public class TransactionsPageViewModelTests
     private readonly Mock<INavigationService> NavigationService;
     private readonly TransactionsPageViewModel ViewModel;
     private readonly Mock<IDialogService> DialogSevice;
-
     public TransactionsPageViewModelTests() {
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
         this.ViewModel = new TransactionsPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object);
-        Logger.Initialise(NullLogger.Instance);
+        
     }
 
     [Fact]

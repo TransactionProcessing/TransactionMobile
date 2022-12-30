@@ -1,13 +1,13 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels;
 
 using System.Windows.Input;
+using Logging;
 using Maui.UIServices;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
 using MyAccount;
 using RequestHandlers;
 using Services;
-using Shared.Logger;
 using Support;
 using Transactions;
 using UIServices;

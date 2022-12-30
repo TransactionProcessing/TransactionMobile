@@ -4,16 +4,18 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Common;
+using Logging;
 using Maui.UIServices;
 using MediatR;
+using Microsoft.Extensions.Logging.Abstractions;
 using Models;
 using Moq;
 using RequestHandlers;
 using Requests;
 using Services;
-using Shared.Logger;
 using Shouldly;
 using UIServices;
+using ViewModels;
 using ViewModels.Transactions;
 using Xunit;
 
@@ -34,7 +36,6 @@ public class VoucherSelectOperatorPageViewModelTests
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
-        Logger.Initialise(NullLogger.Instance);
         this.ViewModel = new VoucherSelectOperatorPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object,
                                                                 this.DialogSevice.Object);
 

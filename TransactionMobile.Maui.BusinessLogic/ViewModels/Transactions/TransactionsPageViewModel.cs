@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions
 {
     using System.Windows.Input;
+    using Logging;
     using Maui.UIServices;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
@@ -43,31 +44,31 @@
 
         private async Task AdminCommandExecute()
         {
-            Shared.Logger.Logger.LogInformation("AdminCommandExecute called");
+            Logger.LogInformation("AdminCommandExecute called");
             await this.NavigationService.GoToAdminPage();
         }
 
         private async Task BillPaymentCommandExecute()
         {
-            Shared.Logger.Logger.LogInformation("AdminCommandExecute called");
+            Logger.LogInformation("AdminCommandExecute called");
             await this.NavigationService.GoToBillPaymentSelectOperatorPage();
         }
 
         private async Task MobileTopupCommandExecute()
         {
-            Shared.Logger.Logger.LogInformation("MobileTopupCommandExecute called");
+            Logger.LogInformation("MobileTopupCommandExecute called");
             await this.NavigationService.GoToMobileTopupSelectOperatorPage();
         }
 
         private async Task MobileWalletCommandExecute()
         {
-            Shared.Logger.Logger.LogInformation("MobileWalletCommandExecute called");
+            Logger.LogInformation("MobileWalletCommandExecute called");
             await this.NavigationService.GoToHome();
         }
 
         private async Task VoucherCommandExecute()
         {
-            Shared.Logger.Logger.LogInformation("VoucherCommandExecute called");
+            Logger.LogInformation("VoucherCommandExecute called");
             await this.NavigationService.GoToVoucherSelectOperatorPage();
         }
 

@@ -3,6 +3,7 @@
 using System.Web;
 using System.Windows.Input;
 using Common;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Microsoft.Maui.Controls;
@@ -64,7 +65,7 @@ public class MobileTopupSelectProductPageViewModel : ExtendedBaseViewModel, IQue
 
     private async Task ProductSelectedCommandExecute(ItemSelected<ContractProductModel> e)
     {
-        Shared.Logger.Logger.LogInformation("ProductSelectedCommandExecute called");
+        Logger.LogInformation("ProductSelectedCommandExecute called");
         ProductDetails productDetails = new ProductDetails()
                                         {
                                             OperatorIdentifier = e.SelectedItem.OperatorIdentfier,

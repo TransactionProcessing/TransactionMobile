@@ -1,5 +1,6 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.MyAccount;
 
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Models;

@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions;
 
 using System.Windows.Input;
+using Logging;
 using Maui.UIServices;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
@@ -10,7 +11,7 @@ using UIServices;
 public class MobileTopupFailedPageViewModel : BaseViewModel
 {
     private readonly INavigationService NavigationService;
-
+    
     #region Constructors
 
     public MobileTopupFailedPageViewModel(INavigationService navigationService) {
@@ -31,7 +32,7 @@ public class MobileTopupFailedPageViewModel : BaseViewModel
 
     private async Task CancelledCommandExecute()
     {
-        Shared.Logger.Logger.LogInformation("CancelledCommandExecute called");
+        Logger.LogInformation("CancelledCommandExecute called");
         await this.NavigationService.PopToRoot();
     }
 

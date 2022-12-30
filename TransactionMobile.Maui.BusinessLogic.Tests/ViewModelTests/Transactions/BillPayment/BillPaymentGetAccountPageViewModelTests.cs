@@ -4,18 +4,22 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Logging;
 using Maui.UIServices;
 using MediatR;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Models;
 using Moq;
 using RequestHandlers;
 using Requests;
 using Services;
-using Shared.Logger;
 using Shouldly;
 using UIServices;
+using ViewModels;
 using ViewModels.Transactions;
 using Xunit;
+using NullLogger = Logging.NullLogger;
 
 public class BillPaymentGetAccountPageViewModelTests
 {
@@ -35,8 +39,10 @@ public class BillPaymentGetAccountPageViewModelTests
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
         this.ViewModel = new BillPaymentGetAccountPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object, this.Mediator.Object);
-        Logger.Initialise(NullLogger.Instance);
+
+        Logger.Initialise(new NullLogger());
     }
+
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_ApplyQueryAttributes_QueryAttributesApplied()
     {
@@ -55,14 +61,12 @@ public class BillPaymentGetAccountPageViewModelTests
     {
         this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentGetAccountRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentGetAccountResponseModel>(TestData.PerformBillPaymentGetAccountResponseModel));
         
-        BillPaymentGetAccountPageViewModel viewModel = new BillPaymentGetAccountPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object, this.Mediator.Object);
-
-        viewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
+        this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
                                                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                                                       });
-        viewModel.CustomerAccountNumber = TestData.CustomerAccountNumber;
+        this.ViewModel.CustomerAccountNumber = TestData.CustomerAccountNumber;
         
-        viewModel.GetAccountCommand.Execute(null);
+        this.ViewModel.GetAccountCommand.Execute(null);
         
         this.NavigationService.Verify(n => n.GoToBillPaymentPayBillPage(It.IsAny<ProductDetails>(), It.IsAny<BillDetails>()), Times.Once);
     }

@@ -17,6 +17,8 @@ public class LoginPage : BasePage
     private readonly String UseTrainingModeSwitch;
     private readonly String DeviceSerial;
 
+    private readonly String ConfigHostUrlEntry;
+
     public LoginPage()
     {
         this.UserNameEntry = "UserNameEntry";
@@ -24,11 +26,18 @@ public class LoginPage : BasePage
         this.LoginButton = "LoginButton";
         this.UseTrainingModeSwitch = "UseTrainingModeSwitch";
         this.DeviceSerial = "DeviceSerial";
+        this.ConfigHostUrlEntry = "ConfigHostUrlEntry";
     }
 
     public async Task<String> GetDeviceSerial() {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.DeviceSerial);
         return element.Text;
+    }
+
+    public async Task SetConfigHostUrl(String configHostUrl)
+    {
+        IWebElement element = await this.WaitForElementByAccessibilityId(this.ConfigHostUrlEntry);
+        element.SendKeys(configHostUrl);
     }
 
     public async Task<Boolean> IsTrainingModeOn()
@@ -56,7 +65,6 @@ public class LoginPage : BasePage
     public async Task SetTrainingModeOn()
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.UseTrainingModeSwitch);
-        var text = element.Text;
         element.Click();
     }
 

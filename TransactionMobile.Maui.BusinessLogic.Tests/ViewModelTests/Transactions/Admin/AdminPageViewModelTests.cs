@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions.Admin
 {
+    using Logging;
     using Maui.UIServices;
     using MediatR;
     using Microsoft.Extensions.Caching.Memory;

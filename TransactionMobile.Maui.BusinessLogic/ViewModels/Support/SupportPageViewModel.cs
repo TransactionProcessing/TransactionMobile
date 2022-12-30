@@ -3,13 +3,13 @@
     using System.Text;
     using System.Windows.Input;
     using Database;
+    using Logging;
     using Maui.UIServices;
     using MediatR;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
     using Requests;
     using Services;
-    using Shared.Logger;
     using UIServices;
 
     public class SupportPageViewModel : ExtendedBaseViewModel
@@ -79,7 +79,7 @@
         private async Task UploadLogsCommandExecute() {
             Logger.LogInformation("UploadLogsCommandExecute called");
 
-            UploadLogsRequest uploadLogsRequest = UploadLogsRequest.Create(this.DeviceService.GetIdentifier());
+            UploadLogsRequest uploadLogsRequest = UploadLogsRequest.Create(String.Empty);
 
             Boolean response = await this.Mediator.Send(uploadLogsRequest, CancellationToken.None);
 

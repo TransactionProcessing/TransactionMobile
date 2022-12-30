@@ -10,6 +10,7 @@ namespace TransactionMobile.Maui.UITests
     using Common;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Interactions;
+    using Shared.IntegrationTesting;
     using Shouldly;
 
     public abstract class BasePage

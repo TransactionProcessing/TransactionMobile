@@ -8,17 +8,22 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 {
     using System.Net;
     using ClientProxyBase;
+    using Logging;
+    using Microsoft.Extensions.Logging;
     using Models;
     using Newtonsoft.Json;
     using RequestHandlers;
+    using TransactionMobile.Maui.BusinessLogic.Services.DataTransferObjects;
+    using ViewModels;
+    using LogLevel = Models.LogLevel;
+
 
     public class ConfigurationService : ClientProxyBase, IConfigurationService
     {
         private readonly Func<String, String> BaseAddressResolver;
 
         public ConfigurationService(Func<String, String> baseAddressResolver,
-                                    HttpClient httpClient) : base(httpClient)
-        {
+                                    HttpClient httpClient) : base(httpClient) {
             this.BaseAddressResolver = baseAddressResolver;
         }
 
@@ -50,32 +55,64 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                                                                   CancellationToken cancellationToken)
         {
             Configuration response = null;
-            String requestUri = this.BuildRequestUrl($"/configuration/{deviceIdentifier}");
+            String requestUri = this.BuildRequestUrl($"/api/transactionmobileconfiguration/{deviceIdentifier}");
 
             try
             {
-                Shared.Logger.Logger.LogInformation($"About to request configuration for device identifier {deviceIdentifier}");
-                Shared.Logger.Logger.LogDebug($"Configuration Request details: Uri {requestUri}");
+                Logger.LogInformation($"About to request configuration for device identifier {deviceIdentifier}");
+                Logger.LogDebug($"Configuration Request details: Uri {requestUri}");
 
                 // Make the Http Call here
                 HttpResponseMessage httpResponse = await this.HttpClient.GetAsync(requestUri, cancellationToken);
-
+                Logger.LogDebug($"Configuration Response [{httpResponse.StatusCode}]");
+                
                 // Process the response
                 String content = await this.HandleResponse(httpResponse, cancellationToken);
+                Logger.LogDebug($"Configuration Response Content [{content}]");
 
                 // call was successful so now deserialise the body to the response object
-                response = JsonConvert.DeserializeObject<Configuration>(content);
+                ConfigurationResponse apiResponse = JsonConvert.DeserializeObject<ConfigurationResponse>(content);
 
-                Shared.Logger.Logger.LogInformation($"Configuration for device identifier {deviceIdentifier} requested successfully");
-                Shared.Logger.Logger.LogDebug($"Configuration Response: [{content}]");
+                Logger.LogDebug($"About to build Configuration");
+                response = new Configuration() {
+                                                   ClientSecret = apiResponse.ClientSecret,
+                                                   ClientId = apiResponse.ClientId,
+                                                   EnableAutoUpdates = apiResponse.EnableAutoUpdates,
+                                                   EstateManagementUri = apiResponse.HostAddresses.Single(h => h.ServiceType == ServiceType.EstateManagement).Uri,
+                                                   SecurityServiceUri = apiResponse.HostAddresses.Single(h => h.ServiceType == ServiceType.Security).Uri,
+                                                   TransactionProcessorAclUri =
+                                                       apiResponse.HostAddresses.Single(h => h.ServiceType == ServiceType.TransactionProcessorAcl).Uri,
+                                               };
+
+                Logger.LogDebug($"About to xlate log level");
+                response.LogLevel = apiResponse.LogLevel switch
+                {
+                    LoggingLevel.Debug => LogLevel.Debug,
+                    LoggingLevel.Error => LogLevel.Error,
+                    LoggingLevel.Fatal => LogLevel.Fatal,
+                    LoggingLevel.Information => LogLevel.Info,
+                    LoggingLevel.Trace => LogLevel.Trace,
+                    LoggingLevel.Warning => LogLevel.Warn,
+                    _ => LogLevel.Info
+                };
+
+                Logger.LogDebug($"About to xlate app centre config");
+                response.AppCenterConfig = new AppCenterConfiguration() {
+                                                                            AndroidKey = apiResponse.ApplicationCentreConfiguration.AndroidKey,
+                                                                            MacOSKey = apiResponse.ApplicationCentreConfiguration.MacosKey,
+                                                                            WindowsKey = apiResponse.ApplicationCentreConfiguration.WindowsKey,
+                                                                            iOSKey = apiResponse.ApplicationCentreConfiguration.IosKey
+                                                                        };
+
+                Logger.LogInformation($"Configuration for device identifier {deviceIdentifier} requested successfully");
+                Logger.LogDebug($"Configuration Response: [{content}]");
 
                 return new SuccessResult<Configuration>(response);
             }
             catch (Exception ex)
             {
                 // An exception has occurred, add some additional information to the message
-                Exception exception = new Exception($"Error getting configuration for device Id {deviceIdentifier}.", ex);
-                Shared.Logger.Logger.LogError(exception);
+                Logger.LogError($"Error getting configuration for device Id {deviceIdentifier}.",ex);
 
                 return new ErrorResult<Configuration>("Error getting configuration data");
             }
@@ -85,7 +122,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                                              List<LogMessage> logMessages,
                                              CancellationToken cancellationToken)
         {
-            String requestUri = this.BuildRequestUrl($"/logging/{deviceIdentifier}");
+            String requestUri = this.BuildRequestUrl($"/transactionmobilelogging");
 
             // Create a container
             var container = new

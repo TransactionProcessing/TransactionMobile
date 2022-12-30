@@ -5,6 +5,10 @@ using Models;
 
 public interface IApplicationCache
 {
+    String GetConfigHostUrl();
+
+    void SetConfigHostUrl(String value, MemoryCacheEntryOptions options = default);
+
     Boolean GetUseTrainingMode();
 
     void SetUseTrainingMode(Boolean value, MemoryCacheEntryOptions options = default);

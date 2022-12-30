@@ -20,6 +20,7 @@ public partial class App : Application
 {
 	public App()
     {
+        Console.WriteLine("In App Ctor");
         InitializeComponent();
         
 #if ANDROID

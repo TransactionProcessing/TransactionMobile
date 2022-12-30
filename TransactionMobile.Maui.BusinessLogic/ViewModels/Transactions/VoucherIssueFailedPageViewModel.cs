@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions;
 
 using System.Windows.Input;
+using Logging;
 using Maui.UIServices;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
@@ -32,7 +33,7 @@ public class VoucherIssueFailedPageViewModel : BaseViewModel
 
     private async Task CancelledCommandExecute()
     {
-        Shared.Logger.Logger.LogInformation("CancelledCommandExecute called");
+        Logger.LogInformation("CancelledCommandExecute called");
         await this.NavigationService.PopToRoot();
     }
 

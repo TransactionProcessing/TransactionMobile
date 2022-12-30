@@ -1,5 +1,7 @@
 ﻿namespace TransactionMobile.Maui.UIServices;
 
+using BusinessLogic.Logging;
+using BusinessLogic.ViewModels;
 using BusinessLogic.ViewModels.MyAccount;
 using BusinessLogic.ViewModels.Transactions;
 using Pages;
@@ -14,6 +16,9 @@ public class ShellNavigationService : INavigationService
 {
     #region Methods
 
+    public ShellNavigationService() {
+
+    }
     public async Task GoBack() {
         await Shell.Current.Navigation.PopAsync();
     }
@@ -85,7 +90,7 @@ public class ShellNavigationService : INavigationService
     }
 
     public async Task PopToRoot() {
-        Shared.Logger.Logger.LogInformation($"navigating to root");
+        Logger.LogInformation($"navigating to root");
         await Shell.Current.Navigation.PopToRootAsync();
     }
 
@@ -156,12 +161,11 @@ public class ShellNavigationService : INavigationService
 
     private async Task NavigateTo(String route) {
         try {
-            Shared.Logger.Logger.LogInformation($"navigating to {route}");
+            Logger.LogInformation($"navigating to {route}");
             await Shell.Current.GoToAsync(route);
             }
         catch(Exception e) {
-            Exception ex = new Exception("Error navigating to {route}", e);
-            Shared.Logger.Logger.LogError(ex);
+            Logger.LogError("Error navigating to {route}", e);
         }
     }
 
@@ -169,26 +173,24 @@ public class ShellNavigationService : INavigationService
     {
         try
         {
-            Shared.Logger.Logger.LogInformation($"navigating to {route}");
+            Logger.LogInformation($"navigating to {route}");
             await Shell.Current.GoToAsync(route, parameters);
         }
         catch (Exception e)
         {
-            Exception ex = new Exception("Error navigating to {route}", e);
-            Shared.Logger.Logger.LogError(ex);
+            Logger.LogError("Error navigating to {route}", e);
         }
     }
 
     private async Task NavigateTo(ContentPage page){
         try
         {
-            //Shared.Logger.Logger.LogInformation($"navigating to {route}");
+            //Logger.LogInformation($"navigating to {route}");
             await Shell.Current.Navigation.PushAsync(page);
         }
         catch (Exception e)
         {
-            //Exception ex = new Exception("Error navigating to {route}", e);
-            Shared.Logger.Logger.LogError(e);
+            Logger.LogError("Error navigating to {route}", e);
         }
     }
 

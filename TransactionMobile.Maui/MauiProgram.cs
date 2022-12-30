@@ -2,13 +2,15 @@
 
 namespace TransactionMobile.Maui;
 
+using BusinessLogic.Logging;
 using BusinessLogic.UIServices;
 using CommunityToolkit.Maui;
-using Microsoft.Extensions.Caching.Memory;
+using MetroLog.MicrosoftExtensions;
+using Microsoft.Extensions.Logging;
 using UIServices;
 using TransactionMobile.Maui.BusinessLogic.Services;
 using TransactionMobile.Maui.Database;
-using Shared.Logger;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 public static class MauiProgram
 {
@@ -16,7 +18,7 @@ public static class MauiProgram
 	private static MauiAppBuilder Builder;
 	public static MauiApp CreateMauiApp()
 	{
-		Builder = MauiApp.CreateBuilder();
+        Builder = MauiApp.CreateBuilder();
 		Builder.UseMauiApp<App>()
 			.ConfigureRequestHandlers()
 			.ConfigurePages()
@@ -31,13 +33,11 @@ public static class MauiProgram
 							   })
 			.Services.AddTransient<IDeviceService, DeviceService>()
 			   .AddMemoryCache();
-		
-		Container = Builder.Build();
+        MauiProgram.Builder.Logging.SetMinimumLevel(LogLevel.Trace).AddConsole();
+        
+		Logger.Initialise(new ConsoleLogger());
 
-		// Setup static logger
-		IDatabaseContext databaseContext = MauiProgram.Container.Services.GetService<IDatabaseContext>();
-        IApplicationCache applicationCache = MauiProgram.Container.Services.GetService<IApplicationCache>();
-        Logger.Initialise(new DatabaseLogger(databaseContext,applicationCache));
+		Container = Builder.Build();
 
 		return Container;
 	}

@@ -1,9 +1,11 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Admin
 {
     using System.Windows.Input;
+    using Logging;
     using Maui.UIServices;
     using MediatR;
     using Microsoft.Extensions.Caching.Memory;
+    using Models;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
     using RequestHandlers;
@@ -48,9 +50,9 @@
         private async Task ReconciliationCommandExecute()
         {
             PerformReconciliationRequest request =
-                PerformReconciliationRequest.Create(DateTime.Now, this.DeviceService.GetIdentifier(), this.ApplicationInfoService.VersionString);
+                PerformReconciliationRequest.Create(DateTime.Now, String.Empty, this.ApplicationInfoService.VersionString);
 
-            Result<ReconciliationResponseMessage> result = await this.Mediator.Send(request);
+            Result<PerformReconciliationResponseModel> result = await this.Mediator.Send(request);
 
             // TODO: Act on the response (display message or something)...
             await this.NavigationService.GoToHome();

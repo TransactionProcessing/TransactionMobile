@@ -1,21 +1,24 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions.BillPayment;
 
+using Logging;
 using Maui.UIServices;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
-using Shared.Logger;
+using ViewModels;
 using ViewModels.Transactions;
 using Xunit;
+using NullLogger = Logging.NullLogger;
 
 public class BillPaymentSuccessPageViewModelTests
 {
     private readonly Mock<INavigationService> NavigationService;
-
     private readonly BillPaymentSuccessPageViewModel ViewModel;
     public BillPaymentSuccessPageViewModelTests()
     {
         this.NavigationService = new Mock<INavigationService>();
-        Logger.Initialise(NullLogger.Instance);
         this.ViewModel = new BillPaymentSuccessPageViewModel(this.NavigationService.Object);
+        Logger.Initialise(new NullLogger());
     }
 
     [Fact]

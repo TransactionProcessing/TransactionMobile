@@ -2,6 +2,7 @@
 {
     using System.Windows.Input;
     using Common;
+    using Logging;
     using Maui.UIServices;
     using MediatR;
     using Microsoft.Extensions.Caching.Memory;
@@ -12,7 +13,6 @@
     using RequestHandlers;
     using Requests;
     using Services;
-    using Shared.Logger;
     using UIServices;
 
     public class MyAccountPageViewModel : ExtendedBaseViewModel

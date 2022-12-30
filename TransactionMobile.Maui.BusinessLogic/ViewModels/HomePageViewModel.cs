@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels;
 
 using System.Runtime.CompilerServices;
+using Logging;
 using Maui.UIServices;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Distribute;
@@ -52,7 +53,7 @@ public class HomePageViewModel : ExtendedBaseViewModel
             }
         }
         catch(Exception ex) {
-            Shared.Logger.Logger.LogError(ex);
+            Logger.LogError("Error during initialise", ex);
         }
     }
 
@@ -63,7 +64,7 @@ public class HomePageViewModel : ExtendedBaseViewModel
     private Boolean IsIOS() => DeviceInfo.Current.Platform == DevicePlatform.iOS;
 
     private Boolean OnReleaseAvailable(ReleaseDetails releaseDetails) {
-        Shared.Logger.Logger.LogInformation("In OnReleaseAvailable");
+        Logger.LogInformation("In OnReleaseAvailable");
         // Look at releaseDetails public properties to get version information, release notes text or release notes URL
         String versionName = releaseDetails.ShortVersion;
         String versionCodeOrBuildNumber = releaseDetails.Version;
@@ -77,12 +78,12 @@ public class HomePageViewModel : ExtendedBaseViewModel
         // On mandatory update, user can't postpone
         if (releaseDetails.MandatoryUpdate)
         {
-            Shared.Logger.Logger.LogInformation("In OnReleaseAvailable - mandatory update");
+            Logger.LogInformation("In OnReleaseAvailable - mandatory update");
             answer = this.DialogService.ShowDialog(title, releaseNotes, "Download and Install");
         }
         else
         {
-            Shared.Logger.Logger.LogInformation("In OnReleaseAvailable - non mandatory update");
+            Logger.LogInformation("In OnReleaseAvailable - non mandatory update");
             answer = this.DialogService.ShowDialog(title, releaseNotes, "Download and Install", "Later");
         }
 
@@ -91,7 +92,7 @@ public class HomePageViewModel : ExtendedBaseViewModel
             // If mandatory or if answer was positive
             if (releaseDetails.MandatoryUpdate || (task as Task<Boolean>).Result)
             {
-                Shared.Logger.Logger.LogInformation("In OnReleaseAvailable - updating");
+                Logger.LogInformation("In OnReleaseAvailable - updating");
                 // Notify SDK that user selected update
                 Distribute.NotifyUpdateAction(UpdateAction.Update);
             }
@@ -99,7 +100,7 @@ public class HomePageViewModel : ExtendedBaseViewModel
             {
                 // Notify SDK that user selected postpone (for 1 day)
                 // This method call is ignored by the SDK if the update is mandatory
-                Shared.Logger.Logger.LogInformation("In OnReleaseAvailable - postponing");
+                Logger.LogInformation("In OnReleaseAvailable - postponing");
                 Distribute.NotifyUpdateAction(UpdateAction.Postpone);
             }
         });

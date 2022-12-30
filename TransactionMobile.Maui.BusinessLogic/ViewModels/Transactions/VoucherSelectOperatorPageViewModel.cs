@@ -2,6 +2,7 @@
 
 using System.Windows.Input;
 using Common;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Models;
@@ -68,7 +69,7 @@ public class VoucherSelectOperatorPageViewModel : ExtendedBaseViewModel
 
     private async Task OperatorSelectedCommandExecute(ItemSelected<ContractOperatorModel> e)
     {
-        Shared.Logger.Logger.LogInformation("OperatorSelectedCommandExecute called");
+        Logger.LogInformation("OperatorSelectedCommandExecute called");
         ProductDetails productDetails = new ProductDetails()
                                         {
                                             OperatorIdentifier = e.SelectedItem.OperatorIdentfier

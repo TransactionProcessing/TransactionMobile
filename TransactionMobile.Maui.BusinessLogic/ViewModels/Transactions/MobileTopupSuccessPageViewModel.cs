@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions
 {
     using System.Windows.Input;
+    using Logging;
     using Maui.UIServices;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
@@ -10,7 +11,7 @@
     public class MobileTopupSuccessPageViewModel : BaseViewModel
     {
         private readonly INavigationService NavigationService;
-
+        
         #region Constructors
 
         public MobileTopupSuccessPageViewModel(INavigationService navigationService)
@@ -32,7 +33,7 @@
 
         private async Task CompletedCommandExecute()
         {
-            Shared.Logger.Logger.LogInformation("CompletedCommandExecute called");
+            Logger.LogInformation("CompletedCommandExecute called");
             await this.NavigationService.PopToRoot();
         }
 

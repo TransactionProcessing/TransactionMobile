@@ -3,6 +3,7 @@
 using System.Web;
 using System.Windows.Input;
 using Common;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Models;
@@ -65,7 +66,7 @@ public class BillPaymentSelectProductPageViewModel : ExtendedBaseViewModel, IQue
 
     private async Task ProductSelectedCommandExecute(ItemSelected<ContractProductModel> e)
     {
-        Shared.Logger.Logger.LogInformation("ProductSelectedCommandExecute called");
+        Logger.LogInformation("ProductSelectedCommandExecute called");
         ProductDetails productDetails = new()
                                         {
                                             OperatorIdentifier = e.SelectedItem.OperatorIdentfier,

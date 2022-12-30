@@ -37,9 +37,9 @@ jobs:
       - name: Run Unit Tests
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
 
-#      #- name: Upload MacCatalyst Artifact
-#      #  uses: actions/upload-artifact@v2.3.1
-#      #  with:
-#      #    name: macos-ci-build
-#      #    path: src/MauiBeach/bin/Release/net6.0-maccatalyst/**/*.app/
+##      #- name: Upload MacCatalyst Artifact
+##      #  uses: actions/upload-artifact@v2.3.1
+##      #  with:
+##      #    name: macos-ci-build
+##      #    path: src/MauiBeach/bin/Release/net6.0-maccatalyst/**/*.app/
 

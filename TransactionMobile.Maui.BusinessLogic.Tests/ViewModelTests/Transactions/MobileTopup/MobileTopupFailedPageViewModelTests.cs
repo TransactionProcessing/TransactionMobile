@@ -1,12 +1,16 @@
 namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions.MobileTopup;
 
+using Logging;
 using Maui.UIServices;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Services;
-using Shared.Logger;
 using UIServices;
+using ViewModels;
 using ViewModels.Transactions;
 using Xunit;
+using NullLogger = Logging.NullLogger;
 
 public class MobileTopupFailedPageViewModelTests
 {
@@ -16,8 +20,9 @@ public class MobileTopupFailedPageViewModelTests
     public MobileTopupFailedPageViewModelTests()
     {
         this.NavigationService = new Mock<INavigationService>();
-        Logger.Initialise(NullLogger.Instance);
+
         this.ViewModel = new MobileTopupFailedPageViewModel(this.NavigationService.Object);
+        Logger.Initialise(new NullLogger());
     }
 
     [Fact]

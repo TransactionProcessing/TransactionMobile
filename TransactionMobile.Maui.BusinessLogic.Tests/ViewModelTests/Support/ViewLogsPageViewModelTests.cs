@@ -1,11 +1,13 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Support;
 
+using Logging;
 using Maui.UIServices;
 using MediatR;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Services;
-using Shared.Logger;
 using UIServices;
+using ViewModels;
 using ViewModels.Support;
 using Xunit;
 
@@ -27,7 +29,6 @@ public class ViewLogsPageViewModelTests
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogService = new Mock<IDialogService>();
         
-        Logger.Initialise(NullLogger.Instance);
         this.ViewModel = new ViewLogsPageViewModel(this.Mediator.Object,
                                                    this.NavigationService.Object,
                                                    this.ApplicationCache.Object,

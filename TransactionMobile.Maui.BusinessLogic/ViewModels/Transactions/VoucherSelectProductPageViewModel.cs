@@ -3,6 +3,7 @@
 using System.Web;
 using System.Windows.Input;
 using Common;
+using Logging;
 using Maui.UIServices;
 using MediatR;
 using Models;
@@ -29,7 +30,8 @@ public class VoucherSelectProductPageViewModel : ExtendedBaseViewModel, IQueryAt
         this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
     }
 
-    public VoucherSelectProductPageViewModel(IMediator mediator, INavigationService navigationService,
+    public VoucherSelectProductPageViewModel(IMediator mediator,
+                                             INavigationService navigationService,
                                              IApplicationCache applicationCache,
                                              IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
     {
@@ -63,7 +65,7 @@ public class VoucherSelectProductPageViewModel : ExtendedBaseViewModel, IQueryAt
 
     private async Task ProductSelectedCommandExecute(ItemSelected<ContractProductModel> e)
     {
-        Shared.Logger.Logger.LogInformation("ProductSelectedCommandExecute called");
+        Logger.LogInformation("ProductSelectedCommandExecute called");
         ProductDetails productDetails = new ProductDetails()
                                         {
                                             OperatorIdentifier = e.SelectedItem.OperatorIdentfier,

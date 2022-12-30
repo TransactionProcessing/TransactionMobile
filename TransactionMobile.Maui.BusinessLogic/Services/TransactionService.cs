@@ -5,12 +5,14 @@
     using System.Text;
     using ClientProxyBase;
     using Common;
+    using Logging;
     using Models;
     using Newtonsoft.Json;
     using RequestHandlers;
-    using Shared.Logger;
     using TransactionProcessorACL.DataTransferObjects;
     using TransactionProcessorACL.DataTransferObjects.Responses;
+    using ViewModels;
+    using ViewModels.Transactions;
 
     public class TransactionService : ClientProxyBase, ITransactionService
     {
@@ -39,109 +41,164 @@
         #region Methods
 
         public async Task<Result<PerformBillPaymentGetAccountResponseModel>> PerformBillPaymentGetAccount(PerformBillPaymentGetAccountModel model,
-                                                                                                          CancellationToken cancellationToken) {
+                                                                                               CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform bill payment get account transaction");
 
-            Result<PerformBillPaymentGetAccountResponseModel> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, PerformBillPaymentGetAccountResponseModel>(model.ToSaleTransactionRequest(), cancellationToken);
+            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
 
-            if (result.Success)
-            {
-                Logger.LogInformation("Bill payment - get account transaction performed successfully");
-            }
-            else
+            if (result.Success == false)
             {
                 Logger.LogWarning("Error performing bill payment - get account transaction");
+                return new ErrorResult<PerformBillPaymentGetAccountResponseModel>("Error performing bill payment - get account transaction");
+
             }
 
-            return result;
+            // TODO: Factory
+            PerformBillPaymentGetAccountResponseModel responseModel = new()
+                                                                      {
+                                                                          IsSuccessful = result.Data.IsSuccessfulTransaction(),
+                                                                          BillDetails = result.Data.AdditionalResponseMetaData.ToBillDetails()
+                                                                      };
+
+            Logger.LogInformation("Bill payment - get account transaction performed successfully");
+
+            return new SuccessResult<PerformBillPaymentGetAccountResponseModel>(responseModel);
         }
 
-        public async Task<Result<SaleTransactionResponseMessage>> PerformBillPaymentMakePayment(PerformBillPaymentMakePaymentModel model,
-                                                                                                CancellationToken cancellationToken) {
+        public async Task<Result<PerformBillPaymentMakePaymentResponseModel>> PerformBillPaymentMakePayment(PerformBillPaymentMakePaymentModel model,
+                                                                                                            CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform bill payment make payment transaction");
 
             Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
-
-            if (result.Success)
-            {
-                Logger.LogInformation("Bill payment - make payment transaction performed successfully");
-            }
-            else
+            
+            if (result.Success == false)
             {
                 Logger.LogWarning("Error performing bill payment - make payment transaction");
+                return new ErrorResult<PerformBillPaymentMakePaymentResponseModel>("Error performing bill payment - make payment transaction");
+
             }
 
-            return result;
+            // TODO: Factory
+            PerformBillPaymentMakePaymentResponseModel responseModel = new()
+                                                                       {
+                                                                           EstateId = result.Data.EstateId,
+                                                                           MerchantId = result.Data.EstateId,
+                                                                           ResponseCode = result.Data.ResponseCode,
+                                                                           ResponseMessage = result.Data.ResponseMessage
+                                                                       };
+
+            Logger.LogInformation("Bill payment - make payment transaction performed successfully");
+
+            return new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(responseModel);
         }
 
         public async Task<Result<PerformLogonResponseModel>> PerformLogon(PerformLogonRequestModel model,
-                                                                          CancellationToken cancellationToken) {
+                                                                                CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform logon transaction");
 
-            Result<PerformLogonResponseModel> result =  await this.SendTransactionRequest<LogonTransactionRequestMessage, PerformLogonResponseModel>(model.ToLogonTransactionRequest(), cancellationToken);
+            Result<LogonTransactionResponseMessage> result =  await this.SendTransactionRequest<LogonTransactionRequestMessage, LogonTransactionResponseMessage>(model.ToLogonTransactionRequest(), cancellationToken);
 
-            if (result.Success)
-            {
-                Logger.LogInformation("Logon transaction performed successfully");
-            }
-            else
+            if (result.Success == false)
             {
                 Logger.LogWarning("Error performing Logon transaction");
+                return new ErrorResult<PerformLogonResponseModel>("Error performing Logon transaction");
+
             }
 
-            return result;
+            // TODO: Factory
+            PerformLogonResponseModel responseModel = new()
+                                                      {
+                                                          EstateId = result.Data.EstateId,
+                                                          MerchantId = result.Data.MerchantId,
+                                                          ResponseCode = result.Data.ResponseCode,
+                                                          ResponseMessage = result.Data.ResponseMessage
+                                                      };
+
+            Logger.LogInformation("Logon transaction performed successfully");
+
+            return new SuccessResult<PerformLogonResponseModel>(responseModel);
         }
 
-        public async Task<Result<SaleTransactionResponseMessage>> PerformMobileTopup(PerformMobileTopupRequestModel model,
-                                                                                     CancellationToken cancellationToken) {
+        public async Task<Result<PerformMobileTopupResponseModel>> PerformMobileTopup(PerformMobileTopupRequestModel model,
+                                                                                      CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform mobile top-up transaction");
 
-            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
+            Result<SaleTransactionResponseMessage> result =
+                await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
 
-            if (result.Success)
-            {
-                Logger.LogInformation("Mobile top-up transaction performed successfully");
-            }
-            else
-            {
+            if (result.Success == false) {
                 Logger.LogWarning("Error performing Mobile top-up transaction");
+                return new ErrorResult<PerformMobileTopupResponseModel>("Error performing Mobile top-up transaction");
+                
             }
 
-            return result;
+            // TODO: Factory
+            PerformMobileTopupResponseModel responseModel = new (){
+                                                                                                    EstateId = result.Data.EstateId,
+                                                                                                    MerchantId = result.Data.MerchantId,
+                                                                                                    ResponseCode = result.Data.ResponseCode,
+                                                                                                    ResponseMessage = result.Data.ResponseMessage
+                                                                                                };
+
+            Logger.LogInformation("Mobile top-up transaction performed successfully");
+
+            return new SuccessResult<PerformMobileTopupResponseModel>(responseModel);
+
         }
 
-        public async Task<Result<ReconciliationResponseMessage>> PerformReconciliation(PerformReconciliationRequestModel model,
-                                                                                       CancellationToken cancellationToken) {
+        public async Task<Result<PerformReconciliationResponseModel>> PerformReconciliation(PerformReconciliationRequestModel model,
+                                                                                            CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform reconciliation transaction");
 
             Result<ReconciliationResponseMessage> result = await this.SendTransactionRequest<ReconciliationRequestMessage, ReconciliationResponseMessage>(model.ToReconciliationRequest(), cancellationToken);
-
-            if (result.Success)
-            {
-                Logger.LogInformation("Reconciliation transaction performed successfully");
-            }
-            else
+            
+            if (result.Success == false)
             {
                 Logger.LogWarning("Error performing Reconciliation transaction");
+                return new ErrorResult<PerformReconciliationResponseModel>("Error performing Reconciliation transaction");
+
             }
 
-            return result;
+            // TODO: Factory
+            PerformReconciliationResponseModel responseModel = new()
+                                                               {
+                                                                   EstateId = result.Data.EstateId,
+                                                                   MerchantId = result.Data.MerchantId,
+                                                                   ResponseCode = result.Data.ResponseCode,
+                                                                   ResponseMessage = result.Data.ResponseMessage
+                                                               };
+
+            Logger.LogInformation("Reconciliation transaction performed successfully");
+
+            return new SuccessResult<PerformReconciliationResponseModel>(responseModel);
+
         }
 
-        public async Task<Result<SaleTransactionResponseMessage>> PerformVoucherIssue(PerformVoucherIssueRequestModel model,
+        public async Task<Result<PerformVoucherIssueResponseModel>> PerformVoucherIssue(PerformVoucherIssueRequestModel model,
                                                                                       CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform voucher transaction");
 
             Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
+            
+            if (result.Success == false)
+            {
+                Logger.LogWarning("Error performing Voucher transaction");
+                return new ErrorResult<PerformVoucherIssueResponseModel>("Error performing Voucher transaction");
 
-            if (result.Success) {
-                Logger.LogInformation("Voucher transaction performed successfully");
-            }
-            else {
-                Logger.LogWarning("Error performing Voucher transaction");    
             }
 
-            return result;
+            // TODO: Factory
+            PerformVoucherIssueResponseModel responseModel = new()
+                                                             {
+                                                                 EstateId = result.Data.EstateId,
+                                                                 MerchantId = result.Data.MerchantId,
+                                                                 ResponseCode = result.Data.ResponseCode,
+                                                                 ResponseMessage = result.Data.ResponseMessage
+                                                             };
+
+            Logger.LogInformation("Voucher transaction performed successfully");
+
+            return new SuccessResult<PerformVoucherIssueResponseModel>(responseModel);
         }
         
         protected override async Task<String> HandleResponse(HttpResponseMessage responseMessage,
@@ -186,6 +243,8 @@
                 // Process the response
                 String content = await this.HandleResponse(httpResponse, cancellationToken);
 
+
+
                 Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content}");
 
                 return new SuccessResult<TResponse>(JsonConvert.DeserializeObject<TResponse>(content));
@@ -193,9 +252,7 @@
             }
             catch(Exception ex) {
                 // An exception has occurred, add some additional information to the message
-                ApplicationException exception = new ApplicationException("Error posting transaction.", ex);
-
-                Logger.LogError(exception);
+                Logger.LogError("Error posting transaction.", ex);
 
                 return new ErrorResult<TResponse>("Error posting transaction");
             }
