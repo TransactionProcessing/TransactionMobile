@@ -10,13 +10,6 @@ namespace TransactionMobile.Maui.Platforms.Services
 {
     public static partial class DeviceInformationService
     {
-        public static partial String Identifier()
-        {
-            var deviceInformation = new EasClientDeviceInformation();
-            string Id = deviceInformation.Id.ToString();
-            return Id;
-        }
-
         public static partial String Model() => new EasClientDeviceInformation().SystemProductName;
         
         public static partial String Platform() => $"UWP {GetVersionString()}";

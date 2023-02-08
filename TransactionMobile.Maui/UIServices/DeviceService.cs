@@ -1,12 +1,19 @@
 ﻿namespace TransactionMobile.Maui.UIServices;
 
+using banditoth.MAUI.DeviceId.Interfaces;
 using BusinessLogic.UIServices;
 using Platforms.Services;
 
 public class DeviceService : IDeviceService
 {
-    public String GetIdentifier() {
-        return DeviceInformationService.Identifier();
+    private readonly IDeviceIdProvider DeviceIdProvider;
+
+    public DeviceService(IDeviceIdProvider deviceIdProvider){
+        this.DeviceIdProvider = deviceIdProvider;
+    }
+
+    public String GetIdentifier(){
+        return this.DeviceIdProvider.GetDeviceId();
     }
 
     public String GetModel()
