@@ -11,6 +11,7 @@ using ViewModels.Transactions;
 using Xunit;
 using NullLogger = Logging.NullLogger;
 
+[Collection("ViewModelTests")]
 public class VoucherIssueFailedPageViewModelTests
 {
     private readonly Mock<INavigationService> NavigationService;

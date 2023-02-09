@@ -12,6 +12,7 @@ using ViewModels.Transactions;
 using Xunit;
 using NullLogger = Logging.NullLogger;
 
+[Collection("ViewModelTests")]
 public class MobileTopupFailedPageViewModelTests
 {
     private readonly Mock<INavigationService> NavigationService;

@@ -13,6 +13,7 @@ using ViewModels;
 using ViewModels.MyAccount;
 using Xunit;
 
+[Collection("ViewModelTests")]
 public class MyAccountDetailsPageViewModelTests
 {
     private readonly Mock<INavigationService> NavigationService;

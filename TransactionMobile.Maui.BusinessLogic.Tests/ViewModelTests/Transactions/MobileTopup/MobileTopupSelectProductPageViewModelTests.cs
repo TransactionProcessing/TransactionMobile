@@ -18,6 +18,7 @@ using UIServices;
 using ViewModels.Transactions;
 using Xunit;
 
+[Collection("ViewModelTests")]
 public class MobileTopupSelectProductPageViewModelTests
 {
     #region Methods

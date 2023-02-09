@@ -18,6 +18,7 @@ using ViewModels;
 using Xunit;
 using NullLogger = Microsoft.Extensions.Logging.Abstractions.NullLogger;
 
+[Collection("ViewModelTests")]
 public class LoginPageViewModelTests
 {
     private LoginPageViewModel ViewModel;

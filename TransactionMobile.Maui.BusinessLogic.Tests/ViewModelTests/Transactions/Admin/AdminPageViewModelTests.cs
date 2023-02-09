@@ -16,6 +16,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
     using Xunit;
     using TransactionMobile.Maui.BusinessLogic.Services;
 
+    [Collection("ViewModelTests")]
     public class AdminPageViewModelTests
     {
         private readonly Mock<INavigationService> NavigationService;

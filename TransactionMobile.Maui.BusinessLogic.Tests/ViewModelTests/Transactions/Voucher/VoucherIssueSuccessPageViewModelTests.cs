@@ -10,6 +10,7 @@ using ViewModels;
 using ViewModels.Transactions;
 using Xunit;
 
+[Collection("ViewModelTests")]
 public class VoucherIssueSuccessPageViewModelTests
 {
     private readonly Mock<INavigationService> NavigationService;

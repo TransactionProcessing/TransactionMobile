@@ -11,6 +11,7 @@ using ViewModels;
 using ViewModels.Support;
 using Xunit;
 
+[Collection("ViewModelTests")]
 public class ViewLogsPageViewModelTests
 {
     private readonly Mock<INavigationService> NavigationService;
