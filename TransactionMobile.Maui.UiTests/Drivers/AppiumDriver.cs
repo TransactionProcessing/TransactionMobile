@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 namespace TransactionMobile.Maui.UiTests.Drivers
 {
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
     using OpenQA.Selenium;
 
     public enum MobileTestPlatform
@@ -31,11 +32,12 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723).Build();
 
             if (appiumService.IsRunning == false) {
-                appiumService.Start();
                 appiumService.OutputDataReceived += (sender,
                                                      args) => {
-                                                        Console.WriteLine(args.Data);
-                                                    };
+                                                        //Console.WriteLine(args.Data);
+                                                        Debug.WriteLine(args.Data);
+                                                     };
+                appiumService.Start();
             }
 
             if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
@@ -75,7 +77,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption("adbExecTimeout", TimeSpan.FromMinutes(5).TotalMilliseconds);
             driverOptions.AutomationName = "UIAutomator2";
             driverOptions.PlatformName = "Android";
-            driverOptions.PlatformVersion = "9.0";
+            driverOptions.PlatformVersion = "7.0";
             driverOptions.DeviceName = "emulator-5554";
             
             // TODO: Only do this locally

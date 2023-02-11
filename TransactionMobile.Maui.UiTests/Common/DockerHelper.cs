@@ -24,6 +24,10 @@ namespace TransactionMobile.Maui.UiTests.Common
     using TechTalk.SpecFlow;
     using TransactionProcessor.Client;
 
+    //"SignInOptions": {
+    //    "RequireConfirmedEmail": true
+    //},
+
     public class DockerHelper : global::Shared.IntegrationTesting.DockerHelper
     {
         #region Fields
@@ -95,29 +99,25 @@ namespace TransactionMobile.Maui.UiTests.Common
 
         public String LocalIPAddress { get; private set; }
 
-        public override async Task<IContainerService> SetupFileProcessorContainer(List<INetworkService> networkServices,
-                                                                                  Int32 securityServicePort = 5001,
-                                                                                  List<String> additionalEnvironmentVariables = null) {
-            return null;
+        public override async Task<IContainerService> SetupTransactionProcessorAclContainer(List<INetworkService> networkServices){
+            this.AdditionalVariables.Add(ContainerType.TransactionProcessorAcl, new List<String>());
+            this.SetAdditionalVariables(ContainerType.TransactionProcessorAcl,
+                                        new List<String>{
+                                                            "AppSettings:SkipVersionCheck=true"
+                                                        });
+            return await base.SetupTransactionProcessorAclContainer(networkServices);
         }
 
-        public override async Task<IContainerService> SetupVoucherManagementAclContainer(List<INetworkService> networkServices,
-                                                                                         Int32 securityServicePort = 5001,
-                                                                                         List<String> additionalEnvironmentVariables = null) {
-            return null;
-        }
 
-        public override async Task<IContainerService> SetupTransactionProcessorAclContainer(List<INetworkService> networkServices,
-                                                                                      Int32 securityServicePort = 5001,
-                                                                                      List<String> additionalEnvironmentVariables = null) {
 
-            this.Trace("In override SetupTransactionProcessorAclContainer");
-            additionalEnvironmentVariables = new List<String> {
-                                                                  "AppSettings:SkipVersionCheck=true"
-                                                              };
-            return await base.SetupTransactionProcessorAclContainer(networkServices, securityServicePort, additionalEnvironmentVariables);
-        }
+        //public override Task<IContainerService> SetupVoucherManagementAclContainer(List<INetworkService> networkServices){
+        //    return null;
+        //}
 
+        //public override Task<IContainerService> SetupFileProcessorContainer(List<INetworkService> networkServices){
+        //    return null;
+        //}
+        
         /// <summary>
         /// Starts the containers for scenario run.
         /// </summary>
