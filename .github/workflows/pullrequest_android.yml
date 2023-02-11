@@ -106,7 +106,10 @@ jobs:
                 -no-boot-anim
                 -camera-back none
                 -camera-front none
-            script: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)
+            #script: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)
+      
+      - name: Test
+        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)
 
       #- name: Upload Android Artifact
       #  uses: actions/upload-artifact@v2.3.1
