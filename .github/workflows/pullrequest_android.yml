@@ -84,29 +84,37 @@ jobs:
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
         
       - name: Run Integration Tests - Android
-      #  uses: malinskiy/action-android/emulator-run-cmd@release/0.1.4
-      #  with:
-      #    #cmd: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)
-      #    api: 28
-      #    tag: default
-      #    abi: x86   
-      #    verbose: false
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: malinskiy/action-android/emulator-run-cmd@release/0.1.4
         with:
-            arch: x86_64
-            api-level: 28
-            target: default
-            emulator-build: 7425822
-            # Override default "-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
-            emulator-options: >
-                -no-window
-                -gpu swiftshader_indirect
-                -no-snapshot
-                -noaudio
-                -no-boot-anim
-                -camera-back none
-                -camera-front none
-            script: "dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)"
+          cmd: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)
+          api: 28
+          tag: default
+          abi: x86   
+          verbose: false
+          cmdOptions: >
+            -no-window
+            -gpu swiftshader_indirect
+            -no-snapshot
+            -noaudio
+            -no-boot-anim
+            -camera-back none
+            -camera-front none
+        #uses: reactivecircus/android-emulator-runner@v2
+        #with:
+        #    arch: x86_64
+        #    api-level: 28
+        #    target: default
+        #    emulator-build: 7425822
+        #    # Override default "-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
+        #    emulator-options: >
+        #        -no-window
+        #        -gpu swiftshader_indirect
+        #        -no-snapshot
+        #        -noaudio
+        #        -no-boot-anim
+        #        -camera-back none
+        #        -camera-front none
+        #    script: "dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)"
       
       #- name: Test
       #  run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)
