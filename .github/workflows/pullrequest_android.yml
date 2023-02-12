@@ -49,10 +49,10 @@ jobs:
          docker pull mcr.microsoft.com/azure-sql-edge
          docker pull eventstore/eventstore:21.10.0-buster-slim
 
-      #- uses: malinskiy/action-android/install-sdk@release/0.1.1
-      #- run: sdkmanager "platform-tools" "platforms;android-33"
-      #- run: sdkmanager "build-tools;30.0.2"
-      #- run: adb devices
+      - uses: malinskiy/action-android/install-sdk@release/0.1.1
+      - run: sdkmanager "platform-tools" "platforms;android-33"
+      - run: sdkmanager "build-tools;30.0.2"
+      - run: adb devices
 
       - name: Set up Appium
         run: |
