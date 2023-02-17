@@ -471,7 +471,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         [Given(@"I have created a config for my device")]
         public async Task GivenIHaveCreatedAConfigForMyDevice() {
             var deviceSerial = await this.loginPage.GetDeviceSerial();
-
+            
             var clientDetails = this.TestingContext.GetClientDetails("mobileAppClient");
             var configRequest = new {
                                         clientId = clientDetails.ClientId,
@@ -515,6 +515,8 @@ namespace TransactionMobile.Maui.UiTests.Steps
 
             var response = await httpClient.SendAsync(request, CancellationToken.None);
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+            this.TestingContext.Logger.LogInformation($"Config Created for serial {deviceSerial}");
         }
 
         [Given(@"I have created a config for my application")]
