@@ -83,3 +83,9 @@ jobs:
 
       - name: Run Integration Tests - iOS
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter  "Category=PRTest&Category=iOS"
+
+      - uses: actions/upload-artifact@v2
+        if: ${{ failure() }}
+        with:
+          name: tracelogsios
+          path: /Users/runner/txnproc/trace/
