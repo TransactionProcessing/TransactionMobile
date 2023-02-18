@@ -10,6 +10,7 @@ using ViewModels;
 using ViewModels.Transactions;
 using Xunit;
 
+[Collection("ViewModelTests")]
 public class TransactionsPageViewModelTests
 {
     private readonly Mock<IApplicationCache> ApplicationCache;

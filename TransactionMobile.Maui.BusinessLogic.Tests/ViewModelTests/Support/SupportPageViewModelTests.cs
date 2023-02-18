@@ -17,6 +17,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Support
     using Services;
     using ViewModels;
 
+    [Collection("ViewModelTests")]
     public class SupportPageViewModelTests
     {
         private readonly Mock<INavigationService> NavigationService;

@@ -11,6 +11,7 @@ using ViewModels;
 using Xunit;
 using NullLogger = Logging.NullLogger;
 
+[Collection("ViewModelTests")]
 public class HomePageViewModelTests
 {
     private Mock<INavigationService> navigationService;

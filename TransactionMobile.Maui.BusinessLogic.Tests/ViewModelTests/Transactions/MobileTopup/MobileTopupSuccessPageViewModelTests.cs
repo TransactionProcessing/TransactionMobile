@@ -11,6 +11,7 @@ using ViewModels;
 using ViewModels.Transactions;
 using Xunit;
 
+[Collection("ViewModelTests")]
 public class MobileTopupSuccessPageViewModelTests
 {
     private readonly Mock<INavigationService> NavigationService;

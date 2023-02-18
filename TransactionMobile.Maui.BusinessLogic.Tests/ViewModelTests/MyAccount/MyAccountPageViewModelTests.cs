@@ -20,6 +20,7 @@ using ViewModels;
 using ViewModels.MyAccount;
 using Xunit;
 
+[Collection("ViewModelTests")]
 public class MyAccountPageViewModelTests
 {
     #region Methods

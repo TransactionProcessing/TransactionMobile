@@ -19,6 +19,7 @@ using ViewModels;
 using ViewModels.Transactions;
 using Xunit;
 
+[Collection("ViewModelTests")]
 public class VoucherSelectOperatorPageViewModelTests
 {
     private readonly Mock<IMediator> Mediator;

@@ -29,6 +29,7 @@
     using Pages.MyAccount;
     using System.Net.Http;
     using System.Runtime.CompilerServices;
+    using banditoth.MAUI.DeviceId;
     using BusinessLogic.Services.TrainingModeServices;
     using Pages.Transactions.BillPayment;
     using TransactionProcessorACL.DataTransferObjects.Responses;
@@ -162,6 +163,8 @@
             builder.Services.AddSingleton<ISecurityServiceClient, SecurityServiceClient>();
             builder.Services.AddSingleton<IEstateClient, EstateClient>();
             builder.Services.AddSingleton<IApplicationCache, ApplicationCache>();
+
+            builder.ConfigureDeviceIdProvider();
 
             return builder;
         }

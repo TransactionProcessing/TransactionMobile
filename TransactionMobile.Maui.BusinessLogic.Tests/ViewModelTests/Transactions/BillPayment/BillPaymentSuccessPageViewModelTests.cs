@@ -10,6 +10,7 @@ using ViewModels.Transactions;
 using Xunit;
 using NullLogger = Logging.NullLogger;
 
+[Collection("ViewModelTests")]
 public class BillPaymentSuccessPageViewModelTests
 {
     private readonly Mock<INavigationService> NavigationService;

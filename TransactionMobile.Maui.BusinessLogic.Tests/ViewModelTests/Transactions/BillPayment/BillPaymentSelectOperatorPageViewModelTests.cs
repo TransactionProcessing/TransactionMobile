@@ -20,6 +20,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
     using ViewModels.Transactions;
     using Xunit;
 
+    [Collection("ViewModelTests")]
     public class BillPaymentSelectOperatorPageViewModelTests
     {
         private readonly Mock<IMediator> Mediator;

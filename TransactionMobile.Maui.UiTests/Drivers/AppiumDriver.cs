@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 namespace TransactionMobile.Maui.UiTests.Drivers
 {
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
     using OpenQA.Selenium;
 
     public enum MobileTestPlatform
@@ -31,11 +32,12 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723).Build();
 
             if (appiumService.IsRunning == false) {
-                appiumService.Start();
                 appiumService.OutputDataReceived += (sender,
                                                      args) => {
-                                                        Console.WriteLine(args.Data);
-                                                    };
+                                                        //Console.WriteLine(args.Data);
+                                                        Debug.WriteLine(args.Data);
+                                                     };
+                appiumService.Start();
             }
 
             if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {

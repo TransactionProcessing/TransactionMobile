@@ -14,6 +14,7 @@ using ViewModels;
 using ViewModels.MyAccount;
 using Xunit;
 
+[Collection("ViewModelTests")]
 public class MyAccountAddressPageViewModelTests
 {
     private readonly Mock<INavigationService> NavigationService;
