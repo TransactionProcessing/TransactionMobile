@@ -13,7 +13,7 @@ public class DeviceService : IDeviceService
     }
 
     public String GetIdentifier(){
-        return this.DeviceIdProvider.GetDeviceId();
+        return this.DeviceIdProvider.GetDeviceId().Replace("-","");
     }
 
     public String GetModel()
