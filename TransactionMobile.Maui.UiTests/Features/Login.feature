@@ -82,8 +82,8 @@ Background:
 	#And I tap on Login
 	#Then the Merchant Home Page is displayed
 
-@PRTest
-Scenario: Logout
+#@PRTest
+#Scenario: Logout
 	#Given I am on the Login Screen
 	#And my device is registered
 	#When I enter 'merchantuser@testmerchant1.co.uk' as the Email Address
