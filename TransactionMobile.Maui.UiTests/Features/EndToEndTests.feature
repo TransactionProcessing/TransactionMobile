@@ -1,4 +1,4 @@
-﻿@background @login @toolbar @profile @base @shared
+﻿@background @login @toolbar @profile @base @sharedapp @shared
 Feature: EndToEndTests
 
 Background: 
