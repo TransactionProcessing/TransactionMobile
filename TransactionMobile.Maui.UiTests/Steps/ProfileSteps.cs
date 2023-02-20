@@ -43,35 +43,53 @@ public class ProfileSteps
     }
 
     [Then(@"the Primary Address is displayed")]
-    public async Task ThenThePrimaryAddressIsDisplayed(Table table)
-    {
+    public async Task ThenThePrimaryAddressIsDisplayed(Table table){
         await this.profileAddressesPage.IsPrimaryAddressShown();
 
-        String addressLine1 = await this.profileAddressesPage.GetAddressLineValue(1);
-        //String addressLine2 = await this.profileAddressesPage.GetAddressLineValue(2);
-        //String addressLine3 = await this.profileAddressesPage.GetAddressLineValue(3);
-        //String addressLine4 = await this.profileAddressesPage.GetAddressLineValue(4);
-        String addressTown = await this.profileAddressesPage.GetAddressTownValue();
-        String addressRegion = await this.profileAddressesPage.GetAddressRegionValue();
-        //String addressPostalCode = await this.profileAddressesPage.GetAddressPostalCodeValue();
+        table.Rows.Single().TryGetValue("AddressLine1", out String? expectedAddressLine1);
+        table.Rows.Single().TryGetValue("AddressLine2", out String? expectedAddressLine2);
+        table.Rows.Single().TryGetValue("AddressLine3", out String? expectedAddressLine3);
+        table.Rows.Single().TryGetValue("AddressLine4", out String? expectedAddressLine4);
+        table.Rows.Single().TryGetValue("AddressTown", out String? expectedAddressTown);
+        table.Rows.Single().TryGetValue("AddressRegion", out String? expectedAddressRegion);
+        table.Rows.Single().TryGetValue("AddressPostCode", out String? expectedAddressPostCode);
 
-        String? expectedAddressLine1 = table.Rows.Single()["AddressLine1"];
-        //String? expectedAddressLine2 = table.Rows.Single()["AddressLine2"];
-        //String? expectedAddressLine3 = table.Rows.Single()["AddressLine3"];
-        //String? expectedAddressLine4 = table.Rows.Single()["AddressLine4"];
-        String? expectedAddressTown = table.Rows.Single()["AddressTown"];
-        String? expectedAddressRegion = table.Rows.Single()["AddressRegion"];
-        //String? expectedAddressPostCode = table.Rows.Single()["AddressPostCode"];
+        if (String.IsNullOrEmpty(expectedAddressLine1) == false){
+            String addressLine1 = await this.profileAddressesPage.GetAddressLineValue(1);
+            addressLine1.ShouldBe(expectedAddressLine1);
+        }
 
-        addressLine1.ShouldBe(expectedAddressLine1);
-        //addressLine2.ShouldBe(expectedAddressLine2);
-        //addressLine3.ShouldBe(expectedAddressLine3);
-        //addressLine4.ShouldBe(expectedAddressLine4);
-        addressTown.ShouldBe(expectedAddressTown);
-        addressRegion.ShouldBe(expectedAddressRegion);
-        //addressPostalCode.ShouldBe(expectedAddressPostCode);
+        if (String.IsNullOrEmpty(expectedAddressLine2) == false){
+            String addressLine2 = await this.profileAddressesPage.GetAddressLineValue(2);
+            addressLine2.ShouldBe(expectedAddressLine2);
+        }
+
+        if (String.IsNullOrEmpty(expectedAddressLine3) == false){
+            String addressLine3 = await this.profileAddressesPage.GetAddressLineValue(3);
+            addressLine3.ShouldBe(expectedAddressLine3);
+        }
+
+        if (String.IsNullOrEmpty(expectedAddressLine4) == false){
+            String addressLine4 = await this.profileAddressesPage.GetAddressLineValue(4);
+            addressLine4.ShouldBe(expectedAddressLine4);
+        }
+
+        if (String.IsNullOrEmpty(expectedAddressTown) == false){
+            String addressTown = await this.profileAddressesPage.GetAddressTownValue();
+            addressTown.ShouldBe(expectedAddressTown);
+        }
+
+        if (String.IsNullOrEmpty(expectedAddressRegion) == false){
+            String addressRegion = await this.profileAddressesPage.GetAddressRegionValue();
+            addressRegion.ShouldBe(expectedAddressRegion);
+        }
+
+        if (String.IsNullOrEmpty(expectedAddressPostCode) == false){
+            String addressPostalCode = await this.profileAddressesPage.GetAddressPostalCodeValue();
+            addressPostalCode.ShouldBe(expectedAddressPostCode);
+        }
     }
-    
+
     [When(@"I tap on the Contacts button")]
     public async Task WhenITapOnTheContactsButton() {
         await this.profilePage.ClickContactsButton();
