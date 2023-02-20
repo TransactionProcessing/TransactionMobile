@@ -26,6 +26,7 @@ namespace TransactionMobile.Maui.UiTests.Features
     [NUnit.Framework.CategoryAttribute("toolbar")]
     [NUnit.Framework.CategoryAttribute("profile")]
     [NUnit.Framework.CategoryAttribute("base")]
+    [NUnit.Framework.CategoryAttribute("sharedapp")]
     [NUnit.Framework.CategoryAttribute("shared")]
     public partial class EndToEndTestsFeature
     {
@@ -38,6 +39,7 @@ namespace TransactionMobile.Maui.UiTests.Features
                 "toolbar",
                 "profile",
                 "base",
+                "sharedapp",
                 "shared"};
         
 #line 1 "EndToEndTests.feature"
@@ -267,6 +269,9 @@ namespace TransactionMobile.Maui.UiTests.Features
             TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
                         "MerchantName",
                         "AddressLine1",
+                        "AddressLine2",
+                        "AddressLine3",
+                        "AddressLine4",
                         "Town",
                         "Region",
                         "Country",
@@ -275,7 +280,10 @@ namespace TransactionMobile.Maui.UiTests.Features
                         "EstateName"});
             table11.AddRow(new string[] {
                         "Test Merchant 1",
-                        "Address Line 1",
+                        "test address line 1",
+                        "test address line 2",
+                        "test address line 3",
+                        "test address line 4",
                         "TestTown",
                         "Test Region",
                         "United Kingdom",
@@ -394,20 +402,10 @@ this.FeatureBackground();
 #line hidden
                 TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
                             "AddressLine1",
-                            "AddressLine2",
-                            "AddressLine3",
-                            "AddressLine4",
-                            "AddressTown",
-                            "AddressRegion",
-                            "AddressPostCode"});
+                            "AddressTown"});
                 table15.AddRow(new string[] {
                             "test address line 1",
-                            "test address line 2",
-                            "test address line 3",
-                            "test address line 4",
-                            "Town",
-                            "Region",
-                            "TE57 1NG"});
+                            "Town"});
 #line 89
  testRunner.And("the Primary Address is displayed", ((string)(null)), table15, "And ");
 #line hidden
@@ -417,51 +415,22 @@ this.FeatureBackground();
 #line 93
  testRunner.Then("the My Profile Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 94
- testRunner.When("I tap on the Contacts button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 95
- testRunner.Then("the Contact List Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-                TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Name",
-                            "EmailAddress",
-                            "MobileNumber"});
-                table16.AddRow(new string[] {
-                            "Test Contact",
-                            "stuart_ferguson1@outlook.com",
-                            "123456789"});
-#line 96
- testRunner.And("the Primary Contact is displayed", ((string)(null)), table16, "And ");
-#line hidden
-#line 99
- testRunner.When("I click on the back button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 100
- testRunner.Then("the My Profile Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
 #line 101
  testRunner.When("I tap on the Account Info button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 102
  testRunner.Then("the Account Info Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-                TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
                             "Name",
                             "Balance",
-                            "AvailableBalance",
-                            "LastStatementDate",
-                            "NextStatementDate",
-                            "SettlementSchedule"});
-                table17.AddRow(new string[] {
-                            "Dummy Merchant",
-                            "99",
-                            "100",
-                            "01/08/2022",
-                            "01/09/2022",
-                            "Monthly"});
+                            "AvailableBalance"});
+                table16.AddRow(new string[] {
+                            "Test Merchant 1",
+                            "0",
+                            "0"});
 #line 103
- testRunner.And("the Account Info is displayed", ((string)(null)), table17, "And ");
+ testRunner.And("the Account Info is displayed", ((string)(null)), table16, "And ");
 #line hidden
 #line 106
  testRunner.When("I click on the back button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");

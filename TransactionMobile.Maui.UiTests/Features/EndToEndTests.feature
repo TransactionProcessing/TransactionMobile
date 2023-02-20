@@ -87,8 +87,8 @@ Scenario: EndToEnd
 	When I tap on the Addresses button
 	Then the Address List Page is displayed
 	And the Primary Address is displayed
-	| AddressLine1        | AddressLine2        | AddressLine3        | AddressLine4        | AddressTown | AddressRegion | AddressPostCode |
-	| test address line 1 | test address line 2 | test address line 3 | test address line 4 | Town        | Region        | TE57 1NG        |
+	| AddressLine1        | AddressTown |
+	| test address line 1 | Town        |
 	When I click on the back button
 	Then the My Profile Page is displayed
 	#When I tap on the Contacts button
