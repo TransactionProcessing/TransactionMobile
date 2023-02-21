@@ -88,7 +88,7 @@ Scenario: EndToEnd
 	Then the Address List Page is displayed
 	And the Primary Address is displayed
 	| AddressLine1        | AddressTown |
-	| test address line 1 | Town        |
+	| test address line 1 | TestTown    |
 	When I click on the back button
 	Then the My Profile Page is displayed
 	#When I tap on the Contacts button
