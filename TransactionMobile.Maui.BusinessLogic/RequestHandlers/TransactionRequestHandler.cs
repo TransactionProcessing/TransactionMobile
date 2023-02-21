@@ -20,7 +20,9 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
 {
     #region Fields
 
-    private readonly ITransactionService TransactionService;
+    //private readonly ITransactionService TransactionService;
+
+    private readonly Func<Boolean, ITransactionService> TransactionServiceResolver;
 
     private readonly IDatabaseContext DatabaseContext;
 
@@ -34,12 +36,14 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
 
     #region Constructors
 
-    public TransactionRequestHandler(ITransactionService transactionService,
+    public TransactionRequestHandler(//ITransactionService transactionService,
+        Func<Boolean, ITransactionService> transactionServiceResolver,
                                      IDatabaseContext databaseContext,
                                      IApplicationCache applicationCache,
                                      IApplicationInfoService applicationInfoService,
                                      IDeviceService deviceService) {
-        this.TransactionService = transactionService;
+        //this.TransactionService = transactionService;
+        this.TransactionServiceResolver = transactionServiceResolver;
         this.DatabaseContext = databaseContext;
         this.ApplicationCache = applicationCache;
         this.ApplicationInfoService = applicationInfoService;
@@ -53,6 +57,9 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
     public async Task<Result<PerformMobileTopupResponseModel>> Handle(PerformMobileTopupRequest request,
                                                                       CancellationToken cancellationToken) {
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+
+        ITransactionService transactionService = this.TransactionServiceResolver(useTrainingMode);
+
         (Int64 transactionNumber, TransactionRecord transactionRecord) transaction = await this.CreateTransactionRecord(request.ToTransactionRecord(useTrainingMode));
 
         // TODO: Factory
@@ -70,7 +77,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                    };
 
 
-        Result<PerformMobileTopupResponseModel> result = await this.TransactionService.PerformMobileTopup(model, cancellationToken);
+        Result<PerformMobileTopupResponseModel> result = await transactionService.PerformMobileTopup(model, cancellationToken);
         
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
 
@@ -101,6 +108,9 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                                 CancellationToken cancellationToken)
     {
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+
+        ITransactionService transactionService = this.TransactionServiceResolver(useTrainingMode);
+
         (Int64 transactionNumber, TransactionRecord transactionRecord) transaction = await this.CreateTransactionRecord(request.ToTransactionRecord(useTrainingMode));
 
         // TODO: Factory
@@ -112,7 +122,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
             ApplicationVersion = this.ApplicationInfoService.VersionString
         };
 
-        Result<PerformLogonResponseModel> result = await this.TransactionService.PerformLogon(model, cancellationToken);
+        Result<PerformLogonResponseModel> result = await transactionService.PerformLogon(model, cancellationToken);
 
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
         if (result.Success && result.Data.IsSuccessful == false)
@@ -127,6 +137,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                                        CancellationToken cancellationToken)
     {
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+        ITransactionService transactionService = this.TransactionServiceResolver(useTrainingMode);
+
         (Int64 transactionNumber, TransactionRecord transactionRecord) transaction = await this.CreateTransactionRecord(request.ToTransactionRecord(useTrainingMode));
 
         PerformVoucherIssueRequestModel model = new PerformVoucherIssueRequestModel
@@ -144,7 +156,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
             ApplicationVersion = this.ApplicationInfoService.VersionString
         };
 
-        Result<PerformVoucherIssueResponseModel> result = await this.TransactionService.PerformVoucherIssue(model, cancellationToken);
+        Result<PerformVoucherIssueResponseModel> result = await transactionService.PerformVoucherIssue(model, cancellationToken);
 
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
 
@@ -160,6 +172,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                                                 CancellationToken cancellationToken)
     {
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+        ITransactionService transactionService = this.TransactionServiceResolver(useTrainingMode);
+
         (Int64 transactionNumber, TransactionRecord transactionRecord) transaction = await this.CreateTransactionRecord(request.ToTransactionRecord(useTrainingMode));
 
         PerformBillPaymentGetAccountModel model = new PerformBillPaymentGetAccountModel
@@ -174,7 +188,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
             ApplicationVersion = this.ApplicationInfoService.VersionString
         };
 
-        Result<PerformBillPaymentGetAccountResponseModel> result = await this.TransactionService.PerformBillPaymentGetAccount(model, cancellationToken);
+        Result<PerformBillPaymentGetAccountResponseModel> result = await transactionService.PerformBillPaymentGetAccount(model, cancellationToken);
 
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
 
@@ -185,6 +199,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                                          CancellationToken cancellationToken)
     {
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+        ITransactionService transactionService = this.TransactionServiceResolver(useTrainingMode);
+
         List<TransactionRecord> storedTransactions = await this.DatabaseContext.GetTransactions(useTrainingMode);
 
         // TODO: convert these to operator totals
@@ -221,7 +237,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         };
 
         // Send to the host        
-        Result<PerformReconciliationResponseModel> result = await this.TransactionService.PerformReconciliation(model, cancellationToken);
+        Result<PerformReconciliationResponseModel> result = await transactionService.PerformReconciliation(model, cancellationToken);
 
         // Clear store (if successful)
         if (result.Success && result.Data.IsSuccessful)
@@ -236,6 +252,8 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                                                  CancellationToken cancellationToken)
     {
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+        ITransactionService transactionService = this.TransactionServiceResolver(useTrainingMode);
+
         (Int64 transactionNumber, TransactionRecord transactionRecord) transaction = await this.CreateTransactionRecord(request.ToTransactionRecord(useTrainingMode));
 
         PerformBillPaymentMakePaymentModel model = new PerformBillPaymentMakePaymentModel
@@ -253,7 +271,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
             ApplicationVersion = this.ApplicationInfoService.VersionString
         };
 
-        Result<PerformBillPaymentMakePaymentResponseModel> result = await this.TransactionService.PerformBillPaymentMakePayment(model, cancellationToken);
+        Result<PerformBillPaymentMakePaymentResponseModel> result = await transactionService.PerformBillPaymentMakePayment(model, cancellationToken);
 
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
 

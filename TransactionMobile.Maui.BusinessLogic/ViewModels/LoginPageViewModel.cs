@@ -160,8 +160,9 @@
             return getMerchantBalanceResult;
         }
 
-        private async Task LoginCommandExecute()
-        {
+        private async Task LoginCommandExecute(){
+            CacheUseTrainingMode();
+
             Stopwatch sw = Stopwatch.StartNew();
             WriteTimingTrace(sw, "Start of LoginCommandExecute");
             try {

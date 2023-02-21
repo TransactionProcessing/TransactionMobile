@@ -77,7 +77,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption("adbExecTimeout", TimeSpan.FromMinutes(5).TotalMilliseconds);
             driverOptions.AutomationName = "UIAutomator2";
             driverOptions.PlatformName = "Android";
-            driverOptions.PlatformVersion = "9.0";
+            driverOptions.PlatformVersion = "7.0";
             driverOptions.DeviceName = "emulator-5554";
             
             // TODO: Only do this locally

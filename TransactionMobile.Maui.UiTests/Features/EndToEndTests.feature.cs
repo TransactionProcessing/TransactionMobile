@@ -405,7 +405,7 @@ this.FeatureBackground();
                             "AddressTown"});
                 table15.AddRow(new string[] {
                             "test address line 1",
-                            "Town"});
+                            "TestTown"});
 #line 89
  testRunner.And("the Primary Address is displayed", ((string)(null)), table15, "And ");
 #line hidden
