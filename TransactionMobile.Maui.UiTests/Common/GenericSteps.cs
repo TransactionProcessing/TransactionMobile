@@ -22,7 +22,7 @@ public class GenericSteps
         this.TestingContext = testingContext;
     }
 
-    [BeforeScenario(Order = 0)]
+    [BeforeScenario(Order = 1)]
     public async Task StartSystem()
     {
         Setup.GlobalSetup();
@@ -47,7 +47,7 @@ public class GenericSteps
         this.TestingContext.Logger.LogInformation("Containers for Scenario Run Started");
     }
 
-    [AfterScenario(Order = 0)]
+    [AfterScenario(Order = 1)]
     public async Task StopSystem()
     {
         this.TestingContext.Logger.LogInformation("About to Stop Containers for Scenario Run");

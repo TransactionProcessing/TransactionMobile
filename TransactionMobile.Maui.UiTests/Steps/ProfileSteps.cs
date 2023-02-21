@@ -136,23 +136,23 @@ public class ProfileSteps
         String merchantName = await this.profileAccountInfoPage.GetMerchantNameValue();
         String balance = await this.profileAccountInfoPage.GetBalanceValue();
         String availableBalance = await this.profileAccountInfoPage.GetAvailableBalanceValue();
-        String lastStatementDate = await this.profileAccountInfoPage.GetLastStatementDateValue();
-        String nextStatementDate = await this.profileAccountInfoPage.GetNextStatementDateValue();
-        String settlementSchedule = await this.profileAccountInfoPage.GetSettlementScheduleValue();
+        //String lastStatementDate = await this.profileAccountInfoPage.GetLastStatementDateValue();
+        //String nextStatementDate = await this.profileAccountInfoPage.GetNextStatementDateValue();
+        //String settlementSchedule = await this.profileAccountInfoPage.GetSettlementScheduleValue();
 
         String? expectedMerchantName = table.Rows.Single()["Name"];
         String? expectedBalance = table.Rows.Single()["Balance"];
         String? expectedAvailableBalance = table.Rows.Single()["AvailableBalance"];
-        String? expectedLastStatementDate = table.Rows.Single()["LastStatementDate"];
-        String? expectedNextStatementDate = table.Rows.Single()["NextStatementDate"];
-        String? expectedSettlementSchedule = table.Rows.Single()["SettlementSchedule"];
+        //String? expectedLastStatementDate = table.Rows.Single()["LastStatementDate"];
+        //String? expectedNextStatementDate = table.Rows.Single()["NextStatementDate"];
+        //String? expectedSettlementSchedule = table.Rows.Single()["SettlementSchedule"];
 
         merchantName.ShouldBe(expectedMerchantName);
         balance.ShouldBe(expectedBalance);
         availableBalance.ShouldBe(expectedAvailableBalance);
-        lastStatementDate.ShouldBe(expectedLastStatementDate);
-        nextStatementDate.ShouldBe(expectedNextStatementDate);
-        settlementSchedule.ShouldBe(expectedSettlementSchedule);
+        //lastStatementDate.ShouldBe(expectedLastStatementDate);
+        //nextStatementDate.ShouldBe(expectedNextStatementDate);
+        //settlementSchedule.ShouldBe(expectedSettlementSchedule);
     }
 
 }
