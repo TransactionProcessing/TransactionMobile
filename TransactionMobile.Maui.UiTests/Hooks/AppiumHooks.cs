@@ -23,7 +23,7 @@ namespace TransactionMobile.Maui.UiTests.Hooks
             this.TestingContext = testingContext;
         }
 
-        [BeforeScenario(Order = 0)]
+        [BeforeScenario(Order = 1)]
         public void StartApp()
         {
             this.TestingContext.Logger.LogInformation("About to Start App");
@@ -31,7 +31,7 @@ namespace TransactionMobile.Maui.UiTests.Hooks
             this.TestingContext.Logger.LogInformation("App Started");
         }
 
-        [AfterScenario(Order = 0)]
+        [AfterScenario(Order = 1)]
         public void ShutdownApp()
         {
             this.TestingContext.Logger.LogInformation("About to Shutdown App");
