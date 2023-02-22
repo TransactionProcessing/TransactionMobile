@@ -39,14 +39,14 @@ namespace TransactionMobile.Maui.UiTests.Steps
         }
 
         [When(@"I click yes")]
-        public void WhenIClickYes() {
-            this.sharedPage.AcceptAlert();
+        public async Task WhenIClickYes() {
+            await this.sharedPage.AcceptAlert();
         }
 
         [When(@"I click no")]
-        public void WhenIClickNo()
+        public async Task WhenIClickNo()
         {
-            this.sharedPage.DismissAlert();
+            await this.sharedPage.DismissAlert();
         }
 
         [Then(@"A message is displayed confirming I want to log out")]
