@@ -50,9 +50,9 @@ namespace TransactionMobile.Maui.UiTests.Steps
         }
 
         [Then(@"A message is displayed confirming I want to log out")]
-        public void ThenAMessageIsDisplayedConfirmingIWantToLogOut()
+        public async Task ThenAMessageIsDisplayedConfirmingIWantToLogOut()
         {
-            this.sharedPage.LogoutMessageIsDisplayed("Title", "Logout Message");
+            await this.sharedPage.LogoutMessageIsDisplayed("Title", "Logout Message");
         }
     }
 }

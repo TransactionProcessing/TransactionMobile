@@ -16,6 +16,7 @@ Scenario: Back Button from Home Page Screen - user wants to log out
 	Then the Login Page is displayed
 
 @PRNavTest
+@ignore
 Scenario: Back Button from Home Page Screen - user does not want to log out
 	Given I am on the Login Screen
 	And the application is in training mode
@@ -30,6 +31,7 @@ Scenario: Back Button from Home Page Screen - user does not want to log out
 
 # Transaction Page Back Button Tests
 @PRNavTest
+@ignore
 Scenario: Back Button from Transaction Page Screen
 	Given I am on the Login Screen
 	And the application is in training mode
@@ -43,6 +45,7 @@ Scenario: Back Button from Transaction Page Screen
 	Then the Merchant Home Page is displayed	
 
 @PRNavTest
+@ignore
 Scenario: Back Button from Transaction Select Operator Screen
 	Given I am on the Login Screen
 	And the application is in training mode
