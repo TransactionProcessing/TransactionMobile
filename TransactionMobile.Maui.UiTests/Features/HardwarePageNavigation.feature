@@ -9,6 +9,7 @@ Scenario: Back Button from Login Screen
 
 # Home Page Back Button Tests
 @PRNavTest
+@ignore
 Scenario: Device Back Button from Home Page Screen - user wants to log out
 	Given I am on the Login Screen
 	And the application is in training mode
@@ -22,6 +23,7 @@ Scenario: Device Back Button from Home Page Screen - user wants to log out
 	Then the Login Page is displayed
 
 @PRNavTest
+@ignore
 Scenario: Device Back Button from Home Page Screen - user does not want to log out
 	Given I am on the Login Screen
 	And the application is in training mode

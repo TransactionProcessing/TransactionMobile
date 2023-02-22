@@ -44,9 +44,9 @@ public class NoBackWithoutLogoutPage : ContentPage
         if (leave)
         {
             //Logger.LogInformation("LogoutCommand called");
-            applicationCache.SetAccessToken(null);
-
-            await navigationService.GoToLoginPage();
+                applicationCache.SetAccessToken(null);
+            
+                await navigationService.GoToLoginPage();
         }
     }
 }
