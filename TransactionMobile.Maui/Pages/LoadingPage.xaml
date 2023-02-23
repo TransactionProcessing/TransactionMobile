@@ -7,10 +7,10 @@
              Shell.NavBarIsVisible="False"
              Shell.FlyoutItemIsVisible="True">
     <ContentPage.Behaviors>
-        <behaviors:StatusBarBehavior StatusBarColor="{StaticResource Tertiary}"/>
+        <behaviors:StatusBarBehavior StatusBarColor="{StaticResource primary}"/>
     </ContentPage.Behaviors>
     <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
-        <ActivityIndicator Color="{StaticResource Primary}"
+        <ActivityIndicator Color="{StaticResource primary}"
                            IsRunning="True" HeightRequest="50" WidthRequest="50"
                            IsVisible="True" />
         <Label Text="Checking authentication..." HorizontalOptions="Center" />
