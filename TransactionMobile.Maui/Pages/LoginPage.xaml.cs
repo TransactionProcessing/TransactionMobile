@@ -16,4 +16,9 @@ public partial class LoginPage : ContentPage
 	{
 		base.OnAppearing();
 	}
+
+    protected override bool OnBackButtonPressed() {
+        Application.Current.Quit();
+        return true;
+    }
 }
