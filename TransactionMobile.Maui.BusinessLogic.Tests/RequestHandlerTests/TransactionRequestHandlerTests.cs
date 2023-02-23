@@ -29,7 +29,6 @@ public class TransactionRequestHandlerTests
     private Mock<IDeviceService> DeviceService;
 
     private TransactionRequestHandler TransactionRequestHandler;
-    private Func<Boolean, ITransactionService> TransactionServiceResolver;
 
     private Func<Boolean, ITransactionService> TransactionServiceResolver;
 
@@ -39,11 +38,6 @@ public class TransactionRequestHandlerTests
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.ApplicationInfoService = new Mock<IApplicationInfoService>();
         this.DeviceService = new Mock<IDeviceService>();
-        this.TransactionServiceResolver = _ =>
-                                          {
-                                              return this.TransactionService.Object;
-                                          };
-
         this.TransactionServiceResolver = _ =>
                                           {
                                               return this.TransactionService.Object;

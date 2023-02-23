@@ -19,10 +19,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                          IRequestHandler<PerformBillPaymentMakePaymentRequest, Result<PerformBillPaymentMakePaymentResponseModel>>
 {
     #region Fields
-
-
-    private readonly Func<Boolean, ITransactionService> TransactionServiceResolver;
-
+    
     private readonly IDatabaseContext DatabaseContext;
 
     private readonly IApplicationCache ApplicationCache;
@@ -57,8 +54,6 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                                       CancellationToken cancellationToken){
 
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
-
-        ITransactionService transactionService = this.TransactionServiceResolver(useTrainingMode);
 
         (Int64 transactionNumber, TransactionRecord transactionRecord) transaction = await this.CreateTransactionRecord(request.ToTransactionRecord(useTrainingMode));
 
