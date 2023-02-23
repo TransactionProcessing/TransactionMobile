@@ -22,7 +22,7 @@ public partial class App : Application
     {
         Console.WriteLine("In App Ctor");
         InitializeComponent();
-        
+
 #if ANDROID
         ViewHandler.ViewMapper.ModifyMapping("AutomationId", (handler, view, previousAction) =>
         {
@@ -114,18 +114,20 @@ public partial class App : Application
             }
         });
 
-#endif     
-        IApplicationCache applicationCache = MauiProgram.Container.Services.GetService<IApplicationCache>();
-        Boolean isLoggedIn = applicationCache.GetIsLoggedIn();
-        
-        if (isLoggedIn)
-        {
-            MainPage = new AppShell();
-        }
-        else {
-            LoginPageViewModel loginPageViewModel = MauiProgram.Container.Services.GetService<LoginPageViewModel>();
-            MainPage = new LoginPage(loginPageViewModel);
-        }
+#endif
+        //IApplicationCache applicationCache = MauiProgram.Container.Services.GetService<IApplicationCache>();
+        //Boolean isLoggedIn = applicationCache.GetIsLoggedIn();
+
+        //if (isLoggedIn)
+        //{
+        MainPage = new AppShell();
+        //}
+        //else {
+        //    LoginPageViewModel loginPageViewModel = MauiProgram.Container.Services.GetService<LoginPageViewModel>();
+        //    MainPage = new LoginPage(loginPageViewModel);
+        //}
+        Routing.RegisterRoute("login", typeof(LoginPage));
+        Routing.RegisterRoute("home", typeof(HomePage));
 
         // TODO: Investigate if this could be done automatically (maybe with exclusions for top level pages)
         Routing.RegisterRoute(nameof(MobileTopupSelectOperatorPage), typeof(MobileTopupSelectOperatorPage));

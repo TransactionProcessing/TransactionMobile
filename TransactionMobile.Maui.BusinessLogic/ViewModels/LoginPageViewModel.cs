@@ -161,7 +161,7 @@
         }
 
         private async Task LoginCommandExecute(){
-            CacheUseTrainingMode();
+            this.CacheUseTrainingMode();
 
             Stopwatch sw = Stopwatch.StartNew();
             WriteTimingTrace(sw, "Start of LoginCommandExecute");

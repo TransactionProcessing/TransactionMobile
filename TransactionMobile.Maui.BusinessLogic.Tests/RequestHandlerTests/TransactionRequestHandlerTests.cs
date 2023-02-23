@@ -29,6 +29,7 @@ public class TransactionRequestHandlerTests
     private Mock<IDeviceService> DeviceService;
 
     private TransactionRequestHandler TransactionRequestHandler;
+    private Func<Boolean, ITransactionService> TransactionServiceResolver;
 
     private Func<Boolean, ITransactionService> TransactionServiceResolver;
 
@@ -43,11 +44,17 @@ public class TransactionRequestHandlerTests
                                               return this.TransactionService.Object;
                                           };
 
+        this.TransactionServiceResolver = _ =>
+                                          {
+                                              return this.TransactionService.Object;
+                                          };
+
+
         this.TransactionRequestHandler = new TransactionRequestHandler(this.TransactionServiceResolver, 
-                                                                          this.DatabaseContext.Object, 
-                                                                          this.ApplicationCache.Object,
-                                                                          this.ApplicationInfoService.Object,
-                                                                          this.DeviceService.Object);
+                                                                       this.DatabaseContext.Object, 
+                                                                       this.ApplicationCache.Object,
+                                                                       this.ApplicationInfoService.Object,
+                                                                       this.DeviceService.Object);
 
     }
 
