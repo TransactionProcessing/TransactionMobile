@@ -100,6 +100,7 @@
         private async Task LogoutCommandExecute() {
             Logger.LogInformation("LogoutCommand called");
             this.ApplicationCache.SetAccessToken(null);
+            this.ApplicationCache.SetIsLoggedIn(false);
 
             await this.NavigationService.GoToLoginPage();
         }
