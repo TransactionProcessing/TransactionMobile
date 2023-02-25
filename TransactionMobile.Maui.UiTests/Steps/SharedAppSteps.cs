@@ -35,24 +35,24 @@ namespace TransactionMobile.Maui.UiTests.Steps
         [Then(@"The application closes")]
         public void ThenTheApplicationCloses() {
             AppState state = AppiumDriverWrapper.Driver.GetAppState("com.transactionprocessing.pos");
-            state.ShouldBe(AppState.RunningInBackground);
+            state.ShouldBe(AppState.NotRunning);
         }
 
         [When(@"I click yes")]
-        public void WhenIClickYes() {
-            this.sharedPage.AcceptAlert();
+        public async Task WhenIClickYes() {
+            await this.sharedPage.AcceptAlert();
         }
 
         [When(@"I click no")]
-        public void WhenIClickNo()
+        public async Task WhenIClickNo()
         {
-            this.sharedPage.DismissAlert();
+            await this.sharedPage.DismissAlert();
         }
 
         [Then(@"A message is displayed confirming I want to log out")]
-        public void ThenAMessageIsDisplayedConfirmingIWantToLogOut()
+        public async Task ThenAMessageIsDisplayedConfirmingIWantToLogOut()
         {
-            this.sharedPage.LogoutMessageIsDisplayed("Title", "Logout Message");
+            await this.sharedPage.LogoutMessageIsDisplayed("Title", "Logout Message");
         }
     }
 }

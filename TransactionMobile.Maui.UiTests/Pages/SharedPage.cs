@@ -20,9 +20,9 @@ namespace TransactionMobile.Maui.UiTests.Pages
         public SharedPage() {
             this.BackButton = "BackButton";
         }
-        public void LogoutMessageIsDisplayed(String logoutAlertTitle,
-                                             String logoutAlertMessage) {
-            IAlert a = this.SwitchToAlert();
+        public async Task LogoutMessageIsDisplayed(String logoutAlertTitle,
+                                                   String logoutAlertMessage) {
+            IAlert a = await this.SwitchToAlert();
             a.Text.ShouldBe($"{logoutAlertTitle}{Environment.NewLine}{logoutAlertMessage}");
         }
 

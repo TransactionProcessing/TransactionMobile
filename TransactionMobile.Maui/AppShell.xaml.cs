@@ -3,6 +3,7 @@ namespace TransactionMobile.Maui;
 //using Android.Media;
 using System.Diagnostics;
 using System.Windows.Input;
+using BusinessLogic.Services;
 using BusinessLogic.UIServices;
 using BusinessLogic.ViewModels;
 using Newtonsoft.Json;
@@ -35,7 +36,7 @@ public partial class AppShell : Shell
             }
         }
     }
-
+    
     protected override void OnNavigated(ShellNavigatedEventArgs args) {
         //Logger.LogDebug($"In OnNavigated - Source [{args.Source.ToString()}] {JsonConvert.SerializeObject(args)}");
         

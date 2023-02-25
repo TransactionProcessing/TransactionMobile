@@ -7,12 +7,25 @@
        xmlns:transactions="clr-namespace:TransactionMobile.Maui.Pages.Transactions"
        xmlns:reports="clr-namespace:TransactionMobile.Maui.Pages.Reports"
        xmlns:support="clr-namespace:TransactionMobile.Maui.Pages.Support"
-       xmlns:myaccount="clr-namespace:TransactionMobile.Maui.Pages.MyAccount">
+       xmlns:myaccount="clr-namespace:TransactionMobile.Maui.Pages.MyAccount"
+       Shell.FlyoutBehavior="Disabled">
     <Shell.Resources>
         <!--
 		Define the resources to be used within this Shell visual hierarchy
 	-->
     </Shell.Resources>
+
+    <!--Loading Page-->
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate login:LoadingPage}"
+        Route="loading" />
+
+    <!--Login Page-->
+    <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate login:LoginPage}"
+        Route="login"/>
 
     <TabBar Route="main">
 
@@ -31,10 +44,4 @@
         <ShellContent ContentTemplate="{DataTemplate support:SupportPage}" Title="Support"
                       Route="support" Icon="supportbutton"   />
     </TabBar>
-
-
-    <ShellItem Route="loginpage">
-        <ShellContent ContentTemplate="{DataTemplate login:LoginPage}" />
-    </ShellItem>
-
 </Shell>

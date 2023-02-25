@@ -74,21 +74,25 @@ namespace TransactionMobile.Maui.UITests
             }
         }
 
-        public void AcceptAlert()
+        public async Task AcceptAlert()
         {
-            IAlert a = this.SwitchToAlert();
+            IAlert a = await this.SwitchToAlert();
             a.Accept();
         }
 
-        public void DismissAlert()
+        public async Task DismissAlert()
         {
-            IAlert a = this.SwitchToAlert();
+            IAlert a = await this.SwitchToAlert();
             a.Dismiss();
         }
 
-        public IAlert SwitchToAlert()
-        {
-            return AppiumDriverWrapper.Driver.SwitchTo().Alert();
+        public async Task<IAlert> SwitchToAlert(){
+            IAlert alert = null;
+            await Retry.For(async () => {
+                                alert = AppiumDriverWrapper.Driver.SwitchTo().Alert();
+                                alert.ShouldNotBeNull();
+                            });
+            return alert;
         }
 
         public void NavigateBack()

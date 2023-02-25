@@ -52,6 +52,7 @@ public class ExtendedBaseViewModel : BaseViewModel
             nameof(MyAccountPageViewModel) => this.ShowHomePage(),
             nameof(SupportPageViewModel) => this.ShowHomePage(),
             nameof(HomePageViewModel) => this.ShowLoginPage(),
+            nameof(LoginPageViewModel) => new Task(() => Application.Current.Quit()),
             _ => this.NavigationService.GoBack()
         };
         await t;
@@ -66,7 +67,10 @@ public class ExtendedBaseViewModel : BaseViewModel
         Boolean leave = await this.DialogService.ShowDialog("Title", "Logout Message", "yes", "no");
         if (leave) {
             Logger.LogInformation("LogoutCommand called");
+            this.ApplicationCache.SetIsLoggedIn(false);
             this.ApplicationCache.SetAccessToken(null);
+            
+            var x = this.ApplicationCache.GetIsLoggedIn();
 
             await this.NavigationService.GoToLoginPage();
         }
