@@ -72,6 +72,12 @@ namespace TransactionMobile.Maui.UiTests.Drivers
                 {
                     Console.WriteLine(s);
                 }
+
+                var x = Directory.GetDirectories(testFolder);
+                foreach (String s in x)
+                {
+                    Console.WriteLine(s);
+                }
             }
             
             //driverOptions.App = apkPath;
