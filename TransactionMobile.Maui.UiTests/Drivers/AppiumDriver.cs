@@ -60,6 +60,9 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64/");
             var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.exe");
+            Console.WriteLine(apkPath);
+            Console.WriteLine(File.Exists(apkPath));
+
             driverOptions.App = apkPath;
 
             AppiumDriverWrapper.Driver = new WindowsDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
