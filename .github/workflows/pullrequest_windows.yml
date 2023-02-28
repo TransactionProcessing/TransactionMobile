@@ -36,6 +36,11 @@ jobs:
         run: |
           dotnet workload install maui --ignore-failed-sources
 
+      - name: Set up Appium
+        run: |
+          npm install -g appium@next --unsafe-perm=true --allow-root
+          appium driver install --source=npm appium-windows-driver
+
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln
 
