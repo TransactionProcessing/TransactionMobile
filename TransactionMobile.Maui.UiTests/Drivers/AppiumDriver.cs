@@ -60,10 +60,11 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64/");
 
-            String testFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/");
+            String testFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/");
             
             Boolean folderExists = Directory.Exists(testFolder);
             Console.Write(folderExists);
+            Console.WriteLine(Environment.NewLine);
             if (folderExists)
             {
                 var x = Directory.GetFiles(testFolder);
