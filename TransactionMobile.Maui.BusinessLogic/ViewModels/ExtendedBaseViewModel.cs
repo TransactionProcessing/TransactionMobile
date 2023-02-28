@@ -69,9 +69,7 @@ public class ExtendedBaseViewModel : BaseViewModel
             Logger.LogInformation("LogoutCommand called");
             this.ApplicationCache.SetIsLoggedIn(false);
             this.ApplicationCache.SetAccessToken(null);
-            
-            var x = this.ApplicationCache.GetIsLoggedIn();
-
+          
             await this.NavigationService.GoToLoginPage();
         }
     }

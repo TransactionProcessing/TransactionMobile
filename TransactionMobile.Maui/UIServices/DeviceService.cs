@@ -13,6 +13,13 @@ public class DeviceService : IDeviceService
     }
 
     public String GetIdentifier(){
+
+#if WINDOWS
+        var deviceInformation = new Windows.Security.ExchangeActiveSyncProvisioning.EasClientDeviceInformation();
+        string Id = deviceInformation.Id.ToString();
+        return Id;
+#endif
+
         return this.DeviceIdProvider.GetDeviceId().Replace("-","");
     }
 
