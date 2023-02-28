@@ -59,30 +59,30 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.PlatformName = "windows";
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64/");
-
-            String testFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/");
+            var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.exe");
+            //String testFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/");
             
-            Boolean folderExists = Directory.Exists(testFolder);
-            Console.Write(folderExists);
-            Console.WriteLine(Environment.NewLine);
-            if (folderExists)
-            {
-                var x = Directory.GetFiles(testFolder);
-                foreach (String s in x)
-                {
-                    Console.WriteLine(s);
-                }
+            //Boolean folderExists = Directory.Exists(testFolder);
+            //Console.Write(folderExists);
+            //Console.WriteLine(Environment.NewLine);
+            //if (folderExists)
+            //{
+            //    var x = Directory.GetFiles(testFolder);
+            //    foreach (String s in x)
+            //    {
+            //        Console.WriteLine(s);
+            //    }
 
-                x = Directory.GetDirectories(testFolder);
-                foreach (String s in x)
-                {
-                    Console.WriteLine(s);
-                }
-            }
+            //    x = Directory.GetDirectories(testFolder);
+            //    foreach (String s in x)
+            //    {
+            //        Console.WriteLine(s);
+            //    }
+            //}
             
-            //driverOptions.App = apkPath;
+            driverOptions.App = apkPath;
 
-            //AppiumDriverWrapper.Driver = new WindowsDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
+            AppiumDriverWrapper.Driver = new WindowsDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
         }
 
         private static void SetupiOSDriver(AppiumLocalService appiumService) {
