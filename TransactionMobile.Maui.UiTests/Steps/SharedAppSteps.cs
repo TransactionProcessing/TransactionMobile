@@ -39,13 +39,12 @@ namespace TransactionMobile.Maui.UiTests.Steps
         }
 
         [When(@"I click yes")]
-        public async Task WhenIClickYes() {
+        public async Task WhenIClickYes(){
             await this.sharedPage.AcceptAlert();
         }
 
         [When(@"I click no")]
-        public async Task WhenIClickNo()
-        {
+        public async Task WhenIClickNo(){
             await this.sharedPage.DismissAlert();
         }
 

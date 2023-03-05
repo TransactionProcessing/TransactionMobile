@@ -13,6 +13,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
 {
     using System.Collections.ObjectModel;
     using System.Diagnostics;
+    using System.Threading;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Appium.Windows;
 
@@ -57,32 +58,12 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             var driverOptions = new AppiumOptions();
             driverOptions.AutomationName = "windows";
             driverOptions.PlatformName = "windows";
-            String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64/");
-            var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.exe");
-            //String testFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/");
-
-            Boolean folderExists = Directory.Exists(binariesFolder);
-            Console.Write(folderExists);
-            Console.WriteLine(Environment.NewLine);
-            if (folderExists)
-           {
-                var x = Directory.GetFiles(binariesFolder);
-                foreach (String s in x)
-                {
-                    Console.WriteLine(s);
-                }
-
-                x = Directory.GetDirectories(binariesFolder);
-                foreach (String s in x)
-                {
-                    Console.WriteLine(s);
-                }
-            }
-
-            driverOptions.App = apkPath;
-
+            driverOptions.DeviceName = "WindowsPC";
+            
+            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
+            driverOptions.App = "597F8511-6166-4C10-AADD-C961E85539A5_9zz4h110yvjzm!App";
             AppiumDriverWrapper.Driver = new WindowsDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
+            
         }
 
         private static void SetupiOSDriver(AppiumLocalService appiumService) {

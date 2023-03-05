@@ -9,6 +9,7 @@ namespace TransactionMobile.Maui.UITests
 {
     using Common;
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Appium;
     using OpenQA.Selenium.Interactions;
     using Shared.IntegrationTesting;
     using Shouldly;
@@ -74,16 +75,29 @@ namespace TransactionMobile.Maui.UITests
             }
         }
 
-        public async Task AcceptAlert()
-        {
-            IAlert a = await this.SwitchToAlert();
-            a.Accept();
+        public async Task AcceptAlert(){
+            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
+            {
+                IWebElement acceptButton = await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId("PrimaryButton");
+                acceptButton.Click();
+            }
+            else{
+                IAlert a = await this.SwitchToAlert();
+                a.Accept();
+            }
         }
 
         public async Task DismissAlert()
         {
-            IAlert a = await this.SwitchToAlert();
-            a.Dismiss();
+            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
+            {
+                IWebElement acceptButton = await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId("SecondaryButton");
+                acceptButton.Click();
+            }
+            else{
+                IAlert a = await this.SwitchToAlert();
+                a.Dismiss();
+            }
         }
 
         public async Task<IAlert> SwitchToAlert(){

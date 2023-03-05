@@ -12,6 +12,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Android;
 using OpenQA.Selenium.Appium.iOS;
 using OpenQA.Selenium.Appium.MultiTouch;
+using OpenQA.Selenium.Appium.Windows;
 using OpenQA.Selenium.Interactions;
 using Shared.IntegrationTesting;
 using Shouldly;
@@ -33,7 +34,7 @@ public static class Extenstions
         await Retry.For(async () => {
                             for (int i = 0; i < 10; i++) {
 
-                                String message = $"Unable to find element on page: {selector} {Environment.NewLine} Source: {AppiumDriverWrapper.Driver.PageSource}"; 
+                                String message = $"Unable to find element on page: {selector} {Environment.NewLine} Source: {AppiumDriverWrapper.Driver.PageSource}";
                                 driver.ScrollDown();
                                 element = driver.FindElement(MobileBy.AccessibilityId(selector));
                                 element.ShouldNotBeNull(message);
@@ -43,7 +44,7 @@ public static class Extenstions
                         });
         return element;
     }
-
+    
     public static void ScrollDown(this AppiumDriver driver)
     {
         //if pressX was zero it didn't work for me
@@ -53,7 +54,12 @@ public static class Extenstions
         // just non zero point, as it didn't scroll to zero normally
         int topY = driver.Manage().Window.Size.Height / 8;
         //scroll with TouchAction by itself
-        driver.Scroll(pressX, bottomY, pressX, topY);
+        if (driver is WindowsDriver){
+            return;
+        }
+        else{
+            driver.Scroll(pressX, bottomY, pressX, topY);
+        }
     }
 
     /*

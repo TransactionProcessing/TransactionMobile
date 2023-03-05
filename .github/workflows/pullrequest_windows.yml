@@ -28,10 +28,7 @@ jobs:
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: 7.0.100              
- 
-      #- run: dotnet tool update -g dotnet-vs
-      #- run: vs install preview --quiet +Microsoft.VisualStudio.Component.ManagedDesktop.Core +Microsoft.NetCore.Component.DevelopmentTools
-          
+           
       - name: Install MAUI Workloads
         run: |
           dotnet workload install maui --ignore-failed-sources
@@ -44,18 +41,25 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln
 
-      #- name: Build Code
-      #  run: msbuild TransactionMobile.Maui/TransactionMobile.Maui.csproj -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041 /p:GenerateAppxPackageOnBuild=true
-      #- name: Build Code
-      #  run: |
-      #    "C:/Program Files/Microsoft Visual Studio/2022/Preview/MSBuild/Current/Bin/MSBuild.exe TransactionMobile.Maui/TransactionMobile.Maui.csproj -r -p:Configuration=Release -p:RestorePackages=true -p:TargetFramework=net7.0-windows10.0.19041 /p:RestoreSources=https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json"
-
       - name: Build Code
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 --no-restore    
 
       - name: Run Unit Tests
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
 
+      - name: Decrypt PFX File
+        run: |
+          echo "${{ secrets.WINDOWSSIGNINGCERT }}" > cert.pfx.asc
+          certutil -decode cert.pfx.asc cert.pfx
+
+      - name: Add Cert to Store
+        run: certutil -user -q -p ${{ secrets.WINDOWSSIGNINGCERT }} -importpfx cert.pfx NoRoot
+
+      - name: Publish and Install App
+        run: |
+         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERT }}"
+         TransactionMobile.Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages\TransactionMobile.Maui_1.0.0.0_Test/Install.ps1
+          
       #- name: Run Integration Tests - iOS
       #  run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter  "Category=PRTest&Category=Windows"
       - name: Run Navigation Integration Tests - Windows

@@ -59,6 +59,10 @@ public class LoginPage : BasePage
             return true;
         }
 
+        if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows){
+            return false;
+        }
+
         return true;
     }
 
