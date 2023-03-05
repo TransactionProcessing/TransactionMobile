@@ -57,8 +57,8 @@ jobs:
 
       - name: Publish and Install App
         run: |
-         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"
-         TransactionMobile.Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages\TransactionMobile.Maui_1.0.0.0_Test/Install.ps1
+         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"
+         TransactionMobile.Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1
           
       #- name: Run Integration Tests - iOS
       #  run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter  "Category=PRTest&Category=Windows"

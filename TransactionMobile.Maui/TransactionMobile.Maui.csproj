@@ -12,6 +12,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PublishReadyToRun>false</PublishReadyToRun>
 		<RunAOTCompilation>false</RunAOTCompilation>
+		<WindowsPackageType>MSIX</WindowsPackageType>
 
 		<!-- Display name -->
 		<ApplicationTitle>Transaction Processing POS</ApplicationTitle>
