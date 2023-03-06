@@ -57,8 +57,11 @@ jobs:
 
       - name: Publish App
         run: |
-         Set-Location Cert:\
-         gci -Recurse | Select Subject, FriendlyName, Thumbprint
+         # Get all certificates
+         $mycertificates = Get-ChildItem -Path Cert:\LocalMachine\My\
+         # Find Friendly Name of the certificate
+         $mycertificates | Select ThumbPrint,FriendlyName
+
          dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"
       
       - name: Install App
