@@ -58,7 +58,7 @@ jobs:
       - name: Publish App
         run: |
          # Get all certificates
-         $mycertificates = Get-ChildItem -Path Cert:\LocalMachine\My\
+         $mycertificates = Get-ChildItem -Path Cert:\CurrentUser\My\
          # Find Friendly Name of the certificate
          $mycertificates | Select ThumbPrint,FriendlyName
 
