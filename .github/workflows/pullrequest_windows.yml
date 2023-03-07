@@ -61,7 +61,7 @@ jobs:
       
       - name: Install App
         run: |         
-         Import-Module Appx
+         Import-Module Appx -usewindowspowershell
          .\TransactionMobile.Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1 -Force
           
       #- name: Run Integration Tests - iOS
