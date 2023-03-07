@@ -61,7 +61,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.DeviceName = "WindowsPC";
             
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
-            driverOptions.App = "597F8511-6166-4C10-AADD-C961E85539A5_9zz4h110yvjzm!App";
+            driverOptions.App = "TransactionMobile.Maui!App";
             AppiumDriverWrapper.Driver = new WindowsDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
             
         }
