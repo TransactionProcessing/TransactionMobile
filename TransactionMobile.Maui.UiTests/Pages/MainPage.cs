@@ -1,7 +1,15 @@
 ﻿namespace TransactionMobile.Maui.UITests;
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Appium;
+using Shared.IntegrationTesting;
+using Shouldly;
+using UiTests.Drivers;
 
 public class MainPage : BasePage
 {
@@ -31,8 +39,20 @@ public class MainPage : BasePage
 
     public async Task ClickTransactionsButton()
     {
-        var element = await this.WaitForElementByAccessibilityId(this.TransactionsButton);
-        element.Click();
+        if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows){
+            await Retry.For(async () => {
+                                var elements = AppiumDriverWrapper.Driver.FindElements(MobileBy.AccessibilityId("navViewItem"));
+                                var element = elements.SingleOrDefault(e => e.Text == this.TransactionsButton);
+                                element.ShouldNotBeNull();
+                                element.Click();
+                            });
+            await Task.Delay(2000);
+
+        }
+        else{
+            var element = await this.WaitForElementByAccessibilityId(this.TransactionsButton);
+            element.Click();
+        }
     }
 
     public async Task ClickReportsButton()

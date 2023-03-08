@@ -115,17 +115,8 @@ public partial class App : Application
         });
 
 #endif
-        //IApplicationCache applicationCache = MauiProgram.Container.Services.GetService<IApplicationCache>();
-        //Boolean isLoggedIn = applicationCache.GetIsLoggedIn();
-
-        //if (isLoggedIn)
-        //{
         MainPage = new AppShell();
-        //}
-        //else {
-        //    LoginPageViewModel loginPageViewModel = MauiProgram.Container.Services.GetService<LoginPageViewModel>();
-        //    MainPage = new LoginPage(loginPageViewModel);
-        //}
+        
         Routing.RegisterRoute("login", typeof(LoginPage));
         Routing.RegisterRoute("home", typeof(HomePage));
 
