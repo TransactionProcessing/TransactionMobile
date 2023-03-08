@@ -2,11 +2,11 @@
 using TransactionMobile.Maui.Pages.Transactions.MobileTopup;
 using TransactionMobile.Maui.Pages.Transactions.Voucher;
 using TransactionMobile.Maui.Pages.Transactions.BillPayment;
-#if WINDOWS
-using Microsoft.UI;
-using Microsoft.UI.Windowing;
-using Windows.Graphics;
-#endif
+//#if WINDOWS
+//using Microsoft.UI;
+//using Microsoft.UI.Windowing;
+//using Windows.Graphics;
+//#endif
 
 namespace TransactionMobile.Maui;
 
@@ -121,15 +121,15 @@ public partial class App : Application
 
         Microsoft.Maui.Handlers.WindowHandler.Mapper.AppendToMapping(nameof(IWindow),
                                                                      (handler, view) => {
-#if WINDOWS
-            var mauiWindow = handler.VirtualView;
-            var nativeWindow = handler.PlatformView;
-            nativeWindow.Activate();
-            IntPtr windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
-            WindowId windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(windowHandle);
-            AppWindow appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
-            appWindow.Resize(new SizeInt32(595, 960));
-#endif
+//#if WINDOWS
+//            var mauiWindow = handler.VirtualView;
+//            var nativeWindow = handler.PlatformView;
+//            nativeWindow.Activate();
+//            IntPtr windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
+//            WindowId windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(windowHandle);
+//            AppWindow appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
+//            appWindow.Resize(new SizeInt32(595, 960));
+//#endif
                                                                      });
 
         MainPage = new AppShell();
