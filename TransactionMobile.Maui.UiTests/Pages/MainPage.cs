@@ -46,8 +46,6 @@ public class MainPage : BasePage
                                 element.ShouldNotBeNull();
                                 element.Click();
                             });
-            await Task.Delay(2000);
-
         }
         else{
             var element = await this.WaitForElementByAccessibilityId(this.TransactionsButton);

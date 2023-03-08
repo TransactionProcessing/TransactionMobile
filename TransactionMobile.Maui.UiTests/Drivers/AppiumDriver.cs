@@ -16,6 +16,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
     using System.Threading;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Appium.Windows;
+    using OpenQA.Selenium.DevTools.V104.SystemInfo;
 
     public enum MobileTestPlatform
     {
@@ -61,9 +62,9 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.DeviceName = "WindowsPC";
             
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
+            
             driverOptions.App = "TransactionMobile_cpahcq4mrrbba!App";
             AppiumDriverWrapper.Driver = new WindowsDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
-            
         }
 
         private static void SetupiOSDriver(AppiumLocalService appiumService) {
