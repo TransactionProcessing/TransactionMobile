@@ -5,6 +5,7 @@ namespace TransactionMobile.Maui.UITests;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Common;
@@ -25,11 +26,28 @@ public static class Extenstions
     //{
     //    return driver.FindElementByClassName("androidx.appcompat.widget.AppCompatTextView");
     //}
-    
+
     public static async Task<IWebElement> WaitForElementByAccessibilityId(this AppiumDriver driver,
                                                                String selector,
-                                                               TimeSpan? timeout = null) {
+                                                               TimeSpan? timeout = null,
+                                                               Int32 i = 0) {
         IWebElement? element = null;
+
+        if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows && i != 0){
+            
+            timeout ??= TimeSpan.FromSeconds(60);
+            await Retry.For(async () => {
+                                for (int i = 0; i < 10; i++){
+                                    String message = $"Unable to find element on page: {selector} {Environment.NewLine} Source: {AppiumDriverWrapper.Driver.PageSource}";
+                                    var elements = AppiumDriverWrapper.Driver.FindElements(MobileBy.AccessibilityId("navViewItem"));
+                                    elements.ShouldNotBeEmpty();
+                                    element = elements.SingleOrDefault(e => e.Text == selector);
+                                    element.ShouldNotBeNull();
+                                }
+                            });
+            return element;
+        }
+        
         timeout ??= TimeSpan.FromSeconds(60);
         await Retry.For(async () => {
                             for (int i = 0; i < 10; i++) {

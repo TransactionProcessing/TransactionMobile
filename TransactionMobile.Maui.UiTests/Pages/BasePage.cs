@@ -44,8 +44,8 @@ namespace TransactionMobile.Maui.UITests
             Should.NotThrow(() => this.WaitForNoElementByAccessibilityId(this.Trait), message);
         }
 
-        public async Task<IWebElement> WaitForElementByAccessibilityId(String accessibilityId, TimeSpan? timeout = null) {
-            return await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId(accessibilityId, timeout);
+        public async Task<IWebElement> WaitForElementByAccessibilityId(String accessibilityId, TimeSpan? timeout = null, Int32 i = 0) {
+            return await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId(accessibilityId, timeout,i);
         }
         
         public async Task<String> GetPageSource()

@@ -37,20 +37,9 @@ public class MainPage : BasePage
         this.AvailableBalanceLabel = "AvailableBalanceValueLabel";
     }
 
-    public async Task ClickTransactionsButton()
-    {
-        if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows){
-            await Retry.For(async () => {
-                                var elements = AppiumDriverWrapper.Driver.FindElements(MobileBy.AccessibilityId("navViewItem"));
-                                var element = elements.SingleOrDefault(e => e.Text == this.TransactionsButton);
-                                element.ShouldNotBeNull();
-                                element.Click();
-                            });
-        }
-        else{
-            var element = await this.WaitForElementByAccessibilityId(this.TransactionsButton);
-            element.Click();
-        }
+    public async Task ClickTransactionsButton(){
+        var element = await this.WaitForElementByAccessibilityId(this.TransactionsButton, i:1);
+        element.Click();
     }
 
     public async Task ClickReportsButton()
