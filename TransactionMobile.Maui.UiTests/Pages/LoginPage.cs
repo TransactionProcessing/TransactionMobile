@@ -95,7 +95,7 @@ public class LoginPage : BasePage
     public async Task ClickLoginButton()
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.LoginButton);
-        if (element.Displayed && element.Enabled)
-            element.Click();
+        //if (element.Displayed && element.Enabled)
+        element.Click();
     }
 }
