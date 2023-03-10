@@ -6,6 +6,8 @@ using System;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
+using Shared.IntegrationTesting;
+using Shouldly;
 using UiTests.Common;
 
 public class LoginPage : BasePage
@@ -93,13 +95,12 @@ public class LoginPage : BasePage
         element.SendKeys(password);
     }
 
-    public async Task ClickLoginButton()
-    {
-        IWebElement element = await this.WaitForElementByAccessibilityId(this.LoginButton);
-        this.TestingContext.Logger.LogInformation($"Element Text [{element.Text}]");
-        this.TestingContext.Logger.LogInformation($"Element Enabled [{element.Enabled}]");
-        this.TestingContext.Logger.LogInformation($"Element Displayed [{element.Displayed}]");
-        this.TestingContext.Logger.LogInformation($"Element Selected [{element.Selected}]");
-        element.Click();
+    public async Task ClickLoginButton(){
+        await Retry.For(async () => {
+                            IWebElement element = await this.WaitForElementByAccessibilityId(this.LoginButton);
+                            element.Displayed.ShouldBeTrue();
+                            element.Click();
+                        });
+
     }
 }

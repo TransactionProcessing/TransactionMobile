@@ -50,7 +50,7 @@ public class MainPage : BasePage
     }
 
     public async Task ClickProfileButton() {
-        var element = await this.WaitForElementByAccessibilityId(this.ProfileButton);
+        var element = await this.WaitForElementByAccessibilityId(this.ProfileButton,i:1);
         element.Click();
     }
 

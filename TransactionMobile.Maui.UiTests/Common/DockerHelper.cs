@@ -11,6 +11,7 @@ namespace TransactionMobile.Maui.UiTests.Common
     using System.Net;
     using System.Runtime.CompilerServices;
     using System.Threading;
+    using Ductus.FluentDocker;
     using Ductus.FluentDocker.Builders;
     using Ductus.FluentDocker.Services;
     using Ductus.FluentDocker.Services.Extensions;
@@ -23,10 +24,9 @@ namespace TransactionMobile.Maui.UiTests.Common
     using Shouldly;
     using TechTalk.SpecFlow;
     using TransactionProcessor.Client;
-
-    //"SignInOptions": {
-    //    "RequireConfirmedEmail": true
-    //},
+    using Ductus.FluentDocker.Commands;
+    using Ductus.FluentDocker.Common;
+    using Microsoft.Extensions.Hosting;
 
     public class DockerHelper : global::Shared.IntegrationTesting.DockerHelper
     {
@@ -200,9 +200,15 @@ namespace TransactionMobile.Maui.UiTests.Common
             environmentVariables.Add("AppSettings:InMemoryDatabase=true");
             ConfigHostContainerName = $"mobileconfighost{this.TestId:N}";
 
+            String imageName = "stuartferguson/mobileconfiguration:latest";
+
+            if (FdOs.IsWindows()){
+                imageName = "stuartferguson/mobileconfigurationwindows:latest";
+            }
+
             ContainerBuilder configHostContainer = new Builder().UseContainer().WithName(ConfigHostContainerName)
                                                                 .WithEnvironment(environmentVariables.ToArray())
-                                                                .UseImageDetails(("stuartferguson/mobileconfiguration:master",false))
+                                                                .UseImageDetails((imageName, true))
                                                                 .ExposePort(ConfigHostDockerPort)
                                                                 .MountHostFolder(this.HostTraceFolder)
                                                                 .SetDockerCredentials(this.DockerCredentials);
