@@ -9,6 +9,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using Shared.IntegrationTesting;
 using Shouldly;
+using UiTests.Common;
 using UiTests.Drivers;
 
 public class MainPage : BasePage
@@ -28,7 +29,7 @@ public class MainPage : BasePage
     /// <summary>
     /// Initializes a new instance of the <see cref="MainPage"/> class.
     /// </summary>
-    public MainPage()
+    public MainPage(TestingContext testingContext) : base(testingContext)
     {
         this.TransactionsButton = "Transactions";
         this.ReportsButton = "ReportsButton";

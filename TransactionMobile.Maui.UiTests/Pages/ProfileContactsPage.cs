@@ -2,6 +2,7 @@
 
 using System;
 using System.Threading.Tasks;
+using TransactionMobile.Maui.UiTests.Common;
 using UITests;
 
 public class ProfileContactsPage : BasePage
@@ -20,7 +21,8 @@ public class ProfileContactsPage : BasePage
 
     #region Constructors
 
-    public ProfileContactsPage() {
+    public ProfileContactsPage(TestingContext testingContext) : base(testingContext)
+    {
         this.PrimaryContactLabel = "PrimaryContactLabel";
         this.ContactNameLabel = "ContactNameLabel";
         this.ContactEmailAddressLabel = "ContactEmailAddressLabel";

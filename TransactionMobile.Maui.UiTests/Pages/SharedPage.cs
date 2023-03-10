@@ -10,6 +10,7 @@ namespace TransactionMobile.Maui.UiTests.Pages
     using OpenQA.Selenium.Appium;
     using OpenQA.Selenium.Appium.Windows;
     using Shouldly;
+    using TransactionMobile.Maui.UiTests.Common;
     using TransactionMobile.Maui.UiTests.Drivers;
     using UITests;
 
@@ -18,7 +19,8 @@ namespace TransactionMobile.Maui.UiTests.Pages
         protected override String Trait => String.Empty;
         private readonly String BackButton;
 
-        public SharedPage() {
+        public SharedPage(TestingContext testingContext) : base(testingContext)
+        {
             this.BackButton = "BackButton";
         }
         public async Task LogoutMessageIsDisplayed(String logoutAlertTitle,

@@ -7,6 +7,7 @@ using TechTalk.SpecFlow;
 
 namespace TransactionMobile.Maui.UiTests.Steps
 {
+    using Common;
     using Drivers;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Appium;
@@ -19,7 +20,11 @@ namespace TransactionMobile.Maui.UiTests.Steps
     [Scope(Tag = "sharedapp")]
     public class SharedAppSteps
     {
-        private SharedPage sharedPage = new SharedPage();
+        public SharedAppSteps(TestingContext testingContext){
+            this.sharedPage = new SharedPage(testingContext);
+        }
+
+        private SharedPage sharedPage;
 
         [When(@"I click on the device back button")]
         public void WhenIClickOnTheDeviceBackButton()

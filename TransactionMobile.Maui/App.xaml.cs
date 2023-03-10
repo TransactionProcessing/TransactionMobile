@@ -3,6 +3,8 @@ using TransactionMobile.Maui.Pages.Transactions.Voucher;
 using TransactionMobile.Maui.Pages.Transactions.BillPayment;
 namespace TransactionMobile.Maui;
 
+using Microsoft.Maui.Handlers;
+using Microsoft.Maui.Platform;
 using Pages;
 using Pages.AppHome;
 using Pages.MyAccount;

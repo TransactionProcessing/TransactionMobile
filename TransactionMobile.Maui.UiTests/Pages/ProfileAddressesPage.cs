@@ -2,6 +2,7 @@
 
 using System;
 using System.Threading.Tasks;
+using TransactionMobile.Maui.UiTests.Common;
 using UITests;
 
 public class ProfileAddressesPage : BasePage
@@ -28,7 +29,8 @@ public class ProfileAddressesPage : BasePage
 
     #region Constructors
 
-    public ProfileAddressesPage() {
+    public ProfileAddressesPage(TestingContext testingContext) : base(testingContext)
+    {
         this.PrimaryAddressLabel = "PrimaryAddressLabel";
         this.AddressLine1Label = "AddressLine1Label";
         this.AddressLine2Label = "AddressLine2Label";

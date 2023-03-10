@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
+using UiTests.Common;
 
 public class LoginPage : BasePage
 {
@@ -19,7 +20,7 @@ public class LoginPage : BasePage
 
     private readonly String ConfigHostUrlEntry;
 
-    public LoginPage()
+    public LoginPage(TestingContext testingContext) : base(testingContext)
     {
         this.UserNameEntry = "UserNameEntry";
         this.PasswordEntry = "PasswordEntry";
@@ -95,7 +96,10 @@ public class LoginPage : BasePage
     public async Task ClickLoginButton()
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.LoginButton);
-        //if (element.Displayed && element.Enabled)
+        this.TestingContext.Logger.LogInformation($"Element Text [{element.Text}]");
+        this.TestingContext.Logger.LogInformation($"Element Enabled [{element.Enabled}]");
+        this.TestingContext.Logger.LogInformation($"Element Displayed [{element.Displayed}]");
+        this.TestingContext.Logger.LogInformation($"Element Selected [{element.Selected}]");
         element.Click();
     }
 }

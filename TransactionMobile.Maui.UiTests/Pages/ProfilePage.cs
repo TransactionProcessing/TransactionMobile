@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using Drivers;
     using OpenQA.Selenium;
+    using TransactionMobile.Maui.UiTests.Common;
     using UITests;
 
     public class ProfilePage : BasePage
@@ -22,7 +23,8 @@
 
         #region Constructors
 
-        public ProfilePage() {
+        public ProfilePage(TestingContext testingContext) : base(testingContext)
+        {
             this.LogoutButton = "LogoutButton";
             this.AddressesButton = "AddressesButton";
             this.ContactsButton = "ContactsButton";

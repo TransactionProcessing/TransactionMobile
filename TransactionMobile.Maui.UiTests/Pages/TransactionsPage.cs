@@ -3,11 +3,14 @@
 using OpenQA.Selenium;
 using System;
 using System.Threading.Tasks;
+using Common;
 using Drivers;
 using UITests;
 
 public class TransactionsPage : BasePage
 {
+    private readonly TestingContext TestingContext;
+
     protected override String Trait{
         get{
             if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows){
@@ -18,8 +21,10 @@ public class TransactionsPage : BasePage
     }
 
     private readonly String MobileTopupButton;
+    
 
-    public TransactionsPage() {
+    public TransactionsPage(TestingContext testingContext) : base(testingContext)
+    {
         this.MobileTopupButton = "MobileTopupButton";
     }
     public async Task ClickMobileTopupButton()

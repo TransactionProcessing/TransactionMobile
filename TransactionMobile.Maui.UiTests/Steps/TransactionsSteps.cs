@@ -2,15 +2,24 @@
 
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
+using UiTests.Common;
 using UiTests.Pages;
 
 [Binding]
 [Scope(Tag = "transactions")]
 public class TransactionsSteps
 {
-    private TransactionsPage transactionsPage = new TransactionsPage();
+    private readonly TestingContext TestingContext;
 
-    private TransactionsSelectMobileTopupOperatorPage transactionsSelectMobileTopupOperatorPage = new TransactionsSelectMobileTopupOperatorPage();
+    private TransactionsPage transactionsPage;
+
+    private TransactionsSelectMobileTopupOperatorPage transactionsSelectMobileTopupOperatorPage;
+
+    public TransactionsSteps(TestingContext testingContext){
+        this.TestingContext = testingContext;
+        this.transactionsPage = new TransactionsPage(testingContext);
+        this.transactionsSelectMobileTopupOperatorPage = new TransactionsSelectMobileTopupOperatorPage(testingContext);
+    }
 
     [Then(@"the Transaction Page is displayed")]
     public async Task ThenTheTransactionPageIsDisplayed() {

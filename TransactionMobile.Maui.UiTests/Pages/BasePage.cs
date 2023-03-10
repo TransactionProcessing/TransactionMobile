@@ -13,10 +13,17 @@ namespace TransactionMobile.Maui.UITests
     using OpenQA.Selenium.Interactions;
     using Shared.IntegrationTesting;
     using Shouldly;
+    using TransactionMobile.Maui.UiTests.Common;
 
     public abstract class BasePage
     {
+        protected readonly TestingContext TestingContext;
+
         protected abstract String Trait { get; }
+
+        public BasePage(TestingContext testingContext){
+            this.TestingContext = testingContext;
+        }
 
         public async Task AssertOnPage(TimeSpan? timeout = null)
         {
