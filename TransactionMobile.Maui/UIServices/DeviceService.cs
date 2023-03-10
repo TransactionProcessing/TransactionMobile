@@ -17,7 +17,7 @@ public class DeviceService : IDeviceService
 #if WINDOWS
         var deviceInformation = new Windows.Security.ExchangeActiveSyncProvisioning.EasClientDeviceInformation();
         string Id = deviceInformation.Id.ToString();
-        return Id;
+        return Id.Replace("-","");;
 #endif
 
         return this.DeviceIdProvider.GetDeviceId().Replace("-","");
