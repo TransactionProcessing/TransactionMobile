@@ -13,7 +13,10 @@ namespace TransactionMobile.Maui.UiTests.Drivers
 {
     using System.Collections.ObjectModel;
     using System.Diagnostics;
+    using System.Threading;
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Appium.Windows;
+    using OpenQA.Selenium.DevTools.V104.SystemInfo;
 
     public enum MobileTestPlatform
     {
@@ -28,26 +31,40 @@ namespace TransactionMobile.Maui.UiTests.Drivers
         public static MobileTestPlatform MobileTestPlatform;
         public static AppiumDriver Driver;
 
-        public void StartApp() {
+        public void StartApp(){
             AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723).Build();
 
-            if (appiumService.IsRunning == false) {
+            if (appiumService.IsRunning == false){
                 appiumService.OutputDataReceived += (sender,
                                                      args) => {
                                                         //Console.WriteLine(args.Data);
                                                         Debug.WriteLine(args.Data);
-                                                     };
+                                                    };
                 appiumService.Start();
             }
 
-            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
+            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android){
                 AppiumDriverWrapper.SetupAndroidDriver(appiumService);
             }
-            else if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.iOS) {
+            else if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.iOS){
                 AppiumDriverWrapper.SetupiOSDriver(appiumService);
             }
+            else if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
+            {
+                AppiumDriverWrapper.SetupWindowsDriver(appiumService);
+            }
+        }
+
+        private static void SetupWindowsDriver(AppiumLocalService appiumService){
+            var driverOptions = new AppiumOptions();
+            driverOptions.AutomationName = "windows";
+            driverOptions.PlatformName = "windows";
+            driverOptions.DeviceName = "WindowsPC";
             
-            //AppiumDriverWrapper.Driver.StartRecordingScreen();
+            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
+            
+            driverOptions.App = "TransactionMobile_cpahcq4mrrbba!App";
+            AppiumDriverWrapper.Driver = new WindowsDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
         }
 
         private static void SetupiOSDriver(AppiumLocalService appiumService) {

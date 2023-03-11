@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.UITests.Steps
 {
+    using System.Runtime.CompilerServices;
     using System.Threading;
     using EstateManagement.DataTransferObjects.Requests;
     using TechTalk.SpecFlow;
@@ -17,12 +18,14 @@ namespace TransactionMobile.Maui.UITests.Steps
     {
         private readonly TestingContext TestingContext;
 
-        LoginPage loginPage = new LoginPage();
+        private LoginPage loginPage;
 
-        MainPage mainPage = new MainPage();
+        private MainPage mainPage;
 
         public LoginSteps(TestingContext testingContext) {
             this.TestingContext = testingContext;
+            this.loginPage = new LoginPage(testingContext);
+            this.mainPage = new MainPage(testingContext);
         }
 
         [Given(@"I am on the Login Screen")]

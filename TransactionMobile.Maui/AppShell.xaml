@@ -29,19 +29,19 @@
 
     <TabBar Route="main">
 
-        <ShellContent ContentTemplate="{DataTemplate home:HomePage}" Title="Home"
+        <ShellContent ContentTemplate="{DataTemplate home:HomePage}" Title="Home" AutomationId="Home"
                       Route="home" Icon="homebutton"/>
 
-        <ShellContent ContentTemplate="{DataTemplate transactions:TransactionsPage}" Title="Transactions"
+        <ShellContent ContentTemplate="{DataTemplate transactions:TransactionsPage}" Title="Transactions" AutomationId="Transactions"
                       Route="transactions" Icon="transactionsbutton"/>
 
-        <ShellContent ContentTemplate="{DataTemplate reports:ReportsPage}" Title="Reports"
+        <ShellContent ContentTemplate="{DataTemplate reports:ReportsPage}" Title="Reports" AutomationId="Reports"
                       Route="reports" Icon="reportbutton"  />
 
-        <ShellContent ContentTemplate="{DataTemplate myaccount:MyAccountPage}" Title="My Account"
+        <ShellContent ContentTemplate="{DataTemplate myaccount:MyAccountPage}" Title="My Account" AutomationId="My Account"
                       Route="myaccount" Icon="profilebutton"/>
 
-        <ShellContent ContentTemplate="{DataTemplate support:SupportPage}" Title="Support"
+        <ShellContent ContentTemplate="{DataTemplate support:SupportPage}" Title="Support" AutomationId="Support"
                       Route="support" Icon="supportbutton"   />
     </TabBar>
 </Shell>

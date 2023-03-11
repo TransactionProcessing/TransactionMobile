@@ -1,6 +1,11 @@
 namespace TransactionMobile.Maui;
 
-//using Android.Media;
+#if WINDOWS
+using Microsoft.UI;
+using Microsoft.UI.Windowing;
+using Windows.Graphics;
+#endif
+
 using System.Diagnostics;
 using System.Windows.Input;
 using BusinessLogic.Services;
@@ -17,7 +22,8 @@ public partial class AppShell : Shell
 	{
         Console.WriteLine("In AppShell Ctor");
         InitializeComponent();
-	}
+        
+    }
 
     protected override async void OnNavigating(ShellNavigatingEventArgs args) {
         base.OnNavigating(args);

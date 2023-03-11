@@ -9,13 +9,21 @@ namespace TransactionMobile.Maui.UITests
 {
     using Common;
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Appium;
     using OpenQA.Selenium.Interactions;
     using Shared.IntegrationTesting;
     using Shouldly;
+    using TransactionMobile.Maui.UiTests.Common;
 
     public abstract class BasePage
     {
+        protected readonly TestingContext TestingContext;
+
         protected abstract String Trait { get; }
+
+        public BasePage(TestingContext testingContext){
+            this.TestingContext = testingContext;
+        }
 
         public async Task AssertOnPage(TimeSpan? timeout = null)
         {
@@ -43,8 +51,8 @@ namespace TransactionMobile.Maui.UITests
             Should.NotThrow(() => this.WaitForNoElementByAccessibilityId(this.Trait), message);
         }
 
-        public async Task<IWebElement> WaitForElementByAccessibilityId(String accessibilityId, TimeSpan? timeout = null) {
-            return await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId(accessibilityId, timeout);
+        public async Task<IWebElement> WaitForElementByAccessibilityId(String accessibilityId, TimeSpan? timeout = null, Int32 i = 0) {
+            return await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId(accessibilityId, timeout,i);
         }
         
         public async Task<String> GetPageSource()
@@ -74,16 +82,29 @@ namespace TransactionMobile.Maui.UITests
             }
         }
 
-        public async Task AcceptAlert()
-        {
-            IAlert a = await this.SwitchToAlert();
-            a.Accept();
+        public async Task AcceptAlert(){
+            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
+            {
+                IWebElement acceptButton = await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId("PrimaryButton");
+                acceptButton.Click();
+            }
+            else{
+                IAlert a = await this.SwitchToAlert();
+                a.Accept();
+            }
         }
 
         public async Task DismissAlert()
         {
-            IAlert a = await this.SwitchToAlert();
-            a.Dismiss();
+            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
+            {
+                IWebElement acceptButton = await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId("SecondaryButton");
+                acceptButton.Click();
+            }
+            else{
+                IAlert a = await this.SwitchToAlert();
+                a.Dismiss();
+            }
         }
 
         public async Task<IAlert> SwitchToAlert(){

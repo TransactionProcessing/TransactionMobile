@@ -1,20 +1,15 @@
-﻿using Microsoft.Maui.Platform;
-using TransactionMobile.Maui.Pages.Reports;
-using TransactionMobile.Maui.Pages.Transactions.MobileTopup;
+﻿using TransactionMobile.Maui.Pages.Transactions.MobileTopup;
 using TransactionMobile.Maui.Pages.Transactions.Voucher;
 using TransactionMobile.Maui.Pages.Transactions.BillPayment;
-
 namespace TransactionMobile.Maui;
 
-using BusinessLogic.ViewModels;
 using Microsoft.Maui.Handlers;
+using Microsoft.Maui.Platform;
 using Pages;
 using Pages.AppHome;
 using Pages.MyAccount;
 using Pages.Support;
 using Pages.Transactions.Admin;
-using TransactionMobile.Maui.BusinessLogic.Services;
-using TransactionMobile.Maui.Controls;
 
 public partial class App : Application
 {
@@ -113,19 +108,9 @@ public partial class App : Application
                 androidView.ContentDescription = view.AutomationId;
             }
         });
-
 #endif
-        //IApplicationCache applicationCache = MauiProgram.Container.Services.GetService<IApplicationCache>();
-        //Boolean isLoggedIn = applicationCache.GetIsLoggedIn();
-
-        //if (isLoggedIn)
-        //{
         MainPage = new AppShell();
-        //}
-        //else {
-        //    LoginPageViewModel loginPageViewModel = MauiProgram.Container.Services.GetService<LoginPageViewModel>();
-        //    MainPage = new LoginPage(loginPageViewModel);
-        //}
+        
         Routing.RegisterRoute("login", typeof(LoginPage));
         Routing.RegisterRoute("home", typeof(HomePage));
 

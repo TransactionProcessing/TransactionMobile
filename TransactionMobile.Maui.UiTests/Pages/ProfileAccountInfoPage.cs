@@ -2,6 +2,7 @@
 
 using System;
 using System.Threading.Tasks;
+using TransactionMobile.Maui.UiTests.Common;
 using UITests;
 
 public class ProfileAccountInfoPage : BasePage
@@ -24,7 +25,7 @@ public class ProfileAccountInfoPage : BasePage
 
     #region Constructors
 
-    public ProfileAccountInfoPage() {
+    public ProfileAccountInfoPage(TestingContext testingContext) : base(testingContext){
         this.MerchantNameLabel = "MerchantNameLabel";
         this.BalanceLabel = "BalanceLabel";
         this.AvailableBalanceLabel = "AvailableBalanceLabel";

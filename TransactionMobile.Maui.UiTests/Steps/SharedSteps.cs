@@ -29,10 +29,12 @@ namespace TransactionMobile.Maui.UiTests.Steps
     public class SharedSteps
     {
         private readonly TestingContext TestingContext;
-        LoginPage loginPage = new LoginPage();
+
+        private LoginPage loginPage;
 
         public SharedSteps(TestingContext testingContext) {
             this.TestingContext = testingContext;
+            this.loginPage = new LoginPage(testingContext);
         }
 
         [Given(@"the following security roles exist")]

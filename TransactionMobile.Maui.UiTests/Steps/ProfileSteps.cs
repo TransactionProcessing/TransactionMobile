@@ -6,18 +6,28 @@ using System.Threading.Tasks;
 using Shouldly;
 using TechTalk.SpecFlow;
 using TransactionMobile.Maui.UiTests.Drivers;
+using UiTests.Common;
 using UiTests.Pages;
 
 [Binding]
 [Scope(Tag = "profile")]
-public class ProfileSteps
-{
-    ProfilePage profilePage = new ProfilePage();
+public class ProfileSteps{
+    private readonly TestingContext TestingContext;
 
-    ProfileAddressesPage profileAddressesPage = new ProfileAddressesPage();
+    private ProfilePage profilePage;
 
-    ProfileContactsPage profileContactsPage = new ProfileContactsPage();
-    ProfileAccountInfoPage profileAccountInfoPage = new ProfileAccountInfoPage();
+    private ProfileAddressesPage profileAddressesPage;
+
+    ProfileContactsPage profileContactsPage;
+    ProfileAccountInfoPage profileAccountInfoPage;
+
+    public ProfileSteps(TestingContext testingContext){
+        this.TestingContext = testingContext;
+        this.profilePage = new ProfilePage(testingContext);
+        this.profileAccountInfoPage = new ProfileAccountInfoPage(testingContext);
+        this.profileContactsPage = new ProfileContactsPage(testingContext);
+        this.profileAddressesPage = new ProfileAddressesPage(testingContext);
+    }
 
     [Then(@"the My Profile Page is displayed")]
     public async Task ThenTheMyProfilePageIsDisplayed()

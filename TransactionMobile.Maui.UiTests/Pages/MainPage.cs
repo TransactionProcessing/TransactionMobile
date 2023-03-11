@@ -1,7 +1,16 @@
 ﻿namespace TransactionMobile.Maui.UITests;
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Appium;
+using Shared.IntegrationTesting;
+using Shouldly;
+using UiTests.Common;
+using UiTests.Drivers;
 
 public class MainPage : BasePage
 {
@@ -20,7 +29,7 @@ public class MainPage : BasePage
     /// <summary>
     /// Initializes a new instance of the <see cref="MainPage"/> class.
     /// </summary>
-    public MainPage()
+    public MainPage(TestingContext testingContext) : base(testingContext)
     {
         this.TransactionsButton = "Transactions";
         this.ReportsButton = "ReportsButton";
@@ -29,9 +38,8 @@ public class MainPage : BasePage
         this.AvailableBalanceLabel = "AvailableBalanceValueLabel";
     }
 
-    public async Task ClickTransactionsButton()
-    {
-        var element = await this.WaitForElementByAccessibilityId(this.TransactionsButton);
+    public async Task ClickTransactionsButton(){
+        var element = await this.WaitForElementByAccessibilityId(this.TransactionsButton, i:1);
         element.Click();
     }
 
@@ -42,7 +50,7 @@ public class MainPage : BasePage
     }
 
     public async Task ClickProfileButton() {
-        var element = await this.WaitForElementByAccessibilityId(this.ProfileButton);
+        var element = await this.WaitForElementByAccessibilityId(this.ProfileButton,i:1);
         element.Click();
     }
 

@@ -12,6 +12,7 @@ namespace TransactionMobile.Maui.UiTests.Features
 {
     [TestFixture(MobileTestPlatform.Android, Category = "Android")]
     [TestFixture(MobileTestPlatform.iOS, Category = "iOS")]
+    [TestFixture(MobileTestPlatform.Windows, Category = "Windows")]
     [NonParallelizable]
     public partial class EndToEndTestsFeature : BaseTestFixture
     {

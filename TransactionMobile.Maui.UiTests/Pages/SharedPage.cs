@@ -8,7 +8,9 @@ namespace TransactionMobile.Maui.UiTests.Pages
 {
     using OpenQA.Selenium;
     using OpenQA.Selenium.Appium;
+    using OpenQA.Selenium.Appium.Windows;
     using Shouldly;
+    using TransactionMobile.Maui.UiTests.Common;
     using TransactionMobile.Maui.UiTests.Drivers;
     using UITests;
 
@@ -17,13 +19,24 @@ namespace TransactionMobile.Maui.UiTests.Pages
         protected override String Trait => String.Empty;
         private readonly String BackButton;
 
-        public SharedPage() {
+        public SharedPage(TestingContext testingContext) : base(testingContext)
+        {
             this.BackButton = "BackButton";
         }
         public async Task LogoutMessageIsDisplayed(String logoutAlertTitle,
                                                    String logoutAlertMessage) {
-            IAlert a = await this.SwitchToAlert();
+            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows){
+                
+                IWebElement alert = await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId("ContentScrollViewer");
+
+                var allLabels = alert.FindElements(MobileBy.ClassName("TextBlock"));
+                allLabels[0].Text.ShouldBe(logoutAlertTitle);
+                allLabels[1].Text.ShouldBe(logoutAlertMessage);
+            }
+            else{
+                IAlert a = await this.SwitchToAlert();
             a.Text.ShouldBe($"{logoutAlertTitle}{Environment.NewLine}{logoutAlertMessage}");
+            }
         }
 
         public async Task ClickBackButton() {

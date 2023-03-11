@@ -12,6 +12,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PublishReadyToRun>false</PublishReadyToRun>
 		<RunAOTCompilation>false</RunAOTCompilation>
+		<WindowsPackageType>MSIX</WindowsPackageType>
 
 		<!-- Display name -->
 		<ApplicationTitle>Transaction Processing POS</ApplicationTitle>
@@ -262,6 +263,9 @@
 
 	<PropertyGroup>
 		<AndroidHttpClientHandlerType>DangerousAndroidMessageHandler, DangerousAndroidMessageHandler</AndroidHttpClientHandlerType>
+		<DefaultLanguage>en</DefaultLanguage>
+		<PackageCertificateThumbprint>8EEF9A99EBFE75E8CB01A297A057014B1AA9F368</PackageCertificateThumbprint>
+		<AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
 	</PropertyGroup>
 
 	<!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-android|AnyCPU'">

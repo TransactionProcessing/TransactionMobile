@@ -6,6 +6,9 @@ using System;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
+using Shared.IntegrationTesting;
+using Shouldly;
+using UiTests.Common;
 
 public class LoginPage : BasePage
 {
@@ -19,7 +22,7 @@ public class LoginPage : BasePage
 
     private readonly String ConfigHostUrlEntry;
 
-    public LoginPage()
+    public LoginPage(TestingContext testingContext) : base(testingContext)
     {
         this.UserNameEntry = "UserNameEntry";
         this.PasswordEntry = "PasswordEntry";
@@ -59,6 +62,10 @@ public class LoginPage : BasePage
             return true;
         }
 
+        if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows){
+            return false;
+        }
+
         return true;
     }
 
@@ -88,9 +95,12 @@ public class LoginPage : BasePage
         element.SendKeys(password);
     }
 
-    public async Task ClickLoginButton()
-    {
-        IWebElement element = await this.WaitForElementByAccessibilityId(this.LoginButton);
-        element.Click();
+    public async Task ClickLoginButton(){
+        await Retry.For(async () => {
+                            IWebElement element = await this.WaitForElementByAccessibilityId(this.LoginButton);
+                            //element.Displayed.ShouldBeTrue();
+                            element.Click();
+                        });
+
     }
 }

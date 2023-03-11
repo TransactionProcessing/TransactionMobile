@@ -7,11 +7,11 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="597F8511-6166-4C10-AADD-C961E85539A5"
-    Publisher="CN=User Name" />
+    Name="TransactionMobile"
+    Publisher="CN=TransactionProcessing, C=EN" Version="1.0.0.0"/>
 
   <Properties>
-    <DisplayName>TransactionMobile.Maui</DisplayName>
+    <DisplayName>TransactionMobile</DisplayName>
     <PublisherDisplayName>Microsoft</PublisherDisplayName>
     <Logo>appiconStoreLogo.png</Logo>
   </Properties>
