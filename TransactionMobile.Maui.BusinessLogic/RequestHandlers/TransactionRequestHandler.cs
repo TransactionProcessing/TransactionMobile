@@ -60,18 +60,18 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         ITransactionService transactionService = this.TransactionServiceResolver(useTrainingMode);
 
         // TODO: Factory
-        PerformMobileTopupRequestModel model = new() {
-                                                       ContractId = request.ContractId,
-                                                       CustomerAccountNumber = request.CustomerAccountNumber,
-                                                       CustomerEmailAddress = request.CustomerEmailAddress,
-                                                       OperatorIdentifier = request.OperatorIdentifier,
-                                                       ProductId = request.ProductId,
-                                                       TopupAmount = request.TopupAmount,
-                                                       TransactionDateTime = request.TransactionDateTime,
-                                                       TransactionNumber = transaction.transactionNumber.ToString(),
-                                                       DeviceIdentifier = String.Empty,
-                                                       ApplicationVersion = this.ApplicationInfoService.VersionString
-                                                   };
+        PerformMobileTopupRequestModel model = new(){
+                                                        ContractId = request.ContractId,
+                                                        CustomerAccountNumber = request.CustomerAccountNumber,
+                                                        CustomerEmailAddress = request.CustomerEmailAddress,
+                                                        OperatorIdentifier = request.OperatorIdentifier,
+                                                        ProductId = request.ProductId,
+                                                        TopupAmount = request.TopupAmount,
+                                                        TransactionDateTime = request.TransactionDateTime,
+                                                        TransactionNumber = transaction.transactionNumber.ToString(),
+                                                        DeviceIdentifier = this.DeviceService.GetIdentifier(),
+                                                        ApplicationVersion = this.ApplicationInfoService.VersionString
+                                                    };
 
         Result<PerformMobileTopupResponseModel> result = await transactionService.PerformMobileTopup(model, cancellationToken);
         
@@ -90,7 +90,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
     private async Task<(Int64 transactionNumber, TransactionRecord transactionRecord)> CreateTransactionRecord(TransactionRecord transactionRecord) {
         
         transactionRecord.ApplicationVersion = this.ApplicationInfoService.VersionString;
-        transactionRecord.DeviceIdentifier = String.Empty;
+        transactionRecord.DeviceIdentifier = this.DeviceService.GetIdentifier();
         Int64 transactionNumber = await this.DatabaseContext.CreateTransaction(transactionRecord);
 
         return (transactionNumber, transactionRecord);

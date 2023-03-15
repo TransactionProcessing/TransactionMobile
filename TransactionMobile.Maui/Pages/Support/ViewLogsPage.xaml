@@ -5,7 +5,7 @@
              xmlns:userControls="clr-namespace:TransactionMobile.Maui.Controls;assembly=TransactionMobile.Maui"
              Shell.NavBarIsVisible="False">
     <StackLayout Margin="20">
-    <userControls:TitleLabel Text="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"
+        <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"
                                  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
         <ListView ItemsSource="{Binding LogMessages}" HasUnevenRows="true" VerticalScrollBarVisibility="Always">
                 <ListView.ItemTemplate>
