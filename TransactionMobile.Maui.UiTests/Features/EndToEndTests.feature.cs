@@ -28,6 +28,7 @@ namespace TransactionMobile.Maui.UiTests.Features
     [NUnit.Framework.CategoryAttribute("base")]
     [NUnit.Framework.CategoryAttribute("sharedapp")]
     [NUnit.Framework.CategoryAttribute("shared")]
+    [NUnit.Framework.CategoryAttribute("transactions")]
     public partial class EndToEndTestsFeature
     {
         
@@ -40,7 +41,8 @@ namespace TransactionMobile.Maui.UiTests.Features
                 "profile",
                 "base",
                 "sharedapp",
-                "shared"};
+                "shared",
+                "transactions"};
         
 #line 1 "EndToEndTests.feature"
 #line hidden
@@ -340,10 +342,25 @@ namespace TransactionMobile.Maui.UiTests.Features
 #line 69
  testRunner.Given("I have created the following security users", ((string)(null)), table14, "Given ");
 #line hidden
+            TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Reference",
+                        "Amount",
+                        "DateTime",
+                        "MerchantName",
+                        "EstateName"});
+            table15.AddRow(new string[] {
+                        "Deposit1",
+                        "100.00",
+                        "Today",
+                        "Test Merchant 1",
+                        "Test Estate 1"});
 #line 73
+ testRunner.Given("I make the following manual merchant deposits", ((string)(null)), table15, "Given ");
+#line hidden
+#line 77
  testRunner.Given("I have created a config for my application", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 75
+#line 79
  testRunner.Given("I have created a config for my device", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
         }
@@ -357,7 +374,7 @@ namespace TransactionMobile.Maui.UiTests.Features
                     "PRTest"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("EndToEnd", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 78
+#line 82
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -370,79 +387,139 @@ this.ScenarioInitialize(scenarioInfo);
 #line 4
 this.FeatureBackground();
 #line hidden
-#line 79
+#line 83
  testRunner.Given("I am on the Login Screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 80
+#line 84
  testRunner.And("my device is registered", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 81
+#line 85
  testRunner.When("I enter \'merchantuser@testmerchant1.co.uk\' as the Email Address", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 82
+#line 86
  testRunner.And("I enter \'123456\' as the Password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 83
+#line 87
  testRunner.And("I tap on Login", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 84
+#line 88
  testRunner.Then("the Merchant Home Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 85
+#line 89
  testRunner.When("I tap on Profile", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 86
+#line 90
  testRunner.Then("the My Profile Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 87
+#line 91
  testRunner.When("I tap on the Addresses button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 88
+#line 92
  testRunner.Then("the Address List Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-                TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
                             "AddressLine1",
                             "AddressTown"});
-                table15.AddRow(new string[] {
+                table16.AddRow(new string[] {
                             "test address line 1",
                             "TestTown"});
-#line 89
- testRunner.And("the Primary Address is displayed", ((string)(null)), table15, "And ");
+#line 93
+ testRunner.And("the Primary Address is displayed", ((string)(null)), table16, "And ");
 #line hidden
-#line 92
+#line 96
  testRunner.When("I click on the back button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 93
+#line 97
  testRunner.Then("the My Profile Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 101
+#line 98
  testRunner.When("I tap on the Account Info button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 102
+#line 99
  testRunner.Then("the Account Info Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-                TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
                             "Name",
                             "Balance",
                             "AvailableBalance"});
-                table16.AddRow(new string[] {
+                table17.AddRow(new string[] {
                             "Test Merchant 1",
                             "0",
                             "0"});
-#line 103
- testRunner.And("the Account Info is displayed", ((string)(null)), table16, "And ");
+#line 100
+ testRunner.And("the Account Info is displayed", ((string)(null)), table17, "And ");
 #line hidden
-#line 106
+#line 103
  testRunner.When("I click on the back button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 107
+#line 104
  testRunner.Then("the My Profile Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
+#line 105
+ testRunner.When("I click on the back button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 106
+ testRunner.Then("the Merchant Home Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 107
+ testRunner.When("I tap on Transactions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
 #line 108
- testRunner.When("I tap on Logout", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.Then("the Transaction Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 109
- testRunner.Then("the Login Screen is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.When("I tap on the Mobile Topup button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 110
+ testRunner.Then("the Transaction Select Mobile Topup Operator Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 111
+ testRunner.When("I tap on the \'Safaricom\' button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 112
+ testRunner.Then("the Select Product Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 113
+ testRunner.When("I tap on the \'Custom\' product button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 114
+ testRunner.Then("the Enter Topup Details Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 115
+ testRunner.When("I enter \'07777777775\' as the Customer Mobile Number", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 116
+ testRunner.And("I enter 10.00 as the Topup Amount", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 117
+ testRunner.And("I tap on Perform Topup", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 118
+ testRunner.Then("the Mobile Topup Successful Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 119
+ testRunner.And("I tap on Complete", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 120
+ testRunner.Then("the Transaction Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 121
+ testRunner.When("I click on the back button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 122
+ testRunner.Then("the Merchant Home Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 123
+ testRunner.When("I click on the back button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 124
+ testRunner.Then("A message is displayed confirming I want to log out", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 125
+ testRunner.When("I click yes", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 126
+ testRunner.Then("the Login Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

@@ -1,4 +1,4 @@
-﻿@background @login @toolbar @profile @base @sharedapp @shared
+﻿@background @login @toolbar @profile @base @sharedapp @shared @transactions
 Feature: EndToEndTests
 
 Background: 
@@ -70,6 +70,10 @@ Background:
 	| EmailAddress                  | Password | GivenName    | FamilyName | EstateName    | MerchantName    |
 	| merchantuser@testmerchant1.co.uk | 123456   | TestMerchant | User1      | Test Estate 1 | Test Merchant 1 |
 
+	Given I make the following manual merchant deposits 
+	| Reference | Amount | DateTime | MerchantName    | EstateName    |
+	| Deposit1  | 100.00 | Today    | Test Merchant 1 | Test Estate 1 |
+
 	Given I have created a config for my application
 
 	Given I have created a config for my device
@@ -91,13 +95,6 @@ Scenario: EndToEnd
 	| test address line 1 | TestTown    |
 	When I click on the back button
 	Then the My Profile Page is displayed
-	#When I tap on the Contacts button
-	#Then the Contact List Page is displayed
-	#And the Primary Contact is displayed
-	#| Name         | EmailAddress                 | MobileNumber |
-	#| Test Contact | stuart_ferguson1@outlook.com | 123456789    |
-	#When I click on the back button
-	#Then the My Profile Page is displayed
 	When I tap on the Account Info button
 	Then the Account Info Page is displayed
 	And the Account Info is displayed
@@ -105,5 +102,25 @@ Scenario: EndToEnd
 	| Test Merchant 1 | 0       | 0                |
 	When I click on the back button
 	Then the My Profile Page is displayed
-	When I tap on Logout
-	Then the Login Screen is displayed
+	When I click on the back button
+	Then the Merchant Home Page is displayed
+	When I tap on Transactions
+	Then the Transaction Page is displayed
+	When I tap on the Mobile Topup button
+	Then the Transaction Select Mobile Topup Operator Page is displayed
+	When I tap on the 'Safaricom' button
+	Then the Select Product Page is displayed
+	When I tap on the 'Custom' product button
+	Then the Enter Topup Details Page is displayed
+	When I enter '07777777775' as the Customer Mobile Number
+	And I enter 10.00 as the Topup Amount
+	And I tap on Perform Topup
+	Then the Mobile Topup Successful Page is displayed
+	And I tap on Complete
+	Then the Transaction Page is displayed
+	When I click on the back button
+	Then the Merchant Home Page is displayed
+	When I click on the back button
+	Then A message is displayed confirming I want to log out
+	When I click yes
+	Then the Login Page is displayed

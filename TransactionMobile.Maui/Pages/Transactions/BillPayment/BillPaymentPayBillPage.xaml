@@ -7,7 +7,7 @@
              Shell.NavBarIsVisible="False">
     <ScrollView>
         <VerticalStackLayout x:Name="MainLayout">
-            <userControls:TitleLabel Text="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"
+            <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"
                                      VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
             <Frame HasShadow="True" Padding="50,20,50,20" Margin="10,0,0,10" VerticalOptions="CenterAndExpand" 
                    CornerRadius="20" Opacity="0.9" BackgroundColor="#f5f8fa">

@@ -202,7 +202,7 @@ namespace TransactionMobile.Maui.UiTests.Common
 
             String imageName = "stuartferguson/mobileconfiguration:latest";
 
-            if (FdOs.IsWindows()){
+            if (FdOs.IsWindows() && Shared.IntegrationTesting.DockerHelper.GetDockerEnginePlatform() == DockerEnginePlatform.Windows){
                 imageName = "stuartferguson/mobileconfigurationwindows:latest";
             }
 
