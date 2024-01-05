@@ -7,7 +7,7 @@ using Common;
 using Drivers;
 using UITests;
 
-public class TransactionsPage : BasePage
+public class TransactionsPage : BasePage2
 {
     private readonly TestingContext TestingContext;
 

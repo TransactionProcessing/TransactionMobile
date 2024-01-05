@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using TransactionMobile.Maui.UiTests.Common;
 using UITests;
 
-public class ProfileAddressesPage : BasePage
+public class ProfileAddressesPage : BasePage2
 {
     #region Fields
 

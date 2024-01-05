@@ -12,7 +12,7 @@ using Shouldly;
 using UiTests.Common;
 using UiTests.Drivers;
 
-public class MainPage : BasePage
+public class MainPage : BasePage2
 {
     protected override String Trait => "Home";
 
@@ -39,7 +39,7 @@ public class MainPage : BasePage
     }
 
     public async Task ClickTransactionsButton(){
-        var element = await this.WaitForElementByAccessibilityId(this.TransactionsButton, i:1);
+        var element = await this.WaitForElementByAccessibilityId(this.TransactionsButton);//, i:1);
         element.Click();
     }
 
@@ -50,7 +50,7 @@ public class MainPage : BasePage
     }
 
     public async Task ClickProfileButton() {
-        var element = await this.WaitForElementByAccessibilityId(this.ProfileButton,i:1);
+        var element = await this.WaitForElementByAccessibilityId(this.ProfileButton);//,i:1);
         element.Click();
     }
 

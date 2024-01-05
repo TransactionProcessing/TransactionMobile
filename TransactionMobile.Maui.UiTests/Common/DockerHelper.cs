@@ -26,7 +26,9 @@ namespace TransactionMobile.Maui.UiTests.Common
     using TransactionProcessor.Client;
     using Ductus.FluentDocker.Commands;
     using Ductus.FluentDocker.Common;
+    using EstateManagement.IntegrationTesting.Helpers;
     using Microsoft.Extensions.Hosting;
+    using EventStore.Client;
 
     public class DockerHelper : global::Shared.IntegrationTesting.DockerHelper
     {
@@ -57,6 +59,8 @@ namespace TransactionMobile.Maui.UiTests.Common
         private readonly TestingContext TestingContext;
 
         #endregion
+
+        public EventStoreProjectionManagementClient ProjectionManagementClient;
 
         #region Constructors
 
@@ -99,36 +103,26 @@ namespace TransactionMobile.Maui.UiTests.Common
 
         public String LocalIPAddress { get; private set; }
 
-        public override async Task<IContainerService> SetupTransactionProcessorAclContainer(List<INetworkService> networkServices){
+        public override ContainerBuilder SetupTransactionProcessorAclContainer(){
             this.AdditionalVariables.Add(ContainerType.TransactionProcessorAcl, new List<String>());
             this.SetAdditionalVariables(ContainerType.TransactionProcessorAcl,
                                         new List<String>{
                                                             "AppSettings:SkipVersionCheck=true"
                                                         });
-            return await base.SetupTransactionProcessorAclContainer(networkServices);
+            return base.SetupTransactionProcessorAclContainer();
         }
 
-
-
-        //public override Task<IContainerService> SetupVoucherManagementAclContainer(List<INetworkService> networkServices){
-        //    return null;
-        //}
-
-        //public override Task<IContainerService> SetupFileProcessorContainer(List<INetworkService> networkServices){
-        //    return null;
-        //}
-        
         /// <summary>
         /// Starts the containers for scenario run.
         /// </summary>
         /// <param name="scenarioName">Name of the scenario.</param>
-        public override async Task StartContainersForScenarioRun(String scenarioName)
+        public override async Task StartContainersForScenarioRun(String scenarioName, DockerServices dockerServices)
         {
             // Get the address of the host
             this.LocalIPAddress = this.GetLocalIPAddress();
             this.Trace(this.LocalIPAddress);
             
-            await base.StartContainersForScenarioRun(scenarioName);
+            await base.StartContainersForScenarioRun(scenarioName, dockerServices);
             await SetupConfigHostContainer(this.TestNetworks);
 
             // Setup the base address resolvers
@@ -152,6 +146,7 @@ namespace TransactionMobile.Maui.UiTests.Common
             this.HttpClient = new HttpClient();
             this.HttpClient.BaseAddress = new Uri(this.TransactionProcessorAclBaseAddressResolver(string.Empty));
 
+            this.ProjectionManagementClient = new EventStoreProjectionManagementClient(ConfigureEventStoreSettings());
         }
 
         public String TransactionProcessorBaseAddressResolver(String api) => $"http://127.0.0.1:{this.TransactionProcessorPort}";
@@ -210,7 +205,7 @@ namespace TransactionMobile.Maui.UiTests.Common
                                                                 .WithEnvironment(environmentVariables.ToArray())
                                                                 .UseImageDetails((imageName, true))
                                                                 .ExposePort(ConfigHostDockerPort)
-                                                                .MountHostFolder(this.HostTraceFolder)
+                                                                .MountHostFolder(this.DockerPlatform, this.HostTraceFolder)
                                                                 .SetDockerCredentials(this.DockerCredentials);
 
             // Now build and return the container                
@@ -246,7 +241,7 @@ namespace TransactionMobile.Maui.UiTests.Common
         /// <summary>
         /// The estates
         /// </summary>
-        private readonly List<EstateDetails> Estates;
+        public readonly List<EstateDetails> Estates;
 
         #endregion
 
@@ -259,6 +254,9 @@ namespace TransactionMobile.Maui.UiTests.Common
         {
             this.Estates = new List<EstateDetails>();
             this.Clients = new List<ClientDetails>();
+            this.Users = new Dictionary<String, Guid>();
+            this.Roles = new Dictionary<String, Guid>();
+            this.ApiResources = new List<String>();
         }
 
         #endregion
@@ -288,6 +286,10 @@ namespace TransactionMobile.Maui.UiTests.Common
         /// The logger.
         /// </value>
         public NlogLogger Logger { get; set; }
+        public Dictionary<String, Guid> Users;
+        public Dictionary<String, Guid> Roles;
+        public List<String> ApiResources;
+        //public List<String> IdentityResources;
 
         #endregion
 
@@ -301,9 +303,9 @@ namespace TransactionMobile.Maui.UiTests.Common
         /// <param name="grantType">Type of the grant.</param>
         public void AddClientDetails(String clientId,
                                      String clientSecret,
-                                     String grantType)
+                                     List<String> grantTypes)
         {
-            this.Clients.Add(ClientDetails.Create(clientId, clientSecret, grantType));
+            this.Clients.Add(ClientDetails.Create(clientId, clientSecret, grantTypes));
         }
 
         /// <summary>
@@ -312,9 +314,10 @@ namespace TransactionMobile.Maui.UiTests.Common
         /// <param name="estateId">The estate identifier.</param>
         /// <param name="estateName">Name of the estate.</param>
         public void AddEstateDetails(Guid estateId,
-                                     String estateName)
+                                     String estateName,
+                                     String estateReference)
         {
-            this.Estates.Add(EstateDetails.Create(estateId, estateName));
+            this.Estates.Add(EstateDetails.Create(estateId, estateName, estateReference));
         }
 
         /// <summary>
@@ -387,340 +390,340 @@ namespace TransactionMobile.Maui.UiTests.Common
         #endregion
     }
 
-    public class EstateDetails
-    {
-        #region Fields
+    //public class EstateDetails
+    //{
+    //    #region Fields
 
-        /// <summary>
-        /// The contracts
-        /// </summary>
-        private readonly List<Contract> Contracts;
+    //    /// <summary>
+    //    /// The contracts
+    //    /// </summary>
+    //    private readonly List<Contract> Contracts;
 
-        private readonly Dictionary<String, Guid> Merchants;
+    //    private readonly Dictionary<String, Guid> Merchants;
 
-        private readonly Dictionary<String, Dictionary<String, String>> MerchantUsers;
+    //    private readonly Dictionary<String, Dictionary<String, String>> MerchantUsers;
 
-        private readonly Dictionary<String, Dictionary<String, String>> MerchantUsersTokens;
+    //    private readonly Dictionary<String, Dictionary<String, String>> MerchantUsersTokens;
 
-        private readonly Dictionary<String, Guid> Operators;
+    //    private readonly Dictionary<String, Guid> Operators;
 
-        #endregion
+    //    #endregion
 
-        #region Constructors
+    //    #region Constructors
 
-        private EstateDetails(Guid estateId,
-                              String estateName)
-        {
-            this.EstateId = estateId;
-            this.EstateName = estateName;
-            this.Merchants = new Dictionary<String, Guid>();
-            this.Operators = new Dictionary<String, Guid>();
-            this.MerchantUsers = new Dictionary<String, Dictionary<String, String>>();
-            this.MerchantUsersTokens = new Dictionary<String, Dictionary<String, String>>();
-            this.TransactionResponses = new Dictionary<(Guid merchantId, String transactionNumber, String transactionType), String>();
-            this.ReconciliationResponses = new Dictionary<Guid, String>();
-            this.Contracts = new List<Contract>();
-        }
+    //    private EstateDetails(Guid estateId,
+    //                          String estateName)
+    //    {
+    //        this.EstateId = estateId;
+    //        this.EstateName = estateName;
+    //        this.Merchants = new Dictionary<String, Guid>();
+    //        this.Operators = new Dictionary<String, Guid>();
+    //        this.MerchantUsers = new Dictionary<String, Dictionary<String, String>>();
+    //        this.MerchantUsersTokens = new Dictionary<String, Dictionary<String, String>>();
+    //        this.TransactionResponses = new Dictionary<(Guid merchantId, String transactionNumber, String transactionType), String>();
+    //        this.ReconciliationResponses = new Dictionary<Guid, String>();
+    //        this.Contracts = new List<Contract>();
+    //    }
 
-        #endregion
+    //    #endregion
 
-        #region Properties
+    //    #region Properties
 
-        public String AccessToken { get; private set; }
+    //    public String AccessToken { get; private set; }
 
-        public Guid EstateId { get; }
+    //    public Guid EstateId { get; }
 
-        public String EstateName { get; }
+    //    public String EstateName { get; }
 
-        public String EstatePassword { get; private set; }
+    //    public String EstatePassword { get; private set; }
 
-        public String EstateUser { get; private set; }
+    //    public String EstateUser { get; private set; }
 
-        private Dictionary<(Guid merchantId, String transactionNumber, String transactionType), String> TransactionResponses { get; }
+    //    private Dictionary<(Guid merchantId, String transactionNumber, String transactionType), String> TransactionResponses { get; }
 
-        private Dictionary<Guid, String> ReconciliationResponses { get; }
+    //    private Dictionary<Guid, String> ReconciliationResponses { get; }
 
-        #endregion
+    //    #endregion
 
-        #region Methods
+    //    #region Methods
 
-        /// <summary>
-        /// Adds the contract.
-        /// </summary>
-        /// <param name="contractId">The contract identifier.</param>
-        /// <param name="contractName">Name of the contract.</param>
-        /// <param name="operatorId">The operator identifier.</param>
-        public void AddContract(Guid contractId,
-                                String contractName,
-                                Guid operatorId)
-        {
-            this.Contracts.Add(new Contract
-            {
-                ContractId = contractId,
-                Description = contractName,
-                OperatorId = operatorId,
-            });
-        }
+    //    /// <summary>
+    //    /// Adds the contract.
+    //    /// </summary>
+    //    /// <param name="contractId">The contract identifier.</param>
+    //    /// <param name="contractName">Name of the contract.</param>
+    //    /// <param name="operatorId">The operator identifier.</param>
+    //    public void AddContract(Guid contractId,
+    //                            String contractName,
+    //                            Guid operatorId)
+    //    {
+    //        this.Contracts.Add(new Contract
+    //        {
+    //            ContractId = contractId,
+    //            Description = contractName,
+    //            OperatorId = operatorId,
+    //        });
+    //    }
 
-        public void AddMerchant(Guid merchantId,
-                                String merchantName)
-        {
-            this.Merchants.Add(merchantName, merchantId);
-        }
+    //    public void AddMerchant(Guid merchantId,
+    //                            String merchantName)
+    //    {
+    //        this.Merchants.Add(merchantName, merchantId);
+    //    }
 
-        public void AddMerchantUser(String merchantName,
-                                    String userName,
-                                    String password)
-        {
-            if (this.MerchantUsers.ContainsKey(merchantName))
-            {
-                Dictionary<String, String> merchantUsersList = this.MerchantUsers[merchantName];
-                if (merchantUsersList.ContainsKey(userName) == false)
-                {
-                    merchantUsersList.Add(userName, password);
-                }
-            }
-            else
-            {
-                Dictionary<String, String> merchantUsersList = new Dictionary<String, String>();
-                merchantUsersList.Add(userName, password);
-                this.MerchantUsers.Add(merchantName, merchantUsersList);
-            }
-        }
+    //    public void AddMerchantUser(String merchantName,
+    //                                String userName,
+    //                                String password)
+    //    {
+    //        if (this.MerchantUsers.ContainsKey(merchantName))
+    //        {
+    //            Dictionary<String, String> merchantUsersList = this.MerchantUsers[merchantName];
+    //            if (merchantUsersList.ContainsKey(userName) == false)
+    //            {
+    //                merchantUsersList.Add(userName, password);
+    //            }
+    //        }
+    //        else
+    //        {
+    //            Dictionary<String, String> merchantUsersList = new Dictionary<String, String>();
+    //            merchantUsersList.Add(userName, password);
+    //            this.MerchantUsers.Add(merchantName, merchantUsersList);
+    //        }
+    //    }
 
-        public void AddMerchantUserToken(String merchantName,
-                                         String userName,
-                                         String token)
-        {
-            if (this.MerchantUsersTokens.ContainsKey(merchantName))
-            {
-                Dictionary<String, String> merchantUsersList = this.MerchantUsersTokens[merchantName];
-                if (merchantUsersList.ContainsKey(userName) == false)
-                {
-                    merchantUsersList.Add(userName, token);
-                }
-            }
-            else
-            {
-                Dictionary<String, String> merchantUsersList = new Dictionary<String, String>();
-                merchantUsersList.Add(userName, token);
-                this.MerchantUsersTokens.Add(merchantName, merchantUsersList);
-            }
-        }
+    //    public void AddMerchantUserToken(String merchantName,
+    //                                     String userName,
+    //                                     String token)
+    //    {
+    //        if (this.MerchantUsersTokens.ContainsKey(merchantName))
+    //        {
+    //            Dictionary<String, String> merchantUsersList = this.MerchantUsersTokens[merchantName];
+    //            if (merchantUsersList.ContainsKey(userName) == false)
+    //            {
+    //                merchantUsersList.Add(userName, token);
+    //            }
+    //        }
+    //        else
+    //        {
+    //            Dictionary<String, String> merchantUsersList = new Dictionary<String, String>();
+    //            merchantUsersList.Add(userName, token);
+    //            this.MerchantUsersTokens.Add(merchantName, merchantUsersList);
+    //        }
+    //    }
 
-        public void AddOperator(Guid operatorId,
-                                String operatorName)
-        {
-            this.Operators.Add(operatorName, operatorId);
-        }
+    //    public void AddOperator(Guid operatorId,
+    //                            String operatorName)
+    //    {
+    //        this.Operators.Add(operatorName, operatorId);
+    //    }
 
-        public void AddTransactionResponse(Guid merchantId,
-                                           String transactionNumber,
-                                           String transactionType,
-                                           String transactionResponse)
-        {
-            this.TransactionResponses.Add((merchantId, transactionNumber, transactionType), transactionResponse);
-        }
+    //    public void AddTransactionResponse(Guid merchantId,
+    //                                       String transactionNumber,
+    //                                       String transactionType,
+    //                                       String transactionResponse)
+    //    {
+    //        this.TransactionResponses.Add((merchantId, transactionNumber, transactionType), transactionResponse);
+    //    }
 
-        public void AddReconciliationResponse(Guid merchantId,
-                                           String transactionResponse)
-        {
-            this.ReconciliationResponses.Add(merchantId, transactionResponse);
-        }
+    //    public void AddReconciliationResponse(Guid merchantId,
+    //                                       String transactionResponse)
+    //    {
+    //        this.ReconciliationResponses.Add(merchantId, transactionResponse);
+    //    }
 
-        public static EstateDetails Create(Guid estateId,
-                                           String estateName)
-        {
-            return new EstateDetails(estateId, estateName);
-        }
+    //    public static EstateDetails Create(Guid estateId,
+    //                                       String estateName)
+    //    {
+    //        return new EstateDetails(estateId, estateName);
+    //    }
 
-        /// <summary>
-        /// Gets the contract.
-        /// </summary>
-        /// <param name="contractName">Name of the contract.</param>
-        /// <returns></returns>
-        public Contract GetContract(String contractName)
-        {
-            if (this.Contracts.Any() == false)
-            {
-                return null;
-            }
+    //    /// <summary>
+    //    /// Gets the contract.
+    //    /// </summary>
+    //    /// <param name="contractName">Name of the contract.</param>
+    //    /// <returns></returns>
+    //    public Contract GetContract(String contractName)
+    //    {
+    //        if (this.Contracts.Any() == false)
+    //        {
+    //            return null;
+    //        }
 
-            return this.Contracts.Single(c => c.Description == contractName);
-        }
+    //        return this.Contracts.Single(c => c.Description == contractName);
+    //    }
 
-        /// <summary>
-        /// Gets the contract.
-        /// </summary>
-        /// <param name="contractId">The contract identifier.</param>
-        /// <returns></returns>
-        public Contract GetContract(Guid contractId)
-        {
-            return this.Contracts.Single(c => c.ContractId == contractId);
-        }
+    //    /// <summary>
+    //    /// Gets the contract.
+    //    /// </summary>
+    //    /// <param name="contractId">The contract identifier.</param>
+    //    /// <returns></returns>
+    //    public Contract GetContract(Guid contractId)
+    //    {
+    //        return this.Contracts.Single(c => c.ContractId == contractId);
+    //    }
 
-        public List<Guid> GetAllMerchantIds()
-        {
-            return this.Merchants.Select(m => m.Value).ToList();
-        }
+    //    public List<Guid> GetAllMerchantIds()
+    //    {
+    //        return this.Merchants.Select(m => m.Value).ToList();
+    //    }
 
-        public Guid GetMerchantId(String merchantName)
-        {
-            return this.Merchants.Single(m => m.Key == merchantName).Value;
-        }
+    //    public Guid GetMerchantId(String merchantName)
+    //    {
+    //        return this.Merchants.Single(m => m.Key == merchantName).Value;
+    //    }
 
-        public String GetMerchantUserToken(String merchantName)
-        {
-            KeyValuePair<String, Dictionary<String, String>> x = this.MerchantUsersTokens.SingleOrDefault(x => x.Key == merchantName);
+    //    public String GetMerchantUserToken(String merchantName)
+    //    {
+    //        KeyValuePair<String, Dictionary<String, String>> x = this.MerchantUsersTokens.SingleOrDefault(x => x.Key == merchantName);
 
-            if (x.Value != null)
-            {
-                return x.Value.First().Value;
-            }
+    //        if (x.Value != null)
+    //        {
+    //            return x.Value.First().Value;
+    //        }
 
-            return string.Empty;
-        }
+    //        return string.Empty;
+    //    }
 
-        public Guid GetOperatorId(String operatorName)
-        {
-            return this.Operators.Single(o => o.Key == operatorName).Value;
-        }
+    //    public Guid GetOperatorId(String operatorName)
+    //    {
+    //        return this.Operators.Single(o => o.Key == operatorName).Value;
+    //    }
 
-        public String GetReconciliationResponse(Guid merchantId)
-        {
-            var reconciliationResponse =
-                this.ReconciliationResponses
-                    .Where(t => t.Key == merchantId)
-                    .SingleOrDefault();
+    //    public String GetReconciliationResponse(Guid merchantId)
+    //    {
+    //        var reconciliationResponse =
+    //            this.ReconciliationResponses
+    //                .Where(t => t.Key == merchantId)
+    //                .SingleOrDefault();
 
-            return reconciliationResponse.Value;
-        }
+    //        return reconciliationResponse.Value;
+    //    }
 
-        public String GetTransactionResponse(Guid merchantId,
-                                             String transactionNumber,
-                                             String transactionType)
-        {
-            KeyValuePair<(Guid merchantId, String transactionNumber, String transactionType), String> transactionResponse =
-                this.TransactionResponses
-                    .Where(t => t.Key.merchantId == merchantId && t.Key.transactionNumber == transactionNumber && t.Key.transactionType == transactionType)
-                    .SingleOrDefault();
+    //    public String GetTransactionResponse(Guid merchantId,
+    //                                         String transactionNumber,
+    //                                         String transactionType)
+    //    {
+    //        KeyValuePair<(Guid merchantId, String transactionNumber, String transactionType), String> transactionResponse =
+    //            this.TransactionResponses
+    //                .Where(t => t.Key.merchantId == merchantId && t.Key.transactionNumber == transactionNumber && t.Key.transactionType == transactionType)
+    //                .SingleOrDefault();
 
-            return transactionResponse.Value;
-        }
+    //        return transactionResponse.Value;
+    //    }
 
-        public void SetEstateUser(String userName,
-                                  String password)
-        {
-            this.EstateUser = userName;
-            this.EstatePassword = password;
-        }
+    //    public void SetEstateUser(String userName,
+    //                              String password)
+    //    {
+    //        this.EstateUser = userName;
+    //        this.EstatePassword = password;
+    //    }
 
-        public void SetEstateUserToken(String accessToken)
-        {
-            this.AccessToken = accessToken;
-        }
+    //    public void SetEstateUserToken(String accessToken)
+    //    {
+    //        this.AccessToken = accessToken;
+    //    }
 
-        #endregion
-    }
+    //    #endregion
+    //}
 
-    public class Product
-    {
-        #region Properties
+    //public class Product
+    //{
+    //    #region Properties
 
-        /// <summary>
-        /// Gets or sets the display text.
-        /// </summary>
-        /// <value>
-        /// The display text.
-        /// </value>
-        public String DisplayText { get; set; }
+    //    /// <summary>
+    //    /// Gets or sets the display text.
+    //    /// </summary>
+    //    /// <value>
+    //    /// The display text.
+    //    /// </value>
+    //    public String DisplayText { get; set; }
 
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
-        public String Name { get; set; }
+    //    /// <summary>
+    //    /// Gets or sets the name.
+    //    /// </summary>
+    //    /// <value>
+    //    /// The name.
+    //    /// </value>
+    //    public String Name { get; set; }
 
-        /// <summary>
-        /// Gets or sets the product identifier.
-        /// </summary>
-        /// <value>
-        /// The product identifier.
-        /// </value>
-        public Guid ProductId { get; set; }
+    //    /// <summary>
+    //    /// Gets or sets the product identifier.
+    //    /// </summary>
+    //    /// <value>
+    //    /// The product identifier.
+    //    /// </value>
+    //    public Guid ProductId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the transaction fees.
-        /// </summary>
-        /// <value>
-        /// The transaction fees.
-        /// </value>
-        public List<TransactionFee> TransactionFees { get; set; }
+    //    /// <summary>
+    //    /// Gets or sets the transaction fees.
+    //    /// </summary>
+    //    /// <value>
+    //    /// The transaction fees.
+    //    /// </value>
+    //    public List<TransactionFee> TransactionFees { get; set; }
 
-        /// <summary>
-        /// Gets or sets the value.
-        /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
-        public Decimal? Value { get; set; }
+    //    /// <summary>
+    //    /// Gets or sets the value.
+    //    /// </summary>
+    //    /// <value>
+    //    /// The value.
+    //    /// </value>
+    //    public Decimal? Value { get; set; }
 
-        #endregion
+    //    #endregion
 
-        #region Methods
+    //    #region Methods
 
-        /// <summary>
-        /// Adds the transaction fee.
-        /// </summary>
-        /// <param name="transactionFeeId">The transaction fee identifier.</param>
-        /// <param name="calculationType">Type of the calculation.</param>
-        /// <param name="description">The description.</param>
-        /// <param name="value">The value.</param>
-        public void AddTransactionFee(Guid transactionFeeId,
-                                      CalculationType calculationType,
-                                      String description,
-                                      Decimal value)
-        {
-            TransactionFee transactionFee = new TransactionFee
-            {
-                TransactionFeeId = transactionFeeId,
-                CalculationType = calculationType,
-                Description = description,
-                Value = value
-            };
+    //    /// <summary>
+    //    /// Adds the transaction fee.
+    //    /// </summary>
+    //    /// <param name="transactionFeeId">The transaction fee identifier.</param>
+    //    /// <param name="calculationType">Type of the calculation.</param>
+    //    /// <param name="description">The description.</param>
+    //    /// <param name="value">The value.</param>
+    //    public void AddTransactionFee(Guid transactionFeeId,
+    //                                  CalculationType calculationType,
+    //                                  String description,
+    //                                  Decimal value)
+    //    {
+    //        TransactionFee transactionFee = new TransactionFee
+    //        {
+    //            TransactionFeeId = transactionFeeId,
+    //            CalculationType = calculationType,
+    //            Description = description,
+    //            Value = value
+    //        };
 
-            if (this.TransactionFees == null)
-            {
-                this.TransactionFees = new List<TransactionFee>();
-            }
+    //        if (this.TransactionFees == null)
+    //        {
+    //            this.TransactionFees = new List<TransactionFee>();
+    //        }
 
-            this.TransactionFees.Add(transactionFee);
-        }
+    //        this.TransactionFees.Add(transactionFee);
+    //    }
 
-        /// <summary>
-        /// Gets the transaction fee.
-        /// </summary>
-        /// <param name="transactionFeeId">The transaction fee identifier.</param>
-        /// <returns></returns>
-        public TransactionFee GetTransactionFee(Guid transactionFeeId)
-        {
-            return this.TransactionFees.SingleOrDefault(t => t.TransactionFeeId == transactionFeeId);
-        }
+    //    /// <summary>
+    //    /// Gets the transaction fee.
+    //    /// </summary>
+    //    /// <param name="transactionFeeId">The transaction fee identifier.</param>
+    //    /// <returns></returns>
+    //    public TransactionFee GetTransactionFee(Guid transactionFeeId)
+    //    {
+    //        return this.TransactionFees.SingleOrDefault(t => t.TransactionFeeId == transactionFeeId);
+    //    }
 
-        /// <summary>
-        /// Gets the transaction fee.
-        /// </summary>
-        /// <param name="description">The description.</param>
-        /// <returns></returns>
-        public TransactionFee GetTransactionFee(String description)
-        {
-            return this.TransactionFees.SingleOrDefault(t => t.Description == description);
-        }
+    //    /// <summary>
+    //    /// Gets the transaction fee.
+    //    /// </summary>
+    //    /// <param name="description">The description.</param>
+    //    /// <returns></returns>
+    //    public TransactionFee GetTransactionFee(String description)
+    //    {
+    //        return this.TransactionFees.SingleOrDefault(t => t.Description == description);
+    //    }
 
-        #endregion
-    }
+    //    #endregion
+    //}
 
     public class TransactionFee
     {
@@ -765,113 +768,113 @@ namespace TransactionMobile.Maui.UiTests.Common
     {
         public String ClientId { get; private set; }
         public String ClientSecret { get; private set; }
-        public String GrantType { get; private set; }
+        public List<String> GrantTypes { get; private set; }
 
         private ClientDetails(String clientId,
                               String clientSecret,
-                              String grantType)
+                              List<String> grantTypes)
         {
             this.ClientId = clientId;
             this.ClientSecret = clientSecret;
-            this.GrantType = grantType;
+            this.GrantTypes = grantTypes;
         }
 
         public static ClientDetails Create(String clientId,
                                            String clientSecret,
-                                           String grantType)
+                                           List<String> grantTypes)
         {
-            return new ClientDetails(clientId, clientSecret, grantType);
+            return new ClientDetails(clientId, clientSecret, grantTypes);
         }
     }
 
-    public class Contract
-    {
-        #region Properties
+    //public class Contract
+    //{
+    //    #region Properties
 
-        /// <summary>
-        /// Gets or sets the contract identifier.
-        /// </summary>
-        /// <value>
-        /// The contract identifier.
-        /// </value>
-        public Guid ContractId { get; set; }
+    //    /// <summary>
+    //    /// Gets or sets the contract identifier.
+    //    /// </summary>
+    //    /// <value>
+    //    /// The contract identifier.
+    //    /// </value>
+    //    public Guid ContractId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the description.
-        /// </summary>
-        /// <value>
-        /// The description.
-        /// </value>
-        public String Description { get; set; }
+    //    /// <summary>
+    //    /// Gets or sets the description.
+    //    /// </summary>
+    //    /// <value>
+    //    /// The description.
+    //    /// </value>
+    //    public String Description { get; set; }
 
-        /// <summary>
-        /// Gets or sets the operator identifier.
-        /// </summary>
-        /// <value>
-        /// The operator identifier.
-        /// </value>
-        public Guid OperatorId { get; set; }
+    //    /// <summary>
+    //    /// Gets or sets the operator identifier.
+    //    /// </summary>
+    //    /// <value>
+    //    /// The operator identifier.
+    //    /// </value>
+    //    public Guid OperatorId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the products.
-        /// </summary>
-        /// <value>
-        /// The products.
-        /// </value>
-        public List<Product> Products { get; set; }
+    //    /// <summary>
+    //    /// Gets or sets the products.
+    //    /// </summary>
+    //    /// <value>
+    //    /// The products.
+    //    /// </value>
+    //    public List<Product> Products { get; set; }
 
-        #endregion
+    //    #endregion
 
-        #region Methods
+    //    #region Methods
 
-        /// <summary>
-        /// Adds the product.
-        /// </summary>
-        /// <param name="productId">The product identifier.</param>
-        /// <param name="name">The name.</param>
-        /// <param name="displayText">The display text.</param>
-        /// <param name="value">The value.</param>
-        public void AddProduct(Guid productId,
-                               String name,
-                               String displayText,
-                               Decimal? value = null)
-        {
-            Product product = new Product
-            {
-                ProductId = productId,
-                DisplayText = displayText,
-                Name = name,
-                Value = value
-            };
+    //    /// <summary>
+    //    /// Adds the product.
+    //    /// </summary>
+    //    /// <param name="productId">The product identifier.</param>
+    //    /// <param name="name">The name.</param>
+    //    /// <param name="displayText">The display text.</param>
+    //    /// <param name="value">The value.</param>
+    //    public void AddProduct(Guid productId,
+    //                           String name,
+    //                           String displayText,
+    //                           Decimal? value = null)
+    //    {
+    //        Product product = new Product
+    //        {
+    //            ProductId = productId,
+    //            DisplayText = displayText,
+    //            Name = name,
+    //            Value = value
+    //        };
 
-            if (this.Products == null)
-            {
-                this.Products = new List<Product>();
-            }
+    //        if (this.Products == null)
+    //        {
+    //            this.Products = new List<Product>();
+    //        }
 
-            this.Products.Add(product);
-        }
+    //        this.Products.Add(product);
+    //    }
 
-        /// <summary>
-        /// Gets the product.
-        /// </summary>
-        /// <param name="productId">The product identifier.</param>
-        /// <returns></returns>
-        public Product GetProduct(Guid productId)
-        {
-            return this.Products.SingleOrDefault(p => p.ProductId == productId);
-        }
+    //    /// <summary>
+    //    /// Gets the product.
+    //    /// </summary>
+    //    /// <param name="productId">The product identifier.</param>
+    //    /// <returns></returns>
+    //    public Product GetProduct(Guid productId)
+    //    {
+    //        return this.Products.SingleOrDefault(p => p.ProductId == productId);
+    //    }
 
-        /// <summary>
-        /// Gets the product.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <returns></returns>
-        public Product GetProduct(String name)
-        {
-            return this.Products.SingleOrDefault(p => p.Name == name);
-        }
+    //    /// <summary>
+    //    /// Gets the product.
+    //    /// </summary>
+    //    /// <param name="name">The name.</param>
+    //    /// <returns></returns>
+    //    public Product GetProduct(String name)
+    //    {
+    //        return this.Products.SingleOrDefault(p => p.Name == name);
+    //    }
 
-        #endregion
-    }
+    //    #endregion
+    //}
 }

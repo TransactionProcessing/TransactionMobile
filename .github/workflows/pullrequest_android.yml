@@ -69,7 +69,7 @@ jobs:
         uses: malinskiy/action-android/emulator-run-cmd@release/0.1.4
         with:
           cmd: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRNavTest)&(Category=Android)
-          api: 28
+          api: 29
           tag: default
           abi: x86   
           verbose: false
@@ -147,7 +147,7 @@ jobs:
         uses: malinskiy/action-android/emulator-run-cmd@release/0.1.4
         with:
           cmd: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)
-          api: 28
+          api: 29
           tag: default
           abi: x86   
           verbose: false

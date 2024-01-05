@@ -9,6 +9,7 @@ namespace TransactionMobile.Maui.UITests.Steps
     using System.Runtime.CompilerServices;
     using System.Threading;
     using EstateManagement.DataTransferObjects.Requests;
+    using EstateManagement.IntegrationTesting.Helpers;
     using TechTalk.SpecFlow;
     using TransactionMobile.Maui.UiTests.Common;
 
@@ -46,7 +47,7 @@ namespace TransactionMobile.Maui.UITests.Steps
                                                                             };
             Guid estateId = this.TestingContext.GetAllEstateIds().Single();
             EstateDetails estate = this.TestingContext.GetEstateDetails(estateId);
-            Guid merchantId = estate.GetAllMerchantIds().Single();
+            Guid merchantId = estate.GetMerchantId("Test Merchant 1"); // TODO: stop this from being hard coded
             await this.TestingContext.DockerHelper.EstateClient.AddDeviceToMerchant(this.TestingContext.AccessToken, estateId, merchantId, request, CancellationToken.None);
         }
         

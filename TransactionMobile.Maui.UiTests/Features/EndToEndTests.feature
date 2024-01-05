@@ -4,7 +4,7 @@ Feature: EndToEndTests
 Background: 
 
 	Given the following security roles exist
-	| RoleName |
+	| Role Name |
 	| Merchant   |
 
 	Given I create the following api scopes
@@ -15,14 +15,14 @@ Background:
 	| voucherManagement | Voucher Management REST  Scope | A scope for Voucher Management REST |
 
 	Given the following api resources exist
-	| ResourceName            | DisplayName                    | Secret  | Scopes                  | UserClaims                 |
+	| Name            | DisplayName                    | Secret  | Scopes                  | UserClaims                 |
 	| estateManagement        | Estate Managememt REST         | Secret1 | estateManagement        | merchantId, estateId, role |
 	| transactionProcessor    | Transaction Processor REST     | Secret1 | transactionProcessor    |                            |
 	| transactionProcessorACL | Transaction Processor ACL REST | Secret1 | transactionProcessorACL | merchantId, estateId, role |
 	| voucherManagement       | Voucher Management REST        | Secret1 | voucherManagement       |                            |
 
 	Given the following clients exist
-	| ClientId        | ClientName        | Secret  | AllowedScopes                                                                   | AllowedGrantTypes  |
+	| ClientId        | ClientName        | Secret  | Scopes                                                                   | GrantTypes  |
 	| serviceClient   | Service Client    | Secret1 | estateManagement,transactionProcessor,transactionProcessorACL,voucherManagement | client_credentials |
 	| mobileAppClient | Mobile App Client | Secret1 | transactionProcessorACL                                                         | password           |
 
@@ -45,9 +45,9 @@ Background:
 	| Test Estate 1 | Voucher      | Hospital 1 Contract |
 
 	When I create the following Products
-	| EstateName    | OperatorName | ContractDescription | ProductName    | DisplayText | Value |
-	| Test Estate 1 | Safaricom    | Safaricom Contract  | Variable Topup | Custom      |       |
-	| Test Estate 1 | Voucher      | Hospital 1 Contract | 10 KES         | 10 KES      |       |
+	| EstateName    | OperatorName | ContractDescription | ProductName    | DisplayText | Value |ProductType |
+	| Test Estate 1 | Safaricom    | Safaricom Contract  | Variable Topup | Custom      |       |MobileTopup |
+	| Test Estate 1 | Voucher      | Hospital 1 Contract | 10 KES         | 10 KES      |       |Voucher     |
 
 	When I add the following Transaction Fees
 	| EstateName    | OperatorName | ContractDescription | ProductName    | CalculationType | FeeDescription      | Value |
@@ -65,6 +65,11 @@ Background:
 	Given I have assigned the following devices to the merchants
 	| MerchantName    | EstateName    |
 	| Test Merchant 1 | Test Estate 1 |
+
+	When I add the following contracts to the following merchants
+	| EstateName    | MerchantName    | ContractDescription       |
+	| Test Estate 1 | Test Merchant 1 | Safaricom Contract        |
+	| Test Estate 1 | Test Merchant 1 | Hospital 1 Contract       |
 
 	Given I have created the following security users
 	| EmailAddress                  | Password | GivenName    | FamilyName | EstateName    | MerchantName    |
