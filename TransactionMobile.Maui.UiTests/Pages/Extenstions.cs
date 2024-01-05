@@ -38,7 +38,7 @@ public static class Extenstions
             _ => timeout.Value
         };
 
-        if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows && i != 0){
+        if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows && i == 1){
             
             await Retry.For(async () => {
                                 for (int i = 0; i < 10; i++){

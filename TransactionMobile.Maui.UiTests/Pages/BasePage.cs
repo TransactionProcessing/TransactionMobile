@@ -108,9 +108,9 @@ namespace TransactionMobile.Maui.UITests
             return element.Text;
         }
 
-        internal async Task<IWebElement> WaitForElementByAccessibilityId(String accessibilityId, TimeSpan? timeout = null)
+        internal async Task<IWebElement> WaitForElementByAccessibilityId(String accessibilityId, TimeSpan? timeout = null, Int32 i  = 0)
         {
-            return await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId(accessibilityId, timeout);
+            return await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId(accessibilityId, timeout, i);
         }
 
         internal async Task WaitForNoElementByAccessibilityId(String accessibilityId, TimeSpan? timeout = null)

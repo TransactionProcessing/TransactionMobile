@@ -39,7 +39,7 @@ public class MainPage : BasePage2
     }
 
     public async Task ClickTransactionsButton(){
-        var element = await this.WaitForElementByAccessibilityId(this.TransactionsButton);//, i:1);
+        var element = await this.WaitForElementByAccessibilityId(this.TransactionsButton, i:1);
         element.Click();
     }
 
@@ -50,7 +50,7 @@ public class MainPage : BasePage2
     }
 
     public async Task ClickProfileButton() {
-        var element = await this.WaitForElementByAccessibilityId(this.ProfileButton);//,i:1);
+        var element = await this.WaitForElementByAccessibilityId(this.ProfileButton,i:1);
         element.Click();
     }
 
