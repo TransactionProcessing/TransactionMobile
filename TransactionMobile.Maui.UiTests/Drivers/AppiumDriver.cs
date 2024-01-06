@@ -16,8 +16,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
     using System.Threading;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Appium.Windows;
-    using OpenQA.Selenium.DevTools.V104.SystemInfo;
-
+    
     public enum MobileTestPlatform
     {
         iOS,
@@ -94,7 +93,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption("adbExecTimeout", TimeSpan.FromMinutes(5).TotalMilliseconds);
             driverOptions.AutomationName = "UIAutomator2";
             driverOptions.PlatformName = "Android";
-            driverOptions.PlatformVersion = "9.0";
+            driverOptions.PlatformVersion = "10.0";
             driverOptions.DeviceName = "emulator-5554";
             
             // TODO: Only do this locally

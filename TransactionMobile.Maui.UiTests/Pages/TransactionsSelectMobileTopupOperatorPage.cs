@@ -7,7 +7,7 @@ using Shared.IntegrationTesting;
 using TransactionMobile.Maui.UiTests.Common;
 using UITests;
 
-public class TransactionsMobileTopupSelectOperatorPage : BasePage
+public class TransactionsMobileTopupSelectOperatorPage : BasePage2
 {
     public TransactionsMobileTopupSelectOperatorPage(TestingContext testingContext) : base(testingContext)
     {

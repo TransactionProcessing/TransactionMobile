@@ -33,9 +33,13 @@ public static class Extenstions
                                                                Int32 i = 0) {
         IWebElement? element = null;
 
-        if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows && i != 0){
+        TimeSpan retryFor = timeout switch{
+            null => TimeSpan.FromSeconds(60),
+            _ => timeout.Value
+        };
+
+        if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows && i == 1){
             
-            timeout ??= TimeSpan.FromSeconds(60);
             await Retry.For(async () => {
                                 for (int i = 0; i < 10; i++){
                                     String message = $"Unable to find element on page: {selector} {Environment.NewLine} Source: {AppiumDriverWrapper.Driver.PageSource}";
@@ -44,11 +48,10 @@ public static class Extenstions
                                     element = elements.SingleOrDefault(e => e.Text == selector);
                                     element.ShouldNotBeNull();
                                 }
-                            });
+                            }, retryFor);
             return element;
         }
         
-        timeout ??= TimeSpan.FromSeconds(60);
         await Retry.For(async () => {
                             for (int i = 0; i < 10; i++) {
 
@@ -59,7 +62,7 @@ public static class Extenstions
                                 // All good so exit the loop
                                 break;
                             }
-                        });
+                        }, retryFor);
         return element;
     }
     
@@ -94,13 +97,17 @@ public static class Extenstions
                                                                String selector,
                                                                TimeSpan? timeout = null)
     {
-        timeout ??= TimeSpan.FromSeconds(60);
+        TimeSpan retryFor = timeout switch
+        {
+            null => TimeSpan.FromSeconds(60),
+            _ => timeout.Value
+        };
 
         await Retry.For(async () =>
                         {
                             IWebElement? element = driver.FindElement(MobileBy.AccessibilityId(selector));
                             element.ShouldBeNull();
-                        }, timeout);
+                        }, retryFor);
 
     }
 

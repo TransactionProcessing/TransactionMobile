@@ -12,7 +12,7 @@ using Shouldly;
 using UiTests.Common;
 using UiTests.Drivers;
 
-public class MainPage : BasePage
+public class MainPage : BasePage2
 {
     protected override String Trait => "Home";
 

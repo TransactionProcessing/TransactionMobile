@@ -7,7 +7,7 @@
     using TransactionMobile.Maui.UiTests.Common;
     using UITests;
 
-    public class ProfilePage : BasePage
+    public class ProfilePage : BasePage2
     {
         #region Fields
 

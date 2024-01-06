@@ -10,7 +10,7 @@ using Shared.IntegrationTesting;
 using Shouldly;
 using UiTests.Common;
 
-public class LoginPage : BasePage
+public class LoginPage : BasePage2
 {
     protected override String Trait => "LoginLabel";
 

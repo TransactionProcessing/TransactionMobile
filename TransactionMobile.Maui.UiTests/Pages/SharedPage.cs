@@ -14,7 +14,7 @@ namespace TransactionMobile.Maui.UiTests.Pages
     using TransactionMobile.Maui.UiTests.Drivers;
     using UITests;
 
-    public class SharedPage : BasePage
+    public class SharedPage : BasePage2
     {
         protected override String Trait => String.Empty;
         private readonly String BackButton;
