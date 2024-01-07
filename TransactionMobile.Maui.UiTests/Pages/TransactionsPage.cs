@@ -21,15 +21,23 @@ public class TransactionsPage : BasePage2
     }
 
     private readonly String MobileTopupButton;
-    
+    private readonly String VoucherButton;
+
 
     public TransactionsPage(TestingContext testingContext) : base(testingContext)
     {
         this.MobileTopupButton = "MobileTopupButton";
+        this.VoucherButton = "VoucherButton";
     }
     public async Task ClickMobileTopupButton()
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.MobileTopupButton);
+        element.Click();
+    }
+
+    public async Task ClickVoucherButton()
+    {
+        IWebElement element = await this.WaitForElementByAccessibilityId(this.VoucherButton);
         element.Click();
     }
 }

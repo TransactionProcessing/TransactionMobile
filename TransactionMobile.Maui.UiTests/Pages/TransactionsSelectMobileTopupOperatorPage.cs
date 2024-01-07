@@ -111,6 +111,133 @@ public class TransactionsMobileTopupSuccessfulTopupPage : BasePage {
     }
 
     #endregion
+}
+
+public class TransactionsVoucherSelectOperatorPage : BasePage2
+{
+    public TransactionsVoucherSelectOperatorPage(TestingContext testingContext) : base(testingContext)
+    {
+
+    }
+
+    #region Properties
+
+    protected override String Trait => "Select an Operator";
+
+    #endregion
+
+    public async Task ClickOperatorButton(String operatorName)
+    {
+        IWebElement element = await this.WaitForElementByAccessibilityId(operatorName);
+        element.Click();
+    }
+}
+
+public class TransactionsVoucherSelectProductPage : BasePage
+{
+    public TransactionsVoucherSelectProductPage(TestingContext testingContext) : base(testingContext)
+    {
+
+    }
+
+    #region Properties
+
+    protected override String Trait => "Select a Product";
+
+    #endregion
+
+    public async Task ClickProductButton(String productText)
+    {
+        IWebElement element = await this.WaitForElementByAccessibilityId(productText);
+        element.Click();
+    }
+}
+
+public class TransactionsVoucherEnterVoucherIssueDetailsPage : BasePage
+{
+
+    private readonly String RecipientMobileNumberEntry;
+    private readonly String RecipientEmailAddressEntry;
+    private readonly String VoucherAmountEntry;
+    private readonly String CustomerEmailAddressEntry;
+    private readonly String IssueVoucherButton;
+
+    public TransactionsVoucherEnterVoucherIssueDetailsPage(TestingContext testingContext) : base(testingContext)
+    {
+        this.RecipientMobileNumberEntry = "RecipientMobileNumberEntry";
+        this.RecipientEmailAddressEntry = "RecipientEmailAddressEntry";
+        this.VoucherAmountEntry = "VoucherAmountEntry";
+        this.CustomerEmailAddressEntry = "CustomerEmailAddressEntry";
+        this.IssueVoucherButton = "IssueVoucherButton";
+    }
+
+    #region Properties
+
+    protected override String Trait => "Enter Voucher Issue Details";
+
+    public async Task EnterRecipientMobileNumber(String recipientMobileNumber)
+    {
+        IWebElement element = await this.WaitForElementByAccessibilityId(this.RecipientMobileNumberEntry);
+
+        element.SendKeys(recipientMobileNumber);
+    }
+
+    public async Task EnterRecipientEmailAddress(String recipientEmailAddress)
+    {
+        IWebElement element = await this.WaitForElementByAccessibilityId(this.RecipientEmailAddressEntry);
+
+        element.SendKeys(recipientEmailAddress);
+    }
+
+    public async Task EnterVoucherAmount(String voucherAmount)
+    {
+        IWebElement element = await this.WaitForElementByAccessibilityId(this.VoucherAmountEntry);
+
+        element.SendKeys(voucherAmount);
+    }
+
+    public async Task EnterCustomerEmailAddress(String customerEmailAddress)
+    {
+        IWebElement element = await this.WaitForElementByAccessibilityId(this.CustomerEmailAddressEntry);
+
+        element.SendKeys(customerEmailAddress);
+    }
+
+    public async Task ClickIssueVoucherButton()
+    {
+        await Retry.For(async () => {
+                            IWebElement element = await this.WaitForElementByAccessibilityId(this.IssueVoucherButton);
+                            //element.Displayed.ShouldBeTrue();
+                            element.Click();
+                        });
+    }
+
+    #endregion
+}
 
 
+public class TransactionsVoucherIssueSuccessfulTopupPage : BasePage
+{
+
+    private readonly String CompleteButton;
+
+    public TransactionsVoucherIssueSuccessfulTopupPage(TestingContext testingContext) : base(testingContext)
+    {
+        this.CompleteButton = "CompleteButton";
+    }
+
+    #region Properties
+
+    protected override String Trait => "Voucher Issue Successful";
+
+    public async Task ClickCompleteButton()
+    {
+        await Retry.For(async () => {
+                            IWebElement element = await this.WaitForElementByAccessibilityId(this.CompleteButton);
+                            //element.Displayed.ShouldBeTrue();
+                            element.Click();
+                        });
+    }
+
+    #endregion
 }
