@@ -133,7 +133,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
 
                                     this.TestingContext.AddEstateDetails(verifiedEstate.EstateId, verifiedEstate.EstateName, verifiedEstate.EstateReference);
                                     this.TestingContext.Logger.LogInformation($"Estate {verifiedEstate.EstateName} created with Id {verifiedEstate.EstateId}");
-                                });
+                                }, TimeSpan.FromMinutes(2));
             }
         }
 
