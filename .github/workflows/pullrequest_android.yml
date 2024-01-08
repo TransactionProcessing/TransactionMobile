@@ -67,8 +67,11 @@ jobs:
 
       - name: Set up Android Emulator
         run: |
-          echo "y" | sdkmanager --install "system-images;android-29;google_apis;x86"
-          echo "no" | avdmanager --verbose create avd --force --name emulator --package "system-images;android-29;google_apis;x86" --abi "google_apis/x86" --device "pixel" --sdcard 512M
+          mkdir android
+          curl -o android/commandlinetools.zip https://dl.google.com/android/repository/commandlinetools-win-6858069_latest.zip
+          tar -xf android/commandlinetools.zip -C android/
+          echo "y" | android/cmdline-tools/bin/sdkmanager --install "system-images;android-29;google_apis;x86"
+          echo "no" | android/cmdline-tools/bin/avdmanager --verbose create avd --force --name emulator --package "system-images;android-29;google_apis;x86" --abi "google_apis/x86" --device "pixel" --sdcard 512M
           emulator -avd emulator -no-audio -no-window -gpu swiftshader -no-boot-anim
           adb wait-for-device
           adb shell input keyevent 82
@@ -99,8 +102,11 @@ jobs:
 
       - name: Set up Android Emulator
         run: |
-          echo "y" | sdkmanager --install "system-images;android-29;google_apis;x86"
-          echo "no" | avdmanager --verbose create avd --force --name emulator --package "system-images;android-29;google_apis;x86" --abi "google_apis/x86" --device "pixel" --sdcard 512M
+          mkdir android
+          curl -o android/commandlinetools.zip https://dl.google.com/android/repository/commandlinetools-win-6858069_latest.zip
+          tar -xf android/commandlinetools.zip -C android/
+          echo "y" | android/cmdline-tools/bin/sdkmanager --install "system-images;android-29;google_apis;x86"
+          echo "no" | android/cmdline-tools/bin/avdmanager --verbose create avd --force --name emulator --package "system-images;android-29;google_apis;x86" --abi "google_apis/x86" --device "pixel" --sdcard 512M
           emulator -avd emulator -no-audio -no-window -gpu swiftshader -no-boot-anim
           adb wait-for-device
           adb shell input keyevent 82
