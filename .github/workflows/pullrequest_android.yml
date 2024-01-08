@@ -77,6 +77,10 @@ jobs:
       - name: Set up Android Emulator
         run: |
           echo "y" | sdkmanager "platforms;android-29"
+
+          # Display the available system images for verification
+          sdkmanager --list
+
           echo "no" | avdmanager create avd -n emulator -k "system-images;android-29;google_apis;x86" -d 19
 
           # Navigate to the directory containing emulator executable
