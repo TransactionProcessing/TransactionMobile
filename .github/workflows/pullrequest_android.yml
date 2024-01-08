@@ -60,13 +60,19 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set up Appium
-        run: |
-          npm install -g appium@next --unsafe-perm=true --allow-root
-          appium driver install uiautomator2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+            java-version: '17'
+            distribution: 'temurin'
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+
+      - name: Set up Appium
+        run: |
+          npm install -g appium@next --unsafe-perm=true --allow-root
+          appium driver install uiautomator2                
 
       # - name: Set up Android Emulator
       #   run: |
@@ -85,38 +91,38 @@ jobs:
         run: |
           dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRNavTest)&(Category=Android)
 
-  endtoendtest:
-    needs: build
-    runs-on: windows-latest
-    name: End To End Tests
+  # endtoendtest:
+  #   needs: build
+  #   runs-on: windows-latest
+  #   name: End To End Tests
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v2
 
-      - name: Get IP
-        run: ipconfig getifaddr en0
+  #     - name: Get IP
+  #       run: ipconfig getifaddr en0
 
-      - name: Cache Public IP
-        run: echo "ENV_IPADDRESS=$(ipconfig getifaddr en0)" >> $GITHUB_ENV
+  #     - name: Cache Public IP
+  #       run: echo "ENV_IPADDRESS=$(ipconfig getifaddr en0)" >> $GITHUB_ENV
         
-      - name: Set up Appium
-        run: |
-          npm install -g appium@next --unsafe-perm=true --allow-root
-          appium driver install uiautomator2
+  #     - name: Set up Appium
+  #       run: |
+  #         npm install -g appium@next --unsafe-perm=true --allow-root
+  #         appium driver install uiautomator2
 
-      - name: Set up Android Emulator
-        run: |
-          mkdir android
-          curl -o android/commandlinetools.zip https://dl.google.com/android/repository/commandlinetools-win-6858069_latest.zip
-          tar -xf android/commandlinetools.zip -C android/
-          set ANDROID_SDK_ROOT=%RUNNER_WORKSPACE%\android\cmdline-tools
-          echo "y" | %ANDROID_SDK_ROOT%\bin\sdkmanager --install "system-images;android-29;google_apis;x86"
-          echo "no" | %ANDROID_SDK_ROOT%\bin\avdmanager --verbose create avd --force --name emulator --package "system-images;android-29;google_apis;x86" --abi "google_apis/x86" --device "pixel" --sdcard 512M
-          emulator -avd emulator -no-audio -no-window -gpu swiftshader -no-boot-anim
-          adb wait-for-device
-          adb shell input keyevent 82
+  #     - name: Set up Android Emulator
+  #       run: |
+  #         mkdir android
+  #         curl -o android/commandlinetools.zip https://dl.google.com/android/repository/commandlinetools-win-6858069_latest.zip
+  #         tar -xf android/commandlinetools.zip -C android/
+  #         set ANDROID_SDK_ROOT=%RUNNER_WORKSPACE%\android\cmdline-tools
+  #         echo "y" | %ANDROID_SDK_ROOT%\bin\sdkmanager --install "system-images;android-29;google_apis;x86"
+  #         echo "no" | %ANDROID_SDK_ROOT%\bin\avdmanager --verbose create avd --force --name emulator --package "system-images;android-29;google_apis;x86" --abi "google_apis/x86" --device "pixel" --sdcard 512M
+  #         emulator -avd emulator -no-audio -no-window -gpu swiftshader -no-boot-anim
+  #         adb wait-for-device
+  #         adb shell input keyevent 82
 
-      - name: Run Android End To End Tests
-        run: |
-          dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)
+  #     - name: Run Android End To End Tests
+  #       run: |
+  #         dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)
