@@ -19,6 +19,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Setup .NET 7
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 7.0.100   
+
       - name: Install MAUI Workloads
         run: |
           dotnet workload install android --ignore-failed-sources
