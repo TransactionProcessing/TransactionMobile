@@ -76,17 +76,14 @@ jobs:
           # Display the available system images for verification
           sdkmanager --list
 
-          echo "no" | avdmanager create avd -n emulator -k "system-images;android-29;google_apis;x86" -d 19
+          echo "no" | avdmanager create avd -n emulator-5554 -k "system-images;android-29;google_apis;x86" -d 19
 
           # Navigate to the directory containing emulator executable
           cd $env:ANDROID_SDK_ROOT\emulator
 
           # Start the emulator
-          Start-Process -FilePath ".\emulator.exe" -ArgumentList "-avd emulator -no-audio -no-window -gpu swiftshader -no-boot-anim" -PassThru | Wait-Process
-
-          # Print the emulator process exit code
-          Write-Host "Emulator exit code: $LASTEXITCODE"
-
+          emulator -avd emulator-5554 -no-audio -no-window -gpu swiftshader -no-boot-anim
+          
           Write-Host "Sleep started"
           Start-Sleep -s 120  # Wait for the emulator to start
           Write-Host "Sleep finished"          
