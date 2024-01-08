@@ -78,7 +78,17 @@ jobs:
         run: |
           echo "y" | sdkmanager "platforms;android-29"
           echo "no" | avdmanager create avd -n emulator -k "system-images;android-29;google_apis;x86" -d 19
-          emulator -avd emulator -no-audio -no-window -gpu swiftshader -no-boot-anim
+
+          # Navigate to the directory containing emulator executable
+          cd $env:ANDROID_SDK_ROOT\emulator
+
+          # Start the emulator
+          Start-Process -FilePath ".\emulator.exe" -ArgumentList "-avd emulator -no-audio -no-window -gpu swiftshader -no-boot-anim"
+
+          # Wait for the emulator to start
+          Start-Sleep -s 30
+
+          # Ensure the emulator is ready
           adb wait-for-device
           adb shell input keyevent 82
       
