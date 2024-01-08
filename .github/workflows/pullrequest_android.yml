@@ -77,7 +77,7 @@ jobs:
       - name: Set up Android Emulator
         run: |
           echo "y" | sdkmanager "platforms;android-29"
-
+          sdkmanager "system-images;android-29;google_apis;x86"
           # Display the available system images for verification
           sdkmanager --list
 
