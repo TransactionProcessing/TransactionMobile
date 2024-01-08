@@ -82,8 +82,11 @@ jobs:
           cd $env:ANDROID_SDK_ROOT\emulator
 
           # Start the emulator
-          emulator -avd emulator-5554 -no-audio -no-window -gpu swiftshader -no-boot-anim
-          
+          Start-Process -FilePath ".\emulator.exe" -ArgumentList "-avd emulator-5554 -no-audio -no-window -gpu swiftshader -no-boot-anim" -PassThru
+
+          # Print the emulator process exit code
+          Write-Host "Emulator exit code: $LASTEXITCODE"
+
           Write-Host "Sleep started"
           Start-Sleep -s 120  # Wait for the emulator to start
           Write-Host "Sleep finished"          
