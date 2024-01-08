@@ -89,7 +89,7 @@ jobs:
 
       - name: Run Android Navigation Tests
         run: |
-          dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRNavTest)&(Category=Android)
+          dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "Category=PRTest&Category=Android"
 
   # endtoendtest:
   #   needs: build
