@@ -53,7 +53,7 @@ jobs:
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj    
 
   navigationtest:
-    needs: build
+    #needs: build
     runs-on: windows-latest
     name: Navigation Tests
     steps:
@@ -67,12 +67,7 @@ jobs:
             distribution: 'temurin'
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Set up Appium
-        run: |
-          npm install -g appium@next --unsafe-perm=true --allow-root
-          appium driver install uiautomator2                
+        uses: android-actions/setup-android@v3              
 
       - name: Set up Android Emulator
         run: |
@@ -92,10 +87,17 @@ jobs:
           # Print the emulator process exit code
           Write-Host "Emulator exit code: $LASTEXITCODE"
 
+          Start-Sleep -s 60  # Wait for the emulator to start
+
           # Ensure the emulator is ready
           adb wait-for-device
           adb shell input keyevent 82
       
+      - name: Set up Appium
+        run: |
+          npm install -g appium@next --unsafe-perm=true --allow-root
+          appium driver install uiautomator2 
+
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
       
