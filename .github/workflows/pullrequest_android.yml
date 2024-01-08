@@ -87,13 +87,15 @@ jobs:
           # Print the emulator process exit code
           Write-Host "Emulator exit code: $LASTEXITCODE"
 
-          #Write-Host "Sleep started"
-          #Start-Sleep -s 120  # Wait for the emulator to start
-          #Write-Host "Sleep finished"
-          while [ "$(adb shell getprop sys.boot_completed | tr -d '\r\n')" != "1" ]; do
-            echo "Waiting for emulator to boot..."
-            sleep 5
-          done
+          Write-Host "Sleep started"
+          Start-Sleep -s 120  # Wait for the emulator to start
+          Write-Host "Sleep finished"          
+          do {
+            Write-Output "Waiting for emulator to boot..."
+            Start-Sleep -Seconds 5
+            $bootCompleted = adb shell getprop sys.boot_completed | ForEach-Object { $_ -replace '\r|\n' }
+          } while ($bootCompleted -ne "1")
+          
           # Ensure the emulator is ready
           adb wait-for-device
           Write-Host "After wait for device"
