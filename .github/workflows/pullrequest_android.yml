@@ -74,18 +74,14 @@ jobs:
           npm install -g appium@next --unsafe-perm=true --allow-root
           appium driver install uiautomator2                
 
-      # - name: Set up Android Emulator
-      #   run: |
-      #     mkdir android
-      #     Invoke-WebRequest -Uri https://dl.google.com/android/repository/commandlinetools-win-6858069_latest.zip -OutFile android\commandlinetools.zip
-      #     tar -xf android\commandlinetools.zip -C android\
-      #     $env:ANDROID_SDK_ROOT="$env:RUNNER_WORKSPACE\android\cmdline-tools"
-      #     & "$env:ANDROID_SDK_ROOT\bin\sdkmanager" --install "system-images;android-29;google_apis;x86"
-      #     & "$env:ANDROID_SDK_ROOT\bin\avdmanager" --verbose create avd --force --name emulator --package "system-images;android-29;google_apis;x86" --abi "google_apis/x86" --device "pixel" --sdcard 512M
-      #     Start-Process -FilePath "emulator" -ArgumentList "-avd emulator -no-audio -no-window -gpu swiftshader -no-boot-anim"
-      #     Start-Sleep -s 30  # Wait for the emulator to start
-      #     adb wait-for-device
-      #     adb shell input keyevent 82
+      - name: Set up Android Emulator
+        run: |
+          echo "y" | sdkmanager "platforms;android-29"
+          echo "no" | avdmanager create avd -n emulator -k "system-images;android-29;google_apis;x86" -d 19
+          emulator -avd emulator -no-audio -no-window -gpu swiftshader -no-boot-anim
+          adb wait-for-device
+          adb shell input keyevent 82
+      
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
       
