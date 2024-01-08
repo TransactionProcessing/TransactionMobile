@@ -68,12 +68,13 @@ jobs:
       - name: Set up Android Emulator
         run: |
           mkdir android
-          curl -o android/commandlinetools.zip https://dl.google.com/android/repository/commandlinetools-win-6858069_latest.zip
-          tar -xf android/commandlinetools.zip -C android/
+          Invoke-WebRequest -Uri https://dl.google.com/android/repository/commandlinetools-win-6858069_latest.zip -OutFile android\commandlinetools.zip
+          tar -xf android\commandlinetools.zip -C android\
           $env:ANDROID_SDK_ROOT="$env:RUNNER_WORKSPACE\android\cmdline-tools"
-          echo "y" | "$env:ANDROID_SDK_ROOT\bin\sdkmanager" --install "system-images;android-29;google_apis;x86"
-          echo "no" | "$env:ANDROID_SDK_ROOT\bin\avdmanager" --verbose create avd --force --name emulator --package "system-images;android-29;google_apis;x86" --abi "google_apis/x86" --device "pixel" --sdcard 512M
-          emulator -avd emulator -no-audio -no-window -gpu swiftshader -no-boot-anim
+          & "$env:ANDROID_SDK_ROOT\bin\sdkmanager" --install "system-images;android-29;google_apis;x86"
+          & "$env:ANDROID_SDK_ROOT\bin\avdmanager" --verbose create avd --force --name emulator --package "system-images;android-29;google_apis;x86" --abi "google_apis/x86" --device "pixel" --sdcard 512M
+          Start-Process -FilePath "emulator" -ArgumentList "-avd emulator -no-audio -no-window -gpu swiftshader -no-boot-anim"
+          Start-Sleep -s 30  # Wait for the emulator to start
           adb wait-for-device
           adb shell input keyevent 82
 
