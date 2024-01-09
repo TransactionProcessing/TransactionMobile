@@ -5,149 +5,170 @@ on:
     branches: 
     - main
 
-
 env:
   DOTNET_NOLOGO: true                     # Disable the .NET logo
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
-  DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry 
+  DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry  
 
 jobs:
-  build:
-    runs-on: windows-latest
-    name: Android Build
+  build-android-unit-tests :
+    runs-on: macos-12
+    name: Android Build - Unit Tests
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 17
-
-      - name: Setup .NET 7
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: 7.0.100   
-
+      - name: Checkout
+        uses: actions/checkout@v3
+          
       - name: Install MAUI Workloads
         run: |
           dotnet workload install android --ignore-failed-sources
           dotnet workload install maui --ignore-failed-sources 
 
       - name: Restore Dependencies
-        run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+        run: dotnet restore TransactionMobile.Maui.sln --source https://api.nuget.org/v3/index.json --source https://www.myget.org/F/transactionprocessing/api/v3/index.json --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-android --no-restore
 
-  unittest:
-    needs: build
-    runs-on: windows-latest
-    name: Unit Tests
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
       - name: Run Unit Tests
-        run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj    
-
-  navigationtest:
-    #needs: build
-    runs-on: windows-latest
-    name: Navigation Tests
+        run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj              
+        
+  build-android-nondocker:
+    runs-on: macos-12
+    name: Android Build - Navigation Tests
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-            java-version: '17'
-            distribution: 'temurin'
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3              
-
-      - name: Set up Android Emulator
-        run: |
-          echo "y" | sdkmanager "platforms;android-29"
-          sdkmanager "system-images;android-29;google_apis;x86"
-          # Display the available system images for verification
-          sdkmanager --list
-
-          echo "no" | avdmanager create avd -n emulator-5554 -k "system-images;android-29;google_apis;x86" -d 19
-
-          # Navigate to the directory containing emulator executable
-          cd $env:ANDROID_SDK_ROOT\emulator
-
-          # Start the emulator
-          Start-Process -FilePath ".\emulator.exe" -ArgumentList "-avd emulator-5554 -no-audio -no-window -gpu swiftshader -no-boot-anim" -PassThru
-
-          # Print the emulator process exit code
-          Write-Host "Emulator exit code: $LASTEXITCODE"
-
-          Write-Host "Sleep started"
-          Start-Sleep -s 120  # Wait for the emulator to start
-          Write-Host "Sleep finished"          
-          do {
-            Write-Output "Waiting for emulator to boot..."
-            Start-Sleep -Seconds 5
-            $bootCompleted = adb shell getprop sys.boot_completed | ForEach-Object { $_ -replace '\r|\n' }
-          } while ($bootCompleted -ne "1")
+      - name: Checkout
+        uses: actions/checkout@v3
           
-          # Ensure the emulator is ready
-          adb wait-for-device
-          Write-Host "After wait for device"
-          adb shell input keyevent 82
-      
+      - name: Setup Docker
+        run: |
+         brew install docker
+         colima start --cpu 2 --memory 8 --disk 100
+
+      - uses: malinskiy/action-android/install-sdk@release/0.1.1
+      - run: sdkmanager "platform-tools" "platforms;android-33"
+      - run: sdkmanager "build-tools;30.0.2"
+      - run: adb devices
+
       - name: Set up Appium
         run: |
           npm install -g appium@next --unsafe-perm=true --allow-root
-          appium driver install uiautomator2 
+          appium driver install uiautomator2
+          
+      - name: Install MAUI Workloads
+        run: |
+          dotnet workload install android --ignore-failed-sources
+          dotnet workload install maui --ignore-failed-sources 
 
       - name: Restore Dependencies
-        run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
-      
+        run: dotnet restore TransactionMobile.Maui.sln --source https://api.nuget.org/v3/index.json --source https://www.myget.org/F/transactionprocessing/api/v3/index.json --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
       - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-android --no-restore 
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-android --no-restore        
+        
+      - name: Run Navigation Integration Tests - Android
+        uses: malinskiy/action-android/emulator-run-cmd@release/0.1.4
+        with:
+          cmd: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRNavTest)&(Category=Android)
+          api: 29
+          tag: default
+          abi: x86   
+          verbose: false
+          cmdOptions: >
+            -no-window
+            -gpu swiftshader_indirect
+            -no-snapshot
+            -noaudio
+            -no-boot-anim
+            -camera-back none
+            -camera-front none        
+                  
+      - name: Save logcat output
+        uses: actions/upload-artifact@master
+        if: failure()
+        with:
+          name: logcat
+          path: artifacts/logcat.log 
 
-      - name: Run Android Navigation Tests
-        run: |
-          dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "Category=PRNavTest&Category=Android"
-
-  # endtoendtest:
-  #   needs: build
-  #   runs-on: windows-latest
-  #   name: End To End Tests
-
+  # build-android-withdocker:
+  #   runs-on: macos-12
+  #   name: Android Build - End To End Tests
   #   steps:
-  #     - name: Checkout Repository
-  #       uses: actions/checkout@v2
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
 
   #     - name: Get IP
   #       run: ipconfig getifaddr en0
 
   #     - name: Cache Public IP
   #       run: echo "ENV_IPADDRESS=$(ipconfig getifaddr en0)" >> $GITHUB_ENV
-        
+          
+  #     - name: Setup Docker
+  #       run: |
+  #        brew install docker
+  #        colima start --cpu 2 --memory 8 --disk 100
+
+  #     - name: Pull images
+  #       run: |
+  #        docker pull stuartferguson/messagingservice:master
+  #        docker pull stuartferguson/estatemanagement:master
+  #        docker pull stuartferguson/securityservice:master
+  #        docker pull stuartferguson/transactionprocessor:master
+  #        docker pull stuartferguson/transactionprocessoracl:master
+  #        docker pull stuartferguson/testhosts:master
+  #        docker pull stuartferguson/vouchermanagementacl:master
+  #        docker pull stuartferguson/fileprocessor:master
+  #        docker pull stuartferguson/callbackhandler:master
+  #        docker pull stuartferguson/mobileconfiguration:master
+  #        docker pull mcr.microsoft.com/azure-sql-edge
+  #        docker pull eventstore/eventstore:21.10.0-buster-slim
+
+  #     - uses: malinskiy/action-android/install-sdk@release/0.1.1
+  #     - run: sdkmanager "platform-tools" "platforms;android-33"
+  #     - run: sdkmanager "build-tools;30.0.2"
+  #     - run: adb devices
+
   #     - name: Set up Appium
   #       run: |
   #         npm install -g appium@next --unsafe-perm=true --allow-root
   #         appium driver install uiautomator2
-
-  #     - name: Set up Android Emulator
+          
+  #     - name: Install MAUI Workloads
   #       run: |
-  #         mkdir android
-  #         curl -o android/commandlinetools.zip https://dl.google.com/android/repository/commandlinetools-win-6858069_latest.zip
-  #         tar -xf android/commandlinetools.zip -C android/
-  #         set ANDROID_SDK_ROOT=%RUNNER_WORKSPACE%\android\cmdline-tools
-  #         echo "y" | %ANDROID_SDK_ROOT%\bin\sdkmanager --install "system-images;android-29;google_apis;x86"
-  #         echo "no" | %ANDROID_SDK_ROOT%\bin\avdmanager --verbose create avd --force --name emulator --package "system-images;android-29;google_apis;x86" --abi "google_apis/x86" --device "pixel" --sdcard 512M
-  #         emulator -avd emulator -no-audio -no-window -gpu swiftshader -no-boot-anim
-  #         adb wait-for-device
-  #         adb shell input keyevent 82
+  #         dotnet workload install android --ignore-failed-sources
+  #         dotnet workload install maui --ignore-failed-sources 
 
-  #     - name: Run Android End To End Tests
-  #       run: |
-  #         dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)
+  #     - name: Restore Dependencies
+  #       run: dotnet restore TransactionMobile.Maui.sln --source https://api.nuget.org/v3/index.json --source https://www.myget.org/F/transactionprocessing/api/v3/index.json --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+  #     - name: Build Code
+  #       run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-android --no-restore
+
+  #     - name: Run Integration Tests - Android
+  #       uses: malinskiy/action-android/emulator-run-cmd@release/0.1.4
+  #       with:
+  #         cmd: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)
+  #         api: 29
+  #         tag: default
+  #         abi: x86   
+  #         verbose: false
+  #         cmdOptions: >
+  #           -no-window
+  #           -gpu swiftshader_indirect
+  #           -no-snapshot
+  #           -noaudio
+  #           -no-boot-anim
+  #           -camera-back none
+  #           -camera-front none        
+
+  #     - uses: actions/upload-artifact@v2
+  #       if: ${{ failure() }}
+  #       with:
+  #         name: tracelogsandroid
+  #         path: /Users/runner/txnproc/trace/
+
+  #     - name: Save logcat output
+  #       uses: actions/upload-artifact@master
+  #       if: failure()
+  #       with:
+  #         name: logcat
+  #         path: artifacts/logcat.log 

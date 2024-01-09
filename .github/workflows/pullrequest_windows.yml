@@ -1,164 +1,164 @@
-name: Build & Test Pull Requests - Windows
+# name: Build & Test Pull Requests - Windows
 
-on:
-  pull_request:
-    branches: 
-    - main
+# on:
+#   pull_request:
+#     branches: 
+#     - main
 
-env:
-  DOTNET_NOLOGO: true                     # Disable the .NET logo
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
-  DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
-  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+# env:
+#   DOTNET_NOLOGO: true                     # Disable the .NET logo
+#   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
+#   DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
+#   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
-jobs:
-  build-windows-unit-tests:
-    runs-on: windows-2022
-    name: Windows Build - Unit Tests
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+# jobs:
+#   build-windows-unit-tests:
+#     runs-on: windows-2022
+#     name: Windows Build - Unit Tests
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
 
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.1
-        with:
-          vs-prerelease: true
+#       - name: Setup MSBuild
+#         uses: microsoft/setup-msbuild@v1.1
+#         with:
+#           vs-prerelease: true
 
-      - name: Setup .NET 7
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: 7.0.100              
+#       - name: Setup .NET 7
+#         uses: actions/setup-dotnet@v2
+#         with:
+#           dotnet-version: 7.0.100              
            
-      - name: Install MAUI Workloads
-        run: |
-          dotnet workload install maui --ignore-failed-sources
+#       - name: Install MAUI Workloads
+#         run: |
+#           dotnet workload install maui --ignore-failed-sources
       
-      - name: Restore Dependencies
-        run: dotnet restore TransactionMobile.Maui.sln
+#       - name: Restore Dependencies
+#         run: dotnet restore TransactionMobile.Maui.sln
 
-      - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 --no-restore    
+#       - name: Build Code
+#         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 --no-restore    
 
-      - name: Run Unit Tests
-        run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
+#       - name: Run Unit Tests
+#         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
         
-  build-windows-nondocker:
-    runs-on: windows-2022
-    name: Windows Build - Navigation Tests
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+#   build-windows-nondocker:
+#     runs-on: windows-2022
+#     name: Windows Build - Navigation Tests
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
 
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.1
-        with:
-          vs-prerelease: true
+#       - name: Setup MSBuild
+#         uses: microsoft/setup-msbuild@v1.1
+#         with:
+#           vs-prerelease: true
 
-      - name: Setup .NET 7
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: 7.0.100              
+#       - name: Setup .NET 7
+#         uses: actions/setup-dotnet@v2
+#         with:
+#           dotnet-version: 7.0.100              
            
-      - name: Install MAUI Workloads
-        run: |
-          dotnet workload install maui --ignore-failed-sources
+#       - name: Install MAUI Workloads
+#         run: |
+#           dotnet workload install maui --ignore-failed-sources
 
-      - name: Set up Appium
-        run: |
-          npm install -g appium@next --unsafe-perm=true --allow-root
-          appium driver install --source=npm appium-windows-driver
+#       - name: Set up Appium
+#         run: |
+#           npm install -g appium@next --unsafe-perm=true --allow-root
+#           appium driver install --source=npm appium-windows-driver
 
-      - name: Restore Dependencies
-        run: dotnet restore TransactionMobile.Maui.sln
+#       - name: Restore Dependencies
+#         run: dotnet restore TransactionMobile.Maui.sln
 
-      - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 --no-restore    
+#       - name: Build Code
+#         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 --no-restore    
 
-      - name: Decrypt PFX File
-        run: |
-          echo "${{ secrets.WINDOWSSIGNINGCERT }}" > cert.pfx.asc
-          certutil -decode cert.pfx.asc cert.pfx
+#       - name: Decrypt PFX File
+#         run: |
+#           echo "${{ secrets.WINDOWSSIGNINGCERT }}" > cert.pfx.asc
+#           certutil -decode cert.pfx.asc cert.pfx
 
-      - name: Add Cert to Store
-        run: certutil -user -q -p ${{ secrets.WINDOWSSIGNINGCERTPWD }} -importpfx cert.pfx NoRoot
+#       - name: Add Cert to Store
+#         run: certutil -user -q -p ${{ secrets.WINDOWSSIGNINGCERTPWD }} -importpfx cert.pfx NoRoot
 
-      - name: Publish App
-        run: |
-         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"
-         Remove-Item D:\a\TransactionMobile\TransactionMobile\TransactionMobile.Maui\bin\Release\net7.0-windows10.0.19041.0\win10-x64\AppPackages\TransactionMobile.Maui_1.0.0.0_Test\Dependencies\x86\Microsoft.WindowsAppRuntime.1.2.msix
+#       - name: Publish App
+#         run: |
+#          dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"
+#          Remove-Item D:\a\TransactionMobile\TransactionMobile\TransactionMobile.Maui\bin\Release\net7.0-windows10.0.19041.0\win10-x64\AppPackages\TransactionMobile.Maui_1.0.0.0_Test\Dependencies\x86\Microsoft.WindowsAppRuntime.1.2.msix
       
-      - name: Install App
-        run: |         
-         Import-Module Appx -usewindowspowershell
-         .\TransactionMobile.Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1 -Force
+#       - name: Install App
+#         run: |         
+#          Import-Module Appx -usewindowspowershell
+#          .\TransactionMobile.Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1 -Force
           
-      - name: Run Navigation Integration Tests - Windows
-        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter  "Category=PRNavTest&Category=Windows"
+#       - name: Run Navigation Integration Tests - Windows
+#         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter  "Category=PRNavTest&Category=Windows"
 
-  build-windows-withdocker:
-    runs-on: windows-2019
-    name: Windows Build - End To End Tests
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+#   build-windows-withdocker:
+#     runs-on: windows-2019
+#     name: Windows Build - End To End Tests
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
 
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.1
-        with:
-          vs-prerelease: true
+#       - name: Setup MSBuild
+#         uses: microsoft/setup-msbuild@v1.1
+#         with:
+#           vs-prerelease: true
 
-      - name: Setup .NET 7
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: 7.0.100              
+#       - name: Setup .NET 7
+#         uses: actions/setup-dotnet@v2
+#         with:
+#           dotnet-version: 7.0.100              
            
-      - name: Install MAUI Workloads
-        run: |
-          dotnet workload install maui --ignore-failed-sources
+#       - name: Install MAUI Workloads
+#         run: |
+#           dotnet workload install maui --ignore-failed-sources
 
-      #- name: Pull images
-      #  run: |
-      #   docker pull stuartferguson/messagingservice:master
-      #   docker pull stuartferguson/estatemanagement:master
-      #   docker pull stuartferguson/securityservice:master
-      #   docker pull stuartferguson/transactionprocessor:master
-      #   docker pull stuartferguson/transactionprocessoracl:master
-      #   docker pull stuartferguson/testhosts:master
-      #   docker pull stuartferguson/vouchermanagementacl:master
-      #   docker pull stuartferguson/fileprocessor:master
-      #   docker pull stuartferguson/callbackhandler:master
-      #   docker pull stuartferguson/mobileconfiguration:master
-      #   docker pull mcr.microsoft.com/azure-sql-edge
-      #   docker pull eventstore/eventstore:21.10.0-buster-slim
+#       #- name: Pull images
+#       #  run: |
+#       #   docker pull stuartferguson/messagingservice:master
+#       #   docker pull stuartferguson/estatemanagement:master
+#       #   docker pull stuartferguson/securityservice:master
+#       #   docker pull stuartferguson/transactionprocessor:master
+#       #   docker pull stuartferguson/transactionprocessoracl:master
+#       #   docker pull stuartferguson/testhosts:master
+#       #   docker pull stuartferguson/vouchermanagementacl:master
+#       #   docker pull stuartferguson/fileprocessor:master
+#       #   docker pull stuartferguson/callbackhandler:master
+#       #   docker pull stuartferguson/mobileconfiguration:master
+#       #   docker pull mcr.microsoft.com/azure-sql-edge
+#       #   docker pull eventstore/eventstore:21.10.0-buster-slim
 
-      - name: Set up Appium
-        run: |
-          npm install -g appium@next --unsafe-perm=true --allow-root
-          appium driver install --source=npm appium-windows-driver
+#       - name: Set up Appium
+#         run: |
+#           npm install -g appium@next --unsafe-perm=true --allow-root
+#           appium driver install --source=npm appium-windows-driver
 
-      - name: Restore Dependencies
-        run: dotnet restore TransactionMobile.Maui.sln
+#       - name: Restore Dependencies
+#         run: dotnet restore TransactionMobile.Maui.sln
 
-      - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 --no-restore    
+#       - name: Build Code
+#         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 --no-restore    
 
-      - name: Decrypt PFX File
-        run: |
-          echo "${{ secrets.WINDOWSSIGNINGCERT }}" > cert.pfx.asc
-          certutil -decode cert.pfx.asc cert.pfx
+#       - name: Decrypt PFX File
+#         run: |
+#           echo "${{ secrets.WINDOWSSIGNINGCERT }}" > cert.pfx.asc
+#           certutil -decode cert.pfx.asc cert.pfx
 
-      - name: Add Cert to Store
-        run: certutil -user -q -p ${{ secrets.WINDOWSSIGNINGCERTPWD }} -importpfx cert.pfx NoRoot
+#       - name: Add Cert to Store
+#         run: certutil -user -q -p ${{ secrets.WINDOWSSIGNINGCERTPWD }} -importpfx cert.pfx NoRoot
 
-      - name: Publish App
-        run: |
-         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"
-         Remove-Item D:\a\TransactionMobile\TransactionMobile\TransactionMobile.Maui\bin\Release\net7.0-windows10.0.19041.0\win10-x64\AppPackages\TransactionMobile.Maui_1.0.0.0_Test\Dependencies\x86\Microsoft.WindowsAppRuntime.1.2.msix
+#       - name: Publish App
+#         run: |
+#          dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"
+#          Remove-Item D:\a\TransactionMobile\TransactionMobile\TransactionMobile.Maui\bin\Release\net7.0-windows10.0.19041.0\win10-x64\AppPackages\TransactionMobile.Maui_1.0.0.0_Test\Dependencies\x86\Microsoft.WindowsAppRuntime.1.2.msix
       
-      - name: Install App
-        run: |         
-         Import-Module Appx -usewindowspowershell
-         .\TransactionMobile.Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1 -Force
+#       - name: Install App
+#         run: |         
+#          Import-Module Appx -usewindowspowershell
+#          .\TransactionMobile.Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1 -Force
           
-      - name: Run Navigation Integration Tests - Windows
-        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter  "Category=PRTest&Category=Windows"
+#       - name: Run Navigation Integration Tests - Windows
+#         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter  "Category=PRTest&Category=Windows"

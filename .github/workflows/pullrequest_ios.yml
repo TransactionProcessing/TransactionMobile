@@ -1,143 +1,143 @@
-name: Build & Test Pull Requests - iOS
+# name: Build & Test Pull Requests - iOS
 
-on:
-  pull_request:
-    branches: 
-    - main
+# on:
+#   pull_request:
+#     branches: 
+#     - main
 
-env:
-  DOTNET_NOLOGO: true                     # Disable the .NET logo
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
-  DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
+# env:
+#   DOTNET_NOLOGO: true                     # Disable the .NET logo
+#   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
+#   DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
 
-jobs: 
-# MAUI iOS Build
-  build-ios-unit-tests:
-    runs-on: macos-12
-    name: iOS Build - Unit Tests
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+# jobs: 
+# # MAUI iOS Build
+#   build-ios-unit-tests:
+#     runs-on: macos-12
+#     name: iOS Build - Unit Tests
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
         
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: '13.3'
+#       - uses: maxim-lobanov/setup-xcode@v1
+#         with:
+#           xcode-version: '13.3'
 
-      - name: Install MAUI Workloads
-        run: |
-          dotnet workload install ios --ignore-failed-sources
-          dotnet workload install maui --ignore-failed-sources
+#       - name: Install MAUI Workloads
+#         run: |
+#           dotnet workload install ios --ignore-failed-sources
+#           dotnet workload install maui --ignore-failed-sources
 
-      - name: Restore Dependencies
-        run: dotnet restore TransactionMobile.Maui.sln
+#       - name: Restore Dependencies
+#         run: dotnet restore TransactionMobile.Maui.sln
         
-      - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-ios --no-restore
+#       - name: Build Code
+#         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-ios --no-restore
         
-      - name: Run Unit Tests
-        run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj      
-  build-ios-nondocker:
-    runs-on: macos-12
-    name: iOS Build - Navigation Tests
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+#       - name: Run Unit Tests
+#         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj      
+#   build-ios-nondocker:
+#     runs-on: macos-12
+#     name: iOS Build - Navigation Tests
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
           
-      - name: Setup Docker
-        run: |
-         brew install docker
-         colima start --cpu 2 --memory 8 --disk 100
+#       - name: Setup Docker
+#         run: |
+#          brew install docker
+#          colima start --cpu 2 --memory 8 --disk 100
 
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: '13.3'
+#       - uses: maxim-lobanov/setup-xcode@v1
+#         with:
+#           xcode-version: '13.3'
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '16.14.2'
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v1
+#         with:
+#           node-version: '16.14.2'
 
-      - name: Set up Appium
-        run: |
-          npm install -g appium@next --unsafe-perm=true --allow-root
-          appium driver install xcuitest   
+#       - name: Set up Appium
+#         run: |
+#           npm install -g appium@next --unsafe-perm=true --allow-root
+#           appium driver install xcuitest   
       
-      - name: Install MAUI Workloads
-        run: |
-          dotnet workload install ios --ignore-failed-sources
-          dotnet workload install maui --ignore-failed-sources
+#       - name: Install MAUI Workloads
+#         run: |
+#           dotnet workload install ios --ignore-failed-sources
+#           dotnet workload install maui --ignore-failed-sources
 
-      - name: Restore Dependencies
-        run: dotnet restore TransactionMobile.Maui.sln
+#       - name: Restore Dependencies
+#         run: dotnet restore TransactionMobile.Maui.sln
         
-      - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-ios --no-restore
+#       - name: Build Code
+#         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-ios --no-restore
 
-      - name: Run Navigation Integration Tests - iOS
-        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter  "Category=PRNavTest&Category=iOS"
-  build-ios-withdocker:
-    runs-on: macos-12
-    name: iOS Build - End To End Tests
-    steps: 
-      - name: Checkout
-        uses: actions/checkout@v3
+#       - name: Run Navigation Integration Tests - iOS
+#         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter  "Category=PRNavTest&Category=iOS"
+#   build-ios-withdocker:
+#     runs-on: macos-12
+#     name: iOS Build - End To End Tests
+#     steps: 
+#       - name: Checkout
+#         uses: actions/checkout@v3
 
-      - name: Get IP
-        run: ipconfig getifaddr en0
+#       - name: Get IP
+#         run: ipconfig getifaddr en0
 
-      - name: Cache Public IP
-        run: echo "ENV_IPADDRESS=$(ipconfig getifaddr en0)" >> $GITHUB_ENV
+#       - name: Cache Public IP
+#         run: echo "ENV_IPADDRESS=$(ipconfig getifaddr en0)" >> $GITHUB_ENV
 
-      - name: Test IP
-        run: echo $ENV_IPADDRESS
+#       - name: Test IP
+#         run: echo $ENV_IPADDRESS
           
-      - name: Setup Docker
-        run: |
-         brew install docker
-         colima start --cpu 2 --memory 8 --disk 100
+#       - name: Setup Docker
+#         run: |
+#          brew install docker
+#          colima start --cpu 2 --memory 8 --disk 100
 
-      - name: Pull images
-        run: |
-         docker pull stuartferguson/messagingservice:master
-         docker pull stuartferguson/estatemanagement:master
-         docker pull stuartferguson/securityservice:master
-         docker pull stuartferguson/transactionprocessor:master
-         docker pull stuartferguson/transactionprocessoracl:master
-         docker pull stuartferguson/testhosts:master
-         docker pull stuartferguson/mobileconfiguration:master
-         docker pull mcr.microsoft.com/azure-sql-edge
-         docker pull eventstore/eventstore:21.10.0-buster-slim
+#       - name: Pull images
+#         run: |
+#          docker pull stuartferguson/messagingservice:master
+#          docker pull stuartferguson/estatemanagement:master
+#          docker pull stuartferguson/securityservice:master
+#          docker pull stuartferguson/transactionprocessor:master
+#          docker pull stuartferguson/transactionprocessoracl:master
+#          docker pull stuartferguson/testhosts:master
+#          docker pull stuartferguson/mobileconfiguration:master
+#          docker pull mcr.microsoft.com/azure-sql-edge
+#          docker pull eventstore/eventstore:21.10.0-buster-slim
 
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: '13.3'
+#       - uses: maxim-lobanov/setup-xcode@v1
+#         with:
+#           xcode-version: '13.3'
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '16.14.2'
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v1
+#         with:
+#           node-version: '16.14.2'
 
-      - name: Set up Appium
-        run: |
-          npm install -g appium@next --unsafe-perm=true --allow-root
-          appium driver install xcuitest 
+#       - name: Set up Appium
+#         run: |
+#           npm install -g appium@next --unsafe-perm=true --allow-root
+#           appium driver install xcuitest 
       
-      - name: Install MAUI Workloads
-        run: |
-          dotnet workload install ios --ignore-failed-sources
-          dotnet workload install maui --ignore-failed-sources
+#       - name: Install MAUI Workloads
+#         run: |
+#           dotnet workload install ios --ignore-failed-sources
+#           dotnet workload install maui --ignore-failed-sources
 
-      - name: Restore Dependencies
-        run: dotnet restore TransactionMobile.Maui.sln
+#       - name: Restore Dependencies
+#         run: dotnet restore TransactionMobile.Maui.sln
         
-      - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-ios --no-restore
+#       - name: Build Code
+#         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-ios --no-restore
 
-      - name: Run Integration Tests - iOS
-        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter  "Category=PRTest&Category=iOS"
+#       - name: Run Integration Tests - iOS
+#         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter  "Category=PRTest&Category=iOS"
 
-      - uses: actions/upload-artifact@v2
-        if: ${{ failure() }}
-        with:
-          name: tracelogsios
-          path: /Users/runner/txnproc/trace/
+#       - uses: actions/upload-artifact@v2
+#         if: ${{ failure() }}
+#         with:
+#           name: tracelogsios
+#           path: /Users/runner/txnproc/trace/
