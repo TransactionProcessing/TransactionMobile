@@ -32,9 +32,6 @@ public class GenericSteps
             NlogLogger logger = new NlogLogger();
             logger.Initialise(LogManager.GetLogger(scenarioName), scenarioName);
             LogManager.AddHiddenAssembly(typeof(NlogLogger).Assembly);
-
-            this.TestingContext.DockerHelper = new DockerHelper();
-            this.TestingContext.DockerHelper.Logger = logger;
             this.TestingContext.Logger = logger;
         }
         else{
