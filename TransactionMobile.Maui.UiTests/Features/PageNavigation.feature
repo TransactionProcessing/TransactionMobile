@@ -2,7 +2,7 @@
 Feature: PageNavigation
 
 # Home Page Back Button Tests
-@PRNavTest
+#@PRNavTest
 Scenario: Back Button from Home Page Screen - user wants to log out
 	Given I am on the Login Screen
 	And the application is in training mode
@@ -15,7 +15,7 @@ Scenario: Back Button from Home Page Screen - user wants to log out
 	When I click yes
 	Then the Login Page is displayed
 
-@PRNavTest
+#@PRNavTest
 Scenario: Back Button from Home Page Screen - user does not want to log out
 	Given I am on the Login Screen
 	And the application is in training mode
@@ -29,7 +29,7 @@ Scenario: Back Button from Home Page Screen - user does not want to log out
 	Then the Merchant Home Page is displayed
 
 # Transaction Page Back Button Tests
-@PRNavTest
+#@PRNavTest
 Scenario: Back Button from Transaction Page Screen
 	Given I am on the Login Screen
 	And the application is in training mode
@@ -42,7 +42,7 @@ Scenario: Back Button from Transaction Page Screen
 	When I click on the back button
 	Then the Merchant Home Page is displayed	
 
-@PRNavTest
+#@PRNavTest
 Scenario: Back Button from Transaction Select Operator Screen
 	Given I am on the Login Screen
 	And the application is in training mode

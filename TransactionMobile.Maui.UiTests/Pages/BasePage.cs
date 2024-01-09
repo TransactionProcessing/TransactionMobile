@@ -26,7 +26,7 @@ namespace TransactionMobile.Maui.UITests
         }
 
         public async Task AssertOnPage(TimeSpan? timeout = null){
-            String message = $"Unable to verify on page: {this.GetType().Name} with trait {this.Trait} {Environment.NewLine} Source: {AppiumDriverWrapper.Driver.PageSource}";
+            String message = $"Unable to verify on page: {this.GetType().Name} with trait {this.Trait} {Environment.NewLine}";// Source: {AppiumDriverWrapper.Driver.PageSource}";
 
             Should.NotThrow(async () => await this.WaitForElementByAccessibilityId(this.Trait, timeout), message);
         }
