@@ -72,7 +72,7 @@ jobs:
           api: 29
           tag: default
           abi: x86   
-          verbose: false
+          verbose: true
           cmdOptions: >
             -no-window
             -gpu swiftshader_indirect
