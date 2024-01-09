@@ -26,7 +26,7 @@ public class TransactionsMobileTopupSelectOperatorPage : BasePage2
     }
 }
 
-public class TransactionsMobileTopupSelectProductPage : BasePage {
+public class TransactionsMobileTopupSelectProductPage : BasePage2 {
     public TransactionsMobileTopupSelectProductPage(TestingContext testingContext) : base(testingContext) {
 
     }
@@ -43,7 +43,7 @@ public class TransactionsMobileTopupSelectProductPage : BasePage {
     }
 }
 
-public class TransactionsMobileTopupEnterTopupDetailsPage : BasePage {
+public class TransactionsMobileTopupEnterTopupDetailsPage : BasePage2 {
 
     private readonly String CustomerMobileNumberEntry;
     private readonly String TopupAmountEntry;
@@ -90,7 +90,7 @@ public class TransactionsMobileTopupEnterTopupDetailsPage : BasePage {
     #endregion
 }
 
-public class TransactionsMobileTopupSuccessfulTopupPage : BasePage {
+public class TransactionsMobileTopupSuccessfulTopupPage : BasePage2 {
 
     private readonly String CompleteButton;
 
@@ -133,7 +133,7 @@ public class TransactionsVoucherSelectOperatorPage : BasePage2
     }
 }
 
-public class TransactionsVoucherSelectProductPage : BasePage
+public class TransactionsVoucherSelectProductPage : BasePage2
 {
     public TransactionsVoucherSelectProductPage(TestingContext testingContext) : base(testingContext)
     {
@@ -153,7 +153,7 @@ public class TransactionsVoucherSelectProductPage : BasePage
     }
 }
 
-public class TransactionsVoucherEnterVoucherIssueDetailsPage : BasePage
+public class TransactionsVoucherEnterVoucherIssueDetailsPage : BasePage2
 {
 
     private readonly String RecipientMobileNumberEntry;
@@ -216,7 +216,7 @@ public class TransactionsVoucherEnterVoucherIssueDetailsPage : BasePage
 }
 
 
-public class TransactionsVoucherIssueSuccessfulTopupPage : BasePage
+public class TransactionsVoucherIssueSuccessfulTopupPage : BasePage2
 {
 
     private readonly String CompleteButton;

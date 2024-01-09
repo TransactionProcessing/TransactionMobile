@@ -72,8 +72,10 @@ public class GenericSteps
     [AfterScenario(Order = 0)]
     public async Task StopSystem()
     {
-        this.TestingContext.Logger.LogInformation("About to Stop Containers for Scenario Run");
-        await this.TestingContext.DockerHelper.StopContainersForScenarioRun().ConfigureAwait(false);
-        this.TestingContext.Logger.LogInformation("Containers for Scenario Run Stopped");
+        if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest") == false){
+            this.TestingContext.Logger.LogInformation("About to Stop Containers for Scenario Run");
+            await this.TestingContext.DockerHelper.StopContainersForScenarioRun().ConfigureAwait(false);
+            this.TestingContext.Logger.LogInformation("Containers for Scenario Run Stopped");
+        }
     }
 }
