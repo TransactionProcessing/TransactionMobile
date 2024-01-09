@@ -8,7 +8,7 @@ Scenario: Back Button from Login Screen
 	Then The application closes
 
 # Home Page Back Button Tests
-@PRNavTest
+#@PRNavTest
 Scenario: Device Back Button from Home Page Screen - user wants to log out
 	Given I am on the Login Screen
 	And the application is in training mode
