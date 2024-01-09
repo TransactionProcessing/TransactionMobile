@@ -51,7 +51,7 @@ jobs:
 
       - name: Set up Appium
         run: |
-          npm install -g appium@next --unsafe-perm=true --allow-root
+          npm install -g appium --unsafe-perm=true --allow-root
           appium driver install uiautomator2
           
       - name: Install MAUI Workloads
