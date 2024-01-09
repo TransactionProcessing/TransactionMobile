@@ -39,10 +39,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
           
-      - name: Setup Docker
-        run: |
-         brew install docker
-         colima start --cpu 2 --memory 8 --disk 100
+      # - name: Setup Docker
+      #   run: |
+      #    brew install docker
+      #    colima start --cpu 2 --memory 8 --disk 100
 
       - uses: malinskiy/action-android/install-sdk@release/0.1.1
       - run: sdkmanager "platform-tools" "platforms;android-33"
@@ -81,6 +81,7 @@ jobs:
             -no-boot-anim
             -camera-back none
             -camera-front none        
+            -grpc-use-jwt
                   
       - name: Save logcat output
         uses: actions/upload-artifact@master
