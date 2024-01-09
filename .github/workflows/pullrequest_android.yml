@@ -33,7 +33,7 @@ jobs:
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj              
         
   build-android-nondocker:
-    runs-on: macos-12
+    runs-on: macos-11
     name: Android Build - Navigation Tests
     steps:
       - name: Checkout
@@ -71,7 +71,7 @@ jobs:
           cmd: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRNavTest)&(Category=Android)
           api: 29
           tag: default
-          abi: x86   
+          abi: x86_64   
           verbose: true
           cmdOptions: >
             -no-window
