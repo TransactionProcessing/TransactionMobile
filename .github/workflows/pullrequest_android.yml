@@ -149,7 +149,7 @@ jobs:
           path: artifacts/logcat.log
 
   build-android-withdocker:
-    runs-on: macos-12
+    runs-on: macos-11
     name: Android Build - End To End Tests
     steps:
       - name: Checkout
