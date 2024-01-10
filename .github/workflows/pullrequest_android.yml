@@ -38,11 +38,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-          
-      # - name: Setup Docker
-      #   run: |
-      #    brew install docker
-      #    colima start --cpu 2 --memory 8 --disk 100
 
       - uses: malinskiy/action-android/install-sdk@release/0.1.1
       - run: sdkmanager "platform-tools" "platforms;android-33"
