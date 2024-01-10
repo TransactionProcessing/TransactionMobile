@@ -32,7 +32,7 @@ jobs:
       - name: Run Unit Tests
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj              
         
-  build-android-nondocker:
+  build-android-nondocker-navtests:
     runs-on: macos-11
     name: Android Build - Navigation Tests
     steps:
@@ -87,8 +87,66 @@ jobs:
         uses: actions/upload-artifact@master
         if: failure()
         with:
-          name: logcat
+          name: logcatnav
           path: artifacts/logcat.log 
+
+  build-android-nondocker-hwnavtests:
+    runs-on: macos-11
+    name: Android Build - Hardware Navigation Tests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+          
+      # - name: Setup Docker
+      #   run: |
+      #    brew install docker
+      #    colima start --cpu 2 --memory 8 --disk 100
+
+      - uses: malinskiy/action-android/install-sdk@release/0.1.1
+      - run: sdkmanager "platform-tools" "platforms;android-33"
+      - run: sdkmanager "build-tools;30.0.2"
+      - run: adb devices
+
+      - name: Set up Appium
+        run: |
+          npm install -g appium --unsafe-perm=true --allow-root
+          appium driver install uiautomator2
+          
+      - name: Install MAUI Workloads
+        run: |
+          dotnet workload install android --ignore-failed-sources
+          dotnet workload install maui --ignore-failed-sources 
+
+      - name: Restore Dependencies
+        run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+      - name: Build Code
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-android --no-restore        
+        
+      - name: Run Navigation Integration Tests - Android
+        uses: malinskiy/action-android/emulator-run-cmd@release/0.1.4
+        with:
+          cmd: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRHWNavTest)&(Category=Android)
+          api: 29
+          tag: default
+          abi: x86_64   
+          verbose: true
+          cmdOptions: >
+            -no-window
+            -gpu swiftshader_indirect
+            -no-snapshot
+            -noaudio
+            -no-boot-anim
+            -camera-back none
+            -camera-front none        
+            -grpc-use-jwt
+                  
+      - name: Save logcat output
+        uses: actions/upload-artifact@master
+        if: failure()
+        with:
+          name: logcathwnav
+          path: artifacts/logcat.log
 
   # build-android-withdocker:
   #   runs-on: macos-12

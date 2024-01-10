@@ -25,7 +25,9 @@ public class GenericSteps
 
     [BeforeScenario(Order = 0)]
     public async Task StartSystem(){
-        if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest")){
+        if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest") ||
+            this.ScenarioContext.ScenarioInfo.Tags.Contains("PRHWNavTest"))
+        {
 
             // Initialise a logger
             String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
@@ -69,7 +71,7 @@ public class GenericSteps
     [AfterScenario(Order = 0)]
     public async Task StopSystem()
     {
-        if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest") == false){
+        if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest") == false && this.ScenarioContext.ScenarioInfo.Tags.Contains("PRHWNavTest") == false){
             this.TestingContext.Logger.LogInformation("About to Stop Containers for Scenario Run");
             await this.TestingContext.DockerHelper.StopContainersForScenarioRun().ConfigureAwait(false);
             this.TestingContext.Logger.LogInformation("Containers for Scenario Run Stopped");

@@ -123,11 +123,11 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Device Back Button from Home Page Screen - user wants to log out")]
-        [NUnit.Framework.CategoryAttribute("PRNavTest")]
+        [NUnit.Framework.CategoryAttribute("PRHWNavTest")]
         public void DeviceBackButtonFromHomePageScreen_UserWantsToLogOut()
         {
             string[] tagsOfScenario = new string[] {
-                    "PRNavTest"};
+                    "PRHWNavTest"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Device Back Button from Home Page Screen - user wants to log out", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 12
@@ -176,11 +176,11 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Device Back Button from Home Page Screen - user does not want to log out")]
-        [NUnit.Framework.CategoryAttribute("PRNavTest")]
+        [NUnit.Framework.CategoryAttribute("PRHWNavTest")]
         public void DeviceBackButtonFromHomePageScreen_UserDoesNotWantToLogOut()
         {
             string[] tagsOfScenario = new string[] {
-                    "PRNavTest"};
+                    "PRHWNavTest"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Device Back Button from Home Page Screen - user does not want to log out", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 25
@@ -229,11 +229,11 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Back Button from Transaction Page Screen")]
-        [NUnit.Framework.CategoryAttribute("PRNavTest")]
+        [NUnit.Framework.CategoryAttribute("PRHWNavTest")]
         public void BackButtonFromTransactionPageScreen()
         {
             string[] tagsOfScenario = new string[] {
-                    "PRNavTest"};
+                    "PRHWNavTest"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Back Button from Transaction Page Screen", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 39
@@ -282,11 +282,11 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Back Button from Transaction Select Operator Screen")]
-        [NUnit.Framework.CategoryAttribute("PRNavTest")]
+        [NUnit.Framework.CategoryAttribute("PRHWNavTest")]
         public void BackButtonFromTransactionSelectOperatorScreen()
         {
             string[] tagsOfScenario = new string[] {
-                    "PRNavTest"};
+                    "PRHWNavTest"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Back Button from Transaction Select Operator Screen", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 52
