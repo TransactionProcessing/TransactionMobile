@@ -87,7 +87,13 @@ public class LoginPage : BasePage2
     public async Task EnterEmailAddress(String emailAddress)
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.UserNameEntry);
-        emailAddress.ToCharArray().ToList().ForEach(x => element.SendKeys(x.ToString()));
+
+        if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android){
+            element.SendKeys(emailAddress);
+        }
+        else{
+            emailAddress.ToCharArray().ToList().ForEach(x => element.SendKeys(x.ToString()));
+        }
     }
 
     public async Task<string> GetEmailAddress()
