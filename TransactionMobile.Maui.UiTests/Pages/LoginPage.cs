@@ -3,12 +3,14 @@
 namespace TransactionMobile.Maui.UITests;
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using Shared.IntegrationTesting;
 using Shouldly;
 using UiTests.Common;
+using static System.Net.Mime.MediaTypeNames;
 
 public class LoginPage : BasePage2
 {
@@ -85,7 +87,7 @@ public class LoginPage : BasePage2
     public async Task EnterEmailAddress(String emailAddress)
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.UserNameEntry);
-        element.SendKeys(emailAddress);
+        emailAddress.ToCharArray().ToList().ForEach(x => element.SendKeys(x.ToString()));
     }
 
     public async Task<string> GetEmailAddress()

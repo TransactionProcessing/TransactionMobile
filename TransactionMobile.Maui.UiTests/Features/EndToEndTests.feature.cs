@@ -351,7 +351,7 @@ namespace TransactionMobile.Maui.UiTests.Features
                         "EstateName",
                         "MerchantName"});
             table15.AddRow(new string[] {
-                        "merchantuser",
+                        "user1",
                         "123456",
                         "TestMerchant",
                         "User1",
@@ -412,7 +412,7 @@ this.FeatureBackground();
  testRunner.And("my device is registered", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 90
- testRunner.When("I enter \'merchantuser\' as the Email Address", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I enter \'user1\' as the Email Address", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 91
  testRunner.And("I enter \'123456\' as the Password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

@@ -63,15 +63,19 @@ namespace TransactionMobile.Maui.UITests.Steps
 
         [When(@"I enter '(.*)' as the Email Address")]
         public async Task WhenIEnterAsTheEmailAddress(String emailAddress) {
-            Char[] x = emailAddress.ToCharArray();
-            StringBuilder expected = new StringBuilder();
-            foreach (Char c in x){
-                expected.Append(c);
-                await this.loginPage.EnterEmailAddress(c.ToString());
-                await Task.Delay(2000);
-                String text = await this.loginPage.GetEmailAddress();
-                text.ShouldBe(expected.ToString());
-            }
+            //Char[] x = emailAddress.ToCharArray();
+            //StringBuilder expected = new StringBuilder();
+            //foreach (Char c in x){
+            //    expected.Append(c);
+            //    await this.loginPage.EnterEmailAddress(c.ToString());
+            //    await Task.Delay(2000);
+            //    String text = await this.loginPage.GetEmailAddress();
+            //    text.ShouldBe(expected.ToString());
+            //}
+            await this.loginPage.EnterEmailAddress(emailAddress);
+            await Task.Delay(2000);
+            String text = await this.loginPage.GetEmailAddress();
+            text.ShouldBe(emailAddress);
         }
 
         [When(@"I enter '(.*)' as the Password")]
