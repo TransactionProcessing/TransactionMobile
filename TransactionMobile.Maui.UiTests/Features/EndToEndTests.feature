@@ -73,7 +73,7 @@ Background:
 
 	Given I have created the following security users
 	| EmailAddress                  | Password | GivenName    | FamilyName | EstateName    | MerchantName    |
-	| merchantuser@testmerchant1.co.uk | 123456   | TestMerchant | User1      | Test Estate 1 | Test Merchant 1 |
+	| user1 | 123456   | TestMerchant | User1      | Test Estate 1 | Test Merchant 1 |
 
 	Given I make the following manual merchant deposits 
 	| Reference | Amount | DateTime | MerchantName    | EstateName    |
@@ -87,7 +87,7 @@ Background:
 Scenario: EndToEnd
 	Given I am on the Login Screen
 	And my device is registered
-	When I enter 'merchantuser@testmerchant1.co.uk' as the Email Address
+	When I enter 'user1' as the Email Address
 	And I enter '123456' as the Password
 	And I tap on Login
 	Then the Merchant Home Page is displayed
