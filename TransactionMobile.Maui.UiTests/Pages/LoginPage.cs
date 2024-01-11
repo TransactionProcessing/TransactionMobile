@@ -85,7 +85,6 @@ public class LoginPage : BasePage2
     public async Task EnterEmailAddress(String emailAddress)
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.UserNameEntry);
-        
         element.SendKeys(emailAddress);
     }
 
@@ -99,6 +98,8 @@ public class LoginPage : BasePage2
     public async Task EnterPassword(String password)
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.PasswordEntry);
+        
+        
         element.SendKeys(password);
     }
 
