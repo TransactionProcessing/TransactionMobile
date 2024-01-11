@@ -89,6 +89,13 @@ public class LoginPage : BasePage2
         element.SendKeys(emailAddress);
     }
 
+    public async Task<string> GetEmailAddress()
+    {
+        IWebElement element = await this.WaitForElementByAccessibilityId(this.UserNameEntry);
+
+        return element.Text;
+    }
+
     public async Task EnterPassword(String password)
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.PasswordEntry);

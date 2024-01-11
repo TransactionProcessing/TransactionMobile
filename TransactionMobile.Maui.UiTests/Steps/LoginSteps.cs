@@ -10,6 +10,7 @@ namespace TransactionMobile.Maui.UITests.Steps
     using System.Threading;
     using EstateManagement.DataTransferObjects.Requests;
     using EstateManagement.IntegrationTesting.Helpers;
+    using Shouldly;
     using TechTalk.SpecFlow;
     using TransactionMobile.Maui.UiTests.Common;
 
@@ -62,6 +63,8 @@ namespace TransactionMobile.Maui.UITests.Steps
         [When(@"I enter '(.*)' as the Email Address")]
         public async Task WhenIEnterAsTheEmailAddress(String emailAddress) {
             await this.loginPage.EnterEmailAddress(emailAddress);
+            String text = await this.loginPage.GetEmailAddress();
+            text.ShouldBe(emailAddress);
         }
 
         [When(@"I enter '(.*)' as the Password")]
