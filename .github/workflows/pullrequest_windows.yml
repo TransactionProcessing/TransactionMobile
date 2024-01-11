@@ -147,3 +147,9 @@ jobs:
           
       - name: Run Navigation Integration Tests - Windows
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter  "Category=PRTest&Category=Windows"
+
+      - uses: actions/upload-artifact@v2
+        if: ${{ failure() }}
+        with:
+          name: tracelogswindows
+          path: C:\\Users\\runneradmin\\txnproc
