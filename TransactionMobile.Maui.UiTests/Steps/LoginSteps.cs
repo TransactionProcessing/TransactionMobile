@@ -67,13 +67,10 @@ namespace TransactionMobile.Maui.UITests.Steps
             StringBuilder expected = new StringBuilder();
             foreach (Char c in x){
                 expected.Append(c);
-                await Retry.For(async () => {
-                        await this.loginPage.EnterEmailAddress(c.ToString());
-                        await Task.Delay(1000);
-                        String text = await this.loginPage.GetEmailAddress();
-
-                        text.ShouldBe(expected.ToString());
-                    });
+                await this.loginPage.EnterEmailAddress(c.ToString());
+                await Task.Delay(2000);
+                String text = await this.loginPage.GetEmailAddress();
+                text.ShouldBe(expected.ToString());
             }
         }
 
