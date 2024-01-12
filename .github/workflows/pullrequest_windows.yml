@@ -65,7 +65,7 @@ jobs:
 
       - name: Set up Appium
         run: |
-          npm install -g appium@next --unsafe-perm=true --allow-root
+          npm install -g appium --unsafe-perm=true --allow-root
           appium driver install --source=npm appium-windows-driver
 
       - name: Restore Dependencies
@@ -116,24 +116,9 @@ jobs:
         run: |
           dotnet workload install maui --ignore-failed-sources
 
-      #- name: Pull images
-      #  run: |
-      #   docker pull stuartferguson/messagingservice:master
-      #   docker pull stuartferguson/estatemanagement:master
-      #   docker pull stuartferguson/securityservice:master
-      #   docker pull stuartferguson/transactionprocessor:master
-      #   docker pull stuartferguson/transactionprocessoracl:master
-      #   docker pull stuartferguson/testhosts:master
-      #   docker pull stuartferguson/vouchermanagementacl:master
-      #   docker pull stuartferguson/fileprocessor:master
-      #   docker pull stuartferguson/callbackhandler:master
-      #   docker pull stuartferguson/mobileconfiguration:master
-      #   docker pull mcr.microsoft.com/azure-sql-edge
-      #   docker pull eventstore/eventstore:21.10.0-buster-slim
-
       - name: Set up Appium
         run: |
-          npm install -g appium@next --unsafe-perm=true --allow-root
+          npm install -g appium --unsafe-perm=true --allow-root
           appium driver install --source=npm appium-windows-driver
 
       - name: Restore Dependencies
@@ -162,3 +147,9 @@ jobs:
           
       - name: Run Navigation Integration Tests - Windows
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter  "Category=PRTest&Category=Windows"
+
+      - uses: actions/upload-artifact@v2
+        if: ${{ failure() }}
+        with:
+          name: tracelogswindows
+          path: C:\\Users\\runneradmin\\txnproc

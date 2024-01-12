@@ -3,12 +3,14 @@
 namespace TransactionMobile.Maui.UITests;
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using Shared.IntegrationTesting;
 using Shouldly;
 using UiTests.Common;
+using static System.Net.Mime.MediaTypeNames;
 
 public class LoginPage : BasePage2
 {
@@ -86,12 +88,26 @@ public class LoginPage : BasePage2
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.UserNameEntry);
 
-        element.SendKeys(emailAddress);
+        if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android){
+            element.SendKeys(emailAddress);
+        }
+        else{
+            emailAddress.ToCharArray().ToList().ForEach(x => element.SendKeys(x.ToString()));
+        }
+    }
+
+    public async Task<string> GetEmailAddress()
+    {
+        IWebElement element = await this.WaitForElementByAccessibilityId(this.UserNameEntry);
+
+        return element.Text;
     }
 
     public async Task EnterPassword(String password)
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.PasswordEntry);
+        
+        
         element.SendKeys(password);
     }
 

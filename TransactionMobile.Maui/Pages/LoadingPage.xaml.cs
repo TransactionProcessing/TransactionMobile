@@ -19,7 +19,7 @@ public partial class LoadingPage : ContentPage {
     }
 
     async Task<bool> isAuthenticated() {
-        await Task.Delay(2000);
+        //await Task.Delay(2000);
         IApplicationCache applicationCache = MauiProgram.Container.Services.GetService<IApplicationCache>();
         Boolean isLoggedIn = applicationCache.GetIsLoggedIn();
         return isLoggedIn;

@@ -20,7 +20,7 @@ namespace TransactionMobile.Maui.UiTests.Common
         public static INetworkService DatabaseServerNetwork;
         public static (String usename, String password) SqlCredentials = ("sa", "thisisalongpassword123!");
         public static (String url, String username, String password) DockerCredentials = ("https://www.docker.com", "stuartferguson", "Sc0tland");
-        [BeforeTestRun]
+        //[BeforeTestRun]
         public static void GlobalSetup()
         {
             ShouldlyConfiguration.DefaultTaskTimeout = TimeSpan.FromMinutes(1);

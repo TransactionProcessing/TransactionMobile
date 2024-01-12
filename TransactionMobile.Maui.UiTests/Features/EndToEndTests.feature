@@ -41,13 +41,13 @@ Background:
 
 	Given I create a contract with the following values
 	| EstateName    | OperatorName    | ContractDescription |
-	| Test Estate 1 | Safaricom | Safaricom Contract |
+	| Test Estate 1 | Safaricom		| Safaricom Contract |
 	| Test Estate 1 | Voucher      | Hospital 1 Contract |
 
 	When I create the following Products
-	| EstateName    | OperatorName | ContractDescription | ProductName    | DisplayText | Value |ProductType |
-	| Test Estate 1 | Safaricom    | Safaricom Contract  | Variable Topup | Custom      |       |MobileTopup |
-	| Test Estate 1 | Voucher      | Hospital 1 Contract | 10 KES         | 10 KES      |       |Voucher     |
+	| EstateName    | OperatorName | ContractDescription | ProductName    | DisplayText | Value | ProductType |
+	| Test Estate 1 | Safaricom    | Safaricom Contract  | Variable Topup | Custom      |       | MobileTopup |
+	| Test Estate 1 | Voucher      | Hospital 1 Contract | 10 KES         | 10 KES      | 10.00 | Voucher     |
 
 	When I add the following Transaction Fees
 	| EstateName    | OperatorName | ContractDescription | ProductName    | CalculationType | FeeDescription      | Value |
@@ -73,7 +73,7 @@ Background:
 
 	Given I have created the following security users
 	| EmailAddress                  | Password | GivenName    | FamilyName | EstateName    | MerchantName    |
-	| merchantuser@testmerchant1.co.uk | 123456   | TestMerchant | User1      | Test Estate 1 | Test Merchant 1 |
+	| user1 | 123456   | TestMerchant | User1      | Test Estate 1 | Test Merchant 1 |
 
 	Given I make the following manual merchant deposits 
 	| Reference | Amount | DateTime | MerchantName    | EstateName    |
@@ -87,7 +87,7 @@ Background:
 Scenario: EndToEnd
 	Given I am on the Login Screen
 	And my device is registered
-	When I enter 'merchantuser@testmerchant1.co.uk' as the Email Address
+	When I enter 'user1' as the Email Address
 	And I enter '123456' as the Password
 	And I tap on Login
 	Then the Merchant Home Page is displayed
@@ -121,6 +121,16 @@ Scenario: EndToEnd
 	And I enter 10.00 as the Topup Amount
 	And I tap on Perform Topup
 	Then the Mobile Topup Successful Page is displayed
+	And I tap on Complete
+	Then the Transaction Page is displayed
+	When I tap on the Voucher button
+	Then the Transaction Select Voucher Operator Page is displayed
+	When I tap on the 'Hospital 1 Contract' button
+	When I tap on the '10 KES' product button
+	Then the Enter Voucher Issue Details Page is displayed
+	When I enter '07777777775' as the Recipient Mobile Number
+	And I tap on Issue Voucher
+	Then the Voucher Issue Successful Page is displayed
 	And I tap on Complete
 	Then the Transaction Page is displayed
 	When I click on the back button

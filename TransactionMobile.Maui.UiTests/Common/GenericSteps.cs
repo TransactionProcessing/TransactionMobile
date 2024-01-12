@@ -25,16 +25,15 @@ public class GenericSteps
 
     [BeforeScenario(Order = 0)]
     public async Task StartSystem(){
-        if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest")){
+        if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest") ||
+            this.ScenarioContext.ScenarioInfo.Tags.Contains("PRHWNavTest"))
+        {
 
             // Initialise a logger
             String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
             NlogLogger logger = new NlogLogger();
             logger.Initialise(LogManager.GetLogger(scenarioName), scenarioName);
             LogManager.AddHiddenAssembly(typeof(NlogLogger).Assembly);
-
-            this.TestingContext.DockerHelper = new DockerHelper();
-            this.TestingContext.DockerHelper.Logger = logger;
             this.TestingContext.Logger = logger;
         }
         else{
@@ -72,8 +71,10 @@ public class GenericSteps
     [AfterScenario(Order = 0)]
     public async Task StopSystem()
     {
-        this.TestingContext.Logger.LogInformation("About to Stop Containers for Scenario Run");
-        await this.TestingContext.DockerHelper.StopContainersForScenarioRun().ConfigureAwait(false);
-        this.TestingContext.Logger.LogInformation("Containers for Scenario Run Stopped");
+        if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest") == false && this.ScenarioContext.ScenarioInfo.Tags.Contains("PRHWNavTest") == false){
+            this.TestingContext.Logger.LogInformation("About to Stop Containers for Scenario Run");
+            await this.TestingContext.DockerHelper.StopContainersForScenarioRun().ConfigureAwait(false);
+            this.TestingContext.Logger.LogInformation("Containers for Scenario Run Stopped");
+        }
     }
 }
