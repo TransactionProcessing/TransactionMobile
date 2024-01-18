@@ -35,13 +35,16 @@ public class MyAccountPageViewModelTests
 
     private MyAccountPageViewModel viewModel;
 
+    private readonly Mock<IDeviceService> DeviceService;
+
     public MyAccountPageViewModelTests() {
         navigationService = new Mock<INavigationService>();
         applicationCache = new Mock<IApplicationCache>();
         dialogService = new Mock<IDialogService>();
+        this.DeviceService = new Mock<IDeviceService>();
         mediator = new Mock<IMediator>();
         viewModel = new MyAccountPageViewModel(navigationService.Object, applicationCache.Object,
-                                                                      dialogService.Object,
+                                                                      dialogService.Object, this.DeviceService.Object,
                                                                       mediator.Object);
     }
 

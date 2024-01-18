@@ -1,5 +1,6 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Support;
 
+using System;
 using Logging;
 using Maui.UIServices;
 using MediatR;
@@ -24,16 +25,19 @@ public class ViewLogsPageViewModelTests
 
     private readonly ViewLogsPageViewModel ViewModel;
 
+    private readonly Mock<IDeviceService> DeviceService;
+
     public ViewLogsPageViewModelTests() {
         this.NavigationService = new Mock<INavigationService>();
         this.Mediator = new Mock<IMediator>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogService = new Mock<IDialogService>();
-        
+        this.DeviceService = new Mock<IDeviceService>();
         this.ViewModel = new ViewLogsPageViewModel(this.Mediator.Object,
                                                    this.NavigationService.Object,
                                                    this.ApplicationCache.Object,
-                                                   this.DialogService.Object);
+                                                   this.DialogService.Object,
+                                                   this.DeviceService.Object);
     }
 
     [Fact]

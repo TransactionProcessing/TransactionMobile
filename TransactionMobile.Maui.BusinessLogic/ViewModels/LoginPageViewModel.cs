@@ -19,8 +19,6 @@
 
     public class LoginPageViewModel : ExtendedBaseViewModel
     {
-        private readonly IDeviceService DeviceService;
-
         private readonly IApplicationInfoService ApplicationInfoService;
 
         private String userName;
@@ -35,9 +33,8 @@
 
         public LoginPageViewModel(IMediator mediator, INavigationService navigationService, IApplicationCache applicationCache,
                                   IDeviceService deviceService,IApplicationInfoService applicationInfoService,
-                                  IDialogService dialogService) : base(applicationCache,dialogService,navigationService)
+                                  IDialogService dialogService) : base(applicationCache,dialogService,navigationService, deviceService)
         {
-            this.DeviceService = deviceService;
             this.ApplicationInfoService = applicationInfoService;
             this.LoginCommand = new AsyncCommand(this.LoginCommandExecute);
             this.Mediator = mediator;

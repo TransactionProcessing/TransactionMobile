@@ -32,5 +32,8 @@ public class DeviceService : IDeviceService
     {
         return DeviceInformationService.Platform();
     }
-    
+
+    public void SetOrientation(DisplayOrientation displayOrientation){
+        DeviceOrientationService.SetDeviceOrientation(displayOrientation);
+    }
 }

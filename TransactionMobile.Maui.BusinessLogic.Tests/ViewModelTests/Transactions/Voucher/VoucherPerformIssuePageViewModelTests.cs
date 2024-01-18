@@ -31,12 +31,16 @@ public class VoucherPerformIssuePageViewModelTests
     private readonly Mock<IDialogService> DialogService;
     private readonly VoucherPerformIssuePageViewModel ViewModel;
 
+    private readonly Mock<IDeviceService> DeviceService;
+
     public VoucherPerformIssuePageViewModelTests() {
         this.Mediator = new Mock<IMediator>();
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogService = new Mock<IDialogService>();
-        this.ViewModel = new VoucherPerformIssuePageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogService.Object, this.Mediator.Object);
+        this.DeviceService = new Mock<IDeviceService>();
+        this.ViewModel = new VoucherPerformIssuePageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, 
+                                                              this.DialogService.Object, this.DeviceService.Object, this.Mediator.Object);
     }
 
     [Fact]

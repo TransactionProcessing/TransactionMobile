@@ -31,6 +31,8 @@
     using System.Runtime.CompilerServices;
     using banditoth.MAUI.DeviceId;
     using BusinessLogic.Services.TrainingModeServices;
+    using BusinessLogic.ViewModels.Reports;
+    using Pages.Reports;
     using Pages.Transactions.BillPayment;
     using TransactionProcessorACL.DataTransferObjects.Responses;
     using LogMessage = BusinessLogic.Models.LogMessage;
@@ -266,6 +268,10 @@
 
             builder.Services.AddTransient<HomePageViewModel>();
 
+            builder.Services.AddTransient<ReportsPageViewModel>();
+            builder.Services.AddTransient<ReportsBalanceAnalysisPageViewModel>();
+            builder.Services.AddTransient<ReportsSalesAnalysisPageViewModel>();
+
             return builder;
         }
 
@@ -302,6 +308,10 @@
             builder.Services.AddTransient<MyAccountAddressesPage>();
             builder.Services.AddTransient<MyAccountContactPage>();
             builder.Services.AddTransient<MyAccountDetailsPage>();
+
+            builder.Services.AddTransient<ReportsPage>();
+            builder.Services.AddTransient<ReportsBalanceAnalysisPage>();
+            builder.Services.AddTransient<ReportsSalesAnalysisPage>();
 
             builder.Services.AddTransient<HomePage>();
 

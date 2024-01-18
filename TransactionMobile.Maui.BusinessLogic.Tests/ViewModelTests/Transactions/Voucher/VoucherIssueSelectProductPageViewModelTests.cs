@@ -34,13 +34,18 @@ public class VoucherIssueSelectProductPageViewModelTests
     private readonly Mock<IDialogService> DialogSevice;
     private readonly VoucherSelectProductPageViewModel ViewModel;
 
+    private readonly Mock<IDeviceService> DeviceService;
+
     public VoucherIssueSelectProductPageViewModelTests() {
         
         this.Mediator = new Mock<IMediator>();
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
-        this.ViewModel = new VoucherSelectProductPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object);
+        this.DeviceService = new Mock<IDeviceService>();
+        this.ViewModel = new VoucherSelectProductPageViewModel(this.Mediator.Object, this.NavigationService.Object, 
+                                                               this.ApplicationCache.Object, this.DialogSevice.Object,
+                                                               this.DeviceService.Object);
         
     }
 

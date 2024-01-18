@@ -20,8 +20,6 @@
 
         private readonly IDatabaseContext DatabaseContext;
 
-        private readonly IDeviceService DeviceService;
-
         private readonly IMediator Mediator;
         
         #endregion
@@ -34,9 +32,8 @@
                                     IMediator mediator,
                                     INavigationService navigationService,
                                     IApplicationCache applicationCache,
-                                    IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
+                                    IDialogService dialogService) : base(applicationCache, dialogService, navigationService, deviceService)
         {
-            this.DeviceService = deviceService;
             this.ApplicationInfoService = applicationInfoService;
             this.DatabaseContext = databaseContext;
             this.UploadLogsCommand = new AsyncCommand(this.UploadLogsCommandExecute);

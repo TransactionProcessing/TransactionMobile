@@ -13,5 +13,7 @@ namespace TransactionMobile.Maui.BusinessLogic.UIServices
         String GetModel();
 
         String GetPlatform();
+
+        void SetOrientation(DisplayOrientation displayOrientation);
     }
 }

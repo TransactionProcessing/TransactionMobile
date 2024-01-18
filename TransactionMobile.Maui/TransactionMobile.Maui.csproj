@@ -25,18 +25,14 @@
 		<ApplicationDisplayVersion>1</ApplicationDisplayVersion>
 
 		<!-- Required for C# Hot Reload -->
-		<UseInterpreter Condition="'$(Configuration)' == 'Debug'">True</UseInterpreter>
+		<!--<UseInterpreter Condition="'$(Configuration)' == 'Debug'">True</UseInterpreter>-->
 
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.4</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
-		<RunAOTCompilation>False</RunAOTCompilation>
-
-		<!-- (Optional) Pin to a specific version -->
-		<!--<MauiVersion>6.0.300-rc.3.5667</MauiVersion>-->
 		
 	</PropertyGroup>
 
@@ -257,16 +253,16 @@
 	  <ProjectReference Include="..\TransactionMobile.Maui.BusinessLogic\TransactionMobile.Maui.BusinessLogic.csproj" />
 	</ItemGroup>
 
-	<PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
+	<!--<PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
 		<RuntimeIdentifier>maccatalyst-arm64</RuntimeIdentifier>
-	</PropertyGroup>
+	</PropertyGroup>-->
 
-	<PropertyGroup>
+	<!--<PropertyGroup>
 		<AndroidHttpClientHandlerType>DangerousAndroidMessageHandler, DangerousAndroidMessageHandler</AndroidHttpClientHandlerType>
 		<DefaultLanguage>en</DefaultLanguage>
 		<PackageCertificateThumbprint>8EEF9A99EBFE75E8CB01A297A057014B1AA9F368</PackageCertificateThumbprint>
 		<AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
-	</PropertyGroup>
+	</PropertyGroup>-->
 
 	<!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-android|AnyCPU'">
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>

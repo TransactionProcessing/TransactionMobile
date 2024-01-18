@@ -40,7 +40,8 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
     public BillPaymentPayBillPageViewModel(INavigationService navigationService,
                                            IApplicationCache applicationCache,
                                            IDialogService dialogService,
-                                           IMediator mediator) : base(applicationCache, dialogService, navigationService)
+                                           IMediator mediator,
+                                           IDeviceService deviceService) : base(applicationCache, dialogService, navigationService, deviceService)
     {
         this.Mediator = mediator;
         this.MakeBillPaymentCommand = new AsyncCommand(this.MakeBillPaymentCommandExecute);

@@ -32,7 +32,8 @@
         public MyAccountPageViewModel(INavigationService navigationService,
                                       IApplicationCache applicationCache,
                                       IDialogService dialogService,
-                                      IMediator mediator) : base(applicationCache, dialogService, navigationService) {
+                                      IDeviceService deviceService,
+                                      IMediator mediator) : base(applicationCache, dialogService, navigationService, deviceService) {
             this.Mediator = mediator;
             this.OptionSelectedCommand = new AsyncCommand<ItemSelected<ListViewItem>>(this.OptionSelectedCommandExecute);
             this.Title = "My Account";

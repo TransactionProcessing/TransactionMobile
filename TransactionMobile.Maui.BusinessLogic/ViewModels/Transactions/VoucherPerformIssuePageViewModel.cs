@@ -42,7 +42,8 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
     public VoucherPerformIssuePageViewModel(INavigationService navigationService,
                                             IApplicationCache applicationCache,
                                             IDialogService dialogService,
-                                            IMediator mediator) : base(applicationCache, dialogService, navigationService)
+                                            IDeviceService deviceService,
+                                            IMediator mediator) : base(applicationCache, dialogService, navigationService, deviceService)
     {
         this.Mediator = mediator;
         this.IssueVoucherCommand = new AsyncCommand(this.IssueVoucherCommandExecute);

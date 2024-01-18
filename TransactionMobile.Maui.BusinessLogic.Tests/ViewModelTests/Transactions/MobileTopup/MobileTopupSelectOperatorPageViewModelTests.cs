@@ -1,5 +1,6 @@
 namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions.MobileTopup;
 
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,13 +32,17 @@ public class MobileTopupSelectOperatorPageViewModelTests
     private readonly Mock<IDialogService> DialogSevice;
 
     private readonly MobileTopupSelectOperatorPageViewModel ViewModel;
+
+    private readonly Mock<IDeviceService> DeviceService;
+
     public MobileTopupSelectOperatorPageViewModelTests() {
         this.Mediator = new Mock<IMediator>();
         
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
-        this.ViewModel = new MobileTopupSelectOperatorPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.DialogSevice.Object, this.ApplicationCache.Object);
+        this.DeviceService = new Mock<IDeviceService>();
+        this.ViewModel = new MobileTopupSelectOperatorPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.DialogSevice.Object, this.ApplicationCache.Object, this.DeviceService.Object);
 
         
     }

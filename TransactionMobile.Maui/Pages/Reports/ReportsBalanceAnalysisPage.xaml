@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TransactionMobile.Maui.Pages.Reports.ReportsBalanceAnalysisPage"
+             xmlns:userControls="clr-namespace:TransactionMobile.Maui.Controls;assembly=TransactionMobile.Maui"
+             xmlns:views="clr-namespace:TransactionMobile.Maui.Pages.Common"
+             xmlns:cards="http://schemas.syncfusion.com/maui"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:reports="clr-namespace:TransactionMobile.Maui.BusinessLogic.ViewModels.Reports;assembly=TransactionMobile.Maui.BusinessLogic"
+             xmlns:common="clr-namespace:TransactionMobile.Maui.BusinessLogic.Common;assembly=TransactionMobile.Maui.BusinessLogic"
+             xmlns:micro="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout>
+            <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+
+            <micro:ChartView x:Name="ChartView"
+                                   BackgroundColor="White"
+                                   HeightRequest="250" />
+
+            <Button Text="Back" AutomationId="BackButton" Style="{StaticResource ReportsButtonStyle}" Command="{Binding BackButtonCommand}"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

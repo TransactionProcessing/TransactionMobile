@@ -33,12 +33,16 @@ public class BillPaymentPayBillPageViewModelTests
     private readonly Mock<IDialogService> DialogSevice;
 
     private readonly BillPaymentPayBillPageViewModel ViewModel;
+
+    private readonly Mock<IDeviceService> DeviceService;
+
     public BillPaymentPayBillPageViewModelTests() {
         this.Mediator = new Mock<IMediator>();
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
-        this.ViewModel = new BillPaymentPayBillPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object, this.Mediator.Object);
+        this.DeviceService = new Mock<IDeviceService>();
+        this.ViewModel = new BillPaymentPayBillPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object, this.Mediator.Object, this.DeviceService.Object);
     }
 
     [Fact]

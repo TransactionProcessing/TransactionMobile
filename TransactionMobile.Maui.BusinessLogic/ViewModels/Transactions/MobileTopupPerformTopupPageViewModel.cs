@@ -42,9 +42,9 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
 
     public MobileTopupPerformTopupPageViewModel(IMediator mediator,
                                                 INavigationService navigationService,
-        IApplicationCache applicationCache,
-                      IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
-    {
+                                                IApplicationCache applicationCache,
+                                                IDialogService dialogService,
+                                                IDeviceService deviceService) : base(applicationCache, dialogService, navigationService, deviceService){
         this.Mediator = mediator;
         this.PerformTopupCommand = new AsyncCommand(this.PerformTopupCommandExecute);
         this.CustomerMobileNumberEntryCompletedCommand = new AsyncCommand(this.CustomerMobileNumberEntryCompletedCommandExecute);

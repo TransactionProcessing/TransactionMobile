@@ -9,3 +9,12 @@ public static partial class DeviceInformationService
     
     #endregion
 }
+
+public static partial class DeviceOrientationService
+{
+    #region Methods
+
+    public static partial void SetDeviceOrientation(DisplayOrientation displayOrientation);
+
+    #endregion
+}

@@ -21,7 +21,8 @@ public class ViewLogsPageViewModel : ExtendedBaseViewModel
 
     public ViewLogsPageViewModel(IMediator mediator, INavigationService navigationService,
     IApplicationCache applicationCache,
-                      IDialogService dialogService) : base(applicationCache, dialogService, navigationService) {
+                      IDialogService dialogService,
+    IDeviceService deviceService) : base(applicationCache, dialogService, navigationService, deviceService) {
         this.Mediator = mediator;
         this.Title = "View Logs";
     }

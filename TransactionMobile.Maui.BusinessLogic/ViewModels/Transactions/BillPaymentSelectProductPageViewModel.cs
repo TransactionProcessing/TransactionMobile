@@ -31,7 +31,8 @@ public class BillPaymentSelectProductPageViewModel : ExtendedBaseViewModel, IQue
 
     public BillPaymentSelectProductPageViewModel(IMediator mediator, INavigationService navigationService,
                                                  IApplicationCache applicationCache,
-                                                 IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
+                                                 IDialogService dialogService,
+                                                 IDeviceService deviceService) : base(applicationCache, dialogService, navigationService, deviceService)
     {
         this.Mediator = mediator;
         this.ProductSelectedCommand = new AsyncCommand<ItemSelected<ContractProductModel>>(this.ProductSelectedCommandExecute);

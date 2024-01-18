@@ -33,12 +33,15 @@ public class MobileTopupSelectProductPageViewModelTests
 
     private readonly MobileTopupSelectProductPageViewModel ViewModel;
 
+    private readonly Mock<IDeviceService> DeviceService;
+
     public MobileTopupSelectProductPageViewModelTests() {
         this.Mediator = new Mock<IMediator>();
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
-        this.ViewModel = new MobileTopupSelectProductPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object);
+        this.DeviceService = new Mock<IDeviceService>();
+        this.ViewModel = new MobileTopupSelectProductPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object, this.DeviceService.Object);
     }
 
     [Fact]
