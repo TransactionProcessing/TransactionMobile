@@ -54,6 +54,10 @@ public partial class ReportsPage : NoBackWithoutLogoutPage
 
             button.SetBinding(Button.CommandProperty, command);
             button.SetBinding(Button.CommandParameterProperty, commandParameter);
+
+            rowCount++;
+            this.ReportsList.Add(button);
+
         }
 
         this.ReportsList.Add(this.AddBackButton());

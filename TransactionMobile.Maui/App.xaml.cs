@@ -8,6 +8,7 @@ using Microsoft.Maui.Platform;
 using Pages;
 using Pages.AppHome;
 using Pages.MyAccount;
+using Pages.Reports;
 using Pages.Support;
 using Pages.Transactions.Admin;
 
@@ -138,6 +139,9 @@ public partial class App : Application
         Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
 
         Routing.RegisterRoute(nameof(ViewLogsPage), typeof(ViewLogsPage));
+
+        Routing.RegisterRoute(nameof(ReportsBalanceAnalysisPage), typeof(ReportsBalanceAnalysisPage));
+        Routing.RegisterRoute(nameof(ReportsSalesAnalysisPage), typeof(ReportsSalesAnalysisPage));
 
         Routing.RegisterRoute(nameof(MyAccountAddressesPage), typeof(MyAccountAddressesPage));
         Routing.RegisterRoute(nameof(MyAccountContactPage), typeof(MyAccountContactPage));

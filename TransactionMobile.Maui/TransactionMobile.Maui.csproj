@@ -58,6 +58,7 @@
 		<PackageReference Include="CommunityToolkit.Maui" Version="6.1.0" />
 		<PackageReference Include="MediatR" Version="10.0.1" />
 		<PackageReference Include="MetroLog.Maui" Version="2.0.1" />
+		<PackageReference Include="Microcharts.Maui" Version="1.0.0" />
 		<PackageReference Include="Microsoft.AppCenter" Version="4.1.0" />
 		<PackageReference Include="Microsoft.AppCenter.Distribute" Version="4.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />

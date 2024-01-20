@@ -7,6 +7,7 @@ using BusinessLogic.UIServices;
 using CommunityToolkit.Maui;
 using MetroLog.MicrosoftExtensions;
 using Microsoft.Extensions.Logging;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 using UIServices;
 using TransactionMobile.Maui.BusinessLogic.Services;
 using TransactionMobile.Maui.Database;
@@ -19,7 +20,7 @@ public static class MauiProgram
 	public static MauiApp CreateMauiApp()
 	{
         Builder = MauiApp.CreateBuilder();
-		Builder.UseMauiApp<App>()
+		Builder.UseMauiApp<App>().UseSkiaSharp()
 			.ConfigureRequestHandlers()
 			.ConfigurePages()
 			.ConfigureViewModels()
