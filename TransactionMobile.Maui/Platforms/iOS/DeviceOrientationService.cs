@@ -12,31 +12,42 @@ namespace TransactionMobile.Maui.Platforms.Services
 
     public static partial class DeviceOrientationService
     {
-        private static readonly IReadOnlyDictionary<DisplayOrientation, UIInterfaceOrientation> _iosDisplayOrientationMap =
+        private static readonly IReadOnlyDictionary<DisplayOrientation, UIInterfaceOrientation> UIInterfaceOrientationMapping =
             new Dictionary<DisplayOrientation, UIInterfaceOrientation>
             {
                 [DisplayOrientation.Landscape] = UIInterfaceOrientation.LandscapeLeft,
                 [DisplayOrientation.Portrait] = UIInterfaceOrientation.Portrait,
             };
 
-        public static partial void SetDeviceOrientation(DisplayOrientation displayOrientation)
-        {
+        private static readonly IReadOnlyDictionary<DisplayOrientation, UIInterfaceOrientationMask> UIInterfaceOrientationMaskMapping =
+            new Dictionary<DisplayOrientation, UIInterfaceOrientationMask>
+            {
+                [DisplayOrientation.Landscape] = UIInterfaceOrientationMask.Landscape,
+                [DisplayOrientation.Portrait] = UIInterfaceOrientationMask.Portrait,
+            };
+
+        public static partial void SetDeviceOrientation(DisplayOrientation displayOrientation){
+            
             if (UIDevice.CurrentDevice.CheckSystemVersion(16, 0)){
 
                 var scene = (UIApplication.SharedApplication.ConnectedScenes.ToArray()[0] as UIWindowScene);
-                if (scene != null){
+                if (scene != null)
+                {
                     var uiAppplication = UIApplication.SharedApplication;
                     var test = UIApplication.SharedApplication.KeyWindow?.RootViewController;
-                    if (test != null){
+                    if (test != null)
+                    {
                         test.SetNeedsUpdateOfSupportedInterfaceOrientations();
+                        UIInterfaceOrientationMask mappingValue = DeviceOrientationService.UIInterfaceOrientationMaskMapping.Single(m => m.Key == displayOrientation).Value;
                         scene.RequestGeometryUpdate(
-                                                    new UIWindowSceneGeometryPreferencesIOS(UIInterfaceOrientationMask.Portrait),
+                                                    new UIWindowSceneGeometryPreferencesIOS(mappingValue),
                                                     error => { });
                     }
                 }
             }
             else{
-                UIDevice.CurrentDevice.SetValueForKey(new NSNumber((int)UIInterfaceOrientation.Portrait), new NSString("orientation"));
+                UIInterfaceOrientation mappingValue = DeviceOrientationService.UIInterfaceOrientationMapping.Single(m => m.Key == displayOrientation).Value;
+                UIDevice.CurrentDevice.SetValueForKey(new NSNumber((int)mappingValue), new NSString("orientation"));
             }
         }
     }

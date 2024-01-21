@@ -15,9 +15,9 @@
         <VerticalStackLayout>
             <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
 
-            <micro:ChartView x:Name="ChartView"
+            <!--<micro:ChartView x:Name="ChartView"
                                    BackgroundColor="White"
-                                   HeightRequest="250" />
+                                   HeightRequest="250" />-->
 
             <Button Text="Back" AutomationId="BackButton" Style="{StaticResource ReportsButtonStyle}" Command="{Binding BackButtonCommand}"/>
 
