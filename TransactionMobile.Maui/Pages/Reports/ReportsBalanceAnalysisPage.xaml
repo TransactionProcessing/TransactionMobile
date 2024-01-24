@@ -8,16 +8,21 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:reports="clr-namespace:TransactionMobile.Maui.BusinessLogic.ViewModels.Reports;assembly=TransactionMobile.Maui.BusinessLogic"
              xmlns:common="clr-namespace:TransactionMobile.Maui.BusinessLogic.Common;assembly=TransactionMobile.Maui.BusinessLogic"
-             xmlns:micro="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+             xmlns:maui="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
              Shell.NavBarIsVisible="False">
 
     <ScrollView>
         <VerticalStackLayout>
             <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
 
-            <!--<micro:ChartView x:Name="ChartView"
-                                   BackgroundColor="White"
-                                   HeightRequest="250" />-->
+            <maui:CartesianChart x:Name="Chart"
+                Series="{Binding Series}" 
+                YAxes="{Binding YAxes}"
+                XAxes="{Binding XAxes}"
+                TooltipFindingStrategy="{Binding TooltipFindingStrategy}"
+                TooltipPosition="{Binding TooltipPosition}"
+                HeightRequest="200" HorizontalOptions="FillAndExpand">
+            </maui:CartesianChart>
 
             <Button Text="Back" AutomationId="BackButton" Style="{StaticResource ReportsButtonStyle}" Command="{Binding BackButtonCommand}"/>
 

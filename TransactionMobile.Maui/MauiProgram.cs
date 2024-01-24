@@ -21,7 +21,8 @@ public static class MauiProgram
 	public static MauiApp CreateMauiApp()
 	{
         Builder = MauiApp.CreateBuilder();
-		Builder.UseMauiApp<App>().UseMicrocharts()
+		Builder.UseMauiApp<App>()
+               .UseSkiaSharp()
 			.ConfigureRequestHandlers()
 			.ConfigurePages()
 			.ConfigureViewModels()
