@@ -1,5 +1,6 @@
 namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions.Voucher;
 
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,13 +33,16 @@ public class VoucherSelectOperatorPageViewModelTests
 
     private readonly VoucherSelectOperatorPageViewModel ViewModel;
 
+    private readonly Mock<IDeviceService> DeviceService;
+
     public VoucherSelectOperatorPageViewModelTests() {
         this.Mediator = new Mock<IMediator>();
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
+        this.DeviceService = new Mock<IDeviceService>();
         this.ViewModel = new VoucherSelectOperatorPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object,
-                                                                this.DialogSevice.Object);
+                                                                this.DialogSevice.Object, this.DeviceService.Object);
 
     }
     [Fact]

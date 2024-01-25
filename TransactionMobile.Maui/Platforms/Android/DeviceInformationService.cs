@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace TransactionMobile.Maui.Platforms.Services
 {
     using Android.Content;
+    using Android.Content.PM;
     using Android.OS;
     using Android.Provider;
     using Android.Util;

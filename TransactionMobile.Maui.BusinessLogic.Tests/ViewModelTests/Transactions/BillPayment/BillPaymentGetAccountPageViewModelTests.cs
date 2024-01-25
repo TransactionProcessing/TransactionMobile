@@ -34,12 +34,16 @@ public class BillPaymentGetAccountPageViewModelTests
 
     private readonly BillPaymentGetAccountPageViewModel ViewModel;
 
+    private readonly Mock<IDeviceService> DeviceService;
+
     public BillPaymentGetAccountPageViewModelTests() {
         this.Mediator = new Mock<IMediator>();
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
-        this.ViewModel = new BillPaymentGetAccountPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object, this.Mediator.Object);
+        this.DeviceService = new Mock<IDeviceService>();
+        this.ViewModel = new BillPaymentGetAccountPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, 
+                                                                this.DialogSevice.Object, this.DeviceService.Object, this.Mediator.Object);
 
         Logger.Initialise(new NullLogger());
     }

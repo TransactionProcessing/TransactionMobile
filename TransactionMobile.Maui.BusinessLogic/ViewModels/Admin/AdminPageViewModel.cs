@@ -18,8 +18,6 @@
     {
         private readonly IMediator Mediator;
         
-        private readonly IDeviceService DeviceService;
-
         private readonly IApplicationInfoService ApplicationInfoService;
 
         #region Constructors
@@ -28,10 +26,9 @@
                                   IApplicationCache applicationCache,
                                   IDialogService dialogService,
                                   IDeviceService deviceService, IApplicationInfoService applicationInfoService) :
-            base(applicationCache,dialogService, navigationService)
+            base(applicationCache,dialogService, navigationService, deviceService)
         {
             this.Mediator = mediator;
-            this.DeviceService = deviceService;
             this.ApplicationInfoService = applicationInfoService;
             this.ReconciliationCommand = new AsyncCommand(this.ReconciliationCommandExecute);
             this.Title = "Select Admin Transaction Type";

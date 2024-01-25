@@ -1,6 +1,5 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels;
 
-using System.Runtime.CompilerServices;
 using Logging;
 using Maui.UIServices;
 using Microsoft.AppCenter;
@@ -15,7 +14,8 @@ public class HomePageViewModel : ExtendedBaseViewModel
     
     public HomePageViewModel(IApplicationCache applicationCache,
                              IDialogService dialogService,
-                             INavigationService navigationService) :base(applicationCache,dialogService, navigationService)
+                             IDeviceService deviceService,
+                             INavigationService navigationService) :base(applicationCache,dialogService, navigationService, deviceService)
     {
         
     }

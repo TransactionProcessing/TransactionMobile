@@ -21,7 +21,8 @@ public class MyAccountContactPageViewModel : ExtendedBaseViewModel
 
     public MyAccountContactPageViewModel(INavigationService navigationService,
                                          IApplicationCache applicationCache,
-                                         IDialogService dialogService) : base(applicationCache, dialogService, navigationService) {
+                                         IDialogService dialogService,
+                                         IDeviceService deviceService) : base(applicationCache, dialogService, navigationService, deviceService) {
         this.Title = "My Contacts";
     }
 

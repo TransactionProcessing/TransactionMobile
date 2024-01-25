@@ -6,9 +6,12 @@
                                xmlns:views="clr-namespace:TransactionMobile.Maui.Pages.Common"
                                Shell.NavBarIsVisible="False">
     <StackLayout>
-        <userControls:TitleLabel Text="Reports" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-        <Label Text="Welcome to Reports"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+        <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+        <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
+               CornerRadius="20" Opacity="0.9" BackgroundColor="#E5E9F0">
+
+            <VerticalStackLayout x:Name="ReportsList" Spacing="10">
+            </VerticalStackLayout>
+        </Frame>
     </StackLayout>
 </views:NoBackWithoutLogoutPage>

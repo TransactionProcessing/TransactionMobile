@@ -1,5 +1,6 @@
 namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions;
 
+using System;
 using Logging;
 using Maui.UIServices;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -17,11 +18,15 @@ public class TransactionsPageViewModelTests
     private readonly Mock<INavigationService> NavigationService;
     private readonly TransactionsPageViewModel ViewModel;
     private readonly Mock<IDialogService> DialogSevice;
+
+    private readonly Mock<IDeviceService> DeviceService;
+
     public TransactionsPageViewModelTests() {
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
-        this.ViewModel = new TransactionsPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object);
+        this.DeviceService = new Mock<IDeviceService>();
+        this.ViewModel = new TransactionsPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object, this.DeviceService.Object);
         
     }
 

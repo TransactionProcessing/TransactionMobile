@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions.BillPayment
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading;
     using Common;
@@ -32,17 +33,20 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
         private readonly Mock<IDialogService> DialogSevice;
 
         private readonly BillPaymentSelectOperatorPageViewModel ViewModel;
-        
+
+        private readonly Mock<IDeviceService> DeviceService;
+
         public BillPaymentSelectOperatorPageViewModelTests() {
             this.Mediator = new Mock<IMediator>();
             this.NavigationService = new Mock<INavigationService>();
             this.ApplicationCache = new Mock<IApplicationCache>();
             this.DialogSevice = new Mock<IDialogService>();
-        
+            this.DeviceService = new Mock<IDeviceService>();
             this.ViewModel = new BillPaymentSelectOperatorPageViewModel(this.Mediator.Object,
                                                                         this.NavigationService.Object,
                                                                         this.ApplicationCache.Object,
-                                                                        this.DialogSevice.Object);
+                                                                        this.DialogSevice.Object,
+                                                                        this.DeviceService.Object);
         }
 
         [Fact]

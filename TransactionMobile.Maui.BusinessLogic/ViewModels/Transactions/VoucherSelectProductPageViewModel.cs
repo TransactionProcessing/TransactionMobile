@@ -33,7 +33,8 @@ public class VoucherSelectProductPageViewModel : ExtendedBaseViewModel, IQueryAt
     public VoucherSelectProductPageViewModel(IMediator mediator,
                                              INavigationService navigationService,
                                              IApplicationCache applicationCache,
-                                             IDialogService dialogService) : base(applicationCache, dialogService, navigationService)
+                                             IDialogService dialogService,
+                                             IDeviceService deviceService) : base(applicationCache, dialogService, navigationService, deviceService)
     {
         this.Mediator = mediator;
         this.ProductSelectedCommand = new AsyncCommand<ItemSelected<ContractProductModel>>(this.ProductSelectedCommandExecute);

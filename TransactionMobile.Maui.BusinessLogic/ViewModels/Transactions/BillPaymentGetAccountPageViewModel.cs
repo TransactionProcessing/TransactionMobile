@@ -26,7 +26,8 @@ public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel, IQueryA
     public BillPaymentGetAccountPageViewModel(INavigationService navigationService,
                                               IApplicationCache applicationCache,
                                               IDialogService dialogService,
-                                              IMediator mediator) : base(applicationCache, dialogService, navigationService) {
+                                              IDeviceService deviceService,
+                                              IMediator mediator) : base(applicationCache, dialogService, navigationService, deviceService) {
         this.Mediator = mediator;
         this.GetAccountCommand = new AsyncCommand(this.GetAccountCommandExecute);
         this.Title = "Get Customer Account";

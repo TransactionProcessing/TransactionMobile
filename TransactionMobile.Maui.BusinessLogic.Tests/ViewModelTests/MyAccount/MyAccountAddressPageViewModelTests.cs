@@ -1,5 +1,6 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.MyAccount;
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Logging;
@@ -22,15 +23,20 @@ public class MyAccountAddressPageViewModelTests
     private readonly Mock<IDialogService> DialogService;
     private readonly Mock<IMediator> Mediator;
     private readonly MyAccountAddressPageViewModel ViewModel;
+
+    private readonly Mock<IDeviceService> DeviceService;
+
     public MyAccountAddressPageViewModelTests()
     {
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogService = new Mock<IDialogService>();
         this.Mediator = new Mock<IMediator>();
+        this.DeviceService = new Mock<IDeviceService>();
         this.ViewModel = new MyAccountAddressPageViewModel(this.NavigationService.Object,
                                                            this.ApplicationCache.Object,
                                                            this.DialogService.Object,
+                                                           this.DeviceService.Object,
                                                            this.Mediator.Object);
     }
 

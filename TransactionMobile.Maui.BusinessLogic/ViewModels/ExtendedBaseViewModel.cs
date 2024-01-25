@@ -6,6 +6,7 @@ using Maui.UIServices;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
 using MyAccount;
+using Reports;
 using RequestHandlers;
 using Services;
 using Support;
@@ -22,17 +23,24 @@ public class ExtendedBaseViewModel : BaseViewModel
 
     protected readonly INavigationService NavigationService;
 
+    protected readonly IDeviceService DeviceService;
+
     #endregion
 
     #region Constructors
 
     public ExtendedBaseViewModel(IApplicationCache applicationCache,
                                  IDialogService dialogService,
-                                 INavigationService navigationService) {
+                                 INavigationService navigationService,
+                                 IDeviceService deviceService,
+                                 DisplayOrientation orientation = DisplayOrientation.Portrait) {
         this.NavigationService = navigationService;
+        this.DeviceService = deviceService;
         this.ApplicationCache = applicationCache;
         this.DialogService = dialogService;
         this.BackButtonCommand = new AsyncCommand(this.BackButtonCommandExecute);
+        this.Orientation = orientation;
+        //this.DeviceService.SetOrientation(orientation);
     }
 
     #endregion
@@ -40,6 +48,16 @@ public class ExtendedBaseViewModel : BaseViewModel
     #region Properties
 
     public ICommand BackButtonCommand { get; }
+
+    //public void SetOrientation(DisplayOrientation orientation){
+    //    this.
+    //}
+
+    public virtual async Task Initialise(CancellationToken cancellationToken){
+        this.DeviceService.SetOrientation(this.Orientation);
+    }
+
+    public DisplayOrientation Orientation{ get; private set; }
 
     #endregion
 
@@ -50,6 +68,7 @@ public class ExtendedBaseViewModel : BaseViewModel
         Task t = type.Name switch {
             nameof(TransactionsPageViewModel) => this.ShowHomePage(),
             nameof(MyAccountPageViewModel) => this.ShowHomePage(),
+            nameof(ReportsPageViewModel) => this.ShowHomePage(),
             nameof(SupportPageViewModel) => this.ShowHomePage(),
             nameof(HomePageViewModel) => this.ShowLoginPage(),
             nameof(LoginPageViewModel) => new Task(() => Application.Current.Quit()),

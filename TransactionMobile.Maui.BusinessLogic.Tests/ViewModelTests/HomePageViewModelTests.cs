@@ -22,12 +22,16 @@ public class HomePageViewModelTests
 
     private HomePageViewModel viewModel;
 
+    private readonly Mock<IDeviceService> DeviceService;
+
     public HomePageViewModelTests() {
          this.navigationService = new Mock<INavigationService>();
         applicationCache = new Mock<IApplicationCache>();
         dialogService = new Mock<IDialogService>();
+        this.DeviceService = new Mock<IDeviceService>();
         viewModel = new HomePageViewModel(applicationCache.Object,
                                                             dialogService.Object,
+                                                            this.DeviceService.Object,
                                                             navigationService.Object);
         Logger.Initialise(new NullLogger());
     }

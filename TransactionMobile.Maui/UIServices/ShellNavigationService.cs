@@ -6,6 +6,7 @@ using BusinessLogic.ViewModels.MyAccount;
 using BusinessLogic.ViewModels.Transactions;
 using Pages;
 using Pages.MyAccount;
+using Pages.Reports;
 using Pages.Support;
 using Pages.Transactions.Admin;
 using Pages.Transactions.BillPayment;
@@ -157,6 +158,14 @@ public class ShellNavigationService : INavigationService
 
     public async Task GoToMyAccountDetails() {
         await NavigateTo(nameof(MyAccountDetailsPage));
+    }
+
+    public async Task GoToReportsSalesAnalysis(){
+        await NavigateTo(nameof(ReportsSalesAnalysisPage));
+    }
+
+    public async Task GoToReportsBalanceAnalysis(){
+        await NavigateTo(nameof(ReportsBalanceAnalysisPage));
     }
 
     private async Task NavigateTo(String route) {
