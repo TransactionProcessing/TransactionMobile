@@ -254,20 +254,20 @@
 	  <ProjectReference Include="..\TransactionMobile.Maui.BusinessLogic\TransactionMobile.Maui.BusinessLogic.csproj" />
 	</ItemGroup>
 
-	<!--<PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
+	<PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
 		<RuntimeIdentifier>maccatalyst-arm64</RuntimeIdentifier>
-	</PropertyGroup>-->
+	</PropertyGroup>
 
-	<!--<PropertyGroup>
+	<PropertyGroup>
 		<AndroidHttpClientHandlerType>DangerousAndroidMessageHandler, DangerousAndroidMessageHandler</AndroidHttpClientHandlerType>
 		<DefaultLanguage>en</DefaultLanguage>
 		<PackageCertificateThumbprint>8EEF9A99EBFE75E8CB01A297A057014B1AA9F368</PackageCertificateThumbprint>
 		<AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
-	</PropertyGroup>-->
+	</PropertyGroup>
 
-	<!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-android|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-android|AnyCPU'">
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
-	</PropertyGroup>-->
+	</PropertyGroup>
 
 	<!--<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">
 		<PublishTrimmed>true</PublishTrimmed>
