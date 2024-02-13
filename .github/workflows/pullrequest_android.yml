@@ -33,13 +33,19 @@ jobs:
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj              
         
   build-android-nondocker-navtests:
-    runs-on: macos-11
+    runs-on: ubuntu-latest
     name: Android Build - Navigation Tests
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: malinskiy/action-android/install-sdk@release/0.1.1
+      - name: Enable KVM
+        run: |
+            echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+            sudo udevadm control --reload-rules
+            sudo udevadm trigger --name-match=kvm
+
+      - uses: malinskiy/action-android/install-sdk@release/0.1.6
       - run: sdkmanager "platform-tools" "platforms;android-33"
       - run: sdkmanager "build-tools;30.0.2"
       - run: adb devices
@@ -86,18 +92,19 @@ jobs:
           path: artifacts/logcat.log 
 
   build-android-nondocker-hwnavtests:
-    runs-on: macos-11
+    runs-on: ubuntu-latest
     name: Android Build - Hardware Navigation Tests
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-          
-      # - name: Setup Docker
-      #   run: |
-      #    brew install docker
-      #    colima start --cpu 2 --memory 8 --disk 100
 
-      - uses: malinskiy/action-android/install-sdk@release/0.1.1
+      - name: Enable KVM
+        run: |
+            echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+            sudo udevadm control --reload-rules
+            sudo udevadm trigger --name-match=kvm
+
+      - uses: malinskiy/action-android/install-sdk@release/0.1.6
       - run: sdkmanager "platform-tools" "platforms;android-33"
       - run: sdkmanager "build-tools;30.0.2"
       - run: adb devices
@@ -144,7 +151,7 @@ jobs:
           path: artifacts/logcat.log
 
   build-android-withdocker:
-    runs-on: macos-11
+    runs-on: ubuntu-latest
     name: Android Build - End To End Tests
     steps:
       - name: Checkout
@@ -155,11 +162,6 @@ jobs:
 
       - name: Cache Public IP
         run: echo "ENV_IPADDRESS=$(ipconfig getifaddr en0)" >> $GITHUB_ENV
-          
-      - name: Setup Docker
-        run: |
-         brew install docker
-         colima start --cpu 2 --memory 8 --disk 100
 
       - name: Pull images
         run: |
@@ -173,7 +175,13 @@ jobs:
          docker pull mcr.microsoft.com/azure-sql-edge
          docker pull eventstore/eventstore:21.10.0-buster-slim
 
-      - uses: malinskiy/action-android/install-sdk@release/0.1.1
+      - name: Enable KVM
+        run: |
+            echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+            sudo udevadm control --reload-rules
+            sudo udevadm trigger --name-match=kvm
+
+      - uses: malinskiy/action-android/install-sdk@release/0.1.6
       - run: sdkmanager "platform-tools" "platforms;android-33"
       - run: sdkmanager "build-tools;30.0.2"
       - run: adb devices
