@@ -64,7 +64,7 @@ jobs:
       - name: Install MAUI Workloads
         run: |
           dotnet workload install android --ignore-failed-sources
-          dotnet workload install maui --ignore-failed-sources 
+          #dotnet workload install maui --ignore-failed-sources 
 
       - name: Restore Dependencies
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
