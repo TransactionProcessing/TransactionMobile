@@ -257,6 +257,27 @@ public static class Extensions
         return saleTransactionRequest;
     }
 
+    public static SaleTransactionRequestMessage ToSaleTransactionRequest(this PerformBillPaymentGetMeterModel model)
+    {
+        SaleTransactionRequestMessage saleTransactionRequest = new SaleTransactionRequestMessage
+        {
+            ProductId = model.ProductId,
+            OperatorIdentifier = model.OperatorIdentifier,
+            ApplicationVersion = model.ApplicationVersion,
+            DeviceIdentifier = model.DeviceIdentifier,
+            ContractId = model.ContractId,
+            TransactionDateTime = model.TransactionDateTime,
+            TransactionNumber = model.TransactionNumber
+        };
+        // Add the additional request data
+        saleTransactionRequest.AdditionalRequestMetaData = new Dictionary<String, String> {
+                                                                                              {"MeterNumber", model.MeterNumber.ToString()},
+                                                                                              {"PataPawaPrePaidMessageType", "meter"}
+                                                                                          };
+
+        return saleTransactionRequest;
+    }
+
     public static T ExtractFieldFromMetadata<T>(this Dictionary<String, String> additionalTransactionMetadata,
                                                 String fieldName)
     {
@@ -288,6 +309,16 @@ public static class Extensions
         billDetails.DueDate = additionalTransactionMetadata.ExtractFieldFromMetadata<String>("customerBillDueDate");
 
         return billDetails;
+    }
+
+    public static MeterDetails ToMeterDetails(this Dictionary<String, String> additionalTransactionMetadata)
+    {
+        MeterDetails meterDetails = new MeterDetails();
+
+        meterDetails.MeterNumber = additionalTransactionMetadata.ExtractFieldFromMetadata<String>("meterNumber");
+        meterDetails.CustomerName = additionalTransactionMetadata.ExtractFieldFromMetadata<String>("customerName"); ;
+
+        return meterDetails;
     }
 
     public static Boolean IsSuccessfulTransaction(this SaleTransactionResponseMessage transactionResponse) {

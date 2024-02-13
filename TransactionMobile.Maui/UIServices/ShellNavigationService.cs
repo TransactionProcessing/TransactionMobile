@@ -127,11 +127,31 @@ public class ShellNavigationService : INavigationService
             NavigateTo($"{nameof(BillPaymentGetAccountPage)}", d);
     }
 
+    public async Task GoToBillPaymentGetMeterPage(ProductDetails productDetails){
+        Dictionary<String, Object> d = new Dictionary<String, Object>() {
+                                                                            {nameof(ProductDetails), productDetails},
+                                                                        };
+        await
+            NavigateTo($"{nameof(BillPaymentGetMeterPage)}", d);
+    }
+
     public async Task GoToBillPaymentPayBillPage(ProductDetails productDetails,
-                                                     BillDetails billDetails) {
+                                                 BillDetails billDetails) {
         Dictionary<String, Object> d = new Dictionary<String, Object>() {
                                                                             {nameof(ProductDetails), productDetails},
                                                                             {nameof(BillDetails), billDetails}
+                                                                        };
+
+        await
+            NavigateTo($"{nameof(BillPaymentPayBillPage)}", d);
+    }
+
+    public async Task GoToBillPaymentPayBillPage(ProductDetails productDetails,
+                                                 MeterDetails meterDetails)
+    {
+        Dictionary<String, Object> d = new Dictionary<String, Object>() {
+                                                                            {nameof(ProductDetails), productDetails},
+                                                                            {nameof(MeterDetails), meterDetails}
                                                                         };
 
         await

@@ -74,8 +74,12 @@ public class BillPaymentSelectProductPageViewModel : ExtendedBaseViewModel, IQue
                                             ContractId = e.SelectedItem.ContractId,
                                             ProductId = e.SelectedItem.ProductId
                                         };
+        Task task = e.SelectedItem.ProductSubType switch{
+            ProductSubType.BillPaymentPostPay => this.NavigationService.GoToBillPaymentGetAccountPage(productDetails),
+            _ => this.NavigationService.GoToBillPaymentGetMeterPage(productDetails)
+        };
 
-        await this.NavigationService.GoToBillPaymentGetAccountPage(productDetails);
+        await task;
     }
 
     #endregion

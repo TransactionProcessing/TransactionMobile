@@ -131,6 +131,7 @@ public partial class App : Application
         Routing.RegisterRoute(nameof(BillPaymentSelectOperatorPage), typeof(BillPaymentSelectOperatorPage));
         Routing.RegisterRoute(nameof(BillPaymentSelectProductPage), typeof(BillPaymentSelectProductPage));
         Routing.RegisterRoute(nameof(BillPaymentGetAccountPage), typeof(BillPaymentGetAccountPage));
+        Routing.RegisterRoute(nameof(BillPaymentGetMeterPage), typeof(BillPaymentGetMeterPage));
         Routing.RegisterRoute(nameof(BillPaymentPayBillPage), typeof(BillPaymentPayBillPage));
         Routing.RegisterRoute(nameof(BillPaymentSuccessPage), typeof(BillPaymentSuccessPage));
         Routing.RegisterRoute(nameof(BillPaymentFailedPage), typeof(BillPaymentFailedPage));

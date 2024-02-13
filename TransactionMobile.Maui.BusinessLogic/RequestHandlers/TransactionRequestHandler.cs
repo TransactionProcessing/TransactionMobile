@@ -16,6 +16,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                          IRequestHandler<PerformVoucherIssueRequest, Result<PerformVoucherIssueResponseModel>>,
                                          IRequestHandler<PerformReconciliationRequest, Result<PerformReconciliationResponseModel>>,
                                          IRequestHandler<PerformBillPaymentGetAccountRequest, Result<PerformBillPaymentGetAccountResponseModel>>,
+                                         IRequestHandler<PerformBillPaymentGetMeterRequest, Result<PerformBillPaymentGetMeterResponseModel>>,
                                          IRequestHandler<PerformBillPaymentMakePaymentRequest, Result<PerformBillPaymentMakePaymentResponseModel>>
 {
     #region Fields
@@ -279,4 +280,29 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
 
     }
     #endregion
+
+    public async Task<Result<PerformBillPaymentGetMeterResponseModel>> Handle(PerformBillPaymentGetMeterRequest request, CancellationToken cancellationToken){
+        Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+        //(Int64 transactionNumber, TransactionRecord transactionRecord) transaction = await this.CreateTransactionRecord(request.ToTransactionRecord(useTrainingMode));
+
+        ITransactionService transactionService = this.TransactionServiceResolver(useTrainingMode);
+
+        PerformBillPaymentGetMeterModel model = new PerformBillPaymentGetMeterModel
+        {
+                                                      ContractId = request.ContractId,
+                                                      OperatorIdentifier = request.OperatorIdentifier,
+                                                      ProductId = request.ProductId,
+                                                      TransactionDateTime = request.TransactionDateTime,
+                                                      //TransactionNumber = transaction.transactionNumber.ToString(),
+                                                      MeterNumber = request.MeterNumber,
+                                                      DeviceIdentifier = this.DeviceService.GetIdentifier(),
+                                                      ApplicationVersion = this.ApplicationInfoService.VersionString
+                                                  };
+
+        Result<PerformBillPaymentGetMeterResponseModel> result = await transactionService.PerformBillPaymentGetMeter(model, cancellationToken);
+
+        //await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
+
+        return result;
+    }
 }

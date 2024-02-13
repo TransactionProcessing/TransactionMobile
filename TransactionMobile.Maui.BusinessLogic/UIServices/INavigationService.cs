@@ -46,8 +46,12 @@ public interface INavigationService
 
     Task GoToBillPaymentGetAccountPage(ProductDetails productDetails);
 
+    Task GoToBillPaymentGetMeterPage(ProductDetails productDetails);
     Task GoToBillPaymentPayBillPage(ProductDetails productDetails,
                                     BillDetails billDetails);
+
+    Task GoToBillPaymentPayBillPage(ProductDetails productDetails,
+                                    MeterDetails meterDetails);
 
     Task GoToLoginPage();
 

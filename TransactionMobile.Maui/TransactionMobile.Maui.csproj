@@ -93,6 +93,9 @@
 	  <Compile Update="Pages\Transactions\Admin\AdminPage.xaml.cs">
 	    <DependentUpon>AdminPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Pages\Transactions\BillPayment\BillPaymentGetMeterPage.xaml.cs">
+	    <DependentUpon>BillPaymentGetMeterPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\Transactions\BillPayment\BillPaymentPayBillPage.xaml.cs">
 	    <DependentUpon>BillPaymentPayBillPage.xaml</DependentUpon>
 	  </Compile>
@@ -182,6 +185,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Transactions\Admin\AdminPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Transactions\BillPayment\BillPaymentGetMeterPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Transactions\BillPayment\BillPaymentPayBillPage.xaml">

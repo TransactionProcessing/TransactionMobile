@@ -92,8 +92,32 @@
             return new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(responseModel);
         }
 
+        public async Task<Result<PerformBillPaymentGetMeterResponseModel>> PerformBillPaymentGetMeter(PerformBillPaymentGetMeterModel model, CancellationToken cancellationToken){
+            Logger.LogInformation("About to perform bill payment get meter transaction");
+
+            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
+
+            if (result.Success == false)
+            {
+                Logger.LogWarning("Error performing bill payment - get account transaction");
+                return new ErrorResult<PerformBillPaymentGetMeterResponseModel>("Error performing bill payment - get meter transaction");
+
+            }
+
+            // TODO: Factory
+            PerformBillPaymentGetMeterResponseModel responseModel = new()
+                                                                    {
+                                                                        IsSuccessful = result.Data.IsSuccessfulTransaction(),
+                                                                        MeterDetails = result.Data.AdditionalResponseMetaData.ToMeterDetails()
+                                                                    };
+
+            Logger.LogInformation("Bill payment - get meter transaction performed successfully");
+
+            return new SuccessResult<PerformBillPaymentGetMeterResponseModel>(responseModel);
+        }
+
         public async Task<Result<PerformLogonResponseModel>> PerformLogon(PerformLogonRequestModel model,
-                                                                                CancellationToken cancellationToken) {
+                                                                          CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform logon transaction");
 
             Result<LogonTransactionResponseMessage> result =  await this.SendTransactionRequest<LogonTransactionRequestMessage, LogonTransactionResponseMessage>(model.ToLogonTransactionRequest(), cancellationToken);

@@ -10,8 +10,8 @@
             <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"
                                      VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
             <Frame HasShadow="True" Padding="50,20,50,20" Margin="10,0,0,10" VerticalOptions="CenterAndExpand" 
-                   CornerRadius="20" Opacity="0.9" BackgroundColor="#f5f8fa">
-                <VerticalStackLayout x:Name="SubLayout">
+                   CornerRadius="20" Opacity="0.9" BackgroundColor="#f5f8fa" IsVisible="{Binding IsPostPayVisible}">
+                <VerticalStackLayout x:Name="PostPayLayout">
                     <Label Text="Bill Details" HorizontalTextAlignment="Center"
                            HorizontalOptions="Fill" FontAttributes="Bold" FontSize="20"
                            Margin="10,0,0,10" AutomationId="PrimaryAddressLabel"/>
@@ -41,9 +41,9 @@
                         </Entry.Behaviors>
                     </Entry>
 
-                    <Entry x:Name="PaymentAmountEntry"
+                    <Entry x:Name="PostPaymentAmountEntry"
                            Placeholder="100"
-                           AutomationId="VoucherAmountEntry"
+                           AutomationId="PostPaymentAmountEntry"
                            Style="{DynamicResource AmountEntryStyle}"
                            Text="{Binding PaymentAmount}"
                            Keyboard="Numeric">
@@ -55,7 +55,32 @@
                     </Entry>
                 </VerticalStackLayout>
             </Frame>
+            <Frame HasShadow="True" Padding="50,20,50,20" Margin="10,0,0,10" VerticalOptions="CenterAndExpand" 
+                   CornerRadius="20" Opacity="0.9" BackgroundColor="#f5f8fa" IsVisible="{Binding IsPrePayVisible}">
+                <VerticalStackLayout x:Name="PrePayLayout">
+                    <Label Text="Meter Details" HorizontalTextAlignment="Center"
+                           HorizontalOptions="Fill" FontAttributes="Bold" FontSize="20"
+                           Margin="10,0,0,10" AutomationId="PrimaryAddressLabel"/>
 
+                    <Label Text="{Binding MeterDetails.MeterNumber, StringFormat='Meter Number: {0}'}"
+                           HorizontalTextAlignment="Start"
+                           HorizontalOptions="Fill" AutomationId="MeterNumber"/>
+
+                    <Entry x:Name="PrePaymentAmountEntry"
+                           Placeholder="100"
+                           AutomationId="PrePaymentAmountEntry"
+                           Style="{DynamicResource AmountEntryStyle}"
+                           Text="{Binding PaymentAmount}"
+                           Keyboard="Numeric">
+                        <Entry.Behaviors>
+                            <behaviors:EventToCommandBehavior             
+                                EventName="Completed"  
+                                Command="{Binding PaymentAmountEntryCompletedCommand}" />
+                        </Entry.Behaviors>
+                    </Entry>
+                </VerticalStackLayout>
+            </Frame>
+            
             <Button x:Name="MakePaymentButton" Text="Make Payment" Command="{Binding MakeBillPaymentCommand}"
                             Style="{DynamicResource BillPaymentButtonStyle}" AutomationId="MakePaymentButton"/>
                     <Button Text="Back" Style="{StaticResource BillPaymentButtonStyle}"
