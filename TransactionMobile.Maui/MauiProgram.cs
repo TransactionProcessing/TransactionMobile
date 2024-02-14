@@ -20,6 +20,8 @@ public static class MauiProgram
 	private static MauiAppBuilder Builder;
 	public static MauiApp CreateMauiApp()
 	{
+        Logger.LogInformation("In CreateMauiApp");
+
         Builder = MauiApp.CreateBuilder();
 		Builder.UseMauiApp<App>()
                .UseSkiaSharp()
