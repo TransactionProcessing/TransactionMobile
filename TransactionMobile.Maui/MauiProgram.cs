@@ -17,6 +17,7 @@ using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 public static class MauiProgram
 {
 	public static MauiApp Container;
+
 	private static MauiAppBuilder Builder;
 	public static MauiApp CreateMauiApp()
 	{
