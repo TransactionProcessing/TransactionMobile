@@ -149,6 +149,10 @@ namespace TransactionMobile.Maui.BusinessLogic.Logging
         /// <param name="message">The message.</param>
         public static void LogInformation(String message)
         {
+            if (Logger.LoggerObjects == null || Logger.LoggerObjects.Any() == false){
+                Console.WriteLine(message);
+                return;
+            }
             foreach (ILogger loggerObject in Logger.LoggerObjects)
             {
                 loggerObject.LogInformation(message);

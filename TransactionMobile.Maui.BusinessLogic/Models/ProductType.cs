@@ -2,28 +2,19 @@
 
 public enum ProductType
 {
-    /// <summary>
-    /// The not set
-    /// </summary>
     NotSet = 0,
-
-    /// <summary>
-    /// The mobile topup
-    /// </summary>
     MobileTopup,
-
-    /// <summary>
-    /// The mobile wallet
-    /// </summary>
     MobileWallet,
-
-    /// <summary>
-    /// The bill payment
-    /// </summary>
     BillPayment,
+    Voucher
+}
 
-    /// <summary>
-    /// The voucher
-    /// </summary>
+public enum ProductSubType
+{
+    NotSet = 0,
+    MobileTopup,
+    MobileWallet,
+    BillPaymentPostPay,
+    BillPaymentPrePay,
     Voucher
 }

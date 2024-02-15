@@ -53,11 +53,12 @@ public class MerchantService : IMerchantService
                                                             ContractId = contractResponse.ContractId,
                                                             ProductId = contractResponseProduct.ProductId,
                                                             OperatorIdentfier = contractResponse.OperatorName,
-                                                            OperatorName = this.GetOperatorName(contractResponse, contractResponseProduct),
+                                                            OperatorName = this.GetOperatorName(contractResponse),
                                                             Value = contractResponseProduct.Value ?? 0,
                                                             IsFixedValue = contractResponseProduct.Value.HasValue,
                                                             ProductDisplayText = contractResponseProduct.DisplayText,
-                                                            ProductType = this.GetProductType(contractResponse.OperatorName)
+                                                            ProductType = this.GetProductType(contractResponse.OperatorName),
+                                                            ProductSubType = this.GetProductSubType(contractResponse.OperatorName),
                                                         });
                 }
             }
@@ -143,8 +144,7 @@ public class MerchantService : IMerchantService
         }
     }
 
-    private String GetOperatorName(ContractResponse contractResponse,
-                                   ContractProduct contractProduct) {
+    private String GetOperatorName(ContractResponse contractResponse) {
         String operatorName = null;
         ProductType productType = this.GetProductType(contractResponse.OperatorName);
         switch(productType) {
@@ -170,6 +170,28 @@ public class MerchantService : IMerchantService
                 break;
             case "PataPawa PostPay":
                 productType = ProductType.BillPayment;
+                break;
+        }
+
+        return productType;
+    }
+
+    private ProductSubType GetProductSubType(String operatorName)
+    {
+        ProductSubType productType = ProductSubType.NotSet;
+        switch (operatorName)
+        {
+            case "Safaricom":
+                productType = ProductSubType.MobileTopup;
+                break;
+            case "Voucher":
+                productType = ProductSubType.Voucher;
+                break;
+            case "PataPawa PostPay":
+                productType = ProductSubType.BillPaymentPostPay;
+                break;
+            case "PataPawa PrePay":
+                productType = ProductSubType.BillPaymentPrePay;
                 break;
         }
 

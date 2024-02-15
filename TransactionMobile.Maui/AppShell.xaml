@@ -16,10 +16,10 @@
     </Shell.Resources>
 
     <!--Loading Page-->
-    <ShellContent
+    <!--<ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate login:LoadingPage}"
-        Route="loading" />
+        Route="loading" />-->
 
     <!--Login Page-->
     <ShellContent

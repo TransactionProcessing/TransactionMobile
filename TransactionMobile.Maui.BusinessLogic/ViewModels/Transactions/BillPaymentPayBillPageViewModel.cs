@@ -20,6 +20,7 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
     private readonly IMediator Mediator;
 
     private BillDetails billdetails;
+    private MeterDetails meterdetails;
 
     #endregion
 
@@ -29,10 +30,20 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
 
     public Action OnPaymentAmountEntryCompleted { get; set; }
 
-    public void ApplyQueryAttributes(IDictionary<string, Object> query)
-    {
+    public void ApplyQueryAttributes(IDictionary<string, Object> query){
+        this.IsPostPayVisible = false;
+        this.IsPrePayVisible = false;
+
         this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
-        this.BillDetails = query["BillDetails"] as BillDetails;
+        if (query.ContainsKey("BillDetails") == true){
+            this.BillDetails = query["BillDetails"] as BillDetails;
+            this.IsPostPayVisible = true;
+        }
+
+        if (query.ContainsKey("MeterDetails") == true){
+            this.IsPrePayVisible = true;
+            this.MeterDetails = query["MeterDetails"] as MeterDetails;
+        }
     }
 
     public ProductDetails ProductDetails { get; set; }
@@ -49,7 +60,6 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
         this.PaymentAmountEntryCompletedCommand = new AsyncCommand(this.PaymentAmountEntryCompletedCommandExecute);
         this.Title = "Make Bill Payment";
     }
-
     private async Task PaymentAmountEntryCompletedCommandExecute() {
         Logger.LogInformation("PaymentAmountEntryCompletedCommandExecute called");
         this.OnPaymentAmountEntryCompleted();
@@ -64,15 +74,30 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
 
     private async Task MakeBillPaymentCommandExecute() {
         Logger.LogInformation("MakeBillPaymentCommandExecute called");
+        PerformBillPaymentMakePaymentRequest request = null;
+        
+        if (this.BillDetails != null){
+            request = PerformBillPaymentMakePaymentRequest.Create(DateTime.Now,
+                                                                                                       this.ProductDetails.ContractId,
+                                                                                                       this.ProductDetails.ProductId,
+                                                                                                       this.ProductDetails.OperatorIdentifier,
+                                                                                                       this.BillDetails.AccountNumber,
+                                                                                                       this.BillDetails.AccountName,
+                                                                                                       this.CustomerMobileNumber,
+                                                                                                       this.PaymentAmount);
+        }
+        else if (this.MeterDetails != null){
+            request = PerformBillPaymentMakePaymentRequest.Create(DateTime.Now,
+                                                                                                       this.ProductDetails.ContractId,
+                                                                                                       this.ProductDetails.ProductId,
+                                                                                                       this.ProductDetails.OperatorIdentifier,
+                                                                                                       this.MeterDetails.MeterNumber,
+                                                                                                       this.MeterDetails.CustomerName,
+                                                                                                       null,
+                                                                                                       this.PaymentAmount);
+        }
 
-        PerformBillPaymentMakePaymentRequest request = PerformBillPaymentMakePaymentRequest.Create(DateTime.Now,
-                                                                                                   this.ProductDetails.ContractId,
-                                                                                                   this.ProductDetails.ProductId,
-                                                                                                   this.ProductDetails.OperatorIdentifier,
-                                                                                                   this.BillDetails.AccountNumber,
-                                                                                                   this.BillDetails.AccountName,
-                                                                                                   this.CustomerMobileNumber,
-                                                                                                   this.PaymentAmount);
+        
 
         Result<PerformBillPaymentMakePaymentResponseModel> result = await this.Mediator.Send(request);
 
@@ -107,5 +132,25 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
         set => this.SetProperty(ref this.billdetails, value);
     }
 
+    public MeterDetails MeterDetails
+    {
+        get => this.meterdetails;
+        set => this.SetProperty(ref this.meterdetails, value);
+    }
+
     public ICommand MakeBillPaymentCommand { get; }
+
+    private Boolean isPostPayVisible;
+    public Boolean IsPostPayVisible
+    {
+        get => this.isPostPayVisible;
+        set => this.SetProperty(ref this.isPostPayVisible, value);
+    }
+
+    private Boolean isPrePayVisible;
+    public Boolean IsPrePayVisible
+    {
+        get => this.isPrePayVisible;
+        set => this.SetProperty(ref this.isPrePayVisible, value);
+    }
 }

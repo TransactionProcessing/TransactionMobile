@@ -39,15 +39,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: malinskiy/action-android/install-sdk@release/0.1.1
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - uses: malinskiy/action-android/install-sdk@release/0.1.6
       - run: sdkmanager "platform-tools" "platforms;android-33"
       - run: sdkmanager "build-tools;30.0.2"
       - run: adb devices
 
       - name: Set up Appium
         run: |
-          npm install -g appium --unsafe-perm=true --allow-root
-          appium driver install uiautomator2
+          npm install -g appium@2.4.1 --unsafe-perm=true --allow-root
+          appium driver install uiautomator2@2.42.2
           
       - name: Install MAUI Workloads
         run: |
@@ -92,21 +98,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
           
-      # - name: Setup Docker
-      #   run: |
-      #    brew install docker
-      #    colima start --cpu 2 --memory 8 --disk 100
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-      - uses: malinskiy/action-android/install-sdk@release/0.1.1
+      - uses: malinskiy/action-android/install-sdk@release/0.1.6
       - run: sdkmanager "platform-tools" "platforms;android-33"
       - run: sdkmanager "build-tools;30.0.2"
       - run: adb devices
 
       - name: Set up Appium
         run: |
-          npm install -g appium --unsafe-perm=true --allow-root
-          appium driver install uiautomator2
-          
+          npm install -g appium@2.4.1 --unsafe-perm=true --allow-root
+          appium driver install uiautomator2@2.42.2
+                    
       - name: Install MAUI Workloads
         run: |
           dotnet workload install android --ignore-failed-sources
@@ -150,6 +157,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - name: Get IP
         run: ipconfig getifaddr en0
 
@@ -173,16 +186,16 @@ jobs:
          docker pull mcr.microsoft.com/azure-sql-edge
          docker pull eventstore/eventstore:21.10.0-buster-slim
 
-      - uses: malinskiy/action-android/install-sdk@release/0.1.1
+      - uses: malinskiy/action-android/install-sdk@release/0.1.6
       - run: sdkmanager "platform-tools" "platforms;android-33"
       - run: sdkmanager "build-tools;30.0.2"
       - run: adb devices
 
       - name: Set up Appium
         run: |
-          npm install -g appium@next --unsafe-perm=true --allow-root
-          appium driver install uiautomator2
-          
+          npm install -g appium@2.4.1 --unsafe-perm=true --allow-root
+          appium driver install uiautomator2@2.42.2
+                    
       - name: Install MAUI Workloads
         run: |
           dotnet workload install android --ignore-failed-sources

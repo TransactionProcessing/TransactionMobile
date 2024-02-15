@@ -35,7 +35,8 @@ jobs:
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-ios --no-restore
         
       - name: Run Unit Tests
-        run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj      
+        run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj     
+        
   build-ios-nondocker:
     runs-on: macos-12
     name: iOS Build - Navigation Tests
@@ -54,8 +55,8 @@ jobs:
 
       - name: Set up Appium
         run: |
-          npm install -g appium --unsafe-perm=true --allow-root
-          appium driver install xcuitest   
+          npm install -g appium@2.4.1 --unsafe-perm=true --allow-root
+          appium driver install xcuitest@5.14.1  
       
       - name: Install MAUI Workloads
         run: |
@@ -115,8 +116,8 @@ jobs:
 
       - name: Set up Appium
         run: |
-          npm install -g appium --unsafe-perm=true --allow-root
-          appium driver install xcuitest 
+          npm install -g appium@2.4.1 --unsafe-perm=true --allow-root
+          appium driver install xcuitest@5.14.1
       
       - name: Install MAUI Workloads
         run: |

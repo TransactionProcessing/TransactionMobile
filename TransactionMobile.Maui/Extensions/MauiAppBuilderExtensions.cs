@@ -222,6 +222,7 @@
             builder.Services.AddSingleton<IRequestHandler<PerformVoucherIssueRequest, Result<PerformVoucherIssueResponseModel>>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<PerformReconciliationRequest, Result<PerformReconciliationResponseModel>>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentGetAccountRequest, Result<PerformBillPaymentGetAccountResponseModel>>, TransactionRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentGetMeterRequest, Result<PerformBillPaymentGetMeterResponseModel>>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentMakePaymentRequest, Result<PerformBillPaymentMakePaymentResponseModel>>, TransactionRequestHandler>();
 
             builder.Services.AddSingleton<IRequestHandler<UploadLogsRequest, Boolean>, SupportRequestHandler>();
@@ -252,6 +253,7 @@
             builder.Services.AddTransient<BillPaymentSelectOperatorPageViewModel>();
             builder.Services.AddTransient<BillPaymentSelectProductPageViewModel>();
             builder.Services.AddTransient<BillPaymentGetAccountPageViewModel>();
+            builder.Services.AddTransient<BillPaymentGetMeterPageViewModel>();
             builder.Services.AddTransient<BillPaymentPayBillPageViewModel>();
             builder.Services.AddTransient<BillPaymentSuccessPageViewModel>();
             builder.Services.AddTransient<BillPaymentFailedPageViewModel>();
@@ -295,6 +297,7 @@
             builder.Services.AddTransient<BillPaymentSelectOperatorPage>();
             builder.Services.AddTransient<BillPaymentSelectProductPage>();
             builder.Services.AddTransient<BillPaymentGetAccountPage>();
+            builder.Services.AddTransient<BillPaymentGetMeterPage>();
             builder.Services.AddTransient<BillPaymentPayBillPage>();
             builder.Services.AddTransient<BillPaymentSuccessPage>();
             builder.Services.AddTransient<BillPaymentFailedPage>();

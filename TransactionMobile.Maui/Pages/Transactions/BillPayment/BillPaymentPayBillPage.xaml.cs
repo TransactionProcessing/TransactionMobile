@@ -13,7 +13,7 @@ public partial class BillPaymentPayBillPage : ContentPage
         BindingContext = vm;
         vm.OnCustomerMobileNumberEntryCompleted = () =>
                                                   {
-                                                      this.PaymentAmountEntry.Focus();
+                                                      this.PostPaymentAmountEntry.Focus();
                                                   };
         vm.OnPaymentAmountEntryCompleted = () =>
                                                   {

@@ -1,5 +1,6 @@
 namespace TransactionMobile.Maui.Pages;
 
+using BusinessLogic.Logging;
 using BusinessLogic.ViewModels;
 
 public partial class LoginPage : ContentPage
@@ -8,7 +9,9 @@ public partial class LoginPage : ContentPage
 
 	public LoginPage(LoginPageViewModel vm)
 	{
-		InitializeComponent();
+        Logger.LogInformation("LoginPage ctor");
+
+        InitializeComponent();
         BindingContext = vm;
     }
 
