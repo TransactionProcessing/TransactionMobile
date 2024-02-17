@@ -146,5 +146,4 @@ public class TransactionsSteps{
             await this.transactionsVoucherIssueSuccessfulTopupPage.ClickCompleteButton();
         }
     }
-
 }

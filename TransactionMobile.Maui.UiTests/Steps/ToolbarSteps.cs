@@ -23,4 +23,10 @@ public class ToolbarSteps{
     public async Task WhenITapOnTransactions() {
         await this.mainPage.ClickTransactionsButton();
     }
+
+    [When(@"I tap on Reports")]
+    public async Task WhenITapOnReports(){
+        await this.mainPage.ClickReportsButton();
+    }
+
 }
