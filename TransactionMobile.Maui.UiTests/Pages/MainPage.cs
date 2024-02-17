@@ -45,7 +45,7 @@ public class MainPage : BasePage2
 
     public async Task ClickReportsButton()
     {
-        var element = await this.WaitForElementByAccessibilityId(this.ReportsButton);
+        var element = await this.WaitForElementByAccessibilityId(this.ReportsButton, i:1);
         element.Click();
     }
 
