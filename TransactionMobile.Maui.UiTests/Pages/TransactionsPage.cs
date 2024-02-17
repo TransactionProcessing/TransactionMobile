@@ -9,8 +9,6 @@ using UITests;
 
 public class TransactionsPage : BasePage2
 {
-    private readonly TestingContext TestingContext;
-
     protected override String Trait{
         get{
             if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows){
@@ -22,8 +20,7 @@ public class TransactionsPage : BasePage2
 
     private readonly String MobileTopupButton;
     private readonly String VoucherButton;
-
-
+    
     public TransactionsPage(TestingContext testingContext) : base(testingContext)
     {
         this.MobileTopupButton = "MobileTopupButton";

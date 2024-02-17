@@ -29,6 +29,7 @@ namespace TransactionMobile.Maui.UiTests.Features
     [NUnit.Framework.CategoryAttribute("transactions")]
     [NUnit.Framework.CategoryAttribute("sharedapp")]
     [NUnit.Framework.CategoryAttribute("base")]
+    [NUnit.Framework.CategoryAttribute("reports")]
     public partial class HardwarePageNavigationFeature
     {
         
@@ -42,7 +43,8 @@ namespace TransactionMobile.Maui.UiTests.Features
                 "shared",
                 "transactions",
                 "sharedapp",
-                "base"};
+                "base",
+                "reports"};
         
 #line 1 "HardwarePageNavigation.feature"
 #line hidden
@@ -245,6 +247,71 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When("I click on the device back button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 44
+ testRunner.Then("the Merchant Home Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Back Button from Reports Page Screen")]
+        [NUnit.Framework.CategoryAttribute("PRHWNavTest")]
+        public void BackButtonFromReportsPageScreen()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "PRHWNavTest"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Back Button from Reports Page Screen", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 48
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 49
+ testRunner.Given("I am on the Login Screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 50
+ testRunner.And("the application is in training mode", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 51
+ testRunner.When("I enter \'user1\' as the Email Address", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 52
+ testRunner.And("I enter \'123456\' as the Password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 53
+ testRunner.And("I tap on Login", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 54
+ testRunner.Then("the Merchant Home Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 55
+ testRunner.When("I tap on Reports", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 56
+ testRunner.Then("the Reports Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 57
+ testRunner.When("I tap on the Sales Analysis Button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 58
+ testRunner.Then("the Sales Analysis Report is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 59
+ testRunner.When("I click on the device back button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 60
+ testRunner.Then("the Transaction Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 61
+ testRunner.When("I click on the device back button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 62
  testRunner.Then("the Merchant Home Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

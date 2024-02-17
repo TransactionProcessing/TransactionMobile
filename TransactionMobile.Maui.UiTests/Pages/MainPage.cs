@@ -32,7 +32,7 @@ public class MainPage : BasePage2
     public MainPage(TestingContext testingContext) : base(testingContext)
     {
         this.TransactionsButton = "Transactions";
-        this.ReportsButton = "ReportsButton";
+        this.ReportsButton = "Reports";
         this.ProfileButton = "My Account";
         this.SupportButton = "SupportButton";
         this.AvailableBalanceLabel = "AvailableBalanceValueLabel";
