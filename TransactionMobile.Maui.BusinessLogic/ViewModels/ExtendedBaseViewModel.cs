@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels;
 
 using System.Windows.Input;
+using Common;
 using Logging;
 using Maui.UIServices;
 using MvvmHelpers;
@@ -71,7 +72,7 @@ public class ExtendedBaseViewModel : BaseViewModel
             nameof(ReportsPageViewModel) => this.ShowHomePage(),
             nameof(SupportPageViewModel) => this.ShowHomePage(),
             nameof(HomePageViewModel) => this.ShowLoginPage(),
-            nameof(LoginPageViewModel) => new Task(() => Application.Current.Quit()),
+            nameof(LoginPageViewModel) => this.NavigationService.QuitApplication(),
             _ => this.NavigationService.GoBack()
         };
         await t;

@@ -1,5 +1,6 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels;
 
+using System.Diagnostics.CodeAnalysis;
 using Logging;
 using Maui.UIServices;
 using Microsoft.AppCenter;
@@ -8,6 +9,7 @@ using Models;
 using Services;
 using UIServices;
 
+[ExcludeFromCodeCoverage]
 public class HomePageViewModel : ExtendedBaseViewModel
 {
     #region Constructors

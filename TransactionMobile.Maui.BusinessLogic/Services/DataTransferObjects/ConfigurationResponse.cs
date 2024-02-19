@@ -1,5 +1,8 @@
-﻿namespace TransactionMobile.Maui.BusinessLogic.Services.DataTransferObjects;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace TransactionMobile.Maui.BusinessLogic.Services.DataTransferObjects;
+
+[ExcludeFromCodeCoverage]
 public class ConfigurationResponse
 {
     public string ClientId { get; set; }

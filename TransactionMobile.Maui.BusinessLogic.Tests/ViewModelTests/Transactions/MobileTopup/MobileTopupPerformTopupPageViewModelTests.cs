@@ -3,6 +3,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Common;
 using Logging;
 using Maui.UIServices;
 using MediatR;
@@ -154,5 +155,14 @@ public class MobileTopupPerformTopupPageViewModelTests
     {
         this.ViewModel.BackButtonCommand.Execute(null);
         this.NavigationService.Verify(v => v.GoBack(), Times.Once);
+    }
+
+    [Fact]
+    public void MobileTopupPerformTopupPageViewModel_Properties_ReturnExpectedValues(){
+        this.ViewModel.CustomerEmailAddress = TestData.CustomerEmailAddress;
+        this.ViewModel.CustomerMobileNumber= TestData.CustomerMobileNumber;
+
+        this.ViewModel.CustomerEmailAddress.ShouldBe(TestData.CustomerEmailAddress);
+        this.ViewModel.CustomerMobileNumber.ShouldBe(TestData.CustomerMobileNumber);
     }
 }

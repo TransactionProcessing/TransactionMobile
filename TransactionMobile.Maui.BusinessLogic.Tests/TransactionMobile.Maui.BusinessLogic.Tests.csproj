@@ -20,6 +20,7 @@
   <PropertyGroup>
 	  <TargetFramework>net7.0</TargetFramework>
 	  <UseMaui>true</UseMaui>
+	  <DebugType>None</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="ViewModelTests\**" />
@@ -32,17 +33,20 @@
     <Compile Remove="HomePageViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ViewModelTests\ExtendedBaseViewModelTests.cs" />
     <Compile Include="ViewModelTests\HomePageViewModelTests.cs" />
     <Compile Include="ViewModelTests\LoginPageViewModelTests.cs" />
     <Compile Include="ViewModelTests\MyAccount\MyAccountAddressPageViewModelTests.cs" />
     <Compile Include="ViewModelTests\MyAccount\MyAccountContactPageViewModelTests.cs" />
     <Compile Include="ViewModelTests\MyAccount\MyAccountDetailsPageViewModelTests.cs" />
     <Compile Include="ViewModelTests\MyAccount\MyAccountPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Reports\ReportsPageViewModelTests.cs" />
     <Compile Include="ViewModelTests\Support\SupportPageViewModelTests.cs" />
     <Compile Include="ViewModelTests\Support\ViewLogsPageViewModelTests.cs" />
     <Compile Include="ViewModelTests\Transactions\Admin\AdminPageViewModelTests.cs" />
     <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentFailedPageViewModelTests.cs" />
     <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentGetAccountPageViewModelTests.cs" />
+    <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentGetMeterPageViewModelTests.cs" />
     <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentPayBillPageViewModelTests.cs" />
     <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentSelectOperatorPageViewModelTests.cs" />
     <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentSelectProductPageViewModelTests.cs" />

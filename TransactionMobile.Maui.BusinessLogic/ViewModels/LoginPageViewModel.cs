@@ -1,7 +1,9 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels
 {
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.Windows.Input;
+    using Common;
     using Logging;
     using Maui.UIServices;
     using MediatR;
@@ -202,6 +204,7 @@
             sw.Start();
         }
 
+        [ExcludeFromCodeCoverage]
         private async void AccessTokenExpired(Object key,
                                         Object value,
                                         EvictionReason reason,

@@ -20,6 +20,11 @@ public class ShellNavigationService : INavigationService
     public ShellNavigationService() {
 
     }
+
+    public async Task QuitApplication(){
+        Application.Current.Quit();
+    }
+
     public async Task GoBack() {
         await Shell.Current.Navigation.PopAsync();
     }

@@ -39,10 +39,6 @@
 		<PackageReference Include="MetroLog.Maui" Version="2.0.1" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Common\" />
-	</ItemGroup>
-
 	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
 	  <PackageReference Include="Microcharts.Maui">
 	    <Version>1.0.0</Version>

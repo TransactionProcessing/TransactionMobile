@@ -173,4 +173,21 @@ public class RequestTests
         request.ShouldNotBeNull();
         request.DeviceIdentifier.ShouldBe(TestData.DeviceIdentifier);
     }
+    
+    [Fact]
+    public void PerformBillPaymentGetMeterRequest_Create_IsCreated(){
+        PerformBillPaymentGetMeterRequest request = PerformBillPaymentGetMeterRequest.Create(TestData.TransactionDateTime,
+                                                                                             TestData.OperatorId3ContractId,
+                                                                                             TestData.Operator3Product_200KES.ProductId,
+                                                                                             TestData.OperatorIdentifier3,
+                                                                                             TestData.CustomerAccountNumber);
+
+        request.ShouldNotBeNull();
+        request.TransactionDateTime.ShouldBe(TestData.TransactionDateTime);
+        request.ContractId.ShouldBe(TestData.OperatorId3ContractId);
+        request.ProductId.ShouldBe(TestData.Operator3Product_200KES.ProductId);
+        request.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier3);
+        request.MeterNumber.ShouldBe(TestData.CustomerAccountNumber);
+
+    }
 }

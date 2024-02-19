@@ -8,6 +8,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
 {
     using System.Net;
     using ClientProxyBase;
+    using Common;
     using Logging;
     using Microsoft.Extensions.Logging;
     using Models;

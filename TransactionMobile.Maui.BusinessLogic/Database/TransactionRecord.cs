@@ -1,7 +1,9 @@
 ﻿namespace TransactionMobile.Maui.Database
 {
     using SQLite;
+    using System.Diagnostics.CodeAnalysis;
 
+    [ExcludeFromCodeCoverage]
     public class TransactionRecord
     {
         public String ApplicationVersion { get; set; }

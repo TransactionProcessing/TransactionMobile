@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.BusinessLogic.Services.TrainingModeServices
 {
+    using Common;
     using Models;
     using RequestHandlers;
     using TransactionProcessorACL.DataTransferObjects.Responses;
 
+    [ExcludeFromCodeCoverage]
     public class TrainingAuthenticationService : IAuthenticationService
     {
         public async Task<Result<TokenResponseModel>> GetToken(String username,

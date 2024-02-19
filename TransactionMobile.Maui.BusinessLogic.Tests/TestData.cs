@@ -56,6 +56,32 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
                                      OperatorIdentifier = Operator1Product_100KES.OperatorIdentfier,
                                  };
 
+        public static ContractProductModel Operator1Product_BillPayment_PostPayment = new ContractProductModel
+                                                                     {
+                                                                         ContractId = OperatorId1ContractId,
+                                                                         IsFixedValue = true,
+                                                                         OperatorId = OperatorId1,
+                                                                         OperatorIdentfier = OperatorIdentifier1,
+                                                                         OperatorName = OperatorName1,
+                                                                         ProductDisplayText = "Custom",
+                                                                         ProductId = Guid.Parse("48D96AE5-A829-498B-8C0D-D7107610EBDC"),
+                                                                         ProductType = ProductType.BillPayment,
+                                                                         ProductSubType = ProductSubType.BillPaymentPostPay
+                                                                     };
+
+        public static ContractProductModel Operator1Product_BillPayment_PrePayment = new ContractProductModel
+                                                                                      {
+                                                                                          ContractId = OperatorId1ContractId,
+                                                                                          IsFixedValue = true,
+                                                                                          OperatorId = OperatorId1,
+                                                                                          OperatorIdentfier = OperatorIdentifier1,
+                                                                                          OperatorName = OperatorName1,
+                                                                                          ProductDisplayText = "Custom",
+                                                                                          ProductId = Guid.Parse("48D96AE5-A829-498B-8C0D-D7107610EBDC"),
+                                                                                          ProductType = ProductType.BillPayment,
+                                                                                          ProductSubType = ProductSubType.BillPaymentPrePay
+                                                                                      };
+
         public static ContractProductModel Operator1Product_100KES = new ContractProductModel
                                                                      {
                                                                          ContractId = OperatorId1ContractId,
@@ -158,27 +184,32 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
         public static Decimal MerchantBalance = 199.99m;
 
         public static List<TransactionRecord> StoredTransactions =>
-            new List<TransactionRecord>
-            {
-                new TransactionRecord
-                {
-                    Amount = TestData.Operator1Product_100KES.Value,
-                    ContractId = TestData.Operator1Product_100KES.ContractId,
-                    OperatorIdentifier = TestData.Operator1Product_100KES.OperatorIdentfier
-                },
-                new TransactionRecord
-                {
-                    Amount = TestData.Operator1Product_100KES.Value,
-                    ContractId = TestData.Operator1Product_100KES.ContractId,
-                    OperatorIdentifier = TestData.Operator1Product_100KES.OperatorIdentfier
-                },
-                new TransactionRecord
-                {
-                    Amount = TestData.Operator1Product_100KES.Value,
-                    ContractId = TestData.Operator1Product_100KES.ContractId,
-                    OperatorIdentifier = TestData.Operator1Product_100KES.OperatorIdentfier
-                }
-            };
+            new List<TransactionRecord>{
+                                           new TransactionRecord{
+                                                                    Amount = TestData.Operator1Product_100KES.Value,
+                                                                    ContractId = TestData.Operator1Product_100KES.ContractId,
+                                                                    OperatorIdentifier = TestData.Operator1Product_100KES.OperatorIdentfier,
+                                                                    IsSuccessful = true
+                                                                },
+                                           new TransactionRecord{
+                                                                    Amount = TestData.Operator1Product_100KES.Value,
+                                                                    ContractId = TestData.Operator1Product_100KES.ContractId,
+                                                                    OperatorIdentifier = TestData.Operator1Product_100KES.OperatorIdentfier,
+                                                                    IsSuccessful = true
+                                                                },
+                                           new TransactionRecord{
+                                                                    Amount = TestData.Operator1Product_100KES.Value,
+                                                                    ContractId = TestData.Operator1Product_100KES.ContractId,
+                                                                    OperatorIdentifier = TestData.Operator1Product_100KES.OperatorIdentfier,
+                                                                    IsSuccessful = true
+                                                                },
+                                           new TransactionRecord{
+                                                                    Amount = TestData.Operator3Product_200KES.Value,
+                                                                    ContractId = TestData.Operator3Product_200KES.ContractId,
+                                                                    OperatorIdentifier = TestData.Operator3Product_200KES.OperatorIdentfier,
+                                                                    IsSuccessful = true
+                                                                }
+                                       };
 
         public static PerformLogonResponseModel PerformLogonResponseModel =>
             new PerformLogonResponseModel
@@ -186,6 +217,15 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
                 EstateId = TestData.EstateId,
                 MerchantId = TestData.MerchantId,
                 ResponseCode = "0000",
+                ResponseMessage = "SUCCESS"
+            };
+
+        public static PerformLogonResponseModel PerformLogonResponseFailedModel =>
+            new PerformLogonResponseModel
+            {
+                EstateId = TestData.EstateId,
+                MerchantId = TestData.MerchantId,
+                ResponseCode = "1000",
                 ResponseMessage = "SUCCESS"
             };
 
@@ -204,6 +244,13 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
                                                               IsSuccessful = true
                                                           };
 
+        public static PerformBillPaymentGetMeterResponseModel PerformBillPaymentGetMeterResponseModel =>
+            new PerformBillPaymentGetMeterResponseModel
+            {
+                MeterDetails = TestData.MeterDetails,
+                IsSuccessful = true
+            };
+
         public static PerformBillPaymentGetAccountResponseModel PerformBillPaymentGetAccountResponseModelFailed =>
             new PerformBillPaymentGetAccountResponseModel
             {
@@ -211,6 +258,12 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
                 IsSuccessful = false
             };
 
+        public static PerformBillPaymentGetMeterResponseModel PerformBillPaymentGetMeterResponseModelFailed =>
+            new PerformBillPaymentGetMeterResponseModel
+            {
+                MeterDetails = null,
+                IsSuccessful = false
+            };
 
         public static MerchantDetailsModel MerchantDetailsModel => new MerchantDetailsModel {
                                                                                                 MerchantName = TestData.MerchantName,
@@ -262,6 +315,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
 
         public static String ContactMobileNumber = "077777777";
 
+        public static String MeterNumber = "123456";
+
         public static String CustomerAccountName = "Mr Test Customer";
 
         public static String AccountBalance = "100 KES";
@@ -279,6 +334,13 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
                                 Balance = TestData.AccountBalance,
                                 DueDate = TestData.AccountDueDate
                             };
+
+        public static MeterDetails MeterDetails =>
+            new MeterDetails
+            {
+                MeterNumber = TestData.MeterNumber,
+                CustomerName = TestData.CustomerAccountName
+            };
     }
 }
  

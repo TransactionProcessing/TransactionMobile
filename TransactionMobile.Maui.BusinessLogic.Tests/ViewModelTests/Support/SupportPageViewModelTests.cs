@@ -16,6 +16,10 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Support
     using Requests;
     using Services;
     using ViewModels;
+    using System.Linq;
+    using System.Text;
+    using Castle.Components.DictionaryAdapter;
+    using Shouldly;
 
     [Collection("ViewModelTests")]
     public class SupportPageViewModelTests
@@ -59,6 +63,57 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Support
 
             this.Mediator.Verify(m => m.Send(It.IsAny<UploadLogsRequest>(),It.IsAny<CancellationToken>()),Times.Once);
             this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
+        }
+
+        [Fact]
+        public void SupportPageViewModel_ViewLogsCommand_Execute_IsExecuted()
+        {
+            this.ViewModel.ViewLogsCommand.Execute(null);
+
+            this.NavigationService.Verify(n => n.GoToViewLogsPage(), Times.Once);
+        }
+
+        [Fact]
+        public void SupportPageViewModel_Platform_ValueIsReturned(){
+            this.DeviceService.Setup(d => d.GetPlatform()).Returns("Platform");
+            this.DeviceService.Setup(d => d.GetManufacturer()).Returns("Manufacturer");
+            this.DeviceService.Setup(d => d.GetModel()).Returns("Model");
+
+            String platform = this.ViewModel.Platform;
+
+            StringBuilder expectedPlatform = new();
+            expectedPlatform.Append("Platform: ").AppendLine("Platform");
+            expectedPlatform.Append("Manufacturer: ").AppendLine("Manufacturer");
+            expectedPlatform.Append("Device: ").AppendLine("Model");
+
+            platform.ShouldBe(expectedPlatform.ToString());
+        }
+
+        [Fact]
+        public void SupportPageViewModel_NumberTransactionsStored_ValueIsReturned()
+        {
+            this.DatabaseContext.Setup(d => d.GetTransactions(It.IsAny<Boolean>())).ReturnsAsync(new List<TransactionRecord>{
+                                                                                                                                new TransactionRecord()
+
+                                                                                                                            });
+            String numberTransactionsStored = this.ViewModel.NumberTransactionsStored;
+
+            String expectedNumberTransactionsStored = $"Transactions Stored: 1";
+
+            numberTransactionsStored.ShouldBe(expectedNumberTransactionsStored);
+        }
+
+        [Fact]
+        public void SupportPageViewModel_ApplicationName_ValueIsReturned()
+        {
+            this.ApplicationInfoService.Setup(d => d.ApplicationName).Returns("ApplicationName");
+            this.ApplicationInfoService.Setup(d => d.VersionString).Returns("VersionString");
+
+            String applicationName = this.ViewModel.ApplicationName;
+
+            String expectedApplicationName = $"ApplicationName vVersionString";
+
+            applicationName.ShouldBe(expectedApplicationName);
         }
 
         [Fact]
