@@ -54,16 +54,12 @@
             get {
                 StringBuilder platform = new();
                 platform.Append("Platform: ").AppendLine(this.DeviceService.GetPlatform());
-                platform.Append("Manufacturer: ").AppendLine(DeviceInfo.Manufacturer);
+                platform.Append("Manufacturer: ").AppendLine(this.DeviceService.GetManufacturer());
                 platform.Append("Device: ").AppendLine(this.DeviceService.GetModel());
 
                 return platform.ToString();
             }
         }
-
-        //public Boolean ShowUploadLogsButton => this.ApplicationCache.GetUseTrainingMode() == false;
-
-        //public Boolean ShowViewLogsButton => this.ApplicationCache.GetUseTrainingMode();
 
         public ICommand UploadLogsCommand { get; }
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.BusinessLogic.Services
 {
+    using Common;
     using Logging;
     using Microsoft.Extensions.Caching.Memory;
     using Models;

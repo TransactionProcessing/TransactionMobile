@@ -1,5 +1,8 @@
-﻿namespace TransactionMobile.Maui.BusinessLogic.Models;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace TransactionMobile.Maui.BusinessLogic.Models;
+
+[ExcludeFromCodeCoverage]
 public class ContactModel
 {
     public String EmailAddress { get; set; }

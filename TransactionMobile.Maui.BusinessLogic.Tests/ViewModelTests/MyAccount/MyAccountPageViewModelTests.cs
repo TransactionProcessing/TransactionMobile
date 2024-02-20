@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.MyAccount;
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Common;
@@ -86,6 +87,25 @@ public class MyAccountPageViewModelTests
         viewModel.OptionSelectedCommand.Execute(this.CreateItemSelected(MyAccountPageViewModel.AccountOptions.Logout));
 
         navigationService.Verify(n => n.GoToLoginPage(), Times.Once);
+    }
+
+    [Fact]
+    public void MyAccountPageViewModel_OptionSelectedCommand_Unsupported_Execute_IsExecuted()
+    {
+        viewModel.OptionSelectedCommand.Execute(this.CreateItemSelected((MyAccountPageViewModel.AccountOptions)99));
+
+        navigationService.Verify(n => n.GoToMyAccountDetails(), Times.Never);
+    }
+
+    [Fact]
+    public void MyAccountPageViewModel_GetMyAccountOptions_OptionsReturned(){
+        viewModel.MyAccountOptions = new List<ListViewItem>{
+                                                               new ListViewItem{
+                                                                                   Title = "Test"
+                                                                               }
+                                                           };
+        List<ListViewItem> options = viewModel.MyAccountOptions;
+        options.Count.ShouldBe(1);
     }
 
     [Fact]

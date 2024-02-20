@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Common;
 using Logging;
 using Maui.UIServices;
 using MediatR;
@@ -46,7 +47,7 @@ public class BillPaymentPayBillPageViewModelTests
     }
 
     [Fact]
-    public async Task BillPaymentPayBillPageViewModel_ApplyQueryAttributes_QueryAttributesApplied()
+    public async Task BillPaymentPayBillPageViewModel_ApplyQueryAttributes_PostPay_QueryAttributesApplied()
     {
         this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
                                                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
@@ -60,6 +61,21 @@ public class BillPaymentPayBillPageViewModelTests
         this.ViewModel.BillDetails.AccountNumber.ShouldBe(TestData.BillDetails.AccountNumber);
         this.ViewModel.BillDetails.Balance.ShouldBe(TestData.BillDetails.Balance);
         this.ViewModel.BillDetails.DueDate.ShouldBe(TestData.BillDetails.DueDate);
+    }
+
+    [Fact]
+    public async Task BillPaymentPayBillPageViewModel_ApplyQueryAttributes_PrePay_QueryAttributesApplied()
+    {
+        this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
+                                                                               {nameof(ProductDetails), TestData.Operator1ProductDetails},
+                                                                               {nameof(MeterDetails), TestData.MeterDetails}
+                                                                           });
+
+        this.ViewModel.ProductDetails.OperatorIdentifier.ShouldBe(TestData.Operator1ProductDetails.OperatorIdentifier);
+        this.ViewModel.ProductDetails.ProductId.ShouldBe(TestData.Operator1ProductDetails.ProductId);
+        this.ViewModel.ProductDetails.ContractId.ShouldBe(TestData.Operator1ProductDetails.ContractId);
+        this.ViewModel.MeterDetails.MeterNumber.ShouldBe(TestData.MeterDetails.MeterNumber);
+        this.ViewModel.MeterDetails.CustomerName.ShouldBe(TestData.MeterDetails.CustomerName);
     }
 
     [Fact]
@@ -99,7 +115,7 @@ public class BillPaymentPayBillPageViewModelTests
     }
 
     [Fact]
-    public void BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_SuccessfulPayment_IsExecuted()
+    public void BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_SuccessfulPostPayPayment_IsExecuted()
     {
         this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel()
             {
@@ -117,7 +133,25 @@ public class BillPaymentPayBillPageViewModelTests
     }
 
     [Fact]
-    public void BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_FailedPayment_IsExecuted()
+    public void BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_SuccessfulPrePayPayment_IsExecuted()
+    {
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel()
+                                                                                                                                                                                                     {
+                                                                                                                                                                                                         ResponseCode = "0000"
+                                                                                                                                                                                                     }));
+
+        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
+                                            {
+                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
+                                                {nameof(this.ViewModel.MeterDetails), TestData.MeterDetails}
+                                            });
+        this.ViewModel.MakeBillPaymentCommand.Execute(null);
+        this.Mediator.Verify(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.NavigationService.Verify(v => v.GoToBillPaymentSuccessPage(), Times.Once);
+    }
+
+    [Fact]
+    public void BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_FailedPostPayPayment_IsExecuted()
     {
         this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel() {
             ResponseCode = "1010"
@@ -131,6 +165,37 @@ public class BillPaymentPayBillPageViewModelTests
         this.ViewModel.MakeBillPaymentCommand.Execute(null);
         this.Mediator.Verify(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(v => v.GoToBillPaymentFailedPage(), Times.Once);
+    }
+
+    [Fact]
+    public void BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_FailedPrePayPayment_IsExecuted()
+    {
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel()
+                                                                                                                                                                                                     {
+                                                                                                                                                                                                         ResponseCode = "1010"
+                                                                                                                                                                                                     }));
+
+        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
+                                            {
+                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
+                                                {nameof(this.ViewModel.MeterDetails), TestData.MeterDetails}
+                                            });
+        this.ViewModel.MakeBillPaymentCommand.Execute(null);
+        this.Mediator.Verify(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.NavigationService.Verify(v => v.GoToBillPaymentFailedPage(), Times.Once);
+    }
+
+    [Fact]
+    public void BillPaymentPayBillPageViewModel_SetProperties_ValuesExpected(){
+        this.ViewModel.PaymentAmount = TestData.PaymentAmount;
+        this.ViewModel.CustomerMobileNumber = TestData.CustomerMobileNumber;
+        this.ViewModel.IsPostPayVisible = true;
+        this.ViewModel.IsPrePayVisible = true;
+        this.ViewModel.PaymentAmount.ShouldBe(TestData.PaymentAmount);
+        this.ViewModel.CustomerMobileNumber.ShouldBe(TestData.CustomerMobileNumber);
+        this.ViewModel.IsPostPayVisible.ShouldBeTrue();
+        this.ViewModel.IsPrePayVisible.ShouldBeTrue();
+
     }
 
     [Fact]

@@ -2,7 +2,10 @@
 
 using Models;
 using RequestHandlers;
+using System.Diagnostics.CodeAnalysis;
+using Common;
 
+[ExcludeFromCodeCoverage]
 public class TrainingMerchantService : IMerchantService
 {
     public async Task<Result<List<ContractProductModel>>> GetContractProducts(CancellationToken cancellationToken) {

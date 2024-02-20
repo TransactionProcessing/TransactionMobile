@@ -1,8 +1,9 @@
-﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Support;
+﻿namespace TransactionMobile.Maui.BusinessLogic.Models;
 
-using Models;
+using System.Diagnostics.CodeAnalysis;
 
-public class LogMessageViewModel
+[ExcludeFromCodeCoverage]
+public class LogMessageModel
 {
     #region Properties
 

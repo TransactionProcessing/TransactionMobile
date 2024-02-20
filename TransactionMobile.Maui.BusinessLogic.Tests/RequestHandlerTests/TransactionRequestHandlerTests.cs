@@ -67,6 +67,19 @@ public class TransactionRequestHandlerTests
     }
 
     [Fact]
+    public async Task TransactionRequestHandler_LogonTransactionRequest_Handle_LogonFailed_IsHandled()
+    {
+        this.TransactionService.Setup(t => t.PerformLogon(It.IsAny<PerformLogonRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(
+                                                                                                                                             new SuccessResult<PerformLogonResponseModel>(TestData.PerformLogonResponseFailedModel));
+
+        LogonTransactionRequest request = LogonTransactionRequest.Create(TestData.TransactionDateTime);
+
+        Result<PerformLogonResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
+
+        result.Success.ShouldBeFalse();
+    }
+
+    [Fact]
     public async Task TransactionRequestHandler_PerformMobileTopupRequest_Handle_IsHandled()
     {
         this.TransactionService.Setup(t => t.PerformMobileTopup(It.IsAny<PerformMobileTopupRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformMobileTopupResponseModel>(new PerformMobileTopupResponseModel
@@ -86,6 +99,27 @@ public class TransactionRequestHandlerTests
 
         result.Success.ShouldBeTrue();
         result.Data.IsSuccessful.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task TransactionRequestHandler_PerformMobileTopupRequest_Handle_TopupFailed_IsHandled()
+    {
+        this.TransactionService.Setup(t => t.PerformMobileTopup(It.IsAny<PerformMobileTopupRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformMobileTopupResponseModel>(new PerformMobileTopupResponseModel
+                                                                                                                                                                                                            {
+                                                                                                                                                                                                                ResponseCode = "1000"
+                                                                                                                                                                                                            }));
+
+        PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(TestData.TransactionDateTime,
+                                                                             TestData.OperatorId1ContractId,
+                                                                             TestData.Operator1Product_100KES.ProductId,
+                                                                             TestData.OperatorIdentifier1,
+                                                                             TestData.CustomerAccountNumber,
+                                                                             TestData.Operator1Product_100KES.Value,
+                                                                             TestData.CustomerEmailAddress);
+
+        Result<PerformMobileTopupResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
+
+        result.Success.ShouldBeFalse();
     }
 
     [Fact]
@@ -109,6 +143,29 @@ public class TransactionRequestHandlerTests
 
         result.Success.ShouldBeTrue();
         result.Data.IsSuccessful.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task TransactionRequestHandler_PerformVoucherIssueRequest_Handle_VoucherIssueFailed_IsHandled()
+    {
+        this.TransactionService.Setup(t => t.PerformVoucherIssue(It.IsAny<PerformVoucherIssueRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformVoucherIssueResponseModel>(new PerformVoucherIssueResponseModel
+                                                                                                                                                                                                               {
+                                                                                                                                                                                                                   ResponseCode = "1000"
+                                                                                                                                                                                                               }));
+
+        PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(TestData.TransactionDateTime,
+                                                                               TestData.OperatorId3ContractId,
+                                                                               TestData.Operator3Product_200KES.ProductId,
+                                                                               TestData.OperatorIdentifier3,
+                                                                               TestData.RecipientMobileNumber,
+                                                                               TestData.RecipientEmailAddress,
+                                                                               TestData.Operator3Product_200KES.Value,
+                                                                               TestData.CustomerEmailAddress);
+
+        Result<PerformVoucherIssueResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
+
+        result.Success.ShouldBeFalse();
+        result.Success.ShouldBeFalse();
     }
 
     [Fact]
@@ -148,6 +205,45 @@ public class TransactionRequestHandlerTests
         result.Success.ShouldBeTrue();
         result.Data.IsSuccessful.ShouldBeFalse();
         result.Data.BillDetails.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task TransactionRequestHandler_PerformBillPaymentGetMeterRequest_Handle_IsHandled()
+    {
+        this.TransactionService.Setup(t => t.PerformBillPaymentGetMeter(It.IsAny<PerformBillPaymentGetMeterModel>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new SuccessResult<PerformBillPaymentGetMeterResponseModel>(TestData.PerformBillPaymentGetMeterResponseModel));
+
+        PerformBillPaymentGetMeterRequest request = PerformBillPaymentGetMeterRequest.Create(TestData.TransactionDateTime,
+                                                                                             TestData.OperatorId1ContractId,
+                                                                                             TestData.Operator1Product_100KES.ProductId,
+                                                                                             TestData.OperatorIdentifier1,
+                                                                                             TestData.CustomerAccountNumber);
+
+        Result<PerformBillPaymentGetMeterResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
+
+        result.Success.ShouldBeTrue();
+        result.Data.IsSuccessful.ShouldBeTrue();
+        result.Data.MeterDetails.ShouldNotBeNull();
+
+    }
+
+    [Fact]
+    public async Task TransactionRequestHandler_PerformBillPaymentGetMeterRequest_GetMeterFailed_Handle_IsHandled()
+    {
+        this.TransactionService.Setup(t => t.PerformBillPaymentGetMeter(It.IsAny<PerformBillPaymentGetMeterModel>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new SuccessResult<PerformBillPaymentGetMeterResponseModel>(TestData.PerformBillPaymentGetMeterResponseModelFailed));
+
+        PerformBillPaymentGetMeterRequest request = PerformBillPaymentGetMeterRequest.Create(TestData.TransactionDateTime,
+                                                                                             TestData.OperatorId1ContractId,
+                                                                                             TestData.Operator1Product_100KES.ProductId,
+                                                                                             TestData.OperatorIdentifier1,
+                                                                                             TestData.CustomerAccountNumber);
+
+        Result<PerformBillPaymentGetMeterResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
+
+        result.Success.ShouldBeTrue();
+        result.Data.IsSuccessful.ShouldBeFalse();
+        result.Data.MeterDetails.ShouldBeNull();
     }
 
     [Fact]

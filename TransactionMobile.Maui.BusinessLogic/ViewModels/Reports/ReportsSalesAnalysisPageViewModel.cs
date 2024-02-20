@@ -4,6 +4,7 @@ using Maui.UIServices;
 using MediatR;
 using Services;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Common;
 using Models;
 using MvvmHelpers.Commands;
@@ -42,18 +43,13 @@ public class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel{
 
     private async Task GetApiData(){
         // TODO: Initial api call to get data would be done here
-        //this.SalesCountAnalysis = new SalesCountAnalysis(100, 98, 0.02m);
-        //this.SalesValueAnalysis = new SalesValueAnalysis(1000, 960, 0.04m);
-        var salesAnalysisList = new List<SalesAnalysis>();
+        List<SalesAnalysis> salesAnalysisList = new List<SalesAnalysis>();
         salesAnalysisList.Add(new SalesAnalysis("100.00 KES", "90.00 KES", "10%", "Sales Value", "Today's Sales", SelectedItem.DisplayText, "Variance:","salesvalue.svg"));
         salesAnalysisList.Add(new SalesAnalysis("100", "90", "10%", "Sales Count", "Today's Sales", SelectedItem.DisplayText, "Variance:", "salescount.svg"));
         this.SalesAnalysisList = salesAnalysisList;
     }
 
-    private SalesValueAnalysis salesValueAnalysis;
-
-    private SalesCountAnalysis salesCountAnalysis;
-
+    
     private List<ComparisonDate> comparisonDates;
 
     ComparisonDate _selectedItem;
@@ -64,18 +60,6 @@ public class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel{
     {
         get => _selectedItem;
         set => SetProperty(ref _selectedItem, value);
-    }
-
-    public SalesValueAnalysis SalesValueAnalysis
-    {
-        get => this.salesValueAnalysis;
-        set => this.SetProperty(ref this.salesValueAnalysis, value);
-    }
-
-    public SalesCountAnalysis SalesCountAnalysis
-    {
-        get => this.salesCountAnalysis;
-        set => this.SetProperty(ref this.salesCountAnalysis, value);
     }
 
     public List<SalesAnalysis> SalesAnalysisList
@@ -102,10 +86,10 @@ public class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel{
 
 }
 
+[ExcludeFromCodeCoverage]
 public record ComparisonDate(DateTime DateTime, String DisplayText);
-public record SalesValueAnalysis(Decimal TodaysValue, Decimal ComparisonValue, Decimal Variance);
-public record SalesCountAnalysis(Int32 TodaysCount, Decimal ComparisonCount, Decimal Variance);
 
+[ExcludeFromCodeCoverage]
 public record SalesAnalysis(String TodaysValue, String ComparisonValue, String VarianceValue, String MainTitle, String TodaysTitle, String ComparisonTitle, String VarianceTitle, String Icon);
 
 public class ReportsBalanceAnalysisPageViewModel : ExtendedBaseViewModel{

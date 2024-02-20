@@ -1,5 +1,6 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Services.DataTransferObjects;
 
+
 public enum LoggingLevel
 {
     Fatal = 0,

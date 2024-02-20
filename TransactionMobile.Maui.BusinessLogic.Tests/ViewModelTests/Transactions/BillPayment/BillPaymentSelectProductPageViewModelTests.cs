@@ -76,8 +76,8 @@ public class BillPaymentSelectProductPageViewModelTests
         this.ViewModel.Products.Count.ShouldBe(3);
     }
 
-    [Fact(Skip = "Revisit Unit Tests for Post and Prepay")]
-    public async Task BillPaymentSelectProductPageViewModel_ProductSelectedCommand_Execute_IsExecuted()
+    [Fact]
+    public async Task BillPaymentSelectProductPageViewModel_ProductSelectedCommand_PostPay_Execute_IsExecuted()
     {
         this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
 
@@ -92,12 +92,36 @@ public class BillPaymentSelectProductPageViewModelTests
         ItemSelected<ContractProductModel> selectedContractProduct = new ItemSelected<ContractProductModel>
                                                                      {
                                                                          SelectedItemIndex = 1,
-                                                                         SelectedItem = TestData.Operator1Product_100KES,
+                                                                         SelectedItem = TestData.Operator1Product_BillPayment_PostPayment,
                                                                      };
 
         this.ViewModel.ProductSelectedCommand.Execute(selectedContractProduct);
 
         this.NavigationService.Verify(n => n.GoToBillPaymentGetAccountPage(It.IsAny<ProductDetails>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task BillPaymentSelectProductPageViewModel_ProductSelectedCommand_PrePay_Execute_IsExecuted()
+    {
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+
+        this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
+                                                                               {nameof(ProductDetails), TestData.Operator1ProductDetails},
+                                                                           });
+        await this.ViewModel.Initialise(CancellationToken.None);
+        this.Mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+
+        this.ViewModel.Products.Count.ShouldBe(3);
+
+        ItemSelected<ContractProductModel> selectedContractProduct = new ItemSelected<ContractProductModel>
+                                                                     {
+                                                                         SelectedItemIndex = 1,
+                                                                         SelectedItem = TestData.Operator1Product_BillPayment_PrePayment,
+                                                                     };
+
+        this.ViewModel.ProductSelectedCommand.Execute(selectedContractProduct);
+
+        this.NavigationService.Verify(n => n.GoToBillPaymentGetMeterPage(It.IsAny<ProductDetails>()), Times.Once);
     }
 
     [Fact]

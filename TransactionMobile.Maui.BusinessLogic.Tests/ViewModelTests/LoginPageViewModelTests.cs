@@ -3,6 +3,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Common;
 using Logging;
 using Maui.UIServices;
 using MediatR;
@@ -11,6 +12,7 @@ using Models;
 using Moq;
 using RequestHandlers;
 using Requests;
+using Shouldly;
 using TransactionMobile.Maui.BusinessLogic.Services;
 using TransactionMobile.Maui.Database;
 using UIServices;
@@ -64,6 +66,31 @@ public class LoginPageViewModelTests
         this.Mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.Mediator.Verify(x => x.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("http://localhost")]
+    public void LoginPageViewModel_LoginCommand_Execute_ConfigUrlSet_IsExecuted(String configUrl)
+    {
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<Configuration>(new Configuration()));
+        this.Mediator.Setup(m => m.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<TokenResponseModel>(TestData.AccessToken));
+        this.Mediator.Setup(m => m.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformLogonResponseModel>(TestData.PerformLogonResponseModel));
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<Decimal>(TestData.MerchantBalance));
+        this.ViewModel.ConfigHostUrl = configUrl;
+        this.ViewModel.LoginCommand.Execute(null);
+
+        this.Mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
+        if (String.IsNullOrEmpty(configUrl) == false){
+            this.ApplicationCache.Verify(v => v.SetConfigHostUrl(It.IsAny<String>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Once);
+        }
+
     }
 
     [Fact]
@@ -151,5 +178,28 @@ public class LoginPageViewModelTests
                                                      "OK",
                                                      null,
                                                      CancellationToken.None), Times.Once);
+    }
+
+    [Fact]
+    public void LoginPageViewModel_BackButtonCommand_Execute_IsExecuted()
+    {
+        this.ViewModel.BackButtonCommand.Execute(null);
+        this.NavigationService.Verify(n => n.QuitApplication(), Times.Once);
+    }
+    
+    [Fact]
+    public void LoginPageViewModel_PropertyTests_ValuesAreAsExpected(){
+        this.DeviceService.Setup(d => d.GetIdentifier()).Returns("testidentifier");
+        
+        this.ViewModel.Password = TestData.Password;
+        this.ViewModel.UserName = TestData.UserName;
+        this.ViewModel.UseTrainingMode = true;
+        this.ViewModel.ConfigHostUrl = "http://localhost";
+        
+        this.ViewModel.UserName.ShouldBe(TestData.UserName);
+        this.ViewModel.Password.ShouldBe(TestData.Password);
+        this.ViewModel.ConfigHostUrl.ShouldBe("http://localhost");
+        this.ViewModel.UseTrainingMode.ShouldBeTrue();
+        this.ViewModel.DeviceIdentifier.ShouldBe("testidentifier");
     }
 }

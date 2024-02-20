@@ -30,6 +30,7 @@
     using System.Net.Http;
     using System.Runtime.CompilerServices;
     using banditoth.MAUI.DeviceId;
+    using BusinessLogic.Common;
     using BusinessLogic.Services.TrainingModeServices;
     using BusinessLogic.ViewModels.Reports;
     using Pages.Reports;

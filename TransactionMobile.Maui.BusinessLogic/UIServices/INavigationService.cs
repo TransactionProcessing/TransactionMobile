@@ -6,6 +6,7 @@ public interface INavigationService
 {
     #region Methods
 
+    Task QuitApplication();
     Task GoBack();
 
     Task GoToHome();

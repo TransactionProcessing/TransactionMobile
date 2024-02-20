@@ -31,7 +31,7 @@ public class ViewLogsPageViewModel : ExtendedBaseViewModel
 
     #region Properties
 
-    public List<LogMessageViewModel> LogMessages { get; private set; }
+    public List<LogMessageModel> LogMessages { get; private set; }
 
     #endregion
 
@@ -42,10 +42,11 @@ public class ViewLogsPageViewModel : ExtendedBaseViewModel
 
         List<LogMessage> logMessages = await this.Mediator.Send(viewLogsRequest, CancellationToken.None);
 
-        List<LogMessageViewModel> logMessageViewModels = new List<LogMessageViewModel>();
+        List<LogMessageModel> logMessageViewModels = new List<LogMessageModel>();
 
         logMessages.ForEach(l => {
-                                logMessageViewModels.Add(new LogMessageViewModel {
+                                logMessageViewModels.Add(new LogMessageModel
+                                                         {
                                                                                      LogLevel = l.LogLevel,
                                                                                      LogLevelString = l.LogLevelString,
                                                                                      Message = l.Message,

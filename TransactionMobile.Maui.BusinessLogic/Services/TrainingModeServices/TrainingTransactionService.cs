@@ -2,8 +2,11 @@
 
 using Models;
 using RequestHandlers;
+using System.Diagnostics.CodeAnalysis;
+using Common;
 using ViewModels.Transactions;
 
+[ExcludeFromCodeCoverage]
 public class TrainingTransactionService : ITransactionService
 {
     public async Task<Result<PerformLogonResponseModel>> PerformLogon(PerformLogonRequestModel model,

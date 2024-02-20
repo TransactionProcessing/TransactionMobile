@@ -1,5 +1,8 @@
-﻿namespace TransactionMobile.Maui.BusinessLogic.Models;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace TransactionMobile.Maui.BusinessLogic.Models;
+
+[ExcludeFromCodeCoverage]
 public class PerformVoucherIssueRequestModel
 {
     // TODO: should we have a base transaction request model ?

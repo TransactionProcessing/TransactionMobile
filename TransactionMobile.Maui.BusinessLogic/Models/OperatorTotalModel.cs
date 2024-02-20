@@ -1,5 +1,8 @@
-﻿namespace TransactionMobile.Maui.BusinessLogic.Models;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace TransactionMobile.Maui.BusinessLogic.Models;
+
+[ExcludeFromCodeCoverage]
 public class OperatorTotalModel
 {
     public Guid ContractId { get; set; }
