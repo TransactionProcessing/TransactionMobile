@@ -55,6 +55,30 @@ Scenario: Back Button from Reports Page Screen
 	When I click on the back button
 	Then the Merchant Home Page is displayed	
 
+# Profile Page Back Button Tests
+@PRNavTest
+Scenario: Back Button from Profile Page Screen
+	Given I am on the Login Screen
+	And the application is in training mode
+	When I enter 'user1' as the Email Address
+	And I enter '123456' as the Password
+	And I tap on Login
+	Then the Merchant Home Page is displayed	
+	When I tap on Profile
+	Then the My Profile Page is displayed
+	When I tap on the Addresses button
+	Then the Address List Page is displayed
+	When I click on the back button
+	Then the My Profile Page is displayed
+	When I tap on the Contacts button
+	Then the Contact List Page is displayed
+	When I click on the back button
+	Then the My Profile Page is displayed
+	When I tap on the Account Info button
+	Then the Account Info Page is displayed
+	When I click on the back button
+	Then the My Profile Page is displayed
+	When I click on the back button
+	Then the Merchant Home Page is displayed
 
-# My Account Page Back Button Tests
 # Support Page Back Button Tests
