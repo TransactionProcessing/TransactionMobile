@@ -28,9 +28,9 @@
                     <Label Text="{Binding NumberTransactionsStored, Mode=OneTime}"
                        VerticalOptions="Center"/>
 
-                    <Button Text="Upload Logs" Style="{StaticResource StandardButton}" Command="{Binding UploadLogsCommand}" IsVisible="{Binding ShowUploadLogsButton}"/>
-                    <Button Text="View Logs" Style="{StaticResource StandardButton}" Command="{Binding ViewLogsCommand}" IsVisible="{Binding ShowViewLogsButton}"/>
-                    <Button Text="Back" Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}"/>
+                    <Button Text="Upload Logs" Style="{StaticResource StandardButton}" Command="{Binding UploadLogsCommand}" AutomationId="UploadLogsButton"/>
+                    <Button Text="View Logs" Style="{StaticResource StandardButton}" Command="{Binding ViewLogsCommand}" AutomationId="ViewLogsButton"/>
+                    <Button Text="Back" Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}" AutomationId="BackButton"/>
                 </VerticalStackLayout>
             </Frame>
         </VerticalStackLayout>

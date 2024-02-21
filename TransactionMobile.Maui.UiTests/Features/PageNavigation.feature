@@ -1,4 +1,4 @@
-﻿@background @login @toolbar @profile @shared @transactions @sharedapp @base @reports
+﻿@background @login @toolbar @profile @shared @transactions @sharedapp @base @reports @support
 Feature: PageNavigation
 
 # Home Page Back Button Tests
@@ -82,3 +82,21 @@ Scenario: Back Button from Profile Page Screen
 	Then the Merchant Home Page is displayed
 
 # Support Page Back Button Tests
+@PRNavTest
+Scenario: Back Button from Support Page Screen
+	Given I am on the Login Screen
+	And the application is in training mode
+	When I enter 'user1' as the Email Address
+	And I enter '123456' as the Password
+	And I tap on Login
+	Then the Merchant Home Page is displayed	
+	When I tap on Support
+	Then the Support Page is displayed
+	When I tap on the Upload Logs Button
+	Then the Support Page is displayed
+	When I tap on the View Logs Button
+	Then the View Logs Page is displayed
+	When I click on the back button
+	Then the Support Page is displayed
+	When I click on the back button
+	Then the Merchant Home Page is displayed
