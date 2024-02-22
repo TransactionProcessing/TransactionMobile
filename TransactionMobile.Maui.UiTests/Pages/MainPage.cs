@@ -34,7 +34,7 @@ public class MainPage : BasePage2
         this.TransactionsButton = "Transactions";
         this.ReportsButton = "Reports";
         this.ProfileButton = "My Account";
-        this.SupportButton = "SupportButton";
+        this.SupportButton = "Support";
         this.AvailableBalanceLabel = "AvailableBalanceValueLabel";
     }
 
@@ -56,7 +56,7 @@ public class MainPage : BasePage2
 
     public async Task ClickSupportButton()
     {
-        var element = await this.WaitForElementByAccessibilityId(this.SupportButton);
+        var element = await this.WaitForElementByAccessibilityId(this.SupportButton, i:1);
         element.Click();
     }
 

@@ -3,6 +3,7 @@
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 using TransactionMobile.Maui.UiTests.Common;
+using UiTests.Pages;
 
 [Binding]
 [Scope(Tag = "toolbar")]
@@ -27,6 +28,49 @@ public class ToolbarSteps{
     [When(@"I tap on Reports")]
     public async Task WhenITapOnReports(){
         await this.mainPage.ClickReportsButton();
+    }
+
+    [When(@"I tap on Support")]
+    public async Task WhenITapOnSupport()
+    {
+        await this.mainPage.ClickSupportButton();
+    }
+}
+
+[Binding]
+[Scope(Tag = "support")]
+public class SupportSteps{
+    private readonly TestingContext TestingContext;
+
+    private SupportPage supportPage;
+    private ViewLogsPage viewLogsPage;
+
+    public SupportSteps(TestingContext testingContext){
+        this.TestingContext = testingContext;
+        this.supportPage = new SupportPage(testingContext);
+        this.viewLogsPage = new ViewLogsPage(testingContext);
+    }
+
+    [Then(@"the Support Page is displayed")]
+    public async Task ThenTheSupportPageIsDisplayed(){
+        await this.supportPage.AssertOnPage();
+    }
+
+    [When(@"I tap on the Upload Logs Button")]
+    public async Task WhenITapOnTheUploadLogsButton()
+    {
+        await this.supportPage.ClickUploadLogsButton();
+    }
+
+    [When(@"I tap on the View Logs Button")]
+    public async Task WhenITapOnTheViewLogsButton(){
+        await this.supportPage.ClickViewLogsButton();
+    }
+
+    [Then(@"the View Logs Page is displayed")]
+    public async Task ThenTheViewLogsPageIsDisplayed()
+    {
+        await this.viewLogsPage.AssertOnPage();
     }
 
 }

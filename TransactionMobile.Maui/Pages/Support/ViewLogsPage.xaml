@@ -20,6 +20,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        <Button Text="Back" Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}"/>
+        <Button Text="Back" Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}" AutomationId="BackButton"/>
     </StackLayout>
 </ContentPage>
