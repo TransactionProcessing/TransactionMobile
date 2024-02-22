@@ -68,7 +68,7 @@
     </ContentPage.Resources>
 
     <ScrollView>
-        <VerticalStackLayout>
+        <VerticalStackLayout Style="{DynamicResource Layout}">
             <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
 
             <!-- TODO: Comparison Date Selection - Picker -->

@@ -20,13 +20,19 @@ public class TrainingTransactionService : ITransactionService
     }
 
     public async Task<Result<PerformMobileTopupResponseModel>> PerformMobileTopup(PerformMobileTopupRequestModel model,
-                                                                                  CancellationToken cancellationToken) {
-        PerformMobileTopupResponseModel responseModel = new() {
-                                                                  ResponseCode = "0000",
-                                                                  ResponseMessage = "SUCCESS"
-                                                              };
+                                                                                  CancellationToken cancellationToken){
 
-
+        PerformMobileTopupResponseModel responseModel = model.TopupAmount switch{
+            150 => new PerformMobileTopupResponseModel(){
+                                                            ResponseCode = "1000",
+                                                            ResponseMessage = "Failed"
+                                                        },
+            _ => new(){
+                          ResponseCode = "0000",
+                          ResponseMessage = "SUCCESS"
+                      }
+        };
+        
         return new SuccessResult<PerformMobileTopupResponseModel>(responseModel);
     }
 
@@ -40,13 +46,22 @@ public class TrainingTransactionService : ITransactionService
 
     public async Task<Result<PerformVoucherIssueResponseModel>> PerformVoucherIssue(PerformVoucherIssueRequestModel model,
                                                                                     CancellationToken cancellationToken) {
-        PerformVoucherIssueResponseModel responseMessage = new PerformVoucherIssueResponseModel
-                                                           {
-                                                               ResponseCode = "0000",
-                                                               ResponseMessage = "SUCCESS"
-                                                           };
+
+        PerformVoucherIssueResponseModel responseModel = model.VoucherAmount switch
+        {
+            150 => new ()
+                   {
+                       ResponseCode = "1000",
+                       ResponseMessage = "Failed"
+                   },
+            _ => new()
+                 {
+                     ResponseCode = "0000",
+                     ResponseMessage = "SUCCESS"
+                 }
+        };
             
-        return new SuccessResult<PerformVoucherIssueResponseModel>(responseMessage);
+        return new SuccessResult<PerformVoucherIssueResponseModel>(responseModel);
     }
 
     public async Task<Result<PerformBillPaymentGetAccountResponseModel>> PerformBillPaymentGetAccount(PerformBillPaymentGetAccountModel model,
@@ -69,15 +84,20 @@ public class TrainingTransactionService : ITransactionService
     }
 
     public async Task<Result<PerformBillPaymentMakePaymentResponseModel>> PerformBillPaymentMakePayment(PerformBillPaymentMakePaymentModel model,
-                                                                                                        CancellationToken cancellationToken) {
-        PerformBillPaymentMakePaymentResponseModel responseMessage = new PerformBillPaymentMakePaymentResponseModel
-                                                                     {
-                                                                         ResponseCode = "0000",
-                                                                         ResponseMessage = "SUCCESS"
-                                                                     };
+                                                                                                        CancellationToken cancellationToken){
 
-
-        return new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(responseMessage);
+        var responseModel = model.PaymentAmount switch{
+            150 => new PerformBillPaymentMakePaymentResponseModel(){
+                                                                       ResponseMessage = "Failed",
+                                                                       ResponseCode = "1000"
+                                                                   },
+            _ => new PerformBillPaymentMakePaymentResponseModel{
+                                                                   ResponseCode = "0000",
+                                                                   ResponseMessage = "SUCCESS"
+                                                               }
+        };
+        
+        return new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(responseModel);
     }
 
     public async Task<Result<PerformBillPaymentGetMeterResponseModel>> PerformBillPaymentGetMeter(PerformBillPaymentGetMeterModel model, CancellationToken cancellationToken){

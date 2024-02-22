@@ -6,7 +6,7 @@
                                xmlns:views="clr-namespace:TransactionMobile.Maui.Pages.Common"
                                Shell.NavBarIsVisible="False">
     <ScrollView>
-        <VerticalStackLayout>
+        <VerticalStackLayout Style="{DynamicResource Layout}">
 
             <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
 
@@ -14,8 +14,7 @@
             <Image Source="techsupport.jpg" VerticalOptions="Start" Aspect="AspectFit"/>
 
 
-            <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
-               CornerRadius="20" Opacity="0.9" BackgroundColor="#E5E9F0">
+            <Frame Style="{DynamicResource MainFrame}">
                 <VerticalStackLayout x:Name="SubLayout" Spacing="5">
 
                     <Label Text="{Binding ApplicationName, Mode=OneTime}"

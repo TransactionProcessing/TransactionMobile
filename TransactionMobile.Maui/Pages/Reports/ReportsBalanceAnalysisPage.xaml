@@ -24,8 +24,9 @@
                 HeightRequest="200" HorizontalOptions="FillAndExpand">
             </maui:CartesianChart>
 
+            <VerticalStackLayout Style="{DynamicResource Layout}">
             <Button Text="Back" AutomationId="BackButton" Style="{StaticResource ReportsButtonStyle}" Command="{Binding BackButtonCommand}"/>
-
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

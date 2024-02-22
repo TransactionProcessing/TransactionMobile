@@ -8,23 +8,21 @@
     <ContentPage.Content>
         <ScrollView>
             <!-- Main structure-->
-            <VerticalStackLayout x:Name="MainLayout">
+            <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
                 <!--Main image-->
-                <Image Source="loginimage.jpg" VerticalOptions="Start" Aspect="AspectFit"/>
+                <Image Source="loginimage.jpg" VerticalOptions="Start" Style="{DynamicResource LoginImage}"/>
 
                 <!-- Title-->
                 <Label Text="Log In" FontSize="34" HorizontalOptions="Center" FontAttributes="Bold" Padding="20,0,0,20" 
                    AutomationId="LoginLabel"/>
+                <Frame Style="{DynamicResource MainFrame}">
 
-                <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
-                   CornerRadius="20" Opacity="0.9" BackgroundColor="#E5E9F0">
                     <VerticalStackLayout x:Name="SubLayout">
-
                         <Entry x:Name="UserNameEntry"
-                           Placeholder="User name or email address"
-                           AutomationId="UserNameEntry"
-                           Style="{DynamicResource UserNameEntryStyle}"
-                           Text="{Binding UserName}">
+                               Placeholder="User name or email address"
+                               AutomationId="UserNameEntry"
+                               Style="{DynamicResource UserNameEntryStyle}"
+                               Text="{Binding UserName}">
                         </Entry>
 
                         <Entry x:Name="PasswordEntry"

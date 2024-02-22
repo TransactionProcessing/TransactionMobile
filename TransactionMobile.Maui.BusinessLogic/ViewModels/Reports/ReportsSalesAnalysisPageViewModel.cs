@@ -44,8 +44,8 @@ public class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel{
     private async Task GetApiData(){
         // TODO: Initial api call to get data would be done here
         List<SalesAnalysis> salesAnalysisList = new List<SalesAnalysis>();
-        salesAnalysisList.Add(new SalesAnalysis("100.00 KES", "90.00 KES", "10%", "Sales Value", "Today's Sales", SelectedItem.DisplayText, "Variance:","salesvalue.svg"));
-        salesAnalysisList.Add(new SalesAnalysis("100", "90", "10%", "Sales Count", "Today's Sales", SelectedItem.DisplayText, "Variance:", "salescount.svg"));
+        salesAnalysisList.Add(new SalesAnalysis("100.00 KES", "90.00 KES", "10%", "Sales Value", "Today's Sales", SelectedItem.DisplayText, "Variance:","salesvalue.png"));
+        salesAnalysisList.Add(new SalesAnalysis("100", "90", "10%", "Sales Count", "Today's Sales", SelectedItem.DisplayText, "Variance:", "salescount.png"));
         this.SalesAnalysisList = salesAnalysisList;
     }
 
