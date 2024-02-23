@@ -182,7 +182,7 @@
         <Setter Property="CornerRadius" Value="20" />
     </Style>
     <Style x:Key="Layout" TargetType="VerticalStackLayout">
-        <Setter Property="WidthRequest" Value="{OnPlatform Android=360,WinUI=400, iOS=380, MacCatalyst=400}"></Setter>
+        <Setter Property="WidthRequest" Value="{OnPlatform Android=360,WinUI=400, iOS=340, MacCatalyst=400}"></Setter>
         <Setter Property="HorizontalOptions" Value="Center"></Setter>
     </Style>
 
@@ -196,7 +196,7 @@
         <Setter Property="WidthRequest" Value="150"/>
     </Style>
     <Style x:Key="MainFrame" TargetType="Frame">
-        <Setter Property="WidthRequest" Value="{OnPlatform Android=320,WinUI=400, iOS=380, MacCatalyst=400}"></Setter>
+        <Setter Property="WidthRequest" Value="{OnPlatform Android=320,WinUI=400, iOS=300, MacCatalyst=400}"></Setter>
         <Setter Property="HasShadow" Value="True"></Setter>
         <Setter Property="Padding" Value="50,20,50,20"></Setter>
         <Setter Property="Margin" Value="0,0,0,0"></Setter>
