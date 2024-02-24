@@ -17,19 +17,19 @@ public partial class MyAccountAddressesPage : ContentPage
         base.OnAppearing();
         await viewModel.Initialise(CancellationToken.None);
 
-        this.AddressLine2.IsVisible = String.IsNullOrEmpty(viewModel.Address.AddressLine2) switch {
-            true => false,
-            false => true
-        };
-        this.AddressLine3.IsVisible = String.IsNullOrEmpty(viewModel.Address.AddressLine3) switch
-        {
-            true => false,
-            false => true
-        };
-        this.AddressLine4.IsVisible = String.IsNullOrEmpty(viewModel.Address.AddressLine4) switch
-        {
-            true => false,
-            false => true
-        };
+        //this.AddressLine2.IsVisible = String.IsNullOrEmpty(viewModel.Address.AddressLine2) switch {
+        //    true => false,
+        //    false => true
+        //};
+        //this.AddressLine3.IsVisible = String.IsNullOrEmpty(viewModel.Address.AddressLine3) switch
+        //{
+        //    true => false,
+        //    false => true
+        //};
+        //this.AddressLine4.IsVisible = String.IsNullOrEmpty(viewModel.Address.AddressLine4) switch
+        //{
+        //    true => false,
+        //    false => true
+        //};
     }
 }
