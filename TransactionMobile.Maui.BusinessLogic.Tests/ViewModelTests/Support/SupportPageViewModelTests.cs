@@ -62,7 +62,6 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Support
             this.ViewModel.UploadLogsCommand.Execute(null);
 
             this.Mediator.Verify(m => m.Send(It.IsAny<UploadLogsRequest>(),It.IsAny<CancellationToken>()),Times.Once);
-            this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
         }
 
         [Fact]

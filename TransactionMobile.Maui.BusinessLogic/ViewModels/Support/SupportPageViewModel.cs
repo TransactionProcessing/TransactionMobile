@@ -77,7 +77,7 @@
             Boolean response = await this.Mediator.Send(uploadLogsRequest, CancellationToken.None);
 
             // TODO: Act on the response (display message or something)...
-            await this.NavigationService.GoToHome();
+            //await this.NavigationService.GoBack();
         }
 
         private async Task ViewLogsCommandExecute() {
