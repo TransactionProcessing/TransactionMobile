@@ -5,11 +5,12 @@
                                xmlns:userControls="clr-namespace:TransactionMobile.Maui.Controls;assembly=TransactionMobile.Maui"
                                xmlns:views="clr-namespace:TransactionMobile.Maui.Pages.Common"
                                Shell.NavBarIsVisible="False">
-    <StackLayout>
+    <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
         <userControls:TitleLabel Text="Home" AutomationId="Home" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+        <Image Source="loginimage.jpg" VerticalOptions="Start" Style="{DynamicResource LoginImage}"/>
         <Label Text="Welcome to .NET MAUI!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+               VerticalOptions="CenterAndExpand" 
+               HorizontalOptions="CenterAndExpand" />
         <Button Text="Exit Application" AutomationId="BackButton" Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}"/>
-    </StackLayout>
+    </VerticalStackLayout>
 </views:NoBackWithoutLogoutPage>

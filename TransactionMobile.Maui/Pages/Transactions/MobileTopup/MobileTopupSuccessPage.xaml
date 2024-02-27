@@ -5,19 +5,17 @@
              xmlns:userControls="clr-namespace:TransactionMobile.Maui.Controls;assembly=TransactionMobile.Maui"
              Shell.NavBarIsVisible="False">
     <ScrollView>
-        <VerticalStackLayout x:Name="MainLayout">
+        <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
             <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center" VerticalOptions="End"
                FontAttributes="Bold" Padding="20,0,0,20"/>
-            <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" CornerRadius="20"
-               Opacity="0.9" BackgroundColor="#E5E9F0">
+            <Frame Style="{DynamicResource MainFrame}">
                 <VerticalStackLayout Spacing="10">
 
-                    <Image Source="Resources/PaymentSuccess.svg" VerticalOptions="Start" Aspect="AspectFit"/>
+                    <Image Source="paymentsuccess.png" VerticalOptions="Start" Style="{DynamicResource PaymentImage}"/>
 
-                    <!--  Payment description label  -->
+                    <!--  Payment description label -->
                     <Label Margin="17,8"
-                       Text="Thank you for your topup. An automated payment receipt will be sent to your email entered."/>
-
+                           Text="Thank you for your topup. An automated payment receipt will be sent to your email entered."/>
                     <Button x:Name="CompleteButton" Margin="0,16" Text="Complete" Command="{Binding CompletedCommand}"
                         Style="{DynamicResource MobileTopupButtonStyle}" AutomationId="CompleteButton"/>
                 </VerticalStackLayout>

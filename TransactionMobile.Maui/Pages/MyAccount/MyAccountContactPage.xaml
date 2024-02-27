@@ -5,11 +5,10 @@
              xmlns:userControls="clr-namespace:TransactionMobile.Maui.Controls;assembly=TransactionMobile.Maui"
              Shell.NavBarIsVisible="False">
     <ScrollView>
-        <VerticalStackLayout>
+        <VerticalStackLayout Style="{DynamicResource Layout}">
             <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
 
-            <Frame HasShadow="True" Padding="50,20,50,20" Margin="10,0,0,10" VerticalOptions="CenterAndExpand" 
-               CornerRadius="20" Opacity="0.9" BackgroundColor="#f5f8fa">
+            <Frame Style="{DynamicResource MainFrame}">
                 <VerticalStackLayout x:Name="SubLayout">
                     <Label Text="Primary Contact" HorizontalTextAlignment="Center"
                        HorizontalOptions="Fill" FontAttributes="Bold" FontSize="20"
@@ -42,7 +41,7 @@
             </Frame>
             <Button Text="Edit Contact" Style="{StaticResource MyAccountButtonStyle}" 
                 Margin="10,0,0,10" AutomationId="EditContactButton"/>
-            <Button Text="Back" AutomationId="BackButton" Style="{StaticResource MyAccountButtonStyle}" Command="{Binding BackButtonCommand}"/>
+            <Button Margin="10,0,0,10" Text="Back" AutomationId="BackButton" Style="{StaticResource MyAccountButtonStyle}" Command="{Binding BackButtonCommand}"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
