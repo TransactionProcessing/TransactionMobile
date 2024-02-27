@@ -8,7 +8,7 @@ namespace TransactionMobile.Maui.UITests.Common
 {
     using TechTalk.SpecFlow;
 
-    public static class SpecflowTableHelper
+    public static class SpecflowTableHelper1
     {
         #region Methods
 
@@ -22,7 +22,7 @@ namespace TransactionMobile.Maui.UITests.Common
         public static T GetEnumValue<T>(TableRow row,
                                         String key) where T : struct
         {
-            String field = SpecflowTableHelper.GetStringRowValue(row, key);
+            String field = SpecflowTableHelper1.GetStringRowValue(row, key);
 
             Enum.TryParse(field, out T myEnum);
 
@@ -38,7 +38,7 @@ namespace TransactionMobile.Maui.UITests.Common
         public static Boolean GetBooleanValue(TableRow row,
                                               String key)
         {
-            String field = SpecflowTableHelper.GetStringRowValue(row, key);
+            String field = SpecflowTableHelper1.GetStringRowValue(row, key);
 
             return bool.TryParse(field, out Boolean value) && value;
         }
@@ -80,7 +80,7 @@ namespace TransactionMobile.Maui.UITests.Common
         public static Decimal GetDecimalValue(TableRow row,
                                               String key)
         {
-            String field = SpecflowTableHelper.GetStringRowValue(row, key);
+            String field = SpecflowTableHelper1.GetStringRowValue(row, key);
 
             return decimal.TryParse(field, out Decimal value) ? value : 0;
         }
@@ -94,7 +94,7 @@ namespace TransactionMobile.Maui.UITests.Common
         public static Int32 GetIntValue(TableRow row,
                                         String key)
         {
-            String field = SpecflowTableHelper.GetStringRowValue(row, key);
+            String field = SpecflowTableHelper1.GetStringRowValue(row, key);
 
             return int.TryParse(field, out Int32 value) ? value : -1;
         }
@@ -108,7 +108,7 @@ namespace TransactionMobile.Maui.UITests.Common
         public static Int16 GetShortValue(TableRow row,
                                           String key)
         {
-            String field = SpecflowTableHelper.GetStringRowValue(row, key);
+            String field = SpecflowTableHelper1.GetStringRowValue(row, key);
 
             if (short.TryParse(field, out Int16 value))
             {

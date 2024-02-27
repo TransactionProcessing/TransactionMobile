@@ -29,5 +29,7 @@ public class PerformBillPaymentMakePaymentModel
 
     public String TransactionNumber { get; set; }
 
+    public Boolean PostPayment{ get; set; }
+
     #endregion
 }

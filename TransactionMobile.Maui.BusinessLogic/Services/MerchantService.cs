@@ -170,6 +170,7 @@ public class MerchantService : IMerchantService
                 productType = ProductType.Voucher;
                 break;
             case "PataPawa PostPay":
+            case "PataPawa PrePay":
                 productType = ProductType.BillPayment;
                 break;
         }

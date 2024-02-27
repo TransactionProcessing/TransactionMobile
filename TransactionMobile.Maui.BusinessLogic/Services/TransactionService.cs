@@ -68,7 +68,7 @@
         public async Task<Result<PerformBillPaymentMakePaymentResponseModel>> PerformBillPaymentMakePayment(PerformBillPaymentMakePaymentModel model,
                                                                                                             CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform bill payment make payment transaction");
-
+            
             Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
             
             if (result.Success == false)
@@ -99,17 +99,22 @@
 
             if (result.Success == false)
             {
-                Logger.LogWarning("Error performing bill payment - get account transaction");
+                Logger.LogWarning("Error performing bill payment - get meter transaction");
                 return new ErrorResult<PerformBillPaymentGetMeterResponseModel>("Error performing bill payment - get meter transaction");
 
             }
+
+            MeterDetails meterDetails = result.Data.AdditionalResponseMetaData switch{
+                null => null,
+                _ => result.Data.AdditionalResponseMetaData.ToMeterDetails(model.MeterNumber)
+            };
 
             // TODO: Factory
             PerformBillPaymentGetMeterResponseModel responseModel = new()
                                                                     {
                                                                         IsSuccessful = result.Data.IsSuccessfulTransaction(),
-                                                                        MeterDetails = result.Data.AdditionalResponseMetaData.ToMeterDetails()
-                                                                    };
+                                                                        MeterDetails = meterDetails
+            };
 
             Logger.LogInformation("Bill payment - get meter transaction performed successfully");
 

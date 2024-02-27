@@ -23,7 +23,7 @@
                             Text="Get Meter"
                             Command="{Binding GetMeterCommand}"
                             Style="{DynamicResource BillPaymentButtonStyle}"
-                            AutomationId="GetAccountButton"/>
+                            AutomationId="GetMeterButton"/>
                     <Button Text="Back" Style="{StaticResource BillPaymentButtonStyle}" Command="{Binding BackButtonCommand}"/>
                 </VerticalStackLayout>
                 

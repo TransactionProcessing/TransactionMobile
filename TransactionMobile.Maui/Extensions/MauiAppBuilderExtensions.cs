@@ -224,7 +224,8 @@
             builder.Services.AddSingleton<IRequestHandler<PerformReconciliationRequest, Result<PerformReconciliationResponseModel>>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentGetAccountRequest, Result<PerformBillPaymentGetAccountResponseModel>>, TransactionRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentGetMeterRequest, Result<PerformBillPaymentGetMeterResponseModel>>, TransactionRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentMakePaymentRequest, Result<PerformBillPaymentMakePaymentResponseModel>>, TransactionRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentMakePostPaymentRequest, Result<PerformBillPaymentMakePaymentResponseModel>>, TransactionRequestHandler>();
+            builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentMakePrePaymentRequest, Result<PerformBillPaymentMakePaymentResponseModel>>, TransactionRequestHandler>();
 
             builder.Services.AddSingleton<IRequestHandler<UploadLogsRequest, Boolean>, SupportRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<ViewLogsRequest, List<LogMessage>>, SupportRequestHandler>();

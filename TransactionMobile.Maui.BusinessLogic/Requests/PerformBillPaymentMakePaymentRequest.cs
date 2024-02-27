@@ -6,18 +6,18 @@ using Models;
 using RequestHandlers;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 
-public class PerformBillPaymentMakePaymentRequest : IRequest<Result<PerformBillPaymentMakePaymentResponseModel>>
+public class PerformBillPaymentMakePostPaymentRequest : IRequest<Result<PerformBillPaymentMakePaymentResponseModel>>
 {
     #region Constructors
 
-    private PerformBillPaymentMakePaymentRequest(DateTime transactionDateTime,
-                                                 Guid contractId,
-                                                 Guid productId,
-                                                 String operatorIdentifier,
-                                                 String customerAccountNumber,
-                                                 String customerAccountName,
-                                                 String customerMobileNumber,
-                                                 Decimal paymentAmount)
+    private PerformBillPaymentMakePostPaymentRequest(DateTime transactionDateTime,
+                                                     Guid contractId,
+                                                     Guid productId,
+                                                     String operatorIdentifier,
+                                                     String customerAccountNumber,
+                                                     String customerAccountName,
+                                                     String customerMobileNumber,
+                                                     Decimal paymentAmount)
     {
         this.CustomerAccountNumber = customerAccountNumber;
         this.CustomerAccountName = customerAccountName;
@@ -53,23 +53,86 @@ public class PerformBillPaymentMakePaymentRequest : IRequest<Result<PerformBillP
 
     #region Methods
 
-    public static PerformBillPaymentMakePaymentRequest Create(DateTime transactionDateTime,
-                                                              Guid contractId,
-                                                              Guid productId,
-                                                              String operatorIdentifier,
-                                                              String customerAccountNumber,
-                                                              String customerAccountName,
-                                                              String customerMobileNumber,
-                                                              Decimal paymentAmount)
+    public static PerformBillPaymentMakePostPaymentRequest Create(DateTime transactionDateTime,
+                                                                  Guid contractId,
+                                                                  Guid productId,
+                                                                  String operatorIdentifier,
+                                                                  String customerAccountNumber,
+                                                                  String customerAccountName,
+                                                                  String customerMobileNumber,
+                                                                  Decimal paymentAmount)
     {
-        return new PerformBillPaymentMakePaymentRequest(transactionDateTime,
-                                                        contractId,
-                                                        productId,
-                                                        operatorIdentifier,
-                                                        customerAccountNumber,
-                                                        customerAccountName,
-                                                        customerMobileNumber,
-                                                        paymentAmount);
+        return new PerformBillPaymentMakePostPaymentRequest(transactionDateTime,
+                                                            contractId,
+                                                            productId,
+                                                            operatorIdentifier,
+                                                            customerAccountNumber,
+                                                            customerAccountName,
+                                                            customerMobileNumber,
+                                                            paymentAmount);
+    }
+
+    #endregion
+}
+
+public class PerformBillPaymentMakePrePaymentRequest : IRequest<Result<PerformBillPaymentMakePaymentResponseModel>>
+{
+    #region Constructors
+
+    private PerformBillPaymentMakePrePaymentRequest(DateTime transactionDateTime,
+                                                    Guid contractId,
+                                                    Guid productId,
+                                                    String operatorIdentifier,
+                                                    String meterNumber,
+                                                    String customerAccountName,
+                                                    Decimal paymentAmount)
+    {
+        this.CustomerAccountName = customerAccountName;
+        this.MeterNumber = meterNumber;
+        this.PaymentAmount = paymentAmount;
+        this.TransactionDateTime = transactionDateTime;
+        this.ContractId = contractId;
+        this.ProductId = productId;
+        this.OperatorIdentifier = operatorIdentifier;
+    }
+
+    #endregion
+
+    #region Properties
+
+    public Guid ContractId { get; }
+
+    public String MeterNumber { get; }
+
+    public String CustomerAccountName { get; }
+
+    public Decimal PaymentAmount { get; }
+
+    public String OperatorIdentifier { get; }
+
+    public Guid ProductId { get; }
+
+    public DateTime TransactionDateTime { get; }
+
+    #endregion
+
+    #region Methods
+
+    public static PerformBillPaymentMakePrePaymentRequest Create(DateTime transactionDateTime,
+                                                                 Guid contractId,
+                                                                 Guid productId,
+                                                                 String operatorIdentifier,
+                                                                 String meterNumber,
+                                                                 String customerAccountName,
+                                                                 Decimal paymentAmount)
+    {
+        return new PerformBillPaymentMakePrePaymentRequest(transactionDateTime,
+                                                           contractId,
+                                                           productId,
+                                                           operatorIdentifier,
+                                                           meterNumber,
+                                                           customerAccountName,
+                                                           paymentAmount);
     }
 
     #endregion

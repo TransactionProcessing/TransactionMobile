@@ -117,7 +117,7 @@ public class BillPaymentPayBillPageViewModelTests
     [Fact]
     public void BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_SuccessfulPostPayPayment_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel()
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePostPaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel()
             {
                 ResponseCode = "0000"
             }));
@@ -128,14 +128,14 @@ public class BillPaymentPayBillPageViewModelTests
                                                 {nameof(this.ViewModel.BillDetails), TestData.BillDetails}
                                             });
         this.ViewModel.MakeBillPaymentCommand.Execute(null);
-        this.Mediator.Verify(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(m => m.Send(It.IsAny<PerformBillPaymentMakePostPaymentRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(v => v.GoToBillPaymentSuccessPage(), Times.Once);
     }
 
     [Fact]
     public void BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_SuccessfulPrePayPayment_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel()
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePrePaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel()
                                                                                                                                                                                                      {
                                                                                                                                                                                                          ResponseCode = "0000"
                                                                                                                                                                                                      }));
@@ -146,14 +146,14 @@ public class BillPaymentPayBillPageViewModelTests
                                                 {nameof(this.ViewModel.MeterDetails), TestData.MeterDetails}
                                             });
         this.ViewModel.MakeBillPaymentCommand.Execute(null);
-        this.Mediator.Verify(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(m => m.Send(It.IsAny<PerformBillPaymentMakePrePaymentRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(v => v.GoToBillPaymentSuccessPage(), Times.Once);
     }
 
     [Fact]
     public void BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_FailedPostPayPayment_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel() {
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePostPaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel() {
             ResponseCode = "1010"
         }));
         
@@ -163,17 +163,17 @@ public class BillPaymentPayBillPageViewModelTests
                                                 {nameof(this.ViewModel.BillDetails), TestData.BillDetails}
                                             });
         this.ViewModel.MakeBillPaymentCommand.Execute(null);
-        this.Mediator.Verify(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(m => m.Send(It.IsAny<PerformBillPaymentMakePostPaymentRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(v => v.GoToBillPaymentFailedPage(), Times.Once);
     }
 
     [Fact]
     public void BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_FailedPrePayPayment_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel()
-                                                                                                                                                                                                     {
-                                                                                                                                                                                                         ResponseCode = "1010"
-                                                                                                                                                                                                     }));
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePrePaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel()
+                                                                                                                                                                                                        {
+                                                                                                                                                                                                            ResponseCode = "1010"
+                                                                                                                                                                                                        }));
 
         this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                             {
@@ -181,7 +181,7 @@ public class BillPaymentPayBillPageViewModelTests
                                                 {nameof(this.ViewModel.MeterDetails), TestData.MeterDetails}
                                             });
         this.ViewModel.MakeBillPaymentCommand.Execute(null);
-        this.Mediator.Verify(m => m.Send(It.IsAny<PerformBillPaymentMakePaymentRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(m => m.Send(It.IsAny<PerformBillPaymentMakePrePaymentRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(v => v.GoToBillPaymentFailedPage(), Times.Once);
     }
 
