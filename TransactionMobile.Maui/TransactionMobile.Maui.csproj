@@ -261,7 +261,7 @@
 	</ItemGroup>
 
 	<PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-		<RuntimeIdentifier>maccatalyst-arm64</RuntimeIdentifier>
+		<RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers>
 	</PropertyGroup>
 
 	<PropertyGroup>

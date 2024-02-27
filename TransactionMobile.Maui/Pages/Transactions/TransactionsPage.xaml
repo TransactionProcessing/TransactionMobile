@@ -7,10 +7,9 @@
                                Shell.NavBarIsVisible="False">
     <ScrollView>
         <!-- This might be better as a flex layout if we had images-->
-        <VerticalStackLayout>
+        <VerticalStackLayout Style="{DynamicResource Layout}">
             <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-            <Frame HasShadow="True" Padding="25,50" Margin="10,0,10,10" VerticalOptions="CenterAndExpand" 
-           CornerRadius="20" Opacity="0.9" BackgroundColor="#E5E9F0">
+            <Frame Style="{DynamicResource MainFrame}">
                 <VerticalStackLayout Spacing="10">
 
                     <Button AutomationId="MobileTopupButton" Command="{Binding MobileTopupCommand}" x:Name="MobileTopupButton" Text="Mobile Topup" Style="{DynamicResource MobileTopupButtonStyle}"/>
