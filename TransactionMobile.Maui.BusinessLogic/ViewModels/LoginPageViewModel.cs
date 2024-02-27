@@ -132,10 +132,6 @@
             if (productsResult.Success) {
                 this.CacheContractData(productsResult.Data);
             }
-            Logger.LogInformation("Got Products from API");
-            foreach (ContractProductModel contractProductModel in productsResult.Data){
-                Logger.LogInformation(JsonConvert.SerializeObject(contractProductModel));
-            }
             
             return productsResult;
         }
