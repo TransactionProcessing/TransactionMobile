@@ -10,6 +10,7 @@ using TechTalk.SpecFlow;
 
 namespace TransactionMobile.Maui.UiTests.Common
 {
+    using System.Threading.Tasks;
     using Ductus.FluentDocker.Services.Extensions;
 
     [Binding]
@@ -21,7 +22,7 @@ namespace TransactionMobile.Maui.UiTests.Common
         public static (String usename, String password) SqlCredentials = ("sa", "thisisalongpassword123!");
         public static (String url, String username, String password) DockerCredentials = ("https://www.docker.com", "stuartferguson", "Sc0tland");
         //[BeforeTestRun]
-        public static void GlobalSetup()
+        public static async Task GlobalSetup()
         {
             ShouldlyConfiguration.DefaultTaskTimeout = TimeSpan.FromMinutes(1);
 
@@ -35,7 +36,7 @@ namespace TransactionMobile.Maui.UiTests.Common
             dockerHelper.SqlServerContainerName = "sharedsqlserver";
 
             Setup.DatabaseServerNetwork = dockerHelper.SetupTestNetwork("sharednetwork", true);
-            Setup.DatabaseServerContainer = dockerHelper.SetupSqlServerContainer(Setup.DatabaseServerNetwork);
+            Setup.DatabaseServerContainer = await dockerHelper.SetupSqlServerContainer(Setup.DatabaseServerNetwork);
         }
 
         public static String GetConnectionString(String databaseName)

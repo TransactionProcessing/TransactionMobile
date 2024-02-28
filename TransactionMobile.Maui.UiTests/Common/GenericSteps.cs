@@ -39,7 +39,7 @@ public class GenericSteps
         else{
             
         
-        Setup.GlobalSetup();
+        await Setup.GlobalSetup();
 
         // Initialise a logger
         String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");

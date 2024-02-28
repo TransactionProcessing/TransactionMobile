@@ -22,7 +22,7 @@
 	  <PackageReference Include="EventStoreProjections" Version="2023.12.3" />
 	  <PackageReference Include="Appium.WebDriver" Version="5.0.0-rc.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
-    <PackageReference Include="Shared.IntegrationTesting" Version="2023.12.2" />
+    <PackageReference Include="Shared.IntegrationTesting" Version="2024.2.1" />
     <PackageReference Include="Shouldly" Version="4.2.1" />
     <PackageReference Include="coverlet.collector" Version="3.2.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
