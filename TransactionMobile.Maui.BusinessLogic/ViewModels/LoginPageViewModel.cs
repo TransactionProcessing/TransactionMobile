@@ -13,6 +13,7 @@
     using Models;
     using MvvmHelpers;
     using MvvmHelpers.Commands;
+    using Newtonsoft.Json;
     using RequestHandlers;
     using Requests;
     using Services;
@@ -131,7 +132,7 @@
             if (productsResult.Success) {
                 this.CacheContractData(productsResult.Data);
             }
-
+            
             return productsResult;
         }
 

@@ -102,6 +102,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption("enforceAppInstall", true);
             driverOptions.AddAdditionalAppiumOption("uiautomator2ServerInstallTimeout", "40000");
 
+            
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net7.0-android/");
 

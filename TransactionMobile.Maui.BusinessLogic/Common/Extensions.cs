@@ -70,7 +70,7 @@ public static class Extensions
         return transactionRecord;
     }
 
-    public static TransactionRecord ToTransactionRecord(this PerformBillPaymentMakePaymentRequest request, Boolean isTrainingMode) {
+    public static TransactionRecord ToTransactionRecord(this PerformBillPaymentMakePostPaymentRequest request, Boolean isTrainingMode) {
         TransactionRecord transactionRecord = new TransactionRecord
                                               {
                                                   TransactionDateTime = request.TransactionDateTime,
@@ -82,6 +82,38 @@ public static class Extensions
                                                   CustomerAccountNumber = request.CustomerAccountNumber,
                                                   IsTrainingMode = isTrainingMode
         };
+        return transactionRecord;
+    }
+
+    public static TransactionRecord ToTransactionRecord(this PerformBillPaymentMakePrePaymentRequest request, Boolean isTrainingMode)
+    {
+        TransactionRecord transactionRecord = new TransactionRecord
+                                              {
+                                                  TransactionDateTime = request.TransactionDateTime,
+                                                  TransactionType = 2,
+                                                  Amount = 0,
+                                                  ProductId = request.ProductId,
+                                                  ContractId = request.ContractId,
+                                                  OperatorIdentifier = request.OperatorIdentifier,
+                                                  CustomerAccountNumber = request.MeterNumber,
+                                                  IsTrainingMode = isTrainingMode
+                                              };
+        return transactionRecord;
+    }
+
+    public static TransactionRecord ToTransactionRecord(this PerformBillPaymentGetMeterRequest request, Boolean isTrainingMode)
+    {
+        TransactionRecord transactionRecord = new TransactionRecord
+                                              {
+                                                  TransactionDateTime = request.TransactionDateTime,
+                                                  TransactionType = 2,
+                                                  Amount = 0,
+                                                  ProductId = request.ProductId,
+                                                  ContractId = request.ContractId,
+                                                  OperatorIdentifier = request.OperatorIdentifier,
+                                                  CustomerAccountNumber = request.MeterNumber,
+                                                  IsTrainingMode = isTrainingMode
+                                              };
         return transactionRecord;
     }
 
@@ -122,6 +154,14 @@ public static class Extensions
 
     public static TransactionRecord UpdateFrom(this TransactionRecord transactionRecord,
                                                Result<PerformBillPaymentGetAccountResponseModel> result)
+    {
+        transactionRecord.IsSuccessful = result.Data.IsSuccessful;
+
+        return transactionRecord;
+    }
+
+    public static TransactionRecord UpdateFrom(this TransactionRecord transactionRecord,
+                                               Result<PerformBillPaymentGetMeterResponseModel> result)
     {
         transactionRecord.IsSuccessful = result.Data.IsSuccessful;
 
@@ -245,14 +285,24 @@ public static class Extensions
                                                                    TransactionDateTime = model.TransactionDateTime,
                                                                    TransactionNumber = model.TransactionNumber
                                                                };
-        // Add the additional request data
-        saleTransactionRequest.AdditionalRequestMetaData = new Dictionary<String, String> {
-                                                                                              {"CustomerAccountNumber", model.CustomerAccountNumber},
-                                                                                              {"CustomerName", model.CustomerAccountName},
-                                                                                              {"MobileNumber", model.CustomerMobileNumber},
-                                                                                              {"Amount", model.PaymentAmount.ToString()},
-                                                                                              {"PataPawaPostPaidMessageType", "ProcessBill"}
-                                                                                          };
+        if (model.PostPayment){
+            // Add the additional request data
+            saleTransactionRequest.AdditionalRequestMetaData = new Dictionary<String, String>{
+                                                                                                 { "CustomerAccountNumber", model.CustomerAccountNumber },
+                                                                                                 { "CustomerName", model.CustomerAccountName },
+                                                                                                 { "MobileNumber", model.CustomerMobileNumber },
+                                                                                                 { "Amount", model.PaymentAmount.ToString() },
+                                                                                                 { "PataPawaPostPaidMessageType", "ProcessBill" }
+                                                                                             };
+        }
+        else{
+            saleTransactionRequest.AdditionalRequestMetaData = new Dictionary<String, String>{
+                                                                                                 { "MeterNumber", model.CustomerAccountNumber },
+                                                                                                 { "CustomerName", model.CustomerAccountName },
+                                                                                                 { "PataPawaPrePayMessageType", "vend" },
+                                                                                                 { "Amount", model.PaymentAmount.ToString() },
+                                                                                             };
+        }
 
         return saleTransactionRequest;
     }
@@ -272,7 +322,7 @@ public static class Extensions
         // Add the additional request data
         saleTransactionRequest.AdditionalRequestMetaData = new Dictionary<String, String> {
                                                                                               {"MeterNumber", model.MeterNumber.ToString()},
-                                                                                              {"PataPawaPrePaidMessageType", "meter"}
+                                                                                              {"PataPawaPrePayMessageType", "meter"}
                                                                                           };
 
         return saleTransactionRequest;
@@ -311,12 +361,13 @@ public static class Extensions
         return billDetails;
     }
 
-    public static MeterDetails ToMeterDetails(this Dictionary<String, String> additionalTransactionMetadata)
+    public static MeterDetails ToMeterDetails(this Dictionary<String, String> additionalTransactionMetadata, String meterNumber)
     {
         MeterDetails meterDetails = new MeterDetails();
 
-        meterDetails.MeterNumber = additionalTransactionMetadata.ExtractFieldFromMetadata<String>("meterNumber");
-        meterDetails.CustomerName = additionalTransactionMetadata.ExtractFieldFromMetadata<String>("customerName"); ;
+        //meterDetails.MeterNumber = additionalTransactionMetadata.ExtractFieldFromMetadata<String>("meterNumber");
+        meterDetails.MeterNumber = meterNumber;
+        meterDetails.CustomerName = additionalTransactionMetadata.ExtractFieldFromMetadata<String>("pataPawaPrePaidCustomerName"); ;
 
         return meterDetails;
     }

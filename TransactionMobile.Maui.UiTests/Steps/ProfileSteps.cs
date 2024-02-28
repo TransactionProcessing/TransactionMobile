@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Shared.IntegrationTesting;
 using Shouldly;
 using TechTalk.SpecFlow;
 using TransactionMobile.Maui.UiTests.Drivers;
@@ -56,13 +57,15 @@ public class ProfileSteps{
     public async Task ThenThePrimaryAddressIsDisplayed(Table table){
         await this.profileAddressesPage.IsPrimaryAddressShown();
 
-        table.Rows.Single().TryGetValue("AddressLine1", out String? expectedAddressLine1);
-        table.Rows.Single().TryGetValue("AddressLine2", out String? expectedAddressLine2);
-        table.Rows.Single().TryGetValue("AddressLine3", out String? expectedAddressLine3);
-        table.Rows.Single().TryGetValue("AddressLine4", out String? expectedAddressLine4);
-        table.Rows.Single().TryGetValue("AddressTown", out String? expectedAddressTown);
-        table.Rows.Single().TryGetValue("AddressRegion", out String? expectedAddressRegion);
-        table.Rows.Single().TryGetValue("AddressPostCode", out String? expectedAddressPostCode);
+        TableRow? tableRow = table.Rows.Single();
+
+        String expectedAddressLine1= SpecflowTableHelper.GetStringRowValue(tableRow, "AddressLine1");
+        String expectedAddressLine2 = SpecflowTableHelper.GetStringRowValue(tableRow, "AddressLine2");
+        String expectedAddressLine3 = SpecflowTableHelper.GetStringRowValue(tableRow, "AddressLine3");
+        String expectedAddressLine4 = SpecflowTableHelper.GetStringRowValue(tableRow, "AddressLine4");
+        String expectedAddressTown = SpecflowTableHelper.GetStringRowValue(tableRow, "AddressTown");
+        String expectedAddressRegion = SpecflowTableHelper.GetStringRowValue(tableRow, "AddressRegion");
+        String expectedAddressPostCode = SpecflowTableHelper.GetStringRowValue(tableRow, "AddressPostCode");
 
         if (String.IsNullOrEmpty(expectedAddressLine1) == false){
             String addressLine1 = await this.profileAddressesPage.GetAddressLineValue(1);
@@ -120,9 +123,10 @@ public class ProfileSteps{
         String contactEmailAddress = await this.profileContactsPage.GetContactEmailAddressValue();
         String contactMobileNumber = await this.profileContactsPage.GetContactMobileNumberValue();
         
-        String? expectedContactName = table.Rows.Single()["Name"];
-        String? expectedContactEmailAddress = table.Rows.Single()["EmailAddress"];
-        String? expectedContactMobileNumber = table.Rows.Single()["MobileNumber"];
+        TableRow? tableRow = table.Rows.Single();
+        String? expectedContactName = SpecflowTableHelper.GetStringRowValue(tableRow, "Name");
+        String? expectedContactEmailAddress = SpecflowTableHelper.GetStringRowValue(tableRow, "EmailAddress");
+        String? expectedContactMobileNumber = SpecflowTableHelper.GetStringRowValue(tableRow, "MobileNumber");
 
         contactName.ShouldBe(expectedContactName);
         contactEmailAddress.ShouldBe(expectedContactEmailAddress);
@@ -150,9 +154,10 @@ public class ProfileSteps{
         //String nextStatementDate = await this.profileAccountInfoPage.GetNextStatementDateValue();
         //String settlementSchedule = await this.profileAccountInfoPage.GetSettlementScheduleValue();
 
-        String? expectedMerchantName = table.Rows.Single()["Name"];
-        String? expectedBalance = table.Rows.Single()["Balance"];
-        String? expectedAvailableBalance = table.Rows.Single()["AvailableBalance"];
+        TableRow? tableRow = table.Rows.Single();
+        String? expectedMerchantName = SpecflowTableHelper.GetStringRowValue(tableRow,"Name");
+        String? expectedBalance = SpecflowTableHelper.GetStringRowValue(tableRow, "Balance");
+        String? expectedAvailableBalance = SpecflowTableHelper.GetStringRowValue(tableRow, "AvailableBalance");
         //String? expectedLastStatementDate = table.Rows.Single()["LastStatementDate"];
         //String? expectedNextStatementDate = table.Rows.Single()["NextStatementDate"];
         //String? expectedSettlementSchedule = table.Rows.Single()["SettlementSchedule"];

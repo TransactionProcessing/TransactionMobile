@@ -27,8 +27,10 @@ namespace TransactionMobile.Maui.UiTests.Steps
     using Shared.IntegrationTesting;
     using Shouldly;
     using TransactionProcessor.DataTransferObjects;
+    using TransactionProcessor.IntegrationTesting.Helpers;
     using UITests;
     using ClientDetails = Common.ClientDetails;
+    using SpecflowExtensions = TransactionProcessor.IntegrationTesting.Helpers.SpecflowExtensions;
 
     [Binding]
     [Scope(Tag = "shared")]
@@ -39,7 +41,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         private readonly SecurityServiceSteps SecurityServiceSteps;
 
         private readonly EstateManagementSteps EstateManagementSteps;
-        //private readonly TransactionProcessorSteps TransactionProcessorSteps;
+        private readonly TransactionProcessorSteps TransactionProcessorSteps;
 
         private LoginPage loginPage;
 
@@ -48,6 +50,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
             this.loginPage = new LoginPage(testingContext);
             this.SecurityServiceSteps = new SecurityServiceSteps(testingContext.DockerHelper.SecurityServiceClient);
             this.EstateManagementSteps = new EstateManagementSteps(this.TestingContext.DockerHelper.EstateClient, this.TestingContext.DockerHelper.HttpClient);
+            this.TransactionProcessorSteps = new TransactionProcessorSteps(this.TestingContext.DockerHelper.TransactionProcessorClient, this.TestingContext.DockerHelper.TestHostHttpClient);
         }
 
         [Given(@"the following security roles exist")]
@@ -336,6 +339,27 @@ namespace TransactionMobile.Maui.UiTests.Steps
             List<EstateDetails> estates = this.TestingContext.Estates.Select(e => e).ToList();
             List<(EstateDetails, Guid, Guid)> requests = table.Rows.ToAddContractToMerchantRequests(estates);
             await this.EstateManagementSteps.WhenIAddTheFollowingContractsToTheFollowingMerchants(this.TestingContext.AccessToken, requests);
+        }
+
+        [Given(@"the following bills are available at the PataPawa PostPaid Host")]
+        public async Task GivenTheFollowingBillsAreAvailableAtThePataPawaPostPaidHost(Table table)
+        {
+            List<SpecflowExtensions.PataPawaBill> bills = table.Rows.ToPataPawaBills();
+            await this.TransactionProcessorSteps.GivenTheFollowingBillsAreAvailableAtThePataPawaPostPaidHost(bills);
+        }
+
+        [Given(@"the following users are available at the PataPawa PrePay Host")]
+        public async Task GivenTheFollowingUsersAreAvailableAtThePataPawaPrePayHost(Table table)
+        {
+            List<SpecflowExtensions.PataPawaUser> users = table.Rows.ToPataPawaUsers();
+            await this.TransactionProcessorSteps.GivenTheFollowingUsersAreAvailableAtThePataPawaPrePaidHost(users);
+        }
+
+        [Given(@"the following meters are available at the PataPawa PrePay Host")]
+        public async Task GivenTheFollowingMetersAreAvailableAtThePataPawaPrePayHost(Table table)
+        {
+            List<SpecflowExtensions.PataPawaMeter> meters = table.Rows.ToPataPawaMeters();
+            await this.TransactionProcessorSteps.GivenTheFollowingMetersAreAvailableAtThePataPawaPrePaidHost(meters);
         }
     }
 }

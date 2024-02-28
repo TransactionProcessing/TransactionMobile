@@ -146,6 +146,9 @@ namespace TransactionMobile.Maui.UiTests.Common
             this.HttpClient = new HttpClient();
             this.HttpClient.BaseAddress = new Uri(this.TransactionProcessorAclBaseAddressResolver(string.Empty));
 
+            this.TestHostHttpClient = new HttpClient(clientHandler);
+            this.TestHostHttpClient.BaseAddress = new Uri($"http://127.0.0.1:{this.TestHostServicePort}");
+
             this.ProjectionManagementClient = new EventStoreProjectionManagementClient(ConfigureEventStoreSettings());
         }
 
@@ -188,6 +191,9 @@ namespace TransactionMobile.Maui.UiTests.Common
 
         public String ConfigHostContainerName;
         public Int32 ConfigHostPort;
+
+        public HttpClient TestHostHttpClient;
+
         public async Task<IContainerService> SetupConfigHostContainer(List<INetworkService> networkServices)
         {
             this.Trace("About to Start Config Host Container");
@@ -224,6 +230,19 @@ namespace TransactionMobile.Maui.UiTests.Common
 
             //await this.DoHealthCheck(ContainerType.CallbackHandler);
             return builtContainer;
+        }
+
+
+        public override ContainerBuilder SetupTransactionProcessorContainer()
+        {
+
+            List<String> variables = new List<String>();
+            variables.Add($"OperatorConfiguration:PataPawaPrePay:Url=http://{this.TestHostContainerName}:{DockerPorts.TestHostPort}/api/patapawaprepay");
+
+            this.AdditionalVariables.Add(ContainerType.FileProcessor, variables);
+            //this.SetAdditionalVariables(ContainerType.FileProcessor, variables);
+
+            return base.SetupTransactionProcessorContainer();
         }
 
         #endregion

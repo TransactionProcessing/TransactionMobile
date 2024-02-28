@@ -3,6 +3,20 @@ Feature: EndToEndTests
 
 Background: 
 
+	Given the following bills are available at the PataPawa PostPaid Host
+	| AccountNumber | AccountName    | DueDate | Amount |
+	| 12345678      | Test Account 1 | Today   | 100.00 |
+
+	Given the following users are available at the PataPawa PrePay Host
+	| Username | Password |
+	| operatora    | 1234567898   |
+
+	Given the following meters are available at the PataPawa PrePay Host
+	| MeterNumber | CustomerName |
+	| 00000001    | Customer 1   |
+	| 00000002    | Customer 2   |
+	| 00000003    | Customer 3   |
+
 	Given the following security roles exist
 	| Role Name |
 	| Merchant   |
@@ -35,32 +49,42 @@ Background:
 	| Test Estate 1 |
 
 	Given I have created the following operators
-	| EstateName    | OperatorName | RequireCustomMerchantNumber | RequireCustomTerminalNumber |
-	| Test Estate 1 | Safaricom    | True                        | True                        |
-	| Test Estate 1 | Voucher      | True                        | True                        |
+	| EstateName    | OperatorName     | RequireCustomMerchantNumber | RequireCustomTerminalNumber |
+	| Test Estate 1 | Safaricom        | True                        | True                        |
+	| Test Estate 1 | Voucher          | True                        | True                        |
+	| Test Estate 1 | PataPawa PostPay | True                        | True                        |
+	| Test Estate 1 | PataPawa PrePay  | True                        | True                        |
 
 	Given I create a contract with the following values
-	| EstateName    | OperatorName    | ContractDescription |
-	| Test Estate 1 | Safaricom		| Safaricom Contract |
-	| Test Estate 1 | Voucher      | Hospital 1 Contract |
+	| EstateName    | OperatorName     | ContractDescription       |
+	| Test Estate 1 | Safaricom        | Safaricom Contract        |
+	| Test Estate 1 | Voucher          | Hospital 1 Contract       |
+	| Test Estate 1 | PataPawa PostPay | PataPawa PostPay Contract |
+	| Test Estate 1 | PataPawa PrePay  | PataPawa PrePay Contract  |
 
 	When I create the following Products
-	| EstateName    | OperatorName | ContractDescription | ProductName    | DisplayText | Value | ProductType |
-	| Test Estate 1 | Safaricom    | Safaricom Contract  | Variable Topup | Custom      |       | MobileTopup |
-	| Test Estate 1 | Voucher      | Hospital 1 Contract | 10 KES         | 10 KES      | 10.00 | Voucher     |
+	| EstateName    | OperatorName     | ContractDescription       | ProductName       | DisplayText     | Value | ProductType |
+	| Test Estate 1 | Safaricom        | Safaricom Contract        | Variable Topup    | Custom          |       | MobileTopup |
+	| Test Estate 1 | Voucher          | Hospital 1 Contract       | 10 KES            | 10 KES          | 10.00 | Voucher     |
+	| Test Estate 1 | PataPawa PostPay | PataPawa PostPay Contract | Post Pay Bill Pay | Bill Pay (Post) |       | BillPayment |
+	| Test Estate 1 | PataPawa PrePay  | PataPawa PrePay Contract  | Pre Pay Bill Pay  | Bill Pay (Pre)  |       | BillPayment |
 
 	When I add the following Transaction Fees
-	| EstateName    | OperatorName | ContractDescription | ProductName    | CalculationType | FeeDescription      | Value |
-	| Test Estate 1 | Safaricom    | Safaricom Contract  | Variable Topup | Fixed           | Merchant Commission | 2.50  |
+	| EstateName    | OperatorName     | ContractDescription       | ProductName       | CalculationType | FeeDescription      | Value |
+	| Test Estate 1 | Safaricom        | Safaricom Contract        | Variable Topup    | Fixed           | Merchant Commission | 2.50  |
+	| Test Estate 1 | PataPawa PostPay | PataPawa PostPay Contract | Post Pay Bill Pay | Percentage      | Merchant Commission | 0.50  |
+	| Test Estate 1 | PataPawa PrePay  | PataPawa PrePay Contract  | Pre Pay Bill Pay  | Percentage      | Merchant Commission | 0.50  |
 
 	Given I create the following merchants
 	| MerchantName    | AddressLine1        | AddressLine2        | AddressLine3        | AddressLine4        | Town     | Region      | Country        | ContactName    | EmailAddress                 | EstateName    |
 	| Test Merchant 1 | test address line 1 | test address line 2 | test address line 3 | test address line 4 | TestTown | Test Region | United Kingdom | Test Contact 1 | testcontact1@merchant1.co.uk | Test Estate 1 |
 
 	Given I have assigned the following  operator to the merchants
-	| OperatorName | MerchantName    | MerchantNumber | TerminalNumber | EstateName    |
-	| Safaricom    | Test Merchant 1 | 00000001       | 10000001       | Test Estate 1 |
-	| Voucher      | Test Merchant 1 | 00000001       | 10000001       | Test Estate 1 |
+	| OperatorName     | MerchantName    | MerchantNumber | TerminalNumber | EstateName    |
+	| Safaricom        | Test Merchant 1 | 00000001       | 10000001       | Test Estate 1 |
+	| Voucher          | Test Merchant 1 | 00000001       | 10000001       | Test Estate 1 |
+	| PataPawa PostPay | Test Merchant 1 | 00000001       | 10000001       | Test Estate 1 |
+	| PataPawa PrePay  | Test Merchant 1 | 00000001       | 10000001       | Test Estate 1 |
 
 	Given I have assigned the following devices to the merchants
 	| MerchantName    | EstateName    |
@@ -70,6 +94,8 @@ Background:
 	| EstateName    | MerchantName    | ContractDescription       |
 	| Test Estate 1 | Test Merchant 1 | Safaricom Contract        |
 	| Test Estate 1 | Test Merchant 1 | Hospital 1 Contract       |
+	| Test Estate 1 | Test Merchant 1 | PataPawa PostPay Contract |
+	| Test Estate 1 | Test Merchant 1 | PataPawa PrePay Contract  |
 
 	Given I have created the following security users
 	| EmailAddress                  | Password | GivenName    | FamilyName | EstateName    | MerchantName    |
@@ -90,7 +116,7 @@ Scenario: EndToEnd
 	When I enter 'user1' as the Email Address
 	And I enter '123456' as the Password
 	And I tap on Login
-	Then the Merchant Home Page is displayed
+	Then the Merchant Home Page is displayed	
 	When I tap on Profile
 	Then the My Profile Page is displayed
 	When I tap on the Addresses button
@@ -126,11 +152,47 @@ Scenario: EndToEnd
 	When I tap on the Voucher button
 	Then the Transaction Select Voucher Operator Page is displayed
 	When I tap on the 'Hospital 1 Contract' button
+	Then the Select Product Page is displayed
 	When I tap on the '10 KES' product button
 	Then the Enter Voucher Issue Details Page is displayed
 	When I enter '07777777775' as the Recipient Mobile Number
 	And I tap on Issue Voucher
 	Then the Voucher Issue Successful Page is displayed
+	And I tap on Complete
+	Then the Transaction Page is displayed
+	When I tap on the Bill Payment button
+	Then the Transaction Select Bill Payment Operator Page is displayed
+	When I tap on the 'PataPawa PostPay' button
+	Then the Select Product Page is displayed
+	When I tap on the 'Bill Pay (Post)' product button
+	Then the Enter Account Details Page is displayed
+	When I enter '12345678' as the Account Number
+	And I tap on the Get Account Button
+	Then the Make Bill Payment page is displayed
+	And the following Bill Details are displayed
+	| AccountNumber | AccountHolder  | DueDate | Balance |
+	| 12345678      | Test Account 1 | Today   | 100.00  |
+	When I enter '07777777775' as the Customer Mobile Number 	
+	And I enter 10.00 as the Payment Amount
+	And I tap on the Make Payment Button
+	Then the Bill Payment Successful Page is displayed
+	And I tap on Complete
+	Then the Transaction Page is displayed
+	When I tap on the Bill Payment button
+	Then the Transaction Select Bill Payment Operator Page is displayed
+	When I tap on the 'PataPawa PrePay' button
+	Then the Select Product Page is displayed
+	When I tap on the 'Bill Pay (Pre)' product button
+	Then the Enter Meter Details Page is displayed
+	When I enter '00000001' as the Meter Number
+	And I tap on the Get Meter Button
+	Then the Make Bill Payment page is displayed
+	And the following Meter Details are displayed
+	| MeterNumber | 
+	| 00000001      |
+	When I enter 10.00 as the Payment Amount
+	And I tap on the Make Payment Button
+	Then the Bill Payment Successful Page is displayed
 	And I tap on Complete
 	Then the Transaction Page is displayed
 	When I click on the back button

@@ -74,27 +74,28 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
 
     private async Task MakeBillPaymentCommandExecute() {
         Logger.LogInformation("MakeBillPaymentCommandExecute called");
-        PerformBillPaymentMakePaymentRequest request = null;
+        IRequest<Result<PerformBillPaymentMakePaymentResponseModel>> request = null;
         
         if (this.BillDetails != null){
-            request = PerformBillPaymentMakePaymentRequest.Create(DateTime.Now,
-                                                                                                       this.ProductDetails.ContractId,
-                                                                                                       this.ProductDetails.ProductId,
-                                                                                                       this.ProductDetails.OperatorIdentifier,
-                                                                                                       this.BillDetails.AccountNumber,
-                                                                                                       this.BillDetails.AccountName,
-                                                                                                       this.CustomerMobileNumber,
-                                                                                                       this.PaymentAmount);
+            request = PerformBillPaymentMakePostPaymentRequest.Create(DateTime.Now,
+                                                                      this.ProductDetails.ContractId,
+                                                                      this.ProductDetails.ProductId,
+                                                                      this.ProductDetails.OperatorIdentifier,
+                                                                      this.BillDetails.AccountNumber,
+                                                                      this.BillDetails.AccountName,
+                                                                      this.CustomerMobileNumber,
+                                                                      this.PaymentAmount);
+
+
         }
         else if (this.MeterDetails != null){
-            request = PerformBillPaymentMakePaymentRequest.Create(DateTime.Now,
-                                                                                                       this.ProductDetails.ContractId,
-                                                                                                       this.ProductDetails.ProductId,
-                                                                                                       this.ProductDetails.OperatorIdentifier,
-                                                                                                       this.MeterDetails.MeterNumber,
-                                                                                                       this.MeterDetails.CustomerName,
-                                                                                                       null,
-                                                                                                       this.PaymentAmount);
+            request = PerformBillPaymentMakePrePaymentRequest.Create(DateTime.Now,
+                                                                                                             this.ProductDetails.ContractId,
+                                                                                                             this.ProductDetails.ProductId,
+                                                                                                             this.ProductDetails.OperatorIdentifier,
+                                                                                                             this.MeterDetails.MeterNumber,
+                                                                                                             this.MeterDetails.CustomerName,
+                                                                                                             this.PaymentAmount);
         }
 
         

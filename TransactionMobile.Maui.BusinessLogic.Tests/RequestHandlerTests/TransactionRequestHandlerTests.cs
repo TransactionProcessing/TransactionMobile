@@ -247,21 +247,21 @@ public class TransactionRequestHandlerTests
     }
 
     [Fact]
-    public async Task TransactionRequestHandler_PerformBillPaymentMakePaymentRequest_Handle_IsHandled()
+    public async Task TransactionRequestHandler_PerformBillPaymentMakePostPaymentRequest_Handle_IsHandled()
     {
         this.TransactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel
         {
             ResponseCode = "0000"
         }));
 
-        PerformBillPaymentMakePaymentRequest request = PerformBillPaymentMakePaymentRequest.Create(TestData.TransactionDateTime,
-                                                                                                   TestData.OperatorId1ContractId,
-                                                                                                   TestData.Operator1Product_100KES.ProductId,
-                                                                                                   TestData.OperatorIdentifier1,
-                                                                                                   TestData.CustomerAccountNumber,
-                                                                                                   TestData.CustomerAccountName,
-                                                                                                   TestData.CustomerMobileNumber,
-                                                                                                   TestData.PaymentAmount);
+        PerformBillPaymentMakePostPaymentRequest request = PerformBillPaymentMakePostPaymentRequest.Create(TestData.TransactionDateTime,
+                                                                                                           TestData.OperatorId1ContractId,
+                                                                                                           TestData.Operator1Product_100KES.ProductId,
+                                                                                                           TestData.OperatorIdentifier1,
+                                                                                                           TestData.CustomerAccountNumber,
+                                                                                                           TestData.CustomerAccountName,
+                                                                                                           TestData.CustomerMobileNumber,
+                                                                                                           TestData.PaymentAmount);
 
         Result<PerformBillPaymentMakePaymentResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
@@ -270,21 +270,64 @@ public class TransactionRequestHandlerTests
     }
 
     [Fact]
-    public async Task TransactionRequestHandler_PerformBillPaymentMakePaymentRequest_PaymentFailed_Handle_IsHandled()
+    public async Task TransactionRequestHandler_PerformBillPaymentMakePrePaymentRequest_Handle_IsHandled()
+    {
+        this.TransactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel
+                                                                                                                                                                                                                                      {
+                                                                                                                                                                                                                                          ResponseCode = "0000"
+                                                                                                                                                                                                                                      }));
+
+        PerformBillPaymentMakePrePaymentRequest request = PerformBillPaymentMakePrePaymentRequest.Create(TestData.TransactionDateTime,
+                                                                                                         TestData.OperatorId1ContractId,
+                                                                                                         TestData.Operator1Product_100KES.ProductId,
+                                                                                                         TestData.OperatorIdentifier1,
+                                                                                                         TestData.MeterNumber,
+                                                                                                         TestData.CustomerAccountName,
+                                                                                                         TestData.PaymentAmount);
+
+        Result<PerformBillPaymentMakePaymentResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
+
+        result.Success.ShouldBeTrue();
+        result.Data.IsSuccessful.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task TransactionRequestHandler_PerformBillPaymentMakePostPaymentRequest_PaymentFailed_Handle_IsHandled()
     {
         this.TransactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel
         {
                 ResponseCode = "0001"
             }));
 
-        PerformBillPaymentMakePaymentRequest request = PerformBillPaymentMakePaymentRequest.Create(TestData.TransactionDateTime,
-                                                                                                   TestData.OperatorId1ContractId,
-                                                                                                   TestData.Operator1Product_100KES.ProductId,
-                                                                                                   TestData.OperatorIdentifier1,
-                                                                                                   TestData.CustomerAccountNumber,
-                                                                                                   TestData.CustomerAccountName,
-                                                                                                   TestData.CustomerMobileNumber,
-                                                                                                   TestData.PaymentAmount);
+        PerformBillPaymentMakePostPaymentRequest request = PerformBillPaymentMakePostPaymentRequest.Create(TestData.TransactionDateTime,
+                                                                                                           TestData.OperatorId1ContractId,
+                                                                                                           TestData.Operator1Product_100KES.ProductId,
+                                                                                                           TestData.OperatorIdentifier1,
+                                                                                                           TestData.CustomerAccountNumber,
+                                                                                                           TestData.CustomerAccountName,
+                                                                                                           TestData.CustomerMobileNumber,
+                                                                                                           TestData.PaymentAmount);
+
+        Result<PerformBillPaymentMakePaymentResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
+
+        result.Failure.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task TransactionRequestHandler_PerformBillPaymentMakePrePaymentRequest_PaymentFailed_Handle_IsHandled()
+    {
+        this.TransactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel
+                                                                                                                                                                                                                                      {
+                                                                                                                                                                                                                                          ResponseCode = "0001"
+                                                                                                                                                                                                                                      }));
+
+        PerformBillPaymentMakePrePaymentRequest request = PerformBillPaymentMakePrePaymentRequest.Create(TestData.TransactionDateTime,
+                                                                                                         TestData.OperatorId1ContractId,
+                                                                                                         TestData.Operator1Product_100KES.ProductId,
+                                                                                                         TestData.OperatorIdentifier1,
+                                                                                                         TestData.MeterNumber,
+                                                                                                         TestData.CustomerAccountName,
+                                                                                                         TestData.PaymentAmount);
 
         Result<PerformBillPaymentMakePaymentResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
