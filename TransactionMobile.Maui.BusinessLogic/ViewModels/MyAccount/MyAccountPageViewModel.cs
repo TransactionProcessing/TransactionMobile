@@ -13,6 +13,7 @@
     using RequestHandlers;
     using Requests;
     using Services;
+    using SimpleResults;
     using UIServices;
 
     public class MyAccountPageViewModel : ExtendedBaseViewModel

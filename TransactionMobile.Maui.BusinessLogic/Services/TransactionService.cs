@@ -9,6 +9,7 @@
     using Models;
     using Newtonsoft.Json;
     using RequestHandlers;
+    using SimpleResults;
     using TransactionProcessorACL.DataTransferObjects;
     using TransactionProcessorACL.DataTransferObjects.Responses;
     using ViewModels;
@@ -41,15 +42,15 @@
         #region Methods
 
         public async Task<Result<PerformBillPaymentGetAccountResponseModel>> PerformBillPaymentGetAccount(PerformBillPaymentGetAccountModel model,
-                                                                                               CancellationToken cancellationToken) {
+                                                                                                          CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform bill payment get account transaction");
 
             Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
 
-            if (result.Success == false)
+            if (result.IsSuccess == false)
             {
                 Logger.LogWarning("Error performing bill payment - get account transaction");
-                return new ErrorResult<PerformBillPaymentGetAccountResponseModel>("Error performing bill payment - get account transaction");
+                return Result.Failure("Error performing bill payment - get account transaction");
 
             }
 
@@ -62,7 +63,7 @@
 
             Logger.LogInformation("Bill payment - get account transaction performed successfully");
 
-            return new SuccessResult<PerformBillPaymentGetAccountResponseModel>(responseModel);
+            return Result.Success(responseModel);
         }
 
         public async Task<Result<PerformBillPaymentMakePaymentResponseModel>> PerformBillPaymentMakePayment(PerformBillPaymentMakePaymentModel model,
@@ -71,10 +72,10 @@
             
             Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
             
-            if (result.Success == false)
+            if (result.IsSuccess == false)
             {
                 Logger.LogWarning("Error performing bill payment - make payment transaction");
-                return new ErrorResult<PerformBillPaymentMakePaymentResponseModel>("Error performing bill payment - make payment transaction");
+                return Result.Failure("Error performing bill payment - make payment transaction");
 
             }
 
@@ -89,7 +90,7 @@
 
             Logger.LogInformation("Bill payment - make payment transaction performed successfully");
 
-            return new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(responseModel);
+            return Result.Success(responseModel);
         }
 
         public async Task<Result<PerformBillPaymentGetMeterResponseModel>> PerformBillPaymentGetMeter(PerformBillPaymentGetMeterModel model, CancellationToken cancellationToken){
@@ -97,10 +98,10 @@
 
             Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
 
-            if (result.Success == false)
+            if (result.IsSuccess == false)
             {
                 Logger.LogWarning("Error performing bill payment - get meter transaction");
-                return new ErrorResult<PerformBillPaymentGetMeterResponseModel>("Error performing bill payment - get meter transaction");
+                return Result.Failure("Error performing bill payment - get meter transaction");
 
             }
 
@@ -118,7 +119,7 @@
 
             Logger.LogInformation("Bill payment - get meter transaction performed successfully");
 
-            return new SuccessResult<PerformBillPaymentGetMeterResponseModel>(responseModel);
+            return Result.Success(responseModel);
         }
 
         public async Task<Result<PerformLogonResponseModel>> PerformLogon(PerformLogonRequestModel model,
@@ -127,10 +128,10 @@
 
             Result<LogonTransactionResponseMessage> result =  await this.SendTransactionRequest<LogonTransactionRequestMessage, LogonTransactionResponseMessage>(model.ToLogonTransactionRequest(), cancellationToken);
 
-            if (result.Success == false)
+            if (result.IsSuccess == false)
             {
                 Logger.LogWarning("Error performing Logon transaction");
-                return new ErrorResult<PerformLogonResponseModel>("Error performing Logon transaction");
+                return Result.Failure("Error performing Logon transaction");
 
             }
 
@@ -145,7 +146,7 @@
 
             Logger.LogInformation("Logon transaction performed successfully");
 
-            return new SuccessResult<PerformLogonResponseModel>(responseModel);
+            return Result.Success(responseModel);
         }
 
         public async Task<Result<PerformMobileTopupResponseModel>> PerformMobileTopup(PerformMobileTopupRequestModel model,
@@ -155,9 +156,9 @@
             Result<SaleTransactionResponseMessage> result =
                 await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
 
-            if (result.Success == false) {
+            if (result.IsSuccess == false) {
                 Logger.LogWarning("Error performing Mobile top-up transaction");
-                return new ErrorResult<PerformMobileTopupResponseModel>("Error performing Mobile top-up transaction");
+                return Result.Failure("Error performing Mobile top-up transaction");
                 
             }
 
@@ -171,7 +172,7 @@
 
             Logger.LogInformation("Mobile top-up transaction performed successfully");
 
-            return new SuccessResult<PerformMobileTopupResponseModel>(responseModel);
+            return Result.Success(responseModel);
 
         }
 
@@ -181,10 +182,10 @@
 
             Result<ReconciliationResponseMessage> result = await this.SendTransactionRequest<ReconciliationRequestMessage, ReconciliationResponseMessage>(model.ToReconciliationRequest(), cancellationToken);
             
-            if (result.Success == false)
+            if (result.IsSuccess == false)
             {
                 Logger.LogWarning("Error performing Reconciliation transaction");
-                return new ErrorResult<PerformReconciliationResponseModel>("Error performing Reconciliation transaction");
+                return Result.Failure("Error performing Reconciliation transaction");
 
             }
 
@@ -199,7 +200,7 @@
 
             Logger.LogInformation("Reconciliation transaction performed successfully");
 
-            return new SuccessResult<PerformReconciliationResponseModel>(responseModel);
+            return Result.Success(responseModel);
 
         }
 
@@ -209,10 +210,10 @@
 
             Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
             
-            if (result.Success == false)
+            if (result.IsSuccess == false)
             {
                 Logger.LogWarning("Error performing Voucher transaction");
-                return new ErrorResult<PerformVoucherIssueResponseModel>("Error performing Voucher transaction");
+                return Result.Failure("Error performing Voucher transaction");
 
             }
 
@@ -227,7 +228,7 @@
 
             Logger.LogInformation("Voucher transaction performed successfully");
 
-            return new SuccessResult<PerformVoucherIssueResponseModel>(responseModel);
+            return Result.Success(responseModel);
         }
         
         protected override async Task<String> HandleResponse(HttpResponseMessage responseMessage,
@@ -276,14 +277,14 @@
 
                 Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content}");
 
-                return new SuccessResult<TResponse>(JsonConvert.DeserializeObject<TResponse>(content));
+                return Result.Success(JsonConvert.DeserializeObject<TResponse>(content));
 
             }
             catch(Exception ex) {
                 // An exception has occurred, add some additional information to the message
                 Logger.LogError("Error posting transaction.", ex);
 
-                return new ErrorResult<TResponse>("Error posting transaction");
+                return ResultExtensions.FailureExtended("Error posting transaction", ex);
             }
         }
 

@@ -3,6 +3,7 @@
 using Common;
 using MediatR;
 using RequestHandlers;
+using SimpleResults;
 using TransactionMobile.Maui.BusinessLogic.Models;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 

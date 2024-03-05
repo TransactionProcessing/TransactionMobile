@@ -16,6 +16,7 @@ using RequestHandlers;
 using Requests;
 using Services;
 using Shouldly;
+using SimpleResults;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 using UIServices;
 using ViewModels;
@@ -117,10 +118,10 @@ public class BillPaymentPayBillPageViewModelTests
     [Fact]
     public void BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_SuccessfulPostPayPayment_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePostPaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel()
-            {
-                ResponseCode = "0000"
-            }));
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePostPaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformBillPaymentMakePaymentResponseModel()
+                                                                                                                                                          {
+                                                                                                                                                              ResponseCode = "0000"
+                                                                                                                                                          }));
 
         this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                             {
@@ -135,10 +136,10 @@ public class BillPaymentPayBillPageViewModelTests
     [Fact]
     public void BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_SuccessfulPrePayPayment_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePrePaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel()
-                                                                                                                                                                                                     {
-                                                                                                                                                                                                         ResponseCode = "0000"
-                                                                                                                                                                                                     }));
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePrePaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformBillPaymentMakePaymentResponseModel()
+                                                                                                                                                         {
+                                                                                                                                                             ResponseCode = "0000"
+                                                                                                                                                         }));
 
         this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                             {
@@ -153,9 +154,9 @@ public class BillPaymentPayBillPageViewModelTests
     [Fact]
     public void BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_FailedPostPayPayment_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePostPaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel() {
-            ResponseCode = "1010"
-        }));
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePostPaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformBillPaymentMakePaymentResponseModel() {
+                                                                                                                                                                                                               ResponseCode = "1010"
+                                                                                                                                                                                                           }));
         
         this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                             {
@@ -170,10 +171,10 @@ public class BillPaymentPayBillPageViewModelTests
     [Fact]
     public void BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_FailedPrePayPayment_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePrePaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel()
-                                                                                                                                                                                                        {
-                                                                                                                                                                                                            ResponseCode = "1010"
-                                                                                                                                                                                                        }));
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentMakePrePaymentRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformBillPaymentMakePaymentResponseModel()
+                                                                                                                                                         {
+                                                                                                                                                             ResponseCode = "1010"
+                                                                                                                                                         }));
 
         this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                             {

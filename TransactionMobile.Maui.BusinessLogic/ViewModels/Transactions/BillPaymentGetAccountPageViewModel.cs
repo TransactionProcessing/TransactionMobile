@@ -10,6 +10,7 @@ using MvvmHelpers.Commands;
 using RequestHandlers;
 using Requests;
 using Services;
+using SimpleResults;
 using UIServices;
 
 public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel, IQueryAttributable
@@ -66,7 +67,7 @@ public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel, IQueryA
 
         Result<PerformBillPaymentGetAccountResponseModel> result = await this.Mediator.Send(request);
 
-        if (result.Success && result.Data.IsSuccessful) {
+        if (result.IsSuccess && result.Data.IsSuccessful) {
             ProductDetails productDetails = new ProductDetails {
                                                                    ContractId = this.ProductDetails.ContractId,
                                                                    ProductId = this.ProductDetails.ProductId,
@@ -141,7 +142,7 @@ public class BillPaymentGetMeterPageViewModel : ExtendedBaseViewModel, IQueryAtt
 
         Result<PerformBillPaymentGetMeterResponseModel> result = await this.Mediator.Send(request);
 
-        if (result.Success && result.Data.IsSuccessful)
+        if (result.IsSuccess && result.Data.IsSuccessful)
         {
             ProductDetails productDetails = new ProductDetails
             {

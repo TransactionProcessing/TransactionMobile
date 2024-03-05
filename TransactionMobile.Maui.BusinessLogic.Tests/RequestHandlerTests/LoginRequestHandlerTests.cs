@@ -10,8 +10,8 @@ using RequestHandlers;
 using Requests;
 using Services;
 using Shouldly;
+using SimpleResults;
 using Xunit;
-using static SQLite.SQLite3;
 
 public class LoginRequestHandlerTests
 {
@@ -42,14 +42,14 @@ public class LoginRequestHandlerTests
     [Fact]
     public async Task LoginRequestHandler_Handle_LoginRequest_IsHandled()
     {
-        this.AuthenticationService.Setup(a => a.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<TokenResponseModel>(TestData.AccessToken));
-        this.ConfigurationService.Setup(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<Configuration>(new Configuration()));
+        this.AuthenticationService.Setup(a => a.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
+        this.ConfigurationService.Setup(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new Configuration()));
            
         LoginRequest request = LoginRequest.Create(TestData.UserName,TestData.Password);
 
         Result<TokenResponseModel> result = await this.LoginRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.AccessToken.ShouldBe(TestData.Token);
         result.Data.ExpiryInMinutes.ShouldBe(TestData.TokenExpiryInMinutes);
         result.Data.RefreshToken.ShouldBe(TestData.RefreshToken);
@@ -68,14 +68,14 @@ public class LoginRequestHandlerTests
         {
             return configurationService.Object;
         });
-        this.AuthenticationService.Setup(a => a.RefreshAccessToken(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<TokenResponseModel>(TestData.AccessToken));
-        this.ConfigurationService.Setup(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<Configuration>(new Configuration()));
+        this.AuthenticationService.Setup(a => a.RefreshAccessToken(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
+        this.ConfigurationService.Setup(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new Configuration()));
 
         RefreshTokenRequest request = RefreshTokenRequest.Create(TestData.RefreshToken);
 
         Result<TokenResponseModel> result = await this.LoginRequestHandler .Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.AccessToken.ShouldBe(TestData.Token);
         result.Data.ExpiryInMinutes.ShouldBe(TestData.TokenExpiryInMinutes);
         result.Data.RefreshToken.ShouldBe(TestData.RefreshToken);
@@ -84,14 +84,14 @@ public class LoginRequestHandlerTests
     [Fact]
     public async Task LoginRequestHandler_Handle_GetConfigurationRequest_IsHandled()
     {
-        this.AuthenticationService.Setup(a => a.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<TokenResponseModel>(TestData.AccessToken));
-        this.ConfigurationService.Setup(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<Configuration>(new Configuration()));
+        this.AuthenticationService.Setup(a => a.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
+        this.ConfigurationService.Setup(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new Configuration()));
 
         GetConfigurationRequest request = GetConfigurationRequest.Create(TestData.DeviceIdentifier);
 
         Result<Configuration> result = await this.LoginRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.ShouldNotBeNull();
     }
 }

@@ -7,6 +7,7 @@ using Logging;
 using Models;
 using Newtonsoft.Json;
 using RequestHandlers;
+using SimpleResults;
 using ViewModels;
 
 public class MerchantService : IMerchantService
@@ -64,12 +65,12 @@ public class MerchantService : IMerchantService
                 }
             }
 
-            return new SuccessResult<List<ContractProductModel>>(result);
+            return Result.Success(result);
         }
         catch(Exception ex) {
             Logger.LogError("Error getting contract products",ex);
 
-            return new ErrorResult<List<ContractProductModel>>("Error getting contract products");
+            return ResultExtensions.FailureExtended("Error getting contract products", ex);
         }
     }
 
@@ -92,11 +93,11 @@ public class MerchantService : IMerchantService
             Logger.LogInformation("Balance for merchant requested successfully");
             //Logger.LogDebug($"Merchant Balance Response: [{JsonConvert.SerializeObject(merchantBalance)}]");
 
-            return new SuccessResult<Decimal>(0);
+            return Result.Success(0.0m);
         }
         catch(Exception ex) {
             Logger.LogError("Error getting merchant balance",ex);
-            return new ErrorResult<Decimal>("Error getting merchant balance");
+            return ResultExtensions.FailureExtended("Error getting merchant balance", ex);
         }
     }
 
@@ -137,11 +138,11 @@ public class MerchantService : IMerchantService
                                                                                                  }
                                                                   };
 
-            return new SuccessResult<MerchantDetailsModel>(model);
+            return Result.Success(model);
         }
         catch(Exception ex) {
             Logger.LogError("Error getting merchant details",ex);
-            return new ErrorResult<MerchantDetailsModel>("Error getting merchant details");
+            return ResultExtensions.FailureExtended("Error getting merchant details", ex);
         }
     }
 

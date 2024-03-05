@@ -14,6 +14,7 @@ using RequestHandlers;
 using Requests;
 using Services;
 using Shouldly;
+using SimpleResults;
 using UIServices;
 using ViewModels.Transactions;
 using Xunit;
@@ -54,7 +55,7 @@ public class BillPaymentSelectProductPageViewModelTests
     [Fact]
     public async Task BillPaymentSelectProductPageViewModel_ApplyQueryAttributes_QueryAttributesApplied()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
 
         this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
                                                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
@@ -65,7 +66,7 @@ public class BillPaymentSelectProductPageViewModelTests
     [Fact]
     public async Task BillPaymentSelectProductPageViewModel_Initialise_IsInitialised()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
 
         this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
                                                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
@@ -79,7 +80,7 @@ public class BillPaymentSelectProductPageViewModelTests
     [Fact]
     public async Task BillPaymentSelectProductPageViewModel_ProductSelectedCommand_PostPay_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
 
         this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
                                                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
@@ -103,7 +104,7 @@ public class BillPaymentSelectProductPageViewModelTests
     [Fact]
     public async Task BillPaymentSelectProductPageViewModel_ProductSelectedCommand_PrePay_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
 
         this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
                                                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},

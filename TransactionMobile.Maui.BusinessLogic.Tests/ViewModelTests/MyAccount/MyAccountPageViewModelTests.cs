@@ -16,6 +16,7 @@ using RequestHandlers;
 using Requests;
 using Services;
 using Shouldly;
+using SimpleResults;
 using UIServices;
 using ViewModels;
 using ViewModels.MyAccount;
@@ -52,7 +53,7 @@ public class MyAccountPageViewModelTests
     [Fact]
     public async Task MyAccountPageViewModel_Initialise_IsInitialised() {
         
-        mediator.Setup(m => m.Send(It.IsAny<GetMerchantDetailsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<MerchantDetailsModel>( TestData.MerchantDetailsModel));
+        mediator.Setup(m => m.Send(It.IsAny<GetMerchantDetailsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success( TestData.MerchantDetailsModel));
 
         await viewModel.Initialise(CancellationToken.None);
 

@@ -16,6 +16,7 @@ using RequestHandlers;
 using Requests;
 using Services;
 using Shouldly;
+using SimpleResults;
 using UIServices;
 using ViewModels;
 using ViewModels.Transactions;
@@ -52,7 +53,7 @@ public class BillPaymentGetAccountPageViewModelTests
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_ApplyQueryAttributes_QueryAttributesApplied()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
         
         this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
                                                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
@@ -65,7 +66,7 @@ public class BillPaymentGetAccountPageViewModelTests
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_GetAccountCommand_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentGetAccountRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentGetAccountResponseModel>(TestData.PerformBillPaymentGetAccountResponseModel));
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentGetAccountRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetAccountResponseModel));
         
         this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
                                                                           {nameof(ProductDetails), TestData.Operator1ProductDetails},
@@ -80,7 +81,7 @@ public class BillPaymentGetAccountPageViewModelTests
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_GetAccountCommand_Failed_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentGetAccountRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentGetAccountResponseModel>(TestData.PerformBillPaymentGetAccountResponseModelFailed));
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentGetAccountRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetAccountResponseModelFailed));
         
         this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
                                                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
@@ -96,8 +97,6 @@ public class BillPaymentGetAccountPageViewModelTests
     [Fact]
     public async Task BillPaymentSelectProductPageViewModel_BackButtonCommand_Execute_IsExecuted()
     {
-        //this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentGetAccountRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(TestData.PerformBillPaymentGetAccountResponseModelFailed);
-        
         this.ViewModel.BackButtonCommand.Execute(null);
 
         this.NavigationService.Verify(n => n.GoBack(), Times.Once);

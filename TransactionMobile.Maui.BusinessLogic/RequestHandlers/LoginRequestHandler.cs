@@ -5,6 +5,7 @@
     using Models;
     using Requests;
     using Services;
+    using SimpleResults;
 
     public class LoginRequestHandler : IRequestHandler<LoginRequest, Result<TokenResponseModel>>,
                                        IRequestHandler<RefreshTokenRequest, Result<TokenResponseModel>>,

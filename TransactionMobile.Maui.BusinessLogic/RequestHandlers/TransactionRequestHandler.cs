@@ -8,6 +8,7 @@ using Services;
 using System.Transactions;
 using Common;
 using Microsoft.Maui.Platform;
+using SimpleResults;
 using UIServices;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 
@@ -79,12 +80,12 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
 
-        if (result.Success && result.Data.IsSuccessful == false)
+        if (result.IsSuccess && result.Data.IsSuccessful == false)
         {
-            return new ErrorResult<PerformMobileTopupResponseModel>("Logon transaction not successful");
+            return Result.Failure("Logon transaction not successful");
         }
 
-        return new SuccessResult<PerformMobileTopupResponseModel>(result.Data);
+        return Result.Success(result.Data);
 
         
     }
@@ -122,12 +123,12 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         Result<PerformLogonResponseModel> result = await transactionService.PerformLogon(model, cancellationToken);
 
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
-        if (result.Success && result.Data.IsSuccessful == false)
+        if (result.IsSuccess && result.Data.IsSuccessful == false)
         {
-            return new ErrorResult<PerformLogonResponseModel>("Logon transaction not successful");
+            return  Result.Failure("Logon transaction not successful");
         }
 
-        return new SuccessResult<PerformLogonResponseModel>(result.Data);
+        return Result.Success(result.Data);
     }
 
     public async Task<Result<PerformVoucherIssueResponseModel>> Handle(PerformVoucherIssueRequest request,
@@ -157,12 +158,12 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
 
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
 
-        if (result.Success && result.Data.IsSuccessful == false)
+        if (result.IsSuccess && result.Data.IsSuccessful == false)
         {
-            return new ErrorResult<PerformVoucherIssueResponseModel>("Voucher Issue not successful");
+            return Result.Failure("Voucher Issue not successful");
         }
 
-        return new SuccessResult<PerformVoucherIssueResponseModel>(result.Data);
+        return Result.Success(result.Data);
     }
 
     public async Task<Result<PerformBillPaymentGetAccountResponseModel>> Handle(PerformBillPaymentGetAccountRequest request,
@@ -237,7 +238,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         Result<PerformReconciliationResponseModel> result = await transactionService.PerformReconciliation(model, cancellationToken);
 
         // Clear store (if successful)
-        if (result.Success && result.Data.IsSuccessful)
+        if (result.IsSuccess && result.Data.IsSuccessful)
         {
             await this.DatabaseContext.ClearStoredTransactions(storedTransactions);
         }
@@ -273,12 +274,12 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
 
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
 
-        if (result.Success && result.Data.IsSuccessful == false)
+        if (result.IsSuccess && result.Data.IsSuccessful == false)
         {
-            return new ErrorResult<PerformBillPaymentMakePaymentResponseModel>("Bill Payment not successful");
+            return Result.Failure("Bill Payment not successful");
         }
 
-        return new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(result.Data);
+        return Result.Success(result.Data);
 
     }
 
@@ -309,12 +310,12 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
 
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
 
-        if (result.Success && result.Data.IsSuccessful == false)
+        if (result.IsSuccess && result.Data.IsSuccessful == false)
         {
-            return new ErrorResult<PerformBillPaymentMakePaymentResponseModel>("Bill Payment not successful");
+            return Result.Failure("Bill Payment not successful");
         }
 
-        return new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(result.Data);
+        return Result.Success(result.Data);
 
     }
     #endregion

@@ -6,6 +6,7 @@ using EstateManagement.DataTransferObjects.Responses;
 using Microsoft.Extensions.Caching.Memory;
 using Models;
 using RequestHandlers;
+using SimpleResults;
 
 public interface IMerchantService
 {

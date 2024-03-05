@@ -12,6 +12,7 @@ using RequestHandlers;
 using Requests;
 using Services;
 using Shouldly;
+using SimpleResults;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 using UIServices;
 using Xunit;
@@ -56,13 +57,13 @@ public class TransactionRequestHandlerTests
     public async Task TransactionRequestHandler_LogonTransactionRequest_Handle_IsHandled()
     {
         this.TransactionService.Setup(t => t.PerformLogon(It.IsAny<PerformLogonRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(
-         new SuccessResult<PerformLogonResponseModel>(TestData.PerformLogonResponseModel));
+         Result.Success(TestData.PerformLogonResponseModel));
      
         LogonTransactionRequest request = LogonTransactionRequest.Create(TestData.TransactionDateTime);
 
         Result<PerformLogonResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.IsSuccessful.ShouldBeTrue();
     }
 
@@ -70,22 +71,22 @@ public class TransactionRequestHandlerTests
     public async Task TransactionRequestHandler_LogonTransactionRequest_Handle_LogonFailed_IsHandled()
     {
         this.TransactionService.Setup(t => t.PerformLogon(It.IsAny<PerformLogonRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(
-                                                                                                                                             new SuccessResult<PerformLogonResponseModel>(TestData.PerformLogonResponseFailedModel));
+                                                                                                                                             Result.Success(TestData.PerformLogonResponseFailedModel));
 
         LogonTransactionRequest request = LogonTransactionRequest.Create(TestData.TransactionDateTime);
 
         Result<PerformLogonResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeFalse();
+        result.IsSuccess.ShouldBeFalse();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformMobileTopupRequest_Handle_IsHandled()
     {
-        this.TransactionService.Setup(t => t.PerformMobileTopup(It.IsAny<PerformMobileTopupRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformMobileTopupResponseModel>(new PerformMobileTopupResponseModel
-            {
-            ResponseCode = "0000"
-        }));
+        this.TransactionService.Setup(t => t.PerformMobileTopup(It.IsAny<PerformMobileTopupRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformMobileTopupResponseModel
+                                                                                                                                                                        {
+                                                                                                                                                                            ResponseCode = "0000"
+                                                                                                                                                                        }));
      
         PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(TestData.TransactionDateTime,
                                                                              TestData.OperatorId1ContractId,
@@ -97,17 +98,17 @@ public class TransactionRequestHandlerTests
 
         Result<PerformMobileTopupResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.IsSuccessful.ShouldBeTrue();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformMobileTopupRequest_Handle_TopupFailed_IsHandled()
     {
-        this.TransactionService.Setup(t => t.PerformMobileTopup(It.IsAny<PerformMobileTopupRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformMobileTopupResponseModel>(new PerformMobileTopupResponseModel
-                                                                                                                                                                                                            {
-                                                                                                                                                                                                                ResponseCode = "1000"
-                                                                                                                                                                                                            }));
+        this.TransactionService.Setup(t => t.PerformMobileTopup(It.IsAny<PerformMobileTopupRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformMobileTopupResponseModel
+                                                                                                                                                                        {
+                                                                                                                                                                            ResponseCode = "1000"
+                                                                                                                                                                        }));
 
         PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(TestData.TransactionDateTime,
                                                                              TestData.OperatorId1ContractId,
@@ -119,16 +120,16 @@ public class TransactionRequestHandlerTests
 
         Result<PerformMobileTopupResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeFalse();
+        result.IsSuccess.ShouldBeFalse();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformVoucherIssueRequest_Handle_IsHandled()
     {
-        this.TransactionService.Setup(t => t.PerformVoucherIssue(It.IsAny<PerformVoucherIssueRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformVoucherIssueResponseModel>(new PerformVoucherIssueResponseModel
-        {
-                ResponseCode = "0000"
-            }));
+        this.TransactionService.Setup(t => t.PerformVoucherIssue(It.IsAny<PerformVoucherIssueRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformVoucherIssueResponseModel
+                                                                                                                                                                          {
+                                                                                                                                                                              ResponseCode = "0000"
+                                                                                                                                                                          }));
 
         PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(TestData.TransactionDateTime,
                                                                                TestData.OperatorId3ContractId,
@@ -141,17 +142,17 @@ public class TransactionRequestHandlerTests
 
         Result<PerformVoucherIssueResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.IsSuccessful.ShouldBeTrue();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformVoucherIssueRequest_Handle_VoucherIssueFailed_IsHandled()
     {
-        this.TransactionService.Setup(t => t.PerformVoucherIssue(It.IsAny<PerformVoucherIssueRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformVoucherIssueResponseModel>(new PerformVoucherIssueResponseModel
-                                                                                                                                                                                                               {
-                                                                                                                                                                                                                   ResponseCode = "1000"
-                                                                                                                                                                                                               }));
+        this.TransactionService.Setup(t => t.PerformVoucherIssue(It.IsAny<PerformVoucherIssueRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformVoucherIssueResponseModel
+                                                                                                                                                                          {
+                                                                                                                                                                              ResponseCode = "1000"
+                                                                                                                                                                          }));
 
         PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(TestData.TransactionDateTime,
                                                                                TestData.OperatorId3ContractId,
@@ -164,15 +165,15 @@ public class TransactionRequestHandlerTests
 
         Result<PerformVoucherIssueResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeFalse();
-        result.Success.ShouldBeFalse();
+        result.IsSuccess.ShouldBeFalse();
+        result.IsSuccess.ShouldBeFalse();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformBillPaymentGetAccountRequest_Handle_IsHandled()
     {
         this.TransactionService.Setup(t => t.PerformBillPaymentGetAccount(It.IsAny<PerformBillPaymentGetAccountModel>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new SuccessResult<PerformBillPaymentGetAccountResponseModel>(TestData.PerformBillPaymentGetAccountResponseModel));
+            .ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetAccountResponseModel));
 
         PerformBillPaymentGetAccountRequest request = PerformBillPaymentGetAccountRequest.Create(TestData.TransactionDateTime,
                                                                                                  TestData.OperatorId1ContractId,
@@ -182,7 +183,7 @@ public class TransactionRequestHandlerTests
 
         Result<PerformBillPaymentGetAccountResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.IsSuccessful.ShouldBeTrue();
         result.Data.BillDetails.ShouldNotBeNull();
         
@@ -192,7 +193,7 @@ public class TransactionRequestHandlerTests
     public async Task TransactionRequestHandler_PerformBillPaymentGetAccountRequest_GetAccountFailed_Handle_IsHandled()
     {
         this.TransactionService.Setup(t => t.PerformBillPaymentGetAccount(It.IsAny<PerformBillPaymentGetAccountModel>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new SuccessResult<PerformBillPaymentGetAccountResponseModel>(TestData.PerformBillPaymentGetAccountResponseModelFailed));
+            .ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetAccountResponseModelFailed));
 
         PerformBillPaymentGetAccountRequest request = PerformBillPaymentGetAccountRequest.Create(TestData.TransactionDateTime,
                                                                                                  TestData.OperatorId1ContractId,
@@ -202,7 +203,7 @@ public class TransactionRequestHandlerTests
 
         Result<PerformBillPaymentGetAccountResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.IsSuccessful.ShouldBeFalse();
         result.Data.BillDetails.ShouldBeNull();
     }
@@ -211,7 +212,7 @@ public class TransactionRequestHandlerTests
     public async Task TransactionRequestHandler_PerformBillPaymentGetMeterRequest_Handle_IsHandled()
     {
         this.TransactionService.Setup(t => t.PerformBillPaymentGetMeter(It.IsAny<PerformBillPaymentGetMeterModel>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new SuccessResult<PerformBillPaymentGetMeterResponseModel>(TestData.PerformBillPaymentGetMeterResponseModel));
+            .ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetMeterResponseModel));
 
         PerformBillPaymentGetMeterRequest request = PerformBillPaymentGetMeterRequest.Create(TestData.TransactionDateTime,
                                                                                              TestData.OperatorId1ContractId,
@@ -221,7 +222,7 @@ public class TransactionRequestHandlerTests
 
         Result<PerformBillPaymentGetMeterResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.IsSuccessful.ShouldBeTrue();
         result.Data.MeterDetails.ShouldNotBeNull();
 
@@ -231,7 +232,7 @@ public class TransactionRequestHandlerTests
     public async Task TransactionRequestHandler_PerformBillPaymentGetMeterRequest_GetMeterFailed_Handle_IsHandled()
     {
         this.TransactionService.Setup(t => t.PerformBillPaymentGetMeter(It.IsAny<PerformBillPaymentGetMeterModel>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new SuccessResult<PerformBillPaymentGetMeterResponseModel>(TestData.PerformBillPaymentGetMeterResponseModelFailed));
+            .ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetMeterResponseModelFailed));
 
         PerformBillPaymentGetMeterRequest request = PerformBillPaymentGetMeterRequest.Create(TestData.TransactionDateTime,
                                                                                              TestData.OperatorId1ContractId,
@@ -241,7 +242,7 @@ public class TransactionRequestHandlerTests
 
         Result<PerformBillPaymentGetMeterResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.IsSuccessful.ShouldBeFalse();
         result.Data.MeterDetails.ShouldBeNull();
     }
@@ -249,10 +250,10 @@ public class TransactionRequestHandlerTests
     [Fact]
     public async Task TransactionRequestHandler_PerformBillPaymentMakePostPaymentRequest_Handle_IsHandled()
     {
-        this.TransactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel
-        {
-            ResponseCode = "0000"
-        }));
+        this.TransactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformBillPaymentMakePaymentResponseModel
+                                                                                                                                                                                       {
+                                                                                                                                                                                           ResponseCode = "0000"
+                                                                                                                                                                                       }));
 
         PerformBillPaymentMakePostPaymentRequest request = PerformBillPaymentMakePostPaymentRequest.Create(TestData.TransactionDateTime,
                                                                                                            TestData.OperatorId1ContractId,
@@ -265,17 +266,17 @@ public class TransactionRequestHandlerTests
 
         Result<PerformBillPaymentMakePaymentResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.IsSuccessful.ShouldBeTrue();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformBillPaymentMakePrePaymentRequest_Handle_IsHandled()
     {
-        this.TransactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel
-                                                                                                                                                                                                                                      {
-                                                                                                                                                                                                                                          ResponseCode = "0000"
-                                                                                                                                                                                                                                      }));
+        this.TransactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformBillPaymentMakePaymentResponseModel
+                                                                                                                                                                                       {
+                                                                                                                                                                                           ResponseCode = "0000"
+                                                                                                                                                                                       }));
 
         PerformBillPaymentMakePrePaymentRequest request = PerformBillPaymentMakePrePaymentRequest.Create(TestData.TransactionDateTime,
                                                                                                          TestData.OperatorId1ContractId,
@@ -287,17 +288,17 @@ public class TransactionRequestHandlerTests
 
         Result<PerformBillPaymentMakePaymentResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.IsSuccessful.ShouldBeTrue();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformBillPaymentMakePostPaymentRequest_PaymentFailed_Handle_IsHandled()
     {
-        this.TransactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel
-        {
-                ResponseCode = "0001"
-            }));
+        this.TransactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformBillPaymentMakePaymentResponseModel
+                                                                                                                                                                                       {
+                                                                                                                                                                                           ResponseCode = "0001"
+                                                                                                                                                                                       }));
 
         PerformBillPaymentMakePostPaymentRequest request = PerformBillPaymentMakePostPaymentRequest.Create(TestData.TransactionDateTime,
                                                                                                            TestData.OperatorId1ContractId,
@@ -310,16 +311,16 @@ public class TransactionRequestHandlerTests
 
         Result<PerformBillPaymentMakePaymentResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Failure.ShouldBeTrue();
+        result.IsFailed.ShouldBeTrue();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformBillPaymentMakePrePaymentRequest_PaymentFailed_Handle_IsHandled()
     {
-        this.TransactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(new PerformBillPaymentMakePaymentResponseModel
-                                                                                                                                                                                                                                      {
-                                                                                                                                                                                                                                          ResponseCode = "0001"
-                                                                                                                                                                                                                                      }));
+        this.TransactionService.Setup(t => t.PerformBillPaymentMakePayment(It.IsAny<PerformBillPaymentMakePaymentModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformBillPaymentMakePaymentResponseModel
+                                                                                                                                                                                       {
+                                                                                                                                                                                           ResponseCode = "0001"
+                                                                                                                                                                                       }));
 
         PerformBillPaymentMakePrePaymentRequest request = PerformBillPaymentMakePrePaymentRequest.Create(TestData.TransactionDateTime,
                                                                                                          TestData.OperatorId1ContractId,
@@ -331,16 +332,16 @@ public class TransactionRequestHandlerTests
 
         Result<PerformBillPaymentMakePaymentResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Failure.ShouldBeTrue();
+        result.IsFailed.ShouldBeTrue();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformReconciliationRequest_NoTransactions_Handle_IsHandled()
     {
-        this.TransactionService.Setup(t => t.PerformReconciliation(It.IsAny<PerformReconciliationRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformReconciliationResponseModel>(new PerformReconciliationResponseModel
-            {
-            ResponseCode = "0000"
-        }));
+        this.TransactionService.Setup(t => t.PerformReconciliation(It.IsAny<PerformReconciliationRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformReconciliationResponseModel
+                                                                                                                                                                              {
+                                                                                                                                                                                  ResponseCode = "0000"
+                                                                                                                                                                              }));
         this.DatabaseContext.Setup(d => d.GetTransactions(It.IsAny<Boolean>())).ReturnsAsync(new List<TransactionRecord>());
 
         PerformReconciliationRequest request = PerformReconciliationRequest.Create(TestData.TransactionDateTime,
@@ -349,16 +350,16 @@ public class TransactionRequestHandlerTests
 
         Result<PerformReconciliationResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.IsSuccessful.ShouldBeTrue();
     }
 
     [Fact]
     public async Task TransactionRequestHandler_PerformReconciliationRequest_TransactionsStored_Handle_IsHandled() {
-        this.TransactionService.Setup(t => t.PerformReconciliation(It.IsAny<PerformReconciliationRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformReconciliationResponseModel>(new PerformReconciliationResponseModel
-        {
-                ResponseCode = "0000"
-            }));
+        this.TransactionService.Setup(t => t.PerformReconciliation(It.IsAny<PerformReconciliationRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformReconciliationResponseModel
+                                                                                                                                                                              {
+                                                                                                                                                                                  ResponseCode = "0000"
+                                                                                                                                                                              }));
 
         this.DatabaseContext.Setup(d => d.GetTransactions(It.IsAny<Boolean>())).ReturnsAsync(TestData.StoredTransactions);
 
@@ -366,7 +367,7 @@ public class TransactionRequestHandlerTests
 
         Result<PerformReconciliationResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.IsSuccessful.ShouldBeTrue();
     }
 }

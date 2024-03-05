@@ -13,6 +13,7 @@ using Moq;
 using Requests;
 using Services;
 using Shouldly;
+using SimpleResults;
 using UIServices;
 using ViewModels.Transactions;
 using Xunit;
@@ -47,7 +48,7 @@ public class BillPaymentGetMeterPageViewModelTests
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_ApplyQueryAttributes_QueryAttributesApplied()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
 
         this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
                                                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
@@ -60,7 +61,7 @@ public class BillPaymentGetMeterPageViewModelTests
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_GetMeterCommand_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentGetMeterRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentGetMeterResponseModel>(TestData.PerformBillPaymentGetMeterResponseModel));
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentGetMeterRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetMeterResponseModel));
 
         this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
                                                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
@@ -75,7 +76,7 @@ public class BillPaymentGetMeterPageViewModelTests
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_GetMeterCommand_Failed_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentGetMeterRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformBillPaymentGetMeterResponseModel>(TestData.PerformBillPaymentGetMeterResponseModelFailed));
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentGetMeterRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetMeterResponseModelFailed));
 
         this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
                                                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},

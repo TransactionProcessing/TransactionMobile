@@ -4,6 +4,7 @@ using Database;
 using Models;
 using RequestHandlers;
 using Requests;
+using SimpleResults;
 using TransactionProcessorACL.DataTransferObjects;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 using ViewModels.Transactions;

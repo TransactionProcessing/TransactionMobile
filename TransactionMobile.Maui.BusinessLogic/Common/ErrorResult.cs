@@ -1,17 +1,14 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Common;
 
-public class ErrorResult<T> : Result<T>, IErrorResult
+using Newtonsoft.Json;
+using SimpleResults;
+
+public static class ResultExtensions
 {
-    public ErrorResult(string message) : this(message, Array.Empty<Error>())
-    {
-        this.Message = message;
-        Success = false;
+    public static Result FailureExtended(string message, Exception exception){
+        return Result.Failure(message,
+                              new List<String>{
+                                                  exception.Message
+                                              });
     }
-
-    public ErrorResult(string message, IReadOnlyCollection<Error> errors) : base(default)
-    {
-            
-    }
-
-    public string Message { get; set; }
 }

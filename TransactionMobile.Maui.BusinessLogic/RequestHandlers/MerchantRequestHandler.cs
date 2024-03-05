@@ -5,6 +5,7 @@ using MediatR;
 using Models;
 using Requests;
 using Services;
+using SimpleResults;
 
 public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest, Result<List<ContractProductModel>>>,
                                       IRequestHandler<GetMerchantBalanceRequest, Result<Decimal>>,
@@ -39,7 +40,7 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
 
         if (products == null || products.Any() == false) {
             Result<List<ContractProductModel>> getProductsResult = await merchantService.GetContractProducts(cancellationToken);
-            if (getProductsResult.Success) {
+            if (getProductsResult.IsSuccess) {
                 products = getProductsResult.Data;
             }
             else {
@@ -51,7 +52,7 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
             products = products.Where(p => p.ProductType == request.ProductType).ToList();
         }
 
-        return new SuccessResult<List<ContractProductModel>>(products);
+        return Result.Success(products);
     }
 
     public async Task<Result<Decimal>> Handle(GetMerchantBalanceRequest request,

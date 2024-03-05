@@ -3,6 +3,7 @@
     using Common;
     using Models;
     using RequestHandlers;
+    using SimpleResults;
     using TransactionProcessorACL.DataTransferObjects.Responses;
 
     public interface ITransactionService

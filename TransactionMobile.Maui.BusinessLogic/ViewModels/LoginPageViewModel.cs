@@ -17,6 +17,7 @@
     using RequestHandlers;
     using Requests;
     using Services;
+    using SimpleResults;
     using TransactionMobile.Maui.Database;
     using UIServices;
 
@@ -90,7 +91,7 @@
             GetConfigurationRequest getConfigurationRequest = GetConfigurationRequest.Create(this.DeviceService.GetIdentifier());
             Result<Configuration> configurationResult = await this.Mediator.Send(getConfigurationRequest);
 
-            if (configurationResult.Success) {
+            if (configurationResult.IsSuccess) {
                 // Cache the config object
                 this.ApplicationCache.SetConfiguration(configurationResult.Data);
             }
@@ -102,7 +103,7 @@
             LoginRequest loginRequest = LoginRequest.Create(this.UserName, this.Password);
             Result<TokenResponseModel> tokenResult = await this.Mediator.Send(loginRequest);
 
-            if (tokenResult.Success) {
+            if (tokenResult.IsSuccess) {
                 // Cache the token
                 this.CacheAccessToken(tokenResult.Data);
             }
@@ -115,7 +116,7 @@
             LogonTransactionRequest logonTransactionRequest = LogonTransactionRequest.Create(DateTime.Now);
             Result<PerformLogonResponseModel> logonResult = await this.Mediator.Send(logonTransactionRequest);
 
-            if (logonResult.Success) {
+            if (logonResult.IsSuccess) {
                 // Set the user information
                 this.ApplicationCache.SetEstateId(logonResult.Data.EstateId);
                 this.ApplicationCache.SetMerchantId(logonResult.Data.MerchantId);
@@ -129,7 +130,7 @@
             GetContractProductsRequest getContractProductsRequest = GetContractProductsRequest.Create();
             Result<List<ContractProductModel>> productsResult = await this.Mediator.Send(getContractProductsRequest);
 
-            if (productsResult.Success) {
+            if (productsResult.IsSuccess) {
                 this.CacheContractData(productsResult.Data);
             }
             
@@ -219,7 +220,7 @@
                 RefreshTokenRequest request = RefreshTokenRequest.Create(token.RefreshToken);
                 Result<TokenResponseModel> newTokenResult = await this.Mediator.Send(request, CancellationToken.None);
 
-                if (newTokenResult.Success) {
+                if (newTokenResult.IsSuccess) {
                     this.CacheAccessToken(newTokenResult.Data);
                 }
             }
