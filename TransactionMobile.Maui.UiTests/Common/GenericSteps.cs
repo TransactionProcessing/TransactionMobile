@@ -23,7 +23,7 @@ public class GenericSteps
         this.TestingContext = testingContext;
     }
 
-    [BeforeScenario(Order = 0)]
+    [BeforeScenario(Order = 1)]
     public async Task StartSystem(){
         if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest") ||
             this.ScenarioContext.ScenarioInfo.Tags.Contains("PRHWNavTest"))
