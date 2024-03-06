@@ -267,7 +267,7 @@
 	<PropertyGroup>
 		<AndroidHttpClientHandlerType>DangerousAndroidMessageHandler, DangerousAndroidMessageHandler</AndroidHttpClientHandlerType>
 		<DefaultLanguage>en</DefaultLanguage>
-		<PackageCertificateThumbprint>8EEF9A99EBFE75E8CB01A297A057014B1AA9F368</PackageCertificateThumbprint>
+		<PackageCertificateThumbprint>04008B93238DA12BB7967AE7817DB9D43107373A</PackageCertificateThumbprint>
 		<AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
 	</PropertyGroup>
 

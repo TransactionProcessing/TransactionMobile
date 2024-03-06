@@ -62,7 +62,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
             
-            driverOptions.App = "TransactionMobile_cpahcq4mrrbba!App";
+            driverOptions.App = "TransactionMobile_zct748q4xfh0m!App";
             AppiumDriverWrapper.Driver = new WindowsDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
         }
 
