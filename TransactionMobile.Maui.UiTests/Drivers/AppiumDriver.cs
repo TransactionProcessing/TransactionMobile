@@ -52,8 +52,6 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             {
                 AppiumDriverWrapper.SetupWindowsDriver(appiumService);
             }
-
-            AppiumDriverWrapper.Driver.A
         }
 
         private static void SetupWindowsDriver(AppiumLocalService appiumService){
