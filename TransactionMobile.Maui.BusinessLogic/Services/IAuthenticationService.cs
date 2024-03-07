@@ -3,6 +3,7 @@
     using Common;
     using Models;
     using RequestHandlers;
+    using SimpleResults;
 
     public interface IAuthenticationService
     {

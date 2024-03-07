@@ -14,6 +14,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
     using RequestHandlers;
     using SecurityService.Client;
     using SecurityService.DataTransferObjects.Responses;
+    using SimpleResults;
     using ViewModels;
 
     public class AuthenticationService : IAuthenticationService
@@ -48,7 +49,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 Logger.LogInformation($"Token for {username} requested successfully");
                 Logger.LogDebug($"Token Response: [{JsonConvert.SerializeObject(token)}]");
 
-                return new SuccessResult<TokenResponseModel>(new TokenResponseModel
+                return Result.Success(new TokenResponseModel
                        {
                            AccessToken = token.AccessToken,
                            ExpiryInMinutes = token.ExpiresIn,
@@ -58,7 +59,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             catch(Exception ex)
             {
                 Logger.LogError($"Error getting Token", ex);
-                return new ErrorResult<TokenResponseModel>("Error getting Token");
+                return ResultExtensions.FailureExtended("Error getting Token", ex);
             }
 
             
@@ -78,7 +79,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 Logger.LogInformation($"Refresh Token requested successfully");
                 Logger.LogDebug($"Token Response: [{JsonConvert.SerializeObject(token)}]");
 
-                return new SuccessResult<TokenResponseModel>(new TokenResponseModel
+                return Result.Success(new TokenResponseModel
                                                              {
                                                                  AccessToken = token.AccessToken,
                                                                  ExpiryInMinutes = token.ExpiresIn,
@@ -88,7 +89,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
             catch (Exception ex)
             {
                 Logger.LogError($"Error refreshing Token", ex);
-                return new ErrorResult<TokenResponseModel>("Error getting Token");
+                return ResultExtensions.FailureExtended("Error refreshing Token", ex);
             }
         }
     }

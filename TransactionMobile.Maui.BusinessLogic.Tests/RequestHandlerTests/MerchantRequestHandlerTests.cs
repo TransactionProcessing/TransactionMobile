@@ -11,6 +11,7 @@ using RequestHandlers;
 using Requests;
 using Services;
 using Shouldly;
+using SimpleResults;
 using Xunit;
 
 public class MerchantRequestHandlerTests
@@ -45,13 +46,13 @@ public class MerchantRequestHandlerTests
     [Fact]
     public async Task MerchantRequestHandler_GetContractProductsRequest_Handle_IsHandled() {
         this.MerchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+            .ReturnsAsync(Result.Success(TestData.ContractProductList));
 
         GetContractProductsRequest request = GetContractProductsRequest.Create();
 
         Result<List<ContractProductModel>> result = await this.MerchantRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.Count.ShouldBe(TestData.ContractProductList.Count);
     }
 
@@ -61,13 +62,13 @@ public class MerchantRequestHandlerTests
         this.ApplicationCache.Setup(a => a.GetContractProducts()).Returns(products);
 
         this.MerchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+            .ReturnsAsync(Result.Success(TestData.ContractProductList));
 
         GetContractProductsRequest request = GetContractProductsRequest.Create();
 
         Result<List<ContractProductModel>> result = await this.MerchantRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.Count.ShouldBe(TestData.ContractProductList.Count);
     }
 
@@ -78,26 +79,26 @@ public class MerchantRequestHandlerTests
         this.ApplicationCache.Setup(a => a.GetContractProducts()).Returns(products);
 
         this.MerchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new ErrorResult<List<ContractProductModel>>("failed"));
+            .ReturnsAsync(Result.Failure("failed"));
 
         GetContractProductsRequest request = GetContractProductsRequest.Create();
 
         Result<List<ContractProductModel>> result = await this.MerchantRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeFalse();
+        result.IsFailed.ShouldBeTrue();
     }
 
     [Fact]
     public async Task MerchantRequestHandler_GetContractProductsRequest_Handle_FilterByType_IsHandled()
     {
         this.MerchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+            .ReturnsAsync(Result.Success(TestData.ContractProductList));
 
         GetContractProductsRequest request = GetContractProductsRequest.Create(ProductType.Voucher);
 
         Result<List<ContractProductModel>> result = await this.MerchantRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.Count.ShouldBe(1);
     }
 
@@ -108,38 +109,38 @@ public class MerchantRequestHandlerTests
         this.ApplicationCache.Setup(a => a.GetContractProducts()).Returns(products);
 
         this.MerchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+            .ReturnsAsync(Result.Success(TestData.ContractProductList));
 
         GetContractProductsRequest request = GetContractProductsRequest.Create();
 
         Result<List<ContractProductModel>> result = await this.MerchantRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.Count.ShouldBe(TestData.ContractProductList.Count);
     }
 
     [Fact]
     public async Task MerchantRequestHandler_GetMerchantBalanceRequest_Handle_IsHandled() {
-        this.MerchantService.Setup(m => m.GetMerchantBalance(It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<Decimal>(TestData.MerchantBalance));
+        this.MerchantService.Setup(m => m.GetMerchantBalance(It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantBalance));
 
         GetMerchantBalanceRequest request = GetMerchantBalanceRequest.Create();
 
         Result<Decimal> result = await this.MerchantRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
         result.Data.ShouldBe(TestData.MerchantBalance);
     }
 
     [Fact]
     public async Task MerchantRequestHandler_GetMerchantDetailsRequest_Handle_IsHandled()
     {
-        this.MerchantService.Setup(m => m.GetMerchantDetails(It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<MerchantDetailsModel>(TestData.MerchantDetailsModel));
+        this.MerchantService.Setup(m => m.GetMerchantDetails(It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
 
         GetMerchantDetailsRequest request = GetMerchantDetailsRequest.Create();
 
         Result<MerchantDetailsModel> result = await this.MerchantRequestHandler.Handle(request, CancellationToken.None);
 
-        result.Success.ShouldBeTrue();
+        result.IsSuccess.ShouldBeTrue();
     }
 
     #endregion

@@ -14,6 +14,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
     using Models;
     using Newtonsoft.Json;
     using RequestHandlers;
+    using SimpleResults;
     using TransactionMobile.Maui.BusinessLogic.Services.DataTransferObjects;
     using ViewModels;
     using LogLevel = Models.LogLevel;
@@ -108,14 +109,14 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                 Logger.LogInformation($"Configuration for device identifier {deviceIdentifier} requested successfully");
                 Logger.LogDebug($"Configuration Response: [{content}]");
 
-                return new SuccessResult<Configuration>(response);
+                return Result.Success(response);
             }
             catch (Exception ex)
             {
                 // An exception has occurred, add some additional information to the message
                 Logger.LogError($"Error getting configuration for device Id {deviceIdentifier}.",ex);
 
-                return new ErrorResult<Configuration>("Error getting configuration data");
+                return ResultExtensions.FailureExtended($"Error getting configuration data for device Id {deviceIdentifier}", ex);
             }
         }
 

@@ -61,8 +61,9 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.DeviceName = "WindowsPC";
             
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
+            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
             
-            driverOptions.App = "TransactionMobile_cpahcq4mrrbba!App";
+            driverOptions.App = "TransactionMobile_zct748q4xfh0m!App";
             AppiumDriverWrapper.Driver = new WindowsDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
         }
 
@@ -77,13 +78,14 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net7.0-ios/iossimulator-x64/");
             var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.app");
             driverOptions.App = apkPath;
-            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
-            driverOptions.AddAdditionalAppiumOption("useNewWDA", true);
-            driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 999999999);
-            driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 999999999);
-            driverOptions.AddAdditionalAppiumOption("restart", true);
-            driverOptions.AddAdditionalAppiumOption("simulatorStartupTimeout", 5 * 60 * 1000);
-            
+            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
+            //driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
+            //driverOptions.AddAdditionalAppiumOption("useNewWDA", true);
+            //driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 999999999);
+            //driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 999999999);
+            //driverOptions.AddAdditionalAppiumOption("restart", true);
+            //driverOptions.AddAdditionalAppiumOption("simulatorStartupTimeout", 5 * 60 * 1000);
+
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
         }
 
@@ -101,13 +103,14 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption("appPackage", "com.transactionprocessing.pos");
             driverOptions.AddAdditionalAppiumOption("enforceAppInstall", true);
             driverOptions.AddAdditionalAppiumOption("uiautomator2ServerInstallTimeout", "40000");
+            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
 
-            
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net7.0-android/");
 
             var apkPath = Path.Combine(binariesFolder, "com.transactionprocessing.pos-Signed.apk");
             driverOptions.App = apkPath;
+            
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.Android.AndroidDriver(appiumService, driverOptions, TimeSpan.FromMinutes(5));
             
         }

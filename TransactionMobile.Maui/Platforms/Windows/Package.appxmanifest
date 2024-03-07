@@ -8,11 +8,11 @@
 
   <Identity
     Name="TransactionMobile"
-    Publisher="CN=TransactionProcessing, C=EN" Version="1.0.0.0"/>
+    Publisher="CN=TransactionProcessing" Version="1.0.0.0"/>
 
   <Properties>
     <DisplayName>TransactionMobile</DisplayName>
-    <PublisherDisplayName>Microsoft</PublisherDisplayName>
+    <PublisherDisplayName>TransactionMobile</PublisherDisplayName>
     <Logo>appiconStoreLogo.png</Logo>
   </Properties>
 

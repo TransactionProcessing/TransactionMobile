@@ -14,6 +14,7 @@ using RequestHandlers;
 using Requests;
 using Services;
 using Shouldly;
+using SimpleResults;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 using UIServices;
 using ViewModels;
@@ -118,9 +119,9 @@ public class MobileTopupPerformTopupPageViewModelTests
     [Fact]
     public void MobileTopupPerformTopupPageViewModel_PerformTopupCommand_Execute_SuccessfulTopup_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformMobileTopupResponseModel>(new PerformMobileTopupResponseModel() {
-            ResponseCode = "0000"
-        }));
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformMobileTopupResponseModel() {
+                                                                                                                                                                                     ResponseCode = "0000"
+                                                                                                                                                                                 }));
 
         this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                             {
@@ -135,10 +136,10 @@ public class MobileTopupPerformTopupPageViewModelTests
     [Fact]
     public void MobileTopupPerformTopupPageViewModel_PerformTopupCommand_Execute_FailedTopup_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformMobileTopupResponseModel>(new PerformMobileTopupResponseModel()
-            {
-                ResponseCode = "0001"
-            }));
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformMobileTopupResponseModel()
+                                                                                                                                           {
+                                                                                                                                               ResponseCode = "0001"
+                                                                                                                                           }));
 
         this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                             {

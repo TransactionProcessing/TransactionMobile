@@ -10,6 +10,7 @@ using MvvmHelpers.Commands;
 using RequestHandlers;
 using Requests;
 using Services;
+using SimpleResults;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 using UIServices;
 
@@ -102,7 +103,7 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
 
         Result<PerformBillPaymentMakePaymentResponseModel> result = await this.Mediator.Send(request);
 
-        if (result.Success && result.Data.IsSuccessful) {
+        if (result.IsSuccess && result.Data.IsSuccessful) {
             await this.NavigationService.GoToBillPaymentSuccessPage();
         }
         else {

@@ -9,6 +9,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services;
 using Common;
 using Models;
 using RequestHandlers;
+using SimpleResults;
 
 public interface IConfigurationService
 {

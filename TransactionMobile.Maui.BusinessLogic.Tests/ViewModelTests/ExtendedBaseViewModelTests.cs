@@ -14,6 +14,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests
     using RequestHandlers;
     using Services;
     using Shouldly;
+    using SimpleResults;
     using UIServices;
     using ViewModels;
     using Xunit;
@@ -50,8 +51,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests
 
         [Fact]
         public async Task ExtendedBaseViewModel_HandleResult_ResultIsAndError_ErrorThrown(){
-            Result<String> result = new ErrorResult<String>("Error has been returned");
-
+            Result<String> result = Result.Failure("Error has been returned");
+            
             ApplicationException exception = Should.Throw<ApplicationException>(() => {
                                                                                     this.ViewModel.HandleResult(result);
                                                                                 });

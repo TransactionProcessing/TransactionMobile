@@ -10,6 +10,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services.TrainingModeServices
     using Common;
     using Models;
     using RequestHandlers;
+    using SimpleResults;
     using TransactionProcessorACL.DataTransferObjects.Responses;
 
     [ExcludeFromCodeCoverage]
@@ -18,21 +19,21 @@ namespace TransactionMobile.Maui.BusinessLogic.Services.TrainingModeServices
         public async Task<Result<TokenResponseModel>> GetToken(String username,
                                                                String password,
                                                                CancellationToken cancellationToken) {
-            return new SuccessResult<TokenResponseModel>(new TokenResponseModel {
-                                                                                    AccessToken = "Token",
-                                                                                    RefreshToken = "RefreshToken",
-                                                                                    ExpiryInMinutes = 1
-                                                                                });
-        }
-
-        public async Task<Result<TokenResponseModel>> RefreshAccessToken(String refreshToken,
-                                                                         CancellationToken cancellationToken) {
-            return new SuccessResult<TokenResponseModel>(new TokenResponseModel
-                                                         {
+            return Result.Success(new TokenResponseModel {
                                                              AccessToken = "Token",
                                                              RefreshToken = "RefreshToken",
                                                              ExpiryInMinutes = 1
                                                          });
+        }
+
+        public async Task<Result<TokenResponseModel>> RefreshAccessToken(String refreshToken,
+                                                                         CancellationToken cancellationToken) {
+            return Result.Success(new TokenResponseModel
+                                  {
+                                      AccessToken = "Token",
+                                      RefreshToken = "RefreshToken",
+                                      ExpiryInMinutes = 1
+                                  });
         }
     }
 }

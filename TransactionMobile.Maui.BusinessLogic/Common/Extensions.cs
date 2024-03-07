@@ -4,6 +4,7 @@ using Database;
 using Models;
 using RequestHandlers;
 using Requests;
+using SimpleResults;
 using TransactionProcessorACL.DataTransferObjects;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 using ViewModels.Transactions;
@@ -378,5 +379,16 @@ public static class Extensions
 
     public static Boolean IsSuccessfulReconciliation(this ReconciliationResponseMessage reconciliationResponse) {
         return reconciliationResponse.ResponseCode == "0000";
+    }
+}
+
+public static class ResultExtensions
+{
+    public static Result FailureExtended(string message, Exception exception)
+    {
+        return Result.Failure(message,
+                              new List<String>{
+                                                  exception.Message
+                                              });
     }
 }

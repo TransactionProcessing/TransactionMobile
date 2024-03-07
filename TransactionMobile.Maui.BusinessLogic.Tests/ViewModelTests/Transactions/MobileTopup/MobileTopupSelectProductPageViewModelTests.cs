@@ -14,6 +14,7 @@ using RequestHandlers;
 using Requests;
 using Services;
 using Shouldly;
+using SimpleResults;
 using UIServices;
 using ViewModels.Transactions;
 using Xunit;
@@ -47,7 +48,7 @@ public class MobileTopupSelectProductPageViewModelTests
     [Fact]
     public async Task MobileTopupSelectProductPageViewModel_ApplyQueryAttributes_QueryAttributesApplied() {
         
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
         
         this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
                                                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
@@ -57,7 +58,7 @@ public class MobileTopupSelectProductPageViewModelTests
 
     [Fact]
     public async Task MobileTopupSelectProductPageViewModel_Initialise_IsInitialised() {
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
         
         this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
                                                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
@@ -70,7 +71,7 @@ public class MobileTopupSelectProductPageViewModelTests
 
     [Fact]
     public async Task MobileTopupSelectProductPageViewModel_ProductSelectedCommand_Execute_IsExecuted() {
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
         
         this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
                                                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
@@ -93,7 +94,7 @@ public class MobileTopupSelectProductPageViewModelTests
     [Fact]
     public async Task MobileTopupSelectProductPageViewModel_BackButtonCommand_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
         
         this.ViewModel.BackButtonCommand.Execute(null);
 

@@ -14,6 +14,7 @@ using RequestHandlers;
 using Requests;
 using Services;
 using Shouldly;
+using SimpleResults;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 using UIServices;
 using ViewModels;
@@ -134,9 +135,9 @@ public class VoucherPerformIssuePageViewModelTests
     [Fact]
     public void VoucherPerformIssuePageViewModel_IssueVoucherCommand_Execute_SuccessfulVoucher_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformVoucherIssueResponseModel>(new PerformVoucherIssueResponseModel() {
-            ResponseCode = "0000"
-        }));
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformVoucherIssueResponseModel() {
+                                                                                                                                                                                       ResponseCode = "0000"
+                                                                                                                                                                                   }));
 
         this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                             {
@@ -151,10 +152,10 @@ public class VoucherPerformIssuePageViewModelTests
     [Fact]
     public void VoucherPerformIssuePageViewModel_IssueVoucherCommand_Execute_FailedVoucher_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<PerformVoucherIssueResponseModel>(new PerformVoucherIssueResponseModel()
-            {
-                ResponseCode = "1010"
-            }));
+        this.Mediator.Setup(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformVoucherIssueResponseModel()
+                                                                                                                                            {
+                                                                                                                                                ResponseCode = "1010"
+                                                                                                                                            }));
 
         this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
                                             {

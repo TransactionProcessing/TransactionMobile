@@ -12,6 +12,7 @@
     using RequestHandlers;
     using Requests;
     using Services;
+    using SimpleResults;
     using TransactionProcessorACL.DataTransferObjects.Responses;
     using UIServices;
 

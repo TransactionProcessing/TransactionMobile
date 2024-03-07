@@ -4,6 +4,7 @@ using Models;
 using RequestHandlers;
 using System.Diagnostics.CodeAnalysis;
 using Common;
+using SimpleResults;
 using ViewModels.Transactions;
 
 [ExcludeFromCodeCoverage]
@@ -11,7 +12,7 @@ public class TrainingTransactionService : ITransactionService
 {
     public async Task<Result<PerformLogonResponseModel>> PerformLogon(PerformLogonRequestModel model,
                                                                       CancellationToken cancellationToken) {
-        return new SuccessResult<PerformLogonResponseModel>(new PerformLogonResponseModel {
+        return Result.Success(new PerformLogonResponseModel {
                                                                                               EstateId = Guid.Parse("D7E52254-E0BE-436A-9A34-CC291DA0D66A"),
                                                                                               MerchantId = Guid.Parse("DD034A3B-D8EE-45A4-A29F-8774751CEE76"),
                                                                                               ResponseCode = "0000",
@@ -33,15 +34,15 @@ public class TrainingTransactionService : ITransactionService
                       }
         };
         
-        return new SuccessResult<PerformMobileTopupResponseModel>(responseModel);
+        return Result.Success(responseModel);
     }
 
     public async Task<Result<PerformReconciliationResponseModel>> PerformReconciliation(PerformReconciliationRequestModel model,
                                                                                         CancellationToken cancellationToken) {
-        return new SuccessResult<PerformReconciliationResponseModel>(new PerformReconciliationResponseModel {
-                                                                                                                ResponseMessage = "SUCCESS",
-                                                                                                                ResponseCode = "0000"
-                                                                                                            });
+        return Result.Success(new PerformReconciliationResponseModel {
+                                                                         ResponseMessage = "SUCCESS",
+                                                                         ResponseCode = "0000"
+                                                                     });
     }
 
     public async Task<Result<PerformVoucherIssueResponseModel>> PerformVoucherIssue(PerformVoucherIssueRequestModel model,
@@ -61,7 +62,7 @@ public class TrainingTransactionService : ITransactionService
                  }
         };
             
-        return new SuccessResult<PerformVoucherIssueResponseModel>(responseModel);
+        return Result.Success(responseModel);
     }
 
     public async Task<Result<PerformBillPaymentGetAccountResponseModel>> PerformBillPaymentGetAccount(PerformBillPaymentGetAccountModel model,
@@ -80,13 +81,13 @@ public class TrainingTransactionService : ITransactionService
                                                                     };
 
 
-        return new SuccessResult<PerformBillPaymentGetAccountResponseModel>(responseMessage);
+        return Result.Success(responseMessage);
     }
 
     public async Task<Result<PerformBillPaymentMakePaymentResponseModel>> PerformBillPaymentMakePayment(PerformBillPaymentMakePaymentModel model,
                                                                                                         CancellationToken cancellationToken){
 
-        var responseModel = model.PaymentAmount switch{
+        PerformBillPaymentMakePaymentResponseModel responseModel = model.PaymentAmount switch{
             150 => new PerformBillPaymentMakePaymentResponseModel(){
                                                                        ResponseMessage = "Failed",
                                                                        ResponseCode = "1000"
@@ -97,7 +98,7 @@ public class TrainingTransactionService : ITransactionService
                                                                }
         };
         
-        return new SuccessResult<PerformBillPaymentMakePaymentResponseModel>(responseModel);
+        return Result.Success(responseModel);
     }
 
     public async Task<Result<PerformBillPaymentGetMeterResponseModel>> PerformBillPaymentGetMeter(PerformBillPaymentGetMeterModel model, CancellationToken cancellationToken){
@@ -112,6 +113,6 @@ public class TrainingTransactionService : ITransactionService
                                                                   };
 
 
-        return new SuccessResult<PerformBillPaymentGetMeterResponseModel>(responseMessage);
+        return Result.Success(responseMessage);
     }
 }

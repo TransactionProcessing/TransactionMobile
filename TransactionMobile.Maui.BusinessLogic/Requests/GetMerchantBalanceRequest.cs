@@ -3,6 +3,7 @@
 using Common;
 using MediatR;
 using RequestHandlers;
+using SimpleResults;
 
 public class GetMerchantBalanceRequest : IRequest<Result<Decimal>>
 {

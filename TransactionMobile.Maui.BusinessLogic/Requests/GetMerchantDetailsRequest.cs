@@ -4,6 +4,7 @@ using Common;
 using MediatR;
 using Models;
 using RequestHandlers;
+using SimpleResults;
 
 public class GetMerchantDetailsRequest : IRequest<Result<MerchantDetailsModel>>
 {

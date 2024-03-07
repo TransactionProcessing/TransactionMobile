@@ -10,6 +10,7 @@ using MyAccount;
 using Reports;
 using RequestHandlers;
 using Services;
+using SimpleResults;
 using Support;
 using Transactions;
 using UIServices;
@@ -97,14 +98,12 @@ public class ExtendedBaseViewModel : BaseViewModel
     public virtual void HandleResult<T>(Result<T> result)
     {
         if (result == null) {
-            ErrorResult<T> errorResult = new ErrorResult<T>("Result from function call was null");
-            throw new ApplicationException(errorResult.Message);
+            throw new ApplicationException("Result from function call was null");
         }
 
-        if (result.Failure)
+        if (result.IsFailed)
         {
-            ErrorResult<T> errorResult = (ErrorResult<T>)result;
-            throw new ApplicationException(errorResult.Message);
+            throw new ApplicationException(result.Message);
         }
         // Success so carry on
     }

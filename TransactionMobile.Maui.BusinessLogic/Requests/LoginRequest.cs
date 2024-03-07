@@ -4,6 +4,7 @@
     using MediatR;
     using Models;
     using RequestHandlers;
+    using SimpleResults;
 
     public class LoginRequest : IRequest<Result<TokenResponseModel>>
     {

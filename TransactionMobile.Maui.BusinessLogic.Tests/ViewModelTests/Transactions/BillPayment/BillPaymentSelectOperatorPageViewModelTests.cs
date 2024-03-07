@@ -17,6 +17,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
     using Requests;
     using Services;
     using Shouldly;
+    using SimpleResults;
     using UIServices;
     using ViewModels.Transactions;
     using Xunit;
@@ -52,7 +53,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
         [Fact]
         public async Task BillPaymentSelectOperatorPageViewModel_Initialise_IsInitialised()
         {
-            this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+            this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
 
             await this.ViewModel.Initialise(CancellationToken.None);
             this.Mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
@@ -63,7 +64,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
         [Fact]
         public async Task BillPaymentSelectOperatorPageViewModel_OperatorSelectedCommand_Execute_IsExecuted()
         {
-            this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new SuccessResult<List<ContractProductModel>>(TestData.ContractProductList));
+            this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
 
             await this.ViewModel.Initialise(CancellationToken.None);
 

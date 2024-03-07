@@ -35,6 +35,7 @@
     using BusinessLogic.ViewModels.Reports;
     using Pages.Reports;
     using Pages.Transactions.BillPayment;
+    using SimpleResults;
     using TransactionProcessorACL.DataTransferObjects.Responses;
     using LogMessage = BusinessLogic.Models.LogMessage;
 #if ANDROID

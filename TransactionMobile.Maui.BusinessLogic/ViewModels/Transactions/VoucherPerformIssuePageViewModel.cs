@@ -135,7 +135,7 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
 
         var result = await this.Mediator.Send(request);
 
-        if (result.Success && result.Data.IsSuccessful)
+        if (result.IsSuccess && result.Data.IsSuccessful)
         {
             await this.NavigationService.GoToVoucherIssueSuccessPage();
 

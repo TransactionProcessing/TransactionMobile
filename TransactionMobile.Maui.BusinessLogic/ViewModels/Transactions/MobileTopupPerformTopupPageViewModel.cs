@@ -119,7 +119,7 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
 
         var response = await this.Mediator.Send(request);
 
-        if (response.Success && response.Data.IsSuccessful)
+        if (response.IsSuccess && response.Data.IsSuccessful)
         {
             await this.NavigationService.GoToMobileTopupSuccessPage();
         }
