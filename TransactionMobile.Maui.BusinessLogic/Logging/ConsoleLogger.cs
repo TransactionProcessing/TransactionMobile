@@ -21,61 +21,33 @@ public class ConsoleLogger : ILogger{
 
     #region Methods
 
-    public void LogCritical(String message, Exception exception){
-        var logMessageModels = LogMessage.CreateFatalLogMessages(message, exception);
-        var logMessages = new List<Database.LogMessage>();
-        foreach (var item in logMessageModels){
+    internal void Log(LogMessage logMessageModel)
+    {
+        List<LogMessage> logMessageModels = new List<LogMessage>{
+                                                                    logMessageModel
+                                                                };
+        Log(logMessageModels);
+    }
+
+    internal void Log(List<LogMessage> logMessageModels)
+    {
+        foreach (LogMessage item in logMessageModels)
+        {
             Console.WriteLine($"AppLog|{item.EntryDateTime}|{item.LogLevel}|{item.Message}");
         }
     }
 
-    public void LogDebug(String message){
-        var logMessageModel = LogMessage.CreateDebugLogMessage(message);
-        var logMessage = new Database.LogMessage{
-                                                    EntryDateTime = logMessageModel.EntryDateTime,
-                                                    LogLevel = logMessageModel.LogLevel.ToString(),
-                                                    Message = logMessageModel.Message
-                                                };
-        Console.WriteLine($"AppLog|{logMessage.EntryDateTime}|{logMessage.LogLevel}|{logMessage.Message}");
-    }
+    public void LogCritical(String message, Exception exception) => Log(LogMessage.CreateFatalLogMessages(message, exception));
+    
+    public void LogDebug(String message) => Log(LogMessage.CreateDebugLogMessage(message));
+    
+    public void LogError(String message, Exception exception) => Log(LogMessage.CreateErrorLogMessages(message, exception));
 
-    public void LogError(String message, Exception exception){
-        var logMessageModels = LogMessage.CreateErrorLogMessages(message, exception);
-        var logMessages = new List<Database.LogMessage>();
-        foreach (var item in logMessageModels){
-            Console.WriteLine($"AppLog|{item.EntryDateTime}|{item.LogLevel}|{item.Message}");
-        }
-    }
+    public void LogInformation(String message) => this.Log(LogMessage.CreateInformationLogMessage(message));
+    
+    public void LogTrace(String message) => this.Log(LogMessage.CreateTraceLogMessage(message));
 
-    public void LogInformation(String message){
-        var logMessageModel = LogMessage.CreateInformationLogMessage(message);
-        var logMessage = new Database.LogMessage{
-                                                    EntryDateTime = logMessageModel.EntryDateTime,
-                                                    LogLevel = logMessageModel.LogLevel.ToString(),
-                                                    Message = logMessageModel.Message
-                                                };
-        Console.WriteLine($"AppLog|{logMessage.EntryDateTime}|{logMessage.LogLevel}|{logMessage.Message}");
-    }
-
-    public void LogTrace(String message){
-        var logMessageModel = LogMessage.CreateTraceLogMessage(message);
-        var logMessage = new Database.LogMessage{
-                                                    EntryDateTime = logMessageModel.EntryDateTime,
-                                                    LogLevel = logMessageModel.LogLevel.ToString(),
-                                                    Message = logMessageModel.Message
-                                                };
-        Console.WriteLine($"AppLog|{logMessage.EntryDateTime}|{logMessage.LogLevel}|{logMessage.Message}");
-    }
-
-    public void LogWarning(String message){
-        var logMessageModel = LogMessage.CreateWarningLogMessage(message);
-        var logMessage = new Database.LogMessage{
-                                                    EntryDateTime = logMessageModel.EntryDateTime,
-                                                    LogLevel = logMessageModel.LogLevel.ToString(),
-                                                    Message = logMessageModel.Message
-                                                };
-        Console.WriteLine($"AppLog|{logMessage.EntryDateTime}|{logMessage.LogLevel}|{logMessage.Message}");
-    }
+    public void LogWarning(String message) => this.Log(LogMessage.CreateWarningLogMessage(message));
 
     #endregion
 }

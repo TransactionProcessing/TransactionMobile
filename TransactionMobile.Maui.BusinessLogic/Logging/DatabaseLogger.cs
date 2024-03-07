@@ -33,73 +33,40 @@ public class DatabaseLogger : ILogger{
 
     #region Methods
 
-    public void LogCritical(String message, Exception exception){
-        var logMessageModels = LogMessage.CreateFatalLogMessages(message, exception);
-        var logMessages = new List<Database.LogMessage>();
-        foreach (var item in logMessageModels){
-            logMessages.Add(new Database.LogMessage{
-                                                       EntryDateTime = item.EntryDateTime,
-                                                       LogLevel = item.LogLevel.ToString(),
-                                                       Message = item.Message
-                                                   });
+    internal void Log(LogMessage logMessageModel)
+    {
+        List<LogMessage> logMessageModels = new List<LogMessage>{
+                                                                    logMessageModel
+                                                                };
+        Log(logMessageModels);
+    }
+
+    internal void Log(List<LogMessage> logMessageModels)
+    {
+        List<Database.LogMessage> logMessages = new List<Database.LogMessage>();
+        foreach (LogMessage item in logMessageModels)
+        {
+            logMessages.Add(new Database.LogMessage
+                            {
+                                EntryDateTime = item.EntryDateTime,
+                                LogLevel = item.LogLevel.ToString(),
+                                Message = item.Message
+                            });
         }
 
         this.DatabaseContext.InsertLogMessages(logMessages);
     }
 
-    public void LogDebug(String message){
-        var logMessageModel = LogMessage.CreateDebugLogMessage(message);
-        var logMessage = new Database.LogMessage{
-                                                    EntryDateTime = logMessageModel.EntryDateTime,
-                                                    LogLevel = logMessageModel.LogLevel.ToString(),
-                                                    Message = logMessageModel.Message
-                                                };
-        this.DatabaseContext.InsertLogMessage(logMessage);
-    }
+    public void LogCritical(String message, Exception exception) => this.Log(LogMessage.CreateFatalLogMessages(message, exception));
 
-    public void LogError(String message, Exception exception){
-        var logMessageModels = LogMessage.CreateErrorLogMessages(message, exception);
-        var logMessages = new List<Database.LogMessage>();
-        foreach (var item in logMessageModels){
-            logMessages.Add(new Database.LogMessage{
-                                                       EntryDateTime = item.EntryDateTime,
-                                                       LogLevel = item.LogLevel.ToString(),
-                                                       Message = item.Message
-                                                   });
-        }
+    public void LogDebug(String message) => this.Log(LogMessage.CreateDebugLogMessage(message));
 
-        this.DatabaseContext.InsertLogMessages(logMessages);
-    }
+    public void LogError(String message, Exception exception) => this.Log(LogMessage.CreateErrorLogMessages(message, exception));
+    public void LogInformation(String message) => this.Log(LogMessage.CreateInformationLogMessage(message));
 
-    public void LogInformation(String message){
-        var logMessageModel = LogMessage.CreateInformationLogMessage(message);
-        var logMessage = new Database.LogMessage{
-                                                    EntryDateTime = logMessageModel.EntryDateTime,
-                                                    LogLevel = logMessageModel.LogLevel.ToString(),
-                                                    Message = logMessageModel.Message
-                                                };
-        this.DatabaseContext.InsertLogMessage(logMessage);
-    }
+    public void LogTrace(String message) => this.Log(LogMessage.CreateTraceLogMessage(message));
 
-    public void LogTrace(String message){
-        var logMessageModel = LogMessage.CreateTraceLogMessage(message);
-        var logMessage = new Database.LogMessage{
-                                                    EntryDateTime = logMessageModel.EntryDateTime,
-                                                    LogLevel = logMessageModel.LogLevel.ToString(),
-                                                    Message = logMessageModel.Message
-                                                };
-        this.DatabaseContext.InsertLogMessage(logMessage);
-    }
-
-    public void LogWarning(String message){
-        var logMessageModel = LogMessage.CreateWarningLogMessage(message);
-        var logMessage = new Database.LogMessage{
-                                                    EntryDateTime = logMessageModel.EntryDateTime,
-                                                    LogLevel = logMessageModel.LogLevel.ToString(),
-                                                    Message = logMessageModel.Message
-                                                };
-        this.DatabaseContext.InsertLogMessage(logMessage);
-    }
+    public void LogWarning(String message) => this.Log(LogMessage.CreateWarningLogMessage(message));
 
     #endregion
 }
