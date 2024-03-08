@@ -9,6 +9,7 @@ using Xunit;
 namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Reports
 {
     using System.Threading;
+    using BusinessLogic.Common;
     using Common;
     using LiveChartsCore.Measure;
     using Maui.UIServices;

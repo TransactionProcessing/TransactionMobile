@@ -6,7 +6,7 @@ using ViewModels.Transactions;
 [ExcludeFromCodeCoverage]
 public class PerformBillPaymentGetAccountResponseModel
 {
-    public Boolean IsSuccessful { get; set; }
+    public Boolean IsSuccessful => this.BillDetails != null;
 
     public BillDetails BillDetails{ get; set; }
 }

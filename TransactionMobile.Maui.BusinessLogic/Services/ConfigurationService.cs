@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.BusinessLogic.Services
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.Net;
     using ClientProxyBase;
     using Common;
@@ -19,7 +20,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
     using ViewModels;
     using LogLevel = Models.LogLevel;
 
-
+    [ExcludeFromCodeCoverage(Justification = "Need to refactor to allow injection of client for mocking")]
     public class ConfigurationService : ClientProxyBase, IConfigurationService
     {
         private readonly Func<String, String> BaseAddressResolver;

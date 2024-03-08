@@ -7,6 +7,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
     using System;
     using System.Collections.Generic;
     using System.Threading;
+    using BusinessLogic.Common;
     using Common;
     using Logging;
     using Maui.UIServices;
@@ -71,10 +72,10 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
             this.ViewModel.Operators.Count.ShouldBe(3);
 
             ItemSelected<ContractOperatorModel> selectedContractOperator = new ItemSelected<ContractOperatorModel>
-            {
-                SelectedItemIndex = 1,
-                SelectedItem = TestData.ContractOperatorModel
-            };
+                                                                           {
+                                                                               SelectedItemIndex = 1,
+                                                                               SelectedItem = TestData.ContractOperatorModel
+                                                                           };
 
             this.ViewModel.OperatorSelectedCommand.Execute(selectedContractOperator);
 

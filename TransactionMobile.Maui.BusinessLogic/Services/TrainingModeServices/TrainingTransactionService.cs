@@ -66,19 +66,16 @@ public class TrainingTransactionService : ITransactionService
     }
 
     public async Task<Result<PerformBillPaymentGetAccountResponseModel>> PerformBillPaymentGetAccount(PerformBillPaymentGetAccountModel model,
-                                                                                                      CancellationToken cancellationToken) {
-        PerformBillPaymentGetAccountResponseModel responseMessage = new PerformBillPaymentGetAccountResponseModel
-                                                                    {
-                                                                        BillDetails = new BillDetails
-                                                                                      {
-                                                                                          AccountName = "Mr Test Customer",
-                                                                                          AccountNumber = model.CustomerAccountNumber,
-                                                                                          Balance = "100.00",
-                                                                                          DueDate = DateTime.Now.AddDays(3).ToString("dd-MM-yyyy"),
+                                                                                                      CancellationToken cancellationToken){
+        PerformBillPaymentGetAccountResponseModel responseMessage = new PerformBillPaymentGetAccountResponseModel{
+                                                                                                                     BillDetails = new BillDetails{
+                                                                                                                                                      AccountName = "Mr Test Customer",
+                                                                                                                                                      AccountNumber = model.CustomerAccountNumber,
+                                                                                                                                                      Balance = "100.00",
+                                                                                                                                                      DueDate = DateTime.Now.AddDays(3).ToString("dd-MM-yyyy"),
 
-                                                                                      },
-                                                                        IsSuccessful = true
-                                                                    };
+                                                                                                                                                  },
+                                                                                                                 };
 
 
         return Result.Success(responseMessage);
@@ -108,8 +105,7 @@ public class TrainingTransactionService : ITransactionService
                                                                                     {
                                                                                         CustomerName = "Mr Test Customer",
                                                                                         MeterNumber = model.MeterNumber
-                                                                                    },
-                                                                      IsSuccessful = true
+                                                                                    }
                                                                   };
 
 

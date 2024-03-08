@@ -1,5 +1,6 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Services;
 
+using System.Diagnostics.CodeAnalysis;
 using Common;
 using EstateManagement.Client;
 using EstateManagement.DataTransferObjects.Responses;
@@ -49,18 +50,20 @@ public class MerchantService : IMerchantService
             Logger.LogDebug($"Merchant Contract Response: [{JsonConvert.SerializeObject(merchantContracts)}]");
 
             foreach (ContractResponse contractResponse in merchantContracts) {
-                foreach (ContractProduct contractResponseProduct in contractResponse.Products) {
+                foreach (ContractProduct contractResponseProduct in contractResponse.Products){
+                    var productType = GetProductType(contractResponse.OperatorName);
+
                     result.Add(new ContractProductModel {
                                                             OperatorId = contractResponse.OperatorId,
                                                             ContractId = contractResponse.ContractId,
                                                             ProductId = contractResponseProduct.ProductId,
                                                             OperatorIdentfier = contractResponse.OperatorName,
-                                                            OperatorName = this.GetOperatorName(contractResponse),
+                                                            OperatorName = GetOperatorName(contractResponse, productType),
                                                             Value = contractResponseProduct.Value ?? 0,
                                                             IsFixedValue = contractResponseProduct.Value.HasValue,
                                                             ProductDisplayText = contractResponseProduct.DisplayText,
-                                                            ProductType = this.GetProductType(contractResponse.OperatorName),
-                                                            ProductSubType = this.GetProductSubType(contractResponse.OperatorName),
+                                                            ProductType = productType,
+                                                            ProductSubType = GetProductSubType(contractResponse.OperatorName),
                                                         });
                 }
             }
@@ -74,6 +77,7 @@ public class MerchantService : IMerchantService
         }
     }
 
+    [ExcludeFromCodeCoverage(Justification = "Need to have a think of best way of this data being retieved")]
     public async Task<Result<Decimal>> GetMerchantBalance(CancellationToken cancellationToken) {
         try {
             TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
@@ -146,9 +150,8 @@ public class MerchantService : IMerchantService
         }
     }
 
-    private String GetOperatorName(ContractResponse contractResponse) {
+    public static String GetOperatorName(ContractResponse contractResponse, ProductType productType) {
         String operatorName = null;
-        ProductType productType = this.GetProductType(contractResponse.OperatorName);
         switch(productType) {
             case ProductType.Voucher:
                 operatorName = contractResponse.Description;
@@ -161,7 +164,7 @@ public class MerchantService : IMerchantService
         return operatorName;
     }
 
-    private ProductType GetProductType(String operatorName) {
+    public static ProductType GetProductType(String operatorName) {
         ProductType productType = ProductType.NotSet;
         switch(operatorName) {
             case "Safaricom":
@@ -179,7 +182,7 @@ public class MerchantService : IMerchantService
         return productType;
     }
 
-    private ProductSubType GetProductSubType(String operatorName)
+    public static ProductSubType GetProductSubType(String operatorName)
     {
         ProductSubType productType = ProductSubType.NotSet;
         switch (operatorName)
