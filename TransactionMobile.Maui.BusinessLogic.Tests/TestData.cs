@@ -240,29 +240,25 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
 
         public static PerformBillPaymentGetAccountResponseModel PerformBillPaymentGetAccountResponseModel =>
             new PerformBillPaymentGetAccountResponseModel {
-                                                              BillDetails = TestData.BillDetails,
-                                                              IsSuccessful = true
+                                                              BillDetails = TestData.BillDetails
                                                           };
 
         public static PerformBillPaymentGetMeterResponseModel PerformBillPaymentGetMeterResponseModel =>
             new PerformBillPaymentGetMeterResponseModel
             {
-                MeterDetails = TestData.MeterDetails,
-                IsSuccessful = true
+                MeterDetails = TestData.MeterDetails
             };
 
         public static PerformBillPaymentGetAccountResponseModel PerformBillPaymentGetAccountResponseModelFailed =>
             new PerformBillPaymentGetAccountResponseModel
             {
-                BillDetails = null,
-                IsSuccessful = false
+                BillDetails = null
             };
 
         public static PerformBillPaymentGetMeterResponseModel PerformBillPaymentGetMeterResponseModelFailed =>
             new PerformBillPaymentGetMeterResponseModel
             {
-                MeterDetails = null,
-                IsSuccessful = false
+                MeterDetails = null
             };
 
         public static MerchantDetailsModel MerchantDetailsModel => new MerchantDetailsModel {

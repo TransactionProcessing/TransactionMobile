@@ -1,5 +1,6 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Services
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.Net;
     using System.Net.Http.Headers;
     using System.Text;
@@ -15,6 +16,7 @@
     using ViewModels;
     using ViewModels.Transactions;
 
+    [ExcludeFromCodeCoverage(Justification = "Need to refactor to allow injection of client for mocking")]
     public class TransactionService : ClientProxyBase, ITransactionService
     {
         #region Fields
@@ -57,7 +59,6 @@
             // TODO: Factory
             PerformBillPaymentGetAccountResponseModel responseModel = new()
                                                                       {
-                                                                          IsSuccessful = result.Data.IsSuccessfulTransaction(),
                                                                           BillDetails = result.Data.AdditionalResponseMetaData.ToBillDetails()
                                                                       };
 
@@ -113,7 +114,6 @@
             // TODO: Factory
             PerformBillPaymentGetMeterResponseModel responseModel = new()
                                                                     {
-                                                                        IsSuccessful = result.Data.IsSuccessfulTransaction(),
                                                                         MeterDetails = meterDetails
             };
 

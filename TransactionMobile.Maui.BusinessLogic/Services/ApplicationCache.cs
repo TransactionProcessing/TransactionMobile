@@ -1,8 +1,10 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Services
 {
+    using System.Diagnostics.CodeAnalysis;
     using Microsoft.Extensions.Caching.Memory;
     using Models;
 
+    [ExcludeFromCodeCoverage]
     public class ApplicationCache : IApplicationCache
     {
         #region Fields

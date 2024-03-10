@@ -366,7 +366,6 @@ public static class Extensions
     {
         MeterDetails meterDetails = new MeterDetails();
 
-        //meterDetails.MeterNumber = additionalTransactionMetadata.ExtractFieldFromMetadata<String>("meterNumber");
         meterDetails.MeterNumber = meterNumber;
         meterDetails.CustomerName = additionalTransactionMetadata.ExtractFieldFromMetadata<String>("pataPawaPrePaidCustomerName"); ;
 
