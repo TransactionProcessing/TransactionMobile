@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TechTalk.SpecFlow;
 
 namespace TransactionMobile.Maui.UiTests.Steps
 {
@@ -20,6 +19,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
     using EstateManagement.IntegrationTesting.Helpers;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using Reqnroll;
     using SecurityService.DataTransferObjects;
     using SecurityService.DataTransferObjects.Requests;
     using SecurityService.DataTransferObjects.Responses;
@@ -30,7 +30,8 @@ namespace TransactionMobile.Maui.UiTests.Steps
     using TransactionProcessor.IntegrationTesting.Helpers;
     using UITests;
     using ClientDetails = Common.ClientDetails;
-    using SpecflowExtensions = TransactionProcessor.IntegrationTesting.Helpers.SpecflowExtensions;
+    using ReqnrollExtensions = TransactionProcessor.IntegrationTesting.Helpers.ReqnrollExtensions;
+    using ReqnrollTableHelper = Shared.IntegrationTesting.ReqnrollTableHelper;
 
     [Binding]
     [Scope(Tag = "shared")]
@@ -54,7 +55,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         }
 
         [Given(@"the following security roles exist")]
-        public async Task GivenTheFollowingSecurityRolesExist(Table table)
+        public async Task GivenTheFollowingSecurityRolesExist(DataTable table)
         {
             List<CreateRoleRequest> requests = table.Rows.ToCreateRoleRequests();
             List<(String, Guid)> responses = await this.SecurityServiceSteps.GivenICreateTheFollowingRoles(requests, CancellationToken.None);
@@ -66,13 +67,13 @@ namespace TransactionMobile.Maui.UiTests.Steps
         }
 
         [Given(@"I create the following api scopes")]
-        public async Task GivenICreateTheFollowingApiScopes(Table table) {
+        public async Task GivenICreateTheFollowingApiScopes(DataTable table) {
             List<CreateApiScopeRequest> requests = table.Rows.ToCreateApiScopeRequests();
             await this.SecurityServiceSteps.GivenICreateTheFollowingApiScopes(requests);
         }
 
         [Given(@"the following api resources exist")]
-        public async Task GivenTheFollowingApiResourcesExist(Table table)
+        public async Task GivenTheFollowingApiResourcesExist(DataTable table)
         {
             List<CreateApiResourceRequest> requests = table.Rows.ToCreateApiResourceRequests();
             await this.SecurityServiceSteps.GivenTheFollowingApiResourcesExist(requests);
@@ -84,7 +85,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         }
 
         [Given(@"the following clients exist")]
-        public async Task GivenTheFollowingClientsExist(Table table)
+        public async Task GivenTheFollowingClientsExist(DataTable table)
         {
             List<CreateClientRequest> requests = table.Rows.ToCreateClientRequests(this.TestingContext.DockerHelper.TestId);
             List<(String clientId, String secret, List<String> allowedGrantTypes)> clients = await this.SecurityServiceSteps.GivenTheFollowingClientsExist(requests);
@@ -95,31 +96,19 @@ namespace TransactionMobile.Maui.UiTests.Steps
         }
 
         [Given(@"I have a token to access the estate management and transaction processor acl resources")]
-        public async Task GivenIHaveATokenToAccessTheEstateManagementAndTransactionProcessorAclResources(Table table)
+        public async Task GivenIHaveATokenToAccessTheEstateManagementAndTransactionProcessorAclResources(DataTable table)
         {
-            TableRow firstRow = table.Rows.First();
-            String clientId = SpecflowTableHelper.GetStringRowValue(firstRow, "ClientId").Replace("[id]", this.TestingContext.DockerHelper.TestId.ToString("N"));
+            DataTableRow firstRow = table.Rows.First();
+            String clientId = ReqnrollTableHelper.GetStringRowValue(firstRow, "ClientId").Replace("[id]", this.TestingContext.DockerHelper.TestId.ToString("N"));
             ClientDetails clientDetails = this.TestingContext.GetClientDetails(clientId);
 
             this.TestingContext.AccessToken = await this.SecurityServiceSteps.GetClientToken(clientDetails.ClientId, clientDetails.ClientSecret, CancellationToken.None);
         }
         
         [Given(@"I have created the following estates")]
-        public async Task GivenIHaveCreatedTheFollowingEstates(Table table) {
+        public async Task GivenIHaveCreatedTheFollowingEstates(DataTable table) {
             List<CreateEstateRequest> requests = table.Rows.ToCreateEstateRequests();
-
-            foreach (CreateEstateRequest request in requests)
-            {
-                // Setup the subscriptions for the estate
-                await Retry.For(async () => {
-                                    await this.TestingContext.DockerHelper
-                                              .CreateEstateSubscriptions(request.EstateName)
-                                              .ConfigureAwait(false);
-                                },
-                                retryFor: TimeSpan.FromMinutes(2),
-                                retryInterval: TimeSpan.FromSeconds(30));
-            }
-
+            
             List<EstateResponse> verifiedEstates = await this.EstateManagementSteps.WhenICreateTheFollowingEstates(this.TestingContext.AccessToken, requests);
 
             foreach (EstateResponse verifiedEstate in verifiedEstates)
@@ -141,7 +130,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         }
 
         [Given(@"I have created the following operators")]
-        public async Task GivenIHaveCreatedTheFollowingOperators(Table table)
+        public async Task GivenIHaveCreatedTheFollowingOperators(DataTable table)
         {
             List<(EstateDetails estate, CreateOperatorRequest request)> requests = table.Rows.ToCreateOperatorRequests(this.TestingContext.Estates);
 
@@ -154,7 +143,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         }
 
         [Given(@"I create a contract with the following values")]
-        public async Task GivenICreateAContractWithTheFollowingValues(Table table)
+        public async Task GivenICreateAContractWithTheFollowingValues(DataTable table)
         {
             var estates = this.TestingContext.Estates.Select(e => e).ToList();
             List<(EstateDetails, CreateContractRequest)> requests = table.Rows.ToCreateContractRequests(estates);
@@ -170,7 +159,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         }
 
         [When(@"I add the following Transaction Fees")]
-        public async Task WhenIAddTheFollowingTransactionFees(Table table)
+        public async Task WhenIAddTheFollowingTransactionFees(DataTable table)
         {
             var estates = this.TestingContext.Estates.Select(e => e).ToList();
             List<(EstateDetails, Contract, Product, AddTransactionFeeForProductToContractRequest)> requests = table.Rows.ToAddTransactionFeeForProductToContractRequests(estates);
@@ -178,7 +167,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         }
 
         [Given(@"I create the following merchants")]
-        public async Task GivenICreateTheFollowingMerchants(Table table)
+        public async Task GivenICreateTheFollowingMerchants(DataTable table)
         {
             var estates = this.TestingContext.Estates.Select(e => e).ToList();
             List<(EstateDetails estate, CreateMerchantRequest)> requests = table.Rows.ToCreateMerchantRequests(estates);
@@ -194,7 +183,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         }
 
         [Given(@"I have assigned the following  operator to the merchants")]
-        public async Task GivenIHaveAssignedTheFollowingOperatorToTheMerchants(Table table)
+        public async Task GivenIHaveAssignedTheFollowingOperatorToTheMerchants(DataTable table)
         {
             var estates = this.TestingContext.Estates.Select(e => e).ToList();
             List<(EstateDetails, Guid, AssignOperatorRequest)> requests = table.Rows.ToAssignOperatorRequests(estates);
@@ -298,7 +287,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         }
 
         [Given(@"I make the following manual merchant deposits")]
-        public async Task GivenIMakeTheFollowingManualMerchantDeposits(Table table) {
+        public async Task GivenIMakeTheFollowingManualMerchantDeposits(DataTable table) {
             var estates = this.TestingContext.Estates.Select(e => e).ToList();
             List<(EstateDetails, Guid, MakeMerchantDepositRequest)> requests = table.Rows.ToMakeMerchantDepositRequest(estates);
 
@@ -319,7 +308,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         }
         
         [Given(@"I have created the following security users")]
-        public async Task GivenIHaveCreatedTheFollowingSecurityUsers(Table table)
+        public async Task GivenIHaveCreatedTheFollowingSecurityUsers(DataTable table)
         {
             var estates = this.TestingContext.Estates.Select(e => e).ToList();
             List<CreateNewUserRequest> createUserRequests = table.Rows.ToCreateNewUserRequests(estates);
@@ -327,14 +316,14 @@ namespace TransactionMobile.Maui.UiTests.Steps
         }
 
         [Given(@"I have assigned the following devices to the merchants")]
-        public void GivenIHaveAssignedTheFollowingDevicesToTheMerchants(Table table) {
+        public void GivenIHaveAssignedTheFollowingDevicesToTheMerchants(DataTable table) {
             
 
             
         }
 
         [When(@"I add the following contracts to the following merchants")]
-        public async Task WhenIAddTheFollowingContractsToTheFollowingMerchants(Table table)
+        public async Task WhenIAddTheFollowingContractsToTheFollowingMerchants(DataTable table)
         {
             List<EstateDetails> estates = this.TestingContext.Estates.Select(e => e).ToList();
             List<(EstateDetails, Guid, Guid)> requests = table.Rows.ToAddContractToMerchantRequests(estates);
@@ -342,23 +331,23 @@ namespace TransactionMobile.Maui.UiTests.Steps
         }
 
         [Given(@"the following bills are available at the PataPawa PostPaid Host")]
-        public async Task GivenTheFollowingBillsAreAvailableAtThePataPawaPostPaidHost(Table table)
+        public async Task GivenTheFollowingBillsAreAvailableAtThePataPawaPostPaidHost(DataTable table)
         {
-            List<SpecflowExtensions.PataPawaBill> bills = table.Rows.ToPataPawaBills();
+            List<ReqnrollExtensions.PataPawaBill> bills = table.Rows.ToPataPawaBills();
             await this.TransactionProcessorSteps.GivenTheFollowingBillsAreAvailableAtThePataPawaPostPaidHost(bills);
         }
 
         [Given(@"the following users are available at the PataPawa PrePay Host")]
-        public async Task GivenTheFollowingUsersAreAvailableAtThePataPawaPrePayHost(Table table)
+        public async Task GivenTheFollowingUsersAreAvailableAtThePataPawaPrePayHost(DataTable table)
         {
-            List<SpecflowExtensions.PataPawaUser> users = table.Rows.ToPataPawaUsers();
+            List<ReqnrollExtensions.PataPawaUser> users = table.Rows.ToPataPawaUsers();
             await this.TransactionProcessorSteps.GivenTheFollowingUsersAreAvailableAtThePataPawaPrePaidHost(users);
         }
 
         [Given(@"the following meters are available at the PataPawa PrePay Host")]
-        public async Task GivenTheFollowingMetersAreAvailableAtThePataPawaPrePayHost(Table table)
+        public async Task GivenTheFollowingMetersAreAvailableAtThePataPawaPrePayHost(DataTable table)
         {
-            List<SpecflowExtensions.PataPawaMeter> meters = table.Rows.ToPataPawaMeters();
+            List<ReqnrollExtensions.PataPawaMeter> meters = table.Rows.ToPataPawaMeters();
             await this.TransactionProcessorSteps.GivenTheFollowingMetersAreAvailableAtThePataPawaPrePaidHost(meters);
         }
     }

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Common;
 using Drivers;
 using OpenQA.Selenium;
-using TechTalk.SpecFlow;
 using UITests;
 
 public class ReportsPage : BasePage2

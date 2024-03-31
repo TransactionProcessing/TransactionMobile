@@ -3,9 +3,9 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Reqnroll;
 using Shared.IntegrationTesting;
 using Shouldly;
-using TechTalk.SpecFlow;
 using TransactionMobile.Maui.UiTests.Drivers;
 using UiTests.Common;
 using UiTests.Pages;
@@ -54,18 +54,18 @@ public class ProfileSteps{
     }
 
     [Then(@"the Primary Address is displayed")]
-    public async Task ThenThePrimaryAddressIsDisplayed(Table table){
+    public async Task ThenThePrimaryAddressIsDisplayed(DataTable table){
         await this.profileAddressesPage.IsPrimaryAddressShown();
 
-        TableRow? tableRow = table.Rows.Single();
+        DataTableRow? tableRow = table.Rows.Single();
 
-        String expectedAddressLine1= SpecflowTableHelper.GetStringRowValue(tableRow, "AddressLine1");
-        String expectedAddressLine2 = SpecflowTableHelper.GetStringRowValue(tableRow, "AddressLine2");
-        String expectedAddressLine3 = SpecflowTableHelper.GetStringRowValue(tableRow, "AddressLine3");
-        String expectedAddressLine4 = SpecflowTableHelper.GetStringRowValue(tableRow, "AddressLine4");
-        String expectedAddressTown = SpecflowTableHelper.GetStringRowValue(tableRow, "AddressTown");
-        String expectedAddressRegion = SpecflowTableHelper.GetStringRowValue(tableRow, "AddressRegion");
-        String expectedAddressPostCode = SpecflowTableHelper.GetStringRowValue(tableRow, "AddressPostCode");
+        String expectedAddressLine1= ReqnrollTableHelper.GetStringRowValue(tableRow, "AddressLine1");
+        String expectedAddressLine2 = ReqnrollTableHelper.GetStringRowValue(tableRow, "AddressLine2");
+        String expectedAddressLine3 = ReqnrollTableHelper.GetStringRowValue(tableRow, "AddressLine3");
+        String expectedAddressLine4 = ReqnrollTableHelper.GetStringRowValue(tableRow, "AddressLine4");
+        String expectedAddressTown = ReqnrollTableHelper.GetStringRowValue(tableRow, "AddressTown");
+        String expectedAddressRegion = ReqnrollTableHelper.GetStringRowValue(tableRow, "AddressRegion");
+        String expectedAddressPostCode = ReqnrollTableHelper.GetStringRowValue(tableRow, "AddressPostCode");
 
         if (String.IsNullOrEmpty(expectedAddressLine1) == false){
             String addressLine1 = await this.profileAddressesPage.GetAddressLineValue(1);
@@ -115,18 +115,18 @@ public class ProfileSteps{
     }
     
     [Then(@"the Primary Contact is displayed")]
-    public async Task ThenThePrimaryContactIsDisplayed(Table table)
+    public async Task ThenThePrimaryContactIsDisplayed(DataTable table)
     {
         await this.profileContactsPage.IsPrimaryContactShown();
 
         String contactName = await this.profileContactsPage.GetContactNameValue();
         String contactEmailAddress = await this.profileContactsPage.GetContactEmailAddressValue();
         String contactMobileNumber = await this.profileContactsPage.GetContactMobileNumberValue();
-        
-        TableRow? tableRow = table.Rows.Single();
-        String? expectedContactName = SpecflowTableHelper.GetStringRowValue(tableRow, "Name");
-        String? expectedContactEmailAddress = SpecflowTableHelper.GetStringRowValue(tableRow, "EmailAddress");
-        String? expectedContactMobileNumber = SpecflowTableHelper.GetStringRowValue(tableRow, "MobileNumber");
+
+        DataTableRow? tableRow = table.Rows.Single();
+        String? expectedContactName = ReqnrollTableHelper.GetStringRowValue(tableRow, "Name");
+        String? expectedContactEmailAddress = ReqnrollTableHelper.GetStringRowValue(tableRow, "EmailAddress");
+        String? expectedContactMobileNumber = ReqnrollTableHelper.GetStringRowValue(tableRow, "MobileNumber");
 
         contactName.ShouldBe(expectedContactName);
         contactEmailAddress.ShouldBe(expectedContactEmailAddress);
@@ -145,7 +145,7 @@ public class ProfileSteps{
     }
 
     [Then(@"the Account Info is displayed")]
-    public async Task ThenTheAccountInfoIsDisplayed(Table table)
+    public async Task ThenTheAccountInfoIsDisplayed(DataTable table)
     {
         String merchantName = await this.profileAccountInfoPage.GetMerchantNameValue();
         String balance = await this.profileAccountInfoPage.GetBalanceValue();
@@ -154,10 +154,10 @@ public class ProfileSteps{
         //String nextStatementDate = await this.profileAccountInfoPage.GetNextStatementDateValue();
         //String settlementSchedule = await this.profileAccountInfoPage.GetSettlementScheduleValue();
 
-        TableRow? tableRow = table.Rows.Single();
-        String? expectedMerchantName = SpecflowTableHelper.GetStringRowValue(tableRow,"Name");
-        String? expectedBalance = SpecflowTableHelper.GetStringRowValue(tableRow, "Balance");
-        String? expectedAvailableBalance = SpecflowTableHelper.GetStringRowValue(tableRow, "AvailableBalance");
+        DataTableRow? tableRow = table.Rows.Single();
+        String? expectedMerchantName = ReqnrollTableHelper.GetStringRowValue(tableRow,"Name");
+        String? expectedBalance = ReqnrollTableHelper.GetStringRowValue(tableRow, "Balance");
+        String? expectedAvailableBalance = ReqnrollTableHelper.GetStringRowValue(tableRow, "AvailableBalance");
         //String? expectedLastStatementDate = table.Rows.Single()["LastStatementDate"];
         //String? expectedNextStatementDate = table.Rows.Single()["NextStatementDate"];
         //String? expectedSettlementSchedule = table.Rows.Single()["SettlementSchedule"];

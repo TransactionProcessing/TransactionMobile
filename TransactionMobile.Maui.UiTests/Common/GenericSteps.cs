@@ -4,9 +4,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using NLog;
+using Reqnroll;
 using Shared.IntegrationTesting;
 using Shared.Logger;
-using TechTalk.SpecFlow;
 
 [Binding]
 [Scope(Tag = "base")]
@@ -76,7 +76,7 @@ public class GenericSteps
     {
         if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest") == false && this.ScenarioContext.ScenarioInfo.Tags.Contains("PRHWNavTest") == false){
             this.TestingContext.Logger.LogInformation("About to Stop Containers for Scenario Run");
-            await this.TestingContext.DockerHelper.StopContainersForScenarioRun().ConfigureAwait(false);
+            await this.TestingContext.DockerHelper.StopContainersForScenarioRun(DockerServices.SqlServer).ConfigureAwait(false);
             this.TestingContext.Logger.LogInformation("Containers for Scenario Run Stopped");
         }
     }

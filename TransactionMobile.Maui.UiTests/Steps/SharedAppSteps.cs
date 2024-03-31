@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TechTalk.SpecFlow;
 
 namespace TransactionMobile.Maui.UiTests.Steps
 {
@@ -13,6 +12,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
     using OpenQA.Selenium.Appium;
     using OpenQA.Selenium.Appium.Enums;
     using Pages;
+    using Reqnroll;
     using Shouldly;
     using UITests;
 

@@ -13,24 +13,26 @@
 
   <ItemGroup>
 	  <PackageReference Include="EstateManagement.Database" Version="2023.12.2-build66" />
-	  <PackageReference Include="EstateManagement.IntegrationTesting.Helpers" Version="2023.12.2-build66" />
+	  <PackageReference Include="EstateManagement.IntegrationTesting.Helpers" Version="2024.3.5" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.7" />
+	  <PackageReference Include="Reqnroll.NUnit" Version="1.0.1" />
+	  <PackageReference Include="Reqnroll.Tools.MsBuild.Generation" Version="1.0.1" />
 	  <PackageReference Include="SecurityService.Client" Version="2023.12.1" />
-	  <PackageReference Include="SecurityService.IntegrationTesting.Helpers" Version="2023.12.1" />
-	  <PackageReference Include="TransactionProcessor.Client" Version="2023.12.3-build81" />
-	  <PackageReference Include="EstateManagement.Client" Version="2023.12.2-build66" />
+	  <PackageReference Include="SecurityService.IntegrationTesting.Helpers" Version="2024.3.1" />
+	  <PackageReference Include="TransactionProcessor.Client" Version="2023.3.3" />
+	  <PackageReference Include="EstateManagement.Client" Version="2024.3.5" />
 	  <PackageReference Include="EventStoreProjections" Version="2023.12.3" />
 	  <PackageReference Include="Appium.WebDriver" Version="5.0.0-rc.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
-    <PackageReference Include="Shared.IntegrationTesting" Version="2024.2.1" />
+    <PackageReference Include="Shared.IntegrationTesting" Version="2024.3.3" />
     <PackageReference Include="Shouldly" Version="4.2.1" />
     <PackageReference Include="coverlet.collector" Version="3.2.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
-    <PackageReference Include="SpecFlow.NUnit.Runners" Version="3.9.74" />
-    <PackageReference Include="TransactionProcessor.IntegrationTesting.Helpers" Version="2024.2.1" />
+    <!--<PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
+    <PackageReference Include="SpecFlow.NUnit.Runners" Version="3.9.74" />-->
+    <PackageReference Include="TransactionProcessor.IntegrationTesting.Helpers" Version="2024.3.3" />
   </ItemGroup>
 
   <ItemGroup>
