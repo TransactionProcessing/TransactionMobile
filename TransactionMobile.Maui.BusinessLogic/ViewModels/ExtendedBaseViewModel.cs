@@ -4,6 +4,7 @@ using System.Windows.Input;
 using Common;
 using Logging;
 using Maui.UIServices;
+using Microsoft.Maui.Devices;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
 using MyAccount;

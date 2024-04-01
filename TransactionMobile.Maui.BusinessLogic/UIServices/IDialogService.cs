@@ -1,5 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.UIServices;
 
+using Microsoft.Maui;
+
 public interface IDialogService
 {
     #region Methods

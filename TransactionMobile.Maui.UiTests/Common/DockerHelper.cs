@@ -112,8 +112,19 @@ namespace TransactionMobile.Maui.UiTests.Common
             return base.SetupTransactionProcessorAclContainer();
         }
 
-        public override async Task CreateSubscriptions(){
-            
+        public override async Task CreateSubscriptions()
+        {
+            List<(String streamName, String groupName, Int32 maxRetries)> subscriptions = new List<(String streamName, String groupName, Int32 maxRetries)>();
+            //subscriptions.AddRange(MessagingService.IntegrationTesting.Helpers.SubscriptionsHelper.GetSubscriptions());
+            subscriptions.AddRange(EstateManagement.IntegrationTesting.Helpers.SubscriptionsHelper.GetSubscriptions());
+            subscriptions.AddRange(TransactionProcessor.IntegrationTesting.Helpers.SubscriptionsHelper.GetSubscriptions());
+
+            foreach ((String streamName, String groupName, Int32 maxRetries) subscription in subscriptions)
+            {
+                var x = subscription;
+                x.maxRetries = 2;
+                await this.CreatePersistentSubscription(x);
+            }
         }
 
         /// <summary>

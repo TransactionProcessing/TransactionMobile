@@ -19,6 +19,7 @@ using LiveChartsCore.VisualElements;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.Measure;
+using Microsoft.Maui.Devices;
 
 public class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel{
 

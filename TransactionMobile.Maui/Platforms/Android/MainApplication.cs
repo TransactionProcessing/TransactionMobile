@@ -3,7 +3,7 @@ using Android.Runtime;
 
 namespace TransactionMobile.Maui;
 
-[Application]
+[Application(AllowBackup = false, Debuggable = true, UsesCleartextTraffic = true)]
 public class MainApplication : MauiApplication
 {
 	public MainApplication(IntPtr handle, JniHandleOwnership ownership)
