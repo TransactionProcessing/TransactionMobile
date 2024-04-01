@@ -37,7 +37,7 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln
 
       - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 --no-restore    
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 --no-restore    
 
       - name: Run Unit Tests
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
@@ -72,7 +72,7 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln
 
       - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 --no-restore    
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 --no-restore    
 
       - name: Decrypt PFX File
         run: |
@@ -84,13 +84,13 @@ jobs:
 
       - name: Publish App
         run: |
-         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"
-         Remove-Item D:\a\TransactionMobile\TransactionMobile\TransactionMobile.Maui\bin\Release\net7.0-windows10.0.19041.0\win10-x64\AppPackages\TransactionMobile.Maui_1.0.0.0_Test\Dependencies\x86\Microsoft.WindowsAppRuntime.1.2.msix
+         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"
+         Remove-Item D:\a\TransactionMobile\TransactionMobile\TransactionMobile.Maui\bin\Release\net8.0-windows10.0.19041.0\win10-x64\AppPackages\TransactionMobile.Maui_1.0.0.0_Test\Dependencies\x86\Microsoft.WindowsAppRuntime.1.2.msix
       
       - name: Install App
         run: |         
          Import-Module Appx -usewindowspowershell
-         .\TransactionMobile.Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1 -Force
+         .\TransactionMobile.Maui/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1 -Force
           
       - name: Run Navigation Integration Tests - Windows
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter  "Category=PRNavTest&Category=Windows"
@@ -125,7 +125,7 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln
 
       - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 --no-restore    
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 --no-restore    
 
       - name: Decrypt PFX File
         run: |
@@ -137,13 +137,13 @@ jobs:
 
       - name: Publish App
         run: |
-         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"
-         Remove-Item D:\a\TransactionMobile\TransactionMobile\TransactionMobile.Maui\bin\Release\net7.0-windows10.0.19041.0\win10-x64\AppPackages\TransactionMobile.Maui_1.0.0.0_Test\Dependencies\x86\Microsoft.WindowsAppRuntime.1.2.msix
+         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"
+         Remove-Item D:\a\TransactionMobile\TransactionMobile\TransactionMobile.Maui\bin\Release\net8.0-windows10.0.19041.0\win10-x64\AppPackages\TransactionMobile.Maui_1.0.0.0_Test\Dependencies\x86\Microsoft.WindowsAppRuntime.1.2.msix
       
       - name: Install App
         run: |         
          Import-Module Appx -usewindowspowershell
-         .\TransactionMobile.Maui/bin/Release/net7.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1 -Force
+         .\TransactionMobile.Maui/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1 -Force
           
       - name: Run Navigation Integration Tests - Windows
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter  "Category=PRTest&Category=Windows"
