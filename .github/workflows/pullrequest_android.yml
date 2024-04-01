@@ -46,7 +46,7 @@ jobs:
           java-version: '17'
 
       - uses: malinskiy/action-android/install-sdk@release/0.1.6
-      - run: sdkmanager "platform-tools" "platforms;android-33"
+      - run: sdkmanager "platform-tools" "platforms;android-34"
       - run: sdkmanager "build-tools;30.0.2"
       - run: adb devices
 
