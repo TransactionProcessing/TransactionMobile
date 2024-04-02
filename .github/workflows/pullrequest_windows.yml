@@ -88,6 +88,7 @@ jobs:
          #Remove-Item D:\a\TransactionMobile\TransactionMobile\TransactionMobile.Maui\bin\Release\net8.0-windows10.0.19041.0\win10-x64\AppPackages\TransactionMobile.Maui_1.0.0.0_Test\Dependencies\x86\Microsoft.WindowsAppRuntime.1.2.msix
       
       - name: Install App
+        shell: powershell
         run: |         
          Import-Module Appx -usewindowspowershell
          .\TransactionMobile.Maui/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1 -Force
