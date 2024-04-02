@@ -84,8 +84,7 @@ jobs:
 
       - name: Publish App
         run: |
-         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"
-         #Remove-Item D:\a\TransactionMobile\TransactionMobile\TransactionMobile.Maui\bin\Release\net8.0-windows10.0.19041.0\win10-x64\AppPackages\TransactionMobile.Maui_1.0.0.0_Test\Dependencies\x86\Microsoft.WindowsAppRuntime.1.2.msix
+         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
       
       - name: Install App
         shell: powershell
@@ -138,12 +137,12 @@ jobs:
 
       - name: Publish App
         run: |
-         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"
-         #Remove-Item D:\a\TransactionMobile\TransactionMobile\TransactionMobile.Maui\bin\Release\net8.0-windows10.0.19041.0\win10-x64\AppPackages\TransactionMobile.Maui_1.0.0.0_Test\Dependencies\x86\Microsoft.WindowsAppRuntime.1.2.msix
+         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"         
       
       - name: Install App
+        shell: powershell
         run: |         
-         Import-Module Appx -usewindowspowershell
+         Import-Module Appx 
          .\TransactionMobile.Maui/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1 -Force
           
       - name: Run Navigation Integration Tests - Windows
