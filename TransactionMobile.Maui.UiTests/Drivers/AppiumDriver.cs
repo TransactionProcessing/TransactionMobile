@@ -59,6 +59,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AutomationName = "windows";
             driverOptions.PlatformName = "windows";
             driverOptions.DeviceName = "WindowsPC";
+
             
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
