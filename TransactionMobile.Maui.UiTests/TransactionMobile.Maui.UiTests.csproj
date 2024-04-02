@@ -19,7 +19,7 @@
 	  <PackageReference Include="TransactionProcessor.Client" Version="2024.3.4-build97" />
 	  <PackageReference Include="EstateManagement.Client" Version="2024.3.6-build80" />
 	  <PackageReference Include="EventStoreProjections" Version="2023.12.3" />
-	  <PackageReference Include="Appium.WebDriver" Version="5.0.0-rc.4" />
+	  <PackageReference Include="Appium.WebDriver" Version="5.0.0-rc.7" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageReference Include="Shared.IntegrationTesting" Version="2024.4.2" />
     <PackageReference Include="Shouldly" Version="4.2.1" />      <PackageReference Include="NUnit.ConsoleRunner" Version="3.17.0" />

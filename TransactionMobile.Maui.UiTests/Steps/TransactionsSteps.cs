@@ -4,7 +4,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Common;
-using OpenQA.Selenium.DevTools.V118.Network;
 using Reqnroll;
 using Shared.IntegrationTesting;
 using Shouldly;
