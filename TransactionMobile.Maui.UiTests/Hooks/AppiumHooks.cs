@@ -13,6 +13,7 @@ namespace TransactionMobile.Maui.UiTests.Hooks
     using OpenQA.Selenium.Appium.Enums;
     using Reqnroll;
     using Shared.IntegrationTesting;
+    using Shared.Logger;
     using Shouldly;
 
     [Binding]
@@ -27,21 +28,24 @@ namespace TransactionMobile.Maui.UiTests.Hooks
         }
 
         [BeforeScenario(Order = 0)]
-        public async Task StartApp()
+        public void StartApp()
         {
             //this.TestingContext.Logger.LogInformation("About to Start App");
             //this.TestingContext.Logger.LogInformation("App Started");
 
-            await Retry.For(async () => {
+            Retry.For(async () => {
                                 this.AppiumDriver.StartApp();
                 AppState state = AppiumDriverWrapper.Driver.GetAppState("com.transactionprocessing.pos");
                                 state.ShouldBe(AppState.NotRunning);
-                            });
+                            }).Wait();
         }
 
         [AfterScenario(Order = 1)]
         public void ShutdownApp()
         {
+            if (this.TestingContext.Logger == null){
+                this.TestingContext.Logger = new NlogLogger();
+            }
             this.TestingContext.Logger.LogInformation("About to Shutdown App");
             var logs = this.AppiumDriver.GetLogs();
             if (logs != null) {
