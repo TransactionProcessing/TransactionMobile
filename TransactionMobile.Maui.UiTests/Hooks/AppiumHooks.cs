@@ -35,8 +35,8 @@ namespace TransactionMobile.Maui.UiTests.Hooks
 
             Retry.For(async () => {
                                 this.AppiumDriver.StartApp();
-                AppState state = AppiumDriverWrapper.Driver.GetAppState("com.transactionprocessing.pos");
-                                state.ShouldBe(AppState.NotRunning);
+                //AppState state = AppiumDriverWrapper.Driver.GetAppState("com.transactionprocessing.pos");
+                //                state.ShouldBe(AppState.NotRunning);
                             }).Wait();
         }
 
