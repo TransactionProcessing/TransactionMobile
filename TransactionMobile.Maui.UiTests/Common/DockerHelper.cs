@@ -137,6 +137,9 @@ namespace TransactionMobile.Maui.UiTests.Common
             this.LocalIPAddress = this.GetLocalIPAddress();
             this.Trace(this.LocalIPAddress);
             
+            // override teh SQL Server image
+            this.SetImageDetails(ContainerType.SqlServer, ("iamrjindal/sqlserverexpress:2022", true));
+
             await base.StartContainersForScenarioRun(scenarioName, dockerServices);
             await SetupConfigHostContainer(this.TestNetworks);
 
@@ -250,7 +253,6 @@ namespace TransactionMobile.Maui.UiTests.Common
 
         public override ContainerBuilder SetupTransactionProcessorContainer()
         {
-
             List<String> variables = new List<String>();
             variables.Add($"OperatorConfiguration:PataPawaPrePay:Url=http://{this.TestHostContainerName}:{DockerPorts.TestHostPort}/api/patapawaprepay");
 
