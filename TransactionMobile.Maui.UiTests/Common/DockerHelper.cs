@@ -138,7 +138,7 @@ namespace TransactionMobile.Maui.UiTests.Common
             this.Trace(this.LocalIPAddress);
             
             // override teh SQL Server image
-            this.SetImageDetails(ContainerType.SqlServer, ("iamrjindal/sqlserverexpress:2022", true));
+            this.SetImageDetails(ContainerType.SqlServer, ("mssqlserver:2022-ltsc2022", false));
 
             await base.StartContainersForScenarioRun(scenarioName, dockerServices);
             await SetupConfigHostContainer(this.TestNetworks);

@@ -102,6 +102,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Build Windows SQL Server
+        run: |
+           cd SQLDocker
+           docker build -t mssqlserver:2022-ltsc2022 --build-arg SQL_VERSION=2022 --build-arg WIN_VERSION=ltsc2022 .
+
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.1
         with:
