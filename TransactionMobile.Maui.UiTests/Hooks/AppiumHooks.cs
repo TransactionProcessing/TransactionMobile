@@ -10,7 +10,10 @@ using TransactionMobile.Maui.UiTests.Drivers;
 namespace TransactionMobile.Maui.UiTests.Hooks
 {
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Appium.Enums;
     using Reqnroll;
+    using Shared.IntegrationTesting;
+    using Shouldly;
 
     [Binding]
     public class AppiumHooks
@@ -24,11 +27,16 @@ namespace TransactionMobile.Maui.UiTests.Hooks
         }
 
         [BeforeScenario(Order = 0)]
-        public void StartApp()
+        public async Task StartApp()
         {
             //this.TestingContext.Logger.LogInformation("About to Start App");
-            this.AppiumDriver.StartApp();
             //this.TestingContext.Logger.LogInformation("App Started");
+
+            await Retry.For(async () => {
+                                this.AppiumDriver.StartApp();
+                AppState state = AppiumDriverWrapper.Driver.GetAppState("com.transactionprocessing.pos");
+                                state.ShouldBe(AppState.NotRunning);
+                            });
         }
 
         [AfterScenario(Order = 1)]
