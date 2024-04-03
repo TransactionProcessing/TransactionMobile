@@ -43,7 +43,8 @@ jobs:
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj
         
   build-windows-nondocker:
-    runs-on: windows-2022
+    #runs-on: windows-2022
+    runs-on: windows-2019
     name: Windows Build - Navigation Tests
     steps:
       - name: Checkout
