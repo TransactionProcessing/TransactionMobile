@@ -64,7 +64,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
             //driverOptions.AddAdditionalCapability("ms:waitForAppLaunch", "3");
-            driverOptions.AddAdditionalAppiumOption("ms:waitForAppLaunch", "50");
+            driverOptions.AddAdditionalAppiumOption("createSessionTimeout", "100");
             driverOptions.App = "TransactionMobile_zct748q4xfh0m!App";
             AppiumDriverWrapper.Driver = new WindowsDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
         }
