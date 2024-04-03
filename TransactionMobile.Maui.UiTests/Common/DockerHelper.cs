@@ -136,9 +136,13 @@ namespace TransactionMobile.Maui.UiTests.Common
             // Get the address of the host
             this.LocalIPAddress = this.GetLocalIPAddress();
             this.Trace(this.LocalIPAddress);
-            
-            // override teh SQL Server image
-            this.SetImageDetails(ContainerType.SqlServer, ("mssqlserver:2022-ltsc2022", false));
+
+            String? isCi = Environment.GetEnvironmentVariable("IsCI");
+
+            if (String.Compare(isCi, Boolean.TrueString, StringComparison.InvariantCultureIgnoreCase) == 0){
+                // override teh SQL Server image
+                this.SetImageDetails(ContainerType.SqlServer, ("mssqlserver:2022-ltsc2022", false));
+            }
 
             await base.StartContainersForScenarioRun(scenarioName, dockerServices);
             await SetupConfigHostContainer(this.TestNetworks);
