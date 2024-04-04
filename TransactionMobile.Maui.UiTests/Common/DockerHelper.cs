@@ -133,6 +133,11 @@ namespace TransactionMobile.Maui.UiTests.Common
         /// <param name="scenarioName">Name of the scenario.</param>
         public override async Task StartContainersForScenarioRun(String scenarioName, DockerServices dockerServices)
         {
+            DockerEnginePlatform engineType = BaseDockerHelper.GetDockerEnginePlatform();
+            if (engineType == DockerEnginePlatform.Windows){
+                this.SetImageDetails(ContainerType.EventStore, ("stuartferguson/eventstore_windows", true));
+            }
+
             // Get the address of the host
             this.LocalIPAddress = this.GetLocalIPAddress();
             this.Trace(this.LocalIPAddress);
@@ -219,7 +224,7 @@ namespace TransactionMobile.Maui.UiTests.Common
             String imageName = "stuartferguson/mobileconfiguration:latest";
 
             if (FdOs.IsWindows() && Shared.IntegrationTesting.DockerHelper.GetDockerEnginePlatform() == DockerEnginePlatform.Windows){
-                imageName = "stuartferguson/mobileconfigurationwindows:latest";
+                imageName = "stuartferguson/mobileconfigurationwindows:master";
             }
 
             ContainerBuilder configHostContainer = new Builder().UseContainer().WithName(ConfigHostContainerName)
