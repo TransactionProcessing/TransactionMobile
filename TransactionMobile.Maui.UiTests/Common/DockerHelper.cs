@@ -224,7 +224,7 @@ namespace TransactionMobile.Maui.UiTests.Common
             String imageName = "stuartferguson/mobileconfiguration:latest";
 
             if (FdOs.IsWindows() && Shared.IntegrationTesting.DockerHelper.GetDockerEnginePlatform() == DockerEnginePlatform.Windows){
-                imageName = "stuartferguson/mobileconfigurationwindows:latest";
+                imageName = "stuartferguson/mobileconfigurationwindows:master";
             }
 
             ContainerBuilder configHostContainer = new Builder().UseContainer().WithName(ConfigHostContainerName)
