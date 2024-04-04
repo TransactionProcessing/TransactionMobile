@@ -5,6 +5,7 @@ using Logging;
 using Maui.UIServices;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Distribute;
+using Microsoft.Maui.Devices;
 using Models;
 using Services;
 using UIServices;

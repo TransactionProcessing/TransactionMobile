@@ -22,13 +22,13 @@ namespace TransactionMobile.Maui.UiTests.Common
     using Shared.IntegrationTesting;
     using Shared.Logger;
     using Shouldly;
-    using TechTalk.SpecFlow;
     using TransactionProcessor.Client;
     using Ductus.FluentDocker.Commands;
     using Ductus.FluentDocker.Common;
     using EstateManagement.IntegrationTesting.Helpers;
     using Microsoft.Extensions.Hosting;
     using EventStore.Client;
+    using Reqnroll;
 
     public class DockerHelper : global::Shared.IntegrationTesting.DockerHelper
     {
@@ -112,6 +112,21 @@ namespace TransactionMobile.Maui.UiTests.Common
             return base.SetupTransactionProcessorAclContainer();
         }
 
+        public override async Task CreateSubscriptions()
+        {
+            List<(String streamName, String groupName, Int32 maxRetries)> subscriptions = new List<(String streamName, String groupName, Int32 maxRetries)>();
+            //subscriptions.AddRange(MessagingService.IntegrationTesting.Helpers.SubscriptionsHelper.GetSubscriptions());
+            subscriptions.AddRange(EstateManagement.IntegrationTesting.Helpers.SubscriptionsHelper.GetSubscriptions());
+            subscriptions.AddRange(TransactionProcessor.IntegrationTesting.Helpers.SubscriptionsHelper.GetSubscriptions());
+
+            foreach ((String streamName, String groupName, Int32 maxRetries) subscription in subscriptions)
+            {
+                var x = subscription;
+                x.maxRetries = 2;
+                await this.CreatePersistentSubscription(x);
+            }
+        }
+
         /// <summary>
         /// Starts the containers for scenario run.
         /// </summary>
@@ -121,7 +136,7 @@ namespace TransactionMobile.Maui.UiTests.Common
             // Get the address of the host
             this.LocalIPAddress = this.GetLocalIPAddress();
             this.Trace(this.LocalIPAddress);
-            
+
             await base.StartContainersForScenarioRun(scenarioName, dockerServices);
             await SetupConfigHostContainer(this.TestNetworks);
 
@@ -181,10 +196,10 @@ namespace TransactionMobile.Maui.UiTests.Common
         /// <summary>
         /// Stops the containers for scenario run.
         /// </summary>
-        public override async Task StopContainersForScenarioRun() {
+        public override async Task StopContainersForScenarioRun(DockerServices sharedDockerServices) {
             await RemoveEstateReadModel().ConfigureAwait(false);
 
-            await base.StopContainersForScenarioRun();
+            await base.StopContainersForScenarioRun(sharedDockerServices);
         }
 
         public const int ConfigHostDockerPort = 9200;
@@ -223,7 +238,7 @@ namespace TransactionMobile.Maui.UiTests.Common
             }
 
             this.Trace("Config Host Container Started");
-            this.Containers.Add(builtContainer);
+            this.Containers.Add((DockerServices.EstateManagement, builtContainer));
 
             //  Do a health check here
             this.ConfigHostPort = builtContainer.ToHostExposedEndpoint($"{ConfigHostDockerPort}/tcp").Port;
@@ -235,7 +250,6 @@ namespace TransactionMobile.Maui.UiTests.Common
 
         public override ContainerBuilder SetupTransactionProcessorContainer()
         {
-
             List<String> variables = new List<String>();
             variables.Add($"OperatorConfiguration:PataPawaPrePay:Url=http://{this.TestHostContainerName}:{DockerPorts.TestHostPort}/api/patapawaprepay");
 
@@ -367,9 +381,9 @@ namespace TransactionMobile.Maui.UiTests.Common
         /// </summary>
         /// <param name="tableRow">The table row.</param>
         /// <returns></returns>
-        public EstateDetails GetEstateDetails(TableRow tableRow)
+        public EstateDetails GetEstateDetails(DataTableRow tableRow)
         {
-            String estateName = SpecflowTableHelper.GetStringRowValue(tableRow, "EstateName");
+            String estateName = ReqnrollTableHelper.GetStringRowValue(tableRow, "EstateName");
 
             EstateDetails estateDetails = this.Estates.SingleOrDefault(e => e.EstateName == estateName);
 

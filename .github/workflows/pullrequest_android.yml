@@ -27,7 +27,7 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-android --no-restore
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-android --no-restore
 
       - name: Run Unit Tests
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj              
@@ -46,7 +46,7 @@ jobs:
           java-version: '17'
 
       - uses: malinskiy/action-android/install-sdk@release/0.1.6
-      - run: sdkmanager "platform-tools" "platforms;android-33"
+      - run: sdkmanager "platform-tools" "platforms;android-34"
       - run: sdkmanager "build-tools;30.0.2"
       - run: adb devices
 
@@ -64,7 +64,7 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-android --no-restore        
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-android --no-restore        
         
       - name: Run Navigation Integration Tests - Android
         uses: malinskiy/action-android/emulator-run-cmd@release/0.1.4
@@ -105,7 +105,7 @@ jobs:
           java-version: '17'
 
       - uses: malinskiy/action-android/install-sdk@release/0.1.6
-      - run: sdkmanager "platform-tools" "platforms;android-33"
+      - run: sdkmanager "platform-tools" "platforms;android-34"
       - run: sdkmanager "build-tools;30.0.2"
       - run: adb devices
 
@@ -123,7 +123,7 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-android --no-restore        
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-android --no-restore        
         
       - name: Run Navigation Integration Tests - Android
         uses: malinskiy/action-android/emulator-run-cmd@release/0.1.4
@@ -187,7 +187,7 @@ jobs:
          docker pull eventstore/eventstore:21.10.0-buster-slim
 
       - uses: malinskiy/action-android/install-sdk@release/0.1.6
-      - run: sdkmanager "platform-tools" "platforms;android-33"
+      - run: sdkmanager "platform-tools" "platforms;android-34"
       - run: sdkmanager "build-tools;30.0.2"
       - run: adb devices
 
@@ -205,7 +205,7 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net7.0-android --no-restore
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-android --no-restore
 
       - name: Run Integration Tests - Android
         uses: malinskiy/action-android/emulator-run-cmd@release/0.1.4

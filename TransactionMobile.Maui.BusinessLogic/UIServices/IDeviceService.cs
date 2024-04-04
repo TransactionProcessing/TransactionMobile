@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.BusinessLogic.UIServices
 {
+    using Microsoft.Maui.Devices;
+
     public interface IDeviceService
     {
         String GetIdentifier();

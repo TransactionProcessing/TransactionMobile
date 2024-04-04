@@ -1,7 +1,7 @@
 ﻿namespace TransactionMobile.Maui.UITests.Steps;
 
 using System.Threading.Tasks;
-using TechTalk.SpecFlow;
+using Reqnroll;
 using TransactionMobile.Maui.UiTests.Common;
 using UiTests.Pages;
 

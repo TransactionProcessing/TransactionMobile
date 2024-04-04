@@ -78,7 +78,7 @@
                                                                                                      return configHostUrl;
                                                                                                  }
                                                                                                  //return "https://sferguson.ddns.net:9200";
-                                                                                                 return "http://192.168.0.10:9200";
+                                                                                                 return "http://192.168.1.167:9200";
                                                                                              }
 
                                                                                              Configuration configuration = applicationCache.GetConfiguration();
@@ -230,9 +230,7 @@
 
             builder.Services.AddSingleton<IRequestHandler<UploadLogsRequest, Boolean>, SupportRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<ViewLogsRequest, List<LogMessage>>, SupportRequestHandler>();
-
-            builder.Services.AddSingleton<ServiceFactory>(ctx => { return t => ctx.GetService(t); });
-
+            
             return builder;
         }
 

@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Models;
 
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.Maui.Graphics;
 
 [ExcludeFromCodeCoverage]
 public class LogMessageModel

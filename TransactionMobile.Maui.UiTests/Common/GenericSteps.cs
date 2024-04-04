@@ -4,9 +4,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using NLog;
+using Reqnroll;
 using Shared.IntegrationTesting;
 using Shared.Logger;
-using TechTalk.SpecFlow;
 
 [Binding]
 [Scope(Tag = "base")]
@@ -54,6 +54,15 @@ public class GenericSteps
             this.TestingContext.DockerHelper.RequiredDockerServices = dockerServices;
             this.TestingContext.Logger.LogInformation("About to Start Global Setup");
 
+            String? isCi = Environment.GetEnvironmentVariable("IsCI");
+            this.TestingContext.Logger.LogInformation($"IsCI [{isCi}]");
+            if (String.Compare(isCi, Boolean.TrueString, StringComparison.InvariantCultureIgnoreCase) == 0)
+            {
+                // override teh SQL Server image
+                this.TestingContext.Logger.LogInformation("Sql Image overridden");
+                this.TestingContext.DockerHelper.SetImageDetails(ContainerType.SqlServer, ("mssqlserver:2022-ltsc2022", false));
+            }
+
             await Setup.GlobalSetup(this.TestingContext.DockerHelper);
             
         this.TestingContext.DockerHelper.SqlServerContainer = Setup.DatabaseServerContainer;
@@ -76,7 +85,7 @@ public class GenericSteps
     {
         if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest") == false && this.ScenarioContext.ScenarioInfo.Tags.Contains("PRHWNavTest") == false){
             this.TestingContext.Logger.LogInformation("About to Stop Containers for Scenario Run");
-            await this.TestingContext.DockerHelper.StopContainersForScenarioRun().ConfigureAwait(false);
+            await this.TestingContext.DockerHelper.StopContainersForScenarioRun(DockerServices.SqlServer).ConfigureAwait(false);
             this.TestingContext.Logger.LogInformation("Containers for Scenario Run Stopped");
         }
     }
