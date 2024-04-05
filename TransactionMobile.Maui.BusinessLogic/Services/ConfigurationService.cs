@@ -20,7 +20,6 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
     using ViewModels;
     using LogLevel = Models.LogLevel;
 
-    [ExcludeFromCodeCoverage(Justification = "Need to refactor to allow injection of client for mocking")]
     public class ConfigurationService : ClientProxyBase, IConfigurationService
     {
         private readonly Func<String, String> BaseAddressResolver;
@@ -125,7 +124,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                                              List<LogMessage> logMessages,
                                              CancellationToken cancellationToken)
         {
-            String requestUri = this.BuildRequestUrl($"/transactionmobilelogging");
+            String requestUri = this.BuildRequestUrl($"/transactionmobilelogging/{deviceIdentifier}");
 
             // Create a container
             var container = new
