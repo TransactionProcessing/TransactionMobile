@@ -16,7 +16,7 @@
     using ViewModels;
     using ViewModels.Transactions;
 
-    [ExcludeFromCodeCoverage(Justification = "Need to refactor to allow injection of client for mocking")]
+    //[ExcludeFromCodeCoverage(Justification = "Need to refactor to allow injection of client for mocking")]
     public class TransactionService : ClientProxyBase, ITransactionService
     {
         #region Fields
@@ -272,9 +272,7 @@
 
                 // Process the response
                 String content = await this.HandleResponse(httpResponse, cancellationToken);
-
-
-
+                
                 Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content}");
 
                 return Result.Success(JsonConvert.DeserializeObject<TResponse>(content));

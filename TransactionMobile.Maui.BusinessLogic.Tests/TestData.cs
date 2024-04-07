@@ -211,13 +211,20 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
                                                                 }
                                        };
 
+        public static String ResponseCode_Success = "0000";
+        public static String ResponseMessage_Success = "SUCCESS";
+        public static String ResponseCode_Failed = "1000";
+        public static String ResponseMessage_Failed = "Failed";
+
+
+
         public static PerformLogonResponseModel PerformLogonResponseModel =>
             new PerformLogonResponseModel
             {
                 EstateId = TestData.EstateId,
                 MerchantId = TestData.MerchantId,
-                ResponseCode = "0000",
-                ResponseMessage = "SUCCESS"
+                ResponseCode = ResponseCode_Success,
+                ResponseMessage = ResponseMessage_Success
             };
 
         public static PerformLogonResponseModel PerformLogonResponseFailedModel =>
@@ -225,18 +232,10 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
             {
                 EstateId = TestData.EstateId,
                 MerchantId = TestData.MerchantId,
-                ResponseCode = "1000",
-                ResponseMessage = "SUCCESS"
+                ResponseCode = ResponseCode_Failed,
+                ResponseMessage = ResponseMessage_Failed
             };
 
-        public static PerformLogonResponseModel PerformLogonResponseModelFailed =>
-            new PerformLogonResponseModel
-            {
-                EstateId = TestData.EstateId,
-                MerchantId = TestData.MerchantId,
-                ResponseCode = "1001",
-                ResponseMessage = "FAILED"
-            };
 
         public static PerformBillPaymentGetAccountResponseModel PerformBillPaymentGetAccountResponseModel =>
             new PerformBillPaymentGetAccountResponseModel {
@@ -323,6 +322,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
 
         public static Decimal PaymentAmount = 50.00m;
 
+        public static Guid TransactionId = Guid.Parse("66F9743A-A682-4A73-9A80-441A3C9BCFDC");
+
         public static BillDetails BillDetails =>
             new BillDetails {
                                 AccountNumber = TestData.CustomerAccountNumber,
@@ -337,6 +338,11 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
                 MeterNumber = TestData.MeterNumber,
                 CustomerName = TestData.CustomerAccountName
             };
+
+        public static Int32 TransactionCount = 1;
+
+        public static Decimal TransactionValue = 100.00m;
+
     }
 }
  
