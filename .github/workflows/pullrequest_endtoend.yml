@@ -50,9 +50,11 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install --cask docker
-          open --background -a Docker
-          # Ensure Docker is running before proceeding
-          sleep 20
+           # Start Docker daemon (this avoids using Docker Desktop GUI)
+          sudo dockerd &  # Start the Docker daemon in the background
+          # Wait for Docker to initialize
+          sleep 40
+          docker info || (echo "Docker is not running" && exit 1)
 
       ###########################
       # 🛠 Install Appium & Drivers
