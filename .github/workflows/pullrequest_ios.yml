@@ -13,7 +13,7 @@ env:
 jobs: 
 # MAUI iOS Build
   build-ios-unit-tests:
-    runs-on: macos-12
+    runs-on: macos-latest
     name: iOS Build - Unit Tests
     steps:
       - name: Checkout
@@ -38,7 +38,7 @@ jobs:
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj     
         
   build-ios-nondocker:
-    runs-on: macos-12
+    runs-on: macos-latest
     name: iOS Build - Navigation Tests
     steps:
       - name: Checkout
@@ -73,7 +73,7 @@ jobs:
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter  "Category=PRNavTest&Category=iOS"
 
   build-ios-withdocker:
-    runs-on: macos-12
+    runs-on: macos-latest
     name: iOS Build - End To End Tests
     steps: 
       - name: Checkout
