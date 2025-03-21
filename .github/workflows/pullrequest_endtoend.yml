@@ -46,6 +46,11 @@ jobs:
       ###########################
       # 🐳 Start Backend System (Docker)
       ###########################
+      - name: Install Docker (macOS only)
+        if: runner.os == 'macOS'
+        run: |
+          brew install docker
+
       - name: Start Docker (macOS only)
         if: runner.os == 'macOS'
         run: |
