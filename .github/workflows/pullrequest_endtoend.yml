@@ -136,7 +136,7 @@ jobs:
       ##############################
       - name: Upload logs if tests fail
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: appium-logs-${{ matrix.test-type }}
           path: artifacts/appium-logs-${{ matrix.test-type }}.log      
