@@ -13,7 +13,7 @@ public class Configuration
         
     public String TransactionProcessorAclUri { get; set; }
 
-    public String EstateManagementUri { get; set; }
+    public String TransactionProcessorUri { get; set; }
 
     public String EstateReportingUri { get; set; }
 

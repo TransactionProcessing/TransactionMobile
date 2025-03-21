@@ -72,7 +72,7 @@ public class MobileTopupSelectOperatorPageViewModel : ExtendedBaseViewModel
     {
         Logger.LogInformation("OperatorSelectedCommandExecute called");
         ProductDetails productDetails = new ProductDetails() {
-                                                                 OperatorIdentifier = e.SelectedItem.OperatorIdentfier
+                                                                 OperatorId = e.SelectedItem.OperatorId
                                                              };
 
         await this.NavigationService.GoToMobileTopupSelectProductPage(productDetails);

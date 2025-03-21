@@ -91,7 +91,7 @@ public class TransactionRequestHandlerTests
         PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(TestData.TransactionDateTime,
                                                                              TestData.OperatorId1ContractId,
                                                                              TestData.Operator1Product_100KES.ProductId,
-                                                                             TestData.OperatorIdentifier1,
+                                                                             TestData.OperatorId1,
                                                                              TestData.CustomerAccountNumber,
                                                                              TestData.Operator1Product_100KES.Value,
                                                                              TestData.CustomerEmailAddress);
@@ -113,7 +113,7 @@ public class TransactionRequestHandlerTests
         PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(TestData.TransactionDateTime,
                                                                              TestData.OperatorId1ContractId,
                                                                              TestData.Operator1Product_100KES.ProductId,
-                                                                             TestData.OperatorIdentifier1,
+                                                                             TestData.OperatorId1,
                                                                              TestData.CustomerAccountNumber,
                                                                              TestData.Operator1Product_100KES.Value,
                                                                              TestData.CustomerEmailAddress);
@@ -134,7 +134,7 @@ public class TransactionRequestHandlerTests
         PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(TestData.TransactionDateTime,
                                                                                TestData.OperatorId3ContractId,
                                                                                TestData.Operator3Product_200KES.ProductId,
-                                                                               TestData.OperatorIdentifier3,
+                                                                               TestData.OperatorId3,
                                                                                TestData.RecipientMobileNumber,
                                                                                TestData.RecipientEmailAddress,
                                                                                TestData.Operator3Product_200KES.Value,
@@ -157,7 +157,7 @@ public class TransactionRequestHandlerTests
         PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(TestData.TransactionDateTime,
                                                                                TestData.OperatorId3ContractId,
                                                                                TestData.Operator3Product_200KES.ProductId,
-                                                                               TestData.OperatorIdentifier3,
+                                                                               TestData.OperatorId3,
                                                                                TestData.RecipientMobileNumber,
                                                                                TestData.RecipientEmailAddress,
                                                                                TestData.Operator3Product_200KES.Value,
@@ -178,7 +178,7 @@ public class TransactionRequestHandlerTests
         PerformBillPaymentGetAccountRequest request = PerformBillPaymentGetAccountRequest.Create(TestData.TransactionDateTime,
                                                                                                  TestData.OperatorId1ContractId,
                                                                                                  TestData.Operator1Product_100KES.ProductId,
-                                                                                                 TestData.OperatorIdentifier1,
+                                                                                                 TestData.OperatorId1,
                                                                                                  TestData.CustomerAccountNumber);
 
         Result<PerformBillPaymentGetAccountResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
@@ -198,7 +198,7 @@ public class TransactionRequestHandlerTests
         PerformBillPaymentGetAccountRequest request = PerformBillPaymentGetAccountRequest.Create(TestData.TransactionDateTime,
                                                                                                  TestData.OperatorId1ContractId,
                                                                                                  TestData.Operator1Product_100KES.ProductId,
-                                                                                                 TestData.OperatorIdentifier1,
+                                                                                                 TestData.OperatorId1,
                                                                                                  TestData.CustomerAccountNumber);
 
         Result<PerformBillPaymentGetAccountResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
@@ -217,7 +217,7 @@ public class TransactionRequestHandlerTests
         PerformBillPaymentGetMeterRequest request = PerformBillPaymentGetMeterRequest.Create(TestData.TransactionDateTime,
                                                                                              TestData.OperatorId1ContractId,
                                                                                              TestData.Operator1Product_100KES.ProductId,
-                                                                                             TestData.OperatorIdentifier1,
+                                                                                             TestData.OperatorId1,
                                                                                              TestData.CustomerAccountNumber);
 
         Result<PerformBillPaymentGetMeterResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
@@ -237,7 +237,7 @@ public class TransactionRequestHandlerTests
         PerformBillPaymentGetMeterRequest request = PerformBillPaymentGetMeterRequest.Create(TestData.TransactionDateTime,
                                                                                              TestData.OperatorId1ContractId,
                                                                                              TestData.Operator1Product_100KES.ProductId,
-                                                                                             TestData.OperatorIdentifier1,
+                                                                                             TestData.OperatorId1,
                                                                                              TestData.CustomerAccountNumber);
 
         Result<PerformBillPaymentGetMeterResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
@@ -258,7 +258,7 @@ public class TransactionRequestHandlerTests
         PerformBillPaymentMakePostPaymentRequest request = PerformBillPaymentMakePostPaymentRequest.Create(TestData.TransactionDateTime,
                                                                                                            TestData.OperatorId1ContractId,
                                                                                                            TestData.Operator1Product_100KES.ProductId,
-                                                                                                           TestData.OperatorIdentifier1,
+                                                                                                           TestData.OperatorId1,
                                                                                                            TestData.CustomerAccountNumber,
                                                                                                            TestData.CustomerAccountName,
                                                                                                            TestData.CustomerMobileNumber,
@@ -281,7 +281,7 @@ public class TransactionRequestHandlerTests
         PerformBillPaymentMakePrePaymentRequest request = PerformBillPaymentMakePrePaymentRequest.Create(TestData.TransactionDateTime,
                                                                                                          TestData.OperatorId1ContractId,
                                                                                                          TestData.Operator1Product_100KES.ProductId,
-                                                                                                         TestData.OperatorIdentifier1,
+                                                                                                         TestData.OperatorId1,
                                                                                                          TestData.MeterNumber,
                                                                                                          TestData.CustomerAccountName,
                                                                                                          TestData.PaymentAmount);
@@ -303,7 +303,7 @@ public class TransactionRequestHandlerTests
         PerformBillPaymentMakePostPaymentRequest request = PerformBillPaymentMakePostPaymentRequest.Create(TestData.TransactionDateTime,
                                                                                                            TestData.OperatorId1ContractId,
                                                                                                            TestData.Operator1Product_100KES.ProductId,
-                                                                                                           TestData.OperatorIdentifier1,
+                                                                                                           TestData.OperatorId1,
                                                                                                            TestData.CustomerAccountNumber,
                                                                                                            TestData.CustomerAccountName,
                                                                                                            TestData.CustomerMobileNumber,
@@ -325,7 +325,7 @@ public class TransactionRequestHandlerTests
         PerformBillPaymentMakePrePaymentRequest request = PerformBillPaymentMakePrePaymentRequest.Create(TestData.TransactionDateTime,
                                                                                                          TestData.OperatorId1ContractId,
                                                                                                          TestData.Operator1Product_100KES.ProductId,
-                                                                                                         TestData.OperatorIdentifier1,
+                                                                                                         TestData.OperatorId1,
                                                                                                          TestData.MeterNumber,
                                                                                                          TestData.CustomerAccountName,
                                                                                                          TestData.PaymentAmount);

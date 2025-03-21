@@ -37,7 +37,7 @@ public class GenericSteps
             this.TestingContext.Logger = logger;
         }
         else{
-            DockerServices dockerServices = DockerServices.EstateManagement | DockerServices.EventStore |
+            DockerServices dockerServices = DockerServices.EventStore |
                                             DockerServices.MessagingService | DockerServices.SecurityService |
                                             DockerServices.TestHost | DockerServices.SqlServer | DockerServices.TransactionProcessor |
                                             DockerServices.TransactionProcessorAcl;

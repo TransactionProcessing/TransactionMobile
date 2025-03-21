@@ -82,7 +82,7 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
             request = PerformBillPaymentMakePostPaymentRequest.Create(DateTime.Now,
                                                                       this.ProductDetails.ContractId,
                                                                       this.ProductDetails.ProductId,
-                                                                      this.ProductDetails.OperatorIdentifier,
+                                                                      this.ProductDetails.OperatorId,
                                                                       this.BillDetails.AccountNumber,
                                                                       this.BillDetails.AccountName,
                                                                       this.CustomerMobileNumber,
@@ -94,7 +94,7 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
             request = PerformBillPaymentMakePrePaymentRequest.Create(DateTime.Now,
                                                                                                              this.ProductDetails.ContractId,
                                                                                                              this.ProductDetails.ProductId,
-                                                                                                             this.ProductDetails.OperatorIdentifier,
+                                                                                                             this.ProductDetails.OperatorId,
                                                                                                              this.MeterDetails.MeterNumber,
                                                                                                              this.MeterDetails.CustomerName,
                                                                                                              this.PaymentAmount);

@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.MultiTouch;
 using TransactionMobile.Maui.UiTests.Drivers;
 
 namespace TransactionMobile.Maui.UITests;
@@ -12,7 +13,6 @@ using Common;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Android;
 using OpenQA.Selenium.Appium.iOS;
-using OpenQA.Selenium.Appium.MultiTouch;
 using OpenQA.Selenium.Appium.Windows;
 using OpenQA.Selenium.Interactions;
 using Shared.IntegrationTesting;

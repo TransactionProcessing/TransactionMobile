@@ -67,7 +67,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                         ContractId = request.ContractId,
                                                         CustomerAccountNumber = request.CustomerAccountNumber,
                                                         CustomerEmailAddress = request.CustomerEmailAddress,
-                                                        OperatorIdentifier = request.OperatorIdentifier,
+                                                        OperatorId = request.OperatorId,
                                                         ProductId = request.ProductId,
                                                         TopupAmount = request.TopupAmount,
                                                         TransactionDateTime = request.TransactionDateTime,
@@ -145,7 +145,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
             RecipientEmailAddress = request.RecipientEmailAddress,
             RecipientMobileNumber = request.RecipientMobileNumber,
             CustomerEmailAddress = request.CustomerEmailAddress,
-            OperatorIdentifier = request.OperatorIdentifier,
+            OperatorId = request.OperatorId,
             ProductId = request.ProductId,
             VoucherAmount = request.VoucherAmount,
             TransactionDateTime = request.TransactionDateTime,
@@ -177,7 +177,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         PerformBillPaymentGetAccountModel model = new PerformBillPaymentGetAccountModel
         {
             ContractId = request.ContractId,
-            OperatorIdentifier = request.OperatorIdentifier,
+            OperatorId = request.OperatorId,
             ProductId = request.ProductId,
             TransactionDateTime = request.TransactionDateTime,
             TransactionNumber = transaction.transactionNumber.ToString(),
@@ -202,7 +202,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         ITransactionService transactionService = this.TransactionServiceResolver(useTrainingMode);
 
         // TODO: convert these to operator totals
-        List<OperatorTotalModel> operatorTotals = (from t in storedTransactions
+        var workingTotals = (from t in storedTransactions
                                                    where t.IsSuccessful && t.TransactionType != 1 // Filter out logons
                                                    group t by new
                                                    {
@@ -210,12 +210,22 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                        t.OperatorIdentifier
                                                    }
                                                    into tempOperatorTotals
-                                                   select new OperatorTotalModel
+                                                   select new 
                                                    {
                                                        ContractId = tempOperatorTotals.Key.ContractId,
-                                                       OperatorIdentifier = tempOperatorTotals.Key.OperatorIdentifier,
+                                                       OperatorId = tempOperatorTotals.Key.OperatorIdentifier,
                                                        TransactionValue = tempOperatorTotals.Sum(t => t.Amount),
                                                        TransactionCount = tempOperatorTotals.Count()
+                                                   }).ToList();
+
+        List<OperatorTotalModel> operatorTotals = (from t in workingTotals
+                                                    where Guid.TryParse(t.OperatorId, out _) == true
+                                                   select new OperatorTotalModel
+                                                   {
+                                                       ContractId = t.ContractId,
+                                                       OperatorId = Guid.Parse(t.OperatorId),
+                                                       TransactionValue = t.TransactionValue,
+                                                       TransactionCount = t.TransactionCount
                                                    }).ToList();
 
         var grandTotals = new
@@ -257,7 +267,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         PerformBillPaymentMakePaymentModel model = new PerformBillPaymentMakePaymentModel
         {
             ContractId = request.ContractId,
-            OperatorIdentifier = request.OperatorIdentifier,
+            OperatorId = request.OperatorId,
             ProductId = request.ProductId,
             TransactionDateTime = request.TransactionDateTime,
             TransactionNumber = transaction.transactionNumber.ToString(),
@@ -294,7 +304,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         PerformBillPaymentMakePaymentModel model = new PerformBillPaymentMakePaymentModel
                                                    {
                                                        ContractId = request.ContractId,
-                                                       OperatorIdentifier = request.OperatorIdentifier,
+                                                       OperatorId = request.OperatorId,
                                                        ProductId = request.ProductId,
                                                        TransactionDateTime = request.TransactionDateTime,
                                                        TransactionNumber = transaction.transactionNumber.ToString(),
@@ -329,7 +339,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         PerformBillPaymentGetMeterModel model = new PerformBillPaymentGetMeterModel
         {
                                                       ContractId = request.ContractId,
-                                                      OperatorIdentifier = request.OperatorIdentifier,
+                                                      OperatorId = request.OperatorId,
                                                       ProductId = request.ProductId,
                                                       TransactionDateTime = request.TransactionDateTime,
                                                       TransactionNumber = transaction.transactionNumber.ToString(),

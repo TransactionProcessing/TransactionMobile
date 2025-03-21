@@ -1,4 +1,6 @@
-﻿namespace TransactionMobile.Maui.Extensions
+﻿using TransactionProcessor.Client;
+
+namespace TransactionMobile.Maui.Extensions
 {
     using System.Net.Security;
     using System.Security.Cryptography.X509Certificates;
@@ -13,7 +15,6 @@
     using BusinessLogic.ViewModels.Support;
     using BusinessLogic.ViewModels.Transactions;
     using Database;
-    using EstateManagement.Client;
     using MediatR;
     using SecurityService.Client;
     using UIServices;
@@ -95,9 +96,9 @@
                                                                                                      return configuration.TransactionProcessorAclUri;
                                                                                                  }
 
-                                                                                                 if (configSetting == "EstateManagementApi")
+                                                                                                 if (configSetting == "TransactionProcessorAApi")
                                                                                                  {
-                                                                                                     return configuration.EstateManagementUri;
+                                                                                                     return configuration.TransactionProcessorUri;
                                                                                                  }
 
                                                                                                  if (configSetting == "EstateReportingApi")
@@ -165,7 +166,7 @@
                                                                                                                }));
 
             builder.Services.AddSingleton<ISecurityServiceClient, SecurityServiceClient>();
-            builder.Services.AddSingleton<IEstateClient, EstateClient>();
+            builder.Services.AddSingleton<ITransactionProcessorClient, TransactionProcessorClient>();
             builder.Services.AddSingleton<IApplicationCache, ApplicationCache>();
 
             builder.ConfigureDeviceIdProvider();

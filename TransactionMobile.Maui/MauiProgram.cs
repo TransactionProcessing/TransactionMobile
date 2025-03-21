@@ -38,7 +38,7 @@ public static class MauiProgram
 							   })
 			.Services.AddTransient<IDeviceService, DeviceService>()
 			   .AddMemoryCache();
-        MauiProgram.Builder.Logging.SetMinimumLevel(LogLevel.Trace).AddConsole();
+        MauiProgram.Builder.Logging.SetMinimumLevel(LogLevel.Trace);//.AddConsole();
         
 		Logger.Initialise(new ConsoleLogger());
 

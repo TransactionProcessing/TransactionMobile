@@ -14,7 +14,7 @@ public class PerformBillPaymentMakePostPaymentRequest : IRequest<Result<PerformB
     private PerformBillPaymentMakePostPaymentRequest(DateTime transactionDateTime,
                                                      Guid contractId,
                                                      Guid productId,
-                                                     String operatorIdentifier,
+                                                     Guid operatorId,
                                                      String customerAccountNumber,
                                                      String customerAccountName,
                                                      String customerMobileNumber,
@@ -27,7 +27,7 @@ public class PerformBillPaymentMakePostPaymentRequest : IRequest<Result<PerformB
         this.TransactionDateTime = transactionDateTime;
         this.ContractId = contractId;
         this.ProductId = productId;
-        this.OperatorIdentifier = operatorIdentifier;
+        this.OperatorId = operatorId;
     }
 
     #endregion
@@ -44,7 +44,7 @@ public class PerformBillPaymentMakePostPaymentRequest : IRequest<Result<PerformB
 
     public Decimal PaymentAmount { get; }
 
-    public String OperatorIdentifier { get; }
+    public Guid OperatorId { get; }
 
     public Guid ProductId { get; }
 
@@ -57,7 +57,7 @@ public class PerformBillPaymentMakePostPaymentRequest : IRequest<Result<PerformB
     public static PerformBillPaymentMakePostPaymentRequest Create(DateTime transactionDateTime,
                                                                   Guid contractId,
                                                                   Guid productId,
-                                                                  String operatorIdentifier,
+                                                                  Guid operatorId,
                                                                   String customerAccountNumber,
                                                                   String customerAccountName,
                                                                   String customerMobileNumber,
@@ -66,7 +66,7 @@ public class PerformBillPaymentMakePostPaymentRequest : IRequest<Result<PerformB
         return new PerformBillPaymentMakePostPaymentRequest(transactionDateTime,
                                                             contractId,
                                                             productId,
-                                                            operatorIdentifier,
+                                                            operatorId,
                                                             customerAccountNumber,
                                                             customerAccountName,
                                                             customerMobileNumber,
@@ -83,7 +83,7 @@ public class PerformBillPaymentMakePrePaymentRequest : IRequest<Result<PerformBi
     private PerformBillPaymentMakePrePaymentRequest(DateTime transactionDateTime,
                                                     Guid contractId,
                                                     Guid productId,
-                                                    String operatorIdentifier,
+                                                    Guid operatorId,
                                                     String meterNumber,
                                                     String customerAccountName,
                                                     Decimal paymentAmount)
@@ -94,7 +94,7 @@ public class PerformBillPaymentMakePrePaymentRequest : IRequest<Result<PerformBi
         this.TransactionDateTime = transactionDateTime;
         this.ContractId = contractId;
         this.ProductId = productId;
-        this.OperatorIdentifier = operatorIdentifier;
+        this.OperatorId = operatorId;
     }
 
     #endregion
@@ -109,7 +109,7 @@ public class PerformBillPaymentMakePrePaymentRequest : IRequest<Result<PerformBi
 
     public Decimal PaymentAmount { get; }
 
-    public String OperatorIdentifier { get; }
+    public Guid OperatorId { get; }
 
     public Guid ProductId { get; }
 
@@ -122,7 +122,7 @@ public class PerformBillPaymentMakePrePaymentRequest : IRequest<Result<PerformBi
     public static PerformBillPaymentMakePrePaymentRequest Create(DateTime transactionDateTime,
                                                                  Guid contractId,
                                                                  Guid productId,
-                                                                 String operatorIdentifier,
+                                                                 Guid operatorId,
                                                                  String meterNumber,
                                                                  String customerAccountName,
                                                                  Decimal paymentAmount)
@@ -130,7 +130,7 @@ public class PerformBillPaymentMakePrePaymentRequest : IRequest<Result<PerformBi
         return new PerformBillPaymentMakePrePaymentRequest(transactionDateTime,
                                                            contractId,
                                                            productId,
-                                                           operatorIdentifier,
+                                                           operatorId,
                                                            meterNumber,
                                                            customerAccountName,
                                                            paymentAmount);

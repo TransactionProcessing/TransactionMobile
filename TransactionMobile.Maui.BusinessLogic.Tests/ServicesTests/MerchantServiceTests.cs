@@ -1,13 +1,14 @@
-﻿namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests;
+﻿using TransactionProcessor.Client;
+using TransactionProcessor.DataTransferObjects.Responses.Contract;
+using TransactionProcessor.DataTransferObjects.Responses.Merchant;
+
+namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using EstateManagement.Client;
-using EstateManagement.DataTransferObjects;
-using EstateManagement.DataTransferObjects.Responses;
 using Logging;
 using Models;
 using Moq;
@@ -15,11 +16,10 @@ using Services;
 using Shouldly;
 using SimpleResults;
 using Xunit;
-using ProductType = EstateManagement.DataTransferObjects.ProductType;
 
 public class MerchantServiceTests{
 
-    private readonly Mock<IEstateClient> EstateClient;
+    private readonly Mock<ITransactionProcessorClient> TransactionProcessorClient;
 
     private readonly Mock<IApplicationCache> ApplicationCache;
 
@@ -27,10 +27,10 @@ public class MerchantServiceTests{
 
     public MerchantServiceTests(){
         Logger.Initialise(new NullLogger());
-        this.EstateClient = new Mock<IEstateClient>();
+        this.TransactionProcessorClient = new Mock<ITransactionProcessorClient>();
         this.ApplicationCache = new Mock<IApplicationCache>();
 
-        this.MerchantService = new MerchantService(this.EstateClient.Object, this.ApplicationCache.Object);
+        this.MerchantService = new MerchantService(this.TransactionProcessorClient.Object, this.ApplicationCache.Object);
 
         // Standard cache mocking here
         this.ApplicationCache.Setup(a => a.GetAccessToken()).Returns(TestData.AccessToken);
@@ -48,14 +48,14 @@ public class MerchantServiceTests{
                                                                                                              ProductId = TestData.Operator1Product_100KES.ProductId,
                                                                                                              DisplayText = TestData.Operator1Product_100KES.ProductDisplayText,
                                                                                                              Name = TestData.Operator1Product_100KES.ProductDisplayText,
-                                                                                                             ProductType = ProductType.MobileTopup,
+                                                                                                             ProductType = TransactionProcessor.DataTransferObjects.Responses.Contract.ProductType.MobileTopup,
                                                                                                              Value = TestData.Operator1Product_100KES.Value,
                                                                                                          },
                                                                                       new ContractProduct{
                                                                                                              ProductId = TestData.Operator1Product_200KES.ProductId,
                                                                                                              DisplayText = TestData.Operator1Product_200KES.ProductDisplayText,
                                                                                                              Name = TestData.Operator1Product_200KES.ProductDisplayText,
-                                                                                                             ProductType = ProductType.MobileTopup,
+                                                                                                             ProductType = TransactionProcessor.DataTransferObjects.Responses.Contract.ProductType.MobileTopup,
                                                                                                              Value = TestData.Operator1Product_200KES.Value,
                                                                                                          }
 
@@ -63,7 +63,7 @@ public class MerchantServiceTests{
                                           });
 
 
-        this.EstateClient.Setup(e => e.GetMerchantContracts(It.IsAny<String>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(contracts);
+        this.TransactionProcessorClient.Setup(e => e.GetMerchantContracts(It.IsAny<String>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(contracts);
 
         var result = await this.MerchantService.GetContractProducts(CancellationToken.None);
         result.IsSuccess.ShouldBeTrue();
@@ -72,7 +72,7 @@ public class MerchantServiceTests{
 
     [Fact]
     public async Task MerchantService_GetContractProducts_EstateClientThrowsException_FailureReturned(){
-        this.EstateClient.Setup(e => e.GetMerchantContracts(It.IsAny<String>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ThrowsAsync(new Exception());
+        this.TransactionProcessorClient.Setup(e => e.GetMerchantContracts(It.IsAny<String>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ThrowsAsync(new Exception());
 
         var result = await this.MerchantService.GetContractProducts(CancellationToken.None);
         result.IsFailed.ShouldBeTrue();
@@ -105,7 +105,7 @@ public class MerchantServiceTests{
                                                                                                          }
                                                                 };
 
-        this.EstateClient.Setup(e => e.GetMerchant(It.IsAny<String>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+        this.TransactionProcessorClient.Setup(e => e.GetMerchant(It.IsAny<String>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(merchantResponse);
 
         Result<MerchantDetailsModel> merchantDetails = await this.MerchantService.GetMerchantDetails(CancellationToken.None);
@@ -127,7 +127,7 @@ public class MerchantServiceTests{
 
     [Fact]
     public async Task MerchantService_GetMerchantDetails_ExceptionThrown_FailedResultReturned(){
-        this.EstateClient.Setup(e => e.GetMerchant(It.IsAny<String>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+        this.TransactionProcessorClient.Setup(e => e.GetMerchant(It.IsAny<String>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Exception());
 
         Result<MerchantDetailsModel> merchantDetails = await this.MerchantService.GetMerchantDetails(CancellationToken.None);

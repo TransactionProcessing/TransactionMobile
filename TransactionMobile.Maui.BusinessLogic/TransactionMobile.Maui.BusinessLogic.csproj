@@ -21,23 +21,24 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ClientProxyBase" Version="2024.4.2" />
-		<PackageReference Include="EstateManagement.Client" Version="2024.3.6-build80" />
+		<PackageReference Include="ClientProxyBase" Version="2025.3.2" />
+		<PackageReference Include="Shared.Results" Version="2025.3.2" />
+		<PackageReference Include="TransactionProcessor.Client" Version="2025.2.10" />
 		<PackageReference Include="LiveChartsCore.SkiaSharpView" Version="2.0.0-rc2" />
-		<PackageReference Include="MediatR" Version="12.2.0" />
-		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
+		<PackageReference Include="MediatR" Version="12.4.1" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
-		<PackageReference Include="SecurityService.Client" Version="2024.3.2-build59" />
-		<PackageReference Include="SimpleResults" Version="3.0.0" />
-		<PackageReference Include="TransactionProcessorACL.DataTransferObjects" Version="2024.3.2-build39" />
+		<PackageReference Include="SecurityService.Client" Version="2025.1.1" />
+		<PackageReference Include="SimpleResults" Version="3.0.1" />
+		<PackageReference Include="TransactionProcessorACL.DataTransferObjects" Version="2025.2.1" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
-		<PackageReference Include="SQLitePCLRaw.core" Version="2.1.8" />
-		<PackageReference Include="SQLitePCLRaw.provider.sqlite3" Version="2.1.8" />
-		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.8" />
-		<PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.8" />
-		<PackageReference Include="Microsoft.AppCenter" Version="5.0.3" />
-		<PackageReference Include="Microsoft.AppCenter.Distribute" Version="5.0.3" />
+		<PackageReference Include="SQLitePCLRaw.core" Version="2.1.11" />
+		<PackageReference Include="SQLitePCLRaw.provider.sqlite3" Version="2.1.11" />
+		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.11" />
+		<PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.11" />
+		<PackageReference Include="Microsoft.AppCenter" Version="5.0.7" />
+		<PackageReference Include="Microsoft.AppCenter.Distribute" Version="5.0.7" />
 		<PackageReference Include="MetroLog.Maui" Version="2.1.0" />
 	</ItemGroup>
 

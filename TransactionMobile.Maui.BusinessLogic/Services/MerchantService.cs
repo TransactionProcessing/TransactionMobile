@@ -1,9 +1,11 @@
-﻿namespace TransactionMobile.Maui.BusinessLogic.Services;
+﻿using TransactionProcessor.Client;
+using TransactionProcessor.DataTransferObjects.Responses.Contract;
+using TransactionProcessor.DataTransferObjects.Responses.Merchant;
+
+namespace TransactionMobile.Maui.BusinessLogic.Services;
 
 using System.Diagnostics.CodeAnalysis;
 using Common;
-using EstateManagement.Client;
-using EstateManagement.DataTransferObjects.Responses;
 using Logging;
 using Models;
 using Newtonsoft.Json;
@@ -17,15 +19,15 @@ public class MerchantService : IMerchantService
 
     private readonly IApplicationCache ApplicationCache;
     
-    private readonly IEstateClient EstateClient;
+    private readonly ITransactionProcessorClient TransactionProcessorClient;
 
     #endregion
 
     #region Constructors
 
-    public MerchantService(IEstateClient estateClient,
+    public MerchantService(ITransactionProcessorClient transactionProcessorClient,
                            IApplicationCache applicationCache) {
-        this.EstateClient = estateClient;
+        this.TransactionProcessorClient = transactionProcessorClient;
         this.ApplicationCache = applicationCache;
     }
 
@@ -44,7 +46,7 @@ public class MerchantService : IMerchantService
             Logger.LogInformation("About to request merchant contracts");
             Logger.LogDebug($"Merchant Contract Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
 
-            List<ContractResponse> merchantContracts = await this.EstateClient.GetMerchantContracts(accessToken.AccessToken, estateId, merchantId, cancellationToken);
+            List<ContractResponse> merchantContracts = await this.TransactionProcessorClient.GetMerchantContracts(accessToken.AccessToken, estateId, merchantId, cancellationToken);
 
             Logger.LogInformation($"{merchantContracts.Count} for merchant requested successfully");
             Logger.LogDebug($"Merchant Contract Response: [{JsonConvert.SerializeObject(merchantContracts)}]");
@@ -114,7 +116,7 @@ public class MerchantService : IMerchantService
             Logger.LogInformation("About to request merchant details");
             Logger.LogDebug($"Merchant Details Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
 
-            MerchantResponse merchantResponse = await this.EstateClient.GetMerchant(accessToken.AccessToken, estateId, merchantId, cancellationToken);
+            MerchantResponse merchantResponse = await this.TransactionProcessorClient.GetMerchant(accessToken.AccessToken, estateId, merchantId, cancellationToken);
 
             Logger.LogInformation("Merchant details requested successfully");
             Logger.LogDebug($"Merchant Details Response: [{JsonConvert.SerializeObject(merchantResponse)}]");
