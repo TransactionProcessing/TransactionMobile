@@ -46,16 +46,13 @@ jobs:
       ###########################
       # 🐳 Start Backend System (Docker)
       ###########################
-      - name: Install Docker (macOS only)
+      - name: Install Docker Desktop (macOS only)
         if: runner.os == 'macOS'
         run: |
-          brew install docker
-
-      - name: Start Docker (macOS only)
-        if: runner.os == 'macOS'
-        run: |
-          brew install colima
-          colima start
+          brew install --cask docker
+          open --background -a Docker
+          # Ensure Docker is running before proceeding
+          sleep 20
 
       ###########################
       # 🛠 Install Appium & Drivers
