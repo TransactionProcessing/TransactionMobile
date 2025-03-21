@@ -49,11 +49,12 @@ jobs:
       - name: Install Docker Desktop (macOS only)
         if: runner.os == 'macOS'
         run: |
-          brew install --cask docker
-           # Start Docker daemon (this avoids using Docker Desktop GUI)
-          sudo dockerd &  # Start the Docker daemon in the background
+          brew install docker
+          # Install Docker daemon (Docker CLI can work with a running daemon)
+          brew install --cask colima  # Colima is a lightweight Docker alternative
+          colima start  # Start Colima which runs the Docker daemon
           # Wait for Docker to initialize
-          sleep 40
+          sleep 30  # Wait for Docker to be ready
           docker info || (echo "Docker is not running" && exit 1)
 
       ###########################
