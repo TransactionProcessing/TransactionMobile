@@ -52,10 +52,10 @@ jobs:
           brew install colima
           colima start
 
-      - name: Start Backend Containers
-        run: |
-          docker-compose up -d
-          docker ps
+      #- name: Start Backend Containers
+      #  run: |
+      #    docker-compose up -d
+      #    docker ps
 
       ###########################
       # 🛠 Install Appium & Drivers
