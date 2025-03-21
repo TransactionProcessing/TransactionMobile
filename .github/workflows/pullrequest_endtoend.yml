@@ -13,7 +13,7 @@ jobs:
         platform: [android, ios, windows]
         include:
           - platform: android
-            os: ubuntu-latest
+            os: macos-latest
           - platform: ios
             os: macos-latest
           - platform: windows
@@ -33,7 +33,7 @@ jobs:
 
       - name: Install MAUI Workloads for Android
         if: matrix.platform == 'android'
-        run: dotnet workload install android --ignore-failed-sources
+        run: dotnet workload install maui --ignore-failed-sources
 
       - name: Install MAUI Workloads for iOS
         if: matrix.platform == 'ios'
@@ -51,11 +51,6 @@ jobs:
         run: |
           brew install colima
           colima start
-
-      #- name: Start Backend Containers
-      #  run: |
-      #    docker-compose up -d
-      #    docker ps
 
       ###########################
       # 🛠 Install Appium & Drivers
@@ -82,22 +77,20 @@ jobs:
       - name: Install Android SDK & Emulator
         if: matrix.platform == 'android'
         run: |
-          sudo apt update
-          sudo apt install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
-          sudo usermod -aG libvirt $USER
-          sudo usermod -aG kvm $USER
-          sdkmanager --install "system-images;android-31;default;x86_64"
-          echo "no" | avdmanager create avd -n testEmulator -k "system-images;android-31;default;x86_64" --device "pixel_4"
-          nohup emulator -avd testEmulator -no-window -no-audio -gpu swiftshader_indirect &
+            sdkmanager --install "platform-tools" "system-images;android-31;default;x86_64"
+            echo "no" | avdmanager create avd -n testEmulator -k "system-images;android-31;default;x86_64" --device "pixel_4"
+            nohup emulator -avd testEmulator -no-window -no-audio -gpu swiftshader_indirect -no-boot-anim &
 
       - name: Wait for Emulator to Boot
         if: matrix.platform == 'android'
         run: |
-          adb wait-for-device
-          adb shell settings put global window_animation_scale 0
-          adb shell settings put global transition_animation_scale 0
-          adb shell settings put global animator_duration_scale 0
-          adb devices
+            adb wait-for-device
+            adb shell settings put global window_animation_scale 0
+            adb shell settings put global transition_animation_scale 0
+            adb shell settings put global animator_duration_scale 0
+            adb devices
+            # Additional wait to ensure the emulator is ready for interaction
+            sleep 20  # You can adjust this time as needed
 
       ##############################
       # 🍏 iOS: Start Simulator
