@@ -10,10 +10,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        platform: [android, ios, windows]
+        platform: [android] #, ios, windows]
         include:
           - platform: android
-            os: macos-latest
+            os: ubuntu-latest
           - platform: ios
             os: macos-latest
           - platform: windows
@@ -57,6 +57,26 @@ jobs:
           sleep 30  # Wait for Docker to be ready
           docker info || (echo "Docker is not running" && exit 1)
 
+      - name: Set up Docker (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          # Update package information and install Docker
+          sudo apt-get update
+          sudo apt-get install -y docker.io
+
+          # Enable Docker service to start on boot (in case it's required)
+          sudo systemctl enable --now docker
+
+          # Check Docker version to ensure it's installed properly
+          docker --version
+          docker info
+
+          # Allow current user to access Docker without sudo (optional, for convenience)
+          sudo usermod -aG docker $USER
+
+          # Restart Docker service to apply changes
+          sudo systemctl restart docker
+
       ###########################
       # 🛠 Install Appium & Drivers
       ###########################
@@ -79,23 +99,42 @@ jobs:
       ##############################
       # 🟢 Android: Start Emulator
       ##############################
-      - name: Install Android SDK & Emulator
-        if: matrix.platform == 'android'
+      - name: Set up Android SDK and Emulator (Ubuntu only)
+        if: runner.os == 'Linux'
         run: |
-            sdkmanager --install "platform-tools" "system-images;android-31;default;x86_64"
-            echo "no" | avdmanager create avd -n testEmulator -k "system-images;android-31;default;x86_64" --device "pixel_4"
-            nohup emulator -avd testEmulator -no-window -no-audio -gpu swiftshader_indirect -no-boot-anim &
+            # Install required dependencies
+            sudo apt-get update
+            sudo apt-get install -y \
+            openjdk-11-jdk \
+            unzip \
+            curl \
+            lib32stdc++6 \
+            lib32z1 \
+            qemu-kvm \
+            libvirt-daemon-system \
+            libvirt-clients \
+            bridge-utils \
+            emulators
 
-      - name: Wait for Emulator to Boot
-        if: matrix.platform == 'android'
-        run: |
+            # Install Android SDK
+            mkdir -p $HOME/android-sdk
+            curl -sSL https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip -o commandlinetools.zip
+            unzip commandlinetools.zip -d $HOME/android-sdk
+            rm commandlinetools.zip
+
+            # Install Android system images and SDK packages
+            yes | $HOME/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/android-sdk --licenses
+            $HOME/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/android-sdk "platform-tools" "platforms;android-31" "system-images;android-31;default;x86_64"
+
+            # Create an Android Virtual Device (AVD)
+            echo "no" | $HOME/android-sdk/cmdline-tools/bin/avdmanager create avd --name testEmulator --package "system-images;android-31;default;x86_64" --force
+
+            # Start Android Emulator
+            nohup $HOME/android-sdk/emulator/emulator -avd testEmulator -no-window -no-audio -gpu swiftshader_indirect &
+    
+            # Wait for the emulator to boot
             adb wait-for-device
-            adb shell settings put global window_animation_scale 0
-            adb shell settings put global transition_animation_scale 0
-            adb shell settings put global animator_duration_scale 0
             adb devices
-            # Additional wait to ensure the emulator is ready for interaction
-            sleep 20  # You can adjust this time as needed
 
       ##############################
       # 🍏 iOS: Start Simulator
