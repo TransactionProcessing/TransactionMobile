@@ -60,7 +60,7 @@ jobs:
       - name: Set up Docker (Ubuntu)
         if: runner.os == 'Linux'
         run: |
-          sudo apt-get purge -y containerd
+          sudo apt-get install -y containerd.io
 
           # Update package information and install Docker
           sudo apt-get update
