@@ -513,8 +513,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                  TransactionValue = TestData.TransactionValue
                                                              };
 
-            this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond(req => new HttpResponseMessage(HttpStatusCode.BadRequest));
+            this.MockHttpMessageHandler.When($"http://localhost/api/transactions").Respond(req => new HttpResponseMessage(HttpStatusCode.BadRequest));
 
             Result<PerformReconciliationResponseModel> performReconciliationResult = await this.TransactionService.PerformReconciliation(requestModel, CancellationToken.None);
 
