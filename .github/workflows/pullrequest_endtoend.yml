@@ -31,8 +31,17 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Install MAUI Workloads
-        run: dotnet workload install maui
+      - name: Install MAUI Workloads for Android
+        if: matrix.platform == 'android'
+        run: dotnet workload install android --ignore-failed-sources
+
+      - name: Install MAUI Workloads for iOS
+        if: matrix.platform == 'ios'
+        run: dotnet workload install maui --ignore-failed-sources
+
+      - name: Install MAUI Workloads for Windows
+        if: matrix.platform == 'windows'
+        run: dotnet workload install maui --ignore-failed-sources
 
       ###########################
       # 🐳 Start Backend System (Docker)
