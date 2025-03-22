@@ -131,6 +131,9 @@ jobs:
             # Create and start emulator
             echo "no" | avdmanager create avd -n testEmulator -k "system-images;android-31;google_apis;x86_64" --device "pixel_4"
 
+            echo "⏳ Pausing for 10 seconds to ensure AVD registration..."
+            sleep 30
+
             # Start the emulator in the background
             nohup emulator -avd testEmulator -no-window -no-audio -gpu swiftshader_indirect -no-snapshot -no-boot-anim &
 
