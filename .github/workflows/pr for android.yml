@@ -1,6 +1,9 @@
 name: .NET MAUI UI Tests on Android Emulator
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main
@@ -33,20 +36,12 @@ jobs:
         target: 'google_apis'
         arch: 'x86_64'
         distribution: 'system-images;android-33;google_apis;x86_64'
-        emulator: 'system-images;android-33;google_apis;x86_64'
 
-    - name: Start Android Emulator
-      uses: android-actions/start-emulator@v3
-      with:
-        api-level: '33'
-        target: 'google_apis'
-        arch: 'x86_64'
-        avd-name: 'testAVD'
-        emulator-options: '-no-snapshot -no-window -noaudio'
-        disable-animations: true
-        script: |
-          echo "Waiting for emulator to start..."
-          adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+    - name: Create and Start Android Emulator
+      run: |
+        echo "no" | avdmanager create avd -n testAVD -k "system-images;android-33;google_apis;x86_64"
+        emulator -avd testAVD -no-snapshot -no-window -noaudio -accel auto -no-boot-anim &
+        adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
 
     - name: Restore dependencies
       run: dotnet restore TransactionMobile.Maui/TransactionMobile.Maui.csproj
