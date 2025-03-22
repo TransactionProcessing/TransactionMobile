@@ -1,0 +1,69 @@
+name: .NET MAUI UI Tests on Android Emulator
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x' # Use your desired .NET version
+
+    - name: Install .NET MAUI workload
+      run: dotnet workload install maui
+
+    - name: Install Appium and Drivers
+      run: |
+        sudo npm install -g appium
+        appium driver install uiautomator2
+
+    - name: Install Android SDK and Emulator
+      uses: android-actions/setup-android@v3
+      with:
+        api-level: '33' # Adjust as needed
+        target: 'google_apis'
+        arch: 'x86_64'
+        distribution: 'system-images;android-33;google_apis;x86_64'
+        emulator: 'system-images;android-33;google_apis;x86_64'
+
+    - name: Start Android Emulator
+      uses: android-actions/start-emulator@v3
+      with:
+        api-level: '33'
+        target: 'google_apis'
+        arch: 'x86_64'
+        avd-name: 'testAVD'
+        emulator-options: '-no-snapshot -no-window -noaudio'
+        disable-animations: true
+        script: |
+          echo "Waiting for emulator to start..."
+          adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+
+    - name: Restore dependencies
+      run: dotnet restore TransactionMobile.Maui/TransactionMobile.Maui.csproj
+      working-directory: TransactionMobile.Maui
+
+    - name: Build MAUI Application
+      run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-android
+      working-directory: TransactionMobile.Maui
+
+    - name: Restore UI Test dependencies
+      run: dotnet restore TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj
+      working-directory: TransactionMobile.Maui.UiTests
+
+    - name: Build UI Tests
+      run: dotnet build TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj -c Release
+      working-directory: TransactionMobile.Maui.UiTests
+
+    - name: Run UI Tests
+      run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj -c Release --no-build
+      working-directory: TransactionMobile.Maui.UiTests
