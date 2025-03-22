@@ -42,10 +42,14 @@ jobs:
         sdkmanager --update --sdk_root=${ANDROID_HOME}
         echo "yes" | sdkmanager --licenses --sdk_root=${ANDROID_HOME}
 
-    - name: Debug List Installed Packages
+    - name: Install System Image Explicitly
+      run: |
+        sdkmanager "system-images;android-33;google_apis;x86_64"
+
+    - name: Debug: List Installed Packages
       run: |
         echo "ANDROID_HOME: $ANDROID_HOME"
-        sdkmanager --list_installed
+        sdkmanager --list --installed
 
     - name: Create and Start Android Emulator
       run: |
