@@ -43,6 +43,7 @@ jobs:
 
     - name: Create and Start Android Emulator
       run: |
+	sleep 30 # Add a 10-second delay
         echo "no" | avdmanager create avd -n testAVD -k "system-images;android-33;google_apis;x86_64"
         emulator -avd testAVD -no-snapshot -no-window -noaudio -accel auto -no-boot-anim &
         adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
