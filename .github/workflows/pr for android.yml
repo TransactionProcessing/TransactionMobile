@@ -15,7 +15,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install Android SDK & Emulator
+      - name: Install Android SDK & Emulator (ARM)
         run: |
           # Set up environment variables
           export ANDROID_SDK_ROOT=$HOME/android-sdk
@@ -33,26 +33,26 @@ jobs:
 
           # Accept licenses and install required components
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-33" "system-images;android-33;google_apis;x86_64"
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-33" "system-images;android-33;google_apis;arm64-v8a"
 
           # Export paths for future steps
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
           echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
           echo "PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$PATH" >> $GITHUB_ENV
 
-      - name: Cache Emulator System Image
+      - name: Cache Emulator System Image (ARM)
         uses: actions/cache@v3
         with:
           path: ~/.android/avd
-          key: android-emulator-${{ runner.os }}-android-33
+          key: android-emulator-arm64-${{ runner.os }}-android-33
 
-      - name: Create Android Emulator (Optimized)
+      - name: Create Android Emulator (ARM)
         run: |
-          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-33;google_apis;x86_64" --device "pixel_4"
+          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-33;google_apis;arm64-v8a" --device "pixel_4"
 
-      - name: Start Android Emulator (Optimized)
+      - name: Start Android Emulator (ARM, Optimized)
         run: |
-          nohup emulator -avd test_emulator -no-window -gpu off -no-audio -no-boot-anim -memory 1024 -cores 1 -partition-size 512 -accel auto -snapshot preloaded_snapshot > /dev/null 2>&1 &
+          nohup emulator -avd test_emulator -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -memory 1024 -cores 1 -partition-size 512 -accel auto -snapshot preloaded_snapshot > /dev/null 2>&1 &
 
       - name: Wait for Emulator to Boot (Timeout 10 min)
         run: |
