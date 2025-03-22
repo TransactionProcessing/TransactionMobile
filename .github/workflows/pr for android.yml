@@ -42,9 +42,14 @@ jobs:
         sdkmanager --update --sdk_root=${ANDROID_HOME}
         echo "yes" | sdkmanager --licenses --sdk_root=${ANDROID_HOME}
 
+    - name: Debug: List Installed Packages
+      run: |
+        echo "ANDROID_HOME: $ANDROID_HOME"
+        sdkmanager --list --installed
+
     - name: Create and Start Android Emulator
       run: |
-        sleep 10
+        sleep 30
         echo "no" | avdmanager create avd -n testAVD -k "system-images;android-33;google_apis;x86_64"
         emulator -avd testAVD -no-snapshot -no-window -noaudio -accel auto -no-boot-anim &
         adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
