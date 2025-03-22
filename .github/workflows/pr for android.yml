@@ -50,13 +50,13 @@ jobs:
       run: |
         echo "ANDROID_HOME: $ANDROID_HOME"
         sdkmanager --list_installed
- 
+
     - name: Create and Start Android Emulator
       run: |
         sleep 30
         echo "no" | avdmanager create avd -n testAVD -k "system-images;android-33;google_apis;x86_64"
-        "${{ steps.android_sdk.outputs.emulator-location }}" -avd testAVD -no-snapshot -no-window -noaudio -accel auto -no-boot-anim &
-        adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+        "${{ steps.android_sdk.outputs.emulator-location }}" -verbose -avd testAVD -no-snapshot -no-window -noaudio -no-accel &
+        timeout 60 adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
 
     - name: Install .NET MAUI workload
       run: dotnet workload install maui
