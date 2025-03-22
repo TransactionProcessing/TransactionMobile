@@ -19,21 +19,27 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '8.0.x' # Use your desired .NET version
+        dotnet-version: '8.0.x'
 
     - name: Install Android SDK and Emulator
+      id: android_sdk
       uses: android-actions/setup-android@v3
       with:
-        api-level: '33' # Adjust as needed
+        api-level: '33'
         target: 'google_apis'
         arch: 'x86_64'
         distribution: 'system-images;android-33;google_apis;x86_64'
+        add-system-image: 'system-images;android-33;google_apis;x86_64'
 
     - name: Verify Android SDK Installation
       run: |
         echo "Android SDK Location: ${{ steps.android_sdk.outputs.sdk-root }}"
         echo "Emulator Location: $(which emulator)"
         echo "adb version: $(adb version)"
+
+    - name: List Available System Images
+      run: |
+        sdkmanager --list | grep system-images
 
     - name: Create and Start Android Emulator
       run: |
@@ -42,7 +48,7 @@ jobs:
         adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
 
     - name: Install .NET MAUI workload
-      run: dotnet workload install android
+      run: dotnet workload install maui
 
     - name: Install Appium and Drivers
       run: |
