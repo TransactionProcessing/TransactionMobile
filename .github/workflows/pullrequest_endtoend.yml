@@ -60,14 +60,14 @@ jobs:
       - name: Set up Docker (Ubuntu)
         if: runner.os == 'Linux'
         run: |
-          sudo apt-get purge -y containerd.io
+          #sudo apt-get purge -y containerd.io
 
           # Update package information and install Docker
-          sudo apt-get update
-          sudo apt-get install -y docker.io
+          #sudo apt-get update
+          #sudo apt-get install -y docker.io
 
           # Enable Docker service to start on boot (in case it's required)
-          sudo systemctl enable --now docker
+          #sudo systemctl enable --now docker
 
           # Check Docker version to ensure it's installed properly
           docker --version
@@ -101,42 +101,36 @@ jobs:
       ##############################
       # 🟢 Android: Start Emulator
       ##############################
-      - name: Set up Android SDK and Emulator (Ubuntu only)
-        if: runner.os == 'Linux'
+      - name: Install Android SDK & Start Emulator (Linux)
+        if: matrix.platform == 'android'
         run: |
-            # Install required dependencies
+            # Install dependencies
             sudo apt-get update
-            sudo apt-get install -y \
-            openjdk-11-jdk \
-            unzip \
-            curl \
-            lib32stdc++6 \
-            lib32z1 \
-            qemu-kvm \
-            libvirt-daemon-system \
-            libvirt-clients \
-            bridge-utils \
-            emulators
+            sudo apt-get install -y unzip wget libglu1-mesa
 
-            # Install Android SDK
-            mkdir -p $HOME/android-sdk
-            curl -sSL https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip -o commandlinetools.zip
-            unzip commandlinetools.zip -d $HOME/android-sdk
-            rm commandlinetools.zip
+            # Set up Android SDK directory
+            export ANDROID_HOME=$HOME/android-sdk
+            export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH
+            mkdir -p $ANDROID_HOME/cmdline-tools
 
-            # Install Android system images and SDK packages
-            yes | $HOME/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/android-sdk --licenses
-            $HOME/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/android-sdk "platform-tools" "platforms;android-31" "system-images;android-31;default;x86_64"
+            # Download and install Android command-line tools
+            wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdline-tools.zip
+            unzip -q cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools
+            rm cmdline-tools.zip
+            mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
 
-            # Create an Android Virtual Device (AVD)
-            echo "no" | $HOME/android-sdk/cmdline-tools/bin/avdmanager create avd --name testEmulator --package "system-images;android-31;default;x86_64" --force
+            # Install required Android SDK packages
+            sdkmanager --sdk_root=$ANDROID_HOME --install "platform-tools" "platforms;android-31" "emulator" "system-images;android-31;default;x86_64"
 
-            # Start Android Emulator
-            nohup $HOME/android-sdk/emulator/emulator -avd testEmulator -no-window -no-audio -gpu swiftshader_indirect &
+            # Create and start emulator
+            echo "no" | avdmanager create avd -n testEmulator -k "system-images;android-31;default;x86_64" --device "pixel_4"
+
+            # Start emulator in headless mode
+            nohup emulator -avd testEmulator -no-window -no-audio -gpu swiftshader_indirect -no-snapshot -no-boot-anim &
     
-            # Wait for the emulator to boot
-            adb wait-for-device
-            adb devices
+            # Wait for emulator to fully boot
+            adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 5; done;'
+
 
       ##############################
       # 🍏 iOS: Start Simulator
