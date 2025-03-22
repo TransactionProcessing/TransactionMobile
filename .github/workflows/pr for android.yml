@@ -19,12 +19,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y unzip wget
-          ANDROID_SDK_ROOT=$HOME/android-sdk
-          mkdir -p $ANDROID_SDK_ROOT
+          export ANDROID_SDK_ROOT=$HOME/android-sdk
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/latest
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
-          unzip -q commandlinetools-linux-*.zip -d $ANDROID_SDK_ROOT
-          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
-          mv $ANDROID_SDK_ROOT/cmdline-tools/* $ANDROID_SDK_ROOT/cmdline-tools/latest
+          unzip -q commandlinetools-linux-*.zip -d $ANDROID_SDK_ROOT/cmdline-tools/latest
           export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$PATH
           yes | sdkmanager --licenses
           sdkmanager "platform-tools" "platforms;android-33" "system-images;android-33;google_apis;x86_64" "emulator"
@@ -40,4 +38,3 @@ jobs:
 
       - name: Verify Emulator is Running
         run: adb devices
-
