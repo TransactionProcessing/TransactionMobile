@@ -37,13 +37,14 @@ jobs:
         echo "Emulator Location: $(which emulator)"
         echo "adb version: $(adb version)"
 
-    - name: List Available System Images
+    - name: Update SDK and Accept Licenses
       run: |
-        sdkmanager --list | grep system-images
+        sdkmanager --update --sdk_root=${ANDROID_HOME}
+        echo "yes" | sdkmanager --licenses --sdk_root=${ANDROID_HOME}
 
     - name: Create and Start Android Emulator
       run: |
-        sleep 30 # Add a 10-second delay
+        sleep 10
         echo "no" | avdmanager create avd -n testAVD -k "system-images;android-33;google_apis;x86_64"
         emulator -avd testAVD -no-snapshot -no-window -noaudio -accel auto -no-boot-anim &
         adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
