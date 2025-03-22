@@ -22,7 +22,7 @@ jobs:
         dotnet-version: '8.0.x' # Use your desired .NET version
 
     - name: Install .NET MAUI workload
-      run: dotnet workload install maui
+      run: dotnet workload install android
 
     - name: Install Appium and Drivers
       run: |
