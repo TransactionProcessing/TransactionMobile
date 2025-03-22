@@ -44,7 +44,7 @@ jobs:
 
     - name: Install System Image Explicitly
       run: |
-        sdkmanager "system-images;android-33;google_apis;x86_64"
+        sdkmanager "system-images;android-30;google_apis;x86_64" # changed system image
 
     - name: Debug List Installed Packages
       run: |
