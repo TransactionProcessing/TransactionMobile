@@ -46,17 +46,17 @@ jobs:
           path: ~/.android/avd
           key: android-emulator-${{ runner.os }}-android-33
 
-      - name: Create Android Emulator
+      - name: Create Android Emulator (Optimized)
         run: |
           echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-33;google_apis;x86_64" --device "pixel_4"
 
       - name: Start Android Emulator (Optimized)
         run: |
-          nohup emulator -avd test_emulator -no-window -gpu off -no-audio -no-boot-anim -snapshot save_snapshot > /dev/null 2>&1 &
+          nohup emulator -avd test_emulator -no-window -gpu off -no-audio -no-boot-anim -memory 1024 -cores 1 -partition-size 512 -accel auto -snapshot preloaded_snapshot > /dev/null 2>&1 &
 
-      - name: Wait for Emulator to Boot (Timeout 5 min)
+      - name: Wait for Emulator to Boot (Timeout 10 min)
         run: |
-          timeout 300 sh -c 'adb wait-for-device && while [[ "$(adb shell getprop sys.boot_completed)" != "1" ]]; do sleep 5; done'
+          timeout 600 sh -c 'adb wait-for-device && while [[ "$(adb shell getprop sys.boot_completed)" != "1" ]]; do sleep 5; done'
 
       - name: Verify Emulator is Running
         run: adb devices
