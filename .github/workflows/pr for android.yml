@@ -15,9 +15,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install Android SDK
+      - name: Install Android SDK & Emulator
         run: |
-          # Set environment variables
+          # Set up environment variables
           export ANDROID_SDK_ROOT=$HOME/android-sdk
           export ANDROID_HOME=$ANDROID_SDK_ROOT
           export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$PATH
@@ -25,33 +25,38 @@ jobs:
           # Create necessary directories
           mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
 
-          # Download and unzip command-line tools
+          # Download and install command-line tools
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
           unzip -q commandlinetools-linux-*.zip -d $ANDROID_SDK_ROOT/cmdline-tools
-          
-          # Move the extracted contents to the correct location
           mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest
-
-          # Fix permissions
           chmod +x $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
 
-          # Accept licenses and install required SDK components
+          # Accept licenses and install required components
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-33" "system-images;android-33;google_apis;x86_64" "emulator"
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-33" "system-images;android-33;google_apis;x86_64"
 
           # Export paths for future steps
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
           echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
           echo "PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$PATH" >> $GITHUB_ENV
 
-      - name: Create and Start Emulator
+      - name: Cache Emulator System Image
+        uses: actions/cache@v3
+        with:
+          path: ~/.android/avd
+          key: android-emulator-${{ runner.os }}-android-33
+
+      - name: Create Android Emulator
         run: |
           echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-33;google_apis;x86_64" --device "pixel_4"
-          nohup emulator -avd test_emulator -no-snapshot -no-audio -no-window -gpu off -accel on > /dev/null 2>&1 &
 
-      - name: Wait for Emulator to Boot
+      - name: Start Android Emulator (Optimized)
         run: |
-          adb wait-for-device shell 'while [[ "$(getprop sys.boot_completed)" != "1" ]]; do sleep 5; done'
+          nohup emulator -avd test_emulator -no-window -gpu off -no-audio -no-boot-anim -snapshot save_snapshot > /dev/null 2>&1 &
+
+      - name: Wait for Emulator to Boot (Timeout 5 min)
+        run: |
+          timeout 300 sh -c 'adb wait-for-device && while [[ "$(adb shell getprop sys.boot_completed)" != "1" ]]; do sleep 5; done'
 
       - name: Verify Emulator is Running
         run: adb devices
