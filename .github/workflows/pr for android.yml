@@ -17,23 +17,25 @@ jobs:
 
       - name: Install Android SDK
         run: |
-          # Set up environment variables
+          # Set environment variables
           export ANDROID_SDK_ROOT=$HOME/android-sdk
           export ANDROID_HOME=$ANDROID_SDK_ROOT
           export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$PATH
 
-          # Create required directories
+          # Create necessary directories
           mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
-          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/latest
 
-          # Download and install command-line tools
+          # Download and unzip command-line tools
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
-          unzip -q commandlinetools-linux-*.zip -d $ANDROID_SDK_ROOT/cmdline-tools/latest
+          unzip -q commandlinetools-linux-*.zip -d $ANDROID_SDK_ROOT/cmdline-tools
+          
+          # Move the extracted contents to the correct location
+          mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest
 
-          # Fix permissions and ensure sdkmanager is executable
+          # Fix permissions
           chmod +x $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
 
-          # Accept licenses and install required components
+          # Accept licenses and install required SDK components
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
           $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-33" "system-images;android-33;google_apis;x86_64" "emulator"
 
