@@ -131,11 +131,24 @@ jobs:
             # Create and start emulator
             echo "no" | avdmanager create avd -n testEmulator -k "system-images;android-31;google_apis;x86_64" --device "pixel_4"
 
-            # Start emulator in headless mode
+            # Start the emulator in the background
             nohup emulator -avd testEmulator -no-window -no-audio -gpu swiftshader_indirect -no-snapshot -no-boot-anim &
-    
-            # Wait for emulator to fully boot
-            adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 5; done;'
+
+            # Wait up to 5 minutes (300 seconds) for the emulator to be ready
+            timeout=300
+            while [[ $timeout -gt 0 ]]; do
+              boot_status=$(adb shell getprop sys.boot_completed 2>&1)
+              echo "Waiting for emulator... Boot status: $boot_status"
+              if [[ "$boot_status" == "1" ]]; then
+                echo "✅ Emulator booted successfully!"
+                exit 0
+              fi
+              sleep 5
+              ((timeout -= 5))
+            done
+
+            echo "❌ Emulator failed to boot within timeout!"
+            exit 1
 
 
       ##############################
