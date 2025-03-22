@@ -42,7 +42,7 @@ jobs:
         sdkmanager --update --sdk_root=${ANDROID_HOME}
         echo "yes" | sdkmanager --licenses --sdk_root=${ANDROID_HOME}
 
-    - name: Debug: List Installed Packages
+    - name: Debug List Installed Packages
       run: |
         echo "ANDROID_HOME: $ANDROID_HOME"
         sdkmanager --list --installed
