@@ -1,89 +1,43 @@
 name: .NET MAUI UI Tests on Android Emulator
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
 
 jobs:
-  build_and_test:
+  android-tests:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '8.0.x'
+      - name: Install Android SDK
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y unzip wget
+          ANDROID_SDK_ROOT=$HOME/android-sdk
+          mkdir -p $ANDROID_SDK_ROOT
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
+          unzip -q commandlinetools-linux-*.zip -d $ANDROID_SDK_ROOT
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+          mv $ANDROID_SDK_ROOT/cmdline-tools/* $ANDROID_SDK_ROOT/cmdline-tools/latest
+          export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$PATH
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-33" "system-images;android-33;google_apis;x86_64" "emulator"
 
-    - name: Install Android SDK and Emulator
-      id: android_sdk
-      uses: android-actions/setup-android@v3
-      with:
-        api-level: '33'
-        target: 'google_apis'
-        arch: 'x86_64'
-        distribution: 'system-images;android-33;google_apis;x86_64'
-        add-system-image: 'system-images;android-33;google_apis;x86_64'
+      - name: Create and Start Emulator
+        run: |
+          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-33;google_apis;x86_64" --device "pixel_4"
+          nohup emulator -avd test_emulator -no-snapshot -no-audio -no-window -gpu off -accel on > /dev/null 2>&1 &
 
-    - name: Verify Android SDK Installation
-      run: |
-        echo "Android SDK Location: ${{ steps.android_sdk.outputs.sdk-root }}"
-        echo "Emulator Location: $(which emulator)"
-        echo "adb version: $(adb version)"
+      - name: Wait for Emulator to Boot
+        run: |
+          adb wait-for-device shell 'while [[ "$(getprop sys.boot_completed)" != "1" ]]; do sleep 5; done'
 
-    - name: Update SDK and Accept Licenses
-      run: |
-        sdkmanager --update --sdk_root=${ANDROID_HOME}
-        echo "yes" | sdkmanager --licenses --sdk_root=${ANDROID_HOME}
+      - name: Verify Emulator is Running
+        run: adb devices
 
-    - name: Install System Image Explicitly
-      run: |
-        sdkmanager "system-images;android-30;google_apis;x86_64" # changed system image
-
-    - name: Debug List Installed Packages
-      run: |
-        echo "ANDROID_HOME: $ANDROID_HOME"
-        sdkmanager --list_installed
-
-    - name: Create and Start Android Emulator
-      run: |
-        sleep 30
-        echo "no" | avdmanager create avd -n testAVD -k "system-images;android-30;google_apis;x86_64" -c 2048M # increased ram
-        "${{ steps.android_sdk.outputs.emulator-location }}" -verbose -avd testAVD -no-snapshot -no-window -noaudio -gpu swiftshader & # forced software rendering
-        sleep 30
-        adb devices
-        timeout 180 adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
-
-    - name: Install .NET MAUI workload
-      run: dotnet workload install maui
-
-    - name: Install Appium and Drivers
-      run: |
-        sudo npm install -g appium
-        appium driver install uiautomator2
-
-    - name: Restore dependencies
-      run: dotnet restore TransactionMobile.Maui/TransactionMobile.Maui.csproj
-      working-directory: TransactionMobile.Maui
-
-    - name: Build MAUI Application
-      run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-android
-      working-directory: TransactionMobile.Maui
-
-    - name: Restore UI Test dependencies
-      run: dotnet restore TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj
-      working-directory: TransactionMobile.Maui.UiTests
-
-    - name: Build UI Tests
-      run: dotnet build TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj -c Release
-      working-directory: TransactionMobile.Maui.UiTests
-
-    - name: Run UI Tests
-      run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj -c Release --no-build
-      working-directory: TransactionMobile.Maui.UiTests
