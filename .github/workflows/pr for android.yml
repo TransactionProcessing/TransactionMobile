@@ -21,14 +21,6 @@ jobs:
       with:
         dotnet-version: '8.0.x' # Use your desired .NET version
 
-    - name: Install .NET MAUI workload
-      run: dotnet workload install android
-
-    - name: Install Appium and Drivers
-      run: |
-        sudo npm install -g appium
-        appium driver install uiautomator2
-
     - name: Install Android SDK and Emulator
       uses: android-actions/setup-android@v3
       with:
@@ -37,11 +29,25 @@ jobs:
         arch: 'x86_64'
         distribution: 'system-images;android-33;google_apis;x86_64'
 
+    - name: Verify Android SDK Installation
+      run: |
+        echo "Android SDK Location: ${{ steps.android_sdk.outputs.sdk-root }}"
+        echo "Emulator Location: $(which emulator)"
+        echo "adb version: $(adb version)"
+
     - name: Create and Start Android Emulator
       run: |
         echo "no" | avdmanager create avd -n testAVD -k "system-images;android-33;google_apis;x86_64"
         emulator -avd testAVD -no-snapshot -no-window -noaudio -accel auto -no-boot-anim &
         adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+
+    - name: Install .NET MAUI workload
+      run: dotnet workload install android
+
+    - name: Install Appium and Drivers
+      run: |
+        sudo npm install -g appium
+        appium driver install uiautomator2
 
     - name: Restore dependencies
       run: dotnet restore TransactionMobile.Maui/TransactionMobile.Maui.csproj
