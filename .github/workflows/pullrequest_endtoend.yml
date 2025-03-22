@@ -119,11 +119,17 @@ jobs:
             rm cmdline-tools.zip
             mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
 
+            # Accept licenses
+            yes | sdkmanager --licenses || true
+
             # Install required Android SDK packages
-            sdkmanager --sdk_root=$ANDROID_HOME --install "platform-tools" "platforms;android-31" "emulator" "system-images;android-31;default;x86_64"
+            sdkmanager --sdk_root=$ANDROID_HOME --install "platform-tools" "emulator" "system-images;android-31;google_apis;x86_64"
+
+            # Verify installation
+            sdkmanager --list | grep "system-images;android-31;google_apis;x86_64"
 
             # Create and start emulator
-            echo "no" | avdmanager create avd -n testEmulator -k "system-images;android-31;default;x86_64" --device "pixel_4"
+            echo "no" | avdmanager create avd -n testEmulator -k "system-images;android-31;google_apis;x86_64" --device "pixel_4"
 
             # Start emulator in headless mode
             nohup emulator -avd testEmulator -no-window -no-audio -gpu swiftshader_indirect -no-snapshot -no-boot-anim &
