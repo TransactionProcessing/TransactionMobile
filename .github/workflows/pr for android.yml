@@ -46,10 +46,10 @@ jobs:
       run: |
         sdkmanager "system-images;android-33;google_apis;x86_64"
 
-    - name: Debug: List Installed Packages
+    - name: Debug List Installed Packages
       run: |
         echo "ANDROID_HOME: $ANDROID_HOME"
-        sdkmanager --list --installed
+        sdkmanager --list_installed
 
     - name: Create and Start Android Emulator
       run: |
