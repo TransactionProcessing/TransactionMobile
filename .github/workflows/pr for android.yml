@@ -59,13 +59,13 @@ jobs:
       - name: Start Android Emulator (x86 with KVM Acceleration)
         run: |
           # Enable KVM acceleration if available
-          if kvm-ok | grep -q "KVM acceleration can be used"; then
-            echo "KVM acceleration is available, starting emulator with KVM"
+          #if kvm-ok | grep -q "KVM acceleration can be used"; then
+          #  echo "KVM acceleration is available, starting emulator with KVM"
             nohup emulator -avd test_emulator -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -memory 1024 -cores 2 -partition-size 512 -accel on -snapshot preloaded_snapshot > /dev/null 2>&1 &
-          else
-            echo "KVM acceleration is NOT available, falling back to software rendering"
-            nohup emulator -avd test_emulator -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -memory 1024 -cores 1 -partition-size 512 -snapshot preloaded_snapshot > /dev/null 2>&1 &
-          fi
+          #else
+          #  echo "KVM acceleration is NOT available, falling back to software rendering"
+          #  nohup emulator -avd test_emulator -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -memory 1024 -cores 1 -partition-size 512 -snapshot #preloaded_snapshot > /dev/null 2>&1 &
+          #fi
 
       - name: Wait for Emulator to Boot (Timeout 10 min)
         run: |
