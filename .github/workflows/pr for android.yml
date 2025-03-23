@@ -110,7 +110,42 @@ jobs:
               echo "Emulator still booting, waiting..."
               sleep 5
             done
-          '    
+          '  
         
-      - name: Verify Emulator is Running
-        run: adb devices    
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install .NET MAUI workload
+        run: dotnet workload install maui
+
+      - name: Install Appium and Drivers
+        run: |
+          sudo npm install -g appium
+          appium driver install uiautomator2
+
+      - name: Start Appium Server
+        run: |
+          nohup appium --log appium.log &
+
+      - name: Set up Docker (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          # Check Docker version to ensure it's installed properly
+          docker --version
+          docker info
+
+          # Allow current user to access Docker without sudo (optional, for convenience)
+          sudo usermod -aG docker $USER
+
+          # Restart Docker service to apply changes
+          sudo systemctl restart docker
+
+      - name: Build MAUI App for Android
+        if: matrix.platform == 'android'
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -f net8.0-android -c Release --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+      - name: Run Appium Tests (Android)
+        if: matrix.platform == 'android'
+        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)
