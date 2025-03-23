@@ -70,7 +70,7 @@ jobs:
       - name: Wait for Emulator to Boot (Timeout 10 min with Debug)
         run: |
           # Start waiting for the emulator
-    	  echo "Waiting for emulator to boot..."
+    	    echo "Waiting for emulator to boot..."
 
     	  # Check the list of devices connected (for debugging)
     	  adb devices
