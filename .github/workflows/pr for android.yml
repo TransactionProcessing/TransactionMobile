@@ -71,7 +71,6 @@ jobs:
       - name: Check if Emulator is Running
         run: |
             adb devices
-            test_emulator
         
       - name: Wait for Emulator to Boot (Timeout 10 min with Debug)
         run: |
