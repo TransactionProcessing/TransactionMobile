@@ -62,16 +62,26 @@ jobs:
       - name: Start Emulator
         run: |
           echo "Starting emulator..."
-    
-          # Start emulator in the background and give it time to initialize
-          $ANDROID_HOME/emulator/emulator -avd test_emulator -no-window -no-audio -no-snapshot -gpu swiftshader_indirect -verbose &
 
-          echo "Emulator started."
+          export ANDROID_AVD_HOME=$HOME/.config/.android/avd
 
-      - name: Check if Emulator is Running
-        run: |
-            adb devices
+          nohup $ANDROID_HOME/emulator/emulator -avd test_emulator -no-window -no-audio -no-snapshot -gpu swiftshader_indirect -verbose > emulator.log 2>&1 &
+
+          echo "Waiting for emulator process to start..."
+          sleep 10  # Allow time for initialization
+
+          echo "Checking if emulator process is running..."
+          ps aux | grep emulator
+
+          echo "Checking ADB devices..."
+          adb devices
         
+      - name: Restart ADB
+        run: |
+            adb kill-server
+            adb start-server
+            adb devices
+
       - name: Wait for Emulator to Boot (Timeout 10 min with Debug)
         run: |
           # Start waiting for the emulator
