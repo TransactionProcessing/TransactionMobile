@@ -67,9 +67,35 @@ jobs:
           #  nohup emulator -avd test_emulator -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -memory 1024 -cores 1 -partition-size 512 -snapshot #preloaded_snapshot > /dev/null 2>&1 &
           #fi
 
-      - name: Wait for Emulator to Boot (Timeout 10 min)
+      - name: Wait for Emulator to Boot (Timeout 10 min with Debug)
         run: |
-          timeout 600 sh -c 'adb wait-for-device && while [[ "$(adb shell getprop sys.boot_completed)" != "1" ]]; do sleep 5; done'
+          # Start waiting for the emulator
+          echo "Waiting for emulator to boot..."
+          
+          # Check the list of devices connected
+          adb devices
+
+          # Wait for emulator boot completion
+          timeout 600 sh -c '
+            while true; do
+              # Show the current list of devices
+              adb devices
+              
+              # Check if the emulator is booting by checking the boot status
+              BOOT_COMPLETED=$(adb shell getprop sys.boot_completed)
+              echo "Boot status: $BOOT_COMPLETED"
+
+              # If boot is completed, break the loop
+              if [ "$BOOT_COMPLETED" == "1" ]; then
+                echo "Emulator boot completed!"
+                break
+              fi
+
+              # If boot is not completed, keep waiting
+              echo "Emulator still booting, waiting..."
+              sleep 5
+            done
+          '
 
       - name: Verify Emulator is Running
         run: adb devices
