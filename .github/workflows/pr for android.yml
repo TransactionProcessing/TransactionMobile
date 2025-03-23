@@ -56,16 +56,25 @@ jobs:
         run: |
           echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-33;google_apis;x86_64" --device "pixel_4"
 
-      - name: Start Android Emulator (x86 with KVM Acceleration)
+      - name: Start Emulator
         run: |
-          nohup emulator -avd test_emulator -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -memory 1024 -cores 2 -partition-size 512 -accel on -snapshot preloaded_snapshot > /dev/null 2>&1 &
-      
+          echo "Starting emulator..."
+    
+          # Start emulator in the background and give it time to initialize
+          $ANDROID_HOME/emulator/emulator -avd test -no-window -no-audio -no-snapshot -gpu swiftshader_indirect -verbose &
+
+          echo "Emulator started."
+
+      - name: Check if Emulator is Running
+        run: adb devices
+        
       - name: Wait for Emulator to Boot (Timeout 10 min with Debug)
         run: |
           # Start waiting for the emulator
           echo "Waiting for emulator to boot..."
 
           # Check the list of devices connected (for debugging)
+          adb wait-for-device
           adb devices
 
           # Wait for emulator boot completion
