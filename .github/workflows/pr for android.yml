@@ -75,11 +75,11 @@ jobs:
               adb devices
         
               # Check if the emulator is booting by checking the boot status
-              BOOT_COMPLETED=$(adb shell getprop sys.boot_completed)
+              BOOT_COMPLETED=$(adb shell getprop sys.boot_completed 2>/dev/null)
               echo "Boot status: $BOOT_COMPLETED"
 
               # If boot is completed, break the loop
-              if [[ "$BOOT_COMPLETED" == "1" ]]; then
+              if [ "$BOOT_COMPLETED" == "1" ]; then
                 echo "Emulator boot completed!"
                 break
               fi
