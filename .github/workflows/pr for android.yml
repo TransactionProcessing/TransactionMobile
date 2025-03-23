@@ -61,7 +61,7 @@ jobs:
           echo "Starting emulator..."
     
           # Start emulator in the background and give it time to initialize
-          $ANDROID_HOME/emulator/emulator -avd test -no-window -no-audio -no-snapshot -gpu swiftshader_indirect -verbose &
+          $ANDROID_HOME/emulator/emulator -avd test_emulator -no-window -no-audio -no-snapshot -gpu swiftshader_indirect -verbose &
 
           echo "Emulator started."
 
