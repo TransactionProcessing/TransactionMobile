@@ -69,7 +69,7 @@ jobs:
           adb devices
 
           # Wait for emulator boot completion
-          timeout 600 sh -c '
+          timeout 600 bash -c '
             while true; do
               # Show the current list of devices (debugging)
               adb devices
