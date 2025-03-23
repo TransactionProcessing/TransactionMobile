@@ -58,44 +58,37 @@ jobs:
 
       - name: Start Android Emulator (x86 with KVM Acceleration)
         run: |
-          # Enable KVM acceleration if available
-          #if kvm-ok | grep -q "KVM acceleration can be used"; then
-          #  echo "KVM acceleration is available, starting emulator with KVM"
-            nohup emulator -avd test_emulator -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -memory 1024 -cores 2 -partition-size 512 -accel on -snapshot preloaded_snapshot > /dev/null 2>&1 &
-          #else
-          #  echo "KVM acceleration is NOT available, falling back to software rendering"
-          #  nohup emulator -avd test_emulator -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -memory 1024 -cores 1 -partition-size 512 -snapshot #preloaded_snapshot > /dev/null 2>&1 &
-          #fi
-
+          nohup emulator -avd test_emulator -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -memory 1024 -cores 2 -partition-size 512 -accel on -snapshot preloaded_snapshot > /dev/null 2>&1 &
+      
       - name: Wait for Emulator to Boot (Timeout 10 min with Debug)
         run: |
           # Start waiting for the emulator
-    	    echo "Waiting for emulator to boot..."
+          echo "Waiting for emulator to boot..."
 
-    	  # Check the list of devices connected (for debugging)
-    	  adb devices
+          # Check the list of devices connected (for debugging)
+          adb devices
 
-    	  # Wait for emulator boot completion
-    	  timeout 600 sh -c '
-    	  while true; do
-    	  # Show the current list of devices (debugging)
-    	  adb devices
+          # Wait for emulator boot completion
+          timeout 600 sh -c '
+            while true; do
+              # Show the current list of devices (debugging)
+              adb devices
         
-    	  # Check if the emulator is booting by checking the boot status
-    	  BOOT_COMPLETED=$(adb shell getprop sys.boot_completed)
-    	  echo "Boot status: $BOOT_COMPLETED"
+              # Check if the emulator is booting by checking the boot status
+              BOOT_COMPLETED=$(adb shell getprop sys.boot_completed)
+              echo "Boot status: $BOOT_COMPLETED"
 
-    	  # If boot is completed, break the loop
-    	  if [[ "$BOOT_COMPLETED" == "1" ]]; then
-    	    echo "Emulator boot completed!"
-            break
-          fi
+              # If boot is completed, break the loop
+              if [[ "$BOOT_COMPLETED" == "1" ]]; then
+                echo "Emulator boot completed!"
+                break
+              fi
 
-          # If boot is not completed, keep waiting
-          echo "Emulator still booting, waiting..."
-          sleep 5
-        done
-      '
-
+              # If boot is not completed, keep waiting
+              echo "Emulator still booting, waiting..."
+              sleep 5
+            done
+          '    
+        
       - name: Verify Emulator is Running
-        run: adb devices
+        run: adb devices    
