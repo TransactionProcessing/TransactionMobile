@@ -70,32 +70,32 @@ jobs:
       - name: Wait for Emulator to Boot (Timeout 10 min with Debug)
         run: |
           # Start waiting for the emulator
-          echo "Waiting for emulator to boot..."
-          
-          # Check the list of devices connected
-          adb devices
+    	  echo "Waiting for emulator to boot..."
 
-          # Wait for emulator boot completion
-          timeout 600 sh -c '
-            while true; do
-              # Show the current list of devices
-              adb devices
-              
-              # Check if the emulator is booting by checking the boot status
-              BOOT_COMPLETED=$(adb shell getprop sys.boot_completed)
-              echo "Boot status: $BOOT_COMPLETED"
+    	  # Check the list of devices connected (for debugging)
+    	  adb devices
 
-              # If boot is completed, break the loop
-              if [ "$BOOT_COMPLETED" == "1" ]; then
-                echo "Emulator boot completed!"
-                break
-              fi
+    	  # Wait for emulator boot completion
+    	  timeout 600 sh -c '
+    	  while true; do
+    	  # Show the current list of devices (debugging)
+    	  adb devices
+        
+    	  # Check if the emulator is booting by checking the boot status
+    	  BOOT_COMPLETED=$(adb shell getprop sys.boot_completed)
+    	  echo "Boot status: $BOOT_COMPLETED"
 
-              # If boot is not completed, keep waiting
-              echo "Emulator still booting, waiting..."
-              sleep 5
-            done
-          '
+    	  # If boot is completed, break the loop
+    	  if [[ "$BOOT_COMPLETED" == "1" ]]; then
+    	    echo "Emulator boot completed!"
+            break
+          fi
+
+          # If boot is not completed, keep waiting
+          echo "Emulator still booting, waiting..."
+          sleep 5
+        done
+      '
 
       - name: Verify Emulator is Running
         run: adb devices
