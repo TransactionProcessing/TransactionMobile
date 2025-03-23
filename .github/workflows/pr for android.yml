@@ -15,7 +15,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install Android SDK & Emulator (ARM)
+      - name: Enable KVM group perms
+        run: |
+            echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+            sudo udevadm control --reload-rules
+            sudo udevadm trigger --name-match=kvm	
+
+      - name: Install KVM and Android SDK (x86)
         run: |
           # Set up environment variables
           export ANDROID_SDK_ROOT=$HOME/android-sdk
@@ -33,26 +39,33 @@ jobs:
 
           # Accept licenses and install required components
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-33" "system-images;android-33;google_apis;arm64-v8a"
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-33" "system-images;android-33;google_apis;x86_64"
 
           # Export paths for future steps
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
           echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
           echo "PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$PATH" >> $GITHUB_ENV
 
-      - name: Cache Emulator System Image (ARM)
+      - name: Cache Emulator System Image (x86)
         uses: actions/cache@v3
         with:
           path: ~/.android/avd
-          key: android-emulator-arm64-${{ runner.os }}-android-33
+          key: android-emulator-x86-${{ runner.os }}-android-33
 
-      - name: Create Android Emulator (ARM)
+      - name: Create Android Emulator (x86)
         run: |
-          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-33;google_apis;arm64-v8a" --device "pixel_4"
+          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-33;google_apis;x86_64" --device "pixel_4"
 
-      - name: Start Android Emulator (ARM, Optimized)
+      - name: Start Android Emulator (x86 with KVM Acceleration)
         run: |
-          nohup emulator -avd test_emulator -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -memory 1024 -cores 1 -partition-size 512 -accel auto -snapshot preloaded_snapshot > /dev/null 2>&1 &
+          # Enable KVM acceleration if available
+          if kvm-ok | grep -q "KVM acceleration can be used"; then
+            echo "KVM acceleration is available, starting emulator with KVM"
+            nohup emulator -avd test_emulator -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -memory 1024 -cores 2 -partition-size 512 -accel on -snapshot preloaded_snapshot > /dev/null 2>&1 &
+          else
+            echo "KVM acceleration is NOT available, falling back to software rendering"
+            nohup emulator -avd test_emulator -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -memory 1024 -cores 1 -partition-size 512 -snapshot preloaded_snapshot > /dev/null 2>&1 &
+          fi
 
       - name: Wait for Emulator to Boot (Timeout 10 min)
         run: |
