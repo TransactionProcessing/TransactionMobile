@@ -42,7 +42,8 @@ jobs:
 
           # Accept licenses and install required components
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-33" "system-images;android-33;google_apis;x86_64"
+          # Install Android API level 34 and necessary system images
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-34" "system-images;android-34;google_apis;x86_64"
 
           # Export paths for future steps
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
@@ -53,11 +54,11 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.android/avd
-          key: android-emulator-x86-${{ runner.os }}-android-33
+          key: android-emulator-x86-${{ runner.os }}-android-34
 
       - name: Create Android Emulator (x86)
         run: |
-          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-33;google_apis;x86_64" --device "pixel_4"
+          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-34;google_apis;x86_64" --device "pixel_4"
 
       - name: List AVDs
         run: avdmanager list avd
@@ -65,7 +66,7 @@ jobs:
       - name: Start Emulator
         run: |
           echo "Starting emulator..."
-
+          
           export ANDROID_AVD_HOME=$HOME/.config/.android/avd
 
           nohup $ANDROID_HOME/emulator/emulator -avd test_emulator -no-window -no-audio -no-snapshot -gpu swiftshader_indirect -verbose > emulator.log 2>&1 &
@@ -90,7 +91,7 @@ jobs:
           # Start waiting for the emulator
           echo "Waiting for emulator to boot..."
 
-          # Check the list of devices connected (for debugging)
+          # Check the list of devices connected (debugging)
           adb wait-for-device          
 
           # Wait for emulator boot completion
@@ -118,7 +119,7 @@ jobs:
       - name: Install Android Build Tools
         run: |
           echo "Installing Android Build Tools..."
-          sdkmanager "build-tools;30.0.3"  # Specify the build-tools version you need (or latest)
+          sdkmanager "build-tools;34.0.0"  # Updated to use Android 34 build tools
           sdkmanager --update
         
       - name: Set up .NET
@@ -150,7 +151,7 @@ jobs:
 
           # Restart Docker service to apply changes
           sudo systemctl restart docker
-      
+
       - name: Build MAUI App for Android
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -f net8.0-android -c Release --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
