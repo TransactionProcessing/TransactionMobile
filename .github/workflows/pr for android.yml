@@ -56,6 +56,9 @@ jobs:
         run: |
           echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-33;google_apis;x86_64" --device "pixel_4"
 
+      - name: List AVDs
+        run: avdmanager list avd
+
       - name: Start Emulator
         run: |
           echo "Starting emulator..."
@@ -66,7 +69,9 @@ jobs:
           echo "Emulator started."
 
       - name: Check if Emulator is Running
-        run: adb devices
+        run: |
+            adb devices
+            test_emulator
         
       - name: Wait for Emulator to Boot (Timeout 10 min with Debug)
         run: |
@@ -74,8 +79,7 @@ jobs:
           echo "Waiting for emulator to boot..."
 
           # Check the list of devices connected (for debugging)
-          adb wait-for-device
-          adb devices
+          adb wait-for-device          
 
           # Wait for emulator boot completion
           timeout 600 bash -c '
