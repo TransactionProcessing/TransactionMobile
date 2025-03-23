@@ -3,17 +3,15 @@
 	<PropertyGroup>
 		<!--<TargetFrameworks>net8.0-android;net8.0-ios;net8.0;net8.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>-->
-		<PropertyGroup>
-			<TargetFrameworks>net8.0-android</TargetFrameworks>
-		</PropertyGroup>
+		<TargetFrameworks>net8.0-android</TargetFrameworks>
 
-		<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('windows'))">
-			<TargetFrameworks>$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
-		</PropertyGroup>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">
+			$(TargetFrameworks);net8.0-windows10.0.19041.0
+		</TargetFrameworks>
 
-		<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('osx'))">
-			<TargetFrameworks>$(TargetFrameworks);net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
-		</PropertyGroup>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">
+			$(TargetFrameworks);net8.0-ios;net8.0-maccatalyst
+		</TargetFrameworks>
 
 		 <UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
