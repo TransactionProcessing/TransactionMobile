@@ -143,9 +143,7 @@ jobs:
           sudo systemctl restart docker
 
       - name: Build MAUI App for Android
-        if: matrix.platform == 'android'
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -f net8.0-android -c Release --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Run Appium Tests (Android)
-        if: matrix.platform == 'android'
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)
