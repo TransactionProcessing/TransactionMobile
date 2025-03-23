@@ -114,6 +114,12 @@ jobs:
               sleep 5
             done
           '  
+
+      - name: Install Android Build Tools
+        run: |
+          echo "Installing Android Build Tools..."
+          sdkmanager "build-tools;30.0.3"  # Specify the build-tools version you need (or latest)
+          sdkmanager --update
         
       - name: Set up .NET
         uses: actions/setup-dotnet@v3
