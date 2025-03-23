@@ -118,7 +118,7 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Install .NET MAUI workload
-        run: dotnet workload install maui
+        run: dotnet workload install android
 
       - name: Install Appium and Drivers
         run: |
