@@ -28,9 +28,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <!--<PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
-    <PackageReference Include="SpecFlow.NUnit.Runners" Version="3.9.74" />-->
-    <PackageReference Include="TransactionProcessor.IntegrationTesting.Helpers" Version="2024.3.4-build97" />
   </ItemGroup>
 
   <ItemGroup>
