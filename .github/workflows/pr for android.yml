@@ -152,6 +152,9 @@ jobs:
           # Restart Docker service to apply changes
           sudo systemctl restart docker
 
+      - name: Restore MAUI App for Android
+        run: dotnet restore TransactionMobile.Maui/TransactionMobile.Maui.csproj --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
       - name: Build MAUI App for Android
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -f net8.0-android -c Release --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
