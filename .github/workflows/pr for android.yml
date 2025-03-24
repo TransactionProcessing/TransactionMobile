@@ -162,4 +162,4 @@ jobs:
       #  run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --list-tests --no-build --no-restore --verbosity detailed
         
       - name: Run Appium Tests (Android)
-        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRTest)&(Category=Android)" --no-restore
+        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRTest)&(Category=Android)" #--no-restore
