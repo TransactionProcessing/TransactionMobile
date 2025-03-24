@@ -110,8 +110,7 @@ namespace TransactionMobile.Maui.UiTests.Common
         {
             List<(String streamName, String groupName, Int32 maxRetries)> subscriptions = new List<(String streamName, String groupName, Int32 maxRetries)>();
             subscriptions.AddRange(TransactionProcessor.IntegrationTesting.Helpers.SubscriptionsHelper.GetSubscriptions());
-            subscriptions.AddRange(TransactionProcessor.IntegrationTesting.Helpers.SubscriptionsHelper.GetSubscriptions());
-
+            
             foreach ((String streamName, String groupName, Int32 maxRetries) subscription in subscriptions)
             {
                 var x = subscription;
