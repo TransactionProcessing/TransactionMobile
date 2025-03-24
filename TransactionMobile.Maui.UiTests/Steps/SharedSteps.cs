@@ -145,6 +145,17 @@ namespace TransactionMobile.Maui.UiTests.Steps
             }
         }
 
+        [Given("I have assigned the following operators to the estates")]
+        public async Task GivenIHaveAssignedTheFollowingOperatorsToTheEstates(DataTable dataTable)
+        {
+            List<(EstateDetails estate, AssignOperatorRequest request)> requests = dataTable.Rows.ToAssignOperatorToEstateRequests(this.TestingContext.Estates);
+
+            await this.TransactionProcessorSteps.GivenIHaveAssignedTheFollowingOperatorsToTheEstates(this.TestingContext.AccessToken, requests);
+
+            // TODO Verify
+        }
+
+
         [Given(@"I create a contract with the following values")]
         public async Task GivenICreateAContractWithTheFollowingValues(DataTable table)
         {
