@@ -162,6 +162,11 @@ namespace TransactionMobile.Maui.UiTests.Steps
             var estates = this.TestingContext.Estates.Select(e => e).ToList();
             List<(EstateDetails, CreateContractRequest)> requests = table.Rows.ToCreateContractRequests(estates);
             List<ContractResponse> responses = await this.TransactionProcessorSteps.GivenICreateAContractWithTheFollowingValues(this.TestingContext.AccessToken, requests);
+            foreach (ContractResponse contractResponse in responses)
+            {
+                EstateDetails estate = this.TestingContext.Estates.Single(e => e.EstateId == contractResponse.EstateId);
+                estate.AddContract(contractResponse.ContractId, contractResponse.Description, contractResponse.OperatorId);
+            }
         }
 
         [When(@"I create the following Products")]
