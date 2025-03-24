@@ -164,3 +164,10 @@ jobs:
         
       - name: Run Appium Tests (Android)
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRTest)&(Category=Android)" #--no-restore
+
+      - name: Upload Logs on Failure
+        if: failure()  # Runs only if a previous step fails
+        uses: actions/upload-artifact@v3
+        with:
+            name: android-test-logs
+            path: /home/txnproc/trace/
