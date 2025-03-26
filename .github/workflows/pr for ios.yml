@@ -32,8 +32,8 @@ jobs:
 
       - name: Start Colima (Docker Runtime)
         run: |
-          colima start --cpu 2 --memory 4 --disk 10 --runtime docker
-          sleep 30 # Give Colima time to start
+          colima start --cpu 2 --memory 4 --disk 10 --runtime docker --vm-type hyperkit
+          sleep 10 # Allow Colima to initialize
 
       - name: Verify Colima and Docker
         run: |
