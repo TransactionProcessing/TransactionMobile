@@ -28,6 +28,7 @@ jobs:
       - name: Start Docker (macOS only)
         if: runner.os == 'macOS'
         run: |
+          brew install docker
           brew install colima
           colima start
 
