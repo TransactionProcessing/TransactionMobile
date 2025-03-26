@@ -25,21 +25,16 @@ jobs:
           sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
           xcodebuild -version
 
-      - name: Install Homebrew Dependencies
+      - name: Install Docker Desktop (macOS only)
+        if: runner.os == 'macOS'
         run: |
-          brew install colima docker docker-compose
-          brew install carthage ios-deploy
-
-      - name: Start Colima (Docker Runtime)
-        run: |
-          colima start --cpu 2 --memory 4 --disk 10 --runtime docker --vm-type hyperkit
-          sleep 10 # Allow Colima to initialize
-
-      - name: Verify Colima and Docker
-        run: |
-          colima status
-          docker version
-          docker info
+          brew install docker
+          # Install Docker daemon (Docker CLI can work with a running daemon)
+          brew install --cask colima  # Colima is a lightweight Docker alternative
+          colima start  # Start Colima which runs the Docker daemon
+          # Wait for Docker to initialize
+          sleep 30  # Wait for Docker to be ready
+          docker info || (echo "Docker is not running" && exit 1)
 
       - name: List Available iOS Simulators
         run: xcrun simctl list devices
