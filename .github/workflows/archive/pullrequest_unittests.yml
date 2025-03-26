@@ -1,0 +1,33 @@
+# name: Build & Test Pull Requests Unit Tests
+
+# on:
+#   pull_request:
+#     branches: 
+#     - main
+
+# env:
+#   DOTNET_NOLOGO: true                     # Disable the .NET logo
+#   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
+#   DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry  
+
+# jobs:
+#   unit-tests :
+#     runs-on: ubuntu-latest
+#     name: Android Build - Unit Tests
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
+          
+#       - name: Install MAUI Workloads
+#         run: |
+#           dotnet workload install android --ignore-failed-sources
+#           dotnet workload install maui --ignore-failed-sources 
+
+#       - name: Restore Dependencies
+#         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+#       - name: Build Code
+#         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-android --no-restore
+
+#       - name: Run Unit Tests
+#         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj

@@ -2,7 +2,7 @@
 
 public enum ServiceType
 {
-    EstateManagement = 0,
+    TransactionProcessor = 0,
     Security = 1,
     TransactionProcessorAcl = 2
 }

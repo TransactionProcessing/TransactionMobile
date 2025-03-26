@@ -3,6 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TransactionProcessor.Database.Contexts;
+using TransactionProcessor.DataTransferObjects.Requests.Contract;
+using TransactionProcessor.DataTransferObjects.Requests.Estate;
+using TransactionProcessor.DataTransferObjects.Requests.Merchant;
+using TransactionProcessor.DataTransferObjects.Requests.Operator;
+using TransactionProcessor.DataTransferObjects.Responses.Contract;
+using TransactionProcessor.DataTransferObjects.Responses.Estate;
+using TransactionProcessor.DataTransferObjects.Responses.Merchant;
+using AssignOperatorRequest = TransactionProcessor.DataTransferObjects.Requests.Estate.AssignOperatorRequest;
 
 namespace TransactionMobile.Maui.UiTests.Steps
 {
@@ -12,11 +21,6 @@ namespace TransactionMobile.Maui.UiTests.Steps
     using System.Threading;
     using Common;
     using Drivers;
-    using EstateManagement.Database.Contexts;
-    using EstateManagement.DataTransferObjects;
-    using EstateManagement.DataTransferObjects.Requests;
-    using EstateManagement.DataTransferObjects.Responses;
-    using EstateManagement.IntegrationTesting.Helpers;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using Reqnroll;
@@ -41,7 +45,6 @@ namespace TransactionMobile.Maui.UiTests.Steps
 
         private readonly SecurityServiceSteps SecurityServiceSteps;
 
-        private readonly EstateManagementSteps EstateManagementSteps;
         private readonly TransactionProcessorSteps TransactionProcessorSteps;
 
         private LoginPage loginPage;
@@ -50,8 +53,8 @@ namespace TransactionMobile.Maui.UiTests.Steps
             this.TestingContext = testingContext;
             this.loginPage = new LoginPage(testingContext);
             this.SecurityServiceSteps = new SecurityServiceSteps(testingContext.DockerHelper.SecurityServiceClient);
-            this.EstateManagementSteps = new EstateManagementSteps(this.TestingContext.DockerHelper.EstateClient, this.TestingContext.DockerHelper.HttpClient);
-            this.TransactionProcessorSteps = new TransactionProcessorSteps(this.TestingContext.DockerHelper.TransactionProcessorClient, this.TestingContext.DockerHelper.TestHostHttpClient);
+            this.TransactionProcessorSteps = new TransactionProcessorSteps(this.TestingContext.DockerHelper.TransactionProcessorClient, this.TestingContext.DockerHelper.TestHostHttpClient,
+                this.TestingContext.DockerHelper.ProjectionManagementClient);
         }
 
         [Given(@"the following security roles exist")]
@@ -109,7 +112,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         public async Task GivenIHaveCreatedTheFollowingEstates(DataTable table) {
             List<CreateEstateRequest> requests = table.Rows.ToCreateEstateRequests();
             
-            List<EstateResponse> verifiedEstates = await this.EstateManagementSteps.WhenICreateTheFollowingEstates(this.TestingContext.AccessToken, requests);
+            List<EstateResponse> verifiedEstates = await this.TransactionProcessorSteps.WhenICreateTheFollowingEstatesX(this.TestingContext.AccessToken, requests);
 
             foreach (EstateResponse verifiedEstate in verifiedEstates)
             {
@@ -134,7 +137,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         {
             List<(EstateDetails estate, CreateOperatorRequest request)> requests = table.Rows.ToCreateOperatorRequests(this.TestingContext.Estates);
 
-            List<(Guid, EstateOperatorResponse)> results = await this.EstateManagementSteps.WhenICreateTheFollowingOperators(this.TestingContext.AccessToken, requests);
+            List<(Guid, EstateOperatorResponse)> results = await this.TransactionProcessorSteps.WhenICreateTheFollowingOperators(this.TestingContext.AccessToken, requests);
 
             foreach ((Guid, EstateOperatorResponse) result in results)
             {
@@ -142,12 +145,28 @@ namespace TransactionMobile.Maui.UiTests.Steps
             }
         }
 
+        [Given("I have assigned the following operators to the estates")]
+        public async Task GivenIHaveAssignedTheFollowingOperatorsToTheEstates(DataTable dataTable)
+        {
+            List<(EstateDetails estate, AssignOperatorRequest request)> requests = dataTable.Rows.ToAssignOperatorToEstateRequests(this.TestingContext.Estates);
+
+            await this.TransactionProcessorSteps.GivenIHaveAssignedTheFollowingOperatorsToTheEstates(this.TestingContext.AccessToken, requests);
+
+            // TODO Verify
+        }
+
+
         [Given(@"I create a contract with the following values")]
         public async Task GivenICreateAContractWithTheFollowingValues(DataTable table)
         {
             var estates = this.TestingContext.Estates.Select(e => e).ToList();
             List<(EstateDetails, CreateContractRequest)> requests = table.Rows.ToCreateContractRequests(estates);
-            List<ContractResponse> responses = await this.EstateManagementSteps.GivenICreateAContractWithTheFollowingValues(this.TestingContext.AccessToken, requests);
+            List<ContractResponse> responses = await this.TransactionProcessorSteps.GivenICreateAContractWithTheFollowingValues(this.TestingContext.AccessToken, requests);
+            foreach (ContractResponse contractResponse in responses)
+            {
+                EstateDetails estate = this.TestingContext.Estates.Single(e => e.EstateId == contractResponse.EstateId);
+                estate.AddContract(contractResponse.ContractId, contractResponse.Description, contractResponse.OperatorId);
+            }
         }
 
         [When(@"I create the following Products")]
@@ -155,7 +174,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         {
             var estates = this.TestingContext.Estates.Select(e => e).ToList();
             List<(EstateDetails, Contract, AddProductToContractRequest)> requests = table.Rows.ToAddProductToContractRequest(estates);
-            await this.EstateManagementSteps.WhenICreateTheFollowingProducts(this.TestingContext.AccessToken, requests);
+            await this.TransactionProcessorSteps.WhenICreateTheFollowingProducts(this.TestingContext.AccessToken, requests);
         }
 
         [When(@"I add the following Transaction Fees")]
@@ -163,7 +182,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         {
             var estates = this.TestingContext.Estates.Select(e => e).ToList();
             List<(EstateDetails, Contract, Product, AddTransactionFeeForProductToContractRequest)> requests = table.Rows.ToAddTransactionFeeForProductToContractRequests(estates);
-            await this.EstateManagementSteps.WhenIAddTheFollowingTransactionFees(this.TestingContext.AccessToken, requests);
+            await this.TransactionProcessorSteps.WhenIAddTheFollowingTransactionFees(this.TestingContext.AccessToken, requests);
         }
 
         [Given(@"I create the following merchants")]
@@ -172,7 +191,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
             var estates = this.TestingContext.Estates.Select(e => e).ToList();
             List<(EstateDetails estate, CreateMerchantRequest)> requests = table.Rows.ToCreateMerchantRequests(estates);
 
-            List<MerchantResponse> verifiedMerchants = await this.EstateManagementSteps.WhenICreateTheFollowingMerchants(this.TestingContext.AccessToken, requests);
+            List<MerchantResponse> verifiedMerchants = await this.TransactionProcessorSteps.WhenICreateTheFollowingMerchants(this.TestingContext.AccessToken, requests);
 
             foreach (MerchantResponse verifiedMerchant in verifiedMerchants)
             {
@@ -185,10 +204,10 @@ namespace TransactionMobile.Maui.UiTests.Steps
         [Given(@"I have assigned the following  operator to the merchants")]
         public async Task GivenIHaveAssignedTheFollowingOperatorToTheMerchants(DataTable table)
         {
-            var estates = this.TestingContext.Estates.Select(e => e).ToList();
-            List<(EstateDetails, Guid, AssignOperatorRequest)> requests = table.Rows.ToAssignOperatorRequests(estates);
+            List<EstateDetails> estates = this.TestingContext.Estates.Select(e => e).ToList();
+            List<(EstateDetails, Guid, TransactionProcessor.DataTransferObjects.Requests.Merchant.AssignOperatorRequest)> requests = table.Rows.ToAssignOperatorRequests(estates);
 
-            List<(EstateDetails, MerchantOperatorResponse)> results = await this.EstateManagementSteps.WhenIAssignTheFollowingOperatorToTheMerchants(this.TestingContext.AccessToken, requests);
+            List<(EstateDetails, MerchantOperatorResponse)> results = await this.TransactionProcessorSteps.WhenIAssignTheFollowingOperatorToTheMerchants(this.TestingContext.AccessToken, requests);
 
             foreach ((EstateDetails, MerchantOperatorResponse) result in results)
             {
@@ -212,7 +231,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
                                     };
             configRequest.hostAddresses.Add(new {
                                                     servicetype = 0,
-                                                    uri = this.TestingContext.DockerHelper.EstateManagementBaseAddressResolver("").Replace("127.0.0.1", this.TestingContext.DockerHelper.LocalIPAddress)
+                                                    uri = this.TestingContext.DockerHelper.TransactionProcessorBaseAddressResolver("").Replace("127.0.0.1", this.TestingContext.DockerHelper.LocalIPAddress)
             });
             configRequest.hostAddresses.Add(new
                                             {
@@ -295,7 +314,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
             {
                 Decimal previousMerchantBalance = await this.GetMerchantBalance(request.Item2);
 
-                await this.EstateManagementSteps.GivenIMakeTheFollowingManualMerchantDeposits(this.TestingContext.AccessToken, request);
+                await this.TransactionProcessorSteps.GivenIMakeTheFollowingManualMerchantDeposits(this.TestingContext.AccessToken, request);
 
                 await Retry.For(async () => {
                                     Decimal currentMerchantBalance = await this.GetMerchantBalance(request.Item2);
@@ -312,7 +331,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         {
             var estates = this.TestingContext.Estates.Select(e => e).ToList();
             List<CreateNewUserRequest> createUserRequests = table.Rows.ToCreateNewUserRequests(estates);
-            await this.EstateManagementSteps.WhenICreateTheFollowingSecurityUsers(this.TestingContext.AccessToken, createUserRequests, estates);
+            await this.TransactionProcessorSteps.WhenICreateTheFollowingSecurityUsers(this.TestingContext.AccessToken, createUserRequests, estates);
         }
 
         [Given(@"I have assigned the following devices to the merchants")]
@@ -327,7 +346,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         {
             List<EstateDetails> estates = this.TestingContext.Estates.Select(e => e).ToList();
             List<(EstateDetails, Guid, Guid)> requests = table.Rows.ToAddContractToMerchantRequests(estates);
-            await this.EstateManagementSteps.WhenIAddTheFollowingContractsToTheFollowingMerchants(this.TestingContext.AccessToken, requests);
+            await this.TransactionProcessorSteps.WhenIAddTheFollowingContractsToTheFollowingMerchants(this.TestingContext.AccessToken, requests);
         }
 
         [Given(@"the following bills are available at the PataPawa PostPaid Host")]

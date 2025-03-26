@@ -75,7 +75,7 @@ public class BillPaymentSelectOperatorPageViewModel : ExtendedBaseViewModel
         Logger.LogInformation("OperatorSelectedCommandExecute called");
 
         ProductDetails productDetails = new() {
-                                                  OperatorIdentifier = e.SelectedItem.OperatorIdentfier
+                                                  OperatorId = e.SelectedItem.OperatorId
                                               };
 
         await this.NavigationService.GoToBillPaymentSelectProductPage(productDetails);

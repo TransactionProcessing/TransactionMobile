@@ -15,7 +15,7 @@ public class PerformBillPaymentGetMeterModel
 
     public String DeviceIdentifier { get; set; }
 
-    public String OperatorIdentifier { get; set; }
+    public Guid OperatorId { get; set; }
 
     public Guid ProductId { get; set; }
 

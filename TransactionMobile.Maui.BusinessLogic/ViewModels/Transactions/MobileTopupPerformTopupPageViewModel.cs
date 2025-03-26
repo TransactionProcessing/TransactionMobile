@@ -112,7 +112,7 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
         PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(DateTime.Now,
                                                                              this.ProductDetails.ContractId,
                                                                              this.ProductDetails.ProductId,
-                                                                             this.ProductDetails.OperatorIdentifier,
+                                                                             this.ProductDetails.OperatorId,
                                                                              this.CustomerMobileNumber,
                                                                              this.TopupAmount,
                                                                              this.CustomerEmailAddress);

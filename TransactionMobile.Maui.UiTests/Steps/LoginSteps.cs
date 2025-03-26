@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TransactionProcessor.DataTransferObjects.Requests.Merchant;
+using TransactionProcessor.IntegrationTesting.Helpers;
 
 namespace TransactionMobile.Maui.UITests.Steps
 {
     using System.Runtime.CompilerServices;
     using System.Threading;
-    using EstateManagement.DataTransferObjects.Requests;
-    using EstateManagement.IntegrationTesting.Helpers;
     using Reqnroll;
     using Shared.IntegrationTesting;
     using Shouldly;
@@ -50,7 +50,7 @@ namespace TransactionMobile.Maui.UITests.Steps
             Guid estateId = this.TestingContext.GetAllEstateIds().Single();
             EstateDetails estate = this.TestingContext.GetEstateDetails(estateId);
             Guid merchantId = estate.GetMerchantId("Test Merchant 1"); // TODO: stop this from being hard coded
-            await this.TestingContext.DockerHelper.EstateClient.AddDeviceToMerchant(this.TestingContext.AccessToken, estateId, merchantId, request, CancellationToken.None);
+            await this.TestingContext.DockerHelper.TransactionProcessorClient.AddDeviceToMerchant(this.TestingContext.AccessToken, estateId, merchantId, request, CancellationToken.None);
         }
         
         [Given(@"the application is in training mode")]

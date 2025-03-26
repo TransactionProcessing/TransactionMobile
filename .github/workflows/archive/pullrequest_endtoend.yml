@@ -1,0 +1,206 @@
+﻿name: Build & Test Pull Requests UI Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  end-to-end-tests:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        platform: [android] #, ios, windows]
+        include:
+          - platform: android
+            os: ubuntu-latest
+          - platform: ios
+            os: macos-latest
+          - platform: windows
+            os: windows-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      ##############################
+      # Setup .NET and Dependencies 
+      ##############################
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install MAUI Workloads for Android
+        if: matrix.platform == 'android'
+        run: dotnet workload install android --ignore-failed-sources
+
+      - name: Install MAUI Workloads for iOS
+        if: matrix.platform == 'ios'
+        run: dotnet workload install maui --ignore-failed-sources
+
+      - name: Install MAUI Workloads for Windows
+        if: matrix.platform == 'windows'
+        run: dotnet workload install maui --ignore-failed-sources
+
+      ###########################
+      # 🐳 Start Backend System (Docker)
+      ###########################
+      - name: Install Docker Desktop (macOS only)
+        if: runner.os == 'macOS'
+        run: |
+          brew install docker
+          # Install Docker daemon (Docker CLI can work with a running daemon)
+          brew install --cask colima  # Colima is a lightweight Docker alternative
+          colima start  # Start Colima which runs the Docker daemon
+          # Wait for Docker to initialize
+          sleep 30  # Wait for Docker to be ready
+          docker info || (echo "Docker is not running" && exit 1)
+
+      - name: Set up Docker (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          #sudo apt-get purge -y containerd.io
+
+          # Update package information and install Docker
+          #sudo apt-get update
+          #sudo apt-get install -y docker.io
+
+          # Enable Docker service to start on boot (in case it's required)
+          #sudo systemctl enable --now docker
+
+          # Check Docker version to ensure it's installed properly
+          docker --version
+          docker info
+
+          # Allow current user to access Docker without sudo (optional, for convenience)
+          sudo usermod -aG docker $USER
+
+          # Restart Docker service to apply changes
+          sudo systemctl restart docker
+
+      ###########################
+      # 🛠 Install Appium & Drivers
+      ###########################
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Appium and Drivers
+        run: |
+          npm install -g appium
+          appium driver install uiautomator2
+          appium driver install xcuitest
+          appium driver install windows
+
+      - name: Start Appium Server
+        run: |
+          nohup appium --log appium.log &
+
+      ##############################
+      # 🟢 Android: Start Emulator
+      ##############################
+      - name: Install Android SDK & Start Emulator (Linux)
+        if: matrix.platform == 'android'
+        run: |
+            # Install dependencies
+            sudo apt-get update
+            sudo apt-get install -y unzip wget libglu1-mesa
+
+            # Set up Android SDK directory
+            export ANDROID_HOME=$HOME/android-sdk
+            export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH
+            mkdir -p $ANDROID_HOME/cmdline-tools
+
+            # Download and install Android command-line tools
+            wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdline-tools.zip
+            unzip -q cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools
+            rm cmdline-tools.zip
+            mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
+
+            # Accept licenses
+            yes | sdkmanager --licenses || true
+
+            # Install required Android SDK packages
+            sdkmanager --sdk_root=$ANDROID_HOME --install "platform-tools" "emulator" "system-images;android-31;google_apis;x86_64"
+
+            # Verify installation
+            sdkmanager --list | grep "system-images;android-31;google_apis;x86_64"
+
+            # Create and start emulator
+            echo "no" | avdmanager create avd -n testEmulator -k "system-images;android-31;google_apis;x86_64" --device "pixel_4"
+
+            echo "⏳ Pausing for 10 seconds to ensure AVD registration..."
+            sleep 30
+
+            # Start the emulator in the background
+            nohup emulator -avd testEmulator -no-window -no-audio -gpu swiftshader_indirect -no-snapshot -no-boot-anim &
+
+            # Wait up to 5 minutes (300 seconds) for the emulator to be ready
+            timeout=300
+            while [[ $timeout -gt 0 ]]; do
+              boot_status=$(adb shell getprop sys.boot_completed 2>&1)
+              echo "Waiting for emulator... Boot status: $boot_status"
+              if [[ "$boot_status" == "1" ]]; then
+                echo "✅ Emulator booted successfully!"
+                exit 0
+              fi
+              sleep 5
+              ((timeout -= 5))
+            done
+
+            echo "❌ Emulator failed to boot within timeout!"
+            exit 1
+
+
+      ##############################
+      # 🍏 iOS: Start Simulator
+      ##############################
+      - name: Start iOS Simulator
+        if: matrix.platform == 'ios'
+        run: |
+          open -a Simulator &
+          xcrun simctl list
+          xcrun simctl boot "iPhone 14"
+          xcrun simctl list devices
+
+      ##############################
+      # 🔨 Build .NET MAUI App
+      ##############################
+      - name: Build MAUI App for Android
+        if: matrix.platform == 'android'
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -f net8.0-android -c Release --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+      - name: Build MAUI App for iOS
+        if: matrix.platform == 'ios'
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -f net8.0-ios -c Release --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+      - name: Build MAUI App for Windows
+        if: matrix.platform == 'windows'
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -f net8.0-windows -c Release --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+      ##############################
+      # 🚀 Run Appium UI Tests
+      ##############################
+      - name: Run Appium Tests (Android)
+        if: matrix.platform == 'android'
+        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=Android)
+
+      - name: Run Appium Tests (iOS)
+        if: matrix.platform == 'ios'
+        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRTest)&(Category=iOS)
+
+      - name: Run Appium Tests (Windows)
+        if: matrix.platform == 'windows'
+        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter  "Category=PRTest&Category=Windows"
+
+      ##############################
+      # 📤 Upload Logs if Tests Fail
+      ##############################
+      - name: Upload logs if tests fail
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: appium-logs-${{ matrix.test-type }}
+          path: artifacts/appium-logs-${{ matrix.test-type }}.log      

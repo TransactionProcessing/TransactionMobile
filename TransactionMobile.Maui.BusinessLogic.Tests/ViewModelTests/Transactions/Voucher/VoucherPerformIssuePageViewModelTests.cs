@@ -56,7 +56,7 @@ public class VoucherPerformIssuePageViewModelTests
 
         this.ViewModel.ProductDetails.ContractId.ShouldBe(TestData.OperatorId1ContractId);
         this.ViewModel.ProductDetails.ProductId.ShouldBe(TestData.Operator1Product_100KES.ProductId);
-        this.ViewModel.ProductDetails.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier1);
+        this.ViewModel.ProductDetails.OperatorId.ShouldBe(TestData.OperatorId1);
         this.ViewModel.VoucherAmount.ShouldBe(TestData.Operator1Product_100KES.Value);
     }
 

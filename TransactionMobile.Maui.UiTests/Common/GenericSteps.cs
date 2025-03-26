@@ -23,7 +23,7 @@ public class GenericSteps
         this.TestingContext = testingContext;
     }
 
-    [BeforeScenario(Order = 1)]
+    [BeforeScenario(Order = 0)]
     public async Task StartSystem(){
         if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest") ||
             this.ScenarioContext.ScenarioInfo.Tags.Contains("PRHWNavTest"))
@@ -37,7 +37,7 @@ public class GenericSteps
             this.TestingContext.Logger = logger;
         }
         else{
-            DockerServices dockerServices = DockerServices.EstateManagement | DockerServices.EventStore |
+            DockerServices dockerServices = DockerServices.EventStore |
                                             DockerServices.MessagingService | DockerServices.SecurityService |
                                             DockerServices.TestHost | DockerServices.SqlServer | DockerServices.TransactionProcessor |
                                             DockerServices.TransactionProcessorAcl;

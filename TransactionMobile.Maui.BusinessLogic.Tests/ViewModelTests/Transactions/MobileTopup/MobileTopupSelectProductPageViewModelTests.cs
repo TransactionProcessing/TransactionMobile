@@ -54,7 +54,7 @@ public class MobileTopupSelectProductPageViewModelTests
         this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
                                                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                                                            });
-        this.ViewModel.ProductDetails.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier1);
+        this.ViewModel.ProductDetails.OperatorId.ShouldBe(TestData.OperatorId1);
     }
 
     [Fact]

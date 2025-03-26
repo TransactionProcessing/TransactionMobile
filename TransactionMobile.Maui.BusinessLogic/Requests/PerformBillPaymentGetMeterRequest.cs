@@ -13,14 +13,14 @@ public class PerformBillPaymentGetMeterRequest : IRequest<Result<PerformBillPaym
     private PerformBillPaymentGetMeterRequest(DateTime transactionDateTime,
                                               Guid contractId,
                                               Guid productId,
-                                              String operatorIdentifier,
+                                              Guid operatorId,
                                               String meterNumber)
     {
         this.MeterNumber = meterNumber;
         this.TransactionDateTime = transactionDateTime;
         this.ContractId = contractId;
         this.ProductId = productId;
-        this.OperatorIdentifier = operatorIdentifier;
+        this.OperatorId = operatorId;
     }
 
     #endregion
@@ -31,7 +31,7 @@ public class PerformBillPaymentGetMeterRequest : IRequest<Result<PerformBillPaym
 
     public String MeterNumber { get; }
 
-    public String OperatorIdentifier { get; }
+    public Guid OperatorId { get; }
 
     public Guid ProductId { get; }
 
@@ -44,13 +44,13 @@ public class PerformBillPaymentGetMeterRequest : IRequest<Result<PerformBillPaym
     public static PerformBillPaymentGetMeterRequest Create(DateTime transactionDateTime,
                                                            Guid contractId,
                                                            Guid productId,
-                                                           String operatorIdentifier,
+                                                           Guid operatorId,
                                                            String meterNumber)
     {
         return new PerformBillPaymentGetMeterRequest(transactionDateTime,
                                                      contractId,
                                                      productId,
-                                                     operatorIdentifier,
+                                                     operatorId,
                                                      meterNumber);
     }
 

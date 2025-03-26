@@ -55,7 +55,7 @@ public class BillPaymentPayBillPageViewModelTests
                                                                                {nameof(BillDetails), TestData.BillDetails}
                                                                            });
 
-        this.ViewModel.ProductDetails.OperatorIdentifier.ShouldBe(TestData.Operator1ProductDetails.OperatorIdentifier);
+        this.ViewModel.ProductDetails.OperatorId.ShouldBe(TestData.Operator1ProductDetails.OperatorId);
         this.ViewModel.ProductDetails.ProductId.ShouldBe(TestData.Operator1ProductDetails.ProductId);
         this.ViewModel.ProductDetails.ContractId.ShouldBe(TestData.Operator1ProductDetails.ContractId);
         this.ViewModel.BillDetails.AccountName.ShouldBe(TestData.BillDetails.AccountName);
@@ -72,7 +72,7 @@ public class BillPaymentPayBillPageViewModelTests
                                                                                {nameof(MeterDetails), TestData.MeterDetails}
                                                                            });
 
-        this.ViewModel.ProductDetails.OperatorIdentifier.ShouldBe(TestData.Operator1ProductDetails.OperatorIdentifier);
+        this.ViewModel.ProductDetails.OperatorId.ShouldBe(TestData.Operator1ProductDetails.OperatorId);
         this.ViewModel.ProductDetails.ProductId.ShouldBe(TestData.Operator1ProductDetails.ProductId);
         this.ViewModel.ProductDetails.ContractId.ShouldBe(TestData.Operator1ProductDetails.ContractId);
         this.ViewModel.MeterDetails.MeterNumber.ShouldBe(TestData.MeterDetails.MeterNumber);

@@ -113,7 +113,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                 ContractId = TestData.Operator1ProductDetails.ContractId,
                                                                                                 CustomerAccountNumber = TestData.CustomerAccountNumber,
                                                                                                 CustomerEmailAddress = TestData.CustomerEmailAddress,
-                                                                                                OperatorIdentifier = TestData.OperatorIdentifier1,
+                                                                                                OperatorId = TestData.OperatorId1,
                                                                                                 ProductId = TestData.Operator1ProductDetails.ProductId,
                                                                                                 TopupAmount = TestData.PaymentAmount
                                                                                             };
@@ -152,7 +152,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                 ContractId = TestData.Operator1ProductDetails.ContractId,
                                                                                                 CustomerAccountNumber = TestData.CustomerAccountNumber,
                                                                                                 CustomerEmailAddress = TestData.CustomerEmailAddress,
-                                                                                                OperatorIdentifier = TestData.OperatorIdentifier1,
+                                                                                                OperatorId = TestData.OperatorId1,
                                                                                                 ProductId = TestData.Operator1ProductDetails.ProductId,
                                                                                                 TopupAmount = TestData.PaymentAmount
                                                                                             };
@@ -174,7 +174,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                   TransactionNumber = TestData.TransactionNumber,
                                                                                                   ContractId = TestData.Operator1ProductDetails.ContractId,
                                                                                                   CustomerEmailAddress = TestData.CustomerEmailAddress,
-                                                                                                  OperatorIdentifier = TestData.OperatorIdentifier1,
+                                                                                                  OperatorId = TestData.OperatorId1,
                                                                                                   ProductId = TestData.Operator1ProductDetails.ProductId,
                                                                                                   RecipientEmailAddress = TestData.RecipientEmailAddress,
                                                                                                   RecipientMobileNumber = TestData.RecipientMobileNumber,
@@ -214,7 +214,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                   TransactionNumber = TestData.TransactionNumber,
                                                                                                   ContractId = TestData.Operator1ProductDetails.ContractId,
                                                                                                   CustomerEmailAddress = TestData.CustomerEmailAddress,
-                                                                                                  OperatorIdentifier = TestData.OperatorIdentifier1,
+                                                                                                  OperatorId = TestData.OperatorId1,
                                                                                                   ProductId = TestData.Operator1ProductDetails.ProductId,
                                                                                                   RecipientEmailAddress = TestData.RecipientEmailAddress,
                                                                                                   RecipientMobileNumber = TestData.RecipientMobileNumber,
@@ -237,7 +237,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                       TransactionDateTime = TestData.TransactionDateTime,
                                                                                                       TransactionNumber = TestData.TransactionNumber,
                                                                                                       ContractId = TestData.Operator1ProductDetails.ContractId,
-                                                                                                      OperatorIdentifier = TestData.OperatorIdentifier1,
+                                                                                                      OperatorId = TestData.OperatorId1,
                                                                                                       ProductId = TestData.Operator1ProductDetails.ProductId,
                                                                                                       CustomerAccountNumber = TestData.CustomerAccountNumber,
                                                                                                   };
@@ -280,7 +280,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                       TransactionDateTime = TestData.TransactionDateTime,
                                                                                                       TransactionNumber = TestData.TransactionNumber,
                                                                                                       ContractId = TestData.Operator1ProductDetails.ContractId,
-                                                                                                      OperatorIdentifier = TestData.OperatorIdentifier1,
+                                                                                                      OperatorId = TestData.OperatorId1,
                                                                                                       ProductId = TestData.Operator1ProductDetails.ProductId,
                                                                                                       CustomerAccountNumber = TestData.CustomerAccountNumber,
                                                                                                   };
@@ -302,7 +302,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                   TransactionDateTime = TestData.TransactionDateTime,
                                                                                                   TransactionNumber = TestData.TransactionNumber,
                                                                                                   ContractId = TestData.Operator1ProductDetails.ContractId,
-                                                                                                  OperatorIdentifier = TestData.OperatorIdentifier1,
+                                                                                                  OperatorId = TestData.OperatorId1,
                                                                                                   ProductId = TestData.Operator1ProductDetails.ProductId,
                                                                                                   MeterNumber = TestData.MeterNumber
                                                                                               };
@@ -339,7 +339,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                   TransactionDateTime = TestData.TransactionDateTime,
                                                                                                   TransactionNumber = TestData.TransactionNumber,
                                                                                                   ContractId = TestData.Operator1ProductDetails.ContractId,
-                                                                                                  OperatorIdentifier = TestData.OperatorIdentifier1,
+                                                                                                  OperatorId = TestData.OperatorId1,
                                                                                                   ProductId = TestData.Operator1ProductDetails.ProductId,
                                                                                                   MeterNumber = TestData.MeterNumber
                                                                                               };
@@ -372,7 +372,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                   TransactionDateTime = TestData.TransactionDateTime,
                                                                                                   TransactionNumber = TestData.TransactionNumber,
                                                                                                   ContractId = TestData.Operator1ProductDetails.ContractId,
-                                                                                                  OperatorIdentifier = TestData.OperatorIdentifier1,
+                                                                                                  OperatorId = TestData.OperatorId1,
                                                                                                   ProductId = TestData.Operator1ProductDetails.ProductId,
                                                                                                   MeterNumber = TestData.MeterNumber
                                                                                               };
@@ -395,7 +395,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                         TransactionDateTime = TestData.TransactionDateTime,
                                                                                                         TransactionNumber = TestData.TransactionNumber,
                                                                                                         ContractId = TestData.Operator1ProductDetails.ContractId,
-                                                                                                        OperatorIdentifier = TestData.OperatorIdentifier1,
+                                                                                                        OperatorId = TestData.OperatorId1,
                                                                                                         ProductId = TestData.Operator1ProductDetails.ProductId,
                                                                                                         CustomerAccountName = TestData.CustomerAccountName,
                                                                                                         PaymentAmount = TestData.PaymentAmount,
@@ -432,7 +432,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                         TransactionDateTime = TestData.TransactionDateTime,
                                                                                                         TransactionNumber = TestData.TransactionNumber,
                                                                                                         ContractId = TestData.Operator1ProductDetails.ContractId,
-                                                                                                        OperatorIdentifier = TestData.OperatorIdentifier1,
+                                                                                                        OperatorId = TestData.OperatorId1,
                                                                                                         ProductId = TestData.Operator1ProductDetails.ProductId,
                                                                                                         CustomerAccountName = TestData.CustomerAccountName,
                                                                                                         PaymentAmount = TestData.PaymentAmount,
@@ -462,7 +462,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                              TransactionCount = TestData.TransactionCount,
                                                                                              TransactionValue = TestData.TransactionValue,
                                                                                              ContractId = TestData.OperatorId1ContractId,
-                                                                                             OperatorIdentifier = TestData.OperatorIdentifier1
+                                                                                             OperatorId = TestData.OperatorId1
                                                                                          }
                                                                },
                 TransactionCount = TestData.TransactionCount,
@@ -506,15 +506,14 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                                                               TransactionCount = TestData.TransactionCount,
                                                                                                                                               TransactionValue = TestData.TransactionValue,
                                                                                                                                               ContractId = TestData.OperatorId1ContractId,
-                                                                                                                                              OperatorIdentifier = TestData.OperatorIdentifier1
+                                                                                                                                              OperatorId = TestData.OperatorId1
                                                                                                                                           }
                                                                                                                 },
                                                                  TransactionCount = TestData.TransactionCount,
                                                                  TransactionValue = TestData.TransactionValue
                                                              };
 
-            this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond(req => new HttpResponseMessage(HttpStatusCode.BadRequest));
+            this.MockHttpMessageHandler.When($"http://localhost/api/transactions").Respond(req => new HttpResponseMessage(HttpStatusCode.BadRequest));
 
             Result<PerformReconciliationResponseModel> performReconciliationResult = await this.TransactionService.PerformReconciliation(requestModel, CancellationToken.None);
 

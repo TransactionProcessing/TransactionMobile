@@ -1,8 +1,6 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Services;
 
 using Common;
-using EstateManagement.Client;
-using EstateManagement.DataTransferObjects.Responses;
 using Microsoft.Extensions.Caching.Memory;
 using Models;
 using RequestHandlers;

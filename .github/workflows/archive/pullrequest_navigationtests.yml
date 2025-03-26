@@ -1,0 +1,132 @@
+﻿# name: Build & Test Pull Requests UI Tests
+
+# on:
+#   pull_request:
+#     branches:
+#       - main
+
+# jobs:
+#   end-to-end-tests:
+#     runs-on: ${{ matrix.os }}
+#     strategy:
+#       matrix:
+#         platform: [android, ios, windows]
+#         include:
+#           - platform: android
+#             os: ubuntu-latest
+#           - platform: ios
+#             os: macos-latest
+#           - platform: windows
+#             os: windows-latest
+    
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+
+#       ##############################
+#       # Setup .NET and Dependencies
+#       ##############################
+#       - name: Set up .NET
+#         uses: actions/setup-dotnet@v3
+#         with:
+#           dotnet-version: 8.0.x
+
+#       - name: Install MAUI Workloads
+#         run: dotnet workload install maui             
+
+#       ###########################
+#       # 🛠 Install Appium & Drivers
+#       ###########################
+#       - name: Install Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: 18
+
+#       - name: Install Appium and Drivers
+#         run: |
+#           npm install -g appium
+#           appium driver install uiautomator2
+#           appium driver install xcuitest
+#           appium driver install windows
+
+#       - name: Start Appium Server
+#         run: |
+#           nohup appium --log appium.log &
+
+#       ##############################
+#       # 🟢 Android: Start Emulator
+#       ##############################
+#       - name: Install Android SDK & Emulator
+#         if: matrix.platform == 'android'
+#         run: |
+#           sudo apt update
+#           sudo apt install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
+#           sudo usermod -aG libvirt $USER
+#           sudo usermod -aG kvm $USER
+#           sdkmanager --install "system-images;android-31;default;x86_64"
+#           echo "no" | avdmanager create avd -n testEmulator -k "system-images;android-31;default;x86_64" --device "pixel_4"
+#           nohup emulator -avd testEmulator -no-window -no-audio -gpu swiftshader_indirect &
+
+#       - name: Wait for Emulator to Boot
+#         if: matrix.platform == 'android'
+#         run: |
+#           adb wait-for-device
+#           adb shell settings put global window_animation_scale 0
+#           adb shell settings put global transition_animation_scale 0
+#           adb shell settings put global animator_duration_scale 0
+#           adb devices
+
+#       ##############################
+#       # 🍏 iOS: Start Simulator
+#       ##############################
+#       - name: Start iOS Simulator
+#         if: matrix.platform == 'ios'
+#         run: |
+#           open -a Simulator &
+#           xcrun simctl list
+#           xcrun simctl boot "iPhone 14"
+#           xcrun simctl list devices
+
+#       ##############################
+#       # 🔨 Build .NET MAUI App
+#       ##############################
+#       - name: Build MAUI App for Android
+#         if: matrix.platform == 'android'
+#         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -f net8.0-android -c Release --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+#       - name: Build MAUI App for iOS
+#         if: matrix.platform == 'ios'
+#         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -f net8.0-ios -c Release --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+#       - name: Build MAUI App for Windows
+#         if: matrix.platform == 'windows'
+#         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -f net8.0-windows -c Release --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+#       ##############################
+#       # 🚀 Run Appium UI Tests
+#       ##############################
+#       - name: Run Appium Navigation Tests (Android)
+#         if: matrix.platform == 'android'
+#         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRNavTest)&(Category=Android)
+
+#       - name: Run Appium Navigation Hardware Tests (Android)
+#         if: matrix.platform == 'android'
+#         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRHWNavTest)&(Category=Android)
+
+#       - name: Run Appium Tests (iOS)
+#         if: matrix.platform == 'ios'
+#         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter (Category=PRNavTest)&(Category=iOS)
+
+#       - name: Run Appium Tests (Windows)
+#         if: matrix.platform == 'windows'
+#         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter  "Category=PRNavTest&Category=Windows"
+
+#       ##############################
+#       # 📤 Upload Logs if Tests Fail
+#       ##############################
+#       - name: Upload logs if tests fail
+#         if: failure()
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: appium-logs-${{ matrix.test-type }}
+#           path: artifacts/appium-logs-${{ matrix.test-type }}.log      
