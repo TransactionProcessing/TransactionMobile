@@ -1,0 +1,91 @@
+name: .NET MAUI UI Tests on iOS Simulator
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  ios-tests:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4  
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install .NET MAUI Workload
+        run: dotnet workload install maui-ios
+
+      - name: Install Xcode Command Line Tools
+        run: |
+          sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+          xcodebuild -version
+
+      - name: Install Homebrew Dependencies
+        run: |
+          brew install colima docker docker-compose
+          brew install carthage ios-deploy
+
+      - name: Start Colima (Docker Runtime)
+        run: |
+          colima start --cpu 2 --memory 4 --disk 10 --runtime docker
+          sleep 30 # Give Colima time to start
+
+      - name: Verify Colima and Docker
+        run: |
+          colima status
+          docker version
+          docker info
+
+      - name: List Available iOS Simulators
+        run: xcrun simctl list devices
+
+      - name: Start iOS Simulator
+        run: |
+          UDID=$(xcrun simctl create "Test-iPhone" "com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro" "com.apple.CoreSimulator.SimRuntime.iOS-17-4")
+          echo "Simulator UDID: $UDID"
+          xcrun simctl boot "$UDID"
+          sleep 15 # Allow time for boot
+
+      - name: Wait for iOS Simulator to Boot
+        run: |
+          timeout 180 bash -c '
+          while true; do
+            STATUS=$(xcrun simctl list devices | grep "Test-iPhone" | grep "(Booted)")
+            if [ ! -z "$STATUS" ]; then
+              echo "Simulator is booted!"
+              break
+            fi
+            echo "Waiting for simulator..."
+            sleep 5
+          done
+          '
+
+      - name: Install Appium and WebDriverAgent
+        run: |
+          npm install -g appium
+          appium driver install xcuitest
+
+      - name: Start Appium Server
+        run: |
+          nohup appium --log appium.log &
+
+      - name: Restore MAUI App for iOS
+        run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }}
+
+      - name: Build MAUI App for iOS
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -f net8.0-ios -c Release --no-restore
+
+      - name: Run Appium Tests (iOS)
+        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRTest)&(Category=iOS)"
+
+      - name: Upload Logs on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+            name: ios-test-logs
+            path: appium.log

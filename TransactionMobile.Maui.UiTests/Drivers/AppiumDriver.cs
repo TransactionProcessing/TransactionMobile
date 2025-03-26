@@ -73,8 +73,8 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             var driverOptions = new AppiumOptions();
             driverOptions.AutomationName = "XCUITest";
             driverOptions.PlatformName = "iOS";
-            driverOptions.PlatformVersion = "15.4";
-            driverOptions.DeviceName = "iPhone 11";
+            driverOptions.PlatformVersion = "17.4";
+            driverOptions.DeviceName = "Test-iPhone";
             
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net8.0-ios/iossimulator-x64/");
