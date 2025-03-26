@@ -96,7 +96,7 @@ namespace TransactionMobile.Maui.Extensions
                                                                                                      return configuration.TransactionProcessorAclUri;
                                                                                                  }
 
-                                                                                                 if (configSetting == "TransactionProcessorAApi")
+                                                                                                 if (configSetting == "TransactionProcessorApi")
                                                                                                  {
                                                                                                      return configuration.TransactionProcessorUri;
                                                                                                  }

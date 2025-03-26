@@ -1,4 +1,6 @@
-﻿namespace TransactionMobile.Maui.BusinessLogic.RequestHandlers;
+﻿using Newtonsoft.Json;
+
+namespace TransactionMobile.Maui.BusinessLogic.RequestHandlers;
 
 using Database;
 using MediatR;
@@ -125,7 +127,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
         if (result.IsSuccess && result.Data.IsSuccessful == false)
         {
-            return  Result.Failure("Logon transaction not successful");
+            return  Result.Failure($"Logon transaction not successful {JsonConvert.SerializeObject(result.Data)}");
         }
 
         return Result.Success(result.Data);

@@ -1,5 +1,5 @@
 ﻿using OpenQA.Selenium.Appium;
-using OpenQA.Selenium.Appium.MultiTouch;
+//using OpenQA.Selenium.Appium.MultiTouch;
 using TransactionMobile.Maui.UiTests.Drivers;
 
 namespace TransactionMobile.Maui.UITests;
@@ -89,8 +89,9 @@ public static class Extenstions
      */
     public static void Scroll(this AppiumDriver driver, int fromX, int fromY, int toX, int toY)
     {
-        TouchAction touchAction = new TouchAction(driver);
-        touchAction.LongPress(fromX, fromY).MoveTo(toX, toY).Release().Perform();
+        // TODO: Implement this for new Appium Driver
+        //TouchAction touchAction = new TouchAction(driver);
+        //touchAction.LongPress(fromX, fromY).MoveTo(toX, toY).Release().Perform();
     }
 
     public static async Task WaitForNoElementByAccessibilityId(this AppiumDriver driver,

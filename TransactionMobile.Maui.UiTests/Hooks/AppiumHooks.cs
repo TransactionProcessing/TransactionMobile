@@ -27,9 +27,14 @@ namespace TransactionMobile.Maui.UiTests.Hooks
             this.TestingContext = testingContext;
         }
 
-        [BeforeScenario(Order = 0)]
+        [BeforeScenario(Order = 1)]
         public void StartApp()
         {
+            if (this.TestingContext.Logger == null)
+            {
+                this.TestingContext.Logger = new NlogLogger();
+            }
+
             //this.TestingContext.Logger.LogInformation("About to Start App");
             //this.TestingContext.Logger.LogInformation("App Started");
 
