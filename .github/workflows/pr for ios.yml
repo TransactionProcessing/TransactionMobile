@@ -60,20 +60,20 @@ jobs:
       - name: Install coreutils
         run: brew install coreutils
 
-      - name: Wait for iOS Simulator to Boot
-        run: |
-          UDID=$(xcrun simctl list devices | grep "Test-iPhone" | grep -o '([0-9A-F\-]+)' | head -n 1) #get the UDID
-          timeout 180 bash -c '
-            while true; do
-              STATUS=$(xcrun simctl list devices "$UDID" | grep "(Booted)")
-              if [ ! -z "$STATUS" ]; then
-                echo "Simulator is booted! UDID: $UDID"
-              break
-            fi
-            echo "Waiting for simulator with UDID: $UDID ..."
-            sleep 5
-            done
-          '
+      #- name: Wait for iOS Simulator to Boot
+      #  run: |
+      #    UDID=$(xcrun simctl list devices | grep "Test-iPhone" | grep -o '([0-9A-F\-]+)' | head -n 1) #get the UDID
+      #    timeout 180 bash -c '
+      #      while true; do
+      #        STATUS=$(xcrun simctl list devices "$UDID" | grep "(Booted)")
+      #        if [ ! -z "$STATUS" ]; then
+      #          echo "Simulator is booted! UDID: $UDID"
+      #        break
+      #      fi
+      #      echo "Waiting for simulator with UDID: $UDID ..."
+      #      sleep 5
+      #      done
+      #    '
 
       - name: Install Appium and WebDriverAgent
         run: |
