@@ -33,6 +33,7 @@ jobs:
           while ! docker info > /dev/null 2>&1; do
             if [ $ELAPSED_TIME -ge $RETRY_TIME ]; then
               echo "Docker did not start within $RETRY_TIME seconds, exiting."
+              cat docker.log || echo "No logs found"
               exit 1
             fi
             echo "Retrying to connect to Docker... ($ELAPSED_TIME seconds elapsed)"
