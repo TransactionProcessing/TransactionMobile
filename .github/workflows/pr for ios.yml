@@ -24,7 +24,8 @@ jobs:
       - name: Setup Docker
         run: |
           brew install --cask docker
-          docker info || (echo "Docker is not running" && exit 1)
+          nohup dockerd > docker.log 2>&1 &
+          while ! docker info > /dev/null 2>&1; do sleep 1; done
 
       #- name: Setup Docker
       #  run: |
