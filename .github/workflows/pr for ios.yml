@@ -21,6 +21,10 @@ jobs:
       - name: Test IP
         run: echo $ENV_IPADDRESS
 
+      - name: Install Docker Desktop
+        run: |
+          brew install --cask docker
+
       - name: Ensure Docker Desktop is running (Background)
         run: |
           # Check if Docker Desktop is running
