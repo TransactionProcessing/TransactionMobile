@@ -27,19 +27,18 @@ jobs:
 
       - name: Ensure Docker Desktop is running (Background)
         run: |
-          # Check if Docker Desktop is running
-          if pgrep -x "Docker" > /dev/null; then
-            echo "Docker Desktop is already running."
-          else
-            echo "Starting Docker Desktop..."
-            open -a Docker & # Start Docker Desktop in the background
-            sleep 20 # Wait for Docker Desktop to start. Adjust the sleep time if needed.
+          if [ -f "/Applications/Docker.app/Contents/MacOS/Docker" ]; then
+            open "/Applications/Docker.app" & # Use full path
+            sleep 30 # Adjust sleep time as needed
             #Verify docker is running
             if ! docker info &>/dev/null; then
                 echo "Docker Desktop failed to start correctly."
                 exit 1
             fi
             echo "Docker Desktop started successfully."
+          else
+            echo "Docker Desktop not found at /Applications/Docker.app"
+            exit 1
           fi
 
       - name: Verify Docker Installation
