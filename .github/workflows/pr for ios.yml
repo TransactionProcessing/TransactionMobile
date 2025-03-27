@@ -25,7 +25,7 @@ jobs:
         run: |
          brew install docker
          brew install colima
-         colima start --runtime docker --vm-type=qemu --memory 4 --cpu 2 --disk 100 --image=ghcr.io/abiosoft/colima-qemu:latest
+         colima start --runtime docker --vm-type=qemu --memory 4 --cpu 2 --disk 100 --i=ghcr.io/abiosoft/colima-qemu:latest
 
       - name: Pull images
         run: |
