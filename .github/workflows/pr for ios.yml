@@ -21,38 +21,40 @@ jobs:
       - name: Test IP
         run: echo $ENV_IPADDRESS
 
-      - name: Setup Docker
+      - name: Uninstall Docker Desktop if present
         run: |
-          brew install --cask docker
-          sudo killall -9 dockerd || true
-          sudo rm -rf /var/run/docker.sock
-          nohup dockerd > docker.log 2>&1 &
-          # Start retry loop
-          RETRY_TIME=120
-          ELAPSED_TIME=0
-          while ! docker info > /dev/null 2>&1; do
-            if [ $ELAPSED_TIME -ge $RETRY_TIME ]; then
-              echo "Docker did not start within $RETRY_TIME seconds, exiting."
-              cat docker.log || echo "No logs found"
+          brew uninstall --cask docker || true
+          sudo killall -9 Docker || true
+          sudo rm -rf /Applications/Docker.app /usr/local/bin/docker-compose /var/run/docker.sock
+
+      - name: Install Docker CLI and dependencies
+        run: |
+          brew install docker docker-compose docker-buildx
+          brew link --overwrite docker
+
+      - name: Start Docker Daemon as a background process
+        run: |
+          nohup sudo dockerd > ~/docker.log 2>&1 &
+
+          # Retry loop for up to 60 seconds
+          timeout=60
+          while ! docker info &>/dev/null; do
+            sleep 5
+            timeout=$((timeout - 5))
+            echo "Waiting for Docker to start..."
+            if [ "$timeout" -le 0 ]; then
+              echo "Docker did not start within 60 seconds, exiting."
+              cat ~/docker.log
               exit 1
             fi
-            echo "Retrying to connect to Docker... ($ELAPSED_TIME seconds elapsed)"
-            sleep 1
-            ELAPSED_TIME=$((ELAPSED_TIME + 1))
           done
-          echo "Docker is ready!"
 
-      #- name: Setup Docker
-      #  run: |
-      #   brew install docker
-      #   brew install colima
-      #   brew install qemu
+          echo "Docker is running!"
 
-      #- name: Reset Colima
-      #  run: colima delete -f || true
-
-      #- name: Start Colima with QEMU
-      #  run: colima start --runtime docker --vm-type=qemu --memory 4 --cpu 2 --disk 100
+      - name: Verify Docker Installation
+        run: |
+          docker version
+          docker info
 
       - name: Pull images
         run: |
