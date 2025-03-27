@@ -25,7 +25,19 @@ jobs:
         run: |
           brew install --cask docker
           nohup dockerd > docker.log 2>&1 &
-          while ! docker info > /dev/null 2>&1; do sleep 1; done
+          # Start retry loop
+          RETRY_TIME=60
+          ELAPSED_TIME=0
+          while ! docker info > /dev/null 2>&1; do
+            if [ $ELAPSED_TIME -ge $RETRY_TIME ]; then
+              echo "Docker did not start within $RETRY_TIME seconds, exiting."
+              exit 1
+            fi
+            echo "Retrying to connect to Docker... ($ELAPSED_TIME seconds elapsed)"
+            sleep 1
+            ELAPSED_TIME=$((ELAPSED_TIME + 1))
+          done
+          echo "Docker is ready!"
 
       #- name: Setup Docker
       #  run: |
