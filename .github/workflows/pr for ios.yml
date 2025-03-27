@@ -24,9 +24,11 @@ jobs:
       - name: Setup Docker
         run: |
           brew install --cask docker
+          sudo killall -9 dockerd || true
+          sudo rm -rf /var/run/docker.sock
           nohup dockerd > docker.log 2>&1 &
           # Start retry loop
-          RETRY_TIME=60
+          RETRY_TIME=120
           ELAPSED_TIME=0
           while ! docker info > /dev/null 2>&1; do
             if [ $ELAPSED_TIME -ge $RETRY_TIME ]; then
