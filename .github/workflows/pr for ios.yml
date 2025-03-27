@@ -28,6 +28,7 @@ jobs:
       - name: Start Docker (macOS only)
         if: runner.os == 'macOS'
         run: |
+          brew install qemu
           if ! command -v docker &> /dev/null; then
             brew install docker
           fi
