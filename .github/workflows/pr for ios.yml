@@ -24,6 +24,7 @@ jobs:
       - name: Setup Docker
         run: |
          brew install docker
+         brew install colima
          colima start --cpu 2 --memory 8 --disk 100
 
       - name: Pull images
