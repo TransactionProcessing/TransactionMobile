@@ -28,9 +28,19 @@ jobs:
       - name: Start Docker (macOS only)
         if: runner.os == 'macOS'
         run: |
-          brew install docker
-          brew install colima
-          colima start
+          if ! command -v docker &> /dev/null; then
+            brew install docker
+          fi
+          if ! command -v colima &> /dev/null; then
+            brew install colima
+          fi
+          colima start --runtime docker
+      
+      - name: Wait for Colima to be Ready
+        if: runner.os == 'macOS'
+        run: |
+          sleep 10
+          colima status
 
       - name: List Available iOS Simulators
         run: xcrun simctl list devices
