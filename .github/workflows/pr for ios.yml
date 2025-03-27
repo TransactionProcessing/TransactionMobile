@@ -25,22 +25,33 @@ jobs:
         run: |
           brew install --cask docker
 
+      - name: Debug Applications Directory
+        run: |
+          ls -l /Applications/
+
       - name: Ensure Docker Desktop is running (Background)
         run: |
           if [ -f "/Applications/Docker.app/Contents/MacOS/Docker" ]; then
-            open "/Applications/Docker.app" & # Use full path
-            sleep 30 # Adjust sleep time as needed
-            #Verify docker is running
+            open "/Applications/Docker.app" &
+            sleep 30
+            for i in {1..10}; do
+              if docker info &>/dev/null; then
+                echo "Docker Desktop started successfully."
+                break
+              else
+                echo "Waiting for Docker Desktop... (attempt $i)"
+                sleep 10
+              fi
+            done
             if ! docker info &>/dev/null; then
-                echo "Docker Desktop failed to start correctly."
-                exit 1
+              echo "Docker Desktop failed to start correctly after multiple attempts."
+              exit 1
             fi
-            echo "Docker Desktop started successfully."
           else
             echo "Docker Desktop not found at /Applications/Docker.app"
             exit 1
           fi
-
+          
       - name: Verify Docker Installation
         run: |
           docker version
