@@ -20,18 +20,23 @@ jobs:
 
       - name: Test IP
         run: echo $ENV_IPADDRESS
-          
+
       - name: Setup Docker
         run: |
-         brew install docker
-         brew install colima
-         brew install qemu
+          brew install --cask docker
+          docker info || (echo "Docker is not running" && exit 1)
 
-      - name: Reset Colima
-        run: colima delete -f || true
+      #- name: Setup Docker
+      #  run: |
+      #   brew install docker
+      #   brew install colima
+      #   brew install qemu
 
-      - name: Start Colima with QEMU
-        run: colima start --runtime docker --vm-type=qemu --memory 4 --cpu 2 --disk 100
+      #- name: Reset Colima
+      #  run: colima delete -f || true
+
+      #- name: Start Colima with QEMU
+      #  run: colima start --runtime docker --vm-type=qemu --memory 4 --cpu 2 --disk 100
 
       - name: Pull images
         run: |
