@@ -35,7 +35,7 @@ jobs:
           if ! command -v colima &> /dev/null; then
             brew install colima
           fi
-          colima start --runtime docker --vm-type=qemu
+          colima start --runtime docker --vm-type=qemu --memory 6 --cpu 4
       
       - name: Wait for Colima to be Ready
         if: runner.os == 'macOS'
