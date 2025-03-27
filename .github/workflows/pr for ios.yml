@@ -57,8 +57,8 @@ jobs:
           xcrun simctl boot "$UDID"
           sleep 15 # Allow time for boot
 
-      - name: Install coreutils
-        run: brew install coreutils
+      #- name: Install coreutils
+      #  run: brew install coreutils
 
       #- name: Wait for iOS Simulator to Boot
       #  run: |
@@ -74,6 +74,9 @@ jobs:
       #      sleep 5
       #      done
       #    '
+
+      - name: Install .NET MAUI workload
+        run: dotnet workload install maui
 
       - name: Install Appium and WebDriverAgent
         run: |
