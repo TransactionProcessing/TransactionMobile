@@ -31,27 +31,22 @@ jobs:
 
       - name: Ensure Docker Desktop is running (Background)
         run: |
-          if [ -f "/Applications/Docker.app/Contents/MacOS/Docker" ]; then
-            open "/Applications/Docker.app" &
-            sleep 30
-            for i in {1..10}; do
-              if docker info &>/dev/null; then
-                echo "Docker Desktop started successfully."
-                break
-              else
-                echo "Waiting for Docker Desktop... (attempt $i)"
-                sleep 10
-              fi
-            done
-            if ! docker info &>/dev/null; then
-              echo "Docker Desktop failed to start correctly after multiple attempts."
-              exit 1
+          open "/Applications/Docker.app" &
+          sleep 30
+          for i in {1..10}; do
+            if docker info &>/dev/null; then
+              echo "Docker Desktop started successfully."
+              break
+            else
+              echo "Waiting for Docker Desktop... (attempt $i)"
+              sleep 10
             fi
-          else
-            echo "Docker Desktop not found at /Applications/Docker.app"
+          done
+          if ! docker info &>/dev/null; then
+            echo "Docker Desktop failed to start correctly after multiple attempts."
             exit 1
           fi
-          
+
       - name: Verify Docker Installation
         run: |
           docker version
