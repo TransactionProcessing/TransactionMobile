@@ -21,31 +21,15 @@ jobs:
       - name: Test IP
         run: echo $ENV_IPADDRESS
 
-      - name: Install Docker Desktop
+      - name: Install colima and docker
         run: |
-          brew install --cask docker
-
-      - name: Debug Applications Directory
-        run: |
-          ls -l /Applications/
-
-      - name: Ensure Docker Desktop is running (Background)
-        run: |
-          open "/Applications/Docker.app" &
-          sleep 30
-          for i in {1..10}; do
-            if docker info &>/dev/null; then
-              echo "Docker Desktop started successfully."
-              break
-            else
-              echo "Waiting for Docker Desktop... (attempt $i)"
-              sleep 10
-            fi
-          done
-          if ! docker info &>/dev/null; then
-            echo "Docker Desktop failed to start correctly after multiple attempts."
-            exit 1
-          fi
+          brew install colima docker
+          wget https://github.com/abiosoft/colima-core/releases/download/v0.6.7/ubuntu-23.10-minimal-cloudimg-arm64.qcow2
+          /opt/homebrew/bin/qemu-system-aarch64 -m 1G -drive file=ubuntu-23.10-minimal-cloudimg-arm64.qcow2,if=virtio -display default,show-cursor=on -machine type=virt -accel hvf -nographic &
+          colima start
+          docker ps
+          docker pull alpine:latest
+          docker image ls
 
       - name: Verify Docker Installation
         run: |
