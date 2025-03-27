@@ -25,6 +25,7 @@ jobs:
         run: |
          brew install docker
          brew install colima
+         brew install qemu
 
       - name: Reset Colima
         run: colima delete -f || true
