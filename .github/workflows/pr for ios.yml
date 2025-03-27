@@ -12,37 +12,31 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4  
 
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 8.0.x
+      - name: Get IP
+        run: ipconfig getifaddr en0
 
-      - name: Install .NET MAUI Workload
-        run: dotnet workload install maui-ios
+      - name: Cache Public IP
+        run: echo "ENV_IPADDRESS=$(ipconfig getifaddr en0)" >> $GITHUB_ENV
 
-      - name: Install Xcode Command Line Tools
+      - name: Test IP
+        run: echo $ENV_IPADDRESS
+          
+      - name: Setup Docker
         run: |
-          sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
-          xcodebuild -version
+         brew install docker
+         colima start --cpu 2 --memory 8 --disk 100
 
-      - name: Start Docker (macOS only)
-        if: runner.os == 'macOS'
+      - name: Pull images
         run: |
-          brew install qemu
-          if ! command -v docker &> /dev/null; then
-            brew install docker
-          fi
-          if ! command -v colima &> /dev/null; then
-            brew install colima
-          fi
-          colima start --runtime docker --vm-type=qemu --memory 6 --cpu 4
+         docker pull stuartferguson/messagingservice:master
+         docker pull stuartferguson/securityservice:master
+         docker pull stuartferguson/transactionprocessor:master
+         docker pull stuartferguson/transactionprocessoracl:master
+         docker pull stuartferguson/testhosts:master
+         docker pull stuartferguson/mobileconfiguration:master
+         docker pull mcr.microsoft.com/azure-sql-edge
+         docker pull eventstore/eventstore:21.10.0-buster-slim
       
-      - name: Wait for Colima to be Ready
-        if: runner.os == 'macOS'
-        run: |
-          sleep 10
-          colima status
-
       - name: List Available iOS Simulators
         run: xcrun simctl list devices
 
