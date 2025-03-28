@@ -52,7 +52,10 @@ jobs:
 
       - name: Start SQL Server (Docker)
         run: docker run -p 1433:1433 -e "ACCEPT_EULA=1" -e "SA_PASSWORD=YourStrongPassword!" -d mcr.microsoft.com/azure-sql-edge
-
+      
+      - name: Install telnet
+        run: brew install telnet
+        
       - name: Test SQL Server Connection
         run: telnet $(ifconfig en0 | grep "inet " | awk '{print $2}') 1433
 
