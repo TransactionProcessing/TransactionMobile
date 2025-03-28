@@ -322,7 +322,7 @@ namespace TransactionMobile.Maui.UiTests.Common
             }
         }
 
-        protected async Task DoSqlServerHealthCheckX(IContainerService containerService, Int32 maxRetries = 10)
+        protected async Task DoSqlServerHealthCheckX(IContainerService containerService, Int32 maxRetries = 20)
         {
             // Try opening a connection
             Int32 counter = 1;
