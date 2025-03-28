@@ -300,7 +300,7 @@ namespace TransactionMobile.Maui.UiTests.Common
                 //  Do a health check here
                 //this.MessagingServicePort = 
                 ContainerType type = ContainerType.SqlServer;
-                await DoSqlServerHealthCheckX(startedContainer);
+                //await DoSqlServerHealthCheckX(startedContainer);
                 
                 this.Trace($"Container [{buildContainerFunc.Method.Name}] started");
 
