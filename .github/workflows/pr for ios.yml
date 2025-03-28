@@ -56,7 +56,7 @@ jobs:
       - name: Setup SQL Server Container
         run: |
           docker network create sharednetwork
-          docker run name sharedsqlsserver --network sharednetwork -e "ACCEPT_EULA=Y" -e "SA_USER=sa" -e "SA_PASSWORD=thisisalongpassword123!" -p 1433 -d mcr.microsoft.com/azure-sql-edge
+          docker run --name sharedsqlsserver --network sharednetwork -e "ACCEPT_EULA=Y" -e "SA_USER=sa" -e "SA_PASSWORD=thisisalongpassword123!" -p 1433 -d mcr.microsoft.com/azure-sql-edge
 
       #- name: Install telnet
       #  run: brew install telnet
