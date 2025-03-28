@@ -45,7 +45,7 @@ jobs:
          docker pull stuartferguson/testhosts:master
          docker pull stuartferguson/mobileconfiguration:master
          docker pull mcr.microsoft.com/azure-sql-edge
-        docker pull eventstore/eventstore:21.10.0-buster-slim
+         docker pull eventstore/eventstore:21.10.0-buster-slim
       #- name: Pull images
       #  run: |
       #    docker pull mcr.microsoft.com/azure-sql-edge
