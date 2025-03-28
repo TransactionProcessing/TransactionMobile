@@ -9,25 +9,28 @@ using TransactionProcessor.IntegrationTesting.Helpers;
 
 namespace TransactionMobile.Maui.UiTests.Common
 {
-    using System.Net.Sockets;
-    using System.Net;
-    using System.Runtime.CompilerServices;
-    using System.Threading;
     using Ductus.FluentDocker;
     using Ductus.FluentDocker.Builders;
+    using Ductus.FluentDocker.Commands;
+    using Ductus.FluentDocker.Common;
+    using Ductus.FluentDocker.Executors;
     using Ductus.FluentDocker.Services;
     using Ductus.FluentDocker.Services.Extensions;
+    using EventStore.Client;
+    using Microsoft.Data.SqlClient;
+    using Microsoft.Extensions.Hosting;
+    using Reqnroll;
     using SecurityService.Client;
     using SecurityService.DataTransferObjects.Responses;
     using Shared.IntegrationTesting;
     using Shared.Logger;
     using Shouldly;
+    using System.Data;
+    using System.Net;
+    using System.Net.Sockets;
+    using System.Runtime.CompilerServices;
+    using System.Threading;
     using TransactionProcessor.Client;
-    using Ductus.FluentDocker.Commands;
-    using Ductus.FluentDocker.Common;
-    using Microsoft.Extensions.Hosting;
-    using EventStore.Client;
-    using Reqnroll;
 
     public class DockerHelper : global::Shared.IntegrationTesting.DockerHelper
     {
@@ -254,6 +257,147 @@ namespace TransactionMobile.Maui.UiTests.Common
         }
 
         #endregion
+
+
+        public virtual async Task<IContainerService> SetupSqlServerContainerX(INetworkService networkService)
+        {
+            if (this.SqlCredentials == default)
+                throw new Exception("Sql Credentials have not been set");
+
+            IContainerService databaseServerContainer = await this.StartContainer2X(this.ConfigureSqlContainer,
+                new List<INetworkService>{
+                    networkService
+                },
+                DockerServices.SqlServer);
+
+            return databaseServerContainer;
+        }
+
+        protected async Task<IContainerService> StartContainer2X(Func<ContainerBuilder> buildContainerFunc, List<INetworkService> networkServices, DockerServices dockerService)
+        {
+            if ((this.RequiredDockerServices & dockerService) != dockerService)
+            {
+                return default;
+            }
+
+            ConsoleStream<String> consoleLogs = null;
+            try
+            {
+                ContainerBuilder containerBuilder = buildContainerFunc();
+
+                IContainerService builtContainer = containerBuilder.Build();
+
+                consoleLogs = builtContainer.Logs(true);
+                IContainerService startedContainer = builtContainer.Start();
+                foreach (INetworkService networkService in networkServices)
+                {
+                    networkService.Attach(startedContainer, false);
+                }
+
+                this.Trace($"{dockerService} Container Started");
+                this.Containers.Add((dockerService, startedContainer));
+
+                //  Do a health check here
+                //this.MessagingServicePort = 
+                ContainerType type = ContainerType.SqlServer;
+                await DoSqlServerHealthCheck(startedContainer);
+                
+                this.Trace($"Container [{buildContainerFunc.Method.Name}] started");
+
+                return startedContainer;
+            }
+            catch (Exception ex)
+            {
+                if (consoleLogs != null)
+                {
+                    while (consoleLogs.IsFinished == false)
+                    {
+                        String s = consoleLogs.TryRead(10000);
+                        this.Trace(s);
+                    }
+                }
+
+                this.Error($"Error starting container [{buildContainerFunc.Method.Name}]", ex);
+                throw;
+            }
+        }
+
+        protected async Task DoSqlServerHealthCheckZ(IContainerService containerService, Int32 maxRetries = 10)
+        {
+            // Try opening a connection
+            Int32 counter = 1;
+
+            while (counter <= maxRetries)
+            {
+                try
+                {
+                    this.Trace($"Connection attempt {counter}");
+                    CheckSqlConnectionX(containerService);
+                    break;
+                }
+                catch (SqlException ex)
+                {
+                    this.Logger.LogError(ex);
+                    await Task.Delay(30000);
+                }
+                finally
+                {
+                    counter++;
+                }
+            }
+
+            if (counter >= maxRetries)
+            {
+                // We have got to the end and still not opened the connection
+                throw new Exception($"Database container not started in {maxRetries} retries");
+            }
+        }
+
+        private String sqlTestConnectionString;
+
+        protected void CheckSqlConnectionX(IContainerService databaseServerContainer)
+        {
+            // Try opening a connection
+            this.Trace("About to SQL Server Container is running");
+            if (String.IsNullOrEmpty(this.sqlTestConnectionString))
+            {
+                IPEndPoint sqlServerEndpoint = databaseServerContainer.ToHostExposedEndpoint("1433/tcp");
+
+                //String server = "127.0.0.1";
+                String server = this.GetLocalIPAddress();
+                String database = "master";
+                String user = this.SqlCredentials.Value.usename;
+                String password = this.SqlCredentials.Value.password;
+                String port = sqlServerEndpoint.Port.ToString();
+
+                this.sqlTestConnectionString = $"server={server},{port};user id={user}; password={password}; database={database};Encrypt=False";
+                this.Trace($"Connection String {this.sqlTestConnectionString}");
+            }
+
+            SqlConnection connection = new SqlConnection(this.sqlTestConnectionString);
+            try
+            {
+                connection.Open();
+
+                SqlCommand command = connection.CreateCommand();
+                command.CommandText = "SELECT 1;";
+                command.Prepare();
+                command.ExecuteNonQuery();
+
+                this.Trace("Connection Opened");
+
+                connection.Close();
+                this.Trace("SQL Server Container Running");
+            }
+            catch (SqlException ex)
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+                throw;
+            }
+        }
     }
 
     public class TestingContext

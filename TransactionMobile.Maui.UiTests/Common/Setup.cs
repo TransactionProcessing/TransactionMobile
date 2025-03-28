@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TransactionProcessor.Database.Entities.Summary;
 
 namespace TransactionMobile.Maui.UiTests.Common
 {
@@ -31,9 +32,9 @@ namespace TransactionMobile.Maui.UiTests.Common
             dockerHelper.SqlCredentials = Setup.SqlCredentials;
             dockerHelper.DockerCredentials = Setup.DockerCredentials;
             dockerHelper.SqlServerContainerName = "sharedsqlserver";
-
+            
             Setup.DatabaseServerNetwork = dockerHelper.SetupTestNetwork("sharednetwork", true);
-            Setup.DatabaseServerContainer = await dockerHelper.SetupSqlServerContainer(Setup.DatabaseServerNetwork);
+            Setup.DatabaseServerContainer = await dockerHelper.SetupSqlServerContainerX(Setup.DatabaseServerNetwork);
         }
 
         public static String GetConnectionString(String databaseName)
@@ -44,7 +45,6 @@ namespace TransactionMobile.Maui.UiTests.Common
         public static String GetLocalConnectionString(String databaseName)
         {
             var localIPAddress = GetLocalIPAddress();
-
 
             Int32 databaseHostPort = Setup.DatabaseServerContainer.ToHostExposedEndpoint("1433/tcp").Port;
 
