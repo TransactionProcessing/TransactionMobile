@@ -65,7 +65,7 @@ namespace TransactionMobile.Maui.UiTests.Common
         /// Initializes a new instance of the <see cref="DockerHelper"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        public DockerHelper()
+        public DockerHelper() : base(true)
         {
             this.TestingContext = new TestingContext();
         }

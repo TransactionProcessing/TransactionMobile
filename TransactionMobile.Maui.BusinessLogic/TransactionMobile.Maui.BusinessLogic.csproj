@@ -31,8 +31,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ClientProxyBase" Version="2025.3.2" />
-		<PackageReference Include="Shared.Results" Version="2025.3.2" />
+		<PackageReference Include="ClientProxyBase" Version="2025.3.3" />
+		<PackageReference Include="Shared.Results" Version="2025.3.3" />
 		<PackageReference Include="TransactionProcessor.Client" Version="2025.2.10" />
 		<PackageReference Include="LiveChartsCore.SkiaSharpView" Version="2.0.0-rc2" />
 		<PackageReference Include="MediatR" Version="12.4.1" />
