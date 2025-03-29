@@ -108,7 +108,7 @@ namespace TransactionMobile.Maui.UiTests.Common
             foreach ((String streamName, String groupName, Int32 maxRetries) subscription in subscriptions) {
                 var x = subscription;
                 x.maxRetries = 2;
-                await this.CreatePersistentSubscription(x);
+                //await this.CreatePersistentSubscription(x);
             }
         }
 
