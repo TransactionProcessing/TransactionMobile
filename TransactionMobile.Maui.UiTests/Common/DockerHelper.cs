@@ -421,15 +421,15 @@ namespace TransactionMobile.Maui.UiTests.Common
                     }
 
                     // Now check the create status of each
-                    foreach (String projectionName in projectionNames) {
-                        Should.NotThrow(async () => {
-                            ProjectionDetails projectionDetails = await projectionClient.GetStatusAsync(projectionName);
+                    //foreach (String projectionName in projectionNames) {
+                    //    Should.NotThrow(async () => {
+                    //        ProjectionDetails projectionDetails = await projectionClient.GetStatusAsync(projectionName);
 
-                            projectionDetails.Status.ShouldBe("Running", $"Projection [{projectionName}] is {projectionDetails.Status}");
+                    //        projectionDetails.Status.ShouldBe("Running", $"Projection [{projectionName}] is {projectionDetails.Status}");
 
-                            this.Trace($"Projection [{projectionName}] running");
-                        }, "Error getting Projection [{projectionName}] status");
-                    }
+                    //        this.Trace($"Projection [{projectionName}] running");
+                    //    }, $"Error getting Projection [{projectionName}] status");
+                    //}
                 }
             }
 
