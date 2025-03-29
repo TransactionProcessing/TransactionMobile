@@ -73,7 +73,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             var driverOptions = new AppiumOptions();
             driverOptions.AutomationName = "XCUITest";
             driverOptions.PlatformName = "iOS";
-            driverOptions.PlatformVersion = "17.4";
+            driverOptions.PlatformVersion = "17.2";
             driverOptions.DeviceName = "Test-iPhone";
             
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
