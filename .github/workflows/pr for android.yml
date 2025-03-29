@@ -158,9 +158,6 @@ jobs:
 
       - name: Build MAUI App for Android
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -f net8.0-android -c Release --no-restore
-
-      #- name: Debug Test Discovery
-      #  run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --list-tests --no-build --no-restore --verbosity detailed
         
       - name: Run Appium Tests (Android)
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRTest)&(Category=Android)" #--no-restore
