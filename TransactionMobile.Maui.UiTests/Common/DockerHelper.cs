@@ -26,16 +26,16 @@ namespace TransactionMobile.Maui.UiTests.Common
     using Shared.Logger;
     using Shouldly;
     using System.Data;
+    using System.IO;
     using System.Net;
     using System.Net.Sockets;
     using System.Runtime.CompilerServices;
     using System.Threading;
     using TransactionProcessor.Client;
 
-    public class DockerHelper : global::Shared.IntegrationTesting.DockerHelper
-    {
+    public class DockerHelper : global::Shared.IntegrationTesting.DockerHelper {
         #region Fields
-        
+
         /// <summary>
         /// The HTTP client
         /// </summary>
@@ -65,8 +65,7 @@ namespace TransactionMobile.Maui.UiTests.Common
         /// Initializes a new instance of the <see cref="DockerHelper"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        public DockerHelper() : base(true)
-        {
+        public DockerHelper() : base(true) {
             this.TestingContext = new TestingContext();
         }
 
@@ -74,25 +73,21 @@ namespace TransactionMobile.Maui.UiTests.Common
 
         #region Methods
 
-        public string GetLocalIPAddress()
-        {
+        public string GetLocalIPAddress() {
             String result = String.Empty;
-            if (String.IsNullOrEmpty(Environment.GetEnvironmentVariable("ENV_IPADDRESS")))
-            {
+            if (String.IsNullOrEmpty(Environment.GetEnvironmentVariable("ENV_IPADDRESS"))) {
                 // Nothing in environment so not running under CI
                 IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
-                foreach (IPAddress ip in host.AddressList)
-                {
+                foreach (IPAddress ip in host.AddressList) {
                     this.Trace($"{ip}");
-                    if (ip.AddressFamily == AddressFamily.InterNetwork)
-                    {
+                    if (ip.AddressFamily == AddressFamily.InterNetwork) {
                         result = ip.ToString();
                         break;
                     }
                 }
             }
             else {
-                result= Environment.GetEnvironmentVariable("ENV_IPADDRESS");
+                result = Environment.GetEnvironmentVariable("ENV_IPADDRESS");
             }
 
             return result;
@@ -100,22 +95,17 @@ namespace TransactionMobile.Maui.UiTests.Common
 
         public String LocalIPAddress { get; private set; }
 
-        public override ContainerBuilder SetupTransactionProcessorAclContainer(){
+        public override ContainerBuilder SetupTransactionProcessorAclContainer() {
             this.AdditionalVariables.Add(ContainerType.TransactionProcessorAcl, new List<String>());
-            this.SetAdditionalVariables(ContainerType.TransactionProcessorAcl,
-                                        new List<String>{
-                                                            "AppSettings:SkipVersionCheck=true"
-                                                        });
+            this.SetAdditionalVariables(ContainerType.TransactionProcessorAcl, new List<String> { "AppSettings:SkipVersionCheck=true" });
             return base.SetupTransactionProcessorAclContainer();
         }
 
-        public override async Task CreateSubscriptions()
-        {
+        public override async Task CreateSubscriptions() {
             List<(String streamName, String groupName, Int32 maxRetries)> subscriptions = new List<(String streamName, String groupName, Int32 maxRetries)>();
             subscriptions.AddRange(TransactionProcessor.IntegrationTesting.Helpers.SubscriptionsHelper.GetSubscriptions());
-            
-            foreach ((String streamName, String groupName, Int32 maxRetries) subscription in subscriptions)
-            {
+
+            foreach ((String streamName, String groupName, Int32 maxRetries) subscription in subscriptions) {
                 var x = subscription;
                 x.maxRetries = 2;
                 await this.CreatePersistentSubscription(x);
@@ -126,10 +116,10 @@ namespace TransactionMobile.Maui.UiTests.Common
         /// Starts the containers for scenario run.
         /// </summary>
         /// <param name="scenarioName">Name of the scenario.</param>
-        public override async Task StartContainersForScenarioRun(String scenarioName, DockerServices dockerServices)
-        {
+        public override async Task StartContainersForScenarioRun(String scenarioName,
+                                                                 DockerServices dockerServices) {
             DockerEnginePlatform engineType = BaseDockerHelper.GetDockerEnginePlatform();
-            if (engineType == DockerEnginePlatform.Windows){
+            if (engineType == DockerEnginePlatform.Windows) {
                 this.SetImageDetails(ContainerType.EventStore, ("stuartferguson/eventstore_windows", true));
             }
 
@@ -142,17 +132,14 @@ namespace TransactionMobile.Maui.UiTests.Common
 
             // Setup the base address resolvers
 
-            HttpClientHandler clientHandler = new HttpClientHandler
-                                              {
-                                                  ServerCertificateCustomValidationCallback = (message,
-                                                                                               certificate2,
-                                                                                               arg3,
-                                                                                               arg4) =>
-                                                                                              {
-                                                                                                  return true;
-                                                                                              }
-
-                                              };
+            HttpClientHandler clientHandler = new HttpClientHandler {
+                ServerCertificateCustomValidationCallback = (message,
+                                                             certificate2,
+                                                             arg3,
+                                                             arg4) => {
+                    return true;
+                }
+            };
             HttpClient httpClient = new HttpClient(clientHandler);
             this.SecurityServiceClient = new SecurityServiceClient(this.SecurityServiceBaseAddressResolver, httpClient);
             this.TransactionProcessorClient = new TransactionProcessorClient(this.TransactionProcessorBaseAddressResolver, httpClient);
@@ -171,19 +158,16 @@ namespace TransactionMobile.Maui.UiTests.Common
         public String TransactionProcessorAclBaseAddressResolver(String api) => $"http://127.0.0.1:{this.TransactionProcessorAclPort}";
 
         public String SecurityServiceBaseAddressResolver(String api) => $"https://127.0.0.1:{this.SecurityServicePort}";
-        
-        private async Task RemoveEstateReadModel()
-        {
+
+        private async Task RemoveEstateReadModel() {
             List<Guid> estateIdList = this.TestingContext.GetAllEstateIds();
 
-            foreach (Guid estateId in estateIdList)
-            {
+            foreach (Guid estateId in estateIdList) {
                 String databaseName = $"EstateReportingReadModel{estateId}";
 
                 // Build the connection string (to master)
                 String connectionString = Setup.GetLocalConnectionString(databaseName);
-                await Retry.For(async () =>
-                {
+                await Retry.For(async () => {
                     //EstateReportingSqlServerContext context = new EstateReportingSqlServerContext(connectionString);
                     //await context.Database.EnsureDeletedAsync(CancellationToken.None);
                 }, retryFor: TimeSpan.FromMinutes(2), retryInterval: TimeSpan.FromSeconds(30));
@@ -206,8 +190,7 @@ namespace TransactionMobile.Maui.UiTests.Common
 
         public HttpClient TestHostHttpClient;
 
-        public async Task<IContainerService> SetupConfigHostContainer(List<INetworkService> networkServices)
-        {
+        public async Task<IContainerService> SetupConfigHostContainer(List<INetworkService> networkServices) {
             this.Trace("About to Start Config Host Container");
             List<String> environmentVariables = new List<String>();
             environmentVariables.Add("AppSettings:InMemoryDatabase=true");
@@ -215,22 +198,16 @@ namespace TransactionMobile.Maui.UiTests.Common
 
             String imageName = "stuartferguson/mobileconfiguration:latest";
 
-            if (FdOs.IsWindows() && Shared.IntegrationTesting.DockerHelper.GetDockerEnginePlatform() == DockerEnginePlatform.Windows){
+            if (FdOs.IsWindows() && Shared.IntegrationTesting.DockerHelper.GetDockerEnginePlatform() == DockerEnginePlatform.Windows) {
                 imageName = "stuartferguson/mobileconfigurationwindows:master";
             }
 
-            ContainerBuilder configHostContainer = new Builder().UseContainer().WithName(ConfigHostContainerName)
-                                                                .WithEnvironment(environmentVariables.ToArray())
-                                                                .UseImageDetails((imageName, true))
-                                                                .ExposePort(ConfigHostDockerPort)
-                                                                .MountHostFolder(this.DockerPlatform, this.HostTraceFolder)
-                                                                .SetDockerCredentials(this.DockerCredentials);
+            ContainerBuilder configHostContainer = new Builder().UseContainer().WithName(ConfigHostContainerName).WithEnvironment(environmentVariables.ToArray()).UseImageDetails((imageName, true)).ExposePort(ConfigHostDockerPort).MountHostFolder(this.DockerPlatform, this.HostTraceFolder).SetDockerCredentials(this.DockerCredentials);
 
             // Now build and return the container                
             IContainerService builtContainer = configHostContainer.Build().Start().WaitForPort($"{ConfigHostDockerPort}/tcp", 30000);
 
-            foreach (INetworkService networkService in networkServices)
-            {
+            foreach (INetworkService networkService in networkServices) {
                 networkService.Attach(builtContainer, false);
             }
 
@@ -245,8 +222,7 @@ namespace TransactionMobile.Maui.UiTests.Common
         }
 
 
-        public override ContainerBuilder SetupTransactionProcessorContainer()
-        {
+        public override ContainerBuilder SetupTransactionProcessorContainer() {
             List<String> variables = new List<String>();
             variables.Add($"OperatorConfiguration:PataPawaPrePay:Url=http://{this.TestHostContainerName}:{DockerPorts.TestHostPort}/api/patapawaprepay");
 
@@ -259,38 +235,31 @@ namespace TransactionMobile.Maui.UiTests.Common
         #endregion
 
 
-        public virtual async Task<IContainerService> SetupSqlServerContainerX(INetworkService networkService)
-        {
+        public virtual async Task<IContainerService> SetupSqlServerContainerX(INetworkService networkService) {
             if (this.SqlCredentials == default)
                 throw new Exception("Sql Credentials have not been set");
 
-            IContainerService databaseServerContainer = await this.StartContainer2X(this.ConfigureSqlContainer,
-                new List<INetworkService>{
-                    networkService
-                },
-                DockerServices.SqlServer);
+            IContainerService databaseServerContainer = await this.StartContainer2X(this.ConfigureSqlContainer, new List<INetworkService> { networkService }, DockerServices.SqlServer);
 
             return databaseServerContainer;
         }
 
-        protected async Task<IContainerService> StartContainer2X(Func<ContainerBuilder> buildContainerFunc, List<INetworkService> networkServices, DockerServices dockerService)
-        {
-            if ((this.RequiredDockerServices & dockerService) != dockerService)
-            {
+        protected async Task<IContainerService> StartContainer2X(Func<ContainerBuilder> buildContainerFunc,
+                                                                 List<INetworkService> networkServices,
+                                                                 DockerServices dockerService) {
+            if ((this.RequiredDockerServices & dockerService) != dockerService) {
                 return default;
             }
 
             ConsoleStream<String> consoleLogs = null;
-            try
-            {
+            try {
                 ContainerBuilder containerBuilder = buildContainerFunc();
 
                 IContainerService builtContainer = containerBuilder.Build();
 
                 consoleLogs = builtContainer.Logs(true);
                 IContainerService startedContainer = builtContainer.Start();
-                foreach (INetworkService networkService in networkServices)
-                {
+                foreach (INetworkService networkService in networkServices) {
                     networkService.Attach(startedContainer, false);
                 }
 
@@ -301,17 +270,14 @@ namespace TransactionMobile.Maui.UiTests.Common
                 //this.MessagingServicePort = 
                 ContainerType type = ContainerType.SqlServer;
                 //await DoSqlServerHealthCheckX(startedContainer);
-                
+
                 this.Trace($"Container [{buildContainerFunc.Method.Name}] started");
 
                 return startedContainer;
             }
-            catch (Exception ex)
-            {
-                if (consoleLogs != null)
-                {
-                    while (consoleLogs.IsFinished == false)
-                    {
+            catch (Exception ex) {
+                if (consoleLogs != null) {
+                    while (consoleLogs.IsFinished == false) {
                         String s = consoleLogs.TryRead(10000);
                         this.Trace(s);
                     }
@@ -322,32 +288,27 @@ namespace TransactionMobile.Maui.UiTests.Common
             }
         }
 
-        protected async Task DoSqlServerHealthCheckX(IContainerService containerService, Int32 maxRetries = 20)
-        {
+        protected async Task DoSqlServerHealthCheckX(IContainerService containerService,
+                                                     Int32 maxRetries = 20) {
             // Try opening a connection
             Int32 counter = 1;
 
-            while (counter <= maxRetries)
-            {
-                try
-                {
+            while (counter <= maxRetries) {
+                try {
                     this.Trace($"Connection attempt {counter}");
                     CheckSqlConnectionX(containerService);
                     break;
                 }
-                catch (SqlException ex)
-                {
+                catch (SqlException ex) {
                     this.Logger.LogError(ex);
                     await Task.Delay(30000);
                 }
-                finally
-                {
+                finally {
                     counter++;
                 }
             }
 
-            if (counter >= maxRetries)
-            {
+            if (counter >= maxRetries) {
                 // We have got to the end and still not opened the connection
                 throw new Exception($"Database container not started in {maxRetries} retries");
             }
@@ -355,12 +316,10 @@ namespace TransactionMobile.Maui.UiTests.Common
 
         private String sqlTestConnectionString;
 
-        protected void CheckSqlConnectionX(IContainerService databaseServerContainer)
-        {
+        protected void CheckSqlConnectionX(IContainerService databaseServerContainer) {
             // Try opening a connection
             this.Trace("About to SQL Server Container is running");
-            if (String.IsNullOrEmpty(this.sqlTestConnectionString))
-            {
+            if (String.IsNullOrEmpty(this.sqlTestConnectionString)) {
                 IPEndPoint sqlServerEndpoint = databaseServerContainer.ToHostExposedEndpoint("1433/tcp");
 
                 //String server = "127.0.0.1";
@@ -375,8 +334,7 @@ namespace TransactionMobile.Maui.UiTests.Common
             }
 
             SqlConnection connection = new SqlConnection(this.sqlTestConnectionString);
-            try
-            {
+            try {
                 connection.Open();
 
                 SqlCommand command = connection.CreateCommand();
@@ -389,14 +347,93 @@ namespace TransactionMobile.Maui.UiTests.Common
                 connection.Close();
                 this.Trace("SQL Server Container Running");
             }
-            catch (SqlException ex)
-            {
-                if (connection.State == ConnectionState.Open)
-                {
+            catch (SqlException ex) {
+                if (connection.State == ConnectionState.Open) {
                     connection.Close();
                 }
+
                 throw;
             }
+        }
+
+        private static async Task<String> RemoveProjectionTestSetup(FileInfo file)
+        {
+            // Read the file
+            String[] projectionLines = await File.ReadAllLinesAsync(file.FullName);
+
+            // Find the end of the test setup code
+            Int32 index = Array.IndexOf(projectionLines, "//endtestsetup");
+            List<String> projectionLinesList = projectionLines.ToList();
+
+            // Remove the test setup code
+            projectionLinesList.RemoveRange(0, index + 1);
+            // Rebuild the string from the lines
+            String projection = String.Join(Environment.NewLine, projectionLinesList);
+
+            return projection;
+        }
+
+        protected override EventStoreClientSettings ConfigureEventStoreSettings() {
+            var ip = this.GetLocalIPAddress();
+            String connectionString = $"esdb://admin:changeit@{ip}:{this.EventStoreHttpPort}";
+
+            connectionString = this.IsSecureEventStore switch
+            {
+                true => $"{connectionString}?tls=true&tlsVerifyCert=false",
+                _ => $"{connectionString}?tls=false&tlsVerifyCert=false"
+            };
+
+            return EventStoreClientSettings.Create(connectionString);
+        }
+
+        protected override async Task LoadEventStoreProjections() {
+            //Start our Continuous Projections - we might decide to do this at a different stage, but now lets try here
+            String projectionsFolder = "projections/continuous";
+            IPAddress[] ipAddresses = Dns.GetHostAddresses("127.0.0.1");
+
+            if (!String.IsNullOrWhiteSpace(projectionsFolder)) {
+                DirectoryInfo di = new DirectoryInfo(projectionsFolder);
+
+                if (di.Exists) {
+                    FileInfo[] files = di.GetFiles();
+                    var requiredProjections = this.GetRequiredProjections();
+                    EventStoreProjectionManagementClient projectionClient = new EventStoreProjectionManagementClient(this.ConfigureEventStoreSettings());
+                    List<String> projectionNames = new List<String>();
+
+                    foreach (FileInfo file in files) {
+                        if (requiredProjections.Contains(file.Name) == false)
+                            continue;
+
+                        String projection = await RemoveProjectionTestSetup(file);
+                        String projectionName = file.Name.Replace(".js", String.Empty);
+
+                        Should.NotThrow(async () => {
+                                this.Trace($"Creating projection [{projectionName}] from file [{file.FullName}]");
+                                try {
+                                    await projectionClient.CreateContinuousAsync(projectionName, projection, trackEmittedStreams: true).ConfigureAwait(false);
+                                }
+                                catch (Exception ex) {
+                                }
+
+                                projectionNames.Add(projectionName);
+                                this.Trace($"Projection [{projectionName}] created");
+                            }, $"Projection [{projectionName}] error");
+                    }
+
+                    // Now check the create status of each
+                    foreach (String projectionName in projectionNames) {
+                        Should.NotThrow(async () => {
+                            ProjectionDetails projectionDetails = await projectionClient.GetStatusAsync(projectionName);
+
+                            projectionDetails.Status.ShouldBe("Running", $"Projection [{projectionName}] is {projectionDetails.Status}");
+
+                            this.Trace($"Projection [{projectionName}] running");
+                        }, "Error getting Projection [{projectionName}] status");
+                    }
+                }
+            }
+
+            this.Trace("Loaded projections");
         }
     }
 
