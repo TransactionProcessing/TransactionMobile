@@ -21,31 +21,31 @@ jobs:
       - name: Test IP
         run: echo $ENV_IPADDRESS
 
-      - name: Install colima and docker
-        run: |
-          brew install colima docker
-          wget https://github.com/abiosoft/colima-core/releases/download/v0.6.7/ubuntu-23.10-minimal-cloudimg-arm64.qcow2
-          /opt/homebrew/bin/qemu-system-aarch64 -m 1G -drive file=ubuntu-23.10-minimal-cloudimg-arm64.qcow2,if=virtio -display default,show-cursor=on -machine type=virt -accel hvf -nographic &
-          colima start
-          docker ps
-          docker pull alpine:latest
-          docker image ls
+      #- name: Install colima and docker
+      #  run: |
+      #    brew install colima docker
+      #    wget https://github.com/abiosoft/colima-core/releases/download/v0.6.7/ubuntu-23.10-minimal-cloudimg-arm64.qcow2
+      #    /opt/homebrew/bin/qemu-system-aarch64 -m 1G -drive file=ubuntu-23.10-minimal-cloudimg-arm64.qcow2,if=virtio -display default,show-cursor=on -machine type=virt -accel hvf -nographic &
+      #    colima start
+      #    docker ps
+      #    docker pull alpine:latest
+      #    docker image ls
 
-      - name: Verify Docker Installation
-        run: |
-          docker version
-          docker info
+      #- name: Verify Docker Installation
+      #  run: |
+      #    docker version
+      #    docker info
 
-      - name: Pull images
-        run: |
-         docker pull stuartferguson/messagingservice:master
-         docker pull stuartferguson/securityservice:master
-         docker pull stuartferguson/transactionprocessor:master
-         docker pull stuartferguson/transactionprocessoracl:master
-         docker pull stuartferguson/testhosts:master
-         docker pull stuartferguson/mobileconfiguration:master
-         docker pull mcr.microsoft.com/azure-sql-edge
-         docker pull eventstore/eventstore:21.10.0-buster-slim
+      #- name: Pull images
+      #  run: |
+      #   docker pull stuartferguson/messagingservice:master
+      #   docker pull stuartferguson/securityservice:master
+      #   docker pull stuartferguson/transactionprocessor:master
+      #   docker pull stuartferguson/transactionprocessoracl:master
+      #   docker pull stuartferguson/testhosts:master
+      #   docker pull stuartferguson/mobileconfiguration:master
+      #   docker pull mcr.microsoft.com/azure-sql-edge
+      #   docker pull eventstore/eventstore:21.10.0-buster-slim
       #- name: Pull images
       #  run: |
       #    docker pull mcr.microsoft.com/azure-sql-edge
@@ -53,10 +53,10 @@ jobs:
       #- name: Start SQL Server (Docker)
       #  run: docker run -p 1433:1433 -e "ACCEPT_EULA=1" -e "SA_PASSWORD=YourStrongPassword!" -d mcr.microsoft.com/azure-sql-edge
       
-      - name: Setup SQL Server Container
-        run: |
-          docker network create sharednetwork
-          docker run --name sharedsqlsserver --network sharednetwork -e "ACCEPT_EULA=Y" -e "SA_USER=sa" -e "SA_PASSWORD=thisisalongpassword123!" -p 1433 -d mcr.microsoft.com/azure-sql-edge
+      #- name: Setup SQL Server Container
+      #  run: |
+      #    docker network create sharednetwork
+      #    docker run --name sharedsqlsserver --network sharednetwork -e "ACCEPT_EULA=Y" -e "SA_USER=sa" -e "SA_PASSWORD=thisisalongpassword123!" -p 1433 -d mcr.microsoft.com/azure-sql-edge
 
       #- name: Install telnet
       #  run: brew install telnet
@@ -108,7 +108,7 @@ jobs:
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -f net8.0-ios -c Release --no-restore
 
       - name: Run Appium Tests (iOS)
-        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRTest)&(Category=iOS)"
+        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)"
 
       - name: Upload Logs on Failure
         if: failure()
