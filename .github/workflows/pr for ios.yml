@@ -81,7 +81,7 @@ jobs:
           model: 'iPhone 15 Pro'
       
       - name: Set UDID Environment Variable
-        run: echo "UDID=${{ steps.simulator.outputs.simulator-udid }}" >> $GITHUB_ENV
+        run: echo "UDID=${{ steps.simulator.outputs.udid }}" >> $GITHUB_ENV
 
       #- name: Echo UDID Environment Variable
       #  run: echo "The UDID is: ${{ env.UDID }}"
