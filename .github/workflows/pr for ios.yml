@@ -113,6 +113,11 @@ jobs:
         run: |
           nohup appium --log appium.log &
 
+      - name: Network Connectivity Check
+        run: |
+          ping -c 3 127.0.0.1
+          curl http://127.0.0.1:4723/status
+
       - name: Restore MAUI App for iOS
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }}
 
