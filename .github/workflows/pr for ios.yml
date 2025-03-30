@@ -46,7 +46,7 @@ jobs:
       #   docker pull stuartferguson/mobileconfiguration:master
       #   docker pull mcr.microsoft.com/azure-sql-edge
       #   docker pull eventstore/eventstore:21.10.0-buster-slim
-      #- name: Pull images
+      #- name: Pull images  
       #  run: |
       #    docker pull mcr.microsoft.com/azure-sql-edge
 
@@ -79,6 +79,12 @@ jobs:
         with:
           model: 'iPhone 15 Pro'
       
+      - name: Set UDID Environment Variable
+        run: echo "UDID=${{ steps.simulator.outputs.simulator-udid }}" >> $GITHUB_ENV
+
+      - name: Echo UDID Environment Variable
+        run: echo "The UDID is: ${{ env.UDID }}"
+
       #- name: Wait for iOS Simulator to Boot
       #  run: |
       #    UDID=$(xcrun simctl list devices | grep "Test-iPhone" | grep -o '([0-9A-F\-]+)' | head -n 1) #get the UDID
