@@ -118,6 +118,12 @@ jobs:
           ping -c 3 127.0.0.1
           curl http://127.0.0.1:4723/status
 
+      - name: Check Port 8100      
+        run: lsof -i :8100
+
+      - name: Check Port 8101
+        run: lsof -i :8101
+
       - name: Restore MAUI App for iOS
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }}
 

@@ -88,6 +88,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 999999999);
             driverOptions.AddAdditionalAppiumOption("restart", true);
             driverOptions.AddAdditionalAppiumOption("simulatorStartupTimeout", 5 * 60 * 1000);
+            driverOptions.AddAdditionalAppiumOption("wdaLocalPort", 8101); // Example: Change to port 8101
 
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
         }
