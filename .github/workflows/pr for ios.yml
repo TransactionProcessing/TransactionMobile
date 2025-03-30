@@ -64,15 +64,20 @@ jobs:
       #- name: Test SQL Server Connection
       #  run: telnet $(ifconfig en0 | grep "inet " | awk '{print $2}') 1433
 
-      - name: List Available iOS Simulators
-        run: xcrun simctl list devices
+      #- name: List Available iOS Simulators
+      #  run: xcrun simctl list devices
 
-      - name: Start iOS Simulator
-        run: |
-          UDID=$(xcrun simctl create "Test-iPhone" "com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro" "com.apple.CoreSimulator.SimRuntime.iOS-17-0")
-          echo "Simulator UDID: $UDID"
-          xcrun simctl boot "$UDID"
-          sleep 15 # Allow time for boot
+      #- name: Start iOS Simulator
+      #  run: |
+      #    UDID=$(xcrun simctl create "Test-iPhone" "com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro" "com.apple.CoreSimulator.SimRuntime.iOS-17-2")
+      #    echo "Simulator UDID: $UDID"
+      #    xcrun simctl boot "$UDID"
+      #    sleep 15 # Allow time for boot
+
+      - name: Start Simulator 
+        uses: futureware-tech/simulator-action@v4
+        with:
+          model: 'iPhone-15-Pro'
       
       #- name: Wait for iOS Simulator to Boot
       #  run: |
