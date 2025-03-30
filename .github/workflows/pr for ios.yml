@@ -82,8 +82,8 @@ jobs:
       - name: Set UDID Environment Variable
         run: echo "UDID=${{ steps.simulator.outputs.simulator-udid }}" >> $GITHUB_ENV
 
-      - name: Echo UDID Environment Variable
-        run: echo "The UDID is: ${{ env.UDID }}"
+      #- name: Echo UDID Environment Variable
+      #  run: echo "The UDID is: ${{ env.UDID }}"
 
       #- name: Wait for iOS Simulator to Boot
       #  run: |
