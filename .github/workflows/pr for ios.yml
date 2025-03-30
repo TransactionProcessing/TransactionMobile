@@ -75,6 +75,7 @@ jobs:
       #    sleep 15 # Allow time for boot
 
       - name: Start Simulator 
+        id: simulator
         uses: futureware-tech/simulator-action@v4
         with:
           model: 'iPhone 15 Pro'
@@ -82,8 +83,8 @@ jobs:
       - name: Set UDID Environment Variable
         run: echo "UDID=${{ steps.simulator.outputs.simulator-udid }}" >> $GITHUB_ENV
 
-      - name: Echo UDID Environment Variable
-        run: echo "The UDID is: ${{ env.UDID }}"
+      #- name: Echo UDID Environment Variable
+      #  run: echo "The UDID is: ${{ env.UDID }}"
 
       #- name: Wait for iOS Simulator to Boot
       #  run: |
