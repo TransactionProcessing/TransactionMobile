@@ -77,7 +77,7 @@ jobs:
       - name: Start Simulator 
         uses: futureware-tech/simulator-action@v4
         with:
-          model: 'iPhone-15-Pro'
+          model: 'iPhone 15 Pro'
       
       #- name: Wait for iOS Simulator to Boot
       #  run: |
