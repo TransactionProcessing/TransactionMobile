@@ -84,6 +84,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.App = appPath;
             var fileInfo = new FileInfo(appPath);
             Debug.WriteLine($"App File Exists {fileInfo.Exists}");
+            driverOptions.AddAdditionalAppiumOption("showXcodeLog", true);
 
             //driverOptions.App = apkPath;
             //driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
