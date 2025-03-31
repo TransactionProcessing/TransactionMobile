@@ -11,11 +11,12 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.UiTests.Drivers
 {
+    using Microsoft.Testing.Platform.Capabilities;
+    using OpenQA.Selenium;
+    using OpenQA.Selenium.Appium.Windows;
     using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Threading;
-    using OpenQA.Selenium;
-    using OpenQA.Selenium.Appium.Windows;
     
     public enum MobileTestPlatform
     {
@@ -73,6 +74,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             var driverOptions = new AppiumOptions();
             driverOptions.AutomationName = "XCUITest";
             driverOptions.PlatformName = "iOS";
+            driverOptions.PlatformVersion = "17.2";
             driverOptions.AddAdditionalAppiumOption("udid", Environment.GetEnvironmentVariable("UDID")); // Corrected capability.
 
             //String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
