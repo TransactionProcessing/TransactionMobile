@@ -80,6 +80,27 @@ jobs:
         with:
           model: 'iPhone 15 Pro'
       
+      - name: Wait for Simulator to Boot
+        run: |
+          # Retry loop to check simulator state
+          for i in $(seq 1 30); do # Try 30 times (adjust as needed)
+            echo "Checking simulator boot status (attempt $i)..."
+            
+            # Check if simulator is in 'Booted' state
+            simulator_state=$(xcrun simctl list | grep "${{ env.UDID }}.*(Booted)" | awk '{print $NF}')
+            
+            if [ "$simulator_state" == "(Booted)" ]; then
+              echo "Simulator is booted and ready."
+              exit 0 # Exit successfully
+            fi
+            
+            echo "Simulator not yet booted. Waiting 10 seconds..."
+            sleep 10
+          done
+          
+          echo "Error: Simulator failed to boot within the timeout."
+          exit 1 # Exit with an error
+
       - name: Set UDID Environment Variable
         run: echo "UDID=${{ steps.simulator.outputs.udid }}" >> $GITHUB_ENV
 
