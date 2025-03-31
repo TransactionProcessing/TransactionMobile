@@ -139,7 +139,7 @@ jobs:
           npm install -g appium-doctor
 
       - name: Run appium-doctor
-          run: appium-doctor --ios
+        run: appium-doctor --ios
       
       - name: Restore MAUI App for iOS
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }}
