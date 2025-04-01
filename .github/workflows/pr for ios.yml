@@ -1,83 +1,41 @@
-name: Appium iOS Tests on macOS 13
+name: iOS Build - Navigation Tests
 
-on:
-  pull_request:
-    branches:
-      - main
+on: [push, pull_request]
 
 jobs:
-  ios_tests:
-    runs-on: macos-13 # Specify macOS 13 runner
-
+  build-and-test:
+    runs-on: macos-13
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
         with:
-          node-version: '20.x'
-      
-      - name: Install Appium and Driver
+          xcode-version: '14.3' # Update as needed based on available versions
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Updated to a more recent LTS version
+
+      - name: Set up Appium
         run: |
-          #!/bin/bash -e
-          npm install -g appium
-          appium driver install xcuitest
-        shell: bash
+          npm install -g appium@latest --unsafe-perm=true --allow-root
+          appium driver install xcuitest@latest 
 
-      - name: Set up Simulator
+      - name: Install .NET SDK and MAUI Workloads
         run: |
-          #!/bin/bash -ex
+          dotnet --version
+          dotnet workload update
+          dotnet workload install ios --ignore-failed-sources
+          dotnet workload install maui --ignore-failed-sources
 
-          # 1. Create Simulator (if it doesn't exist - adjust name/version!)
-          SIMULATOR_NAME="iPhone 15 Pro - Appium"
-          UDID=$(xcrun simctl list devices "iPhone 15 Pro (17.2)" | grep -oE "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
-
-          if [ -z "$UDID" ]; then
-            echo "Creating simulator: $SIMULATOR_NAME"
-            UDID=$(xcrun simctl create "$SIMULATOR_NAME" "iPhone 15 Pro" "iOS 17.2")
-          else
-            echo "Simulator exists: $SIMULATOR_NAME ($UDID)"
-          fi
-
-          echo "UDID=$UDID" >> $GITHUB_ENV # Export for later use
-
-          # 2. Boot Simulator
-          echo "Booting simulator..."
-          xcrun simctl boot "$_UDID"
-
-          # 3. Wait for Simulator to Boot (Important!)
-          echo "Waiting for simulator to boot..."
-          until xcrun simctl list devices | grep -q "($UDID) (Booted)"; do
-            echo "Simulator not yet booted, waiting..."
-            sleep 5
-          done
-          echo "Simulator booted successfully."
-
-        shell: bash
-
-      - name: Start Appium Server (in background)
-        run: |
-          #!/bin/bash -e
-          echo "Starting Appium server..."
-          appium --port 4723 --log-level debug &  # Start in background
-          sleep 10 # Give Appium time to start
-          echo "Appium server started."
-        shell: bash
-
-      - name: Install .NET MAUI workload
-        run: dotnet workload install maui
-
-      - name: Restore MAUI App for iOS
-        run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }}
+      - name: Restore Dependencies
+        run: dotnet restore TransactionMobile.Maui.sln
 
       - name: Build MAUI App for iOS
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -f net8.0-ios -c Release --no-restore
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-ios --no-restore
 
-      - name: Run Appium Tests (iOS)
-        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)"
-
-      - name: Upload Logs on Failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-            name: ios-test-logs
-            path: appium.log
+      - name: Run Navigation Integration Tests - iOS
+        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "Category=PRNavTest&Category=iOS"
