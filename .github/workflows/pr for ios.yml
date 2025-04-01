@@ -155,22 +155,27 @@ jobs:
       - name: Find Appium XCUITest Driver Path
         id: find-driver-path
         run: |
+          echo "--- START Find Appium XCUITest Driver Path ---" # Added START marker
+
           # 1. Try npm list (most reliable)
           DRIVER_PATH=$(npm list -g appium-xcuitest-driver | awk -F'appium-xcuitest-driver@' '{print $2}' | awk '{print $1}' | head -n 1)
-          echo "DEBUG: npm list path: $DRIVER_PATH" # Added debug output
+          echo "DEBUG 1: npm list path: $DRIVER_PATH" # Added explicit DEBUG 1
+          echo "DEBUG 1: npm list exit code: $?" # Added exit code check
 
           # 2. If npm list fails, try npm root -g
           if [ ! -d "$DRIVER_PATH" ]; then
             echo "npm list failed, trying npm root -g..."
             DRIVER_PATH=$(npm root -g)/appium/node_modules/appium-xcuitest-driver
-            echo "DEBUG: npm root -g path: $DRIVER_PATH" # Added debug output
+            echo "DEBUG 2: npm root -g path: $DRIVER_PATH" # Added explicit DEBUG 2
+            echo "DEBUG 2: npm root -g exit code: $?" # Added exit code check
           fi
 
           # 3. If *both* fail, use find (last resort)
           if [ ! -d "$DRIVER_PATH" ]; then
             echo "Both npm methods failed, using 'find'..."
             DRIVER_PATH=$(find /usr/local/lib /opt/homebrew /usr/lib /usr/ -name "appium-xcuitest-driver" -type d 2>/dev/null | head -n 1)
-            echo "DEBUG: find path: $DRIVER_PATH" # Added debug output
+            echo "DEBUG 3: find path: $DRIVER_PATH" # Added explicit DEBUG 3
+            echo "DEBUG 3: find exit code: $?" # Added exit code check
           fi
 
           # 4. Final check and error handling
@@ -180,6 +185,7 @@ jobs:
           fi
 
           echo "DRIVER_PATH=$DRIVER_PATH" >> $GITHUB_OUTPUT
+          echo "--- END Find Appium XCUITest Driver Path ---" # Added END marker
         shell: bash
 
       - name: Use Driver Path (Example)
