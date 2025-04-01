@@ -138,26 +138,42 @@ jobs:
         run: |
           npm install -g appium-doctor
 
-      - name: Run appium-doctor
-        run: appium-doctor --ios
+      - name: Debug List global npm modules
+        run: npm list -g --depth=0
+        shell: bash
+
+      - name: Debug npm root -g
+        run: npm root -g
+        shell: bash
+
+      - name: Debug Appium Version and Installation Info
+        run: |
+          appium --version
+          npm list -g appium
+        shell: bash
 
       - name: Find Appium XCUITest Driver Path
         id: find-driver-path
         run: |
-          # Try the standard path first
-          DRIVER_PATH=$(npm root -g)/appium/node_modules/appium-xcuitest-driver
+          # 1. Try npm list for the most accurate path
+          DRIVER_PATH=$(npm list -g appium-xcuitest-driver | awk -F'appium-xcuitest-driver@' '{print $2}' | awk '{print $1}' | head -n 1)
 
-          # Check if the path exists
+          # 2. If npm list fails, try npm root -g (less reliable)
           if [ ! -d "$DRIVER_PATH" ]; then
-            echo "Standard driver path not found. Trying alternative search..."
+            echo "npm list failed, trying npm root -g..."
+            DRIVER_PATH=$(npm root -g)/appium/node_modules/appium-xcuitest-driver
+          fi
 
-            # Use npm list to get the *exact* installed path
-            DRIVER_PATH=$(npm list -g appium-xcuitest-driver | awk -F'appium-xcuitest-driver@' '{print $2}' | awk '{print $1}' | head -n 1)
+          # 3. If *both* fail, do a more thorough find (slow, but last resort)
+          if [ ! -d "$DRIVER_PATH" ]; then
+            echo "Both npm methods failed, using 'find'..."
+            DRIVER_PATH=$(find /usr/local/lib /opt/homebrew /usr/lib /usr/ -name "appium-xcuitest-driver" -type d 2>/dev/null | head -n 1) # Added /usr/lib
+          fi
 
-            if [ ! -d "$DRIVER_PATH" ]; then
-              echo "ERROR: Could not find appium-xcuitest-driver!"
-              exit 1  # Fail the workflow
-            fi
+          # 4. Final check and error handling
+          if [ ! -d "$DRIVER_PATH" ]; then
+            echo "ERROR: Could not find appium-xcuitest-driver!"
+            exit 1
           fi
 
           echo "DRIVER_PATH=$DRIVER_PATH" >> $GITHUB_OUTPUT
@@ -167,7 +183,7 @@ jobs:
         run: |
           DRIVER_PATH=${{ steps.find-driver-path.outputs.DRIVER_PATH }}
           echo "Found driver at: $DRIVER_PATH"
-          ls -l "$DRIVER_PATH"  # Try the ls command again
+          ls -l "$DRIVER_PATH"           
 
       - name: Build WebDriverAgent
         run: |
