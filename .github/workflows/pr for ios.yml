@@ -154,8 +154,8 @@ jobs:
           DRIVER_PATH=${{ steps.find-driver-path.outputs.DRIVER_PATH }}
           echo "Found driver at: $DRIVER_PATH"
 
-      # You can now use DRIVER_PATH in subsequent commands, e.g.,
-      # ls -l "$DRIVER_PATH"
+          # You can now use DRIVER_PATH in subsequent commands, e.g.,
+          ls -l "$DRIVER_PATH"
 
       - name: Build WebDriverAgent
         run: |
