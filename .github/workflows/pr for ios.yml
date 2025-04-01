@@ -134,6 +134,16 @@ jobs:
         run: |
           nohup appium --log appium.log &
 
+      - name: Use Driver Path (Example)
+        run: |
+          #!/bin/bash -e
+          
+          # Example: List contents of the driver directory
+          ls -l /Users/runner/.appium/node_modules/appium-xcuitest-driver
+          
+          echo "--- END Use Driver Path (Example) ---"
+        shell: bash
+
       - name: Build WebDriverAgent with xcodebuild
         id: build-wda
         run: |
