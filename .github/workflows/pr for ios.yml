@@ -144,18 +144,30 @@ jobs:
       - name: Find Appium XCUITest Driver Path
         id: find-driver-path
         run: |
+          # Try the standard path first
           DRIVER_PATH=$(npm root -g)/appium/node_modules/appium-xcuitest-driver
+
+          # Check if the path exists
+          if [ ! -d "$DRIVER_PATH" ]; then
+            echo "Standard driver path not found. Trying alternative search..."
+
+            # Use npm list to get the *exact* installed path
+            DRIVER_PATH=$(npm list -g appium-xcuitest-driver | awk -F'appium-xcuitest-driver@' '{print $2}' | awk '{print $1}' | head -n 1)
+
+            if [ ! -d "$DRIVER_PATH" ]; then
+              echo "ERROR: Could not find appium-xcuitest-driver!"
+              exit 1  # Fail the workflow
+            fi
+          fi
+
           echo "DRIVER_PATH=$DRIVER_PATH" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Use Driver Path (Example)
         run: |
-          # Access the driver path from the previous step's output
           DRIVER_PATH=${{ steps.find-driver-path.outputs.DRIVER_PATH }}
           echo "Found driver at: $DRIVER_PATH"
-
-          # You can now use DRIVER_PATH in subsequent commands, e.g.,
-          ls -l "$DRIVER_PATH"
+          ls -l "$DRIVER_PATH"  # Try the ls command again
 
       - name: Build WebDriverAgent
         run: |
