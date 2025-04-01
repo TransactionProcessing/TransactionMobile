@@ -144,82 +144,51 @@ jobs:
           echo "--- END Use Driver Path (Example) ---"
         shell: bash
 
-      - name: Build WebDriverAgent with xcodebuild
+      - name: Clone WebDriverAgent
+          uses: actions/checkout@v4
+          with:
+            repository: appium/WebDriverAgent
+            path: WebDriverAgent  # Clone into a directory named "WebDriverAgent"
+
+      - name: Build WebDriverAgent
         id: build-wda
         run: |
-          #!/bin/bash -ex
-          echo "--- START Build WebDriverAgent with xcodebuild ---"
+            #!/bin/bash -ex
+            echo "--- START Build WebDriverAgent ---"
 
-          # 1. Determine Appium Home and Driver path (from logs)
-          APPIUM_HOME="/Users/runner/.appium" # From your logs
-          DRIVER_PATH="$APPIUM_HOME/node_modules/appium-xcuitest-driver"
+            # 1. Set WDA path
+            WDA_PATH="${GITHUB_WORKSPACE}/WebDriverAgent"  # Consistent path
+            XCODE_PROJECT="$WDA_PATH/WebDriverAgent.xcodeproj"
 
-          echo "APPIUM_HOME: $APPIUM_HOME"
-          echo "DRIVER_PATH: $(realpath "$DRIVER_PATH")"
+            echo "WDA_PATH: $(realpath "$WDA_PATH")"
+            echo "XCODE_PROJECT: $(realpath "$XCODE_PROJECT")"
 
-          # 2. Try common WDA paths (and find it)
-          WDA_PROJECTS=(
-            "$DRIVER_PATH/WebDriverAgent/WebDriverAgent.xcodeproj"        # 1. Inside driver (old location?)
-            "$APPIUM_HOME/WebDriverAgent/WebDriverAgent.xcodeproj"         # 2. In Appium Home
-            "/opt/WebDriverAgent/WebDriverAgent.xcodeproj"                 # 3. Common install location
-            "/usr/local/WebDriverAgent/WebDriverAgent.xcodeproj"           # 4. Another common install
-          )
-          WDA_PROJECT=""
-
-          for PROJECT in "${WDA_PROJECTS[@]}"; do
-            if [ -f "$(realpath "$PROJECT")" ]; then
-              WDA_PROJECT="$(realpath "$PROJECT")"
-              break  # Found it, exit loop
+            # 2. Get Simulator UDID (Adjust the grep!)
+            SIMULATOR_UDID=$(xcrun simctl list devices | grep "iPhone 15.*(Booted)" | awk '{print $5}' | tr -d '()')
+            if [ -z "$SIMULATOR_UDID" ]; then
+              echo "ERROR: Could not determine Simulator UDID!"
+              exit 1
             fi
-          done
+            echo "SIMULATOR_UDID: $SIMULATOR_UDID"
 
-          if [ -z "$WDA_PROJECT" ]; then
-            echo "ERROR: WebDriverAgent.xcodeproj not found in any common locations!"
-            # Debug: List contents of Appium Home
-            echo "Contents of APPIUM_HOME:"
-            ls -l "$APPIUM_HOME"
-            # Debug: List contents of driver dir
-            echo "Contents of DRIVER_PATH:"
-            ls -l "$DRIVER_PATH"
-            exit 1
-          fi
+            # 3. Change to WDA directory
+            echo "Changing working directory to: $(realpath "$WDA_PATH")"
+            cd "$(realpath "$WDA_PATH")"
+            pwd
 
-          echo "WDA_PROJECT: $WDA_PROJECT"
+            # 4. Clean and build WebDriverAgent
+            echo "Cleaning and building WebDriverAgent..."
+            xcodebuild -project "$(realpath "WebDriverAgent.xcodeproj")" \
+              -scheme WebDriverAgentRunner \
+              -destination "id=$SIMULATOR_UDID" \
+              clean test  # Clean and build in one command
+            if [ $? -ne 0 ]; then
+              echo "ERROR: xcodebuild failed!"
+              exit 1
+            fi
 
-          # 3. Get Simulator UDID (You might need to adjust this)
-          SIMULATOR_UDID=$(xcrun simctl list devices | grep "iPhone 15.*(Booted)" | awk '{print $5}' | tr -d '()')
-          if [ -z "$SIMULATOR_UDID" ]; then
-            echo "ERROR: Could not determine Simulator UDID!"
-            exit 1
-          fi
-          echo "SIMULATOR_UDID: $SIMULATOR_UDID"
-
-          # 4. Change to WDA directory (IMPORTANT!)
-          WDA_PATH=$(dirname "$WDA_PROJECT") # Get the directory of the project
-          echo "Changing working directory to: $(realpath "$WDA_PATH")"
-          cd "$(realpath "$WDA_PATH")"
-          pwd
-
-          # 5. Clean the build
-          echo "Cleaning Xcode build..."
-          xcodebuild -project "$(realpath "WebDriverAgent.xcodeproj")" -scheme WebDriverAgentRunner clean -destination "id=$SIMULATOR_UDID"
-          if [ $? -ne 0 ]; then
-            echo "ERROR: xcodebuild clean failed!"
-            exit 1
-          fi
-
-          # 6. Build for testing
-          echo "Building WebDriverAgent..."
-          xcodebuild -project "$(realpath "WebDriverAgent.xcodeproj")" -scheme WebDriverAgentRunner \
-            -destination "id=$SIMULATOR_UDID" \
-            test
-          if [ $? -ne 0 ]; then
-            echo "ERROR: xcodebuild build failed!"
-            exit 1
-          fi
-
-          echo "--- END Build WebDriverAgent with xcodebuild ---"
-        shell: bash
+            echo "--- END Build WebDriverAgent ---"
+        shell: bash      
 
       - name: Restore MAUI App for iOS
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }}
