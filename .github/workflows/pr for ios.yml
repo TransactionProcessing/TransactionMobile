@@ -145,8 +145,8 @@ jobs:
         shell: bash
 
       - name: Clone WebDriverAgent
-          uses: actions/checkout@v4
-          with:
+        uses: actions/checkout@v4
+        with:
             repository: appium/WebDriverAgent
             path: WebDriverAgent  # Clone into a directory named "WebDriverAgent"
 
