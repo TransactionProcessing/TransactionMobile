@@ -137,7 +137,7 @@ jobs:
       - name: Build WebDriverAgent with xcodebuild
         id: build-wda
         run: |
-          #!/bin/bash -e
+          #!/bin/bash -ex # -x for extra debugging, -e for exit on error
           echo "--- START Build WebDriverAgent with xcodebuild ---"
 
           # 1. Determine Appium Home and WDA path (from previous step or hardcoded)
@@ -146,8 +146,18 @@ jobs:
           XCODE_PROJECT="$WDA_PATH/WebDriverAgent.xcodeproj"
 
           echo "APPIUM_HOME: $APPIUM_HOME"
-          echo "WDA_PATH: $WDA_PATH"
-          echo "XCODE_PROJECT: $XCODE_PROJECT"
+          echo "WDA_PATH: $(realpath "$WDA_PATH")" # Use realpath
+          echo "XCODE_PROJECT: $(realpath "$XCODE_PROJECT")" # Use realpath
+
+          # Debug: List contents of WDA directory
+          echo "Contents of WDA_PATH:"
+          ls -l "$WDA_PATH"
+
+          # Debug: Check if xcodeproj exists
+          if [ ! -f "$(realpath "$XCODE_PROJECT")" ]; then
+            echo "ERROR: WebDriverAgent.xcodeproj not found!"
+            exit 1
+          fi
 
           # 2. Get Simulator UDID (You might need to adjust this)
           SIMULATOR_UDID=$(xcrun simctl list devices | grep "iPhone 15.*(Booted)" | awk '{print $5}' | tr -d '()')
@@ -157,17 +167,22 @@ jobs:
           fi
           echo "SIMULATOR_UDID: $SIMULATOR_UDID"
 
-          # 3. Clean the build
+          # 3. Change to WDA directory (IMPORTANT!)
+          echo "Changing working directory to: $(realpath "$WDA_PATH")"
+          cd "$(realpath "$WDA_PATH")"
+          pwd # Print current working directory
+
+          # 4. Clean the build
           echo "Cleaning Xcode build..."
-          xcodebuild -project "$XCODE_PROJECT" -scheme WebDriverAgentRunner clean -destination "id=$SIMULATOR_UDID"
+          xcodebuild -project "$(realpath "WebDriverAgent.xcodeproj")" -scheme WebDriverAgentRunner clean -destination "id=$SIMULATOR_UDID"
           if [ $? -ne 0 ]; then
             echo "ERROR: xcodebuild clean failed!"
             exit 1
           fi
 
-          # 4. Build for testing
+          # 5. Build for testing
           echo "Building WebDriverAgent..."
-          xcodebuild -project "$XCODE_PROJECT" -scheme WebDriverAgentRunner \
+          xcodebuild -project "$(realpath "WebDriverAgent.xcodeproj")" -scheme WebDriverAgentRunner \
             -destination "id=$SIMULATOR_UDID" \
             test
           if [ $? -ne 0 ]; then
