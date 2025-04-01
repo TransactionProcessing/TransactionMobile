@@ -140,7 +140,22 @@ jobs:
 
       - name: Run appium-doctor
         run: appium-doctor --ios
+
+      - name: Build WebDriverAgent
+        run: |
+          # Find the WebDriverAgent project path (adjust if needed)
+          WDA_PATH=$(npm root -g)/appium/node_modules/appium-xcuitest-driver/WebDriverAgent
       
+          # Clean build (important!)
+          xcodebuild -project "$WDA_PATH/WebDriverAgent.xcodeproj" -scheme WebDriverAgentRunner clean
+
+          # Build for testing
+          xcodebuild -project "$WDA_PATH/WebDriverAgent.xcodeproj" -scheme WebDriverAgentRunner \
+            -destination "id=$UDID" \
+            test
+
+        shell: bash # Important to use bash for the commands
+
       - name: Restore MAUI App for iOS
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }}
 
