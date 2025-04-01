@@ -148,6 +148,15 @@ jobs:
           echo "DRIVER_PATH=$DRIVER_PATH" >> $GITHUB_OUTPUT
         shell: bash
 
+      - name: Use Driver Path (Example)
+        run: |
+          # Access the driver path from the previous step's output
+          DRIVER_PATH=${{ steps.find-driver-path.outputs.DRIVER_PATH }}
+          echo "Found driver at: $DRIVER_PATH"
+
+      # You can now use DRIVER_PATH in subsequent commands, e.g.,
+      # ls -l "$DRIVER_PATH"
+
       - name: Build WebDriverAgent
         run: |
           # Find the WebDriverAgent project path (adjust if needed)
