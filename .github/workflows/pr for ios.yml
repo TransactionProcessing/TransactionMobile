@@ -51,7 +51,7 @@ jobs:
 
       - name: Boot Existing iOS Simulator
         run: |
-          export UDID=$(xcrun simctl list devices available | grep -m 1 "iPhone" | awk '{print $NF}' | tr -d '()')
+          export UDID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '([0-9A-F-]{36})' | head -n 1)
           echo "Booting Simulator UDID: $UDID"
           xcrun simctl boot "$UDID"
 
