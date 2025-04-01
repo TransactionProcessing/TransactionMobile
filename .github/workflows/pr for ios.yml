@@ -141,6 +141,13 @@ jobs:
       - name: Run appium-doctor
         run: appium-doctor --ios
 
+      - name: Find Appium XCUITest Driver Path
+        id: find-driver-path
+        run: |
+          DRIVER_PATH=$(npm root -g)/appium/node_modules/appium-xcuitest-driver
+          echo "DRIVER_PATH=$DRIVER_PATH" >> $GITHUB_OUTPUT
+        shell: bash
+
       - name: Build WebDriverAgent
         run: |
           # Find the WebDriverAgent project path (adjust if needed)
