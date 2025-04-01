@@ -134,98 +134,49 @@ jobs:
         run: |
           nohup appium --log appium.log &
 
-      - name: Install Appium and appium-doctor
+      - name: Build WebDriverAgent with xcodebuild
+        id: build-wda
         run: |
-          npm install -g appium-doctor
+          #!/bin/bash -e
+          echo "--- START Build WebDriverAgent with xcodebuild ---"
 
-      - name: Debug List global npm modules
-        run: npm list -g --depth=0
-        shell: bash
+          # 1. Determine Appium Home and WDA path (from previous step or hardcoded)
+          APPIUM_HOME="/Users/runner/.appium" # From your logs
+          WDA_PATH="$APPIUM_HOME/node_modules/appium-xcuitest-driver/WebDriverAgent"
+          XCODE_PROJECT="$WDA_PATH/WebDriverAgent.xcodeproj"
 
-      - name: Debug npm root -g
-        run: npm root -g
-        shell: bash
+          echo "APPIUM_HOME: $APPIUM_HOME"
+          echo "WDA_PATH: $WDA_PATH"
+          echo "XCODE_PROJECT: $XCODE_PROJECT"
 
-      - name: Debug Appium Version and Installation Info
-        run: |
-          appium --version
-          npm list -g appium
-        shell: bash
-
-      - name: Find Appium XCUITest Driver Path
-        id: find-driver-path
-        run: |
-          #!/bin/bash -e  # Force bash and exit on error
-          echo "--- START Find Appium XCUITest Driver Path ---"
-
-          # 1. Try npm list (most reliable)
-          DRIVER_PATH=$(npm list -g appium-xcuitest-driver | awk -F'appium-xcuitest-driver@' '{print $2}' | awk '{print $1}' | head -n 1)
-          echo "DEBUG 1: npm list path: $DRIVER_PATH"
-          echo "DEBUG 1: npm list exit code: $?"
-
-          # 2. If npm list fails, try npm root -g
-          if [ ! -d "$DRIVER_PATH" ]; then
-            echo "npm list failed, trying npm root -g..."
-            DRIVER_PATH=$(npm root -g)/appium/node_modules/appium-xcuitest-driver
-            echo "DEBUG 2: npm root -g path: $DRIVER_PATH"
-            echo "DEBUG 2: npm root -g exit code: $?"
-          fi
-
-          # 3. If *both* fail, use find (last resort)
-          if [ ! -d "$DRIVER_PATH" ]; then
-            echo "Both npm methods failed, using 'find'..."
-            DRIVER_PATH=$(find /usr/local/lib /opt/homebrew /usr/lib /usr/ -name "appium-xcuitest-driver" -type d 2>/dev/null | head -n 1)
-            echo "DEBUG 3: find path: $DRIVER_PATH"
-            echo "DEBUG 3: find exit code: $?"
-          fi
-
-          # 4. Final check and error handling
-          if [ ! -d "$DRIVER_PATH" ]; then
-            echo "ERROR: Could not find appium-xcuitest-driver!"
+          # 2. Get Simulator UDID (You might need to adjust this)
+          SIMULATOR_UDID=$(xcrun simctl list devices | grep "iPhone 15.*(Booted)" | awk '{print $5}' | tr -d '()')
+          if [ -z "$SIMULATOR_UDID" ]; then
+            echo "ERROR: Could not determine Simulator UDID!"
             exit 1
           fi
+          echo "SIMULATOR_UDID: $SIMULATOR_UDID"
 
-          echo "DRIVER_PATH=$DRIVER_PATH" >> $GITHUB_OUTPUT
-          echo "--- END Find Appium XCUITest Driver Path ---"
-        shell: bash
-
-      - name: Use Driver Path (Example)
-        run: |
-          #!/bin/bash -e  # Force bash and exit on error
-          echo "--- START Use Driver Path (Example) ---"
-          DRIVER_PATH=${{ steps.find-driver-path.outputs.DRIVER_PATH }}
-          echo "Found driver at: $DRIVER_PATH"
-
-          # Enhanced ls with error checking
-          ls -l "$DRIVER_PATH"
-          echo "ls exit code: $?"
+          # 3. Clean the build
+          echo "Cleaning Xcode build..."
+          xcodebuild -project "$XCODE_PROJECT" -scheme WebDriverAgentRunner clean -destination "id=$SIMULATOR_UDID"
           if [ $? -ne 0 ]; then
-            echo "ERROR: ls command failed!"
+            echo "ERROR: xcodebuild clean failed!"
             exit 1
           fi
-          echo "--- END Use Driver Path (Example) ---"
-        shell: bash
 
-      - name: Use Driver Path (Example)
-        run: |
-          DRIVER_PATH=${{ steps.find-driver-path.outputs.DRIVER_PATH }}
-          echo "Found driver at: $DRIVER_PATH"
-          ls -l "$DRIVER_PATH"           
-
-      - name: Build WebDriverAgent
-        run: |
-          # Find the WebDriverAgent project path (adjust if needed)
-          WDA_PATH=$(npm root -g)/appium/node_modules/appium-xcuitest-driver/WebDriverAgent
-      
-          # Clean build (important!)
-          xcodebuild -project "$WDA_PATH/WebDriverAgent.xcodeproj" -scheme WebDriverAgentRunner clean
-
-          # Build for testing
-          xcodebuild -project "$WDA_PATH/WebDriverAgent.xcodeproj" -scheme WebDriverAgentRunner \
-            -destination "id=$UDID" \
+          # 4. Build for testing
+          echo "Building WebDriverAgent..."
+          xcodebuild -project "$XCODE_PROJECT" -scheme WebDriverAgentRunner \
+            -destination "id=$SIMULATOR_UDID" \
             test
+          if [ $? -ne 0 ]; then
+            echo "ERROR: xcodebuild build failed!"
+            exit 1
+          fi
 
-        shell: bash # Important to use bash for the commands
+          echo "--- END Build WebDriverAgent with xcodebuild ---"
+        shell: bash
 
       - name: Restore MAUI App for iOS
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }}
