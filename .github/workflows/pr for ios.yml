@@ -140,36 +140,53 @@ jobs:
           
           # Example: List contents of the driver directory
           ls -l /Users/runner/.appium/node_modules/appium-xcuitest-driver
-          
+
           echo "--- END Use Driver Path (Example) ---"
         shell: bash
 
       - name: Build WebDriverAgent with xcodebuild
         id: build-wda
         run: |
-          #!/bin/bash -ex # -x for extra debugging, -e for exit on error
+          #!/bin/bash -ex
           echo "--- START Build WebDriverAgent with xcodebuild ---"
 
-          # 1. Determine Appium Home and WDA path (from previous step or hardcoded)
+          # 1. Determine Appium Home and Driver path (from logs)
           APPIUM_HOME="/Users/runner/.appium" # From your logs
-          WDA_PATH="$APPIUM_HOME/node_modules/appium-xcuitest-driver/WebDriverAgent"
-          XCODE_PROJECT="$WDA_PATH/WebDriverAgent.xcodeproj"
+          DRIVER_PATH="$APPIUM_HOME/node_modules/appium-xcuitest-driver"
 
           echo "APPIUM_HOME: $APPIUM_HOME"
-          echo "WDA_PATH: $(realpath "$WDA_PATH")" # Use realpath
-          echo "XCODE_PROJECT: $(realpath "$XCODE_PROJECT")" # Use realpath
+          echo "DRIVER_PATH: $(realpath "$DRIVER_PATH")"
 
-          # Debug: List contents of WDA directory
-          echo "Contents of WDA_PATH:"
-          ls -l "$WDA_PATH"
+          # 2. Try common WDA paths (and find it)
+          WDA_PROJECTS=(
+            "$DRIVER_PATH/WebDriverAgent/WebDriverAgent.xcodeproj"        # 1. Inside driver (old location?)
+            "$APPIUM_HOME/WebDriverAgent/WebDriverAgent.xcodeproj"         # 2. In Appium Home
+            "/opt/WebDriverAgent/WebDriverAgent.xcodeproj"                 # 3. Common install location
+            "/usr/local/WebDriverAgent/WebDriverAgent.xcodeproj"           # 4. Another common install
+          )
+          WDA_PROJECT=""
 
-          # Debug: Check if xcodeproj exists
-          if [ ! -f "$(realpath "$XCODE_PROJECT")" ]; then
-            echo "ERROR: WebDriverAgent.xcodeproj not found!"
+          for PROJECT in "${WDA_PROJECTS[@]}"; do
+            if [ -f "$(realpath "$PROJECT")" ]; then
+              WDA_PROJECT="$(realpath "$PROJECT")"
+              break  # Found it, exit loop
+            fi
+          done
+
+          if [ -z "$WDA_PROJECT" ]; then
+            echo "ERROR: WebDriverAgent.xcodeproj not found in any common locations!"
+            # Debug: List contents of Appium Home
+            echo "Contents of APPIUM_HOME:"
+            ls -l "$APPIUM_HOME"
+            # Debug: List contents of driver dir
+            echo "Contents of DRIVER_PATH:"
+            ls -l "$DRIVER_PATH"
             exit 1
           fi
 
-          # 2. Get Simulator UDID (You might need to adjust this)
+          echo "WDA_PROJECT: $WDA_PROJECT"
+
+          # 3. Get Simulator UDID (You might need to adjust this)
           SIMULATOR_UDID=$(xcrun simctl list devices | grep "iPhone 15.*(Booted)" | awk '{print $5}' | tr -d '()')
           if [ -z "$SIMULATOR_UDID" ]; then
             echo "ERROR: Could not determine Simulator UDID!"
@@ -177,12 +194,13 @@ jobs:
           fi
           echo "SIMULATOR_UDID: $SIMULATOR_UDID"
 
-          # 3. Change to WDA directory (IMPORTANT!)
+          # 4. Change to WDA directory (IMPORTANT!)
+          WDA_PATH=$(dirname "$WDA_PROJECT") # Get the directory of the project
           echo "Changing working directory to: $(realpath "$WDA_PATH")"
           cd "$(realpath "$WDA_PATH")"
-          pwd # Print current working directory
+          pwd
 
-          # 4. Clean the build
+          # 5. Clean the build
           echo "Cleaning Xcode build..."
           xcodebuild -project "$(realpath "WebDriverAgent.xcodeproj")" -scheme WebDriverAgentRunner clean -destination "id=$SIMULATOR_UDID"
           if [ $? -ne 0 ]; then
@@ -190,7 +208,7 @@ jobs:
             exit 1
           fi
 
-          # 5. Build for testing
+          # 6. Build for testing
           echo "Building WebDriverAgent..."
           xcodebuild -project "$(realpath "WebDriverAgent.xcodeproj")" -scheme WebDriverAgentRunner \
             -destination "id=$SIMULATOR_UDID" \
