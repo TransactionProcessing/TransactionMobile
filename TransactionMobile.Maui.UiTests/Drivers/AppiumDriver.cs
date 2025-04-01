@@ -92,7 +92,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             //driverOptions.App = apkPath;
             //driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
             //driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
-            //driverOptions.AddAdditionalAppiumOption("useNewWDA", true);
+            driverOptions.AddAdditionalAppiumOption("useNewWDA", true);
             driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 999999999);
             //driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 999999999);
             //driverOptions.AddAdditionalAppiumOption("restart", true);
