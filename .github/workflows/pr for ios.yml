@@ -39,7 +39,7 @@ jobs:
 
       - name: Set up iOS Simulator
         run: |
-          UDID=$(xcrun simctl create "Custom iPhone 14" "iPhone 14" "iOS 16.4")
+          UDID=$(xcrun simctl create "Custom iPhone 14" "iPhone 14" "iOS 17.2")
           xcrun simctl boot "$UDID"
           echo "Simulator booted with UDID: $UDID"
 
