@@ -37,17 +37,23 @@ jobs:
       - name: Build MAUI App for iOS
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-ios --no-restore
 
-      - name: Set up iOS Simulator
-        run: |
-          UDID=$(xcrun simctl create "Custom iPhone 14" "iPhone 14" "iOS 17.2")
-          xcrun simctl boot "$UDID"
-          echo "Simulator booted with UDID: $UDID"
+      #- name: Set up iOS Simulator
+      #  run: |
+      #    UDID=$(xcrun simctl create "Custom iPhone 14" "iPhone 14" "iOS 17.2")
+      #    xcrun simctl boot "$UDID"
+      #    echo "Simulator booted with UDID: $UDID"
 
-      - name: Wait for iOS Simulator to Boot
+      #- name: Wait for iOS Simulator to Boot
+      #  run: |
+      #    export UDID=$(xcrun simctl list devices booted | grep -oE '([0-9A-F-]{36})' | head -n 1)
+      #    echo "Using Simulator UDID: $UDID"
+      #    xcrun simctl bootstatus "$UDID" -b
+
+      - name: Boot Existing iOS Simulator
         run: |
-          export UDID=$(xcrun simctl list devices booted | grep -oE '([0-9A-F-]{36})' | head -n 1)
-          echo "Using Simulator UDID: $UDID"
-          xcrun simctl bootstatus "$UDID" -b
+          export UDID=$(xcrun simctl list devices available | grep -m 1 "iPhone" | awk '{print $NF}' | tr -d '()')
+          echo "Booting Simulator UDID: $UDID"
+          xcrun simctl boot "$UDID"
 
       - name: Run Navigation Integration Tests - iOS
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "Category=PRNavTest&Category=iOS"
