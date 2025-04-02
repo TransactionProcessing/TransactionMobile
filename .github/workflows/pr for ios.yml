@@ -68,3 +68,10 @@ jobs:
 
       - name: Run Navigation Integration Tests - iOS
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "Category=PRNavTest&Category=iOS"
+
+      - name: Upload Logs on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+            name: ios-test-logs
+            path: appium.log
