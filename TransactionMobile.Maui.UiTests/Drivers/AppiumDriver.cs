@@ -87,7 +87,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             var fileInfo = new FileInfo(appPath);
             Debug.WriteLine($"App File Exists {fileInfo.Exists}");
             driverOptions.AddAdditionalAppiumOption("showXcodeLog", true);
-            driverOptions.AddAdditionalAppiumOption("xcodebuild", true);
+            //driverOptions.AddAdditionalAppiumOption("xcodebuild", true);
 
             //driverOptions.App = apkPath;
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
@@ -96,7 +96,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 999999999);
             //driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 999999999);
             //driverOptions.AddAdditionalAppiumOption("restart", true);
-            //driverOptions.AddAdditionalAppiumOption("simulatorStartupTimeout", 5 * 60 * 1000);
+            driverOptions.AddAdditionalAppiumOption("simulatorStartupTimeout", 5 * 60 * 1000);
             //driverOptions.AddAdditionalAppiumOption("wdaLocalPort", 8101); // Example: Change to port 8101
 
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
