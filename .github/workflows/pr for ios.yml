@@ -32,7 +32,7 @@ jobs:
           sleep 30  # Increased wait time
 
       - name: Verify Appium is Running
-        run: curl -X GET http://127.0.0.1:4723/status
+        run: curl -X GET http://127.0.0.1:4723/
 
       - name: Boot Existing iOS Simulator
         run: |
