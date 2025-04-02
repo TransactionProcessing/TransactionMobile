@@ -26,6 +26,14 @@ jobs:
           npm install -g appium@latest --unsafe-perm=true --allow-root
           appium driver install xcuitest@latest 
 
+      - name: Start Appium Server
+        run: |
+          appium --base-path /wd/hub --port 4723 --address 127.0.0.1 &
+          sleep 30  # Increased wait time
+
+      - name: Verify Appium is Running
+        run: curl -X GET http://127.0.0.1:4723/status
+
       - name: Boot Existing iOS Simulator
         run: |
           export UDID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '([0-9A-F-]{36})' | head -n 1)
