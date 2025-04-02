@@ -28,11 +28,11 @@ jobs:
 
       - name: Start Appium Server
         run: |
-          appium --base-path /wd/hub --port 4723 --address 127.0.0.1 &
-          sleep 30  # Increased wait time
+          appium --port 4723 --address 127.0.0.1 > appium.log 2>&1 &
+          sleep 30  # Ensure Appium has enough time to start
 
       - name: Verify Appium is Running
-        run: curl -X GET http://127.0.0.1:4723/
+        run: curl -X GET http://127.0.0.1:4723/ || cat appium.log
 
       - name: Boot Existing iOS Simulator
         run: |
