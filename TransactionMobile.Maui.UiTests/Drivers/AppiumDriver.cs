@@ -101,7 +101,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption("waitForQuiescence", true);
             driverOptions.AddAdditionalAppiumOption("usePrebuiltWDA", false);
 
-            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
+            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, driverOptions, TimeSpan.FromMinutes(20));
         }
 
         private static void SetupAndroidDriver(AppiumLocalService appiumService) {
