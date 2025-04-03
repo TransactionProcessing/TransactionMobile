@@ -14,7 +14,7 @@ jobs:
       - name: Set up Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '16.0' # Update as needed based on available versions
+          xcode-version: '16.2' # Update as needed based on available versions
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
