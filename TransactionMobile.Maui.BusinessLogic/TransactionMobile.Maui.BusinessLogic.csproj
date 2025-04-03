@@ -43,6 +43,10 @@
 		<PackageReference Include="Microcharts.Maui" Version="1.0.0" />
 	</ItemGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
+		<RuntimeIdentifiers>iossimulator-arm64</RuntimeIdentifiers>
+	</PropertyGroup>
+
 	<ItemGroup Condition="'$(Configuration)' == 'Release' AND '$(RuntimeIdentifier)' != 'iossimulator-arm64'">
 		<PackageReference Include="Microsoft.AppCenter" Version="5.0.7" />
 		<PackageReference Include="Microsoft.AppCenter.Distribute" Version="5.0.7" />
