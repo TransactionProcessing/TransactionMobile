@@ -265,6 +265,16 @@
   <PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
     <RuntimeIdentifiers>maccatalyst-x64</RuntimeIdentifiers>
   </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
+		<MtouchLink>None</MtouchLink>
+		<PublishTrimmed>true</PublishTrimmed>
+		<RuntimeIdentifiers>iossimulator-arm64</RuntimeIdentifiers>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
+		<MtouchLink>SdkOnly</MtouchLink>
+		<PublishTrimmed>true</PublishTrimmed>
+		<RuntimeIdentifiers>iossimulator-arm64</RuntimeIdentifiers>
+	</PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
     <AndroidPackageFormat>apk</AndroidPackageFormat>
