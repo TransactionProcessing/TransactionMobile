@@ -169,11 +169,9 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Back Button from Transaction Page Screen")]
-        [NUnit.Framework.CategoryAttribute("PRNavTest")]
         public async System.Threading.Tasks.Task BackButtonFromTransactionPageScreen()
         {
-            string[] tagsOfScenario = new string[] {
-                    "PRNavTest"};
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Back Button from Transaction Page Screen", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 24
@@ -234,11 +232,9 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Back Button from Reports Page Screen")]
-        [NUnit.Framework.CategoryAttribute("PRNavTest")]
         public async System.Threading.Tasks.Task BackButtonFromReportsPageScreen()
         {
-            string[] tagsOfScenario = new string[] {
-                    "PRNavTest"};
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Back Button from Reports Page Screen", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 42
@@ -299,11 +295,9 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Back Button from Profile Page Screen")]
-        [NUnit.Framework.CategoryAttribute("PRNavTest")]
         public async System.Threading.Tasks.Task BackButtonFromProfilePageScreen()
         {
-            string[] tagsOfScenario = new string[] {
-                    "PRNavTest"};
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Back Button from Profile Page Screen", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 60
@@ -388,11 +382,9 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Back Button from Support Page Screen")]
-        [NUnit.Framework.CategoryAttribute("PRNavTest")]
         public async System.Threading.Tasks.Task BackButtonFromSupportPageScreen()
         {
-            string[] tagsOfScenario = new string[] {
-                    "PRNavTest"};
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Back Button from Support Page Screen", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 86
