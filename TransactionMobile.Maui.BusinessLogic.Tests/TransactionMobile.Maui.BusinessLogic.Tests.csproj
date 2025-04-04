@@ -1,6 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-	  <TargetFramework>net8.0</TargetFramework>
+	<PropertyGroup>
+		<TargetFrameworks>net8.0;net8.0-android</TargetFrameworks>
+		<UseMaui>true</UseMaui>
+	</PropertyGroup>
+
+	<PropertyGroup>
+	  
 	  <UseMaui>true</UseMaui>
 	  <DebugType>None</DebugType>
   </PropertyGroup>
@@ -69,12 +74,9 @@
     <ProjectReference Include="..\TransactionMobile.Maui.BusinessLogic\TransactionMobile.Maui.BusinessLogic.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Update="Microsoft.Maui.Controls" Version="8.0.14" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.14" />
-  </ItemGroup>
-
+	<!-- Only include MAUI when building for Android -->
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0-android'">
+		<PackageReference Update="Microsoft.Maui.Controls" Version="8.0.14" />
+		<PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.14" />
+	</ItemGroup>
 </Project>
