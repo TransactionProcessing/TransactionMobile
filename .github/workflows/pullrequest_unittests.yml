@@ -18,6 +18,12 @@
        - name: Checkout
          uses: actions/checkout@v3
 
+       - name: Install Android Build Tools
+         run: |
+           echo "Installing Android Build Tools..."
+           sdkmanager "build-tools;34.0.0"  # Updated to use Android 34 build tools
+           sdkmanager --update
+
        - name: Set up .NET
          uses: actions/setup-dotnet@v3
          with:
