@@ -54,7 +54,10 @@
             {
                 Logger.LogWarning("Error performing bill payment - get account transaction");
                 return Result.Failure("Error performing bill payment - get account transaction");
+            }
 
+            if (result.Data == null) {
+                return Result.Failure("Error performing bill payment - get account transaction");
             }
 
             // TODO: Factory
@@ -277,7 +280,7 @@
                 Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content.Data}");
 
                 ResponseData<TResponse> responseData = this.HandleResponseContent<TResponse>(content.Data);
-
+                
                 return Result.Success(responseData.Data);
 
             }

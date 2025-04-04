@@ -10,7 +10,7 @@
 		  $(TargetFrameworks);net8.0-ios;net8.0-maccatalyst
 	  </TargetFrameworks>
 	  <UseMaui>true</UseMaui>
-	  <DebugType>None</DebugType>
+	  <DebugType>Full</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="ViewModelTests\**" />
