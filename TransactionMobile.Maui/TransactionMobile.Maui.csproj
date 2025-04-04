@@ -1,11 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<!--<TargetFrameworks>net8.0-ios;net8.0-android;net8.0-maccatalyst;</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>-->
-		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
-		<PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+	<PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
 			<TargetFrameworks>net8.0-android;net8.0-windows10.0.19041.0</TargetFrameworks>
 		</PropertyGroup>
 
@@ -18,6 +13,12 @@
 		<PropertyGroup Condition="'$(OS)' == 'Unix' And '$(RuntimeIdentifier)' != 'osx.13-x64' And '$(RuntimeIdentifier)' != 'osx.13-arm64'">
 			<TargetFrameworks>net8.0-android</TargetFrameworks>
 		</PropertyGroup>
+		
+	<PropertyGroup>
+		<!--<TargetFrameworks>net8.0-ios;net8.0-android;net8.0-maccatalyst;</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>-->
+		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->		
 		<OutputType>Exe</OutputType>
 		<RootNamespace>TransactionMobile.Maui</RootNamespace>
 		<UseMaui>true</UseMaui>
