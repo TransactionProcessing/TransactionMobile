@@ -11,11 +11,12 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.UiTests.Drivers
 {
+    using Microsoft.Testing.Platform.Capabilities;
+    using OpenQA.Selenium;
+    using OpenQA.Selenium.Appium.Windows;
     using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Threading;
-    using OpenQA.Selenium;
-    using OpenQA.Selenium.Appium.Windows;
     
     public enum MobileTestPlatform
     {
@@ -73,22 +74,34 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             var driverOptions = new AppiumOptions();
             driverOptions.AutomationName = "XCUITest";
             driverOptions.PlatformName = "iOS";
-            driverOptions.PlatformVersion = "15.4";
-            driverOptions.DeviceName = "iPhone 11";
-            
+            driverOptions.PlatformVersion = "17.2";
+            driverOptions.AddAdditionalAppiumOption("udid", Environment.GetEnvironmentVariable("UDID")); // Corrected capability.
+
+            //String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            //String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net8.0-ios/iossimulator-x64/");
+            //var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.app");
+
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net8.0-ios/iossimulator-x64/");
-            var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.app");
-            driverOptions.App = apkPath;
+            String appPath = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net8.0-ios/iossimulator-x64/", "TransactionMobile.Maui.app");
+            driverOptions.App = appPath;
+            var fileInfo = new FileInfo(appPath);
+            Debug.WriteLine($"App File Exists {fileInfo.Exists}");
+            driverOptions.AddAdditionalAppiumOption("showXcodeLog", true);
+            //driverOptions.AddAdditionalAppiumOption("xcodebuild", true);
+
+            //driverOptions.App = apkPath;
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
             //driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
             //driverOptions.AddAdditionalAppiumOption("useNewWDA", true);
-            //driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 999999999);
+            driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 999999999);
             //driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 999999999);
             //driverOptions.AddAdditionalAppiumOption("restart", true);
-            //driverOptions.AddAdditionalAppiumOption("simulatorStartupTimeout", 5 * 60 * 1000);
+            driverOptions.AddAdditionalAppiumOption("simulatorStartupTimeout", 5 * 60 * 1000);
+            //driverOptions.AddAdditionalAppiumOption("wdaLocalPort", 8101); // Example: Change to port 8101
+            driverOptions.AddAdditionalAppiumOption("waitForQuiescence", true);
+            driverOptions.AddAdditionalAppiumOption("usePrebuiltWDA", false);
 
-            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
+            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, driverOptions, TimeSpan.FromMinutes(20));
         }
 
         private static void SetupAndroidDriver(AppiumLocalService appiumService) {

@@ -1,0 +1,77 @@
+name: iOS Build - Navigation Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  build-and-test:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '16.2' # Update as needed based on available versions
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Updated to a more recent LTS version
+
+      - name: Set up Appium
+        run: |
+          npm install -g appium@latest --unsafe-perm=true --allow-root
+          appium driver install xcuitest@latest 
+
+      - name: Start Appium Server
+        run: |
+          appium --port 4723 --address 127.0.0.1 > appium.log 2>&1 &
+          sleep 30  # Ensure Appium has enough time to start
+
+      - name: Verify Appium is Running
+        run: curl -X GET http://127.0.0.1:4723/ || cat appium.log
+
+      - name: Boot Existing iOS Simulator
+        run: |
+          export UDID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '([0-9A-F-]{36})' | head -n 1)
+          echo "Booting Simulator UDID: $UDID"
+          xcrun simctl boot "$UDID"
+
+      - name: Wait for iOS Simulator to Boot
+        run: |
+          export UDID=$(xcrun simctl list devices booted | grep -oE '([0-9A-F-]{36})' | head -n 1)
+          echo "Using Simulator UDID: $UDID"
+          xcrun simctl bootstatus "$UDID" -b
+          echo "UDID=$UDID" >> $GITHUB_ENV
+
+      - name: Install .NET SDK and MAUI Workloads
+        run: |
+          dotnet --version
+          dotnet workload update
+          dotnet workload install ios --ignore-failed-sources
+          dotnet workload install maui --ignore-failed-sources
+
+      - name: Restore Dependencies
+        run: dotnet restore TransactionMobile.Maui.sln
+
+      - name: Build MAUI App for iOS
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-ios --no-restore
+
+      #- name: Set up iOS Simulator
+      #  run: |
+      #    UDID=$(xcrun simctl create "Custom iPhone 14" "iPhone 14" "iOS 17.2")
+      #    xcrun simctl boot "$UDID"
+      #    echo "Simulator booted with UDID: $UDID"
+
+      - name: Run Navigation Integration Tests - iOS
+        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "Category=PRNavTest&Category=iOS"
+
+      - name: Upload Logs on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+            name: ios-test-logs
+            path: appium.log
