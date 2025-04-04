@@ -17,7 +17,12 @@
      steps:
        - name: Checkout
          uses: actions/checkout@v3
-          
+
+       - name: Set up .NET
+         uses: actions/setup-dotnet@v3
+         with:
+          dotnet-version: 8.0.x
+
        - name: Install MAUI Workloads
          run: dotnet workload install maui-android
 
