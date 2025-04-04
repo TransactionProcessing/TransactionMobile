@@ -1,0 +1,207 @@
+name: .NET MAUI UI Tests on iOS Simulator
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  ios-tests:
+    runs-on: macos-14
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4  
+
+      - name: Get IP
+        run: ipconfig getifaddr en0
+
+      - name: Cache Public IP
+        run: echo "ENV_IPADDRESS=$(ipconfig getifaddr en0)" >> $GITHUB_ENV
+
+      - name: Test IP
+        run: echo $ENV_IPADDRESS
+
+      #- name: Install colima and docker
+      #  run: |
+      #    brew install colima docker
+      #    wget https://github.com/abiosoft/colima-core/releases/download/v0.6.7/ubuntu-23.10-minimal-cloudimg-arm64.qcow2
+      #    /opt/homebrew/bin/qemu-system-aarch64 -m 1G -drive file=ubuntu-23.10-minimal-cloudimg-arm64.qcow2,if=virtio -display default,show-cursor=on -machine type=virt -accel hvf -nographic &
+      #    colima start
+      #    docker ps
+      #    docker pull alpine:latest
+      #    docker image ls
+
+      #- name: Verify Docker Installation
+      #  run: |
+      #    docker version
+      #    docker info
+
+      #- name: Pull images
+      #  run: |
+      #   docker pull stuartferguson/messagingservice:master
+      #   docker pull stuartferguson/securityservice:master
+      #   docker pull stuartferguson/transactionprocessor:master
+      #   docker pull stuartferguson/transactionprocessoracl:master
+      #   docker pull stuartferguson/testhosts:master
+      #   docker pull stuartferguson/mobileconfiguration:master
+      #   docker pull mcr.microsoft.com/azure-sql-edge
+      #   docker pull eventstore/eventstore:21.10.0-buster-slim
+      #- name: Pull images  
+      #  run: |
+      #    docker pull mcr.microsoft.com/azure-sql-edge
+
+      #- name: Start SQL Server (Docker)
+      #  run: docker run -p 1433:1433 -e "ACCEPT_EULA=1" -e "SA_PASSWORD=YourStrongPassword!" -d mcr.microsoft.com/azure-sql-edge
+      
+      #- name: Setup SQL Server Container
+      #  run: |
+      #    docker network create sharednetwork
+      #    docker run --name sharedsqlsserver --network sharednetwork -e "ACCEPT_EULA=Y" -e "SA_USER=sa" -e "SA_PASSWORD=thisisalongpassword123!" -p 1433 -d mcr.microsoft.com/azure-sql-edge
+
+      #- name: Install telnet
+      #  run: brew install telnet
+
+      #- name: Test SQL Server Connection
+      #  run: telnet $(ifconfig en0 | grep "inet " | awk '{print $2}') 1433
+
+      #- name: List Available iOS Simulators
+      #  run: xcrun simctl list devices
+
+      #- name: Start iOS Simulator
+      #  run: |
+      #    UDID=$(xcrun simctl create "Test-iPhone" "com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro" "com.apple.CoreSimulator.SimRuntime.iOS-17-2")
+      #    echo "Simulator UDID: $UDID"
+      #    xcrun simctl boot "$UDID"
+      #    sleep 15 # Allow time for boot
+
+      - name: Start Simulator 
+        id: simulator
+        uses: futureware-tech/simulator-action@v4
+        with:
+          model: 'iPhone 15 Pro'
+      
+      - name: Wait for Simulator to Boot
+        run: |
+          # Retry loop to check simulator state
+          for i in $(seq 1 30); do # Try 30 times (adjust as needed)
+            echo "Checking simulator boot status (attempt $i)..."
+            
+            # Check if simulator is in 'Booted' state
+            simulator_state=$(xcrun simctl list | grep "${{ env.UDID }}.*(Booted)" | awk '{print $NF}')
+            
+            if [ "$simulator_state" == "(Booted)" ]; then
+              echo "Simulator is booted and ready."
+              exit 0 # Exit successfully
+            fi
+            
+            echo "Simulator not yet booted. Waiting 10 seconds..."
+            sleep 10
+          done
+          
+          echo "Error: Simulator failed to boot within the timeout."
+          exit 1 # Exit with an error
+
+      - name: Set UDID Environment Variable
+        run: echo "UDID=${{ steps.simulator.outputs.udid }}" >> $GITHUB_ENV
+
+      #- name: Echo UDID Environment Variable
+      #  run: echo "The UDID is: ${{ env.UDID }}"
+
+      #- name: Wait for iOS Simulator to Boot
+      #  run: |
+      #    UDID=$(xcrun simctl list devices | grep "Test-iPhone" | grep -o '([0-9A-F\-]+)' | head -n 1) #get the UDID
+      #    timeout 180 bash -c '
+      #      while true; do
+      #        STATUS=$(xcrun simctl list devices "$UDID" | grep "(Booted)")
+      #        if [ ! -z "$STATUS" ]; then
+      #          echo "Simulator is booted! UDID: $UDID"
+      #        break
+      #      fi
+      #      echo "Waiting for simulator with UDID: $UDID ..."
+      #      sleep 5
+      #      done
+      #    '
+
+      - name: Install .NET MAUI workload
+        run: dotnet workload install maui
+
+      - name: Install Appium and WebDriverAgent
+        run: |
+          npm install -g appium
+          appium driver install xcuitest
+
+      - name: Start Appium Server
+        run: |
+          nohup appium --log appium.log &
+
+      - name: Use Driver Path (Example)
+        run: |
+          #!/bin/bash -e
+          
+          # Example: List contents of the driver directory
+          ls -l /Users/runner/.appium/node_modules/appium-xcuitest-driver
+
+          echo "--- END Use Driver Path (Example) ---"
+        shell: bash
+
+      - name: Clone WebDriverAgent
+          uses: actions/checkout@v4
+          with:
+            repository: appium/WebDriverAgent
+            path: WebDriverAgent  # Clone into a directory named "WebDriverAgent"
+
+      - name: Build WebDriverAgent
+        id: build-wda
+        run: |
+            #!/bin/bash -ex
+            echo "--- START Build WebDriverAgent ---"
+
+            # 1. Set WDA path
+            WDA_PATH="${GITHUB_WORKSPACE}/WebDriverAgent"  # Consistent path
+            XCODE_PROJECT="$WDA_PATH/WebDriverAgent.xcodeproj"
+
+            echo "WDA_PATH: $(realpath "$WDA_PATH")"
+            echo "XCODE_PROJECT: $(realpath "$XCODE_PROJECT")"
+
+            # 2. Get Simulator UDID (Adjust the grep!)
+            SIMULATOR_UDID=$(xcrun simctl list devices | grep "iPhone 15.*(Booted)" | awk '{print $5}' | tr -d '()')
+            if [ -z "$SIMULATOR_UDID" ]; then
+              echo "ERROR: Could not determine Simulator UDID!"
+              exit 1
+            fi
+            echo "SIMULATOR_UDID: $SIMULATOR_UDID"
+
+            # 3. Change to WDA directory
+            echo "Changing working directory to: $(realpath "$WDA_PATH")"
+            cd "$(realpath "$WDA_PATH")"
+            pwd
+
+            # 4. Clean and build WebDriverAgent
+            echo "Cleaning and building WebDriverAgent..."
+            xcodebuild -project "$(realpath "WebDriverAgent.xcodeproj")" \
+              -scheme WebDriverAgentRunner \
+              -destination "id=$SIMULATOR_UDID" \
+              clean test  # Clean and build in one command
+            if [ $? -ne 0 ]; then
+              echo "ERROR: xcodebuild failed!"
+              exit 1
+            fi
+
+            echo "--- END Build WebDriverAgent ---"
+        shell: bash      
+
+      - name: Restore MAUI App for iOS
+        run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }}
+
+      - name: Build MAUI App for iOS
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -f net8.0-ios -c Release --no-restore
+
+      - name: Run Appium Tests (iOS)
+        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)"
+
+      - name: Upload Logs on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+            name: ios-test-logs
+            path: appium.log
