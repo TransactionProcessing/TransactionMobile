@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-<PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+		<PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
 			<TargetFrameworks>net8.0-android;net8.0-windows10.0.19041.0</TargetFrameworks>
 		</PropertyGroup>
 
@@ -10,7 +10,7 @@
 
 		<!-- Linux (Ubuntu) -->
 		<PropertyGroup Condition="'$(OS)' == 'Unix' And '$(RuntimeIdentifier)' != 'osx.13-x64' And '$(RuntimeIdentifier)' != 'osx.13-arm64'">
-			<TargetFrameworks>net8.0-android</TargetFrameworks>
+			<TargetFrameworks>net8.0;net8.0-android</TargetFrameworks>
 		</PropertyGroup>
 
 	<PropertyGroup>
@@ -80,11 +80,9 @@
 	  </PackageReference>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <PackageReference Update="Microsoft.Maui.Controls" Version="8.0.14" />
-	</ItemGroup>
+		<ItemGroup Condition="'$(TargetFramework)' != 'net8.0'">
+			<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.14" />
+			<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.14" />
+		</ItemGroup>
 
-	<ItemGroup>
-	  <PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.14" />
-	</ItemGroup>
 </Project>
