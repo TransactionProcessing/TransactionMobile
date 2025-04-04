@@ -145,28 +145,12 @@ namespace TransactionMobile.Maui.UiTests.Steps
             }
         }
 
-        [Given("I have assigned the following operators to the estates")]
-        public async Task GivenIHaveAssignedTheFollowingOperatorsToTheEstates(DataTable dataTable)
-        {
-            List<(EstateDetails estate, AssignOperatorRequest request)> requests = dataTable.Rows.ToAssignOperatorToEstateRequests(this.TestingContext.Estates);
-
-            await this.TransactionProcessorSteps.GivenIHaveAssignedTheFollowingOperatorsToTheEstates(this.TestingContext.AccessToken, requests);
-
-            // TODO Verify
-        }
-
-
         [Given(@"I create a contract with the following values")]
         public async Task GivenICreateAContractWithTheFollowingValues(DataTable table)
         {
             var estates = this.TestingContext.Estates.Select(e => e).ToList();
             List<(EstateDetails, CreateContractRequest)> requests = table.Rows.ToCreateContractRequests(estates);
             List<ContractResponse> responses = await this.TransactionProcessorSteps.GivenICreateAContractWithTheFollowingValues(this.TestingContext.AccessToken, requests);
-            foreach (ContractResponse contractResponse in responses)
-            {
-                EstateDetails estate = this.TestingContext.Estates.Single(e => e.EstateId == contractResponse.EstateId);
-                estate.AddContract(contractResponse.ContractId, contractResponse.Description, contractResponse.OperatorId);
-            }
         }
 
         [When(@"I create the following Products")]
@@ -204,7 +188,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
         [Given(@"I have assigned the following  operator to the merchants")]
         public async Task GivenIHaveAssignedTheFollowingOperatorToTheMerchants(DataTable table)
         {
-            List<EstateDetails> estates = this.TestingContext.Estates.Select(e => e).ToList();
+            var estates = this.TestingContext.Estates.Select(e => e).ToList();
             List<(EstateDetails, Guid, TransactionProcessor.DataTransferObjects.Requests.Merchant.AssignOperatorRequest)> requests = table.Rows.ToAssignOperatorRequests(estates);
 
             List<(EstateDetails, MerchantOperatorResponse)> results = await this.TransactionProcessorSteps.WhenIAssignTheFollowingOperatorToTheMerchants(this.TestingContext.AccessToken, requests);

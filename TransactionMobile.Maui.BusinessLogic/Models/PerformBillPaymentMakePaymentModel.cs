@@ -21,7 +21,7 @@ public class PerformBillPaymentMakePaymentModel
 
     public String DeviceIdentifier { get; set; }
 
-    public Guid OperatorId { get; set; }
+    public String OperatorIdentifier { get; set; }
 
     public Guid ProductId { get; set; }
 

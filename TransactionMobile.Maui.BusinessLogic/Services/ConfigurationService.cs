@@ -80,7 +80,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Services
                                                    ClientSecret = apiResponse.ClientSecret,
                                                    ClientId = apiResponse.ClientId,
                                                    EnableAutoUpdates = apiResponse.EnableAutoUpdates,
-                                                   TransactionProcessorUri = apiResponse.HostAddresses.Single(h => h.ServiceType == ServiceType.TransactionProcessor).Uri,
+                                                   EstateManagementUri = apiResponse.HostAddresses.Single(h => h.ServiceType == ServiceType.EstateManagement).Uri,
                                                    SecurityServiceUri = apiResponse.HostAddresses.Single(h => h.ServiceType == ServiceType.Security).Uri,
                                                    TransactionProcessorAclUri =
                                                        apiResponse.HostAddresses.Single(h => h.ServiceType == ServiceType.TransactionProcessorAcl).Uri,

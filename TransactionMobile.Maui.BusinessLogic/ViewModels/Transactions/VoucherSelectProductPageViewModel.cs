@@ -60,7 +60,7 @@ public class VoucherSelectProductPageViewModel : ExtendedBaseViewModel, IQueryAt
 
         var result = await this.Mediator.Send(request, cancellationToken);
         var products = result.Data;
-        products = products.Where(p => p.OperatorId == this.ProductDetails.OperatorId).ToList();
+        products = products.Where(p => p.OperatorIdentfier == this.ProductDetails.OperatorIdentifier).ToList();
 
         this.Products = products;
     }
@@ -70,7 +70,7 @@ public class VoucherSelectProductPageViewModel : ExtendedBaseViewModel, IQueryAt
         Logger.LogInformation("ProductSelectedCommandExecute called");
         ProductDetails productDetails = new ProductDetails()
                                         {
-                                            OperatorId = e.SelectedItem.OperatorId,
+                                            OperatorIdentifier = e.SelectedItem.OperatorIdentfier,
                                             ContractId = e.SelectedItem.ContractId,
                                             ProductId = e.SelectedItem.ProductId
                                         };

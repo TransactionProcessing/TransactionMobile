@@ -77,7 +77,7 @@ public class RequestTests
         PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(TestData.TransactionDateTime,
                                                                              TestData.OperatorId1ContractId,
                                                                              TestData.Operator1Product_100KES.ProductId,
-                                                                             TestData.OperatorId1,
+                                                                             TestData.OperatorIdentifier1,
                                                                              TestData.CustomerAccountNumber,
                                                                              TestData.Operator1Product_100KES.Value,
                                                                              TestData.CustomerEmailAddress);
@@ -86,7 +86,7 @@ public class RequestTests
         request.TransactionDateTime.ShouldBe(TestData.TransactionDateTime);
         request.ContractId.ShouldBe(TestData.OperatorId1ContractId);
         request.ProductId.ShouldBe(TestData.Operator1Product_100KES.ProductId);
-        request.OperatorId.ShouldBe(TestData.OperatorId1);
+        request.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier1);
         request.CustomerAccountNumber.ShouldBe(TestData.CustomerAccountNumber);
         request.TopupAmount.ShouldBe(TestData.Operator1Product_100KES.Value);
         request.CustomerEmailAddress.ShouldBe(TestData.CustomerEmailAddress);
@@ -98,7 +98,7 @@ public class RequestTests
         PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(TestData.TransactionDateTime,
                                                                                TestData.OperatorId3ContractId,
                                                                                TestData.Operator3Product_200KES.ProductId,
-                                                                               TestData.OperatorId3,
+                                                                               TestData.OperatorIdentifier3,
                                                                                TestData.RecipientMobileNumber,
                                                                                TestData.RecipientEmailAddress,
                                                                                TestData.Operator3Product_200KES.Value,
@@ -108,7 +108,7 @@ public class RequestTests
         request.TransactionDateTime.ShouldBe(TestData.TransactionDateTime);
         request.ContractId.ShouldBe(TestData.OperatorId3ContractId);
         request.ProductId.ShouldBe(TestData.Operator3Product_200KES.ProductId);
-        request.OperatorId.ShouldBe(TestData.OperatorId3);
+        request.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier3);
         request.RecipientMobileNumber.ShouldBe(TestData.RecipientMobileNumber);
         request.RecipientEmailAddress.ShouldBe(TestData.RecipientEmailAddress);
         request.VoucherAmount.ShouldBe(TestData.Operator3Product_200KES.Value);
@@ -120,7 +120,7 @@ public class RequestTests
         PerformBillPaymentMakePostPaymentRequest request = PerformBillPaymentMakePostPaymentRequest.Create(TestData.TransactionDateTime,
                                                                                                            TestData.OperatorId3ContractId,
                                                                                                            TestData.Operator3Product_200KES.ProductId,
-                                                                                                           TestData.OperatorId3,
+                                                                                                           TestData.OperatorIdentifier3,
                                                                                                            TestData.CustomerAccountNumber,
                                                                                                            TestData.CustomerAccountName,
                                                                                                            TestData.CustomerMobileNumber,
@@ -130,7 +130,7 @@ public class RequestTests
         request.TransactionDateTime.ShouldBe(TestData.TransactionDateTime);
         request.ContractId.ShouldBe(TestData.OperatorId3ContractId);
         request.ProductId.ShouldBe(TestData.Operator3Product_200KES.ProductId);
-        request.OperatorId.ShouldBe(TestData.OperatorId3);
+        request.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier3);
         request.CustomerAccountNumber.ShouldBe(TestData.CustomerAccountNumber);
         request.CustomerAccountName.ShouldBe(TestData.CustomerAccountName);
         request.CustomerMobileNumber.ShouldBe(TestData.CustomerMobileNumber);
@@ -143,7 +143,7 @@ public class RequestTests
         PerformBillPaymentMakePrePaymentRequest request = PerformBillPaymentMakePrePaymentRequest.Create(TestData.TransactionDateTime,
                                                                                                          TestData.OperatorId3ContractId,
                                                                                                          TestData.Operator3Product_200KES.ProductId,
-                                                                                                         TestData.OperatorId3,
+                                                                                                         TestData.OperatorIdentifier3,
                                                                                                          TestData.MeterNumber,
                                                                                                          TestData.CustomerAccountName,
                                                                                                          TestData.PaymentAmount);
@@ -152,7 +152,7 @@ public class RequestTests
         request.TransactionDateTime.ShouldBe(TestData.TransactionDateTime);
         request.ContractId.ShouldBe(TestData.OperatorId3ContractId);
         request.ProductId.ShouldBe(TestData.Operator3Product_200KES.ProductId);
-        request.OperatorId.ShouldBe(TestData.OperatorId3);
+        request.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier3);
         request.MeterNumber.ShouldBe(TestData.MeterNumber);
         request.CustomerAccountName.ShouldBe(TestData.CustomerAccountName);
         request.PaymentAmount.ShouldBe(TestData.PaymentAmount);
@@ -163,14 +163,14 @@ public class RequestTests
         PerformBillPaymentGetAccountRequest request = PerformBillPaymentGetAccountRequest.Create(TestData.TransactionDateTime,
                                                                                                  TestData.OperatorId3ContractId,
                                                                                                  TestData.Operator3Product_200KES.ProductId,
-                                                                                                 TestData.OperatorId3,
+                                                                                                 TestData.OperatorIdentifier3,
                                                                                                  TestData.CustomerAccountNumber);
 
         request.ShouldNotBeNull();
         request.TransactionDateTime.ShouldBe(TestData.TransactionDateTime);
         request.ContractId.ShouldBe(TestData.OperatorId3ContractId);
         request.ProductId.ShouldBe(TestData.Operator3Product_200KES.ProductId);
-        request.OperatorId.ShouldBe(TestData.OperatorId3);
+        request.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier3);
         request.CustomerAccountNumber.ShouldBe(TestData.CustomerAccountNumber);
     }
 
@@ -200,14 +200,14 @@ public class RequestTests
         PerformBillPaymentGetMeterRequest request = PerformBillPaymentGetMeterRequest.Create(TestData.TransactionDateTime,
                                                                                              TestData.OperatorId3ContractId,
                                                                                              TestData.Operator3Product_200KES.ProductId,
-                                                                                             TestData.OperatorId3,
+                                                                                             TestData.OperatorIdentifier3,
                                                                                              TestData.CustomerAccountNumber);
 
         request.ShouldNotBeNull();
         request.TransactionDateTime.ShouldBe(TestData.TransactionDateTime);
         request.ContractId.ShouldBe(TestData.OperatorId3ContractId);
         request.ProductId.ShouldBe(TestData.Operator3Product_200KES.ProductId);
-        request.OperatorId.ShouldBe(TestData.OperatorId3);
+        request.OperatorIdentifier.ShouldBe(TestData.OperatorIdentifier3);
         request.MeterNumber.ShouldBe(TestData.CustomerAccountNumber);
 
     }

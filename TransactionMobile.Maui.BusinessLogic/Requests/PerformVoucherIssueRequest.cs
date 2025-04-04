@@ -14,7 +14,7 @@ public class PerformVoucherIssueRequest : IRequest<Result<PerformVoucherIssueRes
     private PerformVoucherIssueRequest(DateTime transactionDateTime,
                                        Guid contractId,
                                        Guid productId,
-                                       Guid operatorId,
+                                       String operatorIdentifier,
                                        String recipientMobileNumber,
                                        String recipientEmailAddress,
                                        Decimal voucherAmount,
@@ -23,7 +23,7 @@ public class PerformVoucherIssueRequest : IRequest<Result<PerformVoucherIssueRes
         this.TransactionDateTime = transactionDateTime;
         this.ContractId = contractId;
         this.ProductId = productId;
-        this.OperatorId = operatorId;
+        this.OperatorIdentifier = operatorIdentifier;
         this.RecipientEmailAddress = recipientEmailAddress;
         this.RecipientMobileNumber = recipientMobileNumber;
         this.VoucherAmount = voucherAmount;
@@ -42,7 +42,7 @@ public class PerformVoucherIssueRequest : IRequest<Result<PerformVoucherIssueRes
 
     public String CustomerEmailAddress { get; }
 
-    public Guid OperatorId { get; }
+    public String OperatorIdentifier { get; }
 
     public Guid ProductId { get; }
 
@@ -57,7 +57,7 @@ public class PerformVoucherIssueRequest : IRequest<Result<PerformVoucherIssueRes
     public static PerformVoucherIssueRequest Create(DateTime transactionDateTime,
                                                     Guid contractId,
                                                     Guid productId,
-                                                    Guid operatorId,
+                                                    String operatorIdentifier,
                                                     String recipientMobileNumber,
                                                     String recipientEmailAddress,
                                                     Decimal voucherAmount,
@@ -66,7 +66,7 @@ public class PerformVoucherIssueRequest : IRequest<Result<PerformVoucherIssueRes
         return new PerformVoucherIssueRequest(transactionDateTime,
                                               contractId,
                                               productId,
-                                              operatorId,
+                                              operatorIdentifier,
                                               recipientMobileNumber,
                                               recipientEmailAddress,
                                               voucherAmount,

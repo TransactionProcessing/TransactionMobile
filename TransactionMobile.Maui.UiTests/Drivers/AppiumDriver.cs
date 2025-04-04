@@ -31,9 +31,8 @@ namespace TransactionMobile.Maui.UiTests.Drivers
         public static AppiumDriver Driver;
 
         public void StartApp(){
-            AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723)
-                .Build();
-            
+            AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723).Build();
+
             if (appiumService.IsRunning == false){
                 appiumService.OutputDataReceived += (sender,
                                                      args) => {
@@ -97,7 +96,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption("adbExecTimeout", TimeSpan.FromMinutes(5).TotalMilliseconds);
             driverOptions.AutomationName = "UIAutomator2";
             driverOptions.PlatformName = "Android";
-            driverOptions.PlatformVersion = "14.0";
+            driverOptions.PlatformVersion = "10.0";
             driverOptions.DeviceName = "emulator-5554";
             
             // TODO: Only do this locally
@@ -111,8 +110,6 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net8.0-android/");
 
             var apkPath = Path.Combine(binariesFolder, "com.transactionprocessing.pos-Signed.apk");
-            var fileinfo = new FileInfo(apkPath);
-
             driverOptions.App = apkPath;
             
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.Android.AndroidDriver(appiumService, driverOptions, TimeSpan.FromMinutes(5));
@@ -131,7 +128,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
         public void StopApp()
         {
             try {
-                AppiumDriverWrapper.Driver?.Close();
+                AppiumDriverWrapper.Driver?.CloseApp();
                 AppiumDriverWrapper.Driver?.Quit();
             }
             catch(Exception e) {

@@ -14,7 +14,7 @@ public class PerformMobileTopupRequest : IRequest<Result<PerformMobileTopupRespo
     private PerformMobileTopupRequest(DateTime transactionDateTime,
                                       Guid contractId,
                                       Guid productId,
-                                      Guid operatorId,
+                                      String operatorIdentifier,
                                       String customerAccountNumber,
                                       Decimal topupAmount,
                                       String customerEmailAddress)
@@ -22,7 +22,7 @@ public class PerformMobileTopupRequest : IRequest<Result<PerformMobileTopupRespo
         this.TransactionDateTime = transactionDateTime;
         this.ContractId = contractId;
         this.ProductId = productId;
-        this.OperatorId = operatorId;
+        this.OperatorIdentifier = operatorIdentifier;
         this.CustomerAccountNumber = customerAccountNumber;
         this.TopupAmount = topupAmount;
         this.CustomerEmailAddress = customerEmailAddress;
@@ -38,7 +38,7 @@ public class PerformMobileTopupRequest : IRequest<Result<PerformMobileTopupRespo
 
     public String CustomerEmailAddress { get; }
 
-    public Guid OperatorId { get; }
+    public String OperatorIdentifier { get; }
 
     public Guid ProductId { get; }
 
@@ -53,7 +53,7 @@ public class PerformMobileTopupRequest : IRequest<Result<PerformMobileTopupRespo
     public static PerformMobileTopupRequest Create(DateTime transactionDateTime,
                                                    Guid contractId,
                                                    Guid productId,
-                                                   Guid operatorId,
+                                                   String operatorIdentifier,
                                                    String customerAccountNumber,
                                                    Decimal topupAmount,
                                                    String customerEmailAddress)
@@ -61,7 +61,7 @@ public class PerformMobileTopupRequest : IRequest<Result<PerformMobileTopupRespo
         return new PerformMobileTopupRequest(transactionDateTime,
                                              contractId,
                                              productId,
-                                             operatorId,
+                                             operatorIdentifier,
                                              customerAccountNumber,
                                              topupAmount,
                                              customerEmailAddress);

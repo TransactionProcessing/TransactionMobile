@@ -128,7 +128,7 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
         PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(DateTime.Now,
                                                                                this.ProductDetails.ContractId,
                                                                                this.ProductDetails.ProductId,
-                                                                               this.ProductDetails.OperatorId,
+                                                                               this.ProductDetails.OperatorIdentifier,
                                                                                this.RecipientMobileNumber,
                                                                                this.recipientMobileNumber,
                                                                                this.VoucherAmount,

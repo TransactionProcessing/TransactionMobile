@@ -16,7 +16,7 @@ public class TrainingConfigurationService : IConfigurationService
                                                     ClientSecret = "dummyClientSecret",
                                                     EnableAutoUpdates = false,
                                                     ShowDebugMessages = true,
-                                                    TransactionProcessorUri = "http://localhost:5001",
+                                                    EstateManagementUri = "http://localhost:5000",
                                                     EstateReportingUri = "http://localhost:5006",
                                                     LogLevel = LogLevel.Debug,
                                                     SecurityServiceUri = "http://localhost:5001",

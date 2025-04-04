@@ -63,7 +63,7 @@ public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel, IQueryA
         PerformBillPaymentGetAccountRequest request = PerformBillPaymentGetAccountRequest.Create(DateTime.Now,
                                                                                                  this.ProductDetails.ContractId,
                                                                                                  this.ProductDetails.ProductId,
-                                                                                                 this.ProductDetails.OperatorId,
+                                                                                                 this.ProductDetails.OperatorIdentifier,
                                                                                                  this.CustomerAccountNumber);
 
         Result<PerformBillPaymentGetAccountResponseModel> result = await this.Mediator.Send(request);
@@ -72,7 +72,7 @@ public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel, IQueryA
             ProductDetails productDetails = new ProductDetails {
                                                                    ContractId = this.ProductDetails.ContractId,
                                                                    ProductId = this.ProductDetails.ProductId,
-                                                                   OperatorId = this.ProductDetails.OperatorId
+                                                                   OperatorIdentifier = this.ProductDetails.OperatorIdentifier
                                                                };
 
             await this.NavigationService.GoToBillPaymentPayBillPage(productDetails, result.Data.BillDetails);
@@ -138,7 +138,7 @@ public class BillPaymentGetMeterPageViewModel : ExtendedBaseViewModel, IQueryAtt
         PerformBillPaymentGetMeterRequest request = PerformBillPaymentGetMeterRequest.Create(DateTime.Now,
                                                                                                  this.ProductDetails.ContractId,
                                                                                                  this.ProductDetails.ProductId,
-                                                                                                 this.ProductDetails.OperatorId,
+                                                                                                 this.ProductDetails.OperatorIdentifier,
                                                                                                  this.MeterNumber);
 
         Result<PerformBillPaymentGetMeterResponseModel> result = await this.Mediator.Send(request);
@@ -149,7 +149,7 @@ public class BillPaymentGetMeterPageViewModel : ExtendedBaseViewModel, IQueryAtt
             {
                 ContractId = this.ProductDetails.ContractId,
                 ProductId = this.ProductDetails.ProductId,
-                OperatorId = this.ProductDetails.OperatorId
+                OperatorIdentifier = this.ProductDetails.OperatorIdentifier
             };
 
             await this.NavigationService.GoToBillPaymentPayBillPage(productDetails, result.Data.MeterDetails);
@@ -185,7 +185,7 @@ public class ProductDetails
 
     public Guid ContractId { get; set; }
 
-    public Guid OperatorId { get; set; }
+    public String OperatorIdentifier { get; set; }
 
     public Guid ProductId { get; set; }
 

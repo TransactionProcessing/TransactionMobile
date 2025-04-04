@@ -98,7 +98,7 @@ namespace TransactionMobile.Maui.Extensions
 
                                                                                                  if (configSetting == "TransactionProcessorApi")
                                                                                                  {
-                                                                                                     return configuration.TransactionProcessorUri;
+                                                                                                     return configuration.EstateManagementUri;
                                                                                                  }
 
                                                                                                  if (configSetting == "EstateReportingApi")

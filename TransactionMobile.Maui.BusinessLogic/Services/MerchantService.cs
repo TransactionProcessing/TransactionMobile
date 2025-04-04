@@ -19,15 +19,15 @@ public class MerchantService : IMerchantService
 
     private readonly IApplicationCache ApplicationCache;
     
-    private readonly ITransactionProcessorClient TransactionProcessorClient;
+    private readonly ITransactionProcessorClient EstateClient;
 
     #endregion
 
     #region Constructors
 
-    public MerchantService(ITransactionProcessorClient transactionProcessorClient,
+    public MerchantService(ITransactionProcessorClient estateClient,
                            IApplicationCache applicationCache) {
-        this.TransactionProcessorClient = transactionProcessorClient;
+        this.EstateClient = estateClient;
         this.ApplicationCache = applicationCache;
     }
 
@@ -37,7 +37,7 @@ public class MerchantService : IMerchantService
 
     public async Task<Result<List<ContractProductModel>>> GetContractProducts(CancellationToken cancellationToken) {
         try {
-            List<ContractProductModel> models = new List<ContractProductModel>();
+            List<ContractProductModel> result = new List<ContractProductModel>();
 
             TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
             Guid estateId = this.ApplicationCache.GetEstateId();
@@ -46,21 +46,16 @@ public class MerchantService : IMerchantService
             Logger.LogInformation("About to request merchant contracts");
             Logger.LogDebug($"Merchant Contract Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
 
-            Result<List<ContractResponse>> result = await this.TransactionProcessorClient.GetMerchantContracts(accessToken.AccessToken, estateId, merchantId, cancellationToken);
+            List<ContractResponse> merchantContracts = await this.EstateClient.GetMerchantContracts(accessToken.AccessToken, estateId, merchantId, cancellationToken);
 
-            if (result.IsFailed) {
-                Logger.LogInformation($"GetMerchantContracts failed {result.Status}");
-                return Result.Failure(result.Message);
-            }
+            Logger.LogInformation($"{merchantContracts.Count} for merchant requested successfully");
+            Logger.LogDebug($"Merchant Contract Response: [{JsonConvert.SerializeObject(merchantContracts)}]");
 
-            Logger.LogInformation($"{result.Data.Count} for merchant requested successfully");
-            Logger.LogDebug($"Merchant Contract Response: [{JsonConvert.SerializeObject(result.Data)}]");
-
-            foreach (ContractResponse contractResponse in result.Data) {
+            foreach (ContractResponse contractResponse in merchantContracts) {
                 foreach (ContractProduct contractResponseProduct in contractResponse.Products){
                     var productType = GetProductType(contractResponse.OperatorName);
 
-                    models.Add(new ContractProductModel {
+                    result.Add(new ContractProductModel {
                                                             OperatorId = contractResponse.OperatorId,
                                                             ContractId = contractResponse.ContractId,
                                                             ProductId = contractResponseProduct.ProductId,
@@ -75,7 +70,7 @@ public class MerchantService : IMerchantService
                 }
             }
 
-            return Result.Success(models);
+            return Result.Success(result);
         }
         catch(Exception ex) {
             Logger.LogError("Error getting contract products",ex);
@@ -121,7 +116,7 @@ public class MerchantService : IMerchantService
             Logger.LogInformation("About to request merchant details");
             Logger.LogDebug($"Merchant Details Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
 
-            MerchantResponse merchantResponse = await this.TransactionProcessorClient.GetMerchant(accessToken.AccessToken, estateId, merchantId, cancellationToken);
+            MerchantResponse merchantResponse = await this.EstateClient.GetMerchant(accessToken.AccessToken, estateId, merchantId, cancellationToken);
 
             Logger.LogInformation("Merchant details requested successfully");
             Logger.LogDebug($"Merchant Details Response: [{JsonConvert.SerializeObject(merchantResponse)}]");

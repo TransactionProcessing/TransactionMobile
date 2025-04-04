@@ -53,7 +53,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
             new ProductDetails() {
                                      ProductId = Operator1Product_100KES.ProductId,
                                      ContractId = Operator1Product_100KES.ContractId,
-                                     OperatorId = Operator1Product_100KES.OperatorId,
+                                     OperatorIdentifier = Operator1Product_100KES.OperatorIdentfier,
                                  };
 
         public static ContractProductModel Operator1Product_BillPayment_PostPayment = new ContractProductModel

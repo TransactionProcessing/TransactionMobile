@@ -32,8 +32,7 @@ public static class Extensions
                                                                         ContractId = request.ContractId,
                                                                         CustomerAccountNumber = request.CustomerAccountNumber,
                                                                         CustomerEmailAddress = request.CustomerEmailAddress,
-                                                                        // TODO: Change db to be guid later
-                                                                        OperatorIdentifier = request.OperatorId.ToString(),
+                                                                        OperatorIdentifier = request.OperatorIdentifier,
                                                                         IsTrainingMode = isTrainingMode
         };
 
@@ -50,7 +49,7 @@ public static class Extensions
                                                                         RecipientEmailAddress = request.RecipientEmailAddress,
                                                                         RecipientMobileNumber = request.RecipientMobileNumber,
                                                                         CustomerEmailAddress = request.CustomerEmailAddress,
-                                                                        OperatorIdentifier = request.OperatorId.ToString(),
+                                                                        OperatorIdentifier = request.OperatorIdentifier,
                                                                         IsTrainingMode = isTrainingMode
         };
 
@@ -65,7 +64,7 @@ public static class Extensions
                                                   Amount = 0,
                                                   ProductId = request.ProductId,
                                                   ContractId = request.ContractId,
-                                                  OperatorIdentifier = request.OperatorId.ToString(),
+                                                  OperatorIdentifier = request.OperatorIdentifier,
                                                   CustomerAccountNumber = request.CustomerAccountNumber,
                                                   IsTrainingMode = isTrainingMode
         };
@@ -80,7 +79,7 @@ public static class Extensions
                                                   Amount = 0,
                                                   ProductId = request.ProductId,
                                                   ContractId = request.ContractId,
-                                                  OperatorIdentifier = request.OperatorId.ToString(),
+                                                  OperatorIdentifier = request.OperatorIdentifier,
                                                   CustomerAccountNumber = request.CustomerAccountNumber,
                                                   IsTrainingMode = isTrainingMode
         };
@@ -96,7 +95,7 @@ public static class Extensions
                                                   Amount = 0,
                                                   ProductId = request.ProductId,
                                                   ContractId = request.ContractId,
-                                                  OperatorIdentifier = request.OperatorId.ToString(),
+                                                  OperatorIdentifier = request.OperatorIdentifier,
                                                   CustomerAccountNumber = request.MeterNumber,
                                                   IsTrainingMode = isTrainingMode
                                               };
@@ -112,7 +111,7 @@ public static class Extensions
                                                   Amount = 0,
                                                   ProductId = request.ProductId,
                                                   ContractId = request.ContractId,
-                                                  OperatorIdentifier = request.OperatorId.ToString(),
+                                                  OperatorIdentifier = request.OperatorIdentifier,
                                                   CustomerAccountNumber = request.MeterNumber,
                                                   IsTrainingMode = isTrainingMode
                                               };
@@ -198,7 +197,8 @@ public static class Extensions
         {
             reconciliationRequest.OperatorTotals.Add(new OperatorTotalRequest
             {
-                OperatorId = modelOperatorTotal.OperatorId,
+                // TODO: Fix this 
+                //OperatorIdentifier = modelOperatorTotal.OperatorIdentifier,
                 TransactionValue = modelOperatorTotal.TransactionValue,
                 ContractId = modelOperatorTotal.ContractId,
                 TransactionCount = modelOperatorTotal.TransactionCount
@@ -213,7 +213,8 @@ public static class Extensions
         SaleTransactionRequestMessage saleTransactionRequest = new SaleTransactionRequestMessage
         {
             ProductId = model.ProductId,
-            OperatorId = model.OperatorId,
+            // TODO: Fix this 
+            //OperatorIdentifier = model.OperatorIdentifier,
             ApplicationVersion = model.ApplicationVersion,
             DeviceIdentifier = model.DeviceIdentifier,
             ContractId = model.ContractId,
@@ -237,7 +238,8 @@ public static class Extensions
         SaleTransactionRequestMessage saleTransactionRequest = new SaleTransactionRequestMessage
         {
             ProductId = model.ProductId,
-            OperatorId = model.OperatorId,
+            // TODO: Fix this 
+            //OperatorIdentifier = model.OperatorIdentifier,
             ApplicationVersion = model.ApplicationVersion,
             DeviceIdentifier = model.DeviceIdentifier,
             ContractId = model.ContractId,
@@ -259,8 +261,9 @@ public static class Extensions
         SaleTransactionRequestMessage saleTransactionRequest = new SaleTransactionRequestMessage
                                                                {
                                                                    ProductId = model.ProductId,
-                                                                   OperatorId = model.OperatorId,
-                                                                   ApplicationVersion = model.ApplicationVersion,
+            // TODO: Fix this 
+            //OperatorIdentifier = model.OperatorIdentifier,
+            ApplicationVersion = model.ApplicationVersion,
                                                                    DeviceIdentifier = model.DeviceIdentifier,
                                                                    ContractId = model.ContractId,
                                                                    TransactionDateTime = model.TransactionDateTime,
@@ -280,7 +283,8 @@ public static class Extensions
         SaleTransactionRequestMessage saleTransactionRequest = new SaleTransactionRequestMessage
                                                                {
                                                                    ProductId = model.ProductId,
-            OperatorId = model.OperatorId,
+            // TODO: Fix this 
+            //OperatorIdentifier = model.OperatorIdentifier,
             ApplicationVersion = model.ApplicationVersion,
                                                                    DeviceIdentifier = model.DeviceIdentifier,
                                                                    ContractId = model.ContractId,
@@ -314,7 +318,8 @@ public static class Extensions
         SaleTransactionRequestMessage saleTransactionRequest = new SaleTransactionRequestMessage
         {
             ProductId = model.ProductId,
-            OperatorId = model.OperatorId,
+            // TODO: Fix this 
+            //OperatorIdentifier = model.OperatorIdentifier,
             ApplicationVersion = model.ApplicationVersion,
             DeviceIdentifier = model.DeviceIdentifier,
             ContractId = model.ContractId,

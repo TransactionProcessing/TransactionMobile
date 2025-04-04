@@ -1,5 +1,9 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Services
 {
+    using System.Diagnostics.CodeAnalysis;
+    using System.Net;
+    using System.Net.Http.Headers;
+    using System.Text;
     using ClientProxyBase;
     using Common;
     using Logging;
@@ -7,11 +11,6 @@
     using Newtonsoft.Json;
     using RequestHandlers;
     using SimpleResults;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Net;
-    using System.Net.Http.Headers;
-    using System.Text;
-    using TransactionProcessor.DataTransferObjects.Responses.Estate;
     using TransactionProcessorACL.DataTransferObjects;
     using TransactionProcessorACL.DataTransferObjects.Responses;
     using ViewModels;
@@ -142,7 +141,7 @@
                                                           EstateId = result.Data.EstateId,
                                                           MerchantId = result.Data.MerchantId,
                                                           ResponseCode = result.Data.ResponseCode,
-                                                          ResponseMessage = result.Data.ResponseMessage,
+                                                          ResponseMessage = result.Data.ResponseMessage
                                                       };
 
             Logger.LogInformation("Logon transaction performed successfully");
@@ -232,13 +231,13 @@
             return Result.Success(responseModel);
         }
         
-        protected override async Task<Result<String>> HandleResponseX(HttpResponseMessage responseMessage,
-                                                                      CancellationToken cancellationToken) {
+        protected override async Task<String> HandleResponse(HttpResponseMessage responseMessage,
+                                                             CancellationToken cancellationToken) {
             if (responseMessage.StatusCode == HttpStatusCode.HttpVersionNotSupported) {
                 throw new ApplicationException("Application needs to be updated to the latest version");
             }
 
-            return await base.HandleResponseX(responseMessage, cancellationToken);
+            return await base.HandleResponse(responseMessage, cancellationToken);
         }
 
         private String BuildRequestUrl(String route) {
@@ -272,13 +271,11 @@
                 HttpResponseMessage httpResponse = await this.HttpClient.PostAsync(requestUri, httpContent, cancellationToken);
 
                 // Process the response
-                Result<String> content = await this.HandleResponse(httpResponse, cancellationToken);
+                String content = await this.HandleResponse(httpResponse, cancellationToken);
                 
-                Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content.Data}");
+                Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content}");
 
-                ResponseData<TResponse> responseData = this.HandleResponseContent<TResponse>(content.Data);
-
-                return Result.Success(responseData.Data);
+                return Result.Success(JsonConvert.DeserializeObject<TResponse>(content));
 
             }
             catch(Exception ex) {

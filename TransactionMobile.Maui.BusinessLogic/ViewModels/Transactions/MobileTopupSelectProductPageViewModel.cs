@@ -59,7 +59,7 @@ public class MobileTopupSelectProductPageViewModel : ExtendedBaseViewModel, IQue
         var productsresult = await this.Mediator.Send(request, cancellationToken);
         List<ContractProductModel> products = productsresult.Data;
 
-        products = products.Where(p => p.OperatorId == this.ProductDetails.OperatorId).ToList();
+        products = products.Where(p => p.OperatorIdentfier == this.ProductDetails.OperatorIdentifier).ToList();
 
         this.Products = products;
     }
@@ -69,7 +69,7 @@ public class MobileTopupSelectProductPageViewModel : ExtendedBaseViewModel, IQue
         Logger.LogInformation("ProductSelectedCommandExecute called");
         ProductDetails productDetails = new ProductDetails()
                                         {
-                                            OperatorId = e.SelectedItem.OperatorId,
+                                            OperatorIdentifier = e.SelectedItem.OperatorIdentfier,
                                             ContractId = e.SelectedItem.ContractId,
                                             ProductId = e.SelectedItem.ProductId
                                         };

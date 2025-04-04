@@ -49,8 +49,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                               EnableAutoUpdates = false,
                                                               HostAddresses = new List<HostAddress>{
                                                                                                        new HostAddress{
-                                                                                                                          ServiceType = ServiceType.TransactionProcessor, 
-                                                                                                                          Uri = "http://localhost:5001"
+                                                                                                                          ServiceType = ServiceType.EstateManagement, 
+                                                                                                                          Uri = "http://localhost:5000"
                                                                                                                       },
                                                                                                        new HostAddress{
                                                                                                                           ServiceType = ServiceType.Security,
@@ -83,7 +83,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
             configurationResult.Data.ClientSecret.ShouldBe(expectedConfiguration.ClientSecret);
             configurationResult.Data.ClientId.ShouldBe(expectedConfiguration.ClientId);
             configurationResult.Data.EnableAutoUpdates.ShouldBe(expectedConfiguration.EnableAutoUpdates);
-            configurationResult.Data.TransactionProcessorUri.ShouldBe(expectedConfiguration.HostAddresses.Single(s => s.ServiceType == ServiceType.TransactionProcessor).Uri);
+            configurationResult.Data.EstateManagementUri.ShouldBe(expectedConfiguration.HostAddresses.Single(s => s.ServiceType == ServiceType.EstateManagement).Uri);
             configurationResult.Data.SecurityServiceUri.ShouldBe(expectedConfiguration.HostAddresses.Single(s => s.ServiceType == ServiceType.Security).Uri);
             configurationResult.Data.TransactionProcessorAclUri.ShouldBe(expectedConfiguration.HostAddresses.Single(s => s.ServiceType == ServiceType.TransactionProcessorAcl).Uri);
             configurationResult.Data.LogLevel.ShouldBe(expectedLogLevel);

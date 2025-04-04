@@ -53,7 +53,7 @@ public class BillPaymentGetMeterPageViewModelTests
         this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
                                                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
                                                                            });
-        this.ViewModel.ProductDetails.OperatorId.ShouldBe(TestData.Operator1ProductDetails.OperatorId);
+        this.ViewModel.ProductDetails.OperatorIdentifier.ShouldBe(TestData.Operator1ProductDetails.OperatorIdentifier);
         this.ViewModel.ProductDetails.ProductId.ShouldBe(TestData.Operator1ProductDetails.ProductId);
         this.ViewModel.ProductDetails.ContractId.ShouldBe(TestData.Operator1ProductDetails.ContractId);
     }

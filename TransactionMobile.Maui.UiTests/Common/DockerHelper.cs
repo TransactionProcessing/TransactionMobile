@@ -110,7 +110,7 @@ namespace TransactionMobile.Maui.UiTests.Common
         {
             List<(String streamName, String groupName, Int32 maxRetries)> subscriptions = new List<(String streamName, String groupName, Int32 maxRetries)>();
             subscriptions.AddRange(TransactionProcessor.IntegrationTesting.Helpers.SubscriptionsHelper.GetSubscriptions());
-            
+
             foreach ((String streamName, String groupName, Int32 maxRetries) subscription in subscriptions)
             {
                 var x = subscription;
@@ -232,7 +232,7 @@ namespace TransactionMobile.Maui.UiTests.Common
             }
 
             this.Trace("Config Host Container Started");
-            this.Containers.Add((DockerServices.TestHost, builtContainer));
+            this.Containers.Add((DockerServices.CallbackHandler, builtContainer));
 
             //  Do a health check here
             this.ConfigHostPort = builtContainer.ToHostExposedEndpoint($"{ConfigHostDockerPort}/tcp").Port;

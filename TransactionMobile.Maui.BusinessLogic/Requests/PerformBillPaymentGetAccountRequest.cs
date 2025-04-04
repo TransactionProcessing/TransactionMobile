@@ -13,13 +13,13 @@ public class PerformBillPaymentGetAccountRequest : IRequest<Result<PerformBillPa
     private PerformBillPaymentGetAccountRequest(DateTime transactionDateTime,
                                                 Guid contractId,
                                                 Guid productId,
-                                                Guid operatorId,
+                                                String operatorIdentifier,
                                                 String customerAccountNumber) {
         this.CustomerAccountNumber = customerAccountNumber;
         this.TransactionDateTime = transactionDateTime;
         this.ContractId = contractId;
         this.ProductId = productId;
-        this.OperatorId = operatorId;
+        this.OperatorIdentifier = operatorIdentifier;
     }
 
     #endregion
@@ -30,7 +30,7 @@ public class PerformBillPaymentGetAccountRequest : IRequest<Result<PerformBillPa
 
     public String CustomerAccountNumber { get; }
 
-    public Guid OperatorId { get; }
+    public String OperatorIdentifier { get; }
 
     public Guid ProductId { get; }
 
@@ -43,12 +43,12 @@ public class PerformBillPaymentGetAccountRequest : IRequest<Result<PerformBillPa
     public static PerformBillPaymentGetAccountRequest Create(DateTime transactionDateTime,
                                                              Guid contractId,
                                                              Guid productId,
-                                                             Guid operatorId,
+                                                             String operatorIdentifier,
                                                              String customerAccountNumber) {
         return new PerformBillPaymentGetAccountRequest(transactionDateTime,
                                                        contractId,
                                                        productId,
-                                                       operatorId,
+                                                       operatorIdentifier,
                                                        customerAccountNumber);
     }
 
