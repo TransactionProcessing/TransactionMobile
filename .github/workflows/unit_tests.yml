@@ -28,4 +28,4 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: Run tests
-        run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests\TransactionMobile.Maui.BusinessLogic.Tests.scproj --configuration Release
+        run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests\TransactionMobile.Maui.BusinessLogic.Tests.csproj --configuration Release
