@@ -312,7 +312,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                 };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
 
             Result<PerformBillPaymentGetMeterResponseModel> performBillPaymentGetMeterResult = await this.TransactionService.PerformBillPaymentGetMeter(requestModel, CancellationToken.None);
 
@@ -347,7 +347,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                 };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
 
             Result<PerformBillPaymentGetMeterResponseModel> performBillPaymentGetMeterResult = await this.TransactionService.PerformBillPaymentGetMeter(requestModel, CancellationToken.None);
 
@@ -406,7 +406,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                 };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
 
             Result<PerformBillPaymentMakePaymentResponseModel> performBillPaymentGetMeterResult = await this.TransactionService.PerformBillPaymentMakePayment(requestModel, CancellationToken.None);
 
@@ -473,7 +473,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
             };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
 
             Result<PerformReconciliationResponseModel> performReconciliationResult = await this.TransactionService.PerformReconciliation(requestModel, CancellationToken.None);
 
