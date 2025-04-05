@@ -22,10 +22,10 @@ jobs:
           dotnet workload install maui
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }}
 
       - name: Build
         run: dotnet build --configuration Release
 
       - name: Run tests
-        run: dotnet test --configuration Release
+        run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests\TransactionMobile.Maui.BusinessLogic.Tests.scproj --configuration Release
