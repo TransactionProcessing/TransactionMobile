@@ -33,11 +33,19 @@ public class DeviceService : IDeviceService
         return DeviceInformationService.Platform();
     }
 
+    public Boolean IsIOS() => DeviceInfo.Platform == DevicePlatform.iOS;
+    
     public String GetManufacturer(){
         return DeviceInfo.Manufacturer;
     }
 
-    public void SetOrientation(DisplayOrientation displayOrientation){
-        DeviceOrientationService.SetDeviceOrientation(displayOrientation);
+    public void SetOrientation(Orientation displayOrientation){
+        DisplayOrientation result = displayOrientation switch
+        {
+            Orientation.Portrait => DisplayOrientation.Portrait,
+            Orientation.Landscape => DisplayOrientation.Landscape,
+            _ => DisplayOrientation.Unknown
+        };
+        DeviceOrientationService.SetDeviceOrientation(result);
     }
 }

@@ -37,7 +37,8 @@
 
         public LoginPageViewModel(IMediator mediator, INavigationService navigationService, IApplicationCache applicationCache,
                                   IDeviceService deviceService,IApplicationInfoService applicationInfoService,
-                                  IDialogService dialogService) : base(applicationCache,dialogService,navigationService, deviceService)
+                                  IDialogService dialogService,
+                                  INavigationParameterService navigationParameterService) : base(applicationCache,dialogService,navigationService, deviceService, navigationParameterService)
         {
             this.ApplicationInfoService = applicationInfoService;
             this.LoginCommand = new AsyncCommand(this.LoginCommandExecute);

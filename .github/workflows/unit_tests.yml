@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -17,15 +17,21 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Install Android Build Tools
+        run: |
+          echo "Installing Android Build Tools..."
+          sdkmanager "build-tools;34.0.0"  # Updated to use Android 34 build tools
+          sdkmanager --update
+
       - name: Install MAUI workloads
         run: |
-          dotnet workload install maui
+          dotnet workload install maui-android
 
-      - name: Restore dependencies
-        run: dotnet restore --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }}
+      - name: Restore MAUI App for Android
+        run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
-      - name: Build
-        run: dotnet build --configuration Release
+      - name: Build MAUI App for Android
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj -f net8.0-android -c Release --no-restore
 
       - name: Run tests
         run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests\TransactionMobile.Maui.BusinessLogic.Tests.csproj --configuration Release

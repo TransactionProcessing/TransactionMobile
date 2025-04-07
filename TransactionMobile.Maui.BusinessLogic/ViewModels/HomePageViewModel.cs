@@ -5,7 +5,6 @@ using Logging;
 using Maui.UIServices;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Distribute;
-using Microsoft.Maui.Devices;
 using Models;
 using Services;
 using UIServices;
@@ -18,7 +17,8 @@ public class HomePageViewModel : ExtendedBaseViewModel
     public HomePageViewModel(IApplicationCache applicationCache,
                              IDialogService dialogService,
                              IDeviceService deviceService,
-                             INavigationService navigationService) :base(applicationCache,dialogService, navigationService, deviceService)
+                             INavigationService navigationService,
+                             INavigationParameterService navigationParameterService) :base(applicationCache,dialogService, navigationService, deviceService,navigationParameterService)
     {
         
     }
@@ -51,7 +51,7 @@ public class HomePageViewModel : ExtendedBaseViewModel
         }
 
         try {
-            if (this.IsIOS() == false) {
+            if (this.DeviceService.IsIOS() == false) {
                 AppCenter.Start(configuration.AppCenterConfig.GetAppCenterKey(), typeof(Distribute));
             }
         }
@@ -64,7 +64,7 @@ public class HomePageViewModel : ExtendedBaseViewModel
         await this.DialogService.ShowDialog("Software Update", "No Release Available","OK");
     }
 
-    private Boolean IsIOS() => DeviceInfo.Current.Platform == DevicePlatform.iOS;
+    //private Boolean IsIOS() => this.DeviceService.IsIOS//DeviceInfo.Current.Platform == DevicePlatform.iOS;
 
     private Boolean OnReleaseAvailable(ReleaseDetails releaseDetails) {
         Logger.LogInformation("In OnReleaseAvailable");

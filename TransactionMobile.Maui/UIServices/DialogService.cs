@@ -49,16 +49,16 @@
                                                                cancellationToken);
         }
 
-        public async Task<String> ShowPrompt(String title,
-                                             String message,
-                                             String acceptString,
-                                             String cancelString,
-                                             String placeHolder = "",
-                                             Int32 maxLength = -1,
-                                             Keyboard keyboard = null,
-                                             String initialValue = "") {
-            return await Application.Current.MainPage.DisplayPromptAsync(title, message, acceptString, cancelString, placeHolder, maxLength, keyboard, initialValue);
-        }
+        //public async Task<String> ShowPrompt(String title,
+        //                                     String message,
+        //                                     String acceptString,
+        //                                     String cancelString,
+        //                                     String placeHolder = "",
+        //                                     Int32 maxLength = -1,
+        //                                     Keyboard keyboard = null,
+        //                                     String initialValue = "") {
+        //    return await Application.Current.MainPage.DisplayPromptAsync(title, message, acceptString, cancelString, placeHolder, maxLength, keyboard, initialValue);
+        //}
 
         public async Task ShowWarningToast(String message,
                                            Action? action = null,

@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TransactionMobile.Maui.BusinessLogic.UIServices
+﻿namespace TransactionMobile.Maui.BusinessLogic.UIServices
 {
-    using Microsoft.Maui.Devices;
-
     public interface IDeviceService
     {
         String GetIdentifier();
@@ -16,8 +8,16 @@ namespace TransactionMobile.Maui.BusinessLogic.UIServices
 
         String GetPlatform();
 
+        Boolean IsIOS();
+
         String GetManufacturer();
 
-        void SetOrientation(DisplayOrientation displayOrientation);
+        void SetOrientation(Orientation displayOrientation);
+    }
+
+    public enum Orientation {
+        Unknown = 0,
+        Portrait = 1,
+        Landscape = 2
     }
 }

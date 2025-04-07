@@ -1,22 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<!-- Base target frameworks -->
+	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
 		<TargetFrameworks>net8.0-android</TargetFrameworks>
+	</PropertyGroup>
 
-		<!-- Append platform-specific targets conditionally -->
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">
-			$(TargetFrameworks);net8.0-windows10.0.19041.0
-		</TargetFrameworks>
+	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+		<TargetFrameworks>net8.0-android;net8.0-windows10.0.19041.0</TargetFrameworks>
+	</PropertyGroup>
 
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">
-			$(TargetFrameworks);net8.0-ios;net8.0-maccatalyst
-		</TargetFrameworks>
+	<!-- macOS-only: Android + iOS + MacCatalyst -->
+	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+	</PropertyGroup>
 
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('tizen'))">
-			$(TargetFrameworks);net8.0-tizen
-		</TargetFrameworks>
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-maccatalyst'">
+		<RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers>
+	</PropertyGroup>
 
+	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>TransactionMobile.Maui</RootNamespace>
 		<UseMaui>true</UseMaui>

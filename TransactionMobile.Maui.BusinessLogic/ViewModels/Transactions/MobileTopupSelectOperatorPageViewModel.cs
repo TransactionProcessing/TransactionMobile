@@ -26,7 +26,8 @@ public class MobileTopupSelectOperatorPageViewModel : ExtendedBaseViewModel
 
     public MobileTopupSelectOperatorPageViewModel(IMediator mediator, INavigationService navigationService, IDialogService dialogService,
                                                   IApplicationCache applicationCache,
-                                                  IDeviceService deviceService) : base(applicationCache,dialogService, navigationService, deviceService)
+                                                  IDeviceService deviceService,
+                                                  INavigationParameterService navigationParameterService) : base(applicationCache,dialogService, navigationService, deviceService,navigationParameterService)
     {
         this.Mediator = mediator;
         this.OperatorSelectedCommand = new AsyncCommand<ItemSelected<ContractOperatorModel>>(this.OperatorSelectedCommandExecute);

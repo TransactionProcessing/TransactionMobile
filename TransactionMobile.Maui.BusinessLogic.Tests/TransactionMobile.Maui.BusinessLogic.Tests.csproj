@@ -1,18 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-	  <TargetFrameworks>net8.0-android</TargetFrameworks>
 
-	  <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">
-		  $(TargetFrameworks);net8.0-windows10.0.19041.0
-	  </TargetFrameworks>
+	<!--<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+		<TargetFrameworks>net8.0-android;net8.0-windows10.0.19041.0</TargetFrameworks>
+	</PropertyGroup>
 
-	  <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">
-		  $(TargetFrameworks);net8.0-ios;net8.0-maccatalyst
-	  </TargetFrameworks>
-	  <UseMaui>true</UseMaui>
+	--><!-- macOS-only: Android + iOS + MacCatalyst --><!--
+	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-maccatalyst'">
+		<RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers>
+	</PropertyGroup>-->
+
+	<PropertyGroup>
+	  <TargetFrameworks>net8.0;</TargetFrameworks>
 	  <DebugType>Full</DebugType>
   </PropertyGroup>
-  <ItemGroup>
+
+  <!--<ItemGroup>
     <Compile Remove="ViewModelTests\**" />
     <EmbeddedResource Remove="ViewModelTests\**" />
     <MauiCss Remove="ViewModelTests\**" />
@@ -52,7 +58,7 @@
     <Compile Include="ViewModelTests\Transactions\Voucher\VoucherIssueSuccessPageViewModelTests.cs" />
     <Compile Include="ViewModelTests\Transactions\Voucher\VoucherPerformIssuePageViewModelTests.cs" />
     <Compile Include="ViewModelTests\Transactions\Voucher\VoucherSelectOperatorPageViewModelTests.cs" />
-  </ItemGroup>
+  </ItemGroup>-->
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.14" />
@@ -77,12 +83,12 @@
     <ProjectReference Include="..\TransactionMobile.Maui.BusinessLogic\TransactionMobile.Maui.BusinessLogic.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <PackageReference Update="Microsoft.Maui.Controls" Version="8.0.14" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.14" />
-  </ItemGroup>
+  </ItemGroup>-->
 
 </Project>

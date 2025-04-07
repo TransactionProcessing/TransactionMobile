@@ -2,19 +2,15 @@
 
 using System.Web;
 using System.Windows.Input;
-using Common;
 using Logging;
 using Maui.UIServices;
 using MediatR;
-using Microsoft.Maui.Controls;
-using MvvmHelpers;
 using MvvmHelpers.Commands;
 using Requests;
 using Services;
 using UIServices;
-using Command = Microsoft.Maui.Controls.Command;
 
-public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAttributable
+public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel
 {
     #region Fields
 
@@ -25,7 +21,7 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
     private String recipientEmailAddress;
 
     private readonly IMediator Mediator;
-    
+
     private Decimal voucherAmount;
 
     public ProductDetails ProductDetails { get; private set; }
@@ -34,8 +30,9 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
 
     #region Constructors
 
-    public void ApplyQueryAttributes(IDictionary<string, Object> query)
+    public async Task Initialise(CancellationToken cancellationToken)
     {
+        var query = this.NavigationParameterService.GetParameters();
         this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
         this.VoucherAmount = Decimal.Parse(HttpUtility.UrlDecode(query[nameof(this.VoucherAmount)].ToString()));
     }
@@ -44,7 +41,8 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel, IQueryAtt
                                             IApplicationCache applicationCache,
                                             IDialogService dialogService,
                                             IDeviceService deviceService,
-                                            IMediator mediator) : base(applicationCache, dialogService, navigationService, deviceService)
+                                            IMediator mediator,
+                                            INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
     {
         this.Mediator = mediator;
         this.IssueVoucherCommand = new AsyncCommand(this.IssueVoucherCommandExecute);

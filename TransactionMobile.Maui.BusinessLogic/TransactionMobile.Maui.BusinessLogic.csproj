@@ -1,16 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
+	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
 		<TargetFrameworks>net8.0-android</TargetFrameworks>
+	</PropertyGroup>
 
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">
-			$(TargetFrameworks);net8.0-windows10.0.19041.0
-		</TargetFrameworks>
+	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+		<TargetFrameworks>net8.0;net8.0-android;net8.0-windows10.0.19041.0</TargetFrameworks>
+	</PropertyGroup>
 
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">
-			$(TargetFrameworks);net8.0-ios;net8.0-maccatalyst
-		</TargetFrameworks>
+	<!-- macOS-only: Android + iOS + MacCatalyst -->
+	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+		<TargetFrameworks>net8.0;net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-maccatalyst'">
+		<RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers>
+	</PropertyGroup>
+	
+	<PropertyGroup>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 		<DebugType>Full</DebugType>
@@ -74,12 +81,9 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Update="Microsoft.Maui.Controls" Version="8.0.14" />
-	</ItemGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' != 'net8.0'">
+		<PackageReference Update="Microsoft.Maui.Controls" Version="8.0.14" />
 		<PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.14" />
 	</ItemGroup>
-
 </Project>

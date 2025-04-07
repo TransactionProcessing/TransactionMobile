@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions.Voucher;
 
 using System;
@@ -28,6 +30,8 @@ public class VoucherPerformIssuePageViewModelTests
 
     private readonly Mock<INavigationService> NavigationService;
 
+    private readonly Mock<INavigationParameterService> NavigationParameterService;
+
     private readonly Mock<IApplicationCache> ApplicationCache;
 
     private readonly Mock<IDialogService> DialogService;
@@ -38,21 +42,22 @@ public class VoucherPerformIssuePageViewModelTests
     public VoucherPerformIssuePageViewModelTests() {
         this.Mediator = new Mock<IMediator>();
         this.NavigationService = new Mock<INavigationService>();
+        this.NavigationParameterService = new Mock<INavigationParameterService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogService = new Mock<IDialogService>();
         this.DeviceService = new Mock<IDeviceService>();
         this.ViewModel = new VoucherPerformIssuePageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, 
-                                                              this.DialogService.Object, this.DeviceService.Object, this.Mediator.Object);
+                                                              this.DialogService.Object, this.DeviceService.Object, this.Mediator.Object, this.NavigationParameterService.Object);
     }
 
     [Fact]
-    public void VoucherPerformIssuePageViewModel_ApplyQueryAttributes_QueryAttributesApplied()
+    public async Task VoucherPerformIssuePageViewModel_ApplyQueryAttributes_QueryAttributesApplied()
     {
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                            {
-                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                {nameof(this.ViewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
-                                            });
+        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+            {nameof(ProductDetails), TestData.Operator1ProductDetails},
+            {nameof(this.ViewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
+        });
+        await this.ViewModel.Initialise(CancellationToken.None);
 
         this.ViewModel.ProductDetails.ContractId.ShouldBe(TestData.OperatorId1ContractId);
         this.ViewModel.ProductDetails.ProductId.ShouldBe(TestData.Operator1Product_100KES.ProductId);
@@ -68,12 +73,10 @@ public class VoucherPerformIssuePageViewModelTests
                                                               {
                                                                   isCompletedCalled = true;
                                                               };
-
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                            {
-                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                {nameof(this.ViewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
-                                            });
+        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+            {nameof(ProductDetails), TestData.Operator1ProductDetails},
+            {nameof(this.ViewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
+        });
         this.ViewModel.CustomerEmailAddressEntryCompletedCommand.Execute(null);
         isCompletedCalled.ShouldBeTrue();
     }
@@ -86,12 +89,10 @@ public class VoucherPerformIssuePageViewModelTests
                                                                {
                                                                    isCompletedCalled = true;
                                                                };
-
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                            {
-                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                {nameof(this.ViewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
-                                            });
+        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+            {nameof(ProductDetails), TestData.Operator1ProductDetails},
+            {nameof(this.ViewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
+        });
         this.ViewModel.RecipientMobileNumberEntryCompletedCommand.Execute(null);
         isCompletedCalled.ShouldBeTrue();
     }
@@ -105,17 +106,18 @@ public class VoucherPerformIssuePageViewModelTests
                                                                    isCompletedCalled = true;
                                                                };
 
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                            {
-                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                {nameof(this.ViewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
-                                            });
+        // TODO: Move to the mock
+        //this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
+        //                                    {
+        //                                        {nameof(ProductDetails), TestData.Operator1ProductDetails},
+        //                                        {nameof(this.ViewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
+        //                                    });
         this.ViewModel.RecipientEmailAddressEntryCompletedCommand.Execute(null);
         isCompletedCalled.ShouldBeTrue();
     }
 
     [Fact]
-    public void VoucherPerformIssuePageViewModel_VoucherAmountEntryCompletedCommand_Execute_IsExecuted()
+    public async Task VoucherPerformIssuePageViewModel_VoucherAmountEntryCompletedCommand_Execute_IsExecuted()
     {
         bool isCompletedCalled = false;
         this.ViewModel.OnVoucherAmountEntryCompleted = () =>
@@ -123,45 +125,48 @@ public class VoucherPerformIssuePageViewModelTests
                                                            isCompletedCalled = true;
                                                        };
 
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                            {
-                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                {nameof(this.ViewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
-                                            });
+        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+            {nameof(ProductDetails), TestData.Operator1ProductDetails},
+            {nameof(this.ViewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
+        });
+        await this.ViewModel.Initialise(CancellationToken.None);
+
         this.ViewModel.VoucherAmountEntryCompletedCommand.Execute(null);
         isCompletedCalled.ShouldBeTrue();
     }
 
     [Fact]
-    public void VoucherPerformIssuePageViewModel_IssueVoucherCommand_Execute_SuccessfulVoucher_IsExecuted()
+    public async Task VoucherPerformIssuePageViewModel_IssueVoucherCommand_Execute_SuccessfulVoucher_IsExecuted()
     {
         this.Mediator.Setup(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformVoucherIssueResponseModel() {
                                                                                                                                                                                        ResponseCode = "0000"
                                                                                                                                                                                    }));
 
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                            {
-                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                {nameof(this.ViewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
-                                            });
+        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+            {nameof(ProductDetails), TestData.Operator1ProductDetails},
+            {nameof(this.ViewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
+        });
+        await this.ViewModel.Initialise(CancellationToken.None);
+
         this.ViewModel.IssueVoucherCommand.Execute(null);
         this.Mediator.Verify(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(v => v.GoToVoucherIssueSuccessPage(), Times.Once);
     }
 
     [Fact]
-    public void VoucherPerformIssuePageViewModel_IssueVoucherCommand_Execute_FailedVoucher_IsExecuted()
+    public async Task VoucherPerformIssuePageViewModel_IssueVoucherCommand_Execute_FailedVoucher_IsExecuted()
     {
         this.Mediator.Setup(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformVoucherIssueResponseModel()
                                                                                                                                             {
                                                                                                                                                 ResponseCode = "1010"
                                                                                                                                             }));
 
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                            {
-                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                {nameof(this.ViewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
-                                            });
+        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+            {nameof(ProductDetails), TestData.Operator1ProductDetails},
+            {nameof(this.ViewModel.VoucherAmount), TestData.Operator1Product_100KES.Value}
+        });
+        await this.ViewModel.Initialise(CancellationToken.None);
+
         this.ViewModel.IssueVoucherCommand.Execute(null);
         this.Mediator.Verify(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(v => v.GoToVoucherIssueFailedPage(), Times.Once);

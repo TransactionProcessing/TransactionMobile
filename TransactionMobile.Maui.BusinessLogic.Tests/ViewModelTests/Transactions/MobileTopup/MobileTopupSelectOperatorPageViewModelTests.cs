@@ -29,6 +29,8 @@ public class MobileTopupSelectOperatorPageViewModelTests
 
     private readonly Mock<INavigationService> NavigationService;
 
+    private readonly Mock<INavigationParameterService> NavigationParameterService;
+
     private readonly Mock<IApplicationCache> ApplicationCache;
 
     private readonly Mock<IDialogService> DialogSevice;
@@ -41,10 +43,12 @@ public class MobileTopupSelectOperatorPageViewModelTests
         this.Mediator = new Mock<IMediator>();
         
         this.NavigationService = new Mock<INavigationService>();
+        this.NavigationParameterService = new Mock<INavigationParameterService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
         this.DeviceService = new Mock<IDeviceService>();
-        this.ViewModel = new MobileTopupSelectOperatorPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.DialogSevice.Object, this.ApplicationCache.Object, this.DeviceService.Object);
+        this.ViewModel = new MobileTopupSelectOperatorPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.DialogSevice.Object, this.ApplicationCache.Object, this.DeviceService.Object,
+            this.NavigationParameterService.Object);
 
         
     }
@@ -84,13 +88,7 @@ public class MobileTopupSelectOperatorPageViewModelTests
     public async Task MobileTopupSelectOperatorPageViewModel_BackButtonCommand_Execute_IsExecuted()
     {
         this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
-
-        ItemSelected<ContractOperatorModel> selectedContractOperator = new ItemSelected<ContractOperatorModel>
-                                                                       {
-                                                                           SelectedItemIndex = 1,
-                                                                           SelectedItem = TestData.ContractOperatorModel
-                                                                       };
-
+        
         this.ViewModel.BackButtonCommand.Execute(null);
 
         this.NavigationService.Verify(n => n.GoBack(), Times.Once);

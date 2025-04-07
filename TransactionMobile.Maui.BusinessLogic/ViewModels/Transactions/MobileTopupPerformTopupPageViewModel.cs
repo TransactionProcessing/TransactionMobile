@@ -2,21 +2,15 @@
 
 using System.Web;
 using System.Windows.Input;
-using Common;
 using Logging;
 using Maui.UIServices;
 using MediatR;
-using Microsoft.Maui.Controls;
-using MvvmHelpers;
 using MvvmHelpers.Commands;
-using RequestHandlers;
 using Requests;
 using Services;
-using TransactionProcessorACL.DataTransferObjects.Responses;
 using UIServices;
-using Command = Microsoft.Maui.Controls.Command;
 
-public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQueryAttributable
+public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel
 {
     #region Fields
 
@@ -34,8 +28,9 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
 
     #region Constructors
 
-    public void ApplyQueryAttributes(IDictionary<string, Object> query)
+    public async Task Initialise(CancellationToken cancellationToken)
     {
+        var query = this.NavigationParameterService.GetParameters();
         this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
         this.TopupAmount = Decimal.Parse(HttpUtility.UrlDecode(query[nameof(TopupAmount)].ToString()));
     }
@@ -44,7 +39,9 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel, IQuer
                                                 INavigationService navigationService,
                                                 IApplicationCache applicationCache,
                                                 IDialogService dialogService,
-                                                IDeviceService deviceService) : base(applicationCache, dialogService, navigationService, deviceService){
+                                                IDeviceService deviceService,
+                                                INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
+    {
         this.Mediator = mediator;
         this.PerformTopupCommand = new AsyncCommand(this.PerformTopupCommandExecute);
         this.CustomerMobileNumberEntryCompletedCommand = new AsyncCommand(this.CustomerMobileNumberEntryCompletedCommandExecute);

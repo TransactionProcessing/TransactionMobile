@@ -28,94 +28,97 @@ public class MyAccountPageViewModelTests
 {
     #region Methods
 
-    private Mock<INavigationService> navigationService;
+    private readonly Mock<INavigationService> NavigationService;
+    private readonly Mock<INavigationParameterService> NavigationParameterService;
 
-    private Mock<IApplicationCache> applicationCache;
+    private readonly Mock<IApplicationCache> ApplicationCache;
 
-    private Mock<IDialogService> dialogService;
+    private readonly Mock<IDialogService> DialogService;
 
-    private Mock<IMediator> mediator;
+    private readonly Mock<IMediator> Mediator;
 
-    private MyAccountPageViewModel viewModel;
+    private readonly MyAccountPageViewModel ViewModel;
 
     private readonly Mock<IDeviceService> DeviceService;
 
     public MyAccountPageViewModelTests() {
-        navigationService = new Mock<INavigationService>();
-        applicationCache = new Mock<IApplicationCache>();
-        dialogService = new Mock<IDialogService>();
+        this.NavigationService = new Mock<INavigationService>();
+        this.NavigationParameterService = new Mock<INavigationParameterService>();
+        this.ApplicationCache = new Mock<IApplicationCache>();
+        this.DialogService = new Mock<IDialogService>();
         this.DeviceService = new Mock<IDeviceService>();
-        mediator = new Mock<IMediator>();
-        viewModel = new MyAccountPageViewModel(navigationService.Object, applicationCache.Object,
-                                                                      dialogService.Object, this.DeviceService.Object,
-                                                                      mediator.Object);
+        this.Mediator = new Mock<IMediator>();
+        this.ViewModel = new MyAccountPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object,
+                                                                      this.DialogService.Object, this.DeviceService.Object,
+                                                                      this.Mediator.Object,
+                                                                      this.NavigationParameterService.Object);
     }
 
     [Fact]
     public async Task MyAccountPageViewModel_Initialise_IsInitialised() {
         
-        mediator.Setup(m => m.Send(It.IsAny<GetMerchantDetailsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success( TestData.MerchantDetailsModel));
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetMerchantDetailsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success( TestData.MerchantDetailsModel));
 
-        await viewModel.Initialise(CancellationToken.None);
+        await this.ViewModel.Initialise(CancellationToken.None);
 
-        viewModel.MerchantName.ShouldBe(TestData.MerchantDetailsModel.MerchantName);
-        viewModel.LastLogin.ShouldBe(DateTime.Now, TimeSpan.FromSeconds(30));
-        applicationCache.Verify(a => a.SetMerchantDetails(It.IsAny<MerchantDetailsModel>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Once);
+        this.ViewModel.MerchantName.ShouldBe(TestData.MerchantDetailsModel.MerchantName);
+        this.ViewModel.LastLogin.ShouldBe(DateTime.Now, TimeSpan.FromSeconds(30));
+        this.ApplicationCache.Verify(a => a.SetMerchantDetails(It.IsAny<MerchantDetailsModel>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Once);
     }
 
     [Fact]
     public void MyAccountPageViewModel_OptionSelectedCommand_AccountInfo_Execute_IsExecuted() {
-        viewModel.OptionSelectedCommand.Execute(this.CreateItemSelected(MyAccountPageViewModel.AccountOptions.AccountInfo));
+        this.ViewModel.OptionSelectedCommand.Execute(this.CreateItemSelected(MyAccountPageViewModel.AccountOptions.AccountInfo));
 
-        navigationService.Verify(n => n.GoToMyAccountDetails(), Times.Once);
+        this.NavigationService.Verify(n => n.GoToMyAccountDetails(), Times.Once);
     }
 
     [Fact]
     public void MyAccountPageViewModel_OptionSelectedCommand_Addresses_Execute_IsExecuted() {
-        viewModel.OptionSelectedCommand.Execute(this.CreateItemSelected(MyAccountPageViewModel.AccountOptions.Addresses));
+        this.ViewModel.OptionSelectedCommand.Execute(this.CreateItemSelected(MyAccountPageViewModel.AccountOptions.Addresses));
 
-        navigationService.Verify(n => n.GoToMyAccountAddresses(), Times.Once);
+        this.NavigationService.Verify(n => n.GoToMyAccountAddresses(), Times.Once);
     }
 
     [Fact]
     public void MyAccountPageViewModel_OptionSelectedCommand_Contacts_Execute_IsExecuted() {
-        viewModel.OptionSelectedCommand.Execute(this.CreateItemSelected(MyAccountPageViewModel.AccountOptions.Contacts));
+        this.ViewModel.OptionSelectedCommand.Execute(this.CreateItemSelected(MyAccountPageViewModel.AccountOptions.Contacts));
 
-        navigationService.Verify(n => n.GoToMyAccountContacts(), Times.Once);
+        this.NavigationService.Verify(n => n.GoToMyAccountContacts(), Times.Once);
     }
 
     [Fact]
     public void MyAccountPageViewModel_OptionSelectedCommand_Logout_Execute_IsExecuted() {
-        viewModel.OptionSelectedCommand.Execute(this.CreateItemSelected(MyAccountPageViewModel.AccountOptions.Logout));
+        this.ViewModel.OptionSelectedCommand.Execute(this.CreateItemSelected(MyAccountPageViewModel.AccountOptions.Logout));
 
-        navigationService.Verify(n => n.GoToLoginPage(), Times.Once);
+        this.NavigationService.Verify(n => n.GoToLoginPage(), Times.Once);
     }
 
     [Fact]
     public void MyAccountPageViewModel_OptionSelectedCommand_Unsupported_Execute_IsExecuted()
     {
-        viewModel.OptionSelectedCommand.Execute(this.CreateItemSelected((MyAccountPageViewModel.AccountOptions)99));
+        this.ViewModel.OptionSelectedCommand.Execute(this.CreateItemSelected((MyAccountPageViewModel.AccountOptions)99));
 
-        navigationService.Verify(n => n.GoToMyAccountDetails(), Times.Never);
+        this.NavigationService.Verify(n => n.GoToMyAccountDetails(), Times.Never);
     }
 
     [Fact]
     public void MyAccountPageViewModel_GetMyAccountOptions_OptionsReturned(){
-        viewModel.MyAccountOptions = new List<ListViewItem>{
+        this.ViewModel.MyAccountOptions = new List<ListViewItem>{
                                                                new ListViewItem{
                                                                                    Title = "Test"
                                                                                }
                                                            };
-        List<ListViewItem> options = viewModel.MyAccountOptions;
+        List<ListViewItem> options = this.ViewModel.MyAccountOptions;
         options.Count.ShouldBe(1);
     }
 
     [Fact]
     public async Task MyAccountPageViewModel_BackButtonCommand_HomePageIsShown()
     {
-        viewModel.BackButtonCommand.Execute(null);
+        this.ViewModel.BackButtonCommand.Execute(null);
 
-        navigationService.Verify(n=> n.GoToHome(),Times.Once);
+        this.NavigationService.Verify(n=> n.GoToHome(),Times.Once);
     }
 
     private ItemSelected<ListViewItem> CreateItemSelected(MyAccountPageViewModel.AccountOptions selectedOption) {

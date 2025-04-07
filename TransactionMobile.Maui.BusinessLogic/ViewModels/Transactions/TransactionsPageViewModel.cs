@@ -15,7 +15,8 @@
         public TransactionsPageViewModel(INavigationService navigationService,
                                          IApplicationCache applicationCache,
                                          IDialogService dialogService,
-                                         IDeviceService deviceService) : base(applicationCache, dialogService, navigationService, deviceService)
+                                         IDeviceService deviceService,
+                                         INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
         {
             this.MobileTopupCommand = new AsyncCommand(this.MobileTopupCommandExecute);
             this.MobileWalletCommand = new AsyncCommand(this.MobileWalletCommandExecute);

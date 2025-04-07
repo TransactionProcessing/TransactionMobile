@@ -16,6 +16,7 @@ public partial class BillPaymentGetAccountPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        await this.viewModel.Initialise(CancellationToken.None);
     }
 
     

@@ -31,7 +31,8 @@ public class MyAccountDetailsPageViewModel : ExtendedBaseViewModel
     public MyAccountDetailsPageViewModel(INavigationService navigationService,
                                          IApplicationCache applicationCache,
                                          IDialogService dialogService,
-                                         IDeviceService deviceService) : base(applicationCache, dialogService, navigationService, deviceService) {
+                                         IDeviceService deviceService,
+                                         INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService) {
         this.Title = "My Details";
     }
 

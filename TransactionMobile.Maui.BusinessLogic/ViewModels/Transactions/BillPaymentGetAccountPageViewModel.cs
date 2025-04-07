@@ -1,26 +1,24 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions;
 
 using System.Windows.Input;
-using Common;
 using Logging;
 using Maui.UIServices;
 using MediatR;
-using Microsoft.Maui.Controls;
 using Models;
 using MvvmHelpers.Commands;
-using RequestHandlers;
 using Requests;
 using Services;
 using SimpleResults;
 using UIServices;
 
-public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel, IQueryAttributable
+public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel
 {
     #region Fields
 
     private String customerAccountNumber;
 
     private readonly IMediator Mediator;
+    private readonly INavigationParameterService NavigationParameterService;
 
     #endregion
 
@@ -30,8 +28,10 @@ public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel, IQueryA
                                               IApplicationCache applicationCache,
                                               IDialogService dialogService,
                                               IDeviceService deviceService,
-                                              IMediator mediator) : base(applicationCache, dialogService, navigationService, deviceService) {
+                                              IMediator mediator,
+                                              INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService) {
         this.Mediator = mediator;
+        this.NavigationParameterService = navigationParameterService;
         this.GetAccountCommand = new AsyncCommand(this.GetAccountCommandExecute);
         this.Title = "Get Customer Account";
     }
@@ -53,7 +53,8 @@ public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel, IQueryA
 
     #region Methods
 
-    public void ApplyQueryAttributes(IDictionary<String, Object> query) {
+    public async Task Initialise(CancellationToken cancellationToken) {
+        var query = this.NavigationParameterService.GetParameters();
         this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
     }
 
@@ -85,7 +86,7 @@ public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel, IQueryA
     #endregion
 }
 
-public class BillPaymentGetMeterPageViewModel : ExtendedBaseViewModel, IQueryAttributable
+public class BillPaymentGetMeterPageViewModel : ExtendedBaseViewModel
 {
     #region Fields
 
@@ -101,7 +102,8 @@ public class BillPaymentGetMeterPageViewModel : ExtendedBaseViewModel, IQueryAtt
                                               IApplicationCache applicationCache,
                                               IDialogService dialogService,
                                               IDeviceService deviceService,
-                                              IMediator mediator) : base(applicationCache, dialogService, navigationService, deviceService)
+                                              IMediator mediator,
+                                              INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
     {
         this.Mediator = mediator;
         this.GetMeterCommand = new AsyncCommand(this.GetMeterCommandExecute);
@@ -126,11 +128,11 @@ public class BillPaymentGetMeterPageViewModel : ExtendedBaseViewModel, IQueryAtt
 
     #region Methods
 
-    public void ApplyQueryAttributes(IDictionary<String, Object> query)
+    public async Task Initialise(CancellationToken cancellationToken)
     {
+        var query = this.NavigationParameterService.GetParameters();
         this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
     }
-
     private async Task GetMeterCommandExecute()
     {
         Logger.LogInformation("GetMeterCommandExecute called");

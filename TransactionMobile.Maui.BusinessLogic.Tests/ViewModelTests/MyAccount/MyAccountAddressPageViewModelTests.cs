@@ -19,6 +19,7 @@ using Xunit;
 public class MyAccountAddressPageViewModelTests
 {
     private readonly Mock<INavigationService> NavigationService;
+    private Mock<INavigationParameterService> NavigationParameterService;
     private readonly Mock<IApplicationCache> ApplicationCache;
     private readonly Mock<IDialogService> DialogService;
     private readonly Mock<IMediator> Mediator;
@@ -29,6 +30,7 @@ public class MyAccountAddressPageViewModelTests
     public MyAccountAddressPageViewModelTests()
     {
         this.NavigationService = new Mock<INavigationService>();
+        this.NavigationParameterService = new Mock<INavigationParameterService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogService = new Mock<IDialogService>();
         this.Mediator = new Mock<IMediator>();
@@ -37,7 +39,8 @@ public class MyAccountAddressPageViewModelTests
                                                            this.ApplicationCache.Object,
                                                            this.DialogService.Object,
                                                            this.DeviceService.Object,
-                                                           this.Mediator.Object);
+                                                           this.Mediator.Object,
+                                                           this.NavigationParameterService.Object);
     }
 
     [Fact]

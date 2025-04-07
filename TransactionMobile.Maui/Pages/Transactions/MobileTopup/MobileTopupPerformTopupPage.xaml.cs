@@ -35,6 +35,7 @@ public partial class MobileTopupPerformTopupPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        await this.viewModel.Initialise(CancellationToken.None);
         if (viewModel.TopupAmount > 0)
         {
             this.TopupAmountEntry.IsReadOnly = true;

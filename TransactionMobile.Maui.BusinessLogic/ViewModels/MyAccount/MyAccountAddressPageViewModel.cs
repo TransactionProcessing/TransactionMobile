@@ -23,7 +23,7 @@ public class MyAccountAddressPageViewModel : ExtendedBaseViewModel
                                          IApplicationCache applicationCache,
                                          IDialogService dialogService,
                                          IDeviceService deviceService,
-                                         IMediator mediator) : base(applicationCache, dialogService, navigationService, deviceService) {
+                                         IMediator mediator, INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService,navigationParameterService) {
         this.Mediator = mediator;
         this.Title = "My Addresses";
     }

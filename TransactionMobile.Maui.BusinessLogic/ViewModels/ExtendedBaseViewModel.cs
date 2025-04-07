@@ -1,15 +1,12 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels;
 
 using System.Windows.Input;
-using Common;
 using Logging;
 using Maui.UIServices;
-using Microsoft.Maui.Devices;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
 using MyAccount;
 using Reports;
-using RequestHandlers;
 using Services;
 using SimpleResults;
 using Support;
@@ -27,6 +24,7 @@ public class ExtendedBaseViewModel : BaseViewModel
     protected readonly INavigationService NavigationService;
 
     protected readonly IDeviceService DeviceService;
+    protected readonly INavigationParameterService NavigationParameterService;
 
     #endregion
 
@@ -36,14 +34,15 @@ public class ExtendedBaseViewModel : BaseViewModel
                                  IDialogService dialogService,
                                  INavigationService navigationService,
                                  IDeviceService deviceService,
-                                 DisplayOrientation orientation = DisplayOrientation.Portrait) {
+                                 INavigationParameterService navigationParameterService,
+        Orientation orientation = Orientation.Portrait) {
         this.NavigationService = navigationService;
         this.DeviceService = deviceService;
+        this.NavigationParameterService = navigationParameterService;
         this.ApplicationCache = applicationCache;
         this.DialogService = dialogService;
         this.BackButtonCommand = new AsyncCommand(this.BackButtonCommandExecute);
         this.Orientation = orientation;
-        //this.DeviceService.SetOrientation(orientation);
     }
 
     #endregion
@@ -52,15 +51,11 @@ public class ExtendedBaseViewModel : BaseViewModel
 
     public ICommand BackButtonCommand { get; }
 
-    //public void SetOrientation(DisplayOrientation orientation){
-    //    this.
-    //}
-
-    public virtual async Task Initialise(CancellationToken cancellationToken){
+    public virtual async Task Initialise(CancellationToken cancellationToken) {
         this.DeviceService.SetOrientation(this.Orientation);
     }
 
-    public DisplayOrientation Orientation{ get; private set; }
+    public Orientation Orientation { get; private set; }
 
     #endregion
 
