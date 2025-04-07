@@ -48,15 +48,16 @@ public class LoginPage : BasePage2
     public async Task<Boolean> IsTrainingModeOn()
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.UseTrainingModeSwitch);
-        String? text = element.Text;
         if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
-            if (text == "OFF") {
+            var text = element.GetAttribute("checked");
+            if (text == "false") {
                 return false;
             }
 
             return true;
         }
         if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.iOS) {
+            String? text = element.GetAttribute("value");
             if (text == "0") {
                 return false;
             }
