@@ -60,4 +60,4 @@ jobs:
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json -f net8.0-android -c Release #--no-restore
 
       - name: Run tests
-        run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests\TransactionMobile.Maui.BusinessLogic.Tests.csproj --configuration Release
+        run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj --configuration Release
