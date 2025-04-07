@@ -149,7 +149,7 @@ jobs:
       - name: Run Android Navigation Tests
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=Android)" --no-restore
 
-hardware_navigation_tests:
+  hardware_navigation_tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
