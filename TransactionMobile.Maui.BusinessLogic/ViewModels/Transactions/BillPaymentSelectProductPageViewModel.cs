@@ -1,22 +1,18 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions;
 
-using System.Web;
 using System.Windows.Input;
 using Common;
 using Logging;
 using Maui.UIServices;
 using MediatR;
-using Microsoft.Maui.Controls;
 using Models;
-using MvvmHelpers;
 using MvvmHelpers.Commands;
-using RequestHandlers;
 using Requests;
 using Services;
 using SimpleResults;
 using UIServices;
 
-public class BillPaymentSelectProductPageViewModel : ExtendedBaseViewModel, IQueryAttributable
+public class BillPaymentSelectProductPageViewModel : ExtendedBaseViewModel
 {
     #region Fields
 
@@ -26,15 +22,11 @@ public class BillPaymentSelectProductPageViewModel : ExtendedBaseViewModel, IQue
 
     #region Constructors
 
-    public void ApplyQueryAttributes(IDictionary<string, Object> query)
-    {
-        this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
-    }
-
     public BillPaymentSelectProductPageViewModel(IMediator mediator, INavigationService navigationService,
                                                  IApplicationCache applicationCache,
                                                  IDialogService dialogService,
-                                                 IDeviceService deviceService) : base(applicationCache, dialogService, navigationService, deviceService)
+                                                 IDeviceService deviceService,
+                                                 INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
     {
         this.Mediator = mediator;
         this.ProductSelectedCommand = new AsyncCommand<ItemSelected<ContractProductModel>>(this.ProductSelectedCommandExecute);
@@ -57,6 +49,9 @@ public class BillPaymentSelectProductPageViewModel : ExtendedBaseViewModel, IQue
 
     public async Task Initialise(CancellationToken cancellationToken)
     {
+        IDictionary<String, Object> query = this.NavigationParameterService.GetParameters();
+        this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
+
         GetContractProductsRequest request = GetContractProductsRequest.Create(ProductType.BillPayment);
 
         Result<List<ContractProductModel>> productsresult = await this.Mediator.Send(request, cancellationToken);

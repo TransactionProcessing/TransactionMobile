@@ -1,8 +1,5 @@
 ﻿using Moq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -10,11 +7,9 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Reports
 {
     using System.Threading;
     using BusinessLogic.Common;
-    using Common;
     using LiveChartsCore.Measure;
     using Maui.UIServices;
     using MediatR;
-    using Microsoft.Maui.Handlers;
     using Models;
     using Services;
     using Shouldly;
@@ -23,24 +18,29 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Reports
 
     public class ReportsPageViewModelTests
     {
-        private Mock<INavigationService> navigationService;
-        private Mock<IApplicationCache> applicationCache;
-        private Mock<IDialogService> dialogService;
+        private readonly Mock<INavigationService> NavigationService;
+        private readonly Mock<INavigationParameterService> NavigationParameterService;
+        private readonly Mock<IApplicationCache> ApplicationCache;
+        private readonly Mock<IDialogService> DialogService;
         private readonly Mock<IDeviceService> DeviceService;
-        private Mock<IMediator> mediator;
-        private ReportsPageViewModel viewModel;
-        public ReportsPageViewModelTests(){
-            navigationService = new Mock<INavigationService>();
-            applicationCache = new Mock<IApplicationCache>();
-            dialogService = new Mock<IDialogService>();
-            this.DeviceService = new Mock<IDeviceService>();
-            mediator = new Mock<IMediator>();
+        private readonly Mock<IMediator> Mediator;
 
-            this.viewModel = new ReportsPageViewModel(this.navigationService.Object,
-                                                      this.applicationCache.Object,
-                                                      this.dialogService.Object,
+        private readonly ReportsPageViewModel ViewModel;
+
+        public ReportsPageViewModelTests(){
+            this.NavigationService = new Mock<INavigationService>();
+            this.NavigationParameterService = new Mock<INavigationParameterService>();
+            this.ApplicationCache = new Mock<IApplicationCache>();
+            this.DialogService = new Mock<IDialogService>();
+            this.DeviceService = new Mock<IDeviceService>();
+            this.Mediator = new Mock<IMediator>();
+
+            this.ViewModel = new ReportsPageViewModel(this.NavigationService.Object,
+                                                      this.ApplicationCache.Object,
+                                                      this.DialogService.Object,
                                                       this.DeviceService.Object,
-                                                      this.mediator.Object);
+                                                      this.Mediator.Object,
+                                                      this.NavigationParameterService.Object);
         }
 
         [Theory]
@@ -56,18 +56,18 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Reports
                                                                                         SelectedItem = li,
                                                                                         SelectedItemIndex = selectedIndex,
                                                                                     };
-            this.viewModel.OptionSelectedCommand.Execute(itemSelected);
+            this.ViewModel.OptionSelectedCommand.Execute(itemSelected);
 
             switch(selectedIndex){
                 case 0:
-                    this.navigationService.Verify(v => v.GoToReportsSalesAnalysis(), Times.Once);
+                    this.NavigationService.Verify(v => v.GoToReportsSalesAnalysis(), Times.Once);
                     break;
                 case 1:
-                    this.navigationService.Verify(v => v.GoToReportsBalanceAnalysis(), Times.Once);
+                    this.NavigationService.Verify(v => v.GoToReportsBalanceAnalysis(), Times.Once);
                     break;
                 default:
-                    this.navigationService.Verify(v => v.GoToReportsSalesAnalysis(), Times.Never);
-                    this.navigationService.Verify(v => v.GoToReportsBalanceAnalysis(), Times.Never);
+                    this.NavigationService.Verify(v => v.GoToReportsSalesAnalysis(), Times.Never);
+                    this.NavigationService.Verify(v => v.GoToReportsBalanceAnalysis(), Times.Never);
                     break;
             }
         }
@@ -75,101 +75,107 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Reports
         [Fact]
         public async Task ReportsPageViewModel_Initialise_IsInitialised()
         {
-            await viewModel.Initialise(CancellationToken.None);
-            this.viewModel.ReportsMenuOptions.Count.ShouldBe(2);
+            await this.ViewModel.Initialise(CancellationToken.None);
+            this.ViewModel.ReportsMenuOptions.Count.ShouldBe(2);
         }
 
         [Fact]
         public async Task ReportsPageViewModel_BackButtonCommand_HomePageIsShown()
         {
-            viewModel.BackButtonCommand.Execute(null);
+            this.ViewModel.BackButtonCommand.Execute(null);
 
-            navigationService.Verify(n => n.GoToHome(), Times.Once);
+            this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
         }
     }
 
     public class ReportsSalesAnalysisPageViewModelTests{
-        private ReportsSalesAnalysisPageViewModel viewModel;
-        private Mock<INavigationService> navigationService;
-        private Mock<IApplicationCache> applicationCache;
-        private Mock<IDialogService> dialogService;
+        private readonly ReportsSalesAnalysisPageViewModel ViewModel;
+        private readonly Mock<INavigationService> NavigationService;
+        private readonly Mock<INavigationParameterService> NavigationParameterService;
+        private readonly Mock<IApplicationCache> ApplicationCache;
+        private readonly Mock<IDialogService> DialogService;
         private readonly Mock<IDeviceService> DeviceService;
-        private Mock<IMediator> mediator;
+        private readonly Mock<IMediator> Mediator;
 
         public ReportsSalesAnalysisPageViewModelTests(){
-            navigationService = new Mock<INavigationService>();
-            applicationCache = new Mock<IApplicationCache>();
-            dialogService = new Mock<IDialogService>();
+            this.NavigationService = new Mock<INavigationService>();
+            this.NavigationParameterService = new Mock<INavigationParameterService>();
+            this.ApplicationCache = new Mock<IApplicationCache>();
+            this.DialogService = new Mock<IDialogService>();
             this.DeviceService = new Mock<IDeviceService>();
-            mediator = new Mock<IMediator>();
+            this.Mediator = new Mock<IMediator>();
 
-            this.viewModel = new ReportsSalesAnalysisPageViewModel(this.navigationService.Object,
-                                                                   this.applicationCache.Object,
-                                                                   this.dialogService.Object,
+            this.ViewModel = new ReportsSalesAnalysisPageViewModel(this.NavigationService.Object,
+                                                                   this.ApplicationCache.Object,
+                                                                   this.DialogService.Object,
                                                                    this.DeviceService.Object,
-                                                                   this.mediator.Object);
+                                                                   this.Mediator.Object,
+                                                                   this.NavigationParameterService.Object);
         }
 
         [Fact]
         public async Task ReportsSalesAnalysisPageViewModel_Initialise_Execute_IsExecuted(){
-            await viewModel.Initialise(CancellationToken.None);
+            await this.ViewModel.Initialise(CancellationToken.None);
 
-            this.viewModel.ComparisonDates.Count.ShouldBe(3);
+            this.ViewModel.ComparisonDates.Count.ShouldBe(3);
         }
 
         [Fact]
         public async Task ReportsSalesAnalysisPageViewModel_ComparisonDatePickerSelectedIndexChangedCommand_HomePageIsShown(){
             ComparisonDate comparisonDate = new ComparisonDate(DateTime.Now.AddDays(-1), "Yesterday");
-            this.viewModel.SelectedItem = comparisonDate;
-            viewModel.ComparisonDatePickerSelectedIndexChangedCommand.Execute(comparisonDate);
+            this.ViewModel.SelectedItem = comparisonDate;
+            this.ViewModel.ComparisonDatePickerSelectedIndexChangedCommand.Execute(comparisonDate);
 
             // Nothing to actually verify yet here
-            this.viewModel.SalesAnalysisList.Count.ShouldBe(2);
+            this.ViewModel.SalesAnalysisList.Count.ShouldBe(2);
         }
 
         [Fact]
         public async Task ReportsSalesAnalysisPageViewModel_BackButtonCommand_HomePageIsShown()
         {
-            viewModel.BackButtonCommand.Execute(null);
+            this.ViewModel.BackButtonCommand.Execute(null);
 
-            navigationService.Verify(n => n.GoBack(), Times.Once);
+            this.NavigationService.Verify(n => n.GoBack(), Times.Once);
         }
     }
 
     public class ReportsBalanceAnalysisPageViewModelTests
     {
-        private ReportsBalanceAnalysisPageViewModel viewModel;
-        private Mock<INavigationService> navigationService;
-        private Mock<IApplicationCache> applicationCache;
-        private Mock<IDialogService> dialogService;
+        private ReportsBalanceAnalysisPageViewModel ViewModel;
+        private Mock<INavigationService> NavigationService;
+        private Mock<INavigationParameterService> NavigationParameterService;
+        private Mock<IApplicationCache> ApplicationCache;
+        private Mock<IDialogService> DialogService;
         private readonly Mock<IDeviceService> DeviceService;
-        private Mock<IMediator> mediator;
+        private Mock<IMediator> Mediator;
 
         public ReportsBalanceAnalysisPageViewModelTests()
         {
-            navigationService = new Mock<INavigationService>();
-            applicationCache = new Mock<IApplicationCache>();
-            dialogService = new Mock<IDialogService>();
+            this.NavigationService = new Mock<INavigationService>();
+            this.NavigationParameterService = new Mock<INavigationParameterService>();
+            this.ApplicationCache = new Mock<IApplicationCache>();
+            this.DialogService = new Mock<IDialogService>();
             this.DeviceService = new Mock<IDeviceService>();
-            mediator = new Mock<IMediator>();
+            this.Mediator = new Mock<IMediator>();
 
-            this.viewModel = new ReportsBalanceAnalysisPageViewModel(this.navigationService.Object,
-                                                                     this.applicationCache.Object,
-                                                                     this.dialogService.Object,
+            this.ViewModel = new ReportsBalanceAnalysisPageViewModel(this.NavigationService.Object,
+                                                                     this.ApplicationCache.Object,
+                                                                     this.DialogService.Object,
                                                                      this.DeviceService.Object,
-                                                                     this.mediator.Object);
+                                                                     this.Mediator.Object,
+                                                                     this.NavigationParameterService.Object);
         }
 
         [Fact]
         public async Task ReportsBalanceAnalysisPageViewModel_Initialise_Execute_IsExecuted()
         {
-            await viewModel.Initialise(CancellationToken.None);
+            await ViewModel.Initialise(CancellationToken.None);
 
-            this.viewModel.XAxes.ShouldNotBeNull();
-            this.viewModel.YAxes.ShouldNotBeNull();
-            this.viewModel.TooltipFindingStrategy.ShouldBe(TooltipFindingStrategy.CompareOnlyX);
-            this.viewModel.TooltipPosition.ShouldBe(TooltipPosition.Top);
-            this.viewModel.Series.ShouldNotBeNull();
+            this.ViewModel.XAxes.ShouldNotBeNull();
+            this.ViewModel.YAxes.ShouldNotBeNull();
+            this.ViewModel.TooltipFindingStrategy.ShouldBe(TooltipFindingStrategy.CompareOnlyX);
+            this.ViewModel.TooltipPosition.ShouldBe(TooltipPosition.Top);
+            this.ViewModel.Series.ShouldNotBeNull();
         }
 
         //[Fact]
@@ -186,9 +192,9 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Reports
         [Fact]
         public async Task ReportsBalanceAnalysisPageViewModel_BackButtonCommand_HomePageIsShown()
         {
-            viewModel.BackButtonCommand.Execute(null);
+            ViewModel.BackButtonCommand.Execute(null);
 
-            navigationService.Verify(n => n.GoBack(), Times.Once);
+            this.NavigationService.Verify(n => n.GoBack(), Times.Once);
         }
     }
 }

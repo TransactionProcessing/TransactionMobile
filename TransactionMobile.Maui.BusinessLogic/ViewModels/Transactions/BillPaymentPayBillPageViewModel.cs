@@ -5,7 +5,6 @@ using Common;
 using Logging;
 using Maui.UIServices;
 using MediatR;
-using Microsoft.Maui.Controls;
 using Models;
 using MvvmHelpers.Commands;
 using RequestHandlers;
@@ -15,7 +14,7 @@ using SimpleResults;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 using UIServices;
 
-public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttributable
+public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel
 {
     #region Fields
     
@@ -32,7 +31,8 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
 
     public Action OnPaymentAmountEntryCompleted { get; set; }
 
-    public void ApplyQueryAttributes(IDictionary<string, Object> query){
+    public async Task Initialise(CancellationToken cancellationToken){
+        IDictionary<String, Object> query = this.NavigationParameterService.GetParameters();
         this.IsPostPayVisible = false;
         this.IsPrePayVisible = false;
 
@@ -54,7 +54,8 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel, IQueryAttr
                                            IApplicationCache applicationCache,
                                            IDialogService dialogService,
                                            IMediator mediator,
-                                           IDeviceService deviceService) : base(applicationCache, dialogService, navigationService, deviceService)
+                                           IDeviceService deviceService,
+                                           INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
     {
         this.Mediator = mediator;
         this.MakeBillPaymentCommand = new AsyncCommand(this.MakeBillPaymentCommandExecute);

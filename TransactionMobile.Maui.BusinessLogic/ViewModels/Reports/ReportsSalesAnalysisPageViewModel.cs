@@ -5,21 +5,14 @@ using MediatR;
 using Services;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Common;
-using Models;
 using MvvmHelpers.Commands;
 using UIServices;
 using System.Windows.Input;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Painting;
-using LiveChartsCore.SkiaSharpView.VisualElements;
-using SkiaSharp;
-using LiveChartsCore.VisualElements;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.Measure;
-using Microsoft.Maui.Devices;
 
 public class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel{
 
@@ -28,7 +21,7 @@ public class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel{
                                              IApplicationCache applicationCache,
                                              IDialogService dialogService,
                                              IDeviceService deviceService,
-                                             IMediator mediator) : base(applicationCache, dialogService, navigationService, deviceService)
+                                             IMediator mediator, INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService,navigationParameterService)
     {
         this.Mediator = mediator;
         this.ComparisonDatePickerSelectedIndexChangedCommand = new AsyncCommand<ComparisonDate>(this.ComparisonDatePickerSelectedExecute);
@@ -100,7 +93,8 @@ public class ReportsBalanceAnalysisPageViewModel : ExtendedBaseViewModel{
                                                IApplicationCache applicationCache,
                                                IDialogService dialogService,
                                                IDeviceService deviceService,
-                                               IMediator mediator) : base(applicationCache, dialogService, navigationService, deviceService, DisplayOrientation.Landscape)
+                                               IMediator mediator,
+                                               INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService, Orientation.Landscape)
     {
         this.Mediator = mediator;
         this.Title = "Balance Analysis";

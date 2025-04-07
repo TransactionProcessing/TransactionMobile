@@ -15,10 +15,12 @@ using Pages.Transactions.Voucher;
 
 public class ShellNavigationService : INavigationService
 {
+    private readonly INavigationParameterService NavigationParameterService;
+
     #region Methods
 
-    public ShellNavigationService() {
-
+    public ShellNavigationService(INavigationParameterService navigationParameterService) {
+        this.NavigationParameterService = navigationParameterService;
     }
 
     public async Task QuitApplication(){
@@ -207,8 +209,9 @@ public class ShellNavigationService : INavigationService
     {
         try
         {
+            this.NavigationParameterService.SetParameters(parameters);
             Logger.LogInformation($"navigating to {route}");
-            await Shell.Current.GoToAsync(route, parameters);
+            await Shell.Current.GoToAsync(route);
         }
         catch (Exception e)
         {

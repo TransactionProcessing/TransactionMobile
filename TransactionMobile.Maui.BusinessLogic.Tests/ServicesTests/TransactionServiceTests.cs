@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
     using SimpleResults;
     using TransactionProcessorACL.DataTransferObjects.Responses;
     using Xunit;
-
+    
     public class TransactionServiceTests{
 
         private MockHttpMessageHandler MockHttpMessageHandler;
@@ -38,16 +39,8 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
             this.ApplicationCache.Setup(s => s.GetAccessToken()).Returns(new TokenResponseModel(){
                                                                                                      AccessToken = "token"
                                                                                                  });
-            Logger.Initialise(new NullLogger());
+            Logger.Initialise(new Logging.NullLogger());
         }
-
-        /*
-        PerformBillPaymentGetAccount
-           PerformBillPaymentMakePayment
-           PerformBillPaymentGetMeter
-           PerformReconciliation
-           PerformVoucherIssue
-        */
 
         [Fact]
         public async Task TransactionService_PerformLogon_LogonPerformed(){
@@ -69,7 +62,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                   };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
 
             Result<PerformLogonResponseModel> performLogonResult = await this.TransactionService.PerformLogon(requestModel, CancellationToken.None);
 
@@ -128,7 +121,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                 };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
 
             Result<PerformMobileTopupResponseModel> performMobileTopupResult = await this.TransactionService.PerformMobileTopup(requestModel, CancellationToken.None);
 
@@ -191,7 +184,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                 };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
 
             Result<PerformVoucherIssueResponseModel> performVoucherIssueResult = await this.TransactionService.PerformVoucherIssue(requestModel, CancellationToken.None);
 
@@ -230,7 +223,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
         }
 
         [Fact]
-        public async Task TransactionService_PerformBillPaymentGetAccount_GetAccountPerformed(){
+        public async Task TransactionService_PerformBillPaymentGetAccount_GetAccountPerformed() {
             PerformBillPaymentGetAccountModel requestModel = new PerformBillPaymentGetAccountModel{
                                                                                                       ApplicationVersion = TestData.ApplicationVersion,
                                                                                                       DeviceIdentifier = TestData.DeviceIdentifier,
@@ -257,10 +250,10 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                 };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
 
             Result<PerformBillPaymentGetAccountResponseModel> performBillPaymentGetAccountResult = await this.TransactionService.PerformBillPaymentGetAccount(requestModel, CancellationToken.None);
-
+            performBillPaymentGetAccountResult.ShouldNotBeNull();
             performBillPaymentGetAccountResult.IsSuccess.ShouldBeTrue();
             performBillPaymentGetAccountResult.Data.ShouldNotBeNull();
             performBillPaymentGetAccountResult.Data.IsSuccessful.ShouldBeTrue();
@@ -319,7 +312,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                 };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
 
             Result<PerformBillPaymentGetMeterResponseModel> performBillPaymentGetMeterResult = await this.TransactionService.PerformBillPaymentGetMeter(requestModel, CancellationToken.None);
 
@@ -354,7 +347,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                 };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
 
             Result<PerformBillPaymentGetMeterResponseModel> performBillPaymentGetMeterResult = await this.TransactionService.PerformBillPaymentGetMeter(requestModel, CancellationToken.None);
 
@@ -413,7 +406,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
                                                                                                 };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
 
             Result<PerformBillPaymentMakePaymentResponseModel> performBillPaymentGetMeterResult = await this.TransactionService.PerformBillPaymentMakePayment(requestModel, CancellationToken.None);
 
@@ -480,7 +473,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
             };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
 
             Result<PerformReconciliationResponseModel> performReconciliationResult = await this.TransactionService.PerformReconciliation(requestModel, CancellationToken.None);
 

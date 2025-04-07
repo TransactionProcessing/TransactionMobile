@@ -20,6 +20,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
     public class AdminPageViewModelTests
     {
         private readonly Mock<INavigationService> NavigationService;
+        private readonly Mock<INavigationParameterService> NavigationParameterService;
 
         private readonly Mock<IMediator> Mediator;
 
@@ -34,6 +35,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
         private readonly AdminPageViewModel ViewModel;
         public AdminPageViewModelTests() {
             this.NavigationService = new Mock<INavigationService>();
+            this.NavigationParameterService = new Mock<INavigationParameterService>();
             this.Mediator = new Mock<IMediator>();
             this.DeviceService = new Mock<IDeviceService>();
             this.ApplicationInfoService = new Mock<IApplicationInfoService>();
@@ -44,7 +46,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions
                                                     this.ApplicationCache.Object,
                                                     this.DialogService.Object,
                                                     this.DeviceService.Object,
-                                                    this.ApplicationInfoService.Object);
+                                                    this.ApplicationInfoService.Object, this.NavigationParameterService.Object);
         }
 
         [Fact]

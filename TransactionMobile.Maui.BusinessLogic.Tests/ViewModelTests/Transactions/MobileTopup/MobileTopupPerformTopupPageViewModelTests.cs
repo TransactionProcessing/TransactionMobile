@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace TransactionMobile.Maui.BusinessLogic.Tests.ViewModelTests.Transactions.MobileTopup;
 
 using System;
@@ -27,7 +29,7 @@ public class MobileTopupPerformTopupPageViewModelTests
     private readonly Mock<IMediator> Mediator;
 
     private readonly Mock<INavigationService> NavigationService;
-
+    private readonly Mock<INavigationParameterService> NavigationParameterService;
     private readonly Mock<IApplicationCache> ApplicationCache;
     private readonly Mock<IDialogService> DialogSevice;
     private readonly MobileTopupPerformTopupPageViewModel ViewModel;
@@ -38,6 +40,7 @@ public class MobileTopupPerformTopupPageViewModelTests
         
         this.Mediator = new Mock<IMediator>();
         this.NavigationService = new Mock<INavigationService>();
+        this.NavigationParameterService = new Mock<INavigationParameterService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
         this.DeviceService = new Mock<IDeviceService>();
@@ -45,16 +48,17 @@ public class MobileTopupPerformTopupPageViewModelTests
                                                                   this.NavigationService.Object,
                                                                   this.ApplicationCache.Object,
                                                                   this.DialogSevice.Object,
-                                                                  this.DeviceService.Object);
+                                                                  this.DeviceService.Object,
+                                                                  this.NavigationParameterService.Object);
     }
     [Fact]
-    public void MobileTopupPerformTopupPageViewModel_ApplyQueryAttributes_QueryAttributesApplied()
+    public async Task MobileTopupPerformTopupPageViewModel_ApplyQueryAttributes_QueryAttributesApplied()
     {
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                            {
-                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                {nameof(this.ViewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
-                                            });
+        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+            {nameof(ProductDetails), TestData.Operator1ProductDetails},
+            {nameof(this.ViewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
+        });
+        await this.ViewModel.Initialise(CancellationToken.None);
 
         this.ViewModel.ProductDetails.ContractId.ShouldBe(TestData.OperatorId1ContractId);
         this.ViewModel.ProductDetails.ProductId.ShouldBe(TestData.Operator1Product_100KES.ProductId);
@@ -63,7 +67,7 @@ public class MobileTopupPerformTopupPageViewModelTests
     }
 
     [Fact]
-    public void MobileTopupPerformTopupPageViewModel_CustomerEmailAddressEntryCompletedCommand_Execute_IsExecuted()
+    public async Task MobileTopupPerformTopupPageViewModel_CustomerEmailAddressEntryCompletedCommand_Execute_IsExecuted()
     {
         bool isCompletedCalled = false;
         this.ViewModel.OnCustomerEmailAddressEntryCompleted = () =>
@@ -71,17 +75,17 @@ public class MobileTopupPerformTopupPageViewModelTests
                                                                   isCompletedCalled = true;
                                                               };
 
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                            {
-                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                {nameof(this.ViewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
-                                            });
+        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+            {nameof(ProductDetails), TestData.Operator1ProductDetails},
+            {nameof(this.ViewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
+        });
+        await this.ViewModel.Initialise(CancellationToken.None);
         this.ViewModel.CustomerEmailAddressEntryCompletedCommand.Execute(null);
         isCompletedCalled.ShouldBeTrue();
     }
 
     [Fact]
-    public void MobileTopupPerformTopupPageViewModel_CustomerMobileNumberEntryCompletedCommand_Execute_IsExecuted()
+    public async Task MobileTopupPerformTopupPageViewModel_CustomerMobileNumberEntryCompletedCommand_Execute_IsExecuted()
     {
         Boolean isCompletedCalled = false;
         this.ViewModel.OnCustomerMobileNumberEntryCompleted = () =>
@@ -89,17 +93,17 @@ public class MobileTopupPerformTopupPageViewModelTests
                                                                   isCompletedCalled = true;
                                                               };
 
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                            {
-                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                {nameof(this.ViewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
-                                            });
+        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+            {nameof(ProductDetails), TestData.Operator1ProductDetails},
+            {nameof(this.ViewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
+        });
+        await this.ViewModel.Initialise(CancellationToken.None);
         this.ViewModel.CustomerMobileNumberEntryCompletedCommand.Execute(null);
         isCompletedCalled.ShouldBeTrue();
     }
 
     [Fact]
-    public void MobileTopupPerformTopupPageViewModel_TopupAmountEntryCompletedCommand_Execute_IsExecuted()
+    public async Task MobileTopupPerformTopupPageViewModel_TopupAmountEntryCompletedCommand_Execute_IsExecuted()
     {
         Boolean isCompletedCalled = false;
         this.ViewModel.OnTopupAmountEntryCompleted = () =>
@@ -107,45 +111,46 @@ public class MobileTopupPerformTopupPageViewModelTests
                                                          isCompletedCalled = true;
                                                      };
 
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                            {
-                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                {nameof(this.ViewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
-                                            });
+        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+            {nameof(ProductDetails), TestData.Operator1ProductDetails},
+            {nameof(this.ViewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
+        });
+        await this.ViewModel.Initialise(CancellationToken.None);
         this.ViewModel.TopupAmountEntryCompletedCommand.Execute(null);
         isCompletedCalled.ShouldBeTrue();
     }
 
     [Fact]
-    public void MobileTopupPerformTopupPageViewModel_PerformTopupCommand_Execute_SuccessfulTopup_IsExecuted()
+    public async Task MobileTopupPerformTopupPageViewModel_PerformTopupCommand_Execute_SuccessfulTopup_IsExecuted()
     {
         this.Mediator.Setup(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformMobileTopupResponseModel() {
                                                                                                                                                                                      ResponseCode = "0000"
                                                                                                                                                                                  }));
 
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                            {
-                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                {nameof(this.ViewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
-                                            });
+        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+            {nameof(ProductDetails), TestData.Operator1ProductDetails},
+            {nameof(this.ViewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
+        });
+        await this.ViewModel.Initialise(CancellationToken.None);
         this.ViewModel.PerformTopupCommand.Execute(null);
         this.Mediator.Verify(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(v => v.GoToMobileTopupSuccessPage(), Times.Once);
     }
 
     [Fact]
-    public void MobileTopupPerformTopupPageViewModel_PerformTopupCommand_Execute_FailedTopup_IsExecuted()
+    public async Task MobileTopupPerformTopupPageViewModel_PerformTopupCommand_Execute_FailedTopup_IsExecuted()
     {
         this.Mediator.Setup(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformMobileTopupResponseModel()
                                                                                                                                            {
                                                                                                                                                ResponseCode = "0001"
                                                                                                                                            }));
 
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<string, object>
-                                            {
-                                                {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                {nameof(this.ViewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
-                                            });
+        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+            {nameof(ProductDetails), TestData.Operator1ProductDetails},
+            {nameof(this.ViewModel.TopupAmount), TestData.Operator1Product_100KES.Value}
+        });
+        await this.ViewModel.Initialise(CancellationToken.None);
+
         this.ViewModel.PerformTopupCommand.Execute(null);
         this.Mediator.Verify(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(v => v.GoToMobileTopupFailedPage(), Times.Once);

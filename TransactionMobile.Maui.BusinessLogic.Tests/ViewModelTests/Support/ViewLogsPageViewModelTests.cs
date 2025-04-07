@@ -23,6 +23,8 @@ public class ViewLogsPageViewModelTests
 {
     private readonly Mock<INavigationService> NavigationService;
 
+    private readonly Mock<INavigationParameterService> NavigationParameterService;
+
     private readonly Mock<IMediator> Mediator;
 
     private readonly Mock<IApplicationCache> ApplicationCache;
@@ -35,6 +37,7 @@ public class ViewLogsPageViewModelTests
 
     public ViewLogsPageViewModelTests() {
         this.NavigationService = new Mock<INavigationService>();
+        this.NavigationParameterService = new Mock<INavigationParameterService>();
         this.Mediator = new Mock<IMediator>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogService = new Mock<IDialogService>();
@@ -43,7 +46,7 @@ public class ViewLogsPageViewModelTests
                                                    this.NavigationService.Object,
                                                    this.ApplicationCache.Object,
                                                    this.DialogService.Object,
-                                                   this.DeviceService.Object);
+                                                   this.DeviceService.Object, this.NavigationParameterService.Object);
     }
 
     [Fact]

@@ -32,7 +32,8 @@
                                     IMediator mediator,
                                     INavigationService navigationService,
                                     IApplicationCache applicationCache,
-                                    IDialogService dialogService) : base(applicationCache, dialogService, navigationService, deviceService)
+                                    IDialogService dialogService,
+                                    INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService,navigationParameterService)
         {
             this.ApplicationInfoService = applicationInfoService;
             this.DatabaseContext = databaseContext;

@@ -1,39 +1,35 @@
-﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions;
+﻿using SimpleResults;
 
-using System.Web;
+namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Transactions;
+
 using System.Windows.Input;
 using Common;
 using Logging;
 using Maui.UIServices;
 using MediatR;
-using Microsoft.Maui.Controls;
 using Models;
-using MvvmHelpers;
 using MvvmHelpers.Commands;
 using Requests;
 using Services;
 using UIServices;
 
-public class MobileTopupSelectProductPageViewModel : ExtendedBaseViewModel, IQueryAttributable
+public class MobileTopupSelectProductPageViewModel : ExtendedBaseViewModel//, IQueryAttributableX
 {
     #region Fields
 
     private readonly IMediator Mediator;
-
+    
     public ProductDetails ProductDetails { get; private set; }
 
     #endregion
 
     #region Constructors
 
-    public void ApplyQueryAttributes(IDictionary<string, Object> query)
-    {
-        this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
-    }
 
     public MobileTopupSelectProductPageViewModel(IMediator mediator, INavigationService navigationService,
                                                  IApplicationCache applicationCache, IDialogService dialogService,
-                                                 IDeviceService deviceService) :base(applicationCache, dialogService, navigationService, deviceService)
+                                                 IDeviceService deviceService,
+                                                 INavigationParameterService navigationParameterService) :base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
     {
         this.Mediator = mediator;
         this.ProductSelectedCommand = new AsyncCommand<ItemSelected<ContractProductModel>>(this.ProductSelectedCommandExecute);
@@ -54,10 +50,13 @@ public class MobileTopupSelectProductPageViewModel : ExtendedBaseViewModel, IQue
 
     public async Task Initialise(CancellationToken cancellationToken)
     {
+        IDictionary<String, Object> query = this.NavigationParameterService.GetParameters();
+        this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
+
         GetContractProductsRequest request = GetContractProductsRequest.Create(ProductType.MobileTopup);
 
-        var productsresult = await this.Mediator.Send(request, cancellationToken);
-        List<ContractProductModel> products = productsresult.Data;
+        Result<List<ContractProductModel>> productsResult = await this.Mediator.Send(request, cancellationToken);
+        List<ContractProductModel> products = productsResult.Data;
 
         products = products.Where(p => p.OperatorId == this.ProductDetails.OperatorId).ToList();
 

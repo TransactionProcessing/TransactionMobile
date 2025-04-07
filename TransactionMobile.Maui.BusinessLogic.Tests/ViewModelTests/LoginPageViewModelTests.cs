@@ -29,6 +29,7 @@ public class LoginPageViewModelTests
     private readonly Mock<IMediator> Mediator;
 
     private readonly Mock<INavigationService> NavigationService;
+    private Mock<INavigationParameterService> NavigationParameterService;
 
     private readonly Mock<IApplicationCache> ApplicationCache;
 
@@ -40,6 +41,7 @@ public class LoginPageViewModelTests
     public LoginPageViewModelTests() {
         this.Mediator = new Mock<IMediator>();
         this.NavigationService = new Mock<INavigationService>();
+        this.NavigationParameterService = new Mock<INavigationParameterService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DeviceService = new Mock<IDeviceService>();
         this.ApplicationInfoService = new Mock<IApplicationInfoService>();
@@ -47,7 +49,7 @@ public class LoginPageViewModelTests
 
         this.ViewModel = new LoginPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object,
                                                 this.DeviceService.Object, this.ApplicationInfoService.Object,
-                                                this.DialogService.Object);
+                                                this.DialogService.Object, this.NavigationParameterService.Object);
         Logger.Initialise(new Logging.NullLogger());
     }
 

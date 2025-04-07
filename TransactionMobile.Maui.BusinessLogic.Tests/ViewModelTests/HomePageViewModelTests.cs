@@ -15,6 +15,7 @@ using NullLogger = Logging.NullLogger;
 public class HomePageViewModelTests
 {
     private Mock<INavigationService> navigationService;
+    private Mock<INavigationParameterService> navigationParameterService;
 
     private Mock<IApplicationCache> applicationCache;
 
@@ -29,10 +30,12 @@ public class HomePageViewModelTests
         applicationCache = new Mock<IApplicationCache>();
         dialogService = new Mock<IDialogService>();
         this.DeviceService = new Mock<IDeviceService>();
+        this.navigationParameterService = new Mock<INavigationParameterService>();
         viewModel = new HomePageViewModel(applicationCache.Object,
                                                             dialogService.Object,
                                                             this.DeviceService.Object,
-                                                            navigationService.Object);
+                                                            navigationService.Object,
+                                                            navigationParameterService.Object);
         Logger.Initialise(new NullLogger());
     }
 

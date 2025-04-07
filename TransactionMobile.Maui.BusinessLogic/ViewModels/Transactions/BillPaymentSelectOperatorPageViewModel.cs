@@ -26,7 +26,8 @@ public class BillPaymentSelectOperatorPageViewModel : ExtendedBaseViewModel
     public BillPaymentSelectOperatorPageViewModel(IMediator mediator, INavigationService navigationService,
                                                   IApplicationCache applicationCache,
                                                   IDialogService dialogService,
-                                                  IDeviceService deviceService) : base(applicationCache, dialogService, navigationService, deviceService)
+                                                  IDeviceService deviceService,
+                                                  INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService,navigationParameterService)
 
     {
         this.Mediator = mediator;

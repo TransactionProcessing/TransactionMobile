@@ -16,6 +16,7 @@ public class TransactionsPageViewModelTests
 {
     private readonly Mock<IApplicationCache> ApplicationCache;
     private readonly Mock<INavigationService> NavigationService;
+    private Mock<INavigationParameterService> NavigationParameterService;
     private readonly TransactionsPageViewModel ViewModel;
     private readonly Mock<IDialogService> DialogSevice;
 
@@ -23,10 +24,12 @@ public class TransactionsPageViewModelTests
 
     public TransactionsPageViewModelTests() {
         this.NavigationService = new Mock<INavigationService>();
+        this.NavigationParameterService = new Mock<INavigationParameterService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
         this.DeviceService = new Mock<IDeviceService>();
-        this.ViewModel = new TransactionsPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object, this.DeviceService.Object);
+        this.ViewModel = new TransactionsPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, this.DialogSevice.Object, this.DeviceService.Object,
+            this.NavigationParameterService.Object);
         
     }
 

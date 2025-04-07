@@ -6,7 +6,7 @@ using BusinessLogic.Logging;
 using BusinessLogic.UIServices;
 using CommunityToolkit.Maui;
 using MetroLog.MicrosoftExtensions;
-using Microcharts.Maui;
+//using Microcharts.Maui;
 using Microsoft.Extensions.Logging;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using UIServices;

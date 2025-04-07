@@ -19,6 +19,7 @@ using Xunit;
 public class MyAccountContactPageViewModelTests
 {
     private readonly Mock<INavigationService> NavigationService;
+    private readonly Mock<INavigationParameterService> NavigationParameterService;
 
     private readonly Mock<IApplicationCache> ApplicationCache;
 
@@ -31,12 +32,13 @@ public class MyAccountContactPageViewModelTests
     public MyAccountContactPageViewModelTests() {
         this.NavigationService = new Mock<INavigationService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
-        
+        this.NavigationParameterService = new Mock<INavigationParameterService>();
         this.DialogService = new Mock<IDialogService>();
         this.DeviceService = new Mock<IDeviceService>();
         this.ViewModel = new MyAccountContactPageViewModel(this.NavigationService.Object,
                                                            this.ApplicationCache.Object,
-                                                           this.DialogService.Object, this.DeviceService.Object);
+                                                           this.DialogService.Object, this.DeviceService.Object,
+                                                           this.NavigationParameterService.Object);
     }
 
     [Fact]

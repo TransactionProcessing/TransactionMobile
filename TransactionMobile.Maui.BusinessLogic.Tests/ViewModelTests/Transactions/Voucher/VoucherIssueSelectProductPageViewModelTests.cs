@@ -30,6 +30,7 @@ public class VoucherIssueSelectProductPageViewModelTests
     private readonly Mock<IMediator> Mediator;
 
     private readonly Mock<INavigationService> NavigationService;
+    private Mock<INavigationParameterService> NavigationParameterService;
 
     private readonly Mock<IApplicationCache> ApplicationCache;
 
@@ -42,12 +43,13 @@ public class VoucherIssueSelectProductPageViewModelTests
         
         this.Mediator = new Mock<IMediator>();
         this.NavigationService = new Mock<INavigationService>();
+        this.NavigationParameterService = new Mock<INavigationParameterService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
         this.DeviceService = new Mock<IDeviceService>();
         this.ViewModel = new VoucherSelectProductPageViewModel(this.Mediator.Object, this.NavigationService.Object, 
                                                                this.ApplicationCache.Object, this.DialogSevice.Object,
-                                                               this.DeviceService.Object);
+                                                               this.DeviceService.Object, this.NavigationParameterService.Object);
         
     }
 
@@ -55,10 +57,10 @@ public class VoucherIssueSelectProductPageViewModelTests
     public async Task VoucherIssueSelectProductPageViewModel_ApplyQueryAttributes_QueryAttributesApplied() {
 
         this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
-
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
-                                                                               {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                                           });
+        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+            {nameof(ProductDetails), TestData.Operator1ProductDetails}
+        });
+        await this.ViewModel.Initialise(CancellationToken.None);
         this.ViewModel.ProductDetails.OperatorId.ShouldBe(TestData.OperatorId1);
     }
 
@@ -66,9 +68,9 @@ public class VoucherIssueSelectProductPageViewModelTests
     public async Task VoucherIssueSelectProductPageViewModel_Initialise_IsInitialised() {
         this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
 
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
-                                                                               {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                                           });
+        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+            {nameof(ProductDetails), TestData.Operator1ProductDetails}
+        });
         await this.ViewModel.Initialise(CancellationToken.None);
         this.Mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
 
@@ -79,9 +81,9 @@ public class VoucherIssueSelectProductPageViewModelTests
     public async Task VoucherIssueSelectProductPageViewModel_ProductSelectedCommand_Execute_IsExecuted() {
         this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
 
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
-                                                                               {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                                           });
+        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+            {nameof(ProductDetails), TestData.Operator1ProductDetails}
+        });
         await this.ViewModel.Initialise(CancellationToken.None);
         this.Mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
 

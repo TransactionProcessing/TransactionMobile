@@ -7,12 +7,9 @@ using MediatR;
 using Models;
 using Requests;
 using Services;
-using System.Transactions;
 using Common;
-using Microsoft.Maui.Platform;
 using SimpleResults;
 using UIServices;
-using TransactionProcessorACL.DataTransferObjects.Responses;
 
 public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupRequest, Result<PerformMobileTopupResponseModel>>,
                                          IRequestHandler<LogonTransactionRequest, Result<PerformLogonResponseModel>>,

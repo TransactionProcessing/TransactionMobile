@@ -24,6 +24,8 @@ public class BillPaymentGetMeterPageViewModelTests
 
     private readonly Mock<INavigationService> NavigationService;
 
+    private Mock<INavigationParameterService> NavigationParameterService;
+
     private readonly Mock<IApplicationCache> ApplicationCache;
 
     private readonly Mock<IDialogService> DialogSevice;
@@ -36,11 +38,13 @@ public class BillPaymentGetMeterPageViewModelTests
     {
         this.Mediator = new Mock<IMediator>();
         this.NavigationService = new Mock<INavigationService>();
+        this.NavigationParameterService = new Mock<INavigationParameterService>();
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogSevice = new Mock<IDialogService>();
         this.DeviceService = new Mock<IDeviceService>();
         this.ViewModel = new BillPaymentGetMeterPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object,
-                                                              this.DialogSevice.Object, this.DeviceService.Object, this.Mediator.Object);
+                                                              this.DialogSevice.Object, this.DeviceService.Object, this.Mediator.Object,
+                                                              this.NavigationParameterService.Object);
 
         Logger.Initialise(new NullLogger());
     }
@@ -50,9 +54,11 @@ public class BillPaymentGetMeterPageViewModelTests
     {
         this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
 
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
-                                                                               {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                                           });
+        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+            {nameof(ProductDetails), TestData.Operator1ProductDetails},
+        });
+        await this.ViewModel.Initialise(CancellationToken.None);
+        
         this.ViewModel.ProductDetails.OperatorId.ShouldBe(TestData.Operator1ProductDetails.OperatorId);
         this.ViewModel.ProductDetails.ProductId.ShouldBe(TestData.Operator1ProductDetails.ProductId);
         this.ViewModel.ProductDetails.ContractId.ShouldBe(TestData.Operator1ProductDetails.ContractId);
@@ -63,9 +69,10 @@ public class BillPaymentGetMeterPageViewModelTests
     {
         this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentGetMeterRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetMeterResponseModel));
 
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
-                                                                               {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                                           });
+        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+            {nameof(ProductDetails), TestData.Operator1ProductDetails},
+        });
+        await this.ViewModel.Initialise(CancellationToken.None);
         this.ViewModel.MeterNumber = TestData.MeterNumber;
 
         this.ViewModel.GetMeterCommand.Execute(null);
@@ -78,9 +85,10 @@ public class BillPaymentGetMeterPageViewModelTests
     {
         this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentGetMeterRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetMeterResponseModelFailed));
 
-        this.ViewModel.ApplyQueryAttributes(new Dictionary<String, Object> {
-                                                                               {nameof(ProductDetails), TestData.Operator1ProductDetails},
-                                                                           });
+        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+            {nameof(ProductDetails), TestData.Operator1ProductDetails},
+        });
+        await this.ViewModel.Initialise(CancellationToken.None);
         this.ViewModel.MeterNumber = TestData.MeterNumber;
 
         this.ViewModel.GetMeterCommand.Execute(null);

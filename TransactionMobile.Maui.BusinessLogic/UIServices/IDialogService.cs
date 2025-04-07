@@ -1,6 +1,5 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.UIServices;
 
-using Microsoft.Maui;
 
 public interface IDialogService
 {
@@ -27,14 +26,14 @@ public interface IDialogService
                               TimeSpan? duration = null,
                               CancellationToken cancellationToken = default);
 
-    Task<String> ShowPrompt(String title,
-                            String message,
-                            String acceptString,
-                            String cancelString,
-                            String placeHolder = "",
-                            Int32 maxLength = -1,
-                            Keyboard keyboard = null,
-                            String initialValue = "");
+    //Task<String> ShowPrompt(String title,
+    //                        String message,
+    //                        String acceptString,
+    //                        String cancelString,
+    //                        String placeHolder = "",
+    //                        Int32 maxLength = -1,
+    //                        Keyboard keyboard = null,
+    //                        String initialValue = "");
 
     Task ShowWarningToast(String message,
                           Action? action = null,
