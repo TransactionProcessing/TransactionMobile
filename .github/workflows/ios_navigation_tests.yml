@@ -41,7 +41,8 @@ jobs:
           git clone https://github.com/appium/appium-xcuitest-driver.git
           cd appium-xcuitest-driver
           npm install
-          npx appium driver update --source=local .
+          mkdir -p ~/.appium/node_modules/
+          cp -R . ~/.appium/node_modules/appium-xcuitest-driver
 
       - name: Start Appium Server
         run: |
