@@ -82,7 +82,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.app");
             driverOptions.App = apkPath;
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
-            driverOptions.AddAdditionalOption("waitForQuiescence", false);
+            driverOptions.AddAdditionalAppiumOption("waitForQuiescence", false);
             //driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
             //driverOptions.AddAdditionalAppiumOption("useNewWDA", true);
             //driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 999999999);
