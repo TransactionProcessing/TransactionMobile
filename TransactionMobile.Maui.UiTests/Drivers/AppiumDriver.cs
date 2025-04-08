@@ -11,11 +11,12 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.Maui.UiTests.Drivers
 {
+    using Microsoft.Testing.Platform.Capabilities;
+    using OpenQA.Selenium;
+    using OpenQA.Selenium.Appium.Windows;
     using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Threading;
-    using OpenQA.Selenium;
-    using OpenQA.Selenium.Appium.Windows;
     
     public enum MobileTestPlatform
     {
@@ -81,6 +82,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.app");
             driverOptions.App = apkPath;
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
+            driverOptions.AddAdditionalOption("waitForQuiescence", false);
             //driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
             //driverOptions.AddAdditionalAppiumOption("useNewWDA", true);
             //driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 999999999);
