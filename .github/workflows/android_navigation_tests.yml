@@ -149,6 +149,13 @@ jobs:
       - name: Run Android Navigation Tests
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=Android)" --no-restore
 
+      - name: Upload Appium Logs on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+            name: android-software_navigation_tests_appium
+            path: appium.log
+
   hardware_navigation_tests:
     runs-on: ubuntu-latest
     steps:
@@ -291,3 +298,10 @@ jobs:
 
       - name: Run Android Navigation Tests
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRHWNavTest)&(Category=Android)" --no-restore
+
+      - name: Upload Appium Logs on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+            name: android-hardware_navigation_tests_appium
+            path: appium.log
