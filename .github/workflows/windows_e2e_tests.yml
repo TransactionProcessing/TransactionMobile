@@ -64,7 +64,9 @@ jobs:
          Import-Module Appx 
          .\TransactionMobile.Maui/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1 -Force
 
-      - name: Run Windows Navigation Tests
+      - name: Run Windows End To End  Tests
+        env:
+            IsCI: true
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRTest)&(Category=Windows)" --no-restore
 
   
