@@ -1,0 +1,60 @@
+name: Build and Run iOS Navigation Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  software_navigation_tests:
+    runs-on: macos-14
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '16.2' # Update as needed based on available versions
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.14.2'
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x'
+     
+      - name: Install MAUI Workloads
+        run: |
+          dotnet workload install ios --ignore-failed-sources
+          dotnet workload install maui --ignore-failed-sources
+
+      - name: Install Appium and Drivers
+        run: |
+          npm install -g appium --unsafe-perm=true --allow-root
+          appium driver install xcuitest@5.14.1 
+
+      - name: Start Appium Server
+        run: |
+          nohup appium --log appium.log &
+
+      - name: Restore MAUI App for iOS
+        run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+      - name: Build Code
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net8.0-ios -c Release --no-restore
+
+      - name: Run iOS Navigation Tests
+        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)" --no-restore
+
+      - name: Upload Appium Logs on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+            name: ios-software_navigation_tests_appium
+            path: appium.log
+
+  
