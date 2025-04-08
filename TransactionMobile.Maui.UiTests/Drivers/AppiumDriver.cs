@@ -91,6 +91,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             //driverOptions.AddAdditionalAppiumOption("restart", true);
             //driverOptions.AddAdditionalAppiumOption("simulatorStartupTimeout", 5 * 60 * 1000);
 
+
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
         }
 
