@@ -69,4 +69,16 @@ jobs:
             IsCI: true
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRTest)&(Category=Windows)" --no-restore
 
-  
+        - name: Upload Logs on Failure
+        if: failure()  # Runs only if a previous step fails
+        uses: actions/upload-artifact@v4
+        with:
+            name: windows-e2e_tests
+            path: C:\\Users\\runneradmin\\txnproc
+
+      - name: Upload Appium Logs on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+            name: windows-e2e_tests_appium
+            path: appium.log
