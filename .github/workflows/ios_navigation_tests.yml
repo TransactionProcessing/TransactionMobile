@@ -35,7 +35,7 @@ jobs:
       - name: Install Appium and Drivers
         run: |
           npm install -g appium --unsafe-perm=true --allow-root
-          appium driver install xcuitest@5.14.1 
+          appium driver install xcuitest@next
 
       - name: Start Appium Server
         run: |
