@@ -45,17 +45,22 @@ jobs:
           dotnet workload install ios --ignore-failed-sources
           dotnet workload install maui --ignore-failed-sources
 
-      - name: Install Appium and Drivers
-        run: |
-          npm install -g appium --unsafe-perm=true --allow-root
+      #- name: Install Appium and Drivers
+      #  run: |
+      #    npm install -g appium --unsafe-perm=true --allow-root
+
+      #- name: Install Appium XCUITest Driver from GitHub
+      #  run: |
+      #    git clone https://github.com/appium/appium-xcuitest-driver.git
+      #    cd appium-xcuitest-driver
+      #    npm install
+      #    mkdir -p ~/.appium/node_modules/
+      #    cp -R . ~/.appium/node_modules/appium-xcuitest-driver
 
       - name: Install Appium XCUITest Driver from GitHub
         run: |
-          git clone https://github.com/appium/appium-xcuitest-driver.git
-          cd appium-xcuitest-driver
-          npm install
-          mkdir -p ~/.appium/node_modules/
-          cp -R . ~/.appium/node_modules/appium-xcuitest-driver
+          npm install -g appium --unsafe-perm=true --allow-root
+          appium driver install --source=git https://github.com/appium/appium-xcuitest-driver.git
 
       - name: Start Appium Server
         run: |
