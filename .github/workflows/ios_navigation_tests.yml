@@ -20,7 +20,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '16.14.2'
+          node-version: '18'
 
       - name: Set up .NET
         uses: actions/setup-dotnet@v1
