@@ -3,8 +3,10 @@
 using System.Diagnostics.CodeAnalysis;
 using Logging;
 using Maui.UIServices;
+#if !IOS
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Distribute;
+#endif
 using Models;
 using Services;
 using UIServices;
