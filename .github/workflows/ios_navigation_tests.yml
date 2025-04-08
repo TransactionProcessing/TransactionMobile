@@ -26,7 +26,20 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '8.0.x'
-     
+
+      - name: Boot Existing iOS Simulator
+        run: |
+          export UDID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '([0-9A-F-]{36})' | head -n 1)
+          echo "Booting Simulator UDID: $UDID"
+          xcrun simctl boot "$UDID"
+
+      - name: Wait for iOS Simulator to Boot
+        run: |
+          export UDID=$(xcrun simctl list devices booted | grep -oE '([0-9A-F-]{36})' | head -n 1)
+          echo "Using Simulator UDID: $UDID"
+          xcrun simctl bootstatus "$UDID" -b
+          echo "UDID=$UDID" >> $GITHUB_ENV
+
       - name: Install MAUI Workloads
         run: |
           dotnet workload install ios --ignore-failed-sources
