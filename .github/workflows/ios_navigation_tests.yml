@@ -40,36 +40,38 @@ jobs:
           xcrun simctl bootstatus "$UDID" -b
           echo "UDID=$UDID" >> $GITHUB_ENV
 
-      #- name: Install Appium and Drivers
-      #  run: |
-      #    npm install -g appium --unsafe-perm=true --allow-root
-
-      #- name: Install Appium XCUITest Driver from GitHub
-      #  run: |
-      #    git clone https://github.com/appium/appium-xcuitest-driver.git
-      #    cd appium-xcuitest-driver
-      #    npm install
-      #    mkdir -p ~/.appium/node_modules/
-      #    cp -R . ~/.appium/node_modules/appium-xcuitest-driver
-
       - name: Install Appium XCUITest Driver from GitHub
         run: |
           npm install -g appium --unsafe-perm=true --allow-root
           appium driver install --source=git --package=appium-xcuitest-driver https://github.com/appium/appium-xcuitest-driver.git
 
-      - name: Download Prebuilt WebDriverAgent
+      - name: Clone WebDriverAgent
         run: |
-          curl -L -o WebDriverAgent.zip https://github.com/appium/WebDriverAgent/releases/download/v9.4.1/WebDriverAgentRunner-Runner.zip
-          unzip WebDriverAgent.zip -d WebDriverAgent
+          git clone https://github.com/appium/WebDriverAgent.git
+          cd WebDriverAgent
+          git checkout v9.4.1
 
-      - name: Set WebDriverAgent Environment Variable
-        run: echo "WDA_PATH=$(pwd)/WebDriverAgent" >> $GITHUB_ENV
-
-      - name: Install Prebuilt WebDriverAgent onto Simulator
+      - name: Build WebDriverAgent for Simulator
         run: |
-          xcrun simctl install "$UDID" WebDriverAgent/WebDriverAgentRunner-Runner.app
-          xcrun simctl launch "$UDID" com.facebook.WebDriverAgentRunner
+          export UDID=$UDID
+          cd WebDriverAgent
+          mkdir -p build
+          xcodebuild -scheme WebDriverAgentRunner \
+            -destination "id=$UDID" \
+            -derivedDataPath build \
+            -configuration Debug \
+            build-for-testing | xcpretty      
 
+      - name: Install and Launch WebDriverAgentRunner on Simulator
+        run: |
+          export UDID=$UDID
+          APP_PATH="WebDriverAgent/build/Build/Products/Debug-iphonesimulator/WebDriverAgentRunner-Runner.app"
+          
+          xcrun simctl install "$UDID" "$APP_PATH"
+          xcrun simctl launch "$UDID" com.facebook.WebDriverAgentRunner || echo "WDA launch attempted"
+
+          # Optional: Check logs if debugging
+          xcrun simctl spawn "$UDID" log stream --predicate 'process == "WebDriverAgentRunner"' --style compact --timeout 10
 
       - name: Start Appium Server
         run: |

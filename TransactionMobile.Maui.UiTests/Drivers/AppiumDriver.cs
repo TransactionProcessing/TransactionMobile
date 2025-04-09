@@ -101,7 +101,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption("skipServerInstallation", true);
             driverOptions.AddAdditionalAppiumOption("skipProvisioningDeviceDetection", true);
             driverOptions.AddAdditionalAppiumOption("wdaLocalPort", Environment.GetEnvironmentVariable("WDA_PATH"));
-            driverOptions.AddAdditionalAppiumOption("updatedWDABundleId", "com.facebook.WebDriverAgentRunner");
+            driverOptions.AddAdditionalAppiumOption("updatedWDABundleId", "WebDriverAgent/build");
 
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
         }
