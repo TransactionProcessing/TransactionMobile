@@ -60,7 +60,7 @@ jobs:
       - name: Install Appium XCUITest Driver from GitHub
         run: |
           npm install -g appium --unsafe-perm=true --allow-root
-          appium driver install --source=git https://github.com/appium/appium-xcuitest-driver.git
+          appium driver install --source=git --package=appium-xcuitest-driver https://github.com/appium/appium-xcuitest-driver.git
 
       - name: Start Appium Server
         run: |
