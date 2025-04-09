@@ -65,20 +65,41 @@ jobs:
       - name: Debug List Built App Contents
         run: ls -R WebDriverAgent/build/Build/Products/Debug-iphonesimulator
 
-      - name: Install and Launch WebDriverAgentRunner on Simulator
-        run: |
-          echo "Installing WDA to Simulator with UDID=$UDID"
-          APP_PATH="WebDriverAgent/build/Build/Products/Debug-iphonesimulator/WebDriverAgentRunner-Runner.app"
-          
-          # Just in case: boot again (won't hurt)
-          xcrun simctl boot "$UDID" || true
-          xcrun simctl bootstatus "$UDID" -b
+      #- name: Install and Launch WebDriverAgentRunner on Simulator
+      #  run: |
+      #    echo "Installing WDA to Simulator with UDID=$UDID"
+      #    APP_PATH="WebDriverAgent/build/Build/Products/Debug-iphonesimulator/WebDriverAgentRunner-Runner.app"
+      #    
+      #    # Just in case: boot again (won't hurt)
+      #    xcrun simctl boot "$UDID" || true
+      #    xcrun simctl bootstatus "$UDID" -b#
 
-          # Install the app
+#          # Install the app
+ #         xcrun simctl install "$UDID" "$APP_PATH"
+  #        
+   #       # Launch the app
+    #      xcrun simctl launch "$UDID" com.facebook.WebDriverAgentRunner || echo "WDA launch attempted"
+
+      - name: Debug WebDriverAgent App Install and Bundle ID
+        run: |
+          echo "Checking WebDriverAgentRunner app..."
+
+          echo "Simulator UDID: $UDID"
+          APP_PATH="$PWD/WebDriverAgentRunner-Runner.app"
+
+          echo "Checking bundle identifier..."
+          BUNDLE_ID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" "$APP_PATH/Info.plist")
+          echo "Extracted Bundle ID: $BUNDLE_ID"
+
+          echo "Installing WDA app to simulator..."
           xcrun simctl install "$UDID" "$APP_PATH"
-          
-          # Launch the app
-          xcrun simctl launch "$UDID" com.facebook.WebDriverAgentRunner || echo "WDA launch attempted"
+
+          echo "Verifying install..."
+          INSTALLED_APPS=$(xcrun simctl get_app_container "$UDID" "$BUNDLE_ID" 2>&1 || echo "App not found")
+          echo "App container: $INSTALLED_APPS"
+
+          echo "Launching WebDriverAgent..."
+          xcrun simctl launch "$UDID" "$BUNDLE_ID"
 
 
       - name: Start Appium Server
