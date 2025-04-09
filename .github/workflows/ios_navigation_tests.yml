@@ -85,7 +85,7 @@ jobs:
           echo "Checking WebDriverAgentRunner app..."
 
           echo "Simulator UDID: $UDID"
-          APP_PATH="$PWD/WebDriverAgentRunner-Runner.app"
+          APP_PATH="WebDriverAgent/WebDriverAgentRunner-Runner.app"
 
           echo "Checking bundle identifier..."
           BUNDLE_ID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" "$APP_PATH/Info.plist")
