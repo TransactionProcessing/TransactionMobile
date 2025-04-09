@@ -65,6 +65,12 @@ jobs:
       - name: Set WebDriverAgent Environment Variable
         run: echo "WDA_PATH=$(pwd)/WebDriverAgent" >> $GITHUB_ENV
 
+      - name: Install Prebuilt WebDriverAgent onto Simulator
+        run: |
+          xcrun simctl install "$UDID" WebDriverAgent/WebDriverAgentRunner-Runner.app
+          xcrun simctl launch "$UDID" com.facebook.WebDriverAgentRunner
+
+
       - name: Start Appium Server
         run: |
           nohup appium --log appium.log &
