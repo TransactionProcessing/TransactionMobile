@@ -85,23 +85,36 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net8.0-ios/iossimulator-arm64/");
             var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.app");
             driverOptions.App = apkPath;
-            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
-            driverOptions.AddAdditionalAppiumOption("waitForQuiescence", false);
-            driverOptions.AddAdditionalAppiumOption("shouldWaitForQuiescence", false);
-            driverOptions.AddAdditionalAppiumOption("showXcodeLog", true);
-            //driverOptions.AddAdditionalAppiumOption("useNewWDA", true);
-            //driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 60000);
-            //driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 60000);
-            //driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 120000);
-            //driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 120000);
-            //driverOptions.AddAdditionalAppiumOption("useNewWDA", false);
-            //driverOptions.AddAdditionalAppiumOption("wdaStartupRetryInterval", 10000);
-            //driverOptions.AddAdditionalAppiumOption("wdaStartupRetries", 4);
+            //driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
+            //driverOptions.AddAdditionalAppiumOption("waitForQuiescence", false);
+            //driverOptions.AddAdditionalAppiumOption("shouldWaitForQuiescence", false);
+            //driverOptions.AddAdditionalAppiumOption("showXcodeLog", true);
+            ////driverOptions.AddAdditionalAppiumOption("useNewWDA", true);
+            ////driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 60000);
+            ////driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 60000);
+            ////driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 120000);
+            ////driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 120000);
+            ////driverOptions.AddAdditionalAppiumOption("useNewWDA", false);
+            ////driverOptions.AddAdditionalAppiumOption("wdaStartupRetryInterval", 10000);
+            ////driverOptions.AddAdditionalAppiumOption("wdaStartupRetries", 4);
+            //driverOptions.AddAdditionalAppiumOption("usePrebuiltWDA", true);
+            //driverOptions.AddAdditionalAppiumOption("skipServerInstallation", true);
+            //driverOptions.AddAdditionalAppiumOption("skipProvisioningDeviceDetection", true);
+            //driverOptions.AddAdditionalAppiumOption("wdaLocalPort", Environment.GetEnvironmentVariable("WDA_PATH"));
+            //driverOptions.AddAdditionalAppiumOption("updatedWDABundleId", "WebDriverAgent/build");
+            // Tell Appium to use the prebuilt WDA
             driverOptions.AddAdditionalAppiumOption("usePrebuiltWDA", true);
-            driverOptions.AddAdditionalAppiumOption("skipServerInstallation", true);
-            driverOptions.AddAdditionalAppiumOption("skipProvisioningDeviceDetection", true);
-            driverOptions.AddAdditionalAppiumOption("wdaLocalPort", Environment.GetEnvironmentVariable("WDA_PATH"));
-            driverOptions.AddAdditionalAppiumOption("updatedWDABundleId", "WebDriverAgent/build");
+            driverOptions.AddAdditionalAppiumOption("useNewWDA", false);
+            driverOptions.AddAdditionalAppiumOption("shouldUseSingletonTestManager", true);
+
+            // Avoid unnecessary WDA rebuild attempts and add resilience
+            driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 60000);
+            driverOptions.AddAdditionalAppiumOption("wdaStartupRetries", 3);
+            driverOptions.AddAdditionalAppiumOption("wdaStartupRetryInterval", 10000);
+
+            // (Optional but often helpful)
+            driverOptions.AddAdditionalAppiumOption("waitForQuiescence", false);
+            driverOptions.AddAdditionalAppiumOption("startIWDP", true); // if you want to inspect webviews
 
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
         }
