@@ -55,7 +55,23 @@ jobs:
       - name: Install Appium XCUITest Driver from GitHub
         run: |
           npm install -g appium --unsafe-perm=true --allow-root
-          appium driver install --source=git --package=appium-xcuitest-driver https://github.com/appium/appium-xcuitest-driver.git
+          #appium driver install --source=git --package=appium-xcuitest-driver https://github.com/appium/appium-xcuitest-driver.git
+
+      - name: Install Appium XCUITest Driver (Pinned Commit)
+        run: |
+          git clone https://github.com/appium/appium-xcuitest-driver.git
+          cd appium-xcuitest-driver
+          git checkout 0a67193f276d55e2b5e76b20f75b3e8d85e04714  # Known working commit
+          npm install
+          mkdir -p ~/.appium/node_modules/
+          cp -R . ~/.appium/node_modules/appium-xcuitest-driver          
+
+      - name: Prebuild WebDriverAgent
+        run: |
+          xcodebuild -project ~/.appium/node_modules/appium-xcuitest-driver/WebDriverAgent/WebDriverAgent.xcodeproj \
+            -scheme WebDriverAgentRunner \
+            -destination "platform=iOS Simulator,id=$UDID" \
+            build-for-testing
 
       - name: Start Appium Server
         run: |
