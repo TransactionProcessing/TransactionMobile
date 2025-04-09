@@ -89,9 +89,15 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption("waitForQuiescence", false);
             driverOptions.AddAdditionalAppiumOption("shouldWaitForQuiescence", false);
             driverOptions.AddAdditionalAppiumOption("showXcodeLog", true);
-            driverOptions.AddAdditionalAppiumOption("useNewWDA", true);
-            driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 60000);
-            driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 60000);
+            //driverOptions.AddAdditionalAppiumOption("useNewWDA", true);
+            //driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 60000);
+            //driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 60000);
+            driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 120000);
+            driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 120000);
+            driverOptions.AddAdditionalAppiumOption("useNewWDA", false);
+            driverOptions.AddAdditionalAppiumOption("wdaStartupRetryInterval", 10000);
+            driverOptions.AddAdditionalAppiumOption("wdaStartupRetries", 4);
+
 
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
         }
