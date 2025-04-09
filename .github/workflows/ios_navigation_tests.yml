@@ -64,14 +64,19 @@ jobs:
 
       - name: Install and Launch WebDriverAgentRunner on Simulator
         run: |
-          export UDID=$UDID
+          echo "Installing WDA to Simulator with UDID=$UDID"
           APP_PATH="WebDriverAgent/build/Build/Products/Debug-iphonesimulator/WebDriverAgentRunner-Runner.app"
           
+          # Just in case: boot again (won't hurt)
+          xcrun simctl boot "$UDID" || true
+          xcrun simctl bootstatus "$UDID" -b
+
+          # Install the app
           xcrun simctl install "$UDID" "$APP_PATH"
+          
+          # Launch the app
           xcrun simctl launch "$UDID" com.facebook.WebDriverAgentRunner || echo "WDA launch attempted"
 
-          # Optional: Check logs if debugging
-          xcrun simctl spawn "$UDID" log stream --predicate 'process == "WebDriverAgentRunner"' --style compact --timeout 10
 
       - name: Start Appium Server
         run: |
