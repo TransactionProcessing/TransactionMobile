@@ -62,6 +62,9 @@ jobs:
             -configuration Debug \
             build-for-testing | xcpretty      
 
+      - name: Debug: List Built App Contents
+        run: ls -R WebDriverAgent/build/Build/Products/Debug-iphonesimulator
+
       - name: Install and Launch WebDriverAgentRunner on Simulator
         run: |
           echo "Installing WDA to Simulator with UDID=$UDID"
