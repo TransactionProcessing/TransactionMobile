@@ -34,10 +34,7 @@ jobs:
 
       - name: Boot iPhone 15 Pro (iOS 17.2) Simulator
         run: |
-          UDID=$(xcrun simctl list devices available | \
-            grep -i "iPhone 15 Pro (17.2" | \
-            grep -oE '([0-9A-F-]{36})' | head -n 1)
-
+          UDID=$(xcrun simctl list devices available | grep -i "iPhone 15 Pro" | grep -i "17.2" | awk -F'[()]' '{print $2}' | head -n 1)
           if [ -z "$UDID" ]; then
             echo "::error::No matching iPhone 15 Pro (iOS 17.2) simulator found!"
             exit 1
