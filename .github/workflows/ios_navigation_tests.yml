@@ -124,6 +124,13 @@ jobs:
       - name: Build Code
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net8.0-ios -c Release --no-restore
 
+      - name: Boot iPhone 15 Pro (iOS 17.2) Simulator Again....
+        run: |
+          UDID=5C4114F9-8311-49E4-A834-4E4ABEDE918F
+          echo "Booting simulator with UDID: $UDID"
+          xcrun simctl boot "$UDID" || echo "Simulator might already be booted"
+          xcrun simctl bootstatus "$UDID" -b
+
       - name: Run iOS Navigation Tests
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)" --no-restore
 
