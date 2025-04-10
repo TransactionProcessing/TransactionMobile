@@ -119,7 +119,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             //// (Optional but often helpful)
             //driverOptions.AddAdditionalAppiumOption("waitForQuiescence", false);
             //driverOptions.AddAdditionalAppiumOption("startIWDP", true); // if you want to inspect webviews
-
+            driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, false);
             driverOptions.AddAdditionalAppiumOption("usePrebuiltWDA", true);
             driverOptions.AddAdditionalAppiumOption("wdaLocalPort", 8100); // optional, but helpful
             driverOptions.AddAdditionalAppiumOption("shouldUseSingletonTestManager", true); // avoids extra processes
