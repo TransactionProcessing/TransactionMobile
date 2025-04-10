@@ -62,9 +62,7 @@ jobs:
 
       - name: Check WDA architecture
         run: |
-          WDA_APP_PATH=$(find WDA -name "WebDriverAgentRunner-Runner.app" | head -n 1)
-          echo "Checking architecture of $WDA_APP_PATH"
-          lipo -info "$WDA_APP_PATH/WebDriverAgentRunner"
+          lipo -info WebDriverAgent/build/Build/Products/Debug-iphonesimulator/WebDriverAgentRunner-Runner.app/WebDriverAgentRunner
 
       - name: Debug WebDriverAgent App Install and Bundle ID
         run: |
