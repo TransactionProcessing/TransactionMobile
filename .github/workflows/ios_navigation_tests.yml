@@ -27,21 +27,26 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: 🔍 List Available Simulators
+      - name: 🔍 List Available iOS Simulators
         run: |
-          echo "Available iOS Simulators:"
+          echo "Available iOS simulators:"
           xcrun simctl list devices available
 
-      - name: ✅ Boot iPhone 15 Pro (iOS 17.2) Simulator
+      - name: Boot iPhone 15 Pro (iOS 17.2) Simulator
         run: |
-          UDID=$(xcrun simctl list devices available | grep "iPhone 15 Pro (17.2)" | grep -oE '([0-9A-F-]{36})' | head -n 1)
+          UDID=$(xcrun simctl list devices available | \
+            grep -i "iPhone 15 Pro (17.2" | \
+            grep -oE '([0-9A-F-]{36})' | head -n 1)
+
           if [ -z "$UDID" ]; then
-            echo "::error::❌ Could not find iPhone 15 Pro (17.2) simulator"
+            echo "::error::No matching iPhone 15 Pro (iOS 17.2) simulator found!"
             exit 1
           fi
-          echo "Booting Simulator UDID: $UDID"
-          xcrun simctl boot "$UDID" || true
+
+          echo "Booting simulator with UDID: $UDID"
+          xcrun simctl boot "$UDID" || echo "Simulator might already be booted"
           xcrun simctl bootstatus "$UDID" -b
+
           echo "UDID=$UDID" >> $GITHUB_ENV
 
       - name: Wait for iOS Simulator to Boot
