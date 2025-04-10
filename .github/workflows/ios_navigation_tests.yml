@@ -40,11 +40,6 @@ jobs:
           xcrun simctl bootstatus "$UDID" -b
           echo "UDID=$UDID" >> $GITHUB_ENV
 
-      - name: Install Appium XCUITest Driver from GitHub
-        run: |
-          npm install -g appium --unsafe-perm=true --allow-root
-          appium driver install --source=git --package=appium-xcuitest-driver https://github.com/appium/appium-xcuitest-driver.git
-
       - name: Clone WebDriverAgent
         run: |
           git clone https://github.com/appium/WebDriverAgent.git
@@ -65,20 +60,11 @@ jobs:
       - name: Debug List Built App Contents
         run: ls -R WebDriverAgent/build/Build/Products/Debug-iphonesimulator
 
-      #- name: Install and Launch WebDriverAgentRunner on Simulator
-      #  run: |
-      #    echo "Installing WDA to Simulator with UDID=$UDID"
-      #    APP_PATH="WebDriverAgent/build/Build/Products/Debug-iphonesimulator/WebDriverAgentRunner-Runner.app"
-      #    
-      #    # Just in case: boot again (won't hurt)
-      #    xcrun simctl boot "$UDID" || true
-      #    xcrun simctl bootstatus "$UDID" -b#
-
-#          # Install the app
- #         xcrun simctl install "$UDID" "$APP_PATH"
-  #        
-   #       # Launch the app
-    #      xcrun simctl launch "$UDID" com.facebook.WebDriverAgentRunner || echo "WDA launch attempted"
+      - name: Check WDA architecture
+        run: |
+          WDA_APP_PATH=$(find WDA -name "WebDriverAgentRunner-Runner.app" | head -n 1)
+          echo "Checking architecture of $WDA_APP_PATH"
+          lipo -info "$WDA_APP_PATH/WebDriverAgentRunner"
 
       - name: Debug WebDriverAgent App Install and Bundle ID
         run: |
@@ -101,6 +87,10 @@ jobs:
           echo "Launching WebDriverAgent..."
           xcrun simctl launch "$UDID" "$BUNDLE_ID"
 
+      - name: Install Appium XCUITest Driver from GitHub
+        run: |
+          npm install -g appium --unsafe-perm=true --allow-root
+          appium driver install --source=git --package=appium-xcuitest-driver https://github.com/appium/appium-xcuitest-driver.git
 
       - name: Start Appium Server
         run: |
