@@ -27,11 +27,12 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Boot Existing iOS Simulator
+      - name: Boot iOS Simulator 17.2
         run: |
-          export UDID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '([0-9A-F-]{36})' | head -n 1)
+          export UDID=$(xcrun simctl list devices available | grep -i "iPhone 15 Pro (17.2)" | grep -oE '([0-9A-F-]{36})' | head -n 1)
           echo "Booting Simulator UDID: $UDID"
           xcrun simctl boot "$UDID"
+          echo "UDID=$UDID" >> $GITHUB_ENV
 
       - name: Wait for iOS Simulator to Boot
         run: |
