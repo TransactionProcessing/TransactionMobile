@@ -107,6 +107,10 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption("useNewWDA", false);
             driverOptions.AddAdditionalAppiumOption("shouldUseSingletonTestManager", true);
 
+            driverOptions.AddAdditionalAppiumOption("derivedDataPath", "/Users/runner/work/WebDriverAgent/build/Build/Products/Debug-iphonesimulator");
+            driverOptions.AddAdditionalAppiumOption("wdaLocalPort", 8100);
+
+
             // Avoid unnecessary WDA rebuild attempts and add resilience
             driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 60000);
             driverOptions.AddAdditionalAppiumOption("wdaStartupRetries", 3);
