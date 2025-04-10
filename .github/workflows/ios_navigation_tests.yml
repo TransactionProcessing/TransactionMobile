@@ -65,18 +65,20 @@ jobs:
             CODE_SIGN_IDENTITY="-" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            build-for-testing | xcpretty
-
-          echo "Checking built app architecture..."
-          APP_PATH="build/Build/Products/Debug-iphonesimulator/WebDriverAgentRunner-Runner.app/WebDriverAgentRunner"
-          
-          if [ -f "$APP_PATH" ]; then
-            lipo -info "$APP_PATH"
-          else
-            echo "::error::WebDriverAgentRunner binary not found at expected path: $APP_PATH"
+            build-for-testing | xcpretty         
+      
+      - name: 🔍 Find WDA binary and check architecture
+        run: |
+          echo "Searching for WebDriverAgentRunner binary..."
+          WDA_BINARY=$(find WebDriverAgent/build/Build/Products/Debug-iphonesimulator/WebDriverAgentRunner-Runner.app -type f -name WebDriverAgentRunner)
+          if [ -z "$WDA_BINARY" ]; then
+            echo "❌ WebDriverAgentRunner binary not found!"
             exit 1
           fi
-      
+          echo "✅ Found binary at: $WDA_BINARY"
+          echo "📦 Architecture info:"
+          lipo -info "$WDA_BINARY"
+
       - name: Debug WebDriverAgent App Install and Bundle ID
         run: |
           echo "Checking WebDriverAgentRunner app..."
