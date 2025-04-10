@@ -32,11 +32,16 @@ jobs:
           echo "Available iOS Simulators:"
           xcrun simctl list devices available
 
-      - name: Boot iOS Simulator 17.2
+      - name: ✅ Boot iPhone 15 Pro (iOS 17.2) Simulator
         run: |
-          export UDID=$(xcrun simctl list devices available | grep -i "iPhone 15 Pro (17.2)" | grep -oE '([0-9A-F-]{36})' | head -n 1)
+          UDID=$(xcrun simctl list devices available | grep "iPhone 15 Pro (17.2)" | grep -oE '([0-9A-F-]{36})' | head -n 1)
+          if [ -z "$UDID" ]; then
+            echo "::error::❌ Could not find iPhone 15 Pro (17.2) simulator"
+            exit 1
+          fi
           echo "Booting Simulator UDID: $UDID"
-          xcrun simctl boot "$UDID"
+          xcrun simctl boot "$UDID" || true
+          xcrun simctl bootstatus "$UDID" -b
           echo "UDID=$UDID" >> $GITHUB_ENV
 
       - name: Wait for iOS Simulator to Boot
