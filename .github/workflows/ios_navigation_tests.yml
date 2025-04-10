@@ -56,7 +56,8 @@ jobs:
           cd WebDriverAgent
           mkdir -p build
 
-          echo "Building WebDriverAgentRunner with code signing for simulator..."
+          echo "Building WebDriverAgentRunner with manual signing disabled..."
+
           xcodebuild -scheme WebDriverAgentRunner \
             -destination "id=$UDID" \
             -derivedDataPath build \
@@ -65,20 +66,10 @@ jobs:
             CODE_SIGN_IDENTITY="-" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            build-for-testing | xcpretty         
-      
-      - name: 🔍 Find WDA binary and check architecture
-        run: |
-          echo "Searching for WebDriverAgentRunner binary..."
-          WDA_BINARY=$(find WebDriverAgent/build/Build/Products/Debug-iphonesimulator/WebDriverAgentRunner-Runner.app -type f -name WebDriverAgentRunner)
-          if [ -z "$WDA_BINARY" ]; then
-            echo "❌ WebDriverAgentRunner binary not found!"
-            exit 1
-          fi
-          echo "✅ Found binary at: $WDA_BINARY"
-          echo "📦 Architecture info:"
-          lipo -info "$WDA_BINARY"
-
+            DEVELOPMENT_TEAM="" \
+            PRODUCT_BUNDLE_IDENTIFIER=com.appium.WebDriverAgentRunner \
+            build-for-testing | xcpretty
+                
       - name: Debug WebDriverAgent App Install and Bundle ID
         run: |
           echo "Checking WebDriverAgentRunner app..."

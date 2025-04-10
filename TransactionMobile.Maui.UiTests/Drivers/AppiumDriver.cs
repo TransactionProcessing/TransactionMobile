@@ -103,22 +103,29 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             //driverOptions.AddAdditionalAppiumOption("wdaLocalPort", Environment.GetEnvironmentVariable("WDA_PATH"));
             //driverOptions.AddAdditionalAppiumOption("updatedWDABundleId", "WebDriverAgent/build");
             // Tell Appium to use the prebuilt WDA
+            //driverOptions.AddAdditionalAppiumOption("usePrebuiltWDA", true);
+            //driverOptions.AddAdditionalAppiumOption("useNewWDA", false);
+            //driverOptions.AddAdditionalAppiumOption("shouldUseSingletonTestManager", true);
+
+            //driverOptions.AddAdditionalAppiumOption("derivedDataPath", "/Users/runner/work/WebDriverAgent/build/Build/Products/Debug-iphonesimulator");
+            //driverOptions.AddAdditionalAppiumOption("wdaLocalPort", 8100);
+
+
+            //// Avoid unnecessary WDA rebuild attempts and add resilience
+            //driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 60000);
+            //driverOptions.AddAdditionalAppiumOption("wdaStartupRetries", 3);
+            //driverOptions.AddAdditionalAppiumOption("wdaStartupRetryInterval", 10000);
+
+            //// (Optional but often helpful)
+            //driverOptions.AddAdditionalAppiumOption("waitForQuiescence", false);
+            //driverOptions.AddAdditionalAppiumOption("startIWDP", true); // if you want to inspect webviews
+
             driverOptions.AddAdditionalAppiumOption("usePrebuiltWDA", true);
-            driverOptions.AddAdditionalAppiumOption("useNewWDA", false);
-            driverOptions.AddAdditionalAppiumOption("shouldUseSingletonTestManager", true);
+            driverOptions.AddAdditionalAppiumOption("wdaLocalPort", 8100); // optional, but helpful
+            driverOptions.AddAdditionalAppiumOption("shouldUseSingletonTestManager", true); // avoids extra processes
+            driverOptions.AddAdditionalAppiumOption("showXcodeLog", true); // shows build errors in logs
+            driverOptions.AddAdditionalAppiumOption("bundleId", "com.appium.WebDriverAgentRunner"); // match WDA bundle ID
 
-            driverOptions.AddAdditionalAppiumOption("derivedDataPath", "/Users/runner/work/WebDriverAgent/build/Build/Products/Debug-iphonesimulator");
-            driverOptions.AddAdditionalAppiumOption("wdaLocalPort", 8100);
-
-
-            // Avoid unnecessary WDA rebuild attempts and add resilience
-            driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 60000);
-            driverOptions.AddAdditionalAppiumOption("wdaStartupRetries", 3);
-            driverOptions.AddAdditionalAppiumOption("wdaStartupRetryInterval", 10000);
-
-            // (Optional but often helpful)
-            driverOptions.AddAdditionalAppiumOption("waitForQuiescence", false);
-            driverOptions.AddAdditionalAppiumOption("startIWDP", true); // if you want to inspect webviews
 
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
         }
