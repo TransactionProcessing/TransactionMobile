@@ -27,6 +27,11 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: 🔍 List Available Simulators
+        run: |
+          echo "Available iOS Simulators:"
+          xcrun simctl list devices available
+
       - name: Boot iOS Simulator 17.2
         run: |
           export UDID=$(xcrun simctl list devices available | grep -i "iPhone 15 Pro (17.2)" | grep -oE '([0-9A-F-]{36})' | head -n 1)
