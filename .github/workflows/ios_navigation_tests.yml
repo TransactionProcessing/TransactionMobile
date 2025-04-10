@@ -8,110 +8,49 @@ on:
 jobs:
   software_navigation_tests:
     runs-on: macos-14
+    env:
+      PLATFORM_VERSION: "17.2"
+      DEVICE_NAME: "iPhone 15"
+      APP_PATH: "./MyTestApp.app"
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: 🧾 Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Set up Xcode
-        uses: maxim-lobanov/setup-xcode@v1
+      - name: 🔧 Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          xcode-version: '16.2' # Update as needed based on available versions
+          node-version: '20'
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '18'
-
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v1
+      - name: 🔧 Set up .NET
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
 
-      - name: 🔍 List Available iOS Simulators
+      - name: 📦 Install Appium + XCUITest driver
         run: |
-          echo "Available iOS simulators:"
-          xcrun simctl list devices available
+          npm install -g appium
+          appium driver install xcuitest
 
-      - name: Boot iPhone 15 Pro (iOS 17.2) Simulator
+      - name: 🧹 Clean DerivedData and WDA cache
         run: |
-          #UDID=$(xcrun simctl list devices available | grep -i "iPhone 15 Pro" | grep -i "17.2" | awk -F'[()]' '{print $2}' | head -n 1)
-          #if [ -z "$UDID" ]; then
-          #  echo "::error::No matching iPhone 15 Pro (iOS 17.2) simulator found!"
-          #  exit 1
-          #fi
-          UDID=5C4114F9-8311-49E4-A834-4E4ABEDE918F
-          echo "Booting simulator with UDID: $UDID"
-          xcrun simctl boot "$UDID" || echo "Simulator might already be booted"
-          xcrun simctl bootstatus "$UDID" -b
+          rm -rf ~/Library/Developer/Xcode/DerivedData
+          rm -rf ~/.appium/node_modules/appium-webdriveragent/Build
 
-          echo "UDID=$UDID" >> $GITHUB_ENV
-
-      - name: Wait for iOS Simulator to Boot
+      - name: 🧪 Start Appium Server
         run: |
-          export UDID=$(xcrun simctl list devices booted | grep -oE '([0-9A-F-]{36})' | head -n 1)
-          echo "Using Simulator UDID: $UDID"
-          xcrun simctl bootstatus "$UDID" -b
-          echo "UDID=$UDID" >> $GITHUB_ENV
+          nohup appium --base-path /wd/hub > appium.log 2>&1 &
 
-      - name: Clone WebDriverAgent
+      - name: 📱 Create iOS Simulator (if needed)
         run: |
-          git clone https://github.com/appium/WebDriverAgent.git
-          cd WebDriverAgent
-          git checkout v9.4.1
+          SIMULATOR_NAME="ci-sim-$RANDOM"
+          xcrun simctl create "$SIMULATOR_NAME" "$DEVICE_NAME" "com.apple.CoreSimulator.SimRuntime.iOS-${PLATFORM_VERSION//./-}"
+          echo "SIMULATOR_NAME=$SIMULATOR_NAME" >> $GITHUB_ENV
 
-      - name: Build WebDriverAgent for Simulator
+      - name: 🚀 Boot simulator
         run: |
-          set -e
-          export UDID=$UDID
-          echo "Target Simulator UDID: $UDID"
-
-          # Navigate into WebDriverAgent
-          cd WebDriverAgent
-          mkdir -p build
-
-          echo "Building WebDriverAgentRunner with manual signing disabled..."
-
-          xcodebuild -scheme WebDriverAgentRunner \
-            -destination "id=$UDID" \
-            -derivedDataPath build \
-            -configuration Debug \
-            -allowProvisioningUpdates \
-            CODE_SIGN_IDENTITY="-" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
-            DEVELOPMENT_TEAM="" \
-            PRODUCT_BUNDLE_IDENTIFIER=com.appium.WebDriverAgentRunner \
-            build-for-testing | xcpretty
-                
-      - name: Debug WebDriverAgent App Install and Bundle ID
-        run: |
-          echo "Checking WebDriverAgentRunner app..."
-
-          echo "Simulator UDID: $UDID"
-          APP_PATH="WebDriverAgent/build/Build/Products/Debug-iphonesimulator/WebDriverAgentRunner-Runner.app"
-
-          echo "Checking bundle identifier..."
-          BUNDLE_ID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" "$APP_PATH/Info.plist")
-          echo "Extracted Bundle ID: $BUNDLE_ID"
-
-          echo "Installing WDA app to simulator..."
-          xcrun simctl install "$UDID" "$APP_PATH"
-
-          echo "Verifying install..."
-          INSTALLED_APPS=$(xcrun simctl get_app_container "$UDID" "$BUNDLE_ID" 2>&1 || echo "App not found")
-          echo "App container: $INSTALLED_APPS"
-
-          echo "Launching WebDriverAgent..."
-          xcrun simctl launch "$UDID" "$BUNDLE_ID"
-
-      - name: Install Appium XCUITest Driver from GitHub
-        run: |
-          npm install -g appium --unsafe-perm=true --allow-root
-          appium driver install --source=git --package=appium-xcuitest-driver https://github.com/appium/appium-xcuitest-driver.git
-
-      - name: Start Appium Server
-        run: |
-          nohup appium --log appium.log &
+          xcrun simctl boot "$SIMULATOR_NAME"
+          xcrun simctl list | grep Booted
 
       - name: Install MAUI Workloads
         run: |
@@ -124,17 +63,16 @@ jobs:
       - name: Build Code
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net8.0-ios -c Release --no-restore
 
-      - name: Boot iPhone 15 Pro (iOS 17.2) Simulator Again....
-        run: |
-          UDID=5C4114F9-8311-49E4-A834-4E4ABEDE918F
-          echo "Booting simulator with UDID: $UDID"
-          xcrun simctl boot "$UDID" || echo "Simulator might already be booted"
-          xcrun simctl bootstatus "$UDID" -b
-
       - name: Run iOS Navigation Tests
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)" --no-restore
 
-      - name: Upload Appium Logs on Failure
+      - name: 🧼 Shutdown simulator
+        if: always()
+        run: |
+          xcrun simctl shutdown "$SIMULATOR_NAME"
+          xcrun simctl delete "$SIMULATOR_NAME"
+
+      - name: Upload Appium Logs on Failure      
         if: failure()
         uses: actions/upload-artifact@v4
         with:
