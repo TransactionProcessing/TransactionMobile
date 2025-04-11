@@ -59,6 +59,9 @@ namespace TransactionMobile.Maui.UITests.Steps
 
             if (isTrainingModeOn == false)
                 await this.loginPage.SetTrainingModeOn();
+
+            var isOn = this.loginPage.IsTrainingModeOn();
+            Console.WriteLine($"Training Mode is {isOn}");
         }
 
         [When(@"I enter '(.*)' as the Email Address")]
