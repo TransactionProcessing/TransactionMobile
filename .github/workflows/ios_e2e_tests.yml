@@ -108,4 +108,24 @@ jobs:
             name: ios-software_navigation_tests_appium
             path: appium.log
 
+      - name: Upload Colima stderr log if it exists
+        if: failure()
+        run: |
+          if [ -f ~/.colima/_lima/colima/ha.stderr.log ]; then
+            echo "::notice file=~/.colima/_lima/colima/ha.stderr.log::Uploading stderr log"
+          else
+            echo "No stderr log found." > colima-log-missing.txt
+          fi
+        shell: bash
+
+      - name: Upload Colima logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+            name: colima-logs
+            path: |
+                ~/.colima/_lima/colima/ha.stderr.log
+                colima-log-missing.txt
+            if-no-files-found: warn
+
   
