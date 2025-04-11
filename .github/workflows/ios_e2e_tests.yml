@@ -17,6 +17,10 @@ jobs:
       - name: 🧾 Checkout repo
         uses: actions/checkout@v4
 
+      - name: Check virtualization support
+        run: |
+          sysctl -a | grep machdep.cpu.features
+
       - name: Get IP
         run: ipconfig getifaddr en0
 
