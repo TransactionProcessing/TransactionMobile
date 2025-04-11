@@ -20,7 +20,7 @@ Scenario: Back Button from Home Page Screen
 	Then the Login Page is displayed
 
 # Transaction Page Back Button Tests
-#@PRNavTest
+@PRNavTest
 Scenario: Back Button from Transaction Page Screen
 	Given I am on the Login Screen
 	And the application is in training mode
@@ -38,7 +38,7 @@ Scenario: Back Button from Transaction Page Screen
 	Then the Merchant Home Page is displayed	
 
 # Reports Page Back Button Tests
-#@PRNavTest
+@PRNavTest
 Scenario: Back Button from Reports Page Screen
 	Given I am on the Login Screen
 	And the application is in training mode
@@ -56,7 +56,7 @@ Scenario: Back Button from Reports Page Screen
 	Then the Merchant Home Page is displayed	
 
 # Profile Page Back Button Tests
-#@PRNavTest
+@PRNavTest
 Scenario: Back Button from Profile Page Screen
 	Given I am on the Login Screen
 	And the application is in training mode
@@ -82,7 +82,7 @@ Scenario: Back Button from Profile Page Screen
 	Then the Merchant Home Page is displayed
 
 # Support Page Back Button Tests
-#@PRNavTest
+@PRNavTest
 Scenario: Back Button from Support Page Screen
 	Given I am on the Login Screen
 	And the application is in training mode
