@@ -56,7 +56,6 @@ namespace TransactionMobile.Maui.UITests.Steps
         [Given(@"the application is in training mode")]
         public async Task GivenTheApplicationIsInTrainingMode() {
             var isTrainingModeOn = await this.loginPage.IsTrainingModeOn();
-
             if (isTrainingModeOn == false)
                 await this.loginPage.SetTrainingModeOn();
         }
@@ -90,7 +89,14 @@ namespace TransactionMobile.Maui.UITests.Steps
 
         [Then(@"the Merchant Home Page is displayed")]
         public async Task ThenTheMerchantHomePageIsDisplayed() {
-            await this.mainPage.AssertOnPage();
+            try {
+                await this.mainPage.AssertOnPage();
+            }
+            catch(Exception ex)
+            {
+                String pageSource = await this.mainPage.GetPageSource();
+                throw new Exception($"Unable to verify on page: {this.mainPage.GetType().Name} {Environment.NewLine} Page Source: {pageSource}", ex);
+            }
         }
 
         [Then(@"the available balance is shown as (.*)")]

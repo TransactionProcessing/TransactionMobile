@@ -3,8 +3,10 @@
 using System.Diagnostics.CodeAnalysis;
 using Logging;
 using Maui.UIServices;
+#if !IOS
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Distribute;
+#endif
 using Models;
 using Services;
 using UIServices;
@@ -36,6 +38,7 @@ public class HomePageViewModel : ExtendedBaseViewModel
 
     #region Methods
 
+#if !IOS
     public async Task Initialise(CancellationToken cancellationToken) {
         Configuration configuration = this.ApplicationCache.GetConfiguration();
 
@@ -59,13 +62,14 @@ public class HomePageViewModel : ExtendedBaseViewModel
             Logger.LogError("Error during initialise", ex);
         }
     }
+#endif
 
     private async void NoReleaseAvailable() {
         await this.DialogService.ShowDialog("Software Update", "No Release Available","OK");
     }
 
-    //private Boolean IsIOS() => this.DeviceService.IsIOS//DeviceInfo.Current.Platform == DevicePlatform.iOS;
 
+#if !IOS
     private Boolean OnReleaseAvailable(ReleaseDetails releaseDetails) {
         Logger.LogInformation("In OnReleaseAvailable");
         // Look at releaseDetails public properties to get version information, release notes text or release notes URL
@@ -111,6 +115,7 @@ public class HomePageViewModel : ExtendedBaseViewModel
         // Return true if you're using your own dialog, false otherwise
         return true;
     }
+#endif
 
-    #endregion
+#endregion
 }

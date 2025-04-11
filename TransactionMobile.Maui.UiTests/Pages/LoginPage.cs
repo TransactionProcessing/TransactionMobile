@@ -107,14 +107,17 @@ public class LoginPage : BasePage2
     public async Task EnterPassword(String password)
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.PasswordEntry);
-        
-        
         element.SendKeys(password);
     }
 
     public async Task ClickLoginButton(){
         await Retry.For(async () => {
                             IWebElement element = await this.WaitForElementByAccessibilityId(this.LoginButton);
+                            if (element.Displayed == false)
+                            {
+                                this.HideKeyboard();
+                            }
+                            
                             //element.Displayed.ShouldBeTrue();
                             element.Click();
                         });
