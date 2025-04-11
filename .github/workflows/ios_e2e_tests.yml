@@ -19,7 +19,10 @@ jobs:
 
       - name: Check virtualization support
         run: |
-          sysctl -a | grep machdep.cpu.features
+          echo "Checking CPU features..."
+          sysctl -a | tee sysctl_output.txt
+          echo "Searching for virtualization capabilities (VMX)..."
+          sysctl -a | grep machdep.cpu.features || echo "VMX not found"
 
       - name: Get IP
         run: ipconfig getifaddr en0
