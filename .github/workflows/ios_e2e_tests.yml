@@ -1,4 +1,4 @@
-name: Build and Run iOS Navigation Tests
+name: Build and Run iOS End To End Tests
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  software_navigation_tests:
+  e2e_tests:
     runs-on: macos-14
     env:
       PLATFORM_VERSION: "17.2"
@@ -40,8 +40,8 @@ jobs:
         run: |
           brew install colima docker
           wget https://github.com/abiosoft/colima-core/releases/download/v0.6.7/ubuntu-23.10-minimal-cloudimg-arm64.qcow2
-          /opt/homebrew/bin/qemu-system-aarch64 -m 1G -drive file=ubuntu-23.10-minimal-cloudimg-arm64.qcow2,if=virtio -display default,show-cursor=on -machine type=virt -accel hvf -nographic &
-          colima start
+          /opt/homebrew/bin/qemu-system-aarch64 -m 1G -drive file=ubuntu-23.10-minimal-cloudimg-arm64.qcow2,if=virtio -display default,show-cursor=on -machine type=virt -accel hvf -nographic &        
+          colima start --vm-type vz || colima start --vm-type qemu
           docker ps
           docker pull alpine:latest
           docker image ls
