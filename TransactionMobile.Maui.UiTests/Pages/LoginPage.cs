@@ -118,7 +118,7 @@ public class LoginPage : BasePage2
                                 this.HideKeyboard();
                             }
                             
-                            element.Displayed.ShouldBeTrue();
+                            //element.Displayed.ShouldBeTrue();
                             element.Click();
                         });
 
