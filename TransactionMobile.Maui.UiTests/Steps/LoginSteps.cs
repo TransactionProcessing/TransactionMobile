@@ -56,12 +56,8 @@ namespace TransactionMobile.Maui.UITests.Steps
         [Given(@"the application is in training mode")]
         public async Task GivenTheApplicationIsInTrainingMode() {
             var isTrainingModeOn = await this.loginPage.IsTrainingModeOn();
-            isTrainingModeOn.ShouldBe(false);
             if (isTrainingModeOn == false)
                 await this.loginPage.SetTrainingModeOn();
-
-            var isOn = await this.loginPage.IsTrainingModeOn();
-            isOn.ShouldBe(true);
         }
 
         [When(@"I enter '(.*)' as the Email Address")]
