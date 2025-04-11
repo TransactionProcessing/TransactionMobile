@@ -8,11 +8,13 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Google.Protobuf.WellKnownTypes;
 
 namespace TransactionMobile.Maui.UiTests.Drivers
 {
     using Microsoft.Testing.Platform.Capabilities;
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Appium.Service.Options;
     using OpenQA.Selenium.Appium.Windows;
     using System.Collections.ObjectModel;
     using System.Diagnostics;
@@ -31,8 +33,11 @@ namespace TransactionMobile.Maui.UiTests.Drivers
         public static MobileTestPlatform MobileTestPlatform;
         public static AppiumDriver Driver;
 
-        public void StartApp(){
+        public void StartApp() {
+            OptionCollector o = new OptionCollector();
+            o.AddArguments(GeneralOptionList.BasePath("/wd/hub"));
             AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723)
+                .WithArguments(o)
                 .Build();
             
             if (appiumService.IsRunning == false){
