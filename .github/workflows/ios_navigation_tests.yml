@@ -39,7 +39,7 @@ jobs:
 
       - name: 🧪 Start Appium Server
         run: |
-          nohup appium --base-path /wd/hub > appium.log 2>&1 &
+          nohup appium --log appium.log &
 
       - name: 📱 Create iOS Simulator (if needed)
         run: |

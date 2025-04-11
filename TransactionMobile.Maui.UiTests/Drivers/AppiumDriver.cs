@@ -34,10 +34,10 @@ namespace TransactionMobile.Maui.UiTests.Drivers
         public static AppiumDriver Driver;
 
         public void StartApp() {
-            OptionCollector o = new OptionCollector();
-            o.AddArguments(GeneralOptionList.BasePath("/wd/hub"));
+            //OptionCollector o = new OptionCollector();
+            //o.AddArguments(GeneralOptionList.BasePath("/wd/hub"));
             AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723)
-                .WithArguments(o)
+                //.WithArguments(o)
                 .Build();
             
             if (appiumService.IsRunning == false){
