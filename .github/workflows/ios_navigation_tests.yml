@@ -66,12 +66,6 @@ jobs:
       - name: Run iOS Navigation Tests
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)" --no-restore
 
-      - name: 🧼 Shutdown simulator
-        if: always()
-        run: |
-          xcrun simctl shutdown "$SIMULATOR_NAME"
-          xcrun simctl delete "$SIMULATOR_NAME"
-
       - name: Upload Appium Logs on Failure      
         if: failure()
         uses: actions/upload-artifact@v4
