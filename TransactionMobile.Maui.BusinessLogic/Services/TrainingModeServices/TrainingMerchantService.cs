@@ -15,30 +15,30 @@ public class TrainingMerchantService : IMerchantService
                                                                                               ContractId = Guid.Parse("21DA6AC5-70E6-478E-A5E9-74C9B27F5725"),
                                                                                               IsFixedValue = true,
                                                                                               OperatorId = Guid.Parse("2CA5F4C7-34EC-425B-BB53-7EEDF48D9967"),
-                                                                                              OperatorIdentfier = "Safaricom",
-                                                                                              OperatorName = "Safaricom",
-                                                                                              ProductDisplayText = "100 KES",
+                                                                                              OperatorIdentfier = "Hospital 1 Contract",
+                                                                                              OperatorName = "Hospital 1 Contract",
+                                                                                              ProductDisplayText = "10 KES",
                                                                                               ProductId = Guid.Parse("CBF55D95-306A-4E85-B367-24FA442998F6"),
                                                                                               ProductType = ProductType.Voucher,
-                                                                                              Value = 100
+                                                                                              Value = 10
                                                                                           },
                                                                  new ContractProductModel {
                                                                                               ContractId = Guid.Parse("21DA6AC5-70E6-478E-A5E9-74C9B27F5725"),
                                                                                               IsFixedValue = true,
                                                                                               OperatorId = Guid.Parse("2CA5F4C7-34EC-425B-BB53-7EEDF48D9967"),
-                                                                                              OperatorIdentfier = "Safaricom",
-                                                                                              OperatorName = "Safaricom",
-                                                                                              ProductDisplayText = "200 KES",
+                                                                                              OperatorIdentfier = "Hospital 1 Contract",
+                                                                                              OperatorName = "Hospital 1 Contract",
+                                                                                              ProductDisplayText = "20 KES",
                                                                                               ProductId = Guid.Parse("F5F9B63F-9F68-45E8-960B-CE0FC15ED672"),
                                                                                               ProductType = ProductType.Voucher,
-                                                                                              Value = 200
+                                                                                              Value = 20
                                                                                           },
                                                                  new ContractProductModel {
                                                                                               ContractId = Guid.Parse("21DA6AC5-70E6-478E-A5E9-74C9B27F5725"),
                                                                                               IsFixedValue = false,
                                                                                               OperatorId = Guid.Parse("2CA5F4C7-34EC-425B-BB53-7EEDF48D9967"),
-                                                                                              OperatorIdentfier = "Safaricom",
-                                                                                              OperatorName = "Safaricom",
+                                                                                              OperatorIdentfier = "Hospital 1 Contract",
+                                                                                              OperatorName = "Hospital 1 Contract",
                                                                                               ProductDisplayText = "Custom",
                                                                                               ProductId = Guid.Parse("268CBAF5-95E0-4D4C-9725-3BB2B76E4273"),
                                                                                               ProductType = ProductType.Voucher

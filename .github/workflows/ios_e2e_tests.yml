@@ -6,8 +6,8 @@ on:
       - main
 
 jobs:
-  e2e_tests:
-    runs-on: macos-15
+  software_navigation_tests:
+    runs-on: macos-14
     env:
       PLATFORM_VERSION: "17.2"
       DEVICE_NAME: "iPhone 15"
@@ -17,124 +17,60 @@ jobs:
       - name: 🧾 Checkout repo
         uses: actions/checkout@v4
 
-      # - name: Check virtualization support
-      #   run: |
-      #     echo "Checking CPU features......"
-      #     sysctl -a | tee sysctl_output.txt
-      #     echo "Searching for virtualization capabilities (VMX)..."
-      #     sysctl -a | grep machdep.cpu.features || echo "VMX not found"
+      - name: 🔧 Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-      # - name: Get IP
-      #   run: ipconfig getifaddr en0
+      - name: 🔧 Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-      # - name: Cache Public IP
-      #   run: echo "ENV_IPADDRESS=$(ipconfig getifaddr en0)" >> $GITHUB_ENV
-
-      # - name: Test IP
-      #   run: echo $ENV_IPADDRESS
-
-      # - name: 🔧 Set up Node.js
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: '20'
-
-      # - name: 🔧 Set up .NET
-      #   uses: actions/setup-dotnet@v4
-      #   with:
-      #     dotnet-version: '8.0.x'
-
-      # - name: Install colima and docker
-      #   run: |
-      #     brew install colima docker
-      #     #brew install qemu
-      #     wget https://github.com/abiosoft/colima-core/releases/download/v0.6.7/ubuntu-23.10-minimal-cloudimg-arm64.qcow2
-      #     /opt/homebrew/bin/qemu-system-aarch64 -m 1G -drive file=ubuntu-23.10-minimal-cloudimg-arm64.qcow2,if=virtio -display default,show-cursor=on -machine type=virt -accel hvf -nographic &        
-      #     #colima start --vm-type vz || colima start --vm-type qemu
-      #     colima start
-      #     docker ps
-      #     docker pull alpine:latest
-      #     docker image ls
-
-      - name: Verify Docker Installation
+      - name: 📦 Install Appium + XCUITest driver
         run: |
-          docker version
-          docker info
+          npm install -g appium
+          appium driver install xcuitest
 
-      # - name: Pull images
-      #   run: |
-      #    docker pull stuartferguson/messagingservice:master
-      #    docker pull stuartferguson/securityservice:master
-      #    docker pull stuartferguson/transactionprocessor:master
-      #    docker pull stuartferguson/transactionprocessoracl:master
-      #    docker pull stuartferguson/testhosts:master
-      #    docker pull stuartferguson/mobileconfiguration:master
-      #    docker pull mcr.microsoft.com/azure-sql-edge
-      #    docker pull eventstore/eventstore:21.10.0-buster-slim
+      - name: 🧹 Clean DerivedData and WDA cache
+        run: |
+          rm -rf ~/Library/Developer/Xcode/DerivedData
+          rm -rf ~/.appium/node_modules/appium-webdriveragent/Build
 
-      # - name: 📦 Install Appium + XCUITest driver
-      #   run: |
-      #     npm install -g appium
-      #     appium driver install xcuitest
+      - name: 🧪 Start Appium Server
+        run: |
+          nohup appium --log appium.log &
 
-      # - name: 🧹 Clean DerivedData and WDA cache
-      #   run: |
-      #     rm -rf ~/Library/Developer/Xcode/DerivedData
-      #     rm -rf ~/.appium/node_modules/appium-webdriveragent/Build
+      - name: 📱 Create iOS Simulator (if needed)
+        run: |
+          SIMULATOR_NAME="ci-sim-$RANDOM"
+          xcrun simctl create "$SIMULATOR_NAME" "$DEVICE_NAME" "com.apple.CoreSimulator.SimRuntime.iOS-${PLATFORM_VERSION//./-}"
+          echo "SIMULATOR_NAME=$SIMULATOR_NAME" >> $GITHUB_ENV
 
-      # - name: 🧪 Start Appium Server
-      #   run: |
-      #     nohup appium --log appium.log &
+      - name: 🚀 Boot simulator
+        run: |
+          xcrun simctl boot "$SIMULATOR_NAME"
+          xcrun simctl list | grep Booted
 
-      # - name: 📱 Create iOS Simulator (if needed)
-      #   run: |
-      #     SIMULATOR_NAME="ci-sim-$RANDOM"
-      #     xcrun simctl create "$SIMULATOR_NAME" "$DEVICE_NAME" "com.apple.CoreSimulator.SimRuntime.iOS-${PLATFORM_VERSION//./-}"
-      #     echo "SIMULATOR_NAME=$SIMULATOR_NAME" >> $GITHUB_ENV
+      - name: Install MAUI Workloads
+        run: |
+          dotnet workload install ios --ignore-failed-sources
+          dotnet workload install maui --ignore-failed-sources
 
-      # - name: 🚀 Boot simulator
-      #   run: |
-      #     xcrun simctl boot "$SIMULATOR_NAME"
-      #     xcrun simctl list | grep Booted
+      - name: Restore MAUI App for iOS
+        run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
-      # - name: Install MAUI Workloads
-      #   run: |
-      #     dotnet workload install ios --ignore-failed-sources
-      #     dotnet workload install maui --ignore-failed-sources
+      - name: Build Code
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net8.0-ios -c Release --no-restore
 
-      # - name: Restore MAUI App for iOS
-      #   run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+      - name: Run iOS Navigation Tests
+        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=iOSPRTest)&(Category=iOS)" --no-restore
 
-      # - name: Build Code
-      #   run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net8.0-ios -c Release --no-restore
-
-      # - name: Run iOS Navigation Tests
-      #   run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRTest)&(Category=iOS)" --no-restore
-
-      # - name: Upload Appium Logs on Failure      
-      #   if: failure()
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #       name: ios-software_navigation_tests_appium
-      #       path: appium.log
-
-      # - name: Upload Colima stderr log if it exists
-      #   if: failure()
-      #   run: |
-      #     if [ -f ~/.colima/_lima/colima/ha.stderr.log ]; then
-      #       echo "::notice file=~/.colima/_lima/colima/ha.stderr.log::Uploading stderr log"
-      #     else
-      #       echo "No stderr log found." > colima-log-missing.txt
-      #     fi
-      #   shell: bash
-
-      # - name: Upload Colima logs
-      #   if: failure()
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #       name: colima-logs
-      #       path: |
-      #           ~/.colima/_lima/colima/ha.stderr.log
-      #           colima-log-missing.txt
-      #       if-no-files-found: warn
+      - name: Upload Appium Logs on Failure      
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+            name: ios-software_navigation_tests_appium
+            path: appium.log
 
   

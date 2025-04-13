@@ -32,6 +32,7 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel
 
     public async Task Initialise(CancellationToken cancellationToken)
     {
+        Logger.LogInformation("in Initialise");
         var query = this.NavigationParameterService.GetParameters();
         this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
         this.VoucherAmount = Decimal.Parse(HttpUtility.UrlDecode(query[nameof(this.VoucherAmount)].ToString()));
@@ -121,6 +122,8 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel
 
     private async Task IssueVoucherCommandExecute()
     {
+        
+
         Logger.LogInformation("IssueVoucherCommandExecute called");
         // TODO: Create Command and Send
         PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(DateTime.Now,
@@ -132,15 +135,19 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel
                                                                                this.VoucherAmount,
                                                                                this.CustomerEmailAddress);
 
-        var result = await this.Mediator.Send(request);
 
+        Logger.LogInformation("about to call Send ");
+        var result = await this.Mediator.Send(request);
+        Logger.LogInformation("about to check result ");
         if (result.IsSuccess && result.Data.IsSuccessful)
         {
+            Logger.LogInformation("about to go to success");
             await this.NavigationService.GoToVoucherIssueSuccessPage();
 
         }
         else
         {
+            Logger.LogInformation("about to go to failed");
             await this.NavigationService.GoToVoucherIssueFailedPage();
         }
     }
