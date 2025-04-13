@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  software_navigation_tests:
+  e2e_tests:
     runs-on: macos-14
     env:
       PLATFORM_VERSION: "17.2"
