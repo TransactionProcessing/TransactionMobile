@@ -4,7 +4,7 @@ using TransactionMobile.Maui.UiTests.Drivers;
 
 namespace TransactionMobile.Maui.UiTests.Features;
 
-//[TestFixture(MobileTestPlatform.Android, Category = "Android")]
+[TestFixture(MobileTestPlatform.Android, Category = "Android")]
 [TestFixture(MobileTestPlatform.iOS, Category = "iOS")]
 //[TestFixture(MobileTestPlatform.Windows, Category = "Windows")]
 [NonParallelizable]

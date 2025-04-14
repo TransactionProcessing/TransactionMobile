@@ -56,41 +56,41 @@ Scenario: EndToEnd Training Mode
 	Then the Voucher Issue Successful Page is displayed
 	And I tap on Complete
 	Then the Transaction Page is displayed
-	#When I tap on the Bill Payment button
-	#Then the Transaction Select Bill Payment Operator Page is displayed
-	#When I tap on the 'PataPawa PostPay' button
-	#Then the Select Product Page is displayed
-	#When I tap on the 'Bill Pay (Post)' product button
-	#Then the Enter Account Details Page is displayed
-	#When I enter '12345678' as the Account Number
-	#And I tap on the Get Account Button
-	#Then the Make Bill Payment page is displayed
-	#And the following Bill Details are displayed
-	#| AccountNumber | AccountHolder  | DueDate | Balance |
-	#| 12345678      | Test Account 1 | Today   | 100.00  |
-	#When I enter '07777777775' as the Customer Mobile Number 	
-	#And I enter 10.00 as the Payment Amount
-	#And I tap on the Make Payment Button
-	#Then the Bill Payment Successful Page is displayed
-	#And I tap on Complete
-	#Then the Transaction Page is displayed
-	#When I tap on the Bill Payment button
-	#Then the Transaction Select Bill Payment Operator Page is displayed
-	#When I tap on the 'PataPawa PrePay' button
-	#Then the Select Product Page is displayed
-	#When I tap on the 'Bill Pay (Pre)' product button
-	#Then the Enter Meter Details Page is displayed
-	#When I enter '00000001' as the Meter Number
-	#And I tap on the Get Meter Button
-	#Then the Make Bill Payment page is displayed
-	#And the following Meter Details are displayed
-	#| MeterNumber | 
-	#| 00000001      |
-	#When I enter 10.00 as the Payment Amount
-	#And I tap on the Make Payment Button
-	#Then the Bill Payment Successful Page is displayed
-	#And I tap on Complete
-	#Then the Transaction Page is displayed
+	When I tap on the Bill Payment button
+	Then the Transaction Select Bill Payment Operator Page is displayed
+	When I tap on the 'Pata Pawa PostPay' button
+	Then the Select Product Page is displayed
+	When I tap on the 'Bill Pay (Post)' product button
+	Then the Enter Account Details Page is displayed
+	When I enter '12345678' as the Account Number
+	And I tap on the Get Account Button
+	Then the Make Bill Payment page is displayed
+	And the following Bill Details are displayed
+	| AccountNumber | AccountHolder  | DueDate | Balance |
+	| 12345678      | Mr Test Customer | 2025-04-17   | 100.00  |
+	When I enter '07777777775' as the Customer Mobile Number 	
+	And I enter 10.00 as the Payment Amount
+	And I tap on the Make Payment Button
+	Then the Bill Payment Successful Page is displayed
+	And I tap on Complete
+	Then the Transaction Page is displayed
+	When I tap on the Bill Payment button
+	Then the Transaction Select Bill Payment Operator Page is displayed
+	When I tap on the 'Pata Pawa PrePay' button
+	Then the Select Product Page is displayed
+	When I tap on the 'Bill Pay (Pre)' product button
+	Then the Enter Meter Details Page is displayed
+	When I enter '00000001' as the Meter Number
+	And I tap on the Get Meter Button
+	Then the Make Bill Payment page is displayed
+	And the following Meter Details are displayed
+	| MeterNumber | 
+	| 00000001      |
+	When I enter 10.00 as the Payment Amount
+	And I tap on the Make Payment Button
+	Then the Bill Payment Successful Page is displayed
+	And I tap on Complete
+	Then the Transaction Page is displayed
 	When I click on the back button
 	Then the Merchant Home Page is displayed
 	When I click on the back button
