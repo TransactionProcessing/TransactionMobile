@@ -60,7 +60,6 @@
                 return Result.Failure("Error performing bill payment - get account transaction");
             }
 
-            // TODO: Factory
             PerformBillPaymentGetAccountResponseModel responseModel = new()
                                                                       {
                                                                           BillDetails = result.Data.AdditionalResponseMetaData.ToBillDetails()
@@ -115,7 +114,6 @@
                 _ => result.Data.AdditionalResponseMetaData.ToMeterDetails(model.MeterNumber)
             };
 
-            // TODO: Factory
             PerformBillPaymentGetMeterResponseModel responseModel = new()
                                                                     {
                                                                         MeterDetails = meterDetails
@@ -166,7 +164,6 @@
                 
             }
 
-            // TODO: Factory
             PerformMobileTopupResponseModel responseModel = new (){
                                                                                                     EstateId = result.Data.EstateId,
                                                                                                     MerchantId = result.Data.MerchantId,
@@ -221,7 +218,6 @@
 
             }
 
-            // TODO: Factory
             PerformVoucherIssueResponseModel responseModel = new()
                                                              {
                                                                  EstateId = result.Data.EstateId,

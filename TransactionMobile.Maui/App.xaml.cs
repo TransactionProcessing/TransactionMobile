@@ -115,7 +115,6 @@ public partial class App : Application
         Routing.RegisterRoute("login", typeof(LoginPage));
         Routing.RegisterRoute("home", typeof(HomePage));
 
-        // TODO: Investigate if this could be done automatically (maybe with exclusions for top level pages)
         Routing.RegisterRoute(nameof(MobileTopupSelectOperatorPage), typeof(MobileTopupSelectOperatorPage));
         Routing.RegisterRoute(nameof(MobileTopupSelectProductPage), typeof(MobileTopupSelectProductPage));
         Routing.RegisterRoute(nameof(MobileTopupPerformTopupPage), typeof(MobileTopupPerformTopupPage));

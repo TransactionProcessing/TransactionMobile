@@ -61,7 +61,6 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
 
         ITransactionService transactionService = this.TransactionServiceResolver(useTrainingMode);
 
-        // TODO: Factory
         PerformMobileTopupRequestModel model = new(){
                                                         ContractId = request.ContractId,
                                                         CustomerAccountNumber = request.CustomerAccountNumber,
@@ -110,7 +109,6 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
 
         ITransactionService transactionService = this.TransactionServiceResolver(useTrainingMode);
 
-        // TODO: Factory
         PerformLogonRequestModel model = new PerformLogonRequestModel
         {
             TransactionDateTime = request.TransactionDateTime,
@@ -200,7 +198,6 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
 
         ITransactionService transactionService = this.TransactionServiceResolver(useTrainingMode);
 
-        // TODO: convert these to operator totals
         var workingTotals = (from t in storedTransactions
                                                    where t.IsSuccessful && t.TransactionType != 1 // Filter out logons
                                                    group t by new

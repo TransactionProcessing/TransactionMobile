@@ -1,62 +1,87 @@
-﻿using TransactionProcessor.Client;
-using TransactionProcessor.DataTransferObjects.Responses.Contract;
-using TransactionProcessor.DataTransferObjects.Responses.Merchant;
+﻿using TransactionMobile.Maui.BusinessLogic.UIServices;
+using TransactionProcessorACL.DataTransferObjects.Responses;
 
 namespace TransactionMobile.Maui.BusinessLogic.Services;
 
-using System.Diagnostics.CodeAnalysis;
+using ClientProxyBase;
 using Common;
 using Logging;
 using Models;
 using Newtonsoft.Json;
 using RequestHandlers;
 using SimpleResults;
+using System.Diagnostics.CodeAnalysis;
+using System.Net.Http.Headers;
 using ViewModels;
 
-public class MerchantService : IMerchantService
+public class MerchantService : ClientProxyBase, IMerchantService
 {
     #region Fields
 
     private readonly IApplicationCache ApplicationCache;
-    
-    private readonly ITransactionProcessorClient TransactionProcessorClient;
+    private readonly IApplicationInfoService ApplicationInfoService;
+
+    private readonly Func<String, String> BaseAddressResolver;
 
     #endregion
 
     #region Constructors
 
-    public MerchantService(ITransactionProcessorClient transactionProcessorClient,
-                           IApplicationCache applicationCache) {
-        this.TransactionProcessorClient = transactionProcessorClient;
+    public MerchantService(Func<String, String> baseAddressResolver,
+                           HttpClient httpClient,
+                           IApplicationCache applicationCache,
+                           IApplicationInfoService applicationInfoService) : base(httpClient) {
+        this.BaseAddressResolver = baseAddressResolver;
         this.ApplicationCache = applicationCache;
+        this.ApplicationInfoService = applicationInfoService;
     }
 
     #endregion
 
     #region Methods
 
+    private String BuildRequestUrl(String route)
+    {
+        String baseAddress = this.BaseAddressResolver("TransactionProcessorACL");
+
+        String requestUri = $"{baseAddress}{route}";
+
+        return requestUri;
+    }
+
     public async Task<Result<List<ContractProductModel>>> GetContractProducts(CancellationToken cancellationToken) {
         try {
-            List<ContractProductModel> models = new List<ContractProductModel>();
+            List<ContractProductModel> models = new();
 
             TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
             Guid estateId = this.ApplicationCache.GetEstateId();
             Guid merchantId = this.ApplicationCache.GetMerchantId();
 
+            String requestUri = this.BuildRequestUrl($"/api/merchants/contracts?application_version={this.ApplicationInfoService.VersionString}");
+
             Logger.LogInformation("About to request merchant contracts");
             Logger.LogDebug($"Merchant Contract Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
 
-            Result<List<ContractResponse>> result = await this.TransactionProcessorClient.GetMerchantContracts(accessToken.AccessToken, estateId, merchantId, cancellationToken);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
+            var httpResponse = await this.HttpClient.SendAsync(request, cancellationToken);
 
-            if (result.IsFailed) {
-                Logger.LogInformation($"GetMerchantContracts failed {result.Status}");
-                return Result.Failure(result.Message);
+            // Process the response
+            Result<String> content = await this.HandleResponse(httpResponse, cancellationToken);
+
+            if (content.IsFailed) {
+                Logger.LogInformation($"GetMerchantContracts failed {content.Status}");
+                return Result.Failure(content.Message);
             }
 
-            Logger.LogInformation($"{result.Data.Count} for merchant requested successfully");
-            Logger.LogDebug($"Merchant Contract Response: [{JsonConvert.SerializeObject(result.Data)}]");
+            Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content.Data}");
 
-            foreach (ContractResponse contractResponse in result.Data) {
+            ResponseData<List<ContractResponse>> responseData = this.HandleResponseContent<List<ContractResponse>>(content.Data);
+            
+            Logger.LogInformation($"{responseData.Data.Count} for merchant requested successfully");
+            Logger.LogDebug($"Merchant Contract Response: [{JsonConvert.SerializeObject(responseData.Data)}]");
+
+            foreach (ContractResponse contractResponse in responseData.Data) {
                 foreach (ContractProduct contractResponseProduct in contractResponse.Products){
                     var productType = GetProductType(contractResponse.OperatorName);
 
@@ -84,7 +109,7 @@ public class MerchantService : IMerchantService
         }
     }
 
-    [ExcludeFromCodeCoverage(Justification = "Need to have a think of best way of this data being retieved")]
+    [ExcludeFromCodeCoverage(Justification = "Need to have a think of best way of this data being retrieved")]
     public async Task<Result<Decimal>> GetMerchantBalance(CancellationToken cancellationToken) {
         try {
             TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
@@ -118,34 +143,52 @@ public class MerchantService : IMerchantService
             Guid estateId = this.ApplicationCache.GetEstateId();
             Guid merchantId = this.ApplicationCache.GetMerchantId();
 
+
+            String requestUri = this.BuildRequestUrl($"/api/merchants?application_version={this.ApplicationInfoService.VersionString}");
+
             Logger.LogInformation("About to request merchant details");
             Logger.LogDebug($"Merchant Details Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
 
-            MerchantResponse merchantResponse = await this.TransactionProcessorClient.GetMerchant(accessToken.AccessToken, estateId, merchantId, cancellationToken);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
+            var httpResponse = await this.HttpClient.SendAsync(request, cancellationToken);
+
+            // Process the response
+            Result<String> content = await this.HandleResponse(httpResponse, cancellationToken);
+
+            if (content.IsFailed)
+            {
+                Logger.LogInformation($"GetMerchantContracts failed {content.Status}");
+                return Result.Failure(content.Message);
+            }
+
+            Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content.Data}");
+
+            ResponseData<MerchantResponse> responseData = this.HandleResponseContent<MerchantResponse>(content.Data);
 
             Logger.LogInformation("Merchant details requested successfully");
-            Logger.LogDebug($"Merchant Details Response: [{JsonConvert.SerializeObject(merchantResponse)}]");
+            Logger.LogDebug($"Merchant Details Response: [{JsonConvert.SerializeObject(responseData.Data)}]");
 
             MerchantDetailsModel model = new MerchantDetailsModel {
-                                                                      MerchantName = merchantResponse.MerchantName,
-                                                                      NextStatementDate = merchantResponse.NextStatementDate,
+                                                                      MerchantName = responseData.Data.MerchantName,
+                                                                      NextStatementDate = responseData.Data.NextStatementDate,
                                                                       LastStatementDate = new DateTime(),
-                                                                      SettlementSchedule = merchantResponse.SettlementSchedule.ToString(),
+                                                                      SettlementSchedule = responseData.Data.SettlementSchedule.ToString(),
                                                                       //AvailableBalance = merchantResponse.AvailableBalance,
                                                                       //Balance = merchantResponse.Balance,
                                                                       Contact = new ContactModel {
-                                                                                                     Name = merchantResponse.Contacts.First().ContactName,
-                                                                                                     EmailAddress = merchantResponse.Contacts.First().ContactEmailAddress,
-                                                                                                     MobileNumber = merchantResponse.Contacts.First().ContactPhoneNumber
+                                                                                                     Name = responseData.Data.Contacts.First().ContactName,
+                                                                                                     EmailAddress = responseData.Data.Contacts.First().ContactEmailAddress,
+                                                                                                     MobileNumber = responseData.Data.Contacts.First().ContactPhoneNumber
                                                                                                  },
                                                                       Address = new AddressModel {
-                                                                                                     AddressLine3 = merchantResponse.Addresses.First().AddressLine3,
-                                                                                                     Town = merchantResponse.Addresses.First().Town,
-                                                                                                     AddressLine4 = merchantResponse.Addresses.First().AddressLine4,
-                                                                                                     PostalCode = merchantResponse.Addresses.First().PostalCode,
-                                                                                                     Region = merchantResponse.Addresses.First().Region,
-                                                                                                     AddressLine1 = merchantResponse.Addresses.First().AddressLine1,
-                                                                                                     AddressLine2 = merchantResponse.Addresses.First().AddressLine2
+                                                                                                     AddressLine3 = responseData.Data.Addresses.First().AddressLine3,
+                                                                                                     Town = responseData.Data.Addresses.First().Town,
+                                                                                                     AddressLine4 = responseData.Data.Addresses.First().AddressLine4,
+                                                                                                     PostalCode = responseData.Data.Addresses.First().PostalCode,
+                                                                                                     Region = responseData.Data.Addresses.First().Region,
+                                                                                                     AddressLine1 = responseData.Data.Addresses.First().AddressLine1,
+                                                                                                     AddressLine2 = responseData.Data.Addresses.First().AddressLine2
                                                                                                  }
                                                                   };
 

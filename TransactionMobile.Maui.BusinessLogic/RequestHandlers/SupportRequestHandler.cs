@@ -40,7 +40,6 @@ namespace TransactionMobile.Maui.BusinessLogic.RequestHandlers
                     break;
                 }
 
-                // TODO: Translate log messages
                 List<Models.LogMessage> logMessageModels = new List<Models.LogMessage>();
 
                 logEntries.ForEach(l => logMessageModels.Add(new Models.LogMessage

@@ -156,14 +156,14 @@ await this.FeatureBackgroundAsync();
 #line 19
  await testRunner.ThenAsync("the Address List Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-                global::Reqnroll.Table table21 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table25 = new global::Reqnroll.Table(new string[] {
                             "AddressLine1",
                             "AddressTown"});
-                table21.AddRow(new string[] {
+                table25.AddRow(new string[] {
                             "test address line 1",
                             "Town"});
 #line 20
- await testRunner.AndAsync("the Primary Address is displayed", ((string)(null)), table21, "And ");
+ await testRunner.AndAsync("the Primary Address is displayed", ((string)(null)), table25, "And ");
 #line hidden
 #line 23
  await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
@@ -177,16 +177,16 @@ await this.FeatureBackgroundAsync();
 #line 26
  await testRunner.ThenAsync("the Account Info Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-                global::Reqnroll.Table table22 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table26 = new global::Reqnroll.Table(new string[] {
                             "Name",
                             "Balance",
                             "AvailableBalance"});
-                table22.AddRow(new string[] {
+                table26.AddRow(new string[] {
                             "Dummy Merchant",
                             "99",
                             "100"});
 #line 27
- await testRunner.AndAsync("the Account Info is displayed", ((string)(null)), table22, "And ");
+ await testRunner.AndAsync("the Account Info is displayed", ((string)(null)), table26, "And ");
 #line hidden
 #line 30
  await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");

@@ -532,6 +532,277 @@ await this.FeatureBackgroundAsync();
 #line 120
  await testRunner.GivenAsync("I am on the Login Screen", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
+#line 121
+ await testRunner.AndAsync("my device is registered", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 122
+ await testRunner.WhenAsync("I enter \'user1\' as the Email Address", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 123
+ await testRunner.AndAsync("I enter \'123456\' as the Password", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 124
+ await testRunner.AndAsync("I tap on Login", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 125
+ await testRunner.ThenAsync("the Merchant Home Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 126
+ await testRunner.WhenAsync("I tap on Profile", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 127
+ await testRunner.ThenAsync("the My Profile Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 128
+ await testRunner.WhenAsync("I tap on the Addresses button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 129
+ await testRunner.ThenAsync("the Address List Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+                global::Reqnroll.Table table21 = new global::Reqnroll.Table(new string[] {
+                            "AddressLine1",
+                            "AddressTown"});
+                table21.AddRow(new string[] {
+                            "test address line 1",
+                            "TestTown"});
+#line 130
+ await testRunner.AndAsync("the Primary Address is displayed", ((string)(null)), table21, "And ");
+#line hidden
+#line 133
+ await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 134
+ await testRunner.ThenAsync("the My Profile Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 135
+ await testRunner.WhenAsync("I tap on the Account Info button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 136
+ await testRunner.ThenAsync("the Account Info Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+                global::Reqnroll.Table table22 = new global::Reqnroll.Table(new string[] {
+                            "Name",
+                            "Balance",
+                            "AvailableBalance"});
+                table22.AddRow(new string[] {
+                            "Test Merchant 1",
+                            "0",
+                            "0"});
+#line 137
+ await testRunner.AndAsync("the Account Info is displayed", ((string)(null)), table22, "And ");
+#line hidden
+#line 140
+ await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 141
+ await testRunner.ThenAsync("the My Profile Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 142
+ await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 143
+ await testRunner.ThenAsync("the Merchant Home Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 144
+ await testRunner.WhenAsync("I tap on Transactions", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 145
+ await testRunner.ThenAsync("the Transaction Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 146
+ await testRunner.WhenAsync("I tap on the Mobile Topup button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 147
+ await testRunner.ThenAsync("the Transaction Select Mobile Topup Operator Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 148
+ await testRunner.WhenAsync("I tap on the \'Safaricom\' button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 149
+ await testRunner.ThenAsync("the Select Product Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 150
+ await testRunner.WhenAsync("I tap on the \'Custom\' product button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 151
+ await testRunner.ThenAsync("the Enter Topup Details Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 152
+ await testRunner.WhenAsync("I enter \'07777777775\' as the Customer Mobile Number", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 153
+ await testRunner.AndAsync("I enter 10.00 as the Topup Amount", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 154
+ await testRunner.AndAsync("I tap on Perform Topup", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 155
+ await testRunner.ThenAsync("the Mobile Topup Successful Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 156
+ await testRunner.AndAsync("I tap on Complete", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 157
+ await testRunner.ThenAsync("the Transaction Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 158
+ await testRunner.WhenAsync("I tap on the Voucher button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 159
+ await testRunner.ThenAsync("the Transaction Select Voucher Operator Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 160
+ await testRunner.WhenAsync("I tap on the \'Hospital 1 Contract\' button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 161
+ await testRunner.ThenAsync("the Select Product Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 162
+ await testRunner.WhenAsync("I tap on the \'10 KES\' product button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 163
+ await testRunner.ThenAsync("the Enter Voucher Issue Details Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 164
+ await testRunner.WhenAsync("I enter \'07777777775\' as the Recipient Mobile Number", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 165
+ await testRunner.AndAsync("I tap on Issue Voucher", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 166
+ await testRunner.ThenAsync("the Voucher Issue Successful Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 167
+ await testRunner.AndAsync("I tap on Complete", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 168
+ await testRunner.ThenAsync("the Transaction Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 169
+ await testRunner.WhenAsync("I tap on the Bill Payment button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 170
+ await testRunner.ThenAsync("the Transaction Select Bill Payment Operator Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 171
+ await testRunner.WhenAsync("I tap on the \'PataPawa PostPay\' button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 172
+ await testRunner.ThenAsync("the Select Product Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 173
+ await testRunner.WhenAsync("I tap on the \'Bill Pay (Post)\' product button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 174
+ await testRunner.ThenAsync("the Enter Account Details Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 175
+ await testRunner.WhenAsync("I enter \'12345678\' as the Account Number", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 176
+ await testRunner.AndAsync("I tap on the Get Account Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 177
+ await testRunner.ThenAsync("the Make Bill Payment page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+                global::Reqnroll.Table table23 = new global::Reqnroll.Table(new string[] {
+                            "AccountNumber",
+                            "AccountHolder",
+                            "DueDate",
+                            "Balance"});
+                table23.AddRow(new string[] {
+                            "12345678",
+                            "Test Account 1",
+                            "Today",
+                            "100.00"});
+#line 178
+ await testRunner.AndAsync("the following Bill Details are displayed", ((string)(null)), table23, "And ");
+#line hidden
+#line 181
+ await testRunner.WhenAsync("I enter \'07777777775\' as the Customer Mobile Number", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 182
+ await testRunner.AndAsync("I enter 10.00 as the Payment Amount", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 183
+ await testRunner.AndAsync("I tap on the Make Payment Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 184
+ await testRunner.ThenAsync("the Bill Payment Successful Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 185
+ await testRunner.AndAsync("I tap on Complete", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 186
+ await testRunner.ThenAsync("the Transaction Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 187
+ await testRunner.WhenAsync("I tap on the Bill Payment button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 188
+ await testRunner.ThenAsync("the Transaction Select Bill Payment Operator Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 189
+ await testRunner.WhenAsync("I tap on the \'PataPawa PrePay\' button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 190
+ await testRunner.ThenAsync("the Select Product Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 191
+ await testRunner.WhenAsync("I tap on the \'Bill Pay (Pre)\' product button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 192
+ await testRunner.ThenAsync("the Enter Meter Details Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 193
+ await testRunner.WhenAsync("I enter \'00000001\' as the Meter Number", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 194
+ await testRunner.AndAsync("I tap on the Get Meter Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 195
+ await testRunner.ThenAsync("the Make Bill Payment page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+                global::Reqnroll.Table table24 = new global::Reqnroll.Table(new string[] {
+                            "MeterNumber"});
+                table24.AddRow(new string[] {
+                            "00000001"});
+#line 196
+ await testRunner.AndAsync("the following Meter Details are displayed", ((string)(null)), table24, "And ");
+#line hidden
+#line 199
+ await testRunner.WhenAsync("I enter 10.00 as the Payment Amount", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 200
+ await testRunner.AndAsync("I tap on the Make Payment Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 201
+ await testRunner.ThenAsync("the Bill Payment Successful Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 202
+ await testRunner.AndAsync("I tap on Complete", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 203
+ await testRunner.ThenAsync("the Transaction Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 204
+ await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 205
+ await testRunner.ThenAsync("the Merchant Home Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 206
+ await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 207
+ await testRunner.ThenAsync("A message is displayed confirming I want to log out", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 208
+ await testRunner.WhenAsync("I click yes", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 209
+ await testRunner.ThenAsync("the Login Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
             }
             await this.ScenarioCleanupAsync();
         }
