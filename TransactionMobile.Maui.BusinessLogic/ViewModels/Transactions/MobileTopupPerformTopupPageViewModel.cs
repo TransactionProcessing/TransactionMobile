@@ -30,6 +30,7 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel
 
     public async Task Initialise(CancellationToken cancellationToken)
     {
+
         var query = this.NavigationParameterService.GetParameters();
         this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
         this.TopupAmount = Decimal.Parse(HttpUtility.UrlDecode(query[nameof(TopupAmount)].ToString()));

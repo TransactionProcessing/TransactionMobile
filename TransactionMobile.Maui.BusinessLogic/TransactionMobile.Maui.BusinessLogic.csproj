@@ -46,7 +46,7 @@
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
 		<PackageReference Include="SecurityService.Client" Version="2025.1.1" />
 		<PackageReference Include="SimpleResults" Version="3.0.1" />
-		<PackageReference Include="TransactionProcessorACL.DataTransferObjects" Version="2025.2.1" />
+		<PackageReference Include="TransactionProcessorACL.DataTransferObjects" Version="2025.3.1" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="SQLitePCLRaw.core" Version="2.1.11" />
 		<PackageReference Include="SQLitePCLRaw.provider.sqlite3" Version="2.1.11" />

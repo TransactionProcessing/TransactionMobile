@@ -46,6 +46,7 @@ public partial class VoucherPerformIssuePage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        await this.viewModel.Initialise(CancellationToken.None);
         if (viewModel.VoucherAmount > 0)
         {
             this.VoucherAmountEntry.IsReadOnly = true;
