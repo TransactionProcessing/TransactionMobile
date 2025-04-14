@@ -91,7 +91,7 @@ public class TrainingMerchantService : IMerchantService
                                                                                               OperatorId = Guid.Parse("C485F21B-EF17-448D-8B8C-E217A07C1863"),
                                                                                               OperatorIdentfier = "PataPawaPostPay",
                                                                                               OperatorName = "Pata Pawa PostPay",
-                                                                                              ProductDisplayText = "Pay Bill",
+                                                                                              ProductDisplayText = "Bill Pay (Post)",
                                                                                               ProductId = Guid.Parse("DE92018C-513E-44B2-B96D-F5B3621C48A2"),
                                                                                               ProductType = ProductType.BillPayment,
                                                                                               ProductSubType = ProductSubType.BillPaymentPostPay
@@ -102,7 +102,7 @@ public class TrainingMerchantService : IMerchantService
                                                                                               OperatorId = Guid.Parse("C485F21B-EF17-448D-8B8C-E217A07C1863"),
                                                                                               OperatorIdentfier = "PataPawaPrePay",
                                                                                               OperatorName = "Pata Pawa PrePay",
-                                                                                              ProductDisplayText = "Pay Bill",
+                                                                                              ProductDisplayText = "Bill Pay (Pre)",
                                                                                               ProductId = Guid.Parse("A7472650-4420-43BF-8132-3A094EB084FE"),
                                                                                               ProductType = ProductType.BillPayment,
                                                                                               ProductSubType = ProductSubType.BillPaymentPrePay
