@@ -67,22 +67,3 @@ public interface INavigationService
 
     #endregion
 }
-
-public interface INavigationParameterService
-{
-    void SetParameters(IDictionary<String, Object> parameters);
-    IDictionary<String, Object> GetParameters();
-}
-
-public class NavigationParameterService : INavigationParameterService
-{
-    private IDictionary<String, Object> parameters;
-    public void SetParameters(IDictionary<String, Object> parameters)
-    {
-        this.parameters = parameters;
-    }
-    public IDictionary<String, Object> GetParameters()
-    {
-        return this.parameters;
-    }
-}

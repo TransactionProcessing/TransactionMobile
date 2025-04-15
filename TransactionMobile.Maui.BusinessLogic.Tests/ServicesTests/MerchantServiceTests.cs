@@ -1,36 +1,45 @@
-﻿using TransactionProcessor.Client;
-using TransactionProcessor.DataTransferObjects.Responses.Contract;
-using TransactionProcessor.DataTransferObjects.Responses.Merchant;
+﻿using Newtonsoft.Json;
+using System.Net;
+using TransactionMobile.Maui.BusinessLogic.UIServices;
+using TransactionProcessorACL.DataTransferObjects.Responses;
 
 namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Logging;
 using Models;
 using Moq;
+using RichardSzalay.MockHttp;
 using Services;
 using Shouldly;
 using SimpleResults;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
-/*public class MerchantServiceTests{
+public class MerchantServiceTests{
 
-    private readonly Mock<ITransactionProcessorClient> TransactionProcessorClient;
+    private MockHttpMessageHandler MockHttpMessageHandler;
 
+    private Func<String, String> BaseAddressResolver;
+    
     private readonly Mock<IApplicationCache> ApplicationCache;
+    private readonly Mock<IApplicationInfoService> ApplicationInfoService;
 
     private readonly IMerchantService MerchantService;
 
     public MerchantServiceTests(){
         Logger.Initialise(new NullLogger());
-        this.TransactionProcessorClient = new Mock<ITransactionProcessorClient>();
+        this.MockHttpMessageHandler = new MockHttpMessageHandler();
+        this.BaseAddressResolver = (s) => $"http://localhost";
         this.ApplicationCache = new Mock<IApplicationCache>();
-
-        this.MerchantService = new MerchantService(this.TransactionProcessorClient.Object, this.ApplicationCache.Object);
+        this.ApplicationInfoService = new Mock<IApplicationInfoService>();
+        this.ApplicationInfoService.Setup(a => a.VersionString).Returns("1.0.0");
+        this.MerchantService = new MerchantService(this.BaseAddressResolver, this.MockHttpMessageHandler.ToHttpClient(),this.ApplicationCache.Object,
+            this.ApplicationInfoService.Object);
 
         // Standard cache mocking here
         this.ApplicationCache.Setup(a => a.GetAccessToken()).Returns(TestData.AccessToken);
@@ -48,14 +57,14 @@ using Xunit;
                                                                                                              ProductId = TestData.Operator1Product_100KES.ProductId,
                                                                                                              DisplayText = TestData.Operator1Product_100KES.ProductDisplayText,
                                                                                                              Name = TestData.Operator1Product_100KES.ProductDisplayText,
-                                                                                                             ProductType = TransactionProcessor.DataTransferObjects.Responses.Contract.ProductType.MobileTopup,
+                                                                                                             ProductType = TransactionProcessorACL.DataTransferObjects.Responses.ProductType.MobileTopup,
                                                                                                              Value = TestData.Operator1Product_100KES.Value,
                                                                                                          },
                                                                                       new ContractProduct{
                                                                                                              ProductId = TestData.Operator1Product_200KES.ProductId,
                                                                                                              DisplayText = TestData.Operator1Product_200KES.ProductDisplayText,
                                                                                                              Name = TestData.Operator1Product_200KES.ProductDisplayText,
-                                                                                                             ProductType = TransactionProcessor.DataTransferObjects.Responses.Contract.ProductType.MobileTopup,
+                                                                                                             ProductType = TransactionProcessorACL.DataTransferObjects.Responses.ProductType.MobileTopup,
                                                                                                              Value = TestData.Operator1Product_200KES.Value,
                                                                                                          }
 
@@ -63,21 +72,24 @@ using Xunit;
                                           });
 
 
-        this.TransactionProcessorClient.Setup(e => e.GetMerchantContracts(It.IsAny<String>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(contracts);
-
+        this.MockHttpMessageHandler.When($"http://localhost/api/merchants/contracts?application_version=1.0.0")
+            .Respond("application/json", JsonConvert.SerializeObject(Result.Success(contracts))); // Respond with JSON
+        
         var result = await this.MerchantService.GetContractProducts(CancellationToken.None);
         result.IsSuccess.ShouldBeTrue();
         result.Data.Count.ShouldBe(2);
     }
 
+    
     [Fact]
-    public async Task MerchantService_GetContractProducts_EstateClientThrowsException_FailureReturned(){
-        this.TransactionProcessorClient.Setup(e => e.GetMerchantContracts(It.IsAny<String>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ThrowsAsync(new Exception());
+    public async Task MerchantService_GetContractProducts_HttpCallFailed_FailureReturned(){
+        this.MockHttpMessageHandler.When($"http://localhost/api/merchants/contracts?application_version=1.0.0")
+            .Respond(HttpStatusCode.InternalServerError);
 
-        var result = await this.MerchantService.GetContractProducts(CancellationToken.None);
+        Result<List<ContractProductModel>> result = await this.MerchantService.GetContractProducts(CancellationToken.None);
         result.IsFailed.ShouldBeTrue();
     }
-
+    
     [Fact]
     public async Task MerchantService_GetMerchantDetails_MerchantDetailsReturned(){
         MerchantResponse merchantResponse = new MerchantResponse{
@@ -105,8 +117,8 @@ using Xunit;
                                                                                                          }
                                                                 };
 
-        this.TransactionProcessorClient.Setup(e => e.GetMerchant(It.IsAny<String>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(merchantResponse);
+        this.MockHttpMessageHandler.When($"http://localhost/api/merchants?application_version=1.0.0")
+            .Respond("application/json", JsonConvert.SerializeObject(Result.Success(merchantResponse))); // Respond with JSON
 
         Result<MerchantDetailsModel> merchantDetails = await this.MerchantService.GetMerchantDetails(CancellationToken.None);
         merchantDetails.IsSuccess.ShouldBeTrue();
@@ -125,15 +137,16 @@ using Xunit;
         merchantDetails.Data.SettlementSchedule.ShouldBe(merchantResponse.SettlementSchedule.ToString());
     }
 
+    
     [Fact]
     public async Task MerchantService_GetMerchantDetails_ExceptionThrown_FailedResultReturned(){
-        this.TransactionProcessorClient.Setup(e => e.GetMerchant(It.IsAny<String>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new Exception());
+        this.MockHttpMessageHandler.When($"http://localhost/api/merchants?application_version=1.0.0")
+            .Respond(HttpStatusCode.InternalServerError);
 
         Result<MerchantDetailsModel> merchantDetails = await this.MerchantService.GetMerchantDetails(CancellationToken.None);
         merchantDetails.IsSuccess.ShouldBeFalse();
     }
-
+    
     [Theory]
     [InlineData("Description", "OperatorName", Models.ProductType.BillPayment, "OperatorName")]
     [InlineData("Description", "OperatorName", Models.ProductType.MobileTopup, "OperatorName")]
@@ -167,4 +180,4 @@ using Xunit;
         Models.ProductSubType result = Services.MerchantService.GetProductSubType(operatorName);
         result.ShouldBe(expectedProductSubType);
     }
-}*/
+}

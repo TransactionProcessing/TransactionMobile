@@ -15,7 +15,7 @@
 
 	<PropertyGroup>
 	  <TargetFrameworks>net8.0;</TargetFrameworks>
-	  <DebugType>Full</DebugType>
+	  <DebugType>None</DebugType>
   </PropertyGroup>
 
   <!--<ItemGroup>
