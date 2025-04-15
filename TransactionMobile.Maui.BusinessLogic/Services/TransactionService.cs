@@ -11,7 +11,6 @@
     using System.Net;
     using System.Net.Http.Headers;
     using System.Text;
-    using TransactionProcessor.DataTransferObjects.Responses.Estate;
     using TransactionProcessorACL.DataTransferObjects;
     using TransactionProcessorACL.DataTransferObjects.Responses;
     using ViewModels;

@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
 	  <IsTestProject>true</IsTestProject>
-	  <DebugType>Full</DebugType>
+	  <DebugType>None</DebugType>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 

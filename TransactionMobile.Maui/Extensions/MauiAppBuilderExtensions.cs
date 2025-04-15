@@ -1,5 +1,4 @@
-﻿using TransactionProcessor.Client;
-
+﻿
 namespace TransactionMobile.Maui.Extensions
 {
     using System.Net.Security;
@@ -166,7 +165,6 @@ namespace TransactionMobile.Maui.Extensions
                                                                                                                }));
 
             builder.Services.AddSingleton<ISecurityServiceClient, SecurityServiceClient>();
-            builder.Services.AddSingleton<ITransactionProcessorClient, TransactionProcessorClient>();
             builder.Services.AddSingleton<IApplicationCache, ApplicationCache>();
 
             builder.ConfigureDeviceIdProvider();
