@@ -1,8 +1,11 @@
-name: Move PR Issues to Project Column
+name: Move Linked Issues
 
 on:
   pull_request:
-    types: [opened, edited, reopened, synchronize]
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 jobs:
   get-date:
@@ -16,14 +19,29 @@ jobs:
           # Extract the month and year from the PR creation date
           PR_DATE="${{ github.event.pull_request.created_at }}"
           FORMATTED_DATE=$(date -d "$PR_DATE" "+%B %Y")  # Format to Month Year
-          echo "formatted_date=${FORMATTED_DATE} Sprint" >> $GITHUB_ENV
+          
+          # Debugging: print out the formatted date
+          echo "Formatted Date: ${FORMATTED_DATE} Sprint"
+          
+          # Set output using the Environment File method
+          echo "formatted_date=${FORMATTED_DATE} Sprint" >> $GITHUB_OUTPUT  # Set the output for later jobs
 
+  debug-date:
+    needs: get-date
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug the outputs
+        run: |
+          echo "PR Number: ${{ github.event.pull_request.number }}"
+          echo "Project Column Name: Review"
+          echo "Project Name Prefix (from get-date job output): ${{ needs.get-date.outputs.project_name_prefix }}"  # Access the output correctly
+          
   move-issues:
     needs: get-date
     uses: TransactionProcessing/org-ci-workflows/.github/workflows/move-linked-issue.yml@main
     with:
       pr_number: ${{ github.event.pull_request.number }}
-      project_column_name: "In review"
-      project_name_prefix: ${{ needs.get-date.outputs.project_name_prefix }}
+      project_column_name: "Review"
+      project_name_prefix: ${{ needs.get-date.outputs.project_name_prefix }}  # Access the output from get-date job
     secrets:
       gh_token: ${{ secrets.GH_TOKEN }}
