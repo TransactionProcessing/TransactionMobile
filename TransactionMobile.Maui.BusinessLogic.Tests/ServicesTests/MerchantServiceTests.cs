@@ -137,7 +137,43 @@ public class MerchantServiceTests{
         merchantDetails.Data.SettlementSchedule.ShouldBe(merchantResponse.SettlementSchedule.ToString());
     }
 
-    
+    [Fact]
+    public async Task MerchantService_GetMerchantDetails_ResultFailed_FailedResultIsReturned()
+    {
+        MerchantResponse merchantResponse = new MerchantResponse
+        {
+            MerchantName = TestData.MerchantName,
+            NextStatementDate = TestData.NextStatementDate,
+            SettlementSchedule = SettlementSchedule.Immediate,
+            Contacts = new List<ContactResponse>{
+                                                                                                            new ContactResponse{
+                                                                                                                                   ContactEmailAddress = TestData.ContactEmailAddress,
+                                                                                                                                   ContactName = TestData.ContactName,
+                                                                                                                                   ContactPhoneNumber = TestData.ContactMobileNumber
+                                                                                                                               }
+                                                                                                        },
+            Addresses = new List<AddressResponse>{
+                                                                                                             new AddressResponse{
+                                                                                                                                    AddressLine1 = TestData.AddressLine1,
+                                                                                                                                    AddressLine2 = TestData.AddressLine2,
+                                                                                                                                    AddressLine3 = TestData.AddressLine3,
+                                                                                                                                    AddressLine4 = TestData.AddressLine4,
+                                                                                                                                    PostalCode = TestData.PostalCode,
+                                                                                                                                    Region = TestData.Region,
+                                                                                                                                    Town = TestData.Town,
+
+                                                                                                                                }
+                                                                                                         }
+        };
+
+        this.MockHttpMessageHandler.When($"http://localhost/api/merchants?application_version=1.0.0")
+            .Respond("application/json", JsonConvert.SerializeObject(Result.Failure())); // Respond with JSON
+
+        Result<MerchantDetailsModel> merchantDetails = await this.MerchantService.GetMerchantDetails(CancellationToken.None);
+        merchantDetails.IsFailed.ShouldBeTrue();
+    }
+
+
     [Fact]
     public async Task MerchantService_GetMerchantDetails_ExceptionThrown_FailedResultReturned(){
         this.MockHttpMessageHandler.When($"http://localhost/api/merchants?application_version=1.0.0")

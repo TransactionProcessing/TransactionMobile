@@ -50,7 +50,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.Common
             transactionRecord.ContractId.ShouldBe(request.ContractId);
             transactionRecord.CustomerAccountNumber.ShouldBe(request.CustomerAccountNumber);
             transactionRecord.CustomerEmailAddress.ShouldBe(request.CustomerEmailAddress);
-            transactionRecord.OperatorIdentifier.ShouldBe(request.OperatorId.ToString());
+            transactionRecord.OperatorId.ShouldBe(request.OperatorId);
         }
 
         [Theory]
@@ -76,7 +76,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.Common
             transactionRecord.RecipientEmailAddress.ShouldBe(request.RecipientEmailAddress);
             transactionRecord.RecipientMobileNumber.ShouldBe(request.RecipientMobileNumber);
             transactionRecord.CustomerEmailAddress.ShouldBe(request.CustomerEmailAddress);
-            transactionRecord.OperatorIdentifier.ShouldBe(request.OperatorId.ToString());
+            transactionRecord.OperatorId.ShouldBe(request.OperatorId);
         }
 
         [Theory]
@@ -96,7 +96,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.Common
             transactionRecord.ProductId.ShouldBe(request.ProductId);
             transactionRecord.ContractId.ShouldBe(request.ContractId);
             transactionRecord.CustomerAccountNumber.ShouldBe(request.CustomerAccountNumber);
-            transactionRecord.OperatorIdentifier.ShouldBe(request.OperatorId.ToString());
+            transactionRecord.OperatorId.ShouldBe(request.OperatorId);
         }
 
         [Theory]
@@ -119,7 +119,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.Common
             transactionRecord.ProductId.ShouldBe(request.ProductId);
             transactionRecord.ContractId.ShouldBe(request.ContractId);
             transactionRecord.CustomerAccountNumber.ShouldBe(request.CustomerAccountNumber);
-            transactionRecord.OperatorIdentifier.ShouldBe(request.OperatorId.ToString());
+            transactionRecord.OperatorId.ShouldBe(request.OperatorId);
         }
 
         [Theory]
@@ -142,7 +142,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.Common
             transactionRecord.ProductId.ShouldBe(request.ProductId);
             transactionRecord.ContractId.ShouldBe(request.ContractId);
             transactionRecord.CustomerAccountNumber.ShouldBe(request.CustomerAccountNumber);
-            transactionRecord.OperatorIdentifier.ShouldBe(request.OperatorId.ToString());
+            transactionRecord.OperatorId.ShouldBe(request.OperatorId);
         }
 
         [Theory]
@@ -162,7 +162,7 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.Common
             transactionRecord.ProductId.ShouldBe(request.ProductId);
             transactionRecord.ContractId.ShouldBe(request.ContractId);
             transactionRecord.CustomerAccountNumber.ShouldBe(request.MeterNumber);
-            transactionRecord.OperatorIdentifier.ShouldBe(request.OperatorId.ToString());
+            transactionRecord.OperatorId.ShouldBe(request.OperatorId);
         }
 
         [Fact]

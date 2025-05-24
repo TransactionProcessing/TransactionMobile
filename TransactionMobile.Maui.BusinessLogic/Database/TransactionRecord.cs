@@ -15,9 +15,7 @@
         public String CustomerEmailAddress { get; set; }
 
         public String DeviceIdentifier { get; set; }
-
-        public String OperatorIdentifier { get; set; }
-
+        
         public Guid ProductId { get; set; }
 
         public Decimal Amount { get; set; }
@@ -39,6 +37,7 @@
         public String ResponseMessage { get; set; }
 
         public Boolean IsTrainingMode { get; set; }
+        public Guid OperatorId { get; set; }
 
     }
 }
