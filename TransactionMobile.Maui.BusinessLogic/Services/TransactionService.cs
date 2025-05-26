@@ -55,10 +55,6 @@
                 return Result.Failure("Error performing bill payment - get account transaction");
             }
 
-            if (result.Data == null) {
-                return Result.Failure("Error performing bill payment - get account transaction");
-            }
-
             PerformBillPaymentGetAccountResponseModel responseModel = new()
                                                                       {
                                                                           BillDetails = result.Data.AdditionalResponseMetaData.ToBillDetails()
@@ -133,7 +129,6 @@
             {
                 Logger.LogWarning("Error performing Logon transaction");
                 return Result.Failure("Error performing Logon transaction");
-
             }
 
             // TODO: Factory
@@ -214,7 +209,6 @@
             {
                 Logger.LogWarning("Error performing Voucher transaction");
                 return Result.Failure("Error performing Voucher transaction");
-
             }
 
             PerformVoucherIssueResponseModel responseModel = new()
@@ -248,14 +242,10 @@
         }
 
         private async Task<Result<TResponse>> SendTransactionRequest<TRequest, TResponse>(TRequest request,
-                                                                                  CancellationToken cancellationToken) {
+                                                                                          CancellationToken cancellationToken) {
             String requestUri = this.BuildRequestUrl("/api/transactions");
-
             try {
-                String requestSerialised = JsonConvert.SerializeObject(request,
-                                                                       new JsonSerializerSettings {
-                                                                                                      TypeNameHandling = TypeNameHandling.All
-                                                                                                  });
+                String requestSerialised = JsonConvert.SerializeObject(request, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
 
                 StringContent httpContent = new StringContent(requestSerialised, Encoding.UTF8, "application/json");
 
@@ -270,16 +260,20 @@
                 HttpResponseMessage httpResponse = await this.HttpClient.PostAsync(requestUri, httpContent, cancellationToken);
 
                 // Process the response
-                Result<String> content = await this.HandleResponse(httpResponse, cancellationToken);
-                
-                Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content.Data}");
+                Result<String> result = await this.HandleResponseX(httpResponse, cancellationToken);
 
-                ResponseData<TResponse> responseData = this.HandleResponseContent<TResponse>(content.Data);
-                
+                if (result.IsSuccess == false) {
+                    Logger.LogWarning("Error performing Voucher transaction");
+                    return Result.Failure("Error performing Voucher transaction");
+                }
+
+                Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {result.Data}");
+
+                ResponseData<TResponse> responseData = this.HandleResponseContent<TResponse>(result.Data);
+
                 return Result.Success(responseData.Data);
-
             }
-            catch(Exception ex) {
+            catch (Exception ex) {
                 // An exception has occurred, add some additional information to the message
                 Logger.LogError("Error posting transaction.", ex);
 

@@ -45,6 +45,15 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
         }
 
         [Fact]
+        public async Task AuthenticationService_GetToken_SecurityClientFailed_TokenNotReturned()
+        {
+            this.SecurityServiceClient.Setup(s => s.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Failure());
+
+            Result<TokenResponseModel> token = await this.AuthenticationService.GetToken(TestData.UserName, TestData.Password, CancellationToken.None);
+            token.IsFailed.ShouldBeTrue();
+        }
+
+        [Fact]
         public async Task AuthenticationService_GetToken_SecurityClientThrowsException_TokenNotReturned()
         {
             this.SecurityServiceClient.Setup(s => s.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ThrowsAsync(new Exception());
@@ -63,6 +72,16 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests.ServicesTests
             token.Data.AccessToken.ShouldBe(TestData.Token);
             token.Data.RefreshToken.ShouldBe(TestData.RefreshToken);
             token.Data.ExpiryInMinutes.ShouldBe(TestData.TokenExpiryInMinutes);
+        }
+
+        [Fact]
+        public async Task AuthenticationService_RefreshAccessToken_SecurityClientFailed_TokenNotReturned()
+        {
+            this.SecurityServiceClient.Setup(s => s.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Failure());
+
+            Result<TokenResponseModel> token = await this.AuthenticationService.RefreshAccessToken(TestData.RefreshToken, CancellationToken.None);
+
+            token.IsFailed.ShouldBeTrue();
         }
 
         [Fact]
