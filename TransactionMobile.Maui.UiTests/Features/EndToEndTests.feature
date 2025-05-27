@@ -115,7 +115,7 @@ Background:
 
 	Given I have created a config for my device
 
-@PRTest @ignore
+@PRTest
 Scenario: EndToEnd
 	Given I am on the Login Screen
 	And my device is registered
