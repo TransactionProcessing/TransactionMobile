@@ -42,6 +42,11 @@ public static class Logger
         if (Logger.LoggerObjects == null) {
             Logger.LoggerObjects = new List<ILogger>();
         }
+
+        if (Logger.LoggerObjects.Any(l => l.GetType() == loggerObject.GetType())) {
+            // Already initialised
+            return;
+        }
         Logger.LoggerObjects.Add(loggerObject);
 
         Logger.IsInitialised = true;
