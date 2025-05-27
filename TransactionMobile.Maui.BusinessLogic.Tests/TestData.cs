@@ -188,26 +188,26 @@ namespace TransactionMobile.Maui.BusinessLogic.Tests
                                            new TransactionRecord{
                                                                     Amount = TestData.Operator1Product_100KES.Value,
                                                                     ContractId = TestData.Operator1Product_100KES.ContractId,
-                                                                    OperatorIdentifier = TestData.Operator1Product_100KES.OperatorIdentfier,
-                                                                    IsSuccessful = true
+                                                                    IsSuccessful = true,
+                                                                    OperatorId = TestData.Operator1Product_100KES.OperatorId,
                                                                 },
                                            new TransactionRecord{
                                                                     Amount = TestData.Operator1Product_100KES.Value,
                                                                     ContractId = TestData.Operator1Product_100KES.ContractId,
-                                                                    OperatorIdentifier = TestData.Operator1Product_100KES.OperatorIdentfier,
-                                                                    IsSuccessful = true
+                                                                    IsSuccessful = true,
+                                                                    OperatorId = TestData.Operator1Product_100KES.OperatorId,
                                                                 },
                                            new TransactionRecord{
                                                                     Amount = TestData.Operator1Product_100KES.Value,
                                                                     ContractId = TestData.Operator1Product_100KES.ContractId,
-                                                                    OperatorIdentifier = TestData.Operator1Product_100KES.OperatorIdentfier,
-                                                                    IsSuccessful = true
+                                                                    IsSuccessful = true,
+                                                                    OperatorId = TestData.Operator1Product_100KES.OperatorId,
                                                                 },
                                            new TransactionRecord{
                                                                     Amount = TestData.Operator3Product_200KES.Value,
                                                                     ContractId = TestData.Operator3Product_200KES.ContractId,
-                                                                    OperatorIdentifier = TestData.Operator3Product_200KES.OperatorIdentfier,
-                                                                    IsSuccessful = true
+                                                                    IsSuccessful = true,
+                                                                    OperatorId = TestData.Operator3Product_200KES.OperatorId,
                                                                 }
                                        };
 

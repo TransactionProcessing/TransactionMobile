@@ -50,63 +50,56 @@ public class MerchantService : ClientProxyBase, IMerchantService
     }
 
     public async Task<Result<List<ContractProductModel>>> GetContractProducts(CancellationToken cancellationToken) {
-        try {
-            List<ContractProductModel> models = new();
+        List<ContractProductModel> models = new();
 
-            TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
-            Guid estateId = this.ApplicationCache.GetEstateId();
-            Guid merchantId = this.ApplicationCache.GetMerchantId();
+        TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
+        Guid estateId = this.ApplicationCache.GetEstateId();
+        Guid merchantId = this.ApplicationCache.GetMerchantId();
 
-            String requestUri = this.BuildRequestUrl($"/api/merchants/contracts?application_version={this.ApplicationInfoService.VersionString}");
+        String requestUri = this.BuildRequestUrl($"/api/merchants/contracts?application_version={this.ApplicationInfoService.VersionString}");
 
-            Logger.LogInformation("About to request merchant contracts");
-            Logger.LogDebug($"Merchant Contract Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
+        Logger.LogInformation("About to request merchant contracts");
+        Logger.LogDebug($"Merchant Contract Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUri);
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
-            var httpResponse = await this.HttpClient.SendAsync(request, cancellationToken);
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
+        var httpResponse = await this.HttpClient.SendAsync(request, cancellationToken);
 
-            // Process the response
-            Result<String> content = await this.HandleResponse(httpResponse, cancellationToken);
+        // Process the response
+        Result<String> content = await this.HandleResponseX(httpResponse, cancellationToken);
 
-            if (content.IsFailed) {
-                Logger.LogInformation($"GetMerchantContracts failed {content.Status}");
-                return Result.Failure(content.Message);
-            }
-
-            Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content.Data}");
-
-            ResponseData<List<ContractResponse>> responseData = this.HandleResponseContent<List<ContractResponse>>(content.Data);
-            
-            Logger.LogInformation($"{responseData.Data.Count} for merchant requested successfully");
-            Logger.LogDebug($"Merchant Contract Response: [{JsonConvert.SerializeObject(responseData.Data)}]");
-
-            foreach (ContractResponse contractResponse in responseData.Data) {
-                foreach (ContractProduct contractResponseProduct in contractResponse.Products){
-                    var productType = GetProductType(contractResponse.OperatorName);
-
-                    models.Add(new ContractProductModel {
-                                                            OperatorId = contractResponse.OperatorId,
-                                                            ContractId = contractResponse.ContractId,
-                                                            ProductId = contractResponseProduct.ProductId,
-                                                            OperatorIdentfier = contractResponse.OperatorName,
-                                                            OperatorName = GetOperatorName(contractResponse, productType),
-                                                            Value = contractResponseProduct.Value ?? 0,
-                                                            IsFixedValue = contractResponseProduct.Value.HasValue,
-                                                            ProductDisplayText = contractResponseProduct.DisplayText,
-                                                            ProductType = productType,
-                                                            ProductSubType = GetProductSubType(contractResponse.OperatorName),
-                                                        });
-                }
-            }
-
-            return Result.Success(models);
+        if (content.IsFailed) {
+            Logger.LogInformation($"GetMerchantContracts failed {content.Status}");
+            return Result.Failure(content.Message);
         }
-        catch(Exception ex) {
-            Logger.LogError("Error getting contract products",ex);
 
-            return ResultExtensions.FailureExtended("Error getting contract products", ex);
+        Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content.Data}");
+
+        ResponseData<List<ContractResponse>> responseData = this.HandleResponseContent<List<ContractResponse>>(content.Data);
+
+        Logger.LogInformation($"{responseData.Data.Count} for merchant requested successfully");
+        Logger.LogDebug($"Merchant Contract Response: [{JsonConvert.SerializeObject(responseData.Data)}]");
+
+        foreach (ContractResponse contractResponse in responseData.Data) {
+            foreach (ContractProduct contractResponseProduct in contractResponse.Products) {
+                var productType = GetProductType(contractResponse.OperatorName);
+
+                models.Add(new ContractProductModel {
+                    OperatorId = contractResponse.OperatorId,
+                    ContractId = contractResponse.ContractId,
+                    ProductId = contractResponseProduct.ProductId,
+                    OperatorIdentfier = contractResponse.OperatorName,
+                    OperatorName = GetOperatorName(contractResponse, productType),
+                    Value = contractResponseProduct.Value ?? 0,
+                    IsFixedValue = contractResponseProduct.Value.HasValue,
+                    ProductDisplayText = contractResponseProduct.DisplayText,
+                    ProductType = productType,
+                    ProductSubType = GetProductSubType(contractResponse.OperatorName),
+                });
+            }
         }
+
+        return Result.Success(models);
     }
 
     [ExcludeFromCodeCoverage(Justification = "Need to have a think of best way of this data being retrieved")]
@@ -138,66 +131,60 @@ public class MerchantService : ClientProxyBase, IMerchantService
     }
 
     public async Task<Result<MerchantDetailsModel>> GetMerchantDetails(CancellationToken cancellationToken) {
-        try {
-            TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
-            Guid estateId = this.ApplicationCache.GetEstateId();
-            Guid merchantId = this.ApplicationCache.GetMerchantId();
+        TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
+        Guid estateId = this.ApplicationCache.GetEstateId();
+        Guid merchantId = this.ApplicationCache.GetMerchantId();
 
 
-            String requestUri = this.BuildRequestUrl($"/api/merchants?application_version={this.ApplicationInfoService.VersionString}");
+        String requestUri = this.BuildRequestUrl($"/api/merchants?application_version={this.ApplicationInfoService.VersionString}");
 
-            Logger.LogInformation("About to request merchant details");
-            Logger.LogDebug($"Merchant Details Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
+        Logger.LogInformation("About to request merchant details");
+        Logger.LogDebug($"Merchant Details Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUri);
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
-            var httpResponse = await this.HttpClient.SendAsync(request, cancellationToken);
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
+        var httpResponse = await this.HttpClient.SendAsync(request, cancellationToken);
 
-            // Process the response
-            Result<String> content = await this.HandleResponse(httpResponse, cancellationToken);
+        // Process the response
+        Result<String> content = await this.HandleResponseX(httpResponse, cancellationToken);
 
-            if (content.IsFailed)
-            {
-                Logger.LogInformation($"GetMerchantContracts failed {content.Status}");
-                return Result.Failure(content.Message);
-            }
-
-            Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content.Data}");
-
-            ResponseData<MerchantResponse> responseData = this.HandleResponseContent<MerchantResponse>(content.Data);
-
-            Logger.LogInformation("Merchant details requested successfully");
-            Logger.LogDebug($"Merchant Details Response: [{JsonConvert.SerializeObject(responseData.Data)}]");
-
-            MerchantDetailsModel model = new MerchantDetailsModel {
-                                                                      MerchantName = responseData.Data.MerchantName,
-                                                                      NextStatementDate = responseData.Data.NextStatementDate,
-                                                                      LastStatementDate = new DateTime(),
-                                                                      SettlementSchedule = responseData.Data.SettlementSchedule.ToString(),
-                                                                      //AvailableBalance = merchantResponse.AvailableBalance,
-                                                                      //Balance = merchantResponse.Balance,
-                                                                      Contact = new ContactModel {
-                                                                                                     Name = responseData.Data.Contacts.First().ContactName,
-                                                                                                     EmailAddress = responseData.Data.Contacts.First().ContactEmailAddress,
-                                                                                                     MobileNumber = responseData.Data.Contacts.First().ContactPhoneNumber
-                                                                                                 },
-                                                                      Address = new AddressModel {
-                                                                                                     AddressLine3 = responseData.Data.Addresses.First().AddressLine3,
-                                                                                                     Town = responseData.Data.Addresses.First().Town,
-                                                                                                     AddressLine4 = responseData.Data.Addresses.First().AddressLine4,
-                                                                                                     PostalCode = responseData.Data.Addresses.First().PostalCode,
-                                                                                                     Region = responseData.Data.Addresses.First().Region,
-                                                                                                     AddressLine1 = responseData.Data.Addresses.First().AddressLine1,
-                                                                                                     AddressLine2 = responseData.Data.Addresses.First().AddressLine2
-                                                                                                 }
-                                                                  };
-
-            return Result.Success(model);
+        if (content.IsFailed)
+        {
+            Logger.LogInformation($"GetMerchantContracts failed {content.Status}");
+            return Result.Failure(content.Message);
         }
-        catch(Exception ex) {
-            Logger.LogError("Error getting merchant details",ex);
-            return ResultExtensions.FailureExtended("Error getting merchant details", ex);
-        }
+
+        Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content.Data}");
+
+        ResponseData<MerchantResponse> responseData = this.HandleResponseContent<MerchantResponse>(content.Data);
+
+        Logger.LogInformation("Merchant details requested successfully");
+        Logger.LogDebug($"Merchant Details Response: [{JsonConvert.SerializeObject(responseData.Data)}]");
+
+        MerchantDetailsModel model = new MerchantDetailsModel {
+                                                                  MerchantName = responseData.Data.MerchantName,
+                                                                  NextStatementDate = responseData.Data.NextStatementDate,
+                                                                  LastStatementDate = new DateTime(),
+                                                                  SettlementSchedule = responseData.Data.SettlementSchedule.ToString(),
+                                                                  //AvailableBalance = merchantResponse.AvailableBalance,
+                                                                  //Balance = merchantResponse.Balance,
+                                                                  Contact = new ContactModel {
+                                                                                                 Name = responseData.Data.Contacts.First().ContactName,
+                                                                                                 EmailAddress = responseData.Data.Contacts.First().ContactEmailAddress,
+                                                                                                 MobileNumber = responseData.Data.Contacts.First().ContactPhoneNumber
+                                                                                             },
+                                                                  Address = new AddressModel {
+                                                                                                 AddressLine3 = responseData.Data.Addresses.First().AddressLine3,
+                                                                                                 Town = responseData.Data.Addresses.First().Town,
+                                                                                                 AddressLine4 = responseData.Data.Addresses.First().AddressLine4,
+                                                                                                 PostalCode = responseData.Data.Addresses.First().PostalCode,
+                                                                                                 Region = responseData.Data.Addresses.First().Region,
+                                                                                                 AddressLine1 = responseData.Data.Addresses.First().AddressLine1,
+                                                                                                 AddressLine2 = responseData.Data.Addresses.First().AddressLine2
+                                                                                             }
+                                                              };
+
+        return Result.Success(model);
     }
 
     public static String GetOperatorName(ContractResponse contractResponse, ProductType productType) {

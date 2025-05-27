@@ -48,6 +48,10 @@ namespace TransactionMobile.Maui.UiTests.Hooks
         [AfterScenario(Order = 1)]
         public void ShutdownApp()
         {
+            if (this.AppiumDriver == null) {
+                return;
+            }
+
             if (this.TestingContext.Logger == null){
                 this.TestingContext.Logger = new NlogLogger();
             }

@@ -203,23 +203,22 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
                                                    group t by new
                                                    {
                                                        t.ContractId,
-                                                       t.OperatorIdentifier
+                                                       t.OperatorId
                                                    }
                                                    into tempOperatorTotals
                                                    select new 
                                                    {
                                                        ContractId = tempOperatorTotals.Key.ContractId,
-                                                       OperatorId = tempOperatorTotals.Key.OperatorIdentifier,
+                                                       OperatorId = tempOperatorTotals.Key.OperatorId,
                                                        TransactionValue = tempOperatorTotals.Sum(t => t.Amount),
                                                        TransactionCount = tempOperatorTotals.Count()
                                                    }).ToList();
 
         List<OperatorTotalModel> operatorTotals = (from t in workingTotals
-                                                    where Guid.TryParse(t.OperatorId, out _) == true
                                                    select new OperatorTotalModel
                                                    {
                                                        ContractId = t.ContractId,
-                                                       OperatorId = Guid.Parse(t.OperatorId),
+                                                       OperatorId = t.OperatorId,
                                                        TransactionValue = t.TransactionValue,
                                                        TransactionCount = t.TransactionCount
                                                    }).ToList();

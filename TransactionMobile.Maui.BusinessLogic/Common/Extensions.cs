@@ -32,9 +32,8 @@ public static class Extensions
                                                                         ContractId = request.ContractId,
                                                                         CustomerAccountNumber = request.CustomerAccountNumber,
                                                                         CustomerEmailAddress = request.CustomerEmailAddress,
-                                                                        // TODO: Change db to be guid later
-                                                                        OperatorIdentifier = request.OperatorId.ToString(),
-                                                                        IsTrainingMode = isTrainingMode
+                                                                        OperatorId = request.OperatorId,
+            IsTrainingMode = isTrainingMode
         };
 
         return transactionRecord;
@@ -50,8 +49,8 @@ public static class Extensions
                                                                         RecipientEmailAddress = request.RecipientEmailAddress,
                                                                         RecipientMobileNumber = request.RecipientMobileNumber,
                                                                         CustomerEmailAddress = request.CustomerEmailAddress,
-                                                                        OperatorIdentifier = request.OperatorId.ToString(),
-                                                                        IsTrainingMode = isTrainingMode
+            OperatorId = request.OperatorId,
+            IsTrainingMode = isTrainingMode
         };
 
         return transactionRecord;
@@ -65,8 +64,8 @@ public static class Extensions
                                                   Amount = 0,
                                                   ProductId = request.ProductId,
                                                   ContractId = request.ContractId,
-                                                  OperatorIdentifier = request.OperatorId.ToString(),
-                                                  CustomerAccountNumber = request.CustomerAccountNumber,
+                                                  OperatorId = request.OperatorId,
+CustomerAccountNumber = request.CustomerAccountNumber,
                                                   IsTrainingMode = isTrainingMode
         };
         return transactionRecord;
@@ -80,7 +79,7 @@ public static class Extensions
                                                   Amount = 0,
                                                   ProductId = request.ProductId,
                                                   ContractId = request.ContractId,
-                                                  OperatorIdentifier = request.OperatorId.ToString(),
+                                                  OperatorId = request.OperatorId,
                                                   CustomerAccountNumber = request.CustomerAccountNumber,
                                                   IsTrainingMode = isTrainingMode
         };
@@ -96,7 +95,7 @@ public static class Extensions
                                                   Amount = 0,
                                                   ProductId = request.ProductId,
                                                   ContractId = request.ContractId,
-                                                  OperatorIdentifier = request.OperatorId.ToString(),
+                                                  OperatorId = request.OperatorId,
                                                   CustomerAccountNumber = request.MeterNumber,
                                                   IsTrainingMode = isTrainingMode
                                               };
@@ -112,7 +111,7 @@ public static class Extensions
                                                   Amount = 0,
                                                   ProductId = request.ProductId,
                                                   ContractId = request.ContractId,
-                                                  OperatorIdentifier = request.OperatorId.ToString(),
+                                                  OperatorId = request.OperatorId,
                                                   CustomerAccountNumber = request.MeterNumber,
                                                   IsTrainingMode = isTrainingMode
                                               };

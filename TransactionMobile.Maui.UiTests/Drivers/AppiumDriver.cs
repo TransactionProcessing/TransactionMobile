@@ -180,6 +180,9 @@ namespace TransactionMobile.Maui.UiTests.Drivers
 
         public List<LogEntry> GetLogs() {
             if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
+                if (AppiumDriverWrapper.Driver == null) {
+                    return new List<LogEntry>();
+                }
                 ReadOnlyCollection<LogEntry>? logs = AppiumDriverWrapper.Driver.Manage().Logs.GetLog("logcat");
                 return logs.ToList();
             }

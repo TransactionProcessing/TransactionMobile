@@ -137,6 +137,15 @@ public class MerchantServiceTests{
         merchantDetails.Data.SettlementSchedule.ShouldBe(merchantResponse.SettlementSchedule.ToString());
     }
 
+    [Fact]
+    public async Task MerchantService_GetMerchantDetails_ResultFailed_FailedResultIsReturned()
+    {
+        this.MockHttpMessageHandler.When($"http://localhost/api/merchants?application_version=1.0.0")
+            .Respond(HttpStatusCode.BadRequest);
+
+        Result<MerchantDetailsModel> merchantDetails = await this.MerchantService.GetMerchantDetails(CancellationToken.None);
+        merchantDetails.IsFailed.ShouldBeTrue();
+    }
     
     [Fact]
     public async Task MerchantService_GetMerchantDetails_ExceptionThrown_FailedResultReturned(){
