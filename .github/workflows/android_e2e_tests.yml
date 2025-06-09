@@ -15,7 +15,7 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
 
       - name: Set up JDK
         uses: actions/setup-java@v3
@@ -157,7 +157,7 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net8.0-android -c Release --no-restore
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net9.0-android -c Release --no-restore
 
       - name: Run Android Navigation Tests
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRTest)&(Category=Android)" --no-restore

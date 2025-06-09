@@ -1,75 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<!--<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-		<TargetFrameworks>net8.0-android;net8.0-windows10.0.19041.0</TargetFrameworks>
-	</PropertyGroup>
-
-	--><!-- macOS-only: Android + iOS + MacCatalyst --><!--
-	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-maccatalyst'">
-		<RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers>
-	</PropertyGroup>-->
-
 	<PropertyGroup>
-	  <TargetFrameworks>net8.0;</TargetFrameworks>
+	  <TargetFrameworks>net9.0;</TargetFrameworks>
 	  <DebugType>None</DebugType>
   </PropertyGroup>
 
-  <!--<ItemGroup>
-    <Compile Remove="ViewModelTests\**" />
-    <EmbeddedResource Remove="ViewModelTests\**" />
-    <MauiCss Remove="ViewModelTests\**" />
-    <MauiXaml Remove="ViewModelTests\**" />
-    <None Remove="ViewModelTests\**" />
-  </ItemGroup>
   <ItemGroup>
-    <Compile Remove="HomePageViewModelTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ViewModelTests\ExtendedBaseViewModelTests.cs" />
-    <Compile Include="ViewModelTests\HomePageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\LoginPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\MyAccount\MyAccountAddressPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\MyAccount\MyAccountContactPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\MyAccount\MyAccountDetailsPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\MyAccount\MyAccountPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Reports\ReportsPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Support\SupportPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Support\ViewLogsPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\Admin\AdminPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentFailedPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentGetAccountPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentGetMeterPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentPayBillPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentSelectOperatorPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentSelectProductPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\BillPayment\BillPaymentSuccessPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\MobileTopup\MobileTopupFailedPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\MobileTopup\MobileTopupPerformTopupPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\MobileTopup\MobileTopupSelectOperatorPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\MobileTopup\MobileTopupSelectProductPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\MobileTopup\MobileTopupSuccessPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\TransactionsPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\Voucher\VoucherIssueFailedPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\Voucher\VoucherIssueSelectProductPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\Voucher\VoucherIssueSuccessPageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\Voucher\VoucherPerformIssuePageViewModelTests.cs" />
-    <Compile Include="ViewModelTests\Transactions\Voucher\VoucherSelectOperatorPageViewModelTests.cs" />
-  </ItemGroup>-->
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.14" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="9.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.5" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="RichardSzalay.MockHttp" Version="7.0.0" />
     <PackageReference Include="Shouldly" Version="4.3.0" />
     <PackageReference Include="SQLite" Version="3.13.0" />
     <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

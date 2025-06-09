@@ -77,7 +77,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
 
         private static void SetupiOSDriver(AppiumLocalService appiumService) {
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net8.0-ios/iossimulator-arm64/");
+            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net9.0-ios/iossimulator-arm64/");
             var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.app");
             
             var caps = new AppiumOptions();
@@ -89,64 +89,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             caps.AddAdditionalAppiumOption("fullReset", true);
             caps.AddAdditionalAppiumOption("noReset", false);
             caps.AddAdditionalAppiumOption("useNewWDA", true);
-
-            //var driverOptions = new AppiumOptions();
-            //driverOptions.AutomationName = "XCUITest";
-            ////driverOptions.PlatformName = "iOS";
-            ////driverOptions.PlatformVersion = "17.4";
-            ////driverOptions.DeviceName = "iPhone 11";
-            //driverOptions.AutomationName = "XCUITest";
-            //driverOptions.PlatformName = "iOS";
-            //driverOptions.PlatformVersion = "17.2";
-            //driverOptions.AddAdditionalAppiumOption("udid", Environment.GetEnvironmentVariable("UDID")); // Corrected capability.
-
-            //String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            //String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net8.0-ios/iossimulator-arm64/");
-            //var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.app");
-            //driverOptions.App = apkPath;
-            //driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
-            //driverOptions.AddAdditionalAppiumOption("waitForQuiescence", false);
-            //driverOptions.AddAdditionalAppiumOption("shouldWaitForQuiescence", false);
-            //driverOptions.AddAdditionalAppiumOption("showXcodeLog", true);
-            ////driverOptions.AddAdditionalAppiumOption("useNewWDA", true);
-            ////driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 60000);
-            ////driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 60000);
-            ////driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 120000);
-            ////driverOptions.AddAdditionalAppiumOption("wdaConnectionTimeout", 120000);
-            ////driverOptions.AddAdditionalAppiumOption("useNewWDA", false);
-            ////driverOptions.AddAdditionalAppiumOption("wdaStartupRetryInterval", 10000);
-            ////driverOptions.AddAdditionalAppiumOption("wdaStartupRetries", 4);
-            //driverOptions.AddAdditionalAppiumOption("usePrebuiltWDA", true);
-            //driverOptions.AddAdditionalAppiumOption("skipServerInstallation", true);
-            //driverOptions.AddAdditionalAppiumOption("skipProvisioningDeviceDetection", true);
-            //driverOptions.AddAdditionalAppiumOption("wdaLocalPort", Environment.GetEnvironmentVariable("WDA_PATH"));
-            //driverOptions.AddAdditionalAppiumOption("updatedWDABundleId", "WebDriverAgent/build");
-            // Tell Appium to use the prebuilt WDA
-            //driverOptions.AddAdditionalAppiumOption("usePrebuiltWDA", true);
-            //driverOptions.AddAdditionalAppiumOption("useNewWDA", false);
-            //driverOptions.AddAdditionalAppiumOption("shouldUseSingletonTestManager", true);
-
-            //driverOptions.AddAdditionalAppiumOption("derivedDataPath", "/Users/runner/work/WebDriverAgent/build/Build/Products/Debug-iphonesimulator");
-            //driverOptions.AddAdditionalAppiumOption("wdaLocalPort", 8100);
-
-
-            //// Avoid unnecessary WDA rebuild attempts and add resilience
-            //driverOptions.AddAdditionalAppiumOption("wdaLaunchTimeout", 60000);
-            //driverOptions.AddAdditionalAppiumOption("wdaStartupRetries", 3);
-            //driverOptions.AddAdditionalAppiumOption("wdaStartupRetryInterval", 10000);
-
-            //// (Optional but often helpful)
-            //driverOptions.AddAdditionalAppiumOption("waitForQuiescence", false);
-            //driverOptions.AddAdditionalAppiumOption("startIWDP", true); // if you want to inspect webviews
-            //driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, false);
-            //driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NoReset, true);
-            //driverOptions.AddAdditionalAppiumOption("usePrebuiltWDA", true);
-            //driverOptions.AddAdditionalAppiumOption("wdaLocalPort", 8100); // optional, but helpful
-            //driverOptions.AddAdditionalAppiumOption("shouldUseSingletonTestManager", true); // avoids extra processes
-            //driverOptions.AddAdditionalAppiumOption("showXcodeLog", true); // shows build errors in logs
-            //driverOptions.AddAdditionalAppiumOption("bundleId", "com.appium.WebDriverAgentRunner"); // match WDA bundle ID
-
-
+            
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, caps, TimeSpan.FromMinutes(10));
         }
 
@@ -167,7 +110,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
 
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net8.0-android/");
+            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net9.0-android/");
 
             var apkPath = Path.Combine(binariesFolder, "com.transactionprocessing.pos-Signed.apk");
             var fileinfo = new FileInfo(apkPath);

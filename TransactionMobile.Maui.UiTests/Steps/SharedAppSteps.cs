@@ -39,8 +39,22 @@ namespace TransactionMobile.Maui.UiTests.Steps
 
         [Then(@"The application closes")]
         public void ThenTheApplicationCloses() {
-            AppState state = AppiumDriverWrapper.Driver.GetAppState("com.transactionprocessing.pos");
-            state.ShouldBe(AppState.NotRunning);
+            //AppState state = AppiumDriverWrapper.Driver.GetAppState("com.transactionprocessing.pos");
+            //state.ShouldBe(AppState.NotRunning);
+            AppState appState = (AppState)AppiumDriverWrapper.Driver.ExecuteScript("mobile: queryAppState", new Dictionary<string, object>
+            {
+                ["appId"] = "com.transactionprocessing.pos"
+            });
+            appState.ShouldBe(AppState.NotRunning, "The application should not be running after clicking the back button.");
+        }
+
+        public enum AppState
+        {
+            NotInstalled = 0,
+            NotRunning = 1,
+            RunningInBackgroundSuspended = 2,
+            RunningInBackground = 3,
+            RunningInForeground = 4
         }
 
         [When(@"I click yes")]

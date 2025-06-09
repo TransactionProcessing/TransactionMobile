@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
 	  <IsTestProject>true</IsTestProject>
 	  <DebugType>Full</DebugType>
@@ -9,22 +9,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.14" />
+	  <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="9.0.5" />
 	  <PackageReference Include="TransactionProcessor.Database" Version="2025.5.1" />
 	  <PackageReference Include="TransactionProcessor.IntegrationTesting.Helpers" Version="2025.5.1" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.14" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.5" />
 	  <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
-	  <PackageReference Include="Reqnroll.NUnit" Version="2.4.0" />
-	  <PackageReference Include="Reqnroll.Tools.MsBuild.Generation" Version="2.4.0" />
+	  <PackageReference Include="Reqnroll.NUnit" Version="2.4.1" />
+	  <PackageReference Include="Reqnroll.Tools.MsBuild.Generation" Version="2.4.1" />
 	  <PackageReference Include="SecurityService.Client" Version="2025.5.1" />
 	  <PackageReference Include="SecurityService.IntegrationTesting.Helpers" Version="2025.5.1" />
 	  <PackageReference Include="TransactionProcessor.Client" Version="2025.5.1" />
 	  <PackageReference Include="EventStoreProjections" Version="2023.12.3" />
-	  <PackageReference Include="Appium.WebDriver" Version="7.2.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
-    <PackageReference Include="Shared.IntegrationTesting" Version="2025.5.4" />
+	  <PackageReference Include="Appium.WebDriver" Version="8.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="Shared.IntegrationTesting" Version="2025.6.2" />
     <PackageReference Include="Shouldly" Version="4.3.0" />      
-	  <PackageReference Include="NUnit.ConsoleRunner" Version="3.19.2" />
+	  <PackageReference Include="NUnit.ConsoleRunner" Version="3.20.1" />
     <PackageReference Include="coverlet.collector" Version="6.0.4">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
