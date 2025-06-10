@@ -43,9 +43,9 @@
 		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.5" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
-		<PackageReference Include="SecurityService.Client" Version="2025.5.1" />
+		<PackageReference Include="SecurityService.Client" Version="2025.5.2-build82" />
 		<PackageReference Include="SimpleResults" Version="4.0.0" />
-		<PackageReference Include="TransactionProcessorACL.DataTransferObjects" Version="2025.3.1" />
+		<PackageReference Include="TransactionProcessorACL.DataTransferObjects" Version="2025.3.2-build64" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="SQLitePCLRaw.core" Version="2.1.11" />
 		<PackageReference Include="SQLitePCLRaw.provider.sqlite3" Version="2.1.11" />
