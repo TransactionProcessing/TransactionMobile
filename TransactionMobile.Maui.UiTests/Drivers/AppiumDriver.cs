@@ -126,6 +126,8 @@ namespace TransactionMobile.Maui.UiTests.Drivers
 
         private static string ExtractUdidFromSimctlOutput(string output, string simulatorName, string platformVersion)
         {
+            Console.WriteLine($"output is {output}");
+
             string platformHeader = $"-- iOS {platformVersion} --";
             bool platformSection = false;
 

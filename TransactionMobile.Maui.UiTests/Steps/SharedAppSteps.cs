@@ -51,7 +51,7 @@ namespace TransactionMobile.Maui.UiTests.Steps
             {
                 ["appId"] = "com.transactionprocessing.pos"
             });
-            Console.WriteLine($"State is {state}");
+            
         }
 
         public enum AppState
