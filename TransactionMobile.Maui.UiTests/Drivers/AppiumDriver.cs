@@ -80,7 +80,12 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net9.0-ios/iossimulator-arm64/");
             var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.app");
-            
+
+            var exists = File.Exists(apkPath);
+            if (!exists) {
+                throw new FileNotFoundException($"The app file was not found at {apkPath}");
+            }
+
             var caps = new AppiumOptions();
             caps.PlatformName = "iOS";
             caps.PlatformVersion = "17.4";
@@ -91,74 +96,9 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             caps.AddAdditionalAppiumOption("noReset", false);
             caps.AddAdditionalAppiumOption("useNewWDA", true);
 
-            string simctlOutput = RunProcess("xcrun", $"simctl list | grep Booted");
-            string udid = ExtractUdidFromSimctlOutput(simctlOutput, caps.DeviceName, caps.PlatformVersion); // Your own parsing logic
-
-            Console.WriteLine($"Id is {udid}");
-
-            if (!string.IsNullOrEmpty(udid))
-                caps.AddAdditionalAppiumOption("udid", udid);
-
-
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, caps, TimeSpan.FromMinutes(10));
         }
-
-        private static string RunProcess(string fileName, string arguments)
-        {
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = fileName,
-                Arguments = arguments,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-
-            using (var process = new Process { StartInfo = startInfo })
-            {
-                process.Start();
-                string output = process.StandardOutput.ReadToEnd();
-                process.WaitForExit();
-                return output;
-            }
-        }
-
-        private static string ExtractUdidFromSimctlOutput(string output, string simulatorName, string platformVersion)
-        {
-            Console.WriteLine($"output is {output}");
-
-            string platformHeader = $"-- iOS {platformVersion} --";
-            bool platformSection = false;
-
-            foreach (var line in output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                if (line.StartsWith("=="))
-                {
-                    platformSection = false;
-                }
-
-                if (line.Trim() == platformHeader)
-                {
-                    platformSection = true;
-                    continue;
-                }
-
-                if (platformSection && line.Contains(simulatorName))
-                {
-                    // Expected format: iPhone 15 (UUID-HERE) (Shutdown)
-                    var match = Regex.Match(line, @"\(([^)]+)\)");
-                    if (match.Success)
-                    {
-                        return match.Groups[1].Value;
-                    }
-                }
-            }
-
-            return null;
-        }
-
-
+        
         private static void SetupAndroidDriver(AppiumLocalService appiumService) {
             // Do Android stuff to start up
             var driverOptions = new AppiumOptions();
