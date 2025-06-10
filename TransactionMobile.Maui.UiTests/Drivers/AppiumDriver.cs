@@ -77,13 +77,30 @@ namespace TransactionMobile.Maui.UiTests.Drivers
         }
 
         private static void SetupiOSDriver(AppiumLocalService appiumService) {
-            //String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            //String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net9.0-ios/iossimulator-arm64/");
-            //var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.app");
-            var apkPath = "/Users/runner/work/TransactionMobile/TransactionMobile/TransactionMobile.Maui/bin/Release/net9.0-ios/iossimulator-arm64/TransactionMobile.Maui.app";
+            String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            // Move up 4 levels
+            string parentDirectory = assemblyFolder;
+            for (int i = 0; i < 4; i++)
+            {
+                parentDirectory = Directory.GetParent(parentDirectory)?.FullName
+                                  ?? throw new InvalidOperationException("Cannot move up further.");
+            }
+            Directory.SetCurrentDirectory(parentDirectory);
+            // Append the target path
+            string targetPath = Path.Combine(
+                parentDirectory,
+                "TransactionMobile.Maui",
+                "bin",
+                "Release",
+                "net9.0-ios",
+                "iossimulator-arm64"
+            );
+
+            var apkPath = Path.Combine(targetPath, "TransactionMobile.Maui.app");
 
             var exists = File.Exists(apkPath);
-            if (!exists) {
+            if (exists == false) {
                 throw new FileNotFoundException($"The app file was not found at {apkPath}");
             }
 
