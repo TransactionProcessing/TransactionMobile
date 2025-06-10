@@ -91,7 +91,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             caps.AddAdditionalAppiumOption("noReset", false);
             caps.AddAdditionalAppiumOption("useNewWDA", true);
 
-            string simctlOutput = RunProcess("xcrun", $"simctl list devices available");
+            string simctlOutput = RunProcess("xcrun", $"simctl list | grep Booted");
             string udid = ExtractUdidFromSimctlOutput(simctlOutput, caps.DeviceName, caps.PlatformVersion); // Your own parsing logic
 
             Console.WriteLine($"Id is {udid}");
