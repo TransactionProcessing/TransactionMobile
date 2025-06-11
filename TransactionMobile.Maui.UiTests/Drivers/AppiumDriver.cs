@@ -88,7 +88,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             caps.AddAdditionalAppiumOption("fullReset", false);
             caps.AddAdditionalAppiumOption("noReset", true);
             caps.AddAdditionalAppiumOption("useNewWDA", false);
-            var udid = Environment.GetEnvironmentVariable("SIMULATOR_UDID");
+            var udid = Environment.GetEnvironmentVariable("SIMULATOR_ID");
             caps.AddAdditionalAppiumOption("udid", udid);
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, caps, TimeSpan.FromMinutes(10));
         }
