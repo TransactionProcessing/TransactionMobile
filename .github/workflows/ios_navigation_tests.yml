@@ -54,6 +54,11 @@ jobs:
           echo "SIMULATOR_ID=$SIMULATOR_ID"
           echo "SIMULATOR_ID=$SIMULATOR_ID" >> $GITHUB_ENV          
 
+      - name: find the app
+        run: |
+            #find /Users/runner/work -name "*.app"
+            mkdir -p /Users/runner/work/mobileapp
+            cp -R /Users/runner/work/TransactionMobile/TransactionMobile/TransactionMobile.Maui/bin/Release/net9.0-ios/iossimulator-arm64/TransactionMobile.Maui.app /Users/runner/work/mobileapp/
       
       - name: Install MAUI Workloads
         run: |
