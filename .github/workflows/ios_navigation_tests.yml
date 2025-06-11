@@ -57,6 +57,8 @@ jobs:
       - name: Build and launch WebDriverAgent manually
         run: |
             echo "Using SIMULATOR_ID=$SIMULATOR_ID"
+            npm install -g appium
+            appium driver install xcuitest
 
             WDA_PATH=$(find ~/.appium -type d -name WebDriverAgent -path '*appium-webdriveragent/WebDriverAgent' | head -n 1)
             if [ -z "$WDA_PATH" ]; then
