@@ -112,7 +112,7 @@ jobs:
               -destination "id=${SIMULATOR_ID}" \
               -only-testing:WebDriverAgentRunner/WebDriverAgentRunnerUITests/testRunner \
               > wda.log 2>&1 &
-          env:
+        env:
             SIMULATOR_ID: ${{ env.SIMULATOR_ID }}
 
       - name: Wait for WDA to be ready
