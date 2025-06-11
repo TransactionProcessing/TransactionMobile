@@ -96,21 +96,18 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             //    "net9.0-ios",
             //    "iossimulator-arm64"
             //);
-            var files = Directory.GetFiles("/Users/runner/work/TransactionMobile/TransactionMobile/", "*.app", SearchOption.AllDirectories);
+            var files = Directory.GetFiles("/Users/runner/work/mobileapp", "*.app", SearchOption.AllDirectories);
             StringBuilder ab = new StringBuilder();
             foreach (String file in files) {
                 ab.AppendLine(file);
             }
 
             if (ab.Length > 0) {
-                throw new FileNotFoundException(ab.ToString());
-            }
-            else {
-                throw new FileNotFoundException("No .app files found in the directory.");
+                Console.WriteLine(ab.ToString());
             }
 
-            //var apkPath = Path.Combine(targetPath, "TransactionMobile.Maui.app");
-            var apkPath = "/Users/runner/work/TransactionMobile/TransactionMobile/TransactionMobile.Maui/bin/Release/net9.0-ios/iossimulator-arm64/TransactionMobile.Maui.app";
+            var apkPath = Path.Combine("/Users/runner/work/mobileapp", "TransactionMobile.Maui.app");
+            //var apkPath = "/Users/runner/work/TransactionMobile/TransactionMobile/TransactionMobile.Maui/bin/Release/net9.0-ios/iossimulator-arm64/TransactionMobile.Maui.app";
             var exists = File.Exists(apkPath);
             if (exists == false) {
                 throw new FileNotFoundException($"The app file was not found at {apkPath}");
