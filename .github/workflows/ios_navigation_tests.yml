@@ -76,10 +76,10 @@ jobs:
                 "capabilities": {
                   "alwaysMatch": {
                     "platformName": "iOS",
-                    "deviceName": "ThisIsFake",
-                    "platformVersion": "99.9",
-                    "automationName": "XCUITest",
-                    "app": "dummy"
+                    "appium:deviceName": "Fake",
+                    "appium:platformVersion": "99.9",
+                    "appium:automationName": "XCUITest",
+                    "appium:app": "dummy"
                   }
                 }
               }' || echo "Expected failure — WDA should still be initialized"
