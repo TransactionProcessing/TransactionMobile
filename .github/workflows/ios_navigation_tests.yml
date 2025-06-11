@@ -69,21 +69,21 @@ jobs:
             mkdir -p /Users/runner/work/mobileapp
             cp -R /Users/runner/work/TransactionMobile/TransactionMobile/TransactionMobile.Maui/bin/Release/net9.0-ios/iossimulator-arm64/TransactionMobile.Maui.app /Users/runner/work/mobileapp/
 
-      - name: run the app
-        run: |
-            xcrun simctl install booted /Users/runner/work/mobileapp/TransactionMobile.Maui.app
-            xcrun simctl launch booted com.transactionprocessing.pos
+      #- name: run the app
+      #  run: |
+      #      xcrun simctl install booted /Users/runner/work/mobileapp/TransactionMobile.Maui.app
+      #      xcrun simctl launch booted com.transactionprocessing.pos
       
 
 
-      #- name: Run iOS Navigation Tests
-      #  run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)" --no-restore
+      - name: Run iOS Navigation Tests
+        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)" --no-restore
 
-      #- name: Upload Appium Logs on Failure      
-      #  if: failure()
-      #  uses: actions/upload-artifact@v4
-      #  with:
-      #      name: ios-software_navigation_tests_appium
-      #      path: appium.log
+      - name: Upload Appium Logs on Failure      
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+            name: ios-software_navigation_tests_appium
+            path: appium.log
 
   
