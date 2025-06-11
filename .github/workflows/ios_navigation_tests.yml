@@ -54,89 +54,17 @@ jobs:
           echo "SIMULATOR_ID=$SIMULATOR_ID"
           echo "SIMULATOR_ID=$SIMULATOR_ID" >> $GITHUB_ENV          
 
-      - name: Prime Appium to install WebDriverAgent
+      
+      - name: Install MAUI Workloads
         run: |
-            #echo "🔧 Starting Appium server in background..."
-            #appium --session-override --port 4723 > appium.log 2>&1 &
+          dotnet workload install ios --ignore-failed-sources
+          dotnet workload install maui --ignore-failed-sources
 
-            #echo "⏳ Waiting for Appium to start..."
-            #for i in {1..10}; do
-            #  if nc -z localhost 4723; then
-            #    echo "✅ Appium server is up."
-            #    break
-            #  fi
-            #  echo "Waiting..."
-            #  sleep 2
-            #done
+      - name: Restore MAUI App for iOS
+        run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
-            echo "📡 Sending dummy iOS session request to trigger WDA setup..."
-            curl -X POST http://localhost:4723/session \
-              -H "Content-Type: application/json" \
-              -d '{
-                "capabilities": {
-                  "alwaysMatch": {
-                    "platformName": "iOS",
-                    "appium:deviceName": "Fake",
-                    "appium:platformVersion": "99.9",
-                    "appium:automationName": "XCUITest",
-                    "appium:app": "dummy"
-                  }
-                }
-              }' || echo "Expected failure — WDA should still be initialized"
-
-            echo "🔍 Checking for WebDriverAgent..."
-
-      - name: Build and launch WebDriverAgent manually
-        run: |
-            WDA_PROJECT_PATH=$(find ~/.appium -name WebDriverAgent.xcodeproj -print | grep 'appium-webdriveragent' | head -n 1)
-
-            if [ -z "$WDA_PROJECT_PATH" ]; then
-              echo "❌ WebDriverAgent.xcodeproj not found"
-              exit 1
-            fi
-
-            echo "✅ Found WDA project at: $WDA_PROJECT_PATH"
-
-            rm -rf ~/Library/Developer/Xcode/DerivedData/*
-
-            echo "📦 Building WDA..."
-            xcodebuild build-for-testing \
-              -project "$WDA_PROJECT_PATH" \
-              -scheme WebDriverAgentRunner \
-              -destination "id=${SIMULATOR_ID}"
-
-            echo "🚀 Launching WDA..."
-            xcodebuild test-without-building \
-              -project "$WDA_PROJECT_PATH" \
-              -scheme WebDriverAgentRunner \
-              -destination "id=${SIMULATOR_ID}" \
-              -only-testing:WebDriverAgentRunner/WebDriverAgentRunnerUITests/testRunner \
-              #> wda.log 2>&1 &
-        env:
-            SIMULATOR_ID: ${{ env.SIMULATOR_ID }}
-
-      - name: Wait for WDA to be ready
-        run: |
-            for i in {1..15}; do
-              if curl -s http://127.0.0.1:8100/status | grep -q "status"; then
-                echo "✅ WDA is up."
-                break
-              fi
-              echo "Waiting for WDA..."
-              sleep 4
-            done
-
-
-      #- name: Install MAUI Workloads
-      #  run: |
-      #    dotnet workload install ios --ignore-failed-sources
-      #    dotnet workload install maui --ignore-failed-sources
-
-      #- name: Restore MAUI App for iOS
-      #  run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
-
-      #- name: Build Code
-      #  run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net9.0-ios -c Release --no-restore
+      - name: Build Code
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net9.0-ios -c Release --no-restore
 
       #- name: find the app
       #  run: |
@@ -151,14 +79,14 @@ jobs:
       
 
 
-      #- name: Run iOS Navigation Tests
-      #  run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)" --no-restore
+      - name: Run iOS Navigation Tests
+        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)" --no-restore
 
-      #- name: Upload Appium Logs on Failure      
-      #  if: failure()
-      #  uses: actions/upload-artifact@v4
-      #  with:
-      #      name: ios-software_navigation_tests_appium
-      #      path: appium.log
+      - name: Upload Appium Logs on Failure      
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+           name: ios-software_navigation_tests_appium
+           path: appium.log
 
   

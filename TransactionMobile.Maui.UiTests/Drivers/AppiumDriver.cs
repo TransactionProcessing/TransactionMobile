@@ -85,9 +85,13 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             caps.DeviceName = "iPhone 15";
             caps.AutomationName = "XCUITest";
             caps.App = apkPath;
-            caps.AddAdditionalAppiumOption("fullReset", false);
-            caps.AddAdditionalAppiumOption("noReset", true);
-            caps.AddAdditionalAppiumOption("useNewWDA", false);
+            //caps.AddAdditionalAppiumOption("fullReset", false);
+            //caps.AddAdditionalAppiumOption("noReset", true);
+            //caps.AddAdditionalAppiumOption("useNewWDA", false);
+            caps.AddAdditionalAppiumOption("useNewWDA", true);
+            caps.AddAdditionalAppiumOption("showXcodeLog", true);
+            caps.AddAdditionalAppiumOption("wdaStartupRetries", 3);
+            caps.AddAdditionalAppiumOption("wdaStartupRetryInterval", 10000);
             var udid = Environment.GetEnvironmentVariable("SIMULATOR_ID");
             caps.AddAdditionalAppiumOption("udid", udid);
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, caps, TimeSpan.FromMinutes(10));
