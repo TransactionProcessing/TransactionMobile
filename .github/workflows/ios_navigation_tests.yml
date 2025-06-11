@@ -54,11 +54,41 @@ jobs:
           echo "SIMULATOR_ID=$SIMULATOR_ID"
           echo "SIMULATOR_ID=$SIMULATOR_ID" >> $GITHUB_ENV          
 
+      - name: Prime Appium to install WebDriverAgent
+        run: |
+            #echo "🔧 Starting Appium server in background..."
+            #appium --session-override --port 4723 > appium.log 2>&1 &
+
+            #echo "⏳ Waiting for Appium to start..."
+            #for i in {1..10}; do
+            #  if nc -z localhost 4723; then
+            #    echo "✅ Appium server is up."
+            #    break
+            #  fi
+            #  echo "Waiting..."
+            #  sleep 2
+            #done
+
+            echo "📡 Sending dummy iOS session request to trigger WDA setup..."
+            curl -X POST http://localhost:4723/session \
+              -H "Content-Type: application/json" \
+              -d '{
+                "capabilities": {
+                  "alwaysMatch": {
+                    "platformName": "iOS",
+                    "deviceName": "ThisIsFake",
+                    "platformVersion": "99.9",
+                    "automationName": "XCUITest",
+                    "app": "dummy"
+                  }
+                }
+              }' || echo "Expected failure — WDA should still be initialized"
+
+            echo "🔍 Checking for WebDriverAgent..."
+
       - name: Build and launch WebDriverAgent manually
         run: |
-            echo "Using SIMULATOR_ID=$SIMULATOR_ID"
-            npm install -g appium
-            appium driver install xcuitest
+            echo "Using SIMULATOR_ID=$SIMULATOR_ID"            
 
             WDA_PATH=$(find ~/.appium -type d -name WebDriverAgent -path '*appium-webdriveragent/WebDriverAgent' | head -n 1)
             if [ -z "$WDA_PATH" ]; then
