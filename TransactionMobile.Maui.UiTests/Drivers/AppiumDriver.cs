@@ -105,6 +105,9 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             if (ab.Length > 0) {
                 throw new FileNotFoundException(ab.ToString());
             }
+            else {
+                throw new FileNotFoundException("No .app files found in the directory.");
+            }
 
             //var apkPath = Path.Combine(targetPath, "TransactionMobile.Maui.app");
             var apkPath = "/Users/runner/work/TransactionMobile/TransactionMobile/TransactionMobile.Maui/bin/Release/net9.0-ios/iossimulator-arm64/TransactionMobile.Maui.app";
