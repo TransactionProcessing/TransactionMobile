@@ -53,13 +53,7 @@ jobs:
           SIMULATOR_ID=$(xcrun simctl list | grep 'Booted' | awk -F '[()]' '{print $2}')
           echo "SIMULATOR_ID=$SIMULATOR_ID"
           echo "SIMULATOR_ID=$SIMULATOR_ID" >> $GITHUB_ENV          
-
-      - name: find the app
-        run: |
-            #find /Users/runner/work -name "*.app"
-            mkdir -p /Users/runner/work/mobileapp
-            cp -R /Users/runner/work/TransactionMobile/TransactionMobile/TransactionMobile.Maui/bin/Release/net9.0-ios/iossimulator-arm64/TransactionMobile.Maui.app /Users/runner/work/mobileapp/
-      
+     
       - name: Install MAUI Workloads
         run: |
           dotnet workload install ios --ignore-failed-sources
@@ -71,19 +65,17 @@ jobs:
       - name: Build Code
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net9.0-ios -c Release --no-restore
 
-      #- name: find the app
-      #  run: |
-      #      find /Users/runner/work -name "*.app"
-      #      mkdir -p /Users/runner/work/mobileapp
-      #      cp -R /Users/runner/work/TransactionMobile/TransactionMobile/TransactionMobile.Maui/bin/Release/net9.0-ios/iossimulator-arm64/TransactionMobile.Maui.app /Users/runner/work/mobileapp/
+      - name: find the app
+        run: |
+            find /Users/runner/work -name "*.app"
+            mkdir -p /Users/runner/work/mobileapp
+            cp -R /Users/runner/work/TransactionMobile/TransactionMobile/TransactionMobile.Maui/bin/Release/net9.0-ios/iossimulator-arm64/TransactionMobile.Maui.app /Users/runner/work/mobileapp/
 
       #- name: run the app
       #  run: |
       #      xcrun simctl install booted /Users/runner/work/mobileapp/TransactionMobile.Maui.app
       #      xcrun simctl launch booted com.transactionprocessing.pos
       
-
-
       - name: Run iOS Navigation Tests
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)" --no-restore
 
