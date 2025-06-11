@@ -50,7 +50,7 @@ jobs:
       - name: 🚀 Boot simulator
         run: |
           xcrun simctl boot "$SIMULATOR_NAME"
-          #xcrun simctl list | grep Booted
+          xcrun simctl list | grep Booted
           SIMULATOR_ID=$(xcrun simctl list devices | grep -E "^$SIMULATOR_NAME " | grep "Booted" | awk -F '[()]' '{print $2}' | head -n1)
 
           echo "Booted Simulator UDID: $SIMULATOR_ID"
