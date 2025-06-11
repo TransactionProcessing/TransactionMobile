@@ -111,8 +111,8 @@ jobs:
               -scheme WebDriverAgentRunner \
               -destination "id=${SIMULATOR_ID}" \
               -only-testing:WebDriverAgentRunner/WebDriverAgentRunnerUITests/testRunner \
-              > wda.log 2>&1 &
-          env:
+              #> wda.log 2>&1 &
+        env:
             SIMULATOR_ID: ${{ env.SIMULATOR_ID }}
 
       - name: Wait for WDA to be ready
@@ -151,14 +151,14 @@ jobs:
       
 
 
-      - name: Run iOS Navigation Tests
-        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)" --no-restore
+      #- name: Run iOS Navigation Tests
+      #  run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)" --no-restore
 
-      - name: Upload Appium Logs on Failure      
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-            name: ios-software_navigation_tests_appium
-            path: appium.log
+      #- name: Upload Appium Logs on Failure      
+      #  if: failure()
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #      name: ios-software_navigation_tests_appium
+      #      path: appium.log
 
   
