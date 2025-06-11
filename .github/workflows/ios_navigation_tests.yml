@@ -64,11 +64,15 @@ jobs:
         run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net9.0-ios -c Release --no-restore
 
       - name: find the app
-        run: find /Users/runner/work -name "*.app"
+        run: |
+            find /Users/runner/work -name "*.app"
+            mkdir -p /Users/runner/work/mobileapp
+            cp -R /Users/runner/work/TransactionMobile/TransactionMobile/TransactionMobile.Maui/bin/Release/net9.0-ios/iossimulator-arm64/TransactionMobile.Maui.app /Users/runner/work/mobileapp/
 
-      - name: Copy App to folder
-        run: mkdir -p /Users/runner/work/mobileapp && cp -R /Users/runner/work/TransactionMobile/TransactionMobile/TransactionMobile.Maui/bin/Release/net9.0-ios/iossimulator-arm64/TransactionMobile.Maui.app /Users/runner/work/mobileapp/
-
+      - name: find the app 2
+        run: |
+            find /Users/runner/work -name "*.app"
+      
       - name: Run iOS Navigation Tests
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)" --no-restore
 
