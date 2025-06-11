@@ -77,17 +77,20 @@ namespace TransactionMobile.Maui.UiTests.Drivers
         }
 
         private static void SetupiOSDriver(AppiumLocalService appiumService) {
-            var apkPath = Path.Combine("/Users/runner/work/mobileapp", "TransactionMobile.Maui.app");
-            
+            var appPath = Path.Combine("/Users/runner/work/mobileapp", "TransactionMobile.Maui.app");
+
+            Console.WriteLine($"Using app path: {appPath}");
+            if (!Directory.Exists(appPath))
+            {
+                throw new Exception($"App path does not exist: {appPath}");
+            }
+
             var caps = new AppiumOptions();
             caps.PlatformName = "iOS";
             caps.PlatformVersion = "17.4";
             caps.DeviceName = "iPhone 15";
             caps.AutomationName = "XCUITest";
-            caps.App = apkPath;
-            //caps.AddAdditionalAppiumOption("fullReset", false);
-            //caps.AddAdditionalAppiumOption("noReset", true);
-            //caps.AddAdditionalAppiumOption("useNewWDA", false);
+            caps.App = appPath;
             caps.AddAdditionalAppiumOption("useNewWDA", true);
             caps.AddAdditionalAppiumOption("showXcodeLog", true);
             caps.AddAdditionalAppiumOption("wdaStartupRetries", 3);
