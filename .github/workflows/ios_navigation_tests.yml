@@ -90,11 +90,16 @@ jobs:
         run: |
             echo "Using SIMULATOR_ID=$SIMULATOR_ID"            
 
-            WDA_PATH=$(find ~/.appium -type d -name WebDriverAgent -path '*appium-webdriveragent/WebDriverAgent' | head -n 1)
+            WDA_PATH=$(find ~/.appium -type d -name WebDriverAgent -print | grep 'appium-webdriveragent' | head -n 1)
+
             if [ -z "$WDA_PATH" ]; then
-              echo "❌ WebDriverAgent not found under ~/.appium"
+              echo "❌ WebDriverAgent still not found"
+              find ~/.appium -type d -print | grep -i webdriver
               exit 1
             fi
+
+            echo "✅ Found WDA at: $WDA_PATH"
+            echo "WDA_PATH=$WDA_PATH" >> $GITHUB_ENV
 
             rm -rf ~/Library/Developer/Xcode/DerivedData/*
 
