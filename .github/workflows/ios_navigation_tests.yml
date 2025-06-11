@@ -88,36 +88,32 @@ jobs:
 
       - name: Build and launch WebDriverAgent manually
         run: |
-            echo "Using SIMULATOR_ID=$SIMULATOR_ID"            
+            WDA_PROJECT_PATH=$(find ~/.appium -name WebDriverAgent.xcodeproj -print | grep 'appium-webdriveragent' | head -n 1)
 
-            WDA_PATH=$(find ~/.appium -type d -name WebDriverAgent -print | grep 'appium-webdriveragent' | head -n 1)
-
-            if [ -z "$WDA_PATH" ]; then
-              echo "❌ WebDriverAgent still not found"
-              find ~/.appium -type d -print | grep -i webdriver
+            if [ -z "$WDA_PROJECT_PATH" ]; then
+              echo "❌ WebDriverAgent.xcodeproj not found"
               exit 1
             fi
 
-            echo "✅ Found WDA at: $WDA_PATH"
-            echo "WDA_PATH=$WDA_PATH" >> $GITHUB_ENV
+            echo "✅ Found WDA project at: $WDA_PROJECT_PATH"
 
             rm -rf ~/Library/Developer/Xcode/DerivedData/*
 
-            echo "📦 Building WDA for testing..."
+            echo "📦 Building WDA..."
             xcodebuild build-for-testing \
-              -project "$WDA_PATH/WebDriverAgent.xcodeproj" \
+              -project "$WDA_PROJECT_PATH" \
               -scheme WebDriverAgentRunner \
               -destination "id=${SIMULATOR_ID}"
 
-            echo "🚀 Launching WDA in background..."
+            echo "🚀 Launching WDA..."
             xcodebuild test-without-building \
-              -project "$WDA_PATH/WebDriverAgent.xcodeproj" \
+              -project "$WDA_PROJECT_PATH" \
               -scheme WebDriverAgentRunner \
               -destination "id=${SIMULATOR_ID}" \
               -only-testing:WebDriverAgentRunner/WebDriverAgentRunnerUITests/testRunner \
               > wda.log 2>&1 &
-        env:
-          SIMULATOR_ID: ${{ env.SIMULATOR_ID }}
+          env:
+            SIMULATOR_ID: ${{ env.SIMULATOR_ID }}
 
       - name: Wait for WDA to be ready
         run: |
