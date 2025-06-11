@@ -80,10 +80,13 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             var appPath = Path.Combine("/Users/runner/work/mobileapp", "TransactionMobile.Maui.app");
 
             Console.WriteLine($"Using app path: {appPath}");
-            if (!Directory.Exists(appPath))
-            {
-                throw new Exception($"App path does not exist: {appPath}");
-            }
+            var x = Directory.GetFiles(appPath);
+            //if (!Directory.Exists(appPath))
+            //{
+                
+
+            //    throw new Exception($"App path does not exist: {appPath}");
+            //}
 
             var caps = new AppiumOptions();
             caps.PlatformName = "iOS";
