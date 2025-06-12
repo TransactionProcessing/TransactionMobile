@@ -110,7 +110,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
                     //AppiumDriverWrapper.Driver = new IOSDriver(appiumService, caps, TimeSpan.FromMinutes(5));
                     var serverUri = new Uri("http://127.0.0.1:4723/");
                     AppiumDriverWrapper.Driver = new IOSDriver(serverUri, caps, TimeSpan.FromMinutes(10));
-
+                    Console.WriteLine($"Driver laucnhed");
                     break;
                 }
                 catch (Exception ex)
