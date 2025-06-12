@@ -14,7 +14,7 @@
 	</PropertyGroup>-->
 
 	<PropertyGroup>
-	  <TargetFrameworks>net8.0;</TargetFrameworks>
+	  <TargetFrameworks>net9.0;</TargetFrameworks>
 	  <DebugType>None</DebugType>
   </PropertyGroup>
 
