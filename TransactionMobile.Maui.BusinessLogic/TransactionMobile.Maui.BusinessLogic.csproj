@@ -85,10 +85,10 @@
 	</ItemGroup>
 
 
-	<ItemGroup Condition="'$(TargetFramework)' != 'net9.0'">
+	<!--<ItemGroup Condition="'$(TargetFramework)' != 'net9.0'">
 		<PackageReference Update="Microsoft.Maui.Controls" Version="8.0.14" />
 		<PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.14" />
-	</ItemGroup>
+	</ItemGroup>-->
 
 
 	<ItemGroup>
