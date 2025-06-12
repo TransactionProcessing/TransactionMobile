@@ -14,6 +14,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
 {
     using Microsoft.Testing.Platform.Capabilities;
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Appium.iOS;
     using OpenQA.Selenium.Appium.Service.Options;
     using OpenQA.Selenium.Appium.Windows;
     using System.Collections.ObjectModel;
@@ -90,7 +91,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
 
             var caps = new AppiumOptions();
             caps.PlatformName = "iOS";
-            caps.PlatformVersion = "17.4";
+            caps.PlatformVersion = "17.2";
             caps.DeviceName = "iPhone 15";
             caps.AutomationName = "XCUITest";
             caps.App = appPath;
@@ -100,7 +101,21 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             caps.AddAdditionalAppiumOption("wdaStartupRetryInterval", 10000);
             var udid = Environment.GetEnvironmentVariable("SIMULATOR_ID");
             caps.AddAdditionalAppiumOption("udid", udid);
-            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, caps, TimeSpan.FromMinutes(10));
+            //AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, caps, TimeSpan.FromMinutes(10));
+            for (int attempt = 0; attempt < 3; attempt++)
+            {
+                try
+                {
+                    AppiumDriverWrapper.Driver = new IOSDriver(appiumService, caps, TimeSpan.FromMinutes(5));
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Driver init failed (attempt {attempt + 1}): {ex.Message}");
+                    Thread.Sleep(TimeSpan.FromSeconds(10));
+                    if (attempt == 2) throw;
+                }
+            }
         }
         
         private static void SetupAndroidDriver(AppiumLocalService appiumService) {
