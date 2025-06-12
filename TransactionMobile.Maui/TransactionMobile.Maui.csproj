@@ -294,4 +294,9 @@
     <Optimize>False</Optimize>
   </PropertyGroup>
 
+	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows10.0.19041.0'">
+		<None Remove="**\WindowRootViewStyle.xbf" />
+		<Content Remove="**\WindowRootViewStyle.xbf" />
+	</ItemGroup>
+
 </Project>
