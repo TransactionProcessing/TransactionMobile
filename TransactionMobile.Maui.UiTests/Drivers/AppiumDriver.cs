@@ -95,6 +95,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             caps.DeviceName = "iPhone 15";
             caps.AutomationName = "XCUITest";
             caps.App = appPath;
+            caps.AddAdditionalAppiumOption("bundleId", "com.transactionprocessing.pos");
             caps.AddAdditionalAppiumOption("useNewWDA", true);
             caps.AddAdditionalAppiumOption("showXcodeLog", true);
             caps.AddAdditionalAppiumOption("wdaStartupRetries", 3);
