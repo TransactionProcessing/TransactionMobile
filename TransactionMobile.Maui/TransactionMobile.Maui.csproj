@@ -294,4 +294,9 @@
     <Optimize>False</Optimize>
   </PropertyGroup>
 
+  <ItemGroup>
+	<Content Remove="**\WindowRootViewStyle.xbf" />
+	<None Remove="**\WindowRootViewStyle.xbf" />
+  </ItemGroup>
+
 </Project>

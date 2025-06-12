@@ -71,6 +71,11 @@ jobs:
             mkdir -p /Users/runner/work/mobileapp
             cp -R /Users/runner/work/TransactionMobile/TransactionMobile/TransactionMobile.Maui/bin/Release/net9.0-ios/iossimulator-arm64/TransactionMobile.Maui.app /Users/runner/work/mobileapp/
 
+      - name: verify the app
+        run: |
+            codesign -dvvv /Users/runner/work/mobileapp/TransactionMobile.Maui.app || echo "Not signed"
+            plutil -p /Users/runner/work/mobileapp/TransactionMobile.Maui.app/Info.plist | grep CFBundleIdentifier
+
       #- name: run the app
       #  run: |
       #      xcrun simctl install booted /Users/runner/work/mobileapp/TransactionMobile.Maui.app
