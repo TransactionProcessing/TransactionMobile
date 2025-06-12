@@ -15,7 +15,7 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
 
       - name: Set up JDK
         uses: actions/setup-java@v3
@@ -48,7 +48,7 @@ jobs:
           # Accept licenses and install required components
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
           # Install Android API level 34 and necessary system images
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-34" "system-images;android-34;google_apis;x86_64"
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-35" "system-images;android-35;google_apis;x86_64"
 
           # Export paths for future steps
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
@@ -63,7 +63,7 @@ jobs:
 
       - name: Create Android Emulator (x86)
         run: |
-          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-34;google_apis;x86_64" --device "pixel_4"
+          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-35;google_apis;x86_64" --device "pixel_4"
 
       - name: List AVDs
         run: avdmanager list avd
@@ -124,7 +124,7 @@ jobs:
       - name: Install Android Build Tools
         run: |
           echo "Installing Android Build Tools..."
-          sdkmanager "build-tools;34.0.0"  # Updated to use Android 34 build tools
+          sdkmanager "build-tools;35.0.0"  # Updated to use Android 34 build tools
           sdkmanager --update
 
       - name: Install MAUI workloads
@@ -144,7 +144,7 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net8.0-android -c Release --no-restore
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net9.0-android -c Release --no-restore
 
       - name: Run Android Navigation Tests
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=Android)" --no-restore
@@ -165,7 +165,7 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
 
       - name: Set up JDK
         uses: actions/setup-java@v3
@@ -198,7 +198,7 @@ jobs:
           # Accept licenses and install required components
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
           # Install Android API level 34 and necessary system images
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-34" "system-images;android-34;google_apis;x86_64"
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-35" "system-images;android-35;google_apis;x86_64"
 
           # Export paths for future steps
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
@@ -209,11 +209,11 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.android/avd
-          key: android-emulator-x86-${{ runner.os }}-android-34
+          key: android-emulator-x86-${{ runner.os }}-android-35
 
       - name: Create Android Emulator (x86)
         run: |
-          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-34;google_apis;x86_64" --device "pixel_4"
+          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-35;google_apis;x86_64" --device "pixel_4"
 
       - name: List AVDs
         run: avdmanager list avd
@@ -274,7 +274,7 @@ jobs:
       - name: Install Android Build Tools
         run: |
           echo "Installing Android Build Tools..."
-          sdkmanager "build-tools;34.0.0"  # Updated to use Android 34 build tools
+          sdkmanager "build-tools;35.0.0"  # Updated to use Android 34 build tools
           sdkmanager --update
 
       - name: Install MAUI workloads
@@ -294,7 +294,7 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net8.0-android -c Release --no-restore
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net9.0-android -c Release --no-restore
 
       - name: Run Android Navigation Tests
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRHWNavTest)&(Category=Android)" --no-restore
