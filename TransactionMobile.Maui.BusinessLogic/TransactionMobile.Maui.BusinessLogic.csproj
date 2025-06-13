@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+	<!--<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
 		<TargetFrameworks>net9.0;net9.0-android</TargetFrameworks>
 	</PropertyGroup>
 
@@ -8,27 +8,26 @@
 		<TargetFrameworks>net9.0;net9.0-android;net9.0-windows10.0.19041.0</TargetFrameworks>
 	</PropertyGroup>
 
-	<!-- macOS-only: Android + iOS + MacCatalyst -->
+	--><!-- macOS-only: Android + iOS + MacCatalyst --><!--
 	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
 		<TargetFrameworks>net9.0;net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-maccatalyst'">
 		<RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers>
-	</PropertyGroup>
+	</PropertyGroup>-->
 	
 	<PropertyGroup>
-		<!--<UseMaui>true</UseMaui>
-		<SingleProject>true</SingleProject>-->
-		<DebugType>Full</DebugType>
+		<TargetFramework>net9.0</TargetFramework>
+			<DebugType>Full</DebugType>
 		<ImplicitUsings>enable</ImplicitUsings>
 
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">12.2</SupportedOSPlatformVersion>
+		<!--<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">12.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>-->
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$(TargetFramework) == 'net9.0'">
@@ -56,10 +55,14 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.70" />
 	</ItemGroup>
 
-	<PropertyGroup Condition="$(TargetFramework.Contains('-windows'))">
+	<ItemGroup Condition="!$([MSBuild]::IsOSPlatform('OSX'))">
+		<PackageReference Include="Microsoft.AppCenter" Version="5.0.7" />
+		<PackageReference Include="Microsoft.AppCenter.Distribute" Version="5.0.7" />
+	</ItemGroup>
+	<!--<PropertyGroup Condition="$(TargetFramework.Contains('-windows'))">
 		<RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
 	</PropertyGroup>
-
+	
 	<ItemGroup Condition="'$(TargetFramework)' != 'net9.0-ios'">
 		<PackageReference Include="Microsoft.AppCenter" Version="5.0.7" />
 		<PackageReference Include="Microsoft.AppCenter.Distribute" Version="5.0.7" />
@@ -91,10 +94,8 @@
 
 	<Target Name="RemoveDuplicatePdbs" AfterTargets="ResolvePublishFiles">
 		<ItemGroup>
-			<ResolvedFileToPublish Remove="@(ResolvedFileToPublish)"
-			                       Condition="'%(ResolvedFileToPublish.RelativePath)' == 'TransactionMobile.Maui.BusinessLogic.pdb'
-      and '%(ResolvedFileToPublish.TargetPath)' == 'TransactionMobile.Maui.BusinessLogic.pdb'" />
+			<ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.RelativePath)' == 'TransactionMobile.Maui.BusinessLogic.pdb'&#xD;&#xA;      and '%(ResolvedFileToPublish.TargetPath)' == 'TransactionMobile.Maui.BusinessLogic.pdb'" />
 		</ItemGroup>
-	</Target>
+	</Target>-->
 
 </Project>

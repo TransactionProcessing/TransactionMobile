@@ -69,6 +69,10 @@
 		<PackageReference Include="Microsoft.AppCenter.Distribute" Version="5.0.7" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="..\TransactionMobile.Maui.BusinessLogic\TransactionMobile.Maui.BusinessLogic.csproj"/>
+	</ItemGroup>
+
   <ItemGroup>
     <Compile Update="Pages\Developer\DeveloperPage.xaml.cs">
       <DependentUpon>DeveloperPage.xaml</DependentUpon>
@@ -260,16 +264,12 @@
     <Folder Include="Models\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\TransactionMobile.Maui.BusinessLogic\TransactionMobile.Maui.BusinessLogic.csproj" />
-  </ItemGroup>
-
   <PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
 	  <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers>
   </PropertyGroup>
 
 	<PropertyGroup Condition="$(TargetFramework.Contains('-windows'))">
-		<RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+		<RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
 	</PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android|AnyCPU'">
