@@ -59,6 +59,21 @@ jobs:
          Import-Module Appx 
          .\TransactionMobile.Maui/bin/Release/net9.0-windows10.0.19041.0/win-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1 -Force
 
+      - name: Get installed AppId
+        id: get_appid
+        run: |
+           $pkg = Get-AppxPackage -Name TransactionMobile
+           $appId = "$($pkg.PackageFamilyName)!App"
+           Write-Output "AppId=$appId"
+           echo "APPID=$appId" >> $env:GITHUB_ENV
+        shell: powershell
+
+      - name: Use AppId in Appium/WinAppDriver step
+        run: |
+            echo "AppId is $env:APPID"
+            # You can now pass $env:APPID to test scripts or config
+        shell: powershell
+
       - name: Run Windows Navigation Tests
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=Windows)" --no-restore
 
