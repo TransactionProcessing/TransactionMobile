@@ -3,7 +3,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Logging;
 using Maui.UIServices;
-#if !IOS
+#if !__MACOS__
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Distribute;
 #endif
@@ -38,7 +38,7 @@ public class HomePageViewModel : ExtendedBaseViewModel
 
     #region Methods
 
-#if !IOS
+#if !__MACOS__
     public async Task Initialise(CancellationToken cancellationToken) {
         Configuration configuration = this.ApplicationCache.GetConfiguration();
 
@@ -69,7 +69,7 @@ public class HomePageViewModel : ExtendedBaseViewModel
     }
 
 
-#if !IOS
+#if !__MACOS__
     private Boolean OnReleaseAvailable(ReleaseDetails releaseDetails) {
         Logger.LogInformation("In OnReleaseAvailable");
         // Look at releaseDetails public properties to get version information, release notes text or release notes URL
