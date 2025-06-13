@@ -25,7 +25,7 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
      
       - name: Install MAUI workloads
         run: |
@@ -44,7 +44,7 @@ jobs:
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net8.0-android -c Release --no-restore
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net9.0-android -c Release --no-restore
 
       - name: Decrypt PFX File
         run: |
@@ -56,7 +56,7 @@ jobs:
 
       - name: Publish App
         run: |
-         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
+         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net9.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
       
       - name: Install App
         shell: powershell

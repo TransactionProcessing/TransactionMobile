@@ -1,7 +1,7 @@
 ﻿namespace TransactionMobile.Maui.BusinessLogic.Models;
 
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Maui.Graphics;
+//using Microsoft.Maui.Graphics;
 
 [ExcludeFromCodeCoverage]
 public class LogMessageModel
@@ -18,19 +18,19 @@ public class LogMessageModel
 
     public String Message { get; set; }
 
-    public Color TextColor {
-        get {
-            return this.LogLevel switch {
-                LogLevel.Debug => Colors.Gray,
-                LogLevel.Trace => Colors.Gray,
-                LogLevel.Info => Colors.Blue,
-                LogLevel.Warn => Colors.Orange,
-                LogLevel.Error => Colors.Red,
-                LogLevel.Fatal => Colors.Red,
-                _ => Colors.Gray
-            };
-        }
-    }
+    //public Color TextColor {
+    //    get {
+    //        return this.LogLevel switch {
+    //            LogLevel.Debug => Colors.Gray,
+    //            LogLevel.Trace => Colors.Gray,
+    //            LogLevel.Info => Colors.Blue,
+    //            LogLevel.Warn => Colors.Orange,
+    //            LogLevel.Error => Colors.Red,
+    //            LogLevel.Fatal => Colors.Red,
+    //            _ => Colors.Gray
+    //        };
+    //    }
+    //}
 
     #endregion
 }
