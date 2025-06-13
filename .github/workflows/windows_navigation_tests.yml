@@ -51,7 +51,7 @@ jobs:
 
       - name: Publish App
         run: |
-         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net9.0-windows10.0.19041.0 -r win-x64 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
+         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net9.0-windows10.0.19041.0 -r win-x64 -p:UseMonoRuntime=false /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
       
       - name: Install App
         shell: powershell
