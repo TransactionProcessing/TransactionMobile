@@ -1,4 +1,10 @@
-﻿namespace TransactionMobile.Maui.UIServices;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Maui.Controls;
+
+namespace TransactionMobile.Maui.UIServices;
 
 using BusinessLogic.Logging;
 using BusinessLogic.ViewModels;

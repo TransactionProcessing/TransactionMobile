@@ -1,6 +1,8 @@
-﻿using Android.App;
+﻿using System;
+using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using Microsoft.Maui;
 
 namespace TransactionMobile.Maui;
 

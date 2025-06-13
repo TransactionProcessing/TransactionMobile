@@ -20,7 +20,7 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
      
       - name: Install MAUI workloads
         run: |
@@ -35,11 +35,11 @@ jobs:
         run: |
           nohup appium --log appium.log &
 
-      - name: Restore MAUI App for Android
+      - name: Restore MAUI App for Windows
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
-        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net8.0-android -c Release --no-restore
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  -f net9.0-windows10.0.19041.0 -c Release --no-restore -r win-x64
 
       - name: Decrypt PFX File
         run: |
@@ -51,13 +51,28 @@ jobs:
 
       - name: Publish App
         run: |
-         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net8.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
+         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net9.0-windows10.0.19041.0 -r win-x64 /p:UseMonoRuntime=false /p:WindowsAppSDKSelfContained=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
       
       - name: Install App
         shell: powershell
         run: |         
          Import-Module Appx 
-         .\TransactionMobile.Maui/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1 -Force
+         .\TransactionMobile.Maui/bin/Release/net9.0-windows10.0.19041.0/win-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1 -Force
+
+      - name: Get installed AppId
+        id: get_appid
+        run: |
+           $pkg = Get-AppxPackage -Name TransactionMobile
+           $appId = "$($pkg.PackageFamilyName)!App"
+           Write-Output "AppId=$appId"
+           echo "APPID=$appId" >> $env:GITHUB_ENV
+        shell: powershell
+
+      - name: Use AppId in Appium/WinAppDriver step
+        run: |
+            echo "AppId is $env:APPID"
+            # You can now pass $env:APPID to test scripts or config
+        shell: powershell
 
       - name: Run Windows Navigation Tests
         run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=Windows)" --no-restore

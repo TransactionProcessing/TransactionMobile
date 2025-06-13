@@ -8,7 +8,8 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:reports="clr-namespace:TransactionMobile.Maui.BusinessLogic.ViewModels.Reports;assembly=TransactionMobile.Maui.BusinessLogic"
              xmlns:common="clr-namespace:TransactionMobile.Maui.BusinessLogic.Common;assembly=TransactionMobile.Maui.BusinessLogic"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             x:Name="SalesAnalysisPage">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -71,7 +72,7 @@
         <VerticalStackLayout Style="{DynamicResource Layout}">
             <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
             
-            <Picker x:Name="ComparisonDate" Title="Select Date for Comparison" 
+            <!--<Picker x:Name="ComparisonDate" Title="Select Date for Comparison" 
                     ItemDisplayBinding="{Binding DisplayText}" 
                     ItemsSource="{Binding ComparisonDates}"
                     SelectedItem="{Binding SelectedItem}">
@@ -82,6 +83,19 @@
                         EventArgsConverter="{StaticResource SelectedItemEventArgsConverter}"
                         CommandParameter="{ Binding SelectedItem}"
                         />
+                </Picker.Behaviors>
+            </Picker>-->
+
+            <Picker x:Name="ComparisonDate"
+                    Title="Select Date for Comparison"
+                    ItemDisplayBinding="{Binding DisplayText}"
+                    ItemsSource="{Binding ComparisonDates}"
+                    SelectedItem="{Binding SelectedItem}">
+                <Picker.Behaviors>
+                    <toolkit:EventToCommandBehavior
+                        EventName="SelectedIndexChanged"
+                        Command="{Binding ComparisonDatePickerSelectedIndexChangedCommand}"
+                        BindingContext="{Binding Source={x:Reference SalesAnalysisPage}, Path=BindingContext}" />
                 </Picker.Behaviors>
             </Picker>
 

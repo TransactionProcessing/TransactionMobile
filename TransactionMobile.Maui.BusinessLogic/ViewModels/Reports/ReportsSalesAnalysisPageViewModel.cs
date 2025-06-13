@@ -13,8 +13,10 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.Measure;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
-public class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel{
+public partial class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel{
 
     private readonly IMediator Mediator;
     public ReportsSalesAnalysisPageViewModel(INavigationService navigationService,
@@ -24,14 +26,26 @@ public class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel{
                                              IMediator mediator, INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService,navigationParameterService)
     {
         this.Mediator = mediator;
-        this.ComparisonDatePickerSelectedIndexChangedCommand = new AsyncCommand<ComparisonDate>(this.ComparisonDatePickerSelectedExecute);
+        //this.ComparisonDatePickerSelectedIndexChangedCommand = new AsyncCommand(this.ComparisonDatePickerSelectedExecute);
         this.Title = "Sales Analysis";
     }
 
-    public ICommand ComparisonDatePickerSelectedIndexChangedCommand { get; }
+    //public ICommand ComparisonDatePickerSelectedIndexChangedCommand { get; }
 
-    private async Task ComparisonDatePickerSelectedExecute(ComparisonDate selectedDate){
-        // TODO: we will re fire the api calls here on a date change
+    //private async Task ComparisonDatePickerSelectedExecute(){
+    //    // TODO: we will re fire the api calls here on a date change
+    //    await this.GetApiData();
+    //}
+
+    [RelayCommand]
+    private async Task ComparisonDatePickerSelectedIndexChanged()
+    {
+        //// Access the updated SelectedItem property directly here
+        //if (_selectedItem != null)
+        //{
+        //    Console.WriteLine($"Picker selection changed to: {_selectedItem.DisplayText}");
+        //    // Perform your logic
+        //}
         await this.GetApiData();
     }
 

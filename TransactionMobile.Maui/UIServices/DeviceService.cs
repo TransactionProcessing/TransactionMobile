@@ -1,4 +1,7 @@
-﻿namespace TransactionMobile.Maui.UIServices;
+﻿using System;
+using Microsoft.Maui.Devices;
+
+namespace TransactionMobile.Maui.UIServices;
 
 using banditoth.MAUI.DeviceId.Interfaces;
 using BusinessLogic.UIServices;

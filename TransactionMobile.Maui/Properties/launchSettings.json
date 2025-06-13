@@ -2,11 +2,20 @@
   "profiles": {
     "Windows Machine": {
       "commandName": "MsixPackage",
-      "nativeDebugging": false
+      "nativeDebugging": false      
     },
     "WSL": {
       "commandName": "WSL2",
       "distributionName": ""
+    },
+    "TransactionMobile.Maui": {
+      "commandName": "Project",
+      "nativeDebugging": true,
+      "environmentVariables": {
+        "DOTNET_RUNNING_IN_CONTAINER": "false"
+      },
+      "dotnetRunMessages": true,
+      "platform": "x64"
     }
   }
 }
