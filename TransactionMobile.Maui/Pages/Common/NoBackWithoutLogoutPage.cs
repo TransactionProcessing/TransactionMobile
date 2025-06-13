@@ -1,3 +1,8 @@
+using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Maui.Controls;
+
 namespace TransactionMobile.Maui.Pages.Common;
 
 using AppHome;

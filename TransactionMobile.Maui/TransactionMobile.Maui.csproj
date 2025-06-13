@@ -1,50 +1,46 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-		<TargetFrameworks>net9.0-android</TargetFrameworks>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-		<TargetFrameworks>net9.0-android;net9.0-windows10.0.19041.0</TargetFrameworks>
-	</PropertyGroup>
-
-	<!-- macOS-only: Android + iOS + MacCatalyst -->
-	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-		<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
-	</PropertyGroup>
-
 	<PropertyGroup>
-		<OutputType>Exe</OutputType>
-		<RootNamespace>TransactionMobile.Maui</RootNamespace>
-		<!--<UseMaui>true</UseMaui>-->
-		<SingleProject>true</SingleProject>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<PublishReadyToRun>false</PublishReadyToRun>
-		<RunAOTCompilation>false</RunAOTCompilation>
-		<WindowsPackageType>MSIX</WindowsPackageType>
-		<ApplicationTitle>Transaction Processing POS</ApplicationTitle>
-		<ApplicationId>com.transactionprocessing.pos</ApplicationId>
-		<ApplicationVersion>1</ApplicationVersion>
-		<ApplicationDisplayVersion>1</ApplicationDisplayVersion>
+		<TargetFrameworks>net9.0-android;net9.0-windows10.0.19041.0</TargetFrameworks>
 
-		<!-- Supported OS platform versions per platform -->
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">12.2</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
-		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
-		<PackageCertificateThumbprint>376AD93CB29454751B808E6883ED14E377D979F2</PackageCertificateThumbprint>
-		<AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
+		<!-- On macOS, include iOS as well -->
+		<TargetFrameworks Condition="'$(OS)' == 'OSX' or '$(IsMacOS)' == 'true'">
+			net9.0-android;net9.0-windows10.0.19041.0;net9.0-ios
+		</TargetFrameworks>
+
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<!--<SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>-->
+		<OutputType>Exe</OutputType>
+		<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
+	</PropertyGroup>
+
+	<!-- RIDs per platform -->
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
+		<RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>
+		<AndroidPackageFormat>aab</AndroidPackageFormat>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-windows10.0.19041.0'">
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
+		<RuntimeIdentifiers>ios-arm64;iossimulator-x64;iossimulator-arm64</RuntimeIdentifiers>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<MauiIcon Include="Resources\appicon.svg" ForegroundFile="Resources\appiconfg.svg" Color="#512BD4" />
-		<MauiSplashScreen Include="Resources\appiconfg.svg" Color="#512BD4" />
-		<MauiImage Include="Resources\Images\*" />
-		<MauiFont Include="Resources\Fonts\*" />
-		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+		<MauiFont Include="Resources\Fonts\OpenSans-Regular.ttf" Alias="OpenSansRegular" />
+		<!--<MauiFont Include="Resources\Fonts\OpenSans-Semibold.ttf" Alias="OpenSansSemibold" />-->
 	</ItemGroup>
+
+	<ItemGroup>
+		<MauiImage Include="Resources\Images\**\*.png" />
+		<MauiIcon Include="Resources\AppIcon\**\*.png" />
+		<MauiSplashScreen Include="Resources\Splash\**\*.png" />
+		<MauiAsset Include="Resources\Raw\**" />
+	</ItemGroup>
+
 
 	<ItemGroup>
 		<PackageReference Include="banditoth.MAUI.DeviceId" Version="1.0.2" />
@@ -57,251 +53,9 @@
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' != 'net9.0-ios'">
-		<PackageReference Include="Microsoft.AppCenter" Version="5.0.7" />
-		<PackageReference Include="Microsoft.AppCenter.Distribute" Version="5.0.7" />
-	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\TransactionMobile.Maui.BusinessLogic\TransactionMobile.Maui.BusinessLogic.csproj"/>
+	  <ProjectReference Include="..\TransactionMobile.Maui.BusinessLogic\TransactionMobile.Maui.BusinessLogic.csproj" />
 	</ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Pages\Developer\DeveloperPage.xaml.cs">
-      <DependentUpon>DeveloperPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\LoadingPage.xaml.cs">
-      <DependentUpon>LoadingPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\MyAccount\MyAccountAddressesPage.xaml.cs">
-      <DependentUpon>MyAccountAddressesPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\MyAccount\MyAccountDetailsPage.xaml.cs">
-      <DependentUpon>MyAccountDetailsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\MyAccount\MyAccountContactPage.xaml.cs">
-      <DependentUpon>MyAccountContactPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\MyAccount\MyAccountPage.xaml.cs">
-      <DependentUpon>MyAccountPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Reports\ReportsPage.xaml.cs">
-      <DependentUpon>ReportsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Support\SupportPage.xaml.cs">
-      <DependentUpon>SupportPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Transactions\Admin\AdminPage.xaml.cs">
-      <DependentUpon>AdminPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Transactions\BillPayment\BillPaymentGetMeterPage.xaml.cs">
-      <DependentUpon>BillPaymentGetMeterPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Transactions\BillPayment\BillPaymentPayBillPage.xaml.cs">
-      <DependentUpon>BillPaymentPayBillPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Transactions\BillPayment\BillPaymentSelectOperatorPage.xaml.cs">
-      <DependentUpon>BillPaymentSelectOperatorPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Transactions\BillPayment\BillPaymentSelectProductPage.xaml.cs">
-      <DependentUpon>BillPaymentSelectProductPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Transactions\BillPayment\BillPaymentGetAccountPage.xaml.cs">
-      <DependentUpon>BillPaymentGetAccountPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Transactions\BillPayment\BillPaymentFailedPage.xaml.cs">
-      <DependentUpon>BillPaymentFailedPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Transactions\BillPayment\BillPaymentSuccessPage.xaml.cs">
-      <DependentUpon>BillPaymentSuccessPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Transactions\MobileTopup\MobileTopupPerformTopupPage.xaml.cs">
-      <DependentUpon>MobileTopupPerformTopupPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Transactions\MobileTopup\MobileTopupSelectOperatorPage.xaml.cs">
-      <DependentUpon>MobileTopupSelectOperatorPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Transactions\MobileTopup\MobileTopupFailedPage.xaml.cs">
-      <DependentUpon>MobileTopupFailedPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Transactions\TransactionsPage.xaml.cs">
-      <DependentUpon>TransactionsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Transactions\Voucher\VoucherIssueFailedPage.xaml.cs">
-      <DependentUpon>VoucherIssueFailedPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Transactions\Voucher\VoucherIssueSuccessPage.xaml.cs">
-      <DependentUpon>VoucherIssueSuccessPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Transactions\Voucher\VoucherPerformIssuePage.xaml.cs">
-      <DependentUpon>VoucherPerformIssuePage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Transactions\Voucher\VoucherSelectOperatorPage.xaml.cs">
-      <DependentUpon>VoucherSelectOperatorPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Transactions\Voucher\VoucherSelectProductPage.xaml.cs">
-      <DependentUpon>VoucherSelectProductPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\Styles\LightTheme.xaml.cs">
-      <DependentUpon>LightTheme.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <MauiXaml Update="AppShell.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\AppHome\HomePage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Developer\DeveloperPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\LoadingPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\LoginPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\MyAccount\MyAccountDetailsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\MyAccount\MyAccountContactPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\MyAccount\MyAccountAddressesPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\MyAccount\MyAccountPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Reports\ReportsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Support\SupportPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Support\ViewLogsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\Admin\AdminPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\BillPayment\BillPaymentGetMeterPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\BillPayment\BillPaymentPayBillPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\BillPayment\BillPaymentSelectOperatorPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\BillPayment\BillPaymentSelectProductPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\BillPayment\BillPaymentGetAccountPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\BillPayment\BillPaymentFailedPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\BillPayment\BillPaymentSuccessPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\MobileTopup\MobileTopupPerformTopupPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\MobileTopup\MobileTopupSelectOperatorPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\MobileTopup\MobileTopupSelectProductPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\MobileTopup\MobileTopupFailedPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\MobileTopup\MobileTopupSuccessPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\TransactionsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\Voucher\VoucherIssueFailedPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\Voucher\VoucherIssueSuccessPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\Voucher\VoucherPerformIssuePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\Voucher\VoucherSelectOperatorPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Pages\Transactions\Voucher\VoucherSelectProductPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Resources\Styles\LightTheme.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-	  <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers>
-  </PropertyGroup>
-
-	<PropertyGroup Condition="$(TargetFramework.Contains('-windows'))">
-		<RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
-	</PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android|AnyCPU'">
-    <AndroidPackageFormat>apk</AndroidPackageFormat>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
-    <MtouchLink>None</MtouchLink>
-    <PublishTrimmed>true</PublishTrimmed>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios|AnyCPU'">
-    <MtouchLink>SdkOnly</MtouchLink>
-    <PublishTrimmed>true</PublishTrimmed>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-windows10.0.19041.0|AnyCPU'">
-    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-windows10.0.19041.0|AnyCPU'">
-    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
-    <Optimize>False</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android|AnyCPU'">
-    <Optimize>False</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-maccatalyst|AnyCPU'">
-    <Optimize>False</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios15.4|AnyCPU'">
-    <Optimize>False</Optimize>
-  </PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-windows10.0.19041.0'">
-		<GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>
-	</PropertyGroup>
-
-	<Target Name="RemoveWindowRootViewStyleXbf" BeforeTargets="GenerateProjectPriFile">
-		<ItemGroup>
-			<PRIResource Remove="@(PRIResource)" Condition="'%(PRIResource.Identity)' == 'Files/Microsoft.Maui/Platform/Windows/Styles/WindowRootViewStyle.xbf'" />
-		</ItemGroup>
-	</Target>
 
 </Project>

@@ -1,4 +1,6 @@
-﻿namespace TransactionMobile.Maui.UIServices;
+﻿using Microsoft.Maui.Graphics;
+
+namespace TransactionMobile.Maui.UIServices;
 
 using CommunityToolkit.Maui.Core;
 

@@ -1,4 +1,7 @@
-﻿namespace TransactionMobile.Maui.Platforms.Services;
+﻿using System;
+using Microsoft.Maui.Devices;
+
+namespace TransactionMobile.Maui.Platforms.Services;
 
 public static partial class DeviceInformationService
 {

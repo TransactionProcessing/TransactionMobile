@@ -1,4 +1,7 @@
-﻿namespace TransactionMobile.Maui.Pages.Support
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Maui.Controls;
+
+namespace TransactionMobile.Maui.Pages.Support
 {
     using BusinessLogic.ViewModels.Support;
 

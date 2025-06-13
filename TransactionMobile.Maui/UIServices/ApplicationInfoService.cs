@@ -1,4 +1,7 @@
-﻿namespace TransactionMobile.Maui.UIServices;
+﻿using System;
+using Microsoft.Maui.ApplicationModel;
+
+namespace TransactionMobile.Maui.UIServices;
 
 using BusinessLogic.UIServices;
 
