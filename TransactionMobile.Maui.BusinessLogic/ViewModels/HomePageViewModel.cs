@@ -3,10 +3,10 @@
 using System.Diagnostics.CodeAnalysis;
 using Logging;
 using Maui.UIServices;
-#if !__MACOS__
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Distribute;
-#endif
+//#if !__MACOS__
+//using Microsoft.AppCenter;
+//using Microsoft.AppCenter.Distribute;
+//#endif
 using Models;
 using Services;
 using UIServices;
@@ -38,84 +38,84 @@ public class HomePageViewModel : ExtendedBaseViewModel
 
     #region Methods
 
-#if !__MACOS__
-    public async Task Initialise(CancellationToken cancellationToken) {
-        Configuration configuration = this.ApplicationCache.GetConfiguration();
+//#if !__MACOS__
+//    public async Task Initialise(CancellationToken cancellationToken) {
+//        Configuration configuration = this.ApplicationCache.GetConfiguration();
 
-        if (configuration.EnableAutoUpdates) {
-            await Distribute.SetEnabledAsync(true);
-            Distribute.ReleaseAvailable = this.OnReleaseAvailable;
-            Distribute.NoReleaseAvailable = NoReleaseAvailable;
-            Distribute.UpdateTrack = UpdateTrack.Public;
-            Distribute.CheckForUpdate();
-        }
-        else {
-            Distribute.DisableAutomaticCheckForUpdate();
-        }
+//        if (configuration.EnableAutoUpdates) {
+//            await Distribute.SetEnabledAsync(true);
+//            Distribute.ReleaseAvailable = this.OnReleaseAvailable;
+//            Distribute.NoReleaseAvailable = NoReleaseAvailable;
+//            Distribute.UpdateTrack = UpdateTrack.Public;
+//            Distribute.CheckForUpdate();
+//        }
+//        else {
+//            Distribute.DisableAutomaticCheckForUpdate();
+//        }
 
-        try {
-            if (this.DeviceService.IsIOS() == false) {
-                AppCenter.Start(configuration.AppCenterConfig.GetAppCenterKey(), typeof(Distribute));
-            }
-        }
-        catch(Exception ex) {
-            Logger.LogError("Error during initialise", ex);
-        }
-    }
-#endif
+//        try {
+//            if (this.DeviceService.IsIOS() == false) {
+//                AppCenter.Start(configuration.AppCenterConfig.GetAppCenterKey(), typeof(Distribute));
+//            }
+//        }
+//        catch(Exception ex) {
+//            Logger.LogError("Error during initialise", ex);
+//        }
+//    }
+//#endif
 
     private async void NoReleaseAvailable() {
         await this.DialogService.ShowDialog("Software Update", "No Release Available","OK");
     }
 
 
-#if !__MACOS__
-    private Boolean OnReleaseAvailable(ReleaseDetails releaseDetails) {
-        Logger.LogInformation("In OnReleaseAvailable");
-        // Look at releaseDetails public properties to get version information, release notes text or release notes URL
-        String versionName = releaseDetails.ShortVersion;
-        String versionCodeOrBuildNumber = releaseDetails.Version;
-        String releaseNotes = releaseDetails.ReleaseNotes;
-        Uri releaseNotesUrl = releaseDetails.ReleaseNotesUrl;
+//#if !__MACOS__
+//    private Boolean OnReleaseAvailable(ReleaseDetails releaseDetails) {
+//        Logger.LogInformation("In OnReleaseAvailable");
+//        // Look at releaseDetails public properties to get version information, release notes text or release notes URL
+//        String versionName = releaseDetails.ShortVersion;
+//        String versionCodeOrBuildNumber = releaseDetails.Version;
+//        String releaseNotes = releaseDetails.ReleaseNotes;
+//        Uri releaseNotesUrl = releaseDetails.ReleaseNotesUrl;
 
-        // custom dialog
-        String title = "Version " + versionName + " available!";
-        Task answer;
+//        // custom dialog
+//        String title = "Version " + versionName + " available!";
+//        Task answer;
 
-        // On mandatory update, user can't postpone
-        if (releaseDetails.MandatoryUpdate)
-        {
-            Logger.LogInformation("In OnReleaseAvailable - mandatory update");
-            answer = this.DialogService.ShowDialog(title, releaseNotes, "Download and Install");
-        }
-        else
-        {
-            Logger.LogInformation("In OnReleaseAvailable - non mandatory update");
-            answer = this.DialogService.ShowDialog(title, releaseNotes, "Download and Install", "Later");
-        }
+//        // On mandatory update, user can't postpone
+//        if (releaseDetails.MandatoryUpdate)
+//        {
+//            Logger.LogInformation("In OnReleaseAvailable - mandatory update");
+//            answer = this.DialogService.ShowDialog(title, releaseNotes, "Download and Install");
+//        }
+//        else
+//        {
+//            Logger.LogInformation("In OnReleaseAvailable - non mandatory update");
+//            answer = this.DialogService.ShowDialog(title, releaseNotes, "Download and Install", "Later");
+//        }
 
-        answer.ContinueWith(task =>
-        {
-            // If mandatory or if answer was positive
-            if (releaseDetails.MandatoryUpdate || (task as Task<Boolean>).Result)
-            {
-                Logger.LogInformation("In OnReleaseAvailable - updating");
-                // Notify SDK that user selected update
-                Distribute.NotifyUpdateAction(UpdateAction.Update);
-            }
-            else
-            {
-                // Notify SDK that user selected postpone (for 1 day)
-                // This method call is ignored by the SDK if the update is mandatory
-                Logger.LogInformation("In OnReleaseAvailable - postponing");
-                Distribute.NotifyUpdateAction(UpdateAction.Postpone);
-            }
-        });
+//        answer.ContinueWith(task =>
+//        {
+//            // If mandatory or if answer was positive
+//            if (releaseDetails.MandatoryUpdate || (task as Task<Boolean>).Result)
+//            {
+//                Logger.LogInformation("In OnReleaseAvailable - updating");
+//                // Notify SDK that user selected update
+//                Distribute.NotifyUpdateAction(UpdateAction.Update);
+//            }
+//            else
+//            {
+//                // Notify SDK that user selected postpone (for 1 day)
+//                // This method call is ignored by the SDK if the update is mandatory
+//                Logger.LogInformation("In OnReleaseAvailable - postponing");
+//                Distribute.NotifyUpdateAction(UpdateAction.Postpone);
+//            }
+//        });
 
-        // Return true if you're using your own dialog, false otherwise
-        return true;
-    }
-#endif
+//        // Return true if you're using your own dialog, false otherwise
+//        return true;
+//    }
+//#endif
 
 #endregion
 }
