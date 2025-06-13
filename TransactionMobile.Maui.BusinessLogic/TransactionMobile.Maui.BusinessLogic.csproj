@@ -18,8 +18,8 @@
 	</PropertyGroup>
 	
 	<PropertyGroup>
-		<UseMaui>true</UseMaui>
-		<SingleProject>true</SingleProject>
+		<!--<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>-->
 		<DebugType>Full</DebugType>
 		<ImplicitUsings>enable</ImplicitUsings>
 
@@ -53,7 +53,12 @@
 		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.11" />
 		<PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.11" />
 		<PackageReference Include="MetroLog.Maui" Version="2.1.0" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.70" />
 	</ItemGroup>
+
+	<PropertyGroup Condition="$(TargetFramework.Contains('-windows'))">
+		<RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+	</PropertyGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' != 'net9.0-ios'">
 		<PackageReference Include="Microsoft.AppCenter" Version="5.0.7" />
@@ -84,14 +89,12 @@
 		</PackageReference>
 	</ItemGroup>
 
+	<Target Name="RemoveDuplicatePdbs" AfterTargets="ResolvePublishFiles">
+		<ItemGroup>
+			<ResolvedFileToPublish Remove="@(ResolvedFileToPublish)"
+			                       Condition="'%(ResolvedFileToPublish.RelativePath)' == 'TransactionMobile.Maui.BusinessLogic.pdb'
+      and '%(ResolvedFileToPublish.TargetPath)' == 'TransactionMobile.Maui.BusinessLogic.pdb'" />
+		</ItemGroup>
+	</Target>
 
-	<!--<ItemGroup Condition="'$(TargetFramework)' != 'net9.0'">
-		<PackageReference Update="Microsoft.Maui.Controls" Version="8.0.14" />
-		<PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.14" />
-	</ItemGroup>-->
-
-
-	<ItemGroup>
-	  <PackageReference Update="Microsoft.Maui.Controls" Version="9.0.70" />
-	</ItemGroup>
 </Project>
