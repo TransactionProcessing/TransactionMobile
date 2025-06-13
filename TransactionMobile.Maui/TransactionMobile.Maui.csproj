@@ -36,13 +36,6 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<PackageCertificateThumbprint>376AD93CB29454751B808E6883ED14E377D979F2</PackageCertificateThumbprint>
 		<AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
-		<GenerateAppInstallerFile>True</GenerateAppInstallerFile>
-		<AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
-		<AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
-		<AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
-		<GenerateTestArtifacts>True</GenerateTestArtifacts>
-		<AppInstallerUri>c:\temp</AppInstallerUri>
-		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -300,6 +293,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios15.4|AnyCPU'">
     <Optimize>False</Optimize>
   </PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-windows10.0.19041.0'">
+		<GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>
+	</PropertyGroup>
 
 	<Target Name="RemoveWindowRootViewStyleXbf" BeforeTargets="GenerateProjectPriFile">
 		<ItemGroup>

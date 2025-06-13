@@ -40,7 +40,7 @@ jobs:
         run: |
           nohup appium --log appium.log &
 
-      - name: Restore MAUI App for Android
+      - name: Restore MAUI App for Windows
         run: dotnet restore TransactionMobile.Maui.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
@@ -56,13 +56,13 @@ jobs:
 
       - name: Publish App
         run: |
-         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net9.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
+         dotnet publish TransactionMobile.Maui/TransactionMobile.Maui.csproj -c Release -f net9.0-windows10.0.19041.0 -r win-x64 /p:UseMonoRuntime=false /p:WindowsAppSDKSelfContained=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
       
       - name: Install App
         shell: powershell
         run: |         
          Import-Module Appx 
-         .\TransactionMobile.Maui/bin/Release/net9.0-windows10.0.19041.0/win10-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1 -Force
+         .\TransactionMobile.Maui/bin/Release/net9.0-windows10.0.19041.0/win-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1 -Force
 
       - name: Run Windows End To End  Tests
         env:
