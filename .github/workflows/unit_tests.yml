@@ -36,7 +36,7 @@ jobs:
           # Accept licenses and install required components
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
           # Install Android API level 34 and necessary system images
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-34" "system-images;android-34;google_apis;x86_64"
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-35" "system-images;android-35;google_apis;x86_64"
 
           # Export paths for future steps
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
@@ -46,7 +46,7 @@ jobs:
       - name: Install Android Build Tools
         run: |
           echo "Installing Android Build Tools..."
-          sdkmanager "build-tools;34.0.0"  # Updated to use Android 34 build tools
+          sdkmanager "build-tools;35.0.0"  # Updated to use Android 34 build tools
           sdkmanager --update
 
       - name: Install MAUI workloads
