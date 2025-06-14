@@ -77,7 +77,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
 
         private static void SetupiOSDriver(AppiumLocalService appiumService) {
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net8.0-ios/iossimulator-arm64/");
+            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net9.0-ios/iossimulator-arm64/");
             var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.app");
             
             var caps = new AppiumOptions();
@@ -156,7 +156,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption("adbExecTimeout", TimeSpan.FromMinutes(5).TotalMilliseconds);
             driverOptions.AutomationName = "UIAutomator2";
             driverOptions.PlatformName = "Android";
-            driverOptions.PlatformVersion = "14.0";
+            driverOptions.PlatformVersion = "15.0";
             driverOptions.DeviceName = "emulator-5554";
             
             // TODO: Only do this locally
@@ -167,7 +167,7 @@ namespace TransactionMobile.Maui.UiTests.Drivers
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
 
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net8.0-android/");
+            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net9.0-android/");
 
             var apkPath = Path.Combine(binariesFolder, "com.transactionprocessing.pos-Signed.apk");
             var fileinfo = new FileInfo(apkPath);
