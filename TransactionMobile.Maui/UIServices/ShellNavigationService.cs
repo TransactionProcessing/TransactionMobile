@@ -28,7 +28,13 @@ public class ShellNavigationService : INavigationService
     }
 
     public async Task GoBack() {
-        await Shell.Current.Navigation.PopAsync();
+        try {
+            await Shell.Current.Navigation.PopAsync();
+        }
+        catch (Exception e) {
+            throw new Exception($"Error in GoBack {e.Message}");
+        }
+        
     }
 
     public async Task GoToHome() {
