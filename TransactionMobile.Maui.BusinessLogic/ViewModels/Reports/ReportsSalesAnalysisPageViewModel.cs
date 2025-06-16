@@ -1,4 +1,6 @@
-﻿namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Reports;
+﻿using CommunityToolkit.Mvvm.Input;
+
+namespace TransactionMobile.Maui.BusinessLogic.ViewModels.Reports;
 
 using Maui.UIServices;
 using MediatR;
@@ -14,36 +16,50 @@ using LiveChartsCore.Defaults;
 using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.Measure;
 
-public class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel{
+public partial class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel
+{
 
     private readonly IMediator Mediator;
     public ReportsSalesAnalysisPageViewModel(INavigationService navigationService,
                                              IApplicationCache applicationCache,
                                              IDialogService dialogService,
                                              IDeviceService deviceService,
-                                             IMediator mediator, INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService,navigationParameterService)
+                                             IMediator mediator, INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
     {
         this.Mediator = mediator;
-        this.ComparisonDatePickerSelectedIndexChangedCommand = new AsyncCommand<ComparisonDate>(this.ComparisonDatePickerSelectedExecute);
+        //this.ComparisonDatePickerSelectedIndexChangedCommand = new AsyncCommand(this.ComparisonDatePickerSelectedExecute);
         this.Title = "Sales Analysis";
     }
 
-    public ICommand ComparisonDatePickerSelectedIndexChangedCommand { get; }
+    //public ICommand ComparisonDatePickerSelectedIndexChangedCommand { get; }
 
-    private async Task ComparisonDatePickerSelectedExecute(ComparisonDate selectedDate){
-        // TODO: we will re fire the api calls here on a date change
+    //private async Task ComparisonDatePickerSelectedExecute(){
+    //    // TODO: we will re fire the api calls here on a date change
+    //    await this.GetApiData();
+    //}
+
+    [RelayCommand]
+    private async Task ComparisonDatePickerSelectedIndexChanged()
+    {
+        //// Access the updated SelectedItem property directly here
+        //if (_selectedItem != null)
+        //{
+        //    Console.WriteLine($"Picker selection changed to: {_selectedItem.DisplayText}");
+        //    // Perform your logic
+        //}
         await this.GetApiData();
     }
 
-    private async Task GetApiData(){
+    private async Task GetApiData()
+    {
         // TODO: Initial api call to get data would be done here
         List<SalesAnalysis> salesAnalysisList = new List<SalesAnalysis>();
-        salesAnalysisList.Add(new SalesAnalysis("100.00 KES", "90.00 KES", "10%", "Sales Value", "Today's Sales", SelectedItem.DisplayText, "Variance:","salesvalue.png"));
+        salesAnalysisList.Add(new SalesAnalysis("100.00 KES", "90.00 KES", "10%", "Sales Value", "Today's Sales", SelectedItem.DisplayText, "Variance:", "salesvalue.png"));
         salesAnalysisList.Add(new SalesAnalysis("100", "90", "10%", "Sales Count", "Today's Sales", SelectedItem.DisplayText, "Variance:", "salescount.png"));
         this.SalesAnalysisList = salesAnalysisList;
     }
 
-    
+
     private List<ComparisonDate> comparisonDates;
 
     ComparisonDate _selectedItem;
@@ -68,13 +84,14 @@ public class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel{
         set => this.SetProperty(ref this.comparisonDates, value);
     }
 
-    public override async Task Initialise(CancellationToken cancellationToken){
+    public override async Task Initialise(CancellationToken cancellationToken)
+    {
         await base.Initialise(cancellationToken);
         // TODO: This list will come  from an api call
         List<ComparisonDate> dates = new List<ComparisonDate>();
-        dates.Add(new ComparisonDate(new DateTime(2024,1,12), "Yesterday"));
-        dates.Add(new ComparisonDate(new DateTime(2024,1,11), "2024-01-11"));
-        dates.Add(new ComparisonDate(new DateTime(2024,1,10), "2024-01-10"));
+        dates.Add(new ComparisonDate(new DateTime(2024, 1, 12), "Yesterday"));
+        dates.Add(new ComparisonDate(new DateTime(2024, 1, 11), "2024-01-11"));
+        dates.Add(new ComparisonDate(new DateTime(2024, 1, 10), "2024-01-10"));
         this.ComparisonDates = dates;
     }
 

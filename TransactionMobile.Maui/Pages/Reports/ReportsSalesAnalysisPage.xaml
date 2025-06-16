@@ -70,18 +70,17 @@
     <ScrollView>
         <VerticalStackLayout Style="{DynamicResource Layout}">
             <userControls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-            
-            <Picker x:Name="ComparisonDate" Title="Select Date for Comparison" 
-                    ItemDisplayBinding="{Binding DisplayText}" 
+
+            <Picker x:Name="ComparisonDate"
+                    Title="Select Date for Comparison"
+                    ItemDisplayBinding="{Binding DisplayText}"
                     ItemsSource="{Binding ComparisonDates}"
                     SelectedItem="{Binding SelectedItem}">
                 <Picker.Behaviors>
-                    <toolkit:EventToCommandBehavior    
-                        EventName="SelectedIndexChanged"  
+                    <toolkit:EventToCommandBehavior
+                        EventName="SelectedIndexChanged"
                         Command="{Binding ComparisonDatePickerSelectedIndexChangedCommand}"
-                        EventArgsConverter="{StaticResource SelectedItemEventArgsConverter}"
-                        CommandParameter="{ Binding SelectedItem}"
-                        />
+                        BindingContext="{Binding Source={x:Reference SalesAnalysisPage}, Path=BindingContext}" />
                 </Picker.Behaviors>
             </Picker>
 
