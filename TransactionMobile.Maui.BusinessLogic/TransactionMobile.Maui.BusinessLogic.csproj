@@ -18,9 +18,9 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="ClientProxyBase" Version="2025.5.4" />
+		<PackageReference Include="ClientProxyBase" Version="2025.6.2" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-		<PackageReference Include="Shared.Results" Version="2025.5.4" />
+		<PackageReference Include="Shared.Results" Version="2025.6.2" />
 		<PackageReference Include="LiveChartsCore.SkiaSharpView" Version="2.0.0-rc2" />
 		<PackageReference Include="MediatR" Version="12.5.0" />
 		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.6" />
