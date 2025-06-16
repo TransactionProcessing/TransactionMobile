@@ -8,7 +8,8 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:reports="clr-namespace:TransactionMobile.Maui.BusinessLogic.ViewModels.Reports;assembly=TransactionMobile.Maui.BusinessLogic"
              xmlns:common="clr-namespace:TransactionMobile.Maui.BusinessLogic.Common;assembly=TransactionMobile.Maui.BusinessLogic"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             x:Name="SalesAnalysisPage">
 
     <ContentPage.Resources>
         <ResourceDictionary>
