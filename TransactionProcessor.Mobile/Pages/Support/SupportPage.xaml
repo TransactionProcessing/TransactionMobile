@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<common:NoBackWithoutLogoutPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                               x:Class="TransactionProcessor.Mobile.Pages.Support.SupportPage"
+                               xmlns:common="clr-namespace:TransactionProcessor.Mobile.Pages.Common"
+                               xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
+                               Shell.NavBarIsVisible="False">
+    <ScrollView>
+        <VerticalStackLayout Style="{DynamicResource Layout}">
+
+            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+
+            <!--Main image-->
+            <Image Source="techsupport.jpg" VerticalOptions="Start" Aspect="AspectFit"/>
+
+
+            <Frame Style="{DynamicResource MainFrame}">
+                <VerticalStackLayout x:Name="SubLayout" Spacing="5">
+
+                    <Label Text="{Binding ApplicationName, Mode=OneTime}"
+                       HorizontalTextAlignment="Center"
+                       HorizontalOptions="Fill"/>
+
+                    <Label Text="{Binding Platform, Mode=OneTime}"
+                       VerticalOptions="Center"/>
+
+                    <Label Text="{Binding NumberTransactionsStored, Mode=OneTime}"
+                       VerticalOptions="Center"/>
+
+                    <Button Text="Upload Logs" Style="{StaticResource StandardButton}" Command="{Binding UploadLogsCommand}" AutomationId="UploadLogsButton"/>
+                    <Button Text="View Logs" Style="{StaticResource StandardButton}" Command="{Binding ViewLogsCommand}" AutomationId="ViewLogsButton"/>
+                    <Button Text="Back" Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}" AutomationId="BackButton"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</common:NoBackWithoutLogoutPage>

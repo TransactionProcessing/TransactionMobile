@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TransactionProcessor.Mobile.Pages.MyAccount.MyAccountContactPage"
+             xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
+             Shell.NavBarIsVisible="False">
+    <ScrollView>
+        <VerticalStackLayout Style="{DynamicResource Layout}">
+            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+
+            <Frame Style="{DynamicResource MainFrame}">
+                <VerticalStackLayout x:Name="SubLayout">
+                    <Label Text="Primary Contact" HorizontalTextAlignment="Center"
+                       HorizontalOptions="Fill" FontAttributes="Bold" FontSize="20"
+                       Margin="10,0,0,10" AutomationId="PrimaryContactLabel"/>
+
+                    <Label Text="Name:" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"/>
+                    <Label Text="{Binding Contact.Name}"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill" Margin="0,0,0,10"
+                       AutomationId="ContactNameLabel"/>
+
+                    <Label Text="Email Address:" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"/>
+                    <Label Text="{Binding Contact.EmailAddress}"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"  Margin="0,0,0,10"
+                       AutomationId="ContactEmailAddressLabel"/>
+
+                    <Label Text="Mobile Number:" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"/>
+                    <Label Text="{Binding Contact.MobileNumber}"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"  Margin="0,0,0,10"
+                       AutomationId="ContactMobileNumberLabel"/>
+                </VerticalStackLayout>
+            </Frame>
+            <Button Text="Edit Contact" Style="{StaticResource MyAccountButtonStyle}" 
+                Margin="10,0,0,10" AutomationId="EditContactButton"/>
+            <Button Margin="10,0,0,10" Text="Back" AutomationId="BackButton" Style="{StaticResource MyAccountButtonStyle}" Command="{Binding BackButtonCommand}"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

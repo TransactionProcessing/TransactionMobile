@@ -15,7 +15,7 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '8.0.x'
 
       - name: Install KVM and Android SDK (x86)
         run: |
@@ -35,8 +35,8 @@ jobs:
 
           # Accept licenses and install required components
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
-          # Install Android API level 35 and necessary system images
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-35" "system-images;android-35;google_apis;x86_64"
+          # Install Android API level 34 and necessary system images
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-34" "system-images;android-34;google_apis;x86_64"
 
           # Export paths for future steps
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
@@ -46,7 +46,7 @@ jobs:
       - name: Install Android Build Tools
         run: |
           echo "Installing Android Build Tools..."
-          sdkmanager "build-tools;35.0.0"  # Updated to use Android 34 build tools
+          sdkmanager "build-tools;34.0.0"  # Updated to use Android 34 build tools
           sdkmanager --update
 
       - name: Install MAUI workloads
@@ -54,7 +54,7 @@ jobs:
           dotnet workload install maui-android
 
       - name: Build Code
-        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json -f net9.0-android -c Release #--no-restore
+        run: dotnet build TransactionMobile.Maui/TransactionMobile.Maui.csproj  --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json -f net8.0-android -c Release #--no-restore
 
       - name: Run unit tests
-        run: dotnet test TransactionProcessor.Mobile.BusinessLogic.Tests/TransactionProcessor.Mobile.BusinessLogic.Tests.csproj --configuration Release
+        run: dotnet test TransactionMobile.Maui.BusinessLogic.Tests/TransactionMobile.Maui.BusinessLogic.Tests.csproj --configuration Release

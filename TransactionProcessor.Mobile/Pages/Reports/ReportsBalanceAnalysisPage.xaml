@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TransactionProcessor.Mobile.Pages.Reports.ReportsBalanceAnalysisPage"
+             xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
+             xmlns:liveChartsCore="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout>
+            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+
+            <liveChartsCore:CartesianChart x:Name="Chart"
+                                           Series="{Binding Series}" 
+                                           YAxes="{Binding YAxes}"
+                                           XAxes="{Binding XAxes}"
+                                           TooltipFindingStrategy="{Binding TooltipFindingStrategy}"
+                                           TooltipPosition="{Binding TooltipPosition}"
+                                           HeightRequest="200" HorizontalOptions="FillAndExpand">
+            </liveChartsCore:CartesianChart>
+
+            <VerticalStackLayout Style="{DynamicResource Layout}">
+            <Button Text="Back" AutomationId="BackButton" Style="{StaticResource ReportsButtonStyle}" Command="{Binding BackButtonCommand}"/>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
