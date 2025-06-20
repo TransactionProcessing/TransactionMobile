@@ -1,0 +1,177 @@
+name: Build and Run Android End to End Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  end_to_end_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Enable KVM group perms
+        run: |
+            echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+            sudo udevadm control --reload-rules
+            sudo udevadm trigger --name-match=kvm
+
+      - name: Install KVM and Android SDK (x86)
+        run: |
+          # Set up environment variables
+          export ANDROID_SDK_ROOT=$HOME/android-sdk
+          export ANDROID_HOME=$ANDROID_SDK_ROOT
+          export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$PATH
+
+          # Create necessary directories
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+
+          # Download and install command-line tools
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
+          unzip -q commandlinetools-linux-*.zip -d $ANDROID_SDK_ROOT/cmdline-tools
+          mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest
+          chmod +x $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
+
+          # Accept licenses and install required components
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
+          # Install Android API level 35 and necessary system images
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-35" "system-images;android-35;google_apis;x86_64"
+
+          # Export paths for future steps
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$PATH" >> $GITHUB_ENV
+
+      - name: Cache Emulator System Image (x86)
+        uses: actions/cache@v3
+        with:
+          path: ~/.android/avd
+          key: android-emulator-x86-${{ runner.os }}-android-35
+
+      - name: Create Android Emulator (x86)
+        run: |
+          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-35;google_apis;x86_64" --device "pixel_4"
+
+      - name: List AVDs
+        run: avdmanager list avd
+
+      - name: Start Emulator
+        run: |
+          echo "Starting emulator..."
+          
+          export ANDROID_AVD_HOME=$HOME/.config/.android/avd
+
+          nohup $ANDROID_HOME/emulator/emulator -avd test_emulator -no-window -no-audio -no-snapshot -gpu swiftshader_indirect -verbose > emulator.log 2>&1 &
+
+          echo "Waiting for emulator process to start..."
+          sleep 10  # Allow time for initialization
+
+          echo "Checking if emulator process is running..."
+          ps aux | grep emulator
+
+          echo "Checking ADB devices..."
+          adb devices
+        
+      - name: Restart ADB
+        run: |
+            adb kill-server
+            adb start-server
+            adb devices
+
+      - name: Wait for Emulator to Boot (Timeout 10 min with Debug)
+        run: |
+          # Start waiting for the emulator
+          echo "Waiting for emulator to boot..."
+
+          # Check the list of devices connected (debugging)
+          adb wait-for-device          
+
+          # Wait for emulator boot completion
+          timeout 600 bash -c '
+            while true; do
+              # Show the current list of devices (debugging)
+              adb devices
+        
+              # Check if the emulator is booting by checking the boot status
+              BOOT_COMPLETED=$(adb shell getprop sys.boot_completed 2>/dev/null)
+              echo "Boot status: $BOOT_COMPLETED"
+
+              # If boot is completed, break the loop
+              if [ "$BOOT_COMPLETED" == "1" ]; then
+                echo "Emulator boot completed!"
+                break
+              fi
+
+              # If boot is not completed, keep waiting
+              echo "Emulator still booting, waiting..."
+              sleep 5
+            done
+          '  
+
+      - name: Install Android Build Tools
+        run: |
+          echo "Installing Android Build Tools..."
+          sdkmanager "build-tools;35.0.0"  # Updated to use Android 34 build tools
+          sdkmanager --update
+
+      - name: Install MAUI workloads
+        run: |
+          dotnet workload install maui-android
+
+      - name: Install Appium and Drivers
+        run: |
+          sudo npm install -g appium
+          appium driver install uiautomator2
+
+      - name: Start Appium Server
+        run: |
+          nohup appium --log appium.log &
+
+      - name: Set up Docker (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          # Check Docker version to ensure it's installed properly
+          docker --version
+          docker info
+
+          # Allow current user to access Docker without sudo (optional, for convenience)
+          sudo usermod -aG docker $USER
+
+          # Restart Docker service to apply changes
+          sudo systemctl restart docker
+
+      - name: Restore MAUI App for Android
+        run: dotnet restore TransactionProcessor.Mobile.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+      - name: Build Code
+        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net9.0-android -c Release --no-restore
+
+      - name: Run Android Navigation Tests
+        run: dotnet test TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=PRTest)&(Category=Android)" --no-restore
+
+      - name: Upload Logs on Failure
+        if: failure()  # Runs only if a previous step fails
+        uses: actions/upload-artifact@v4
+        with:
+            name: android-e2e_tests
+            path: /home/txnproc/trace/
+
+      - name: Upload Appium Logs on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+            name: android-e2e_tests_appium
+            path: appium.log
