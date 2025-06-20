@@ -150,7 +150,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             
             // TODO: Only do this locally
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
-            driverOptions.AddAdditionalAppiumOption("appPackage", "com.transactionprocessing.pos");
+            driverOptions.AddAdditionalAppiumOption("appPackage", "com.transactionprocessor.mobile");
             driverOptions.AddAdditionalAppiumOption("enforceAppInstall", true);
             driverOptions.AddAdditionalAppiumOption("uiautomator2ServerInstallTimeout", "40000");
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
@@ -158,7 +158,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionProcessor.Mobile/bin/Release/net9.0-android/");
 
-            var apkPath = Path.Combine(binariesFolder, "com.transactionprocessing.pos-Signed.apk");
+            var apkPath = Path.Combine(binariesFolder, "com.transactionprocessor.mobile-Signed.apk");
             var fileinfo = new FileInfo(apkPath);
 
             driverOptions.App = apkPath;
