@@ -46,7 +46,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                 //password = "123456";
 
                 Logger.LogInformation($"About to request token for {username}");
-                Logger.LogDebug($"Token Request details UserName: {username} Password: {password} ClientId: {configuration.ClientId} ClientSecret: {configuration.ClientSecret}");
+                Logger.LogDebug($"Token Request details UserName: {username} Password: ****** ClientId: {configuration.ClientId} ClientSecret: {configuration.ClientSecret}");
                 
                 Result<TokenResponse> tokenResult =
                     await this.SecurityServiceClient.GetToken(username, password, configuration.ClientId, configuration.ClientSecret, cancellationToken);
