@@ -14,7 +14,8 @@
 
                 <!-- Title-->
                 <Label Text="Log In" FontSize="34" HorizontalOptions="Center" FontAttributes="Bold" Padding="20,0,0,20" 
-                   AutomationId="LoginLabel"/>
+                   AutomationId="LoginLabel"
+                   x:Name="LoginLabel"/>
                 <Frame Style="{DynamicResource MainFrame}">
 
                     <VerticalStackLayout x:Name="SubLayout">

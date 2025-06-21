@@ -12,7 +12,7 @@ public class TransactionsMobileTopupSelectOperatorPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "Select an Operator";
+    protected override String Trait => "SelectanOperator";
 
     #endregion
 

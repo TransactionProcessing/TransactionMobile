@@ -35,7 +35,7 @@ public class ProfileAccountInfoPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "My Details";
+    protected override String Trait => "MyDetails";
 
     #endregion
 

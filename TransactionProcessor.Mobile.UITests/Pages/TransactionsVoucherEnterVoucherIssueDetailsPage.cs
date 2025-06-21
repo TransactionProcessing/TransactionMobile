@@ -24,7 +24,7 @@ public class TransactionsVoucherEnterVoucherIssueDetailsPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "Enter Voucher Issue Details";
+    protected override String Trait => "EnterVoucherIssueDetails";
 
     public async Task EnterRecipientMobileNumber(String recipientMobileNumber)
     {

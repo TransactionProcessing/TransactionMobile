@@ -17,16 +17,16 @@ namespace TransactionProcessor.Mobile.UITests.Pages
         }
 
         public async Task AssertOnPage(TimeSpan? timeout = null){
-            String message = $"Unable to verify on page: {this.GetType().Name} with trait {this.Trait} {Environment.NewLine}";// Source: {AppiumDriverWrapper.Driver.PageSource}";
+            String message = $"Unable to verify on page: {this.GetType().Name} with trait {this.Trait} {Environment.NewLine} Source: {AppiumDriverWrapper.Driver.PageSource}";
 
             Should.NotThrow(async () => await this.WaitForElementByAccessibilityId(this.Trait, timeout), message);
         }
 
-        public async Task WaitForPageToLeave(TimeSpan? timeout = null)
-        {
-            String message = "Unable to verify *not* on page: " + this.GetType().Name;
-            Should.NotThrow(async () => await this.WaitForNoElementByAccessibilityId(this.Trait, timeout), message);
-        }
+        //public async Task WaitForPageToLeave(TimeSpan? timeout = null)
+        //{
+        //    String message = "Unable to verify *not* on page: " + this.GetType().Name;
+        //    Should.NotThrow(async () => await this.WaitForNoElementByAccessibilityId(this.Trait, timeout), message);
+        //}
 
         public async Task<String> GetPageSource()
         {
@@ -54,7 +54,7 @@ namespace TransactionProcessor.Mobile.UITests.Pages
         {
             if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
             {
-                IWebElement acceptButton = await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId("PrimaryButton");
+                IWebElement acceptButton = await AppiumDriverWrapper.Driver.GetElement("PrimaryButton");
                 acceptButton.Click();
             }
             else
@@ -68,7 +68,7 @@ namespace TransactionProcessor.Mobile.UITests.Pages
         {
             if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
             {
-                IWebElement acceptButton = await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId("SecondaryButton");
+                IWebElement acceptButton = await AppiumDriverWrapper.Driver.GetElement("SecondaryButton");
                 acceptButton.Click();
             }
             else
@@ -101,13 +101,13 @@ namespace TransactionProcessor.Mobile.UITests.Pages
 
         internal async Task<IWebElement> WaitForElementByAccessibilityId(String accessibilityId, TimeSpan? timeout = null, Int32 i  = 0)
         {
-            return await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId(accessibilityId, timeout, i);
+            return await AppiumDriverWrapper.Driver.GetElement(accessibilityId);
         }
 
-        internal async Task WaitForNoElementByAccessibilityId(String accessibilityId, TimeSpan? timeout = null)
-        {
-            await AppiumDriverWrapper.Driver.WaitForNoElementByAccessibilityId(accessibilityId, timeout);
-        }
+        //internal async Task WaitForNoElementByAccessibilityId(String accessibilityId, TimeSpan? timeout = null)
+        //{
+        //    await AppiumDriverWrapper.Driver.WaitForNoElementByAccessibilityId(accessibilityId, timeout);
+        //}
 
     }
 

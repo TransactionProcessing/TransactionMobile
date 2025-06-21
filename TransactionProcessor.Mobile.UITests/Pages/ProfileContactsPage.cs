@@ -30,7 +30,7 @@ public class ProfileContactsPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "My Contacts";
+    protected override String Trait => "MyContacts";
 
     #endregion
 

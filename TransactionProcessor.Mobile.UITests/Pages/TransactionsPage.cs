@@ -9,7 +9,7 @@ public class TransactionsPage : BasePage2
     protected override String Trait{
         get{
             if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows){
-                return "Select Transaction Type";
+                return "SelectTransactionType";
             }
             return "Transactions";
         }

@@ -111,7 +111,7 @@ namespace TransactionProcessor.Mobile.UITests.Steps
                                     String databaseName = $"EstateReportingReadModel{verifiedEstate.EstateId}";
                                     var connString = Setup.GetLocalConnectionString(databaseName);
                                     connString = $"{connString};Encrypt=false";
-                                    var ctx = new EstateManagementSqlServerContext(connString);
+                                    var ctx = new EstateManagementContext(connString);
 
                                     var estates = ctx.Estates.ToList();
                                     estates.Count.ShouldBe(1);

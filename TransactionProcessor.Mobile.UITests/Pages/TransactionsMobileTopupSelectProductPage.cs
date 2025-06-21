@@ -10,7 +10,7 @@ public class TransactionsMobileTopupSelectProductPage : BasePage2 {
 
     #region Properties
 
-    protected override String Trait => "Select a Product";
+    protected override String Trait => "SelectaProduct";
 
     #endregion
 

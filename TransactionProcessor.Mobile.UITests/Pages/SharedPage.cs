@@ -19,7 +19,7 @@ namespace TransactionProcessor.Mobile.UITests.Pages
                                                    String logoutAlertMessage) {
             if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows){
                 
-                IWebElement alert = await AppiumDriverWrapper.Driver.WaitForElementByAccessibilityId("ContentScrollViewer");
+                IWebElement alert = await AppiumDriverWrapper.Driver.GetElement("ContentScrollViewer");
 
                 var allLabels = alert.FindElements(MobileBy.ClassName("TextBlock"));
                 allLabels[0].Text.ShouldBe(logoutAlertTitle);

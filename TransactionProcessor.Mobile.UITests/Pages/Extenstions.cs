@@ -10,52 +10,88 @@ namespace TransactionProcessor.Mobile.UITests.Pages;
 
 public static class Extenstions
 {
-    // TODO: Mac & Windows Extensions
-    // TODO: May need a platform switch
-    //public static AndroidElement GetAlert(this AndroidDriver<AndroidElement> driver)
-    //{
-    //    return driver.FindElementByClassName("androidx.appcompat.widget.AppCompatTextView");
-    //}
+    /*
+        // TODO: Mac & Windows Extensions
+        // TODO: May need a platform switch
+        //public static AndroidElement GetAlert(this AndroidDriver<AndroidElement> driver)
+        //{
+        //    return driver.FindElementByClassName("androidx.appcompat.widget.AppCompatTextView");
+        //}
 
-    public static async Task<IWebElement> WaitForElementByAccessibilityId(this AppiumDriver driver,
-                                                               String selector,
-                                                               TimeSpan? timeout = null,
-                                                               Int32 i = 0) {
-        IWebElement? element = null;
+        public static async Task<IWebElement> WaitForElementByAccessibilityId(this AppiumDriver driver,
+                                                                   String selector,
+                                                                   TimeSpan? timeout = null,
+                                                                   Int32 i = 0) {
+            IWebElement? element = null;
 
-        TimeSpan retryFor = timeout switch{
-            null => TimeSpan.FromSeconds(60),
-            _ => timeout.Value
-        };
+            TimeSpan retryFor = timeout switch{
+                null => TimeSpan.FromSeconds(60),
+                _ => timeout.Value
+            };
 
-        if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows && i == 1){
-            
+            //selector = $"com.transactionprocessor.mobile:id/{selector}";
+
+            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows && i == 1){
+
+                await Retry.For(async () => {
+                                    for (int i = 0; i < 10; i++){
+                                        String message = $"Unable to find element on page: {selector} {Environment.NewLine} Source: {AppiumDriverWrapper.Driver.PageSource}";
+                                        var elements = AppiumDriverWrapper.Driver.FindElements(MobileBy.AccessibilityId("navViewItem"));
+                                        elements.ShouldNotBeEmpty();
+                                        element = elements.SingleOrDefault(e => e.Text == selector);
+                                        element.ShouldNotBeNull();
+                                    }
+                                }, retryFor);
+                return element;
+            }
+
             await Retry.For(async () => {
-                                for (int i = 0; i < 10; i++){
+                                for (int i = 0; i < 10; i++) {
+
                                     String message = $"Unable to find element on page: {selector} {Environment.NewLine} Source: {AppiumDriverWrapper.Driver.PageSource}";
-                                    var elements = AppiumDriverWrapper.Driver.FindElements(MobileBy.AccessibilityId("navViewItem"));
-                                    elements.ShouldNotBeEmpty();
-                                    element = elements.SingleOrDefault(e => e.Text == selector);
-                                    element.ShouldNotBeNull();
+                                    driver.ScrollDown();
+                                    element = driver.FindElementX(selector, "com.transactionprocessor.mobile");
+                                    element.ShouldNotBeNull(message);
+                                    // All good so exit the loop
+                                    break;
                                 }
                             }, retryFor);
             return element;
         }
-        
-        await Retry.For(async () => {
-                            for (int i = 0; i < 10; i++) {
+        */
+    // TODO: make the GetElement method more generic to handle both Android and iOS and make the android package configurable
+    public static async Task<IWebElement> GetElement(this AppiumDriver driver,
+                                                     string automationId,
+                                                     string androidPackage = "com.transactionprocessor.mobile") {
+        TimeSpan retryFor = TimeSpan.FromSeconds(60);
 
-                                String message = $"Unable to find element on page: {selector} {Environment.NewLine} Source: {AppiumDriverWrapper.Driver.PageSource}";
-                                driver.ScrollDown();
-                                element = driver.FindElement(MobileBy.AccessibilityId(selector));
-                                element.ShouldNotBeNull(message);
-                                // All good so exit the loop
-                                break;
-                            }
-                        }, retryFor);
+        IWebElement element = null;
+        await Retry.For(async () => {
+
+            string fullResourceId = $"{androidPackage}:id/{automationId}";
+
+            try {
+                element = driver.FindElement(MobileBy.Id(fullResourceId));
+            }
+            catch (NoSuchElementException) {
+                // Ignore and try AccessibilityId
+            }
+
+            if (element == null) {
+                try {
+                    element = driver.FindElement(MobileBy.AccessibilityId(automationId));
+                }
+                catch (NoSuchElementException) {
+
+                }
+            }
+
+            element.ShouldNotBeNull($"element not found. used fullResourceId [{fullResourceId}] and automationId [{automationId}]");
+        }, retryFor);
         return element;
     }
-    
+
+    /*
     public static void ScrollDown(this AppiumDriver driver)
     {
         //if pressX was zero it didn't work for me
@@ -73,10 +109,6 @@ public static class Extenstions
         }
     }
 
-    /*
-     * don't forget that it's "natural scroll" where 
-     * fromY is the point where you press the and toY where you release it
-     */
     public static void Scroll(this AppiumDriver driver, int fromX, int fromY, int toX, int toY)
     {
         // TODO: Implement this for new Appium Driver
@@ -101,7 +133,7 @@ public static class Extenstions
                         }, retryFor);
 
     }
-
+    */
     public static async Task WaitForToastMessage(this AppiumDriver driver, MobileTestPlatform platform, String expectedToast)
     {
         if (platform == MobileTestPlatform.Android)
@@ -139,7 +171,6 @@ public static class Extenstions
             isDisplayed.ShouldBeTrue();
         }
     }
-    
     public static async Task<String> GetPageSource(this AppiumDriver driver)
     {
         return driver.PageSource;

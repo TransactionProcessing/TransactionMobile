@@ -20,7 +20,7 @@ public class TransactionsMobileTopupEnterTopupDetailsPage : BasePage2 {
 
     #region Properties
 
-    protected override String Trait => "Enter Topup Details";
+    protected override String Trait => "EnterTopupDetails";
 
     public async Task EnterCustomerMobileNumber(String customerMobileNumber) {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.CustomerMobileNumberEntry);

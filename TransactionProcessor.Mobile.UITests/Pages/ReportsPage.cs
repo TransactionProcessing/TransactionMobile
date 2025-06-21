@@ -73,24 +73,3 @@ public class SupportPage : BasePage2{
         element.Click();
     }
 }
-
-public class ViewLogsPage : BasePage2{
-    public ViewLogsPage(TestingContext testingContext) : base(testingContext){
-        
-    }
-
-    protected override String Trait
-    {
-        get
-        {
-            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
-            {
-                return "View Logs";
-            }
-            return "View Logs";
-        }
-    }
-
-
-
-}

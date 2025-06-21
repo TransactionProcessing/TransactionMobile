@@ -13,7 +13,7 @@ public class TransactionsBillPaymentSelectOperatorPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "Select an Operator";
+    protected override String Trait => "SelectanOperator";
 
     #endregion
 
@@ -49,7 +49,7 @@ public class TransactionsBillPaymentEnterAccountDetailsPage : BasePage2
         this.GetAccountButton = "GetAccountButton";
     }
 
-    protected override String Trait => "Get Customer Account";
+    protected override String Trait => "GetCustomerAccount";
 
     public async Task EnterCustomerAccountNumber(String customerAccountNumber)
     {
@@ -80,7 +80,7 @@ public class TransactionsBillPaymentEnterMeterDetailsPage : BasePage2
         this.GetMeterButton = "GetMeterButton";
     }
 
-    protected override String Trait => "Get Meter";
+    protected override String Trait => "GetMeter";
 
     public async Task EnterMeterNumber(String meterNumber)
     {
@@ -122,7 +122,7 @@ public class TransactionsBillPaymentMakeAPaymentPage : BasePage2
 
     }
 
-    protected override String Trait => "Make Bill Payment";
+    protected override String Trait => "MakeBillPayment";
 
     public async Task EnterCustomerMobileNumber(String customerMobileNumber)
     {
@@ -195,7 +195,7 @@ public class TransactionsBillPaymentSuccessfulPaymentPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "Bill Payment Successful";
+    protected override String Trait => "BillPaymentSuccessful";
 
     public async Task ClickCompleteButton()
     {
