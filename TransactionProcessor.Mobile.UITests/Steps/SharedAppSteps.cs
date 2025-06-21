@@ -30,7 +30,7 @@ namespace TransactionProcessor.Mobile.UITests.Steps
 
         [Then(@"The application closes")]
         public void ThenTheApplicationCloses() {
-            AppState state = AppiumDriverWrapper.Driver.GetAppState("com.transactionprocessing.mobile");
+            AppState state = AppiumDriverWrapper.Driver.GetAppState("com.transactionprocessor.mobile");
             state.ShouldBe(AppState.NotRunning);
         }
 
