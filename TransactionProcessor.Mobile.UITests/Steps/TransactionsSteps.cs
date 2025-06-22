@@ -128,8 +128,8 @@ public class TransactionsSteps{
 
 
     [When(@"I tap on the '([^']*)' button")]
-    public async Task WhenITapOnTheButton(String operatorName){
-
+    public async Task WhenITapOnTheButton(String operatorName) {
+        operatorName = operatorName.Replace(" ", "");
         Task t = this.operatorType switch{
             OperatorType.MobileTopup => this.transactionsMobileTopupSelectOperatorPage.ClickOperatorButton(operatorName),
             OperatorType.Voucher => this.transactionsVoucherSelectOperatorPage.ClickOperatorButton(operatorName),
@@ -146,7 +146,7 @@ public class TransactionsSteps{
 
     [When(@"I tap on the '([^']*)' product button")]
     public async Task WhenITapOnTheProductButton(String productText){
-
+        productText= productText.Replace(" ", "");
         Task t = this.operatorType switch{
             OperatorType.MobileTopup => this.transactionsMobileTopupSelectProductPage.ClickProductButton(productText),
             OperatorType.Voucher => this.transactionsVoucherSelectProductPage.ClickProductButton(productText),
