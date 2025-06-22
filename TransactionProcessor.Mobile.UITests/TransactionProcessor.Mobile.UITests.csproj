@@ -32,7 +32,7 @@
 	  <PackageReference Include="SecurityService.Client" Version="2025.5.2-build82" />
 	  <PackageReference Include="SecurityService.IntegrationTesting.Helpers" Version="2025.5.2-build82" />
 	  <PackageReference Include="TransactionProcessor.Database" Version="2025.5.2-build186" />
-
+	  <PackageReference Include="EventStoreProjections" Version="2023.12.3" />
   </ItemGroup>
 
   <ItemGroup>
