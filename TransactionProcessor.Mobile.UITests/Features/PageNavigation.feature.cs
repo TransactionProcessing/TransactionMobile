@@ -123,15 +123,15 @@ namespace TransactionProcessor.Mobile.UITests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Back Button from Home Page Screen")]
+        [NUnit.Framework.DescriptionAttribute("Back Button from Login Screen")]
         [NUnit.Framework.CategoryAttribute("PRNavTest")]
-        public async global::System.Threading.Tasks.Task BackButtonFromHomePageScreen()
+        public async global::System.Threading.Tasks.Task BackButtonFromLoginScreen()
         {
             string[] tagsOfScenario = new string[] {
                     "PRNavTest"};
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Back Button from Home Page Screen", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 6
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Back Button from Login Screen", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 5
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -141,46 +141,78 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 7
+#line 6
  await testRunner.GivenAsync("I am on the Login Screen", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
+#line 7
+ await testRunner.WhenAsync("I click on the device back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
 #line 8
- await testRunner.AndAsync("the application is in training mode", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.ThenAsync("The application closes", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 9
- await testRunner.WhenAsync("I enter \'user1\' as the Email Address", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 10
- await testRunner.AndAsync("I enter \'123456\' as the Password", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 11
- await testRunner.AndAsync("I tap on Login", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Back Button from Home Page Screen")]
+        [NUnit.Framework.CategoryAttribute("PRNavTest")]
+        public async global::System.Threading.Tasks.Task BackButtonFromHomePageScreen()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "PRNavTest"};
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Back Button from Home Page Screen", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 12
- await testRunner.ThenAsync("the Merchant Home Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+this.ScenarioInitialize(scenarioInfo);
 #line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
 #line 13
- await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.GivenAsync("I am on the Login Screen", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 14
- await testRunner.ThenAsync("A message is displayed confirming I want to log out", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.AndAsync("the application is in training mode", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 15
- await testRunner.WhenAsync("I click no", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.WhenAsync("I enter \'user1\' as the Email Address", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 16
- await testRunner.ThenAsync("the Merchant Home Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.AndAsync("I enter \'123456\' as the Password", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 17
- await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.AndAsync("I tap on Login", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 18
- await testRunner.ThenAsync("A message is displayed confirming I want to log out", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.ThenAsync("the Merchant Home Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 19
- await testRunner.WhenAsync("I click yes", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 20
+ await testRunner.ThenAsync("A message is displayed confirming I want to log out", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 21
+ await testRunner.WhenAsync("I click no", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 22
+ await testRunner.ThenAsync("the Merchant Home Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 23
+ await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 24
+ await testRunner.ThenAsync("A message is displayed confirming I want to log out", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 25
+ await testRunner.WhenAsync("I click yes", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 26
  await testRunner.ThenAsync("the Login Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -196,7 +228,7 @@ this.ScenarioInitialize(scenarioInfo);
                     "PRNavTest"};
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Back Button from Transaction Page Screen", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 24
+#line 30
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -206,46 +238,46 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 25
+#line 31
  await testRunner.GivenAsync("I am on the Login Screen", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 26
+#line 32
  await testRunner.AndAsync("the application is in training mode", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 27
+#line 33
  await testRunner.WhenAsync("I enter \'user1\' as the Email Address", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 28
+#line 34
  await testRunner.AndAsync("I enter \'123456\' as the Password", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 29
+#line 35
  await testRunner.AndAsync("I tap on Login", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 30
+#line 36
  await testRunner.ThenAsync("the Merchant Home Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 31
+#line 37
  await testRunner.WhenAsync("I tap on Transactions", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 32
+#line 38
  await testRunner.ThenAsync("the Transaction Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 33
+#line 39
  await testRunner.WhenAsync("I tap on the Mobile Topup button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 34
+#line 40
  await testRunner.ThenAsync("the Transaction Select Mobile Topup Operator Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 35
+#line 41
  await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 36
+#line 42
  await testRunner.ThenAsync("the Transaction Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 37
+#line 43
  await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 38
+#line 44
  await testRunner.ThenAsync("the Merchant Home Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -261,7 +293,7 @@ this.ScenarioInitialize(scenarioInfo);
                     "PRNavTest"};
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Back Button from Reports Page Screen", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 42
+#line 48
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -271,46 +303,46 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 43
+#line 49
  await testRunner.GivenAsync("I am on the Login Screen", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 44
+#line 50
  await testRunner.AndAsync("the application is in training mode", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 45
+#line 51
  await testRunner.WhenAsync("I enter \'user1\' as the Email Address", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 46
+#line 52
  await testRunner.AndAsync("I enter \'123456\' as the Password", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 47
+#line 53
  await testRunner.AndAsync("I tap on Login", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 48
+#line 54
  await testRunner.ThenAsync("the Merchant Home Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 49
+#line 55
  await testRunner.WhenAsync("I tap on Reports", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 50
+#line 56
  await testRunner.ThenAsync("the Reports Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 51
+#line 57
  await testRunner.WhenAsync("I tap on the Sales Analysis Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 52
+#line 58
  await testRunner.ThenAsync("the Sales Analysis Report is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 53
+#line 59
  await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 54
+#line 60
  await testRunner.ThenAsync("the Reports Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 55
+#line 61
  await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 56
+#line 62
  await testRunner.ThenAsync("the Merchant Home Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -326,7 +358,7 @@ this.ScenarioInitialize(scenarioInfo);
                     "PRNavTest"};
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Back Button from Profile Page Screen", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 60
+#line 66
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -336,70 +368,70 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 61
+#line 67
  await testRunner.GivenAsync("I am on the Login Screen", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 62
+#line 68
  await testRunner.AndAsync("the application is in training mode", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 63
+#line 69
  await testRunner.WhenAsync("I enter \'user1\' as the Email Address", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 64
+#line 70
  await testRunner.AndAsync("I enter \'123456\' as the Password", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 65
+#line 71
  await testRunner.AndAsync("I tap on Login", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 66
+#line 72
  await testRunner.ThenAsync("the Merchant Home Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 67
+#line 73
  await testRunner.WhenAsync("I tap on Profile", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 68
- await testRunner.ThenAsync("the My Profile Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 69
- await testRunner.WhenAsync("I tap on the Addresses button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 70
- await testRunner.ThenAsync("the Address List Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 71
- await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 72
- await testRunner.ThenAsync("the My Profile Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 73
- await testRunner.WhenAsync("I tap on the Contacts button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
 #line 74
- await testRunner.ThenAsync("the Contact List Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.ThenAsync("the My Profile Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 75
- await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.WhenAsync("I tap on the Addresses button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 76
- await testRunner.ThenAsync("the My Profile Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.ThenAsync("the Address List Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 77
- await testRunner.WhenAsync("I tap on the Account Info button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 78
- await testRunner.ThenAsync("the Account Info Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 79
  await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 80
+#line 78
  await testRunner.ThenAsync("the My Profile Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 79
+ await testRunner.WhenAsync("I tap on the Contacts button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 80
+ await testRunner.ThenAsync("the Contact List Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 81
  await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 82
+ await testRunner.ThenAsync("the My Profile Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 83
+ await testRunner.WhenAsync("I tap on the Account Info button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 84
+ await testRunner.ThenAsync("the Account Info Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 85
+ await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 86
+ await testRunner.ThenAsync("the My Profile Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 87
+ await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 88
  await testRunner.ThenAsync("the Merchant Home Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -415,7 +447,7 @@ this.ScenarioInitialize(scenarioInfo);
                     "PRNavTest"};
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Back Button from Support Page Screen", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 86
+#line 92
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -425,52 +457,52 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 87
+#line 93
  await testRunner.GivenAsync("I am on the Login Screen", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 88
+#line 94
  await testRunner.AndAsync("the application is in training mode", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 89
+#line 95
  await testRunner.WhenAsync("I enter \'user1\' as the Email Address", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 90
+#line 96
  await testRunner.AndAsync("I enter \'123456\' as the Password", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 91
+#line 97
  await testRunner.AndAsync("I tap on Login", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 92
+#line 98
  await testRunner.ThenAsync("the Merchant Home Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 93
- await testRunner.WhenAsync("I tap on Support", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 94
- await testRunner.ThenAsync("the Support Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 95
- await testRunner.WhenAsync("I tap on the Upload Logs Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 96
- await testRunner.ThenAsync("the Support Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 97
- await testRunner.WhenAsync("I tap on the View Logs Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 98
- await testRunner.ThenAsync("the View Logs Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
 #line 99
- await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.WhenAsync("I tap on Support", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 100
  await testRunner.ThenAsync("the Support Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 101
- await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.WhenAsync("I tap on the Upload Logs Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 102
+ await testRunner.ThenAsync("the Support Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 103
+ await testRunner.WhenAsync("I tap on the View Logs Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 104
+ await testRunner.ThenAsync("the View Logs Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 105
+ await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 106
+ await testRunner.ThenAsync("the Support Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 107
+ await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 108
  await testRunner.ThenAsync("the Merchant Home Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }

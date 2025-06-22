@@ -1,6 +1,12 @@
 ﻿@background @login @toolbar @profile @shared @transactions @sharedapp @base @reports @support
 Feature: PageNavigation
 
+@PRNavTest
+Scenario: Back Button from Login Screen
+	Given I am on the Login Screen
+	When I click on the device back button
+	Then The application closes
+
 # Home Page Back Button Tests
 @PRNavTest
 Scenario: Back Button from Home Page Screen

@@ -1,6 +1,11 @@
 using Microsoft.Maui.Controls;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
+using TransactionProcessor.Mobile.Pages.AppHome;
+using TransactionProcessor.Mobile.Pages.MyAccount;
+using TransactionProcessor.Mobile.Pages.Reports;
+using TransactionProcessor.Mobile.Pages.Support;
+using TransactionProcessor.Mobile.Pages.Transactions;
 
 namespace TransactionProcessor.Mobile.Pages.Common;
 
@@ -12,11 +17,11 @@ public class NoBackWithoutLogoutPage : ContentPage
         Boolean result = false;
         this.Dispatcher.Dispatch(async () => {
                                      Task t = type.Name switch {
-                                         //nameof(TransactionsPage) => this.ShowHomePage(),
-                                         //nameof(MyAccountPage) => this.ShowHomePage(),
-                                         //nameof(ReportsPage) => this.ShowHomePage(),
-                                         //nameof(SupportPage) => this.ShowHomePage(),
-                                         //nameof(HomePage) => this.ShowLoginPage()
+                                         nameof(TransactionsPage) => this.ShowHomePage(),
+                                         nameof(MyAccountPage) => this.ShowHomePage(),
+                                         nameof(ReportsPage) => this.ShowHomePage(),
+                                         nameof(SupportPage) => this.ShowHomePage(),
+                                         nameof(HomePage) => this.ShowLoginPage()
                                      };
                                      await t;
                                  });
