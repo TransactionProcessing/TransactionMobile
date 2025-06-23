@@ -28,8 +28,14 @@ jobs:
       - name: Install MAUI workloads
         run: |
           dotnet workload install maui
-          dotnet workload install microsoft-net-sdk-windows
-          dotnet workload repair
+
+      - name: Add nuget.org source for runtime packs
+        run: dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org -p
+
+      - name: Warm up runtime packs
+        run: |
+            dotnet new console -o WarmupApp
+            dotnet build WarmupApp/WarmupApp.csproj --runtime win10-x64          
 
       - name: Install Appium and Drivers
         run: |
