@@ -25,6 +25,7 @@ jobs:
       - name: Install MAUI workloads
         run: |
           dotnet workload install maui
+          dotnet workload install windows
 
       - name: Install Appium and Drivers
         run: |
