@@ -73,10 +73,10 @@ jobs:
         shell: powershell
         run: |         
          Import-Module Appx 
-         .\TransactionMobile.Maui/bin/Release/net9.0-windows10.0.19041.0/win-x64/AppPackages/TransactionMobile.Maui_1.0.0.0_Test/Install.ps1 -Force
+         .\TransactionProcessor.Mobile/bin/Release/net9.0-windows10.0.19041.0/win-x64/AppPackages/TransactionProcessor.Mobile_1.0.0.0_Test/Install.ps1 -Force
 
       - name: Run Windows Navigation Tests
-        run: dotnet test TransactionMobile.Maui.UiTests/TransactionMobile.Maui.UiTests.csproj --filter "(Category=PRNavTest)&(Category=Windows)" --no-restore
+        run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "(Category=PRNavTest)&(Category=Windows)" --no-restore
 
       - name: Upload Appium Logs on Failure
         if: failure()
