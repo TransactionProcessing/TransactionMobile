@@ -29,8 +29,8 @@ jobs:
         run: |
           dotnet workload install maui
 
-      - name: Add nuget.org source for runtime packs
-        run: dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org -p
+      #- name: Add nuget.org source for runtime packs
+      #  run: dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org -p
 
       - name: Warm up runtime packs
         run: |
