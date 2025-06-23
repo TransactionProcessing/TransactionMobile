@@ -19,6 +19,7 @@
 
 	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
 		<TargetFrameworks>net9.0-android;net9.0-windows10.0.19041.0</TargetFrameworks>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	</PropertyGroup>
 
 	<!-- macOS-only: Android + iOS + MacCatalyst -->
