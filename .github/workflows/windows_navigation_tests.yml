@@ -32,10 +32,11 @@ jobs:
       #- name: Add nuget.org source for runtime packs
       #  run: dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org -p
 
-      - name: Warm up runtime packs
+      - name: Pull required runtime packs manually
         run: |
-            dotnet new console -o WarmupApp
-            dotnet build WarmupApp/WarmupApp.csproj --runtime win10-x64          
+           dotnet add package Microsoft.NETCore.App.Runtime.win10-x64 --version 9.0.6
+           dotnet add package Microsoft.WindowsDesktop.App.Runtime.win10-x64 --version 9.0.6
+        working-directory: TransactionProcessor.Mobile   
 
       - name: Install Appium and Drivers
         run: |
