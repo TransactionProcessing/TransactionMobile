@@ -67,7 +67,7 @@ jobs:
 
       - name: Publish App
         run: |
-         dotnet publish TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj -c Release -f net9.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
+         dotnet publish TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj -c Release -f net9.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
       
       - name: Install App
         shell: powershell
