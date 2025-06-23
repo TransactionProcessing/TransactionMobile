@@ -69,6 +69,11 @@ jobs:
         run: |
          dotnet publish TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj -c Release -f net9.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
       
+      - name: List published files
+        shell: pwsh
+        run: |
+            Get-ChildItem -Path "D:\a\TransactionMobile\TransactionMobile\TransactionProcessor.Mobile\bin\Release\net9.0-windows10.0.19041.0" -Recurse -File | Select-Object FullName
+
       - name: Install App
         shell: powershell
         run: |         
