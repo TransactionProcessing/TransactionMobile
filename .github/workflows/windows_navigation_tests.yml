@@ -80,7 +80,7 @@ jobs:
         # Add-AppxPackage .\TransactionProcessor.Mobile\bin\Release\net9.0-windows10.0.19041.0\win10-x64\AppPackages\TransactionProcessor.Mobile_1.0.0.1_Test\TransactionProcessor.Mobile_1.0.0.1_x64.msix
         run: |         
          Import-Module Appx 
-         .\TransactionMobile.Maui/bin/Release\net9.0-windows10.0.19041.0\win10-x64\AppPackages\TransactionProcessor.Mobile_1.0.0.1_Test\Install.ps1 -Force
+         .\TransactionProcessor.Mobile/bin/Release\net9.0-windows10.0.19041.0\win10-x64\AppPackages\TransactionProcessor.Mobile_1.0.0.1_Test\Install.ps1 -Force
 
       - name: Run Windows Navigation Tests
         run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "(Category=PRNavTest)&(Category=Windows)" --no-restore
