@@ -28,6 +28,7 @@ jobs:
       - name: Install MAUI workloads
         run: |
           dotnet workload install maui
+          dotnet workload install windowsdesktop
 
       #- name: Add nuget.org source for runtime packs
       #  run: dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org -p
