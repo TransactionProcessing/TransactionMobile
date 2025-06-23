@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="TransactionProcessor.Mobile.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:TransactionProcessor.Mobile"
+    xmlns:pages="clr-namespace:TransactionProcessor.Mobile.Pages"
+    xmlns:appHome="clr-namespace:TransactionProcessor.Mobile.Pages.AppHome"
+    xmlns:transactions="clr-namespace:TransactionProcessor.Mobile.Pages.Transactions"
+    xmlns:reports="clr-namespace:TransactionProcessor.Mobile.Pages.Reports"
+    xmlns:myAccount="clr-namespace:TransactionProcessor.Mobile.Pages.MyAccount"
+    xmlns:support="clr-namespace:TransactionProcessor.Mobile.Pages.Support"
+    Title="TransactionProcessor.Mobile">
+
+    <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate pages:LoginPage}"
+        Route="login"/>
+
+    <TabBar Route="main">
+
+        <ShellContent ContentTemplate="{DataTemplate appHome:HomePage}" Title="Home" AutomationId="Home"
+                      Route="home" Icon="homebutton"/>
+
+        <ShellContent ContentTemplate="{DataTemplate transactions:TransactionsPage}" Title="Transactions" AutomationId="Transactions"
+                      Route="transactions" Icon="transactionsbutton"/>
+
+        <ShellContent ContentTemplate="{DataTemplate reports:ReportsPage}" Title="Reports" AutomationId="Reports"
+                      Route="reports" Icon="reportbutton"  />
+
+        <ShellContent ContentTemplate="{DataTemplate myAccount:MyAccountPage}" Title="My Account" AutomationId="My Account"
+                      Route="myaccount" Icon="profilebutton"/>
+
+        <ShellContent ContentTemplate="{DataTemplate support:SupportPage}" Title="Support" AutomationId="Support"
+                      Route="support" Icon="supportbutton"   />
+    </TabBar>
+
+</Shell>

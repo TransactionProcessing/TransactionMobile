@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+                    x:Class="TransactionProcessor.Mobile.Resources.Styles.LightTheme">
+
+    <!-- Colors in use -->
+    <Color x:Key="pageBackgroundColor">#FFFFFF</Color>
+    <Color x:Key="textColor">#E5E9F0</Color>
+
+    <Color x:Key="labelTextColor">#4267B2</Color>
+    <Color x:Key="labelLightTextColor">#FFFFFF</Color>
+    <Color x:Key="entryTextColor">#4267B2</Color>
+    <Color x:Key="entryPlaceHolderColor">#A0FFFFFF</Color>
+    <Color x:Key="entryPlaceHolderColorDark">#4267B2</Color>
+    <Color x:Key="buttonTextColor">#FFFFFF</Color>
+
+    <Color x:Key="primary">#4267B2</Color>
+    <Color x:Key="transactions">#31C8E3</Color>
+    <Color x:Key="reports">#E38C44</Color>
+    <Color x:Key="profile">#5BE3B6</Color>
+    <Color x:Key="support">#E37188</Color>
+
+    <Color x:Key="mobileTopup">#7ed321</Color>
+    <Color x:Key="admin">#ff4a4a</Color>
+    <Color x:Key="mobileWallet">#ff844a</Color>
+    <Color x:Key="billPayment">#4acaff</Color>
+    <Color x:Key="voucher">MediumPurple</Color>
+
+    <Color x:Key="DarkGray">#212125</Color>
+    <Color x:Key="MidGray">#CFCFD3</Color>
+    <Color x:Key="LightGray">#EFEFEF</Color>
+
+    <!-- Styles -->
+    <Style TargetType="Page" ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor" Value="{StaticResource pageBackgroundColor}"/>
+        <Setter Property="Padding" Value="20,20,20, 20"/>
+    </Style>
+
+    <Style x:Key="LabelStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource labelTextColor}"/>
+        <Setter Property="FontFamily" Value="OpenSansRegular"/>
+    </Style>
+
+    <Style x:Key="SmallLabelStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource labelTextColor}"/>
+        <Setter Property="FontFamily" Value="OpenSansRegular"/>
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="LineHeight" Value="1.25" />
+    </Style>
+
+    <Style x:Key="AmountEntryStyle" TargetType="Entry">
+        <Setter Property="PlaceholderColor" Value="{StaticResource entryPlaceHolderColorDark}" />
+        <Setter Property="TextColor" Value="{StaticResource entryTextColor}" />
+        <Setter Property="HeightRequest" Value="50"></Setter>
+        <Setter Property="Margin" Value="0,0,0,0"></Setter>
+        <Setter Property="ReturnType" Value="Done" />
+    </Style>
+
+    <Style x:Key="MobileNumberEntryStyle" TargetType="Entry">
+        <Setter Property="PlaceholderColor" Value="{StaticResource entryPlaceHolderColorDark}" />
+        <Setter Property="TextColor" Value="{StaticResource entryTextColor}" />
+        <Setter Property="TextColor" Value="Blue"></Setter>
+        <Setter Property="HeightRequest" Value="50"></Setter>
+        <Setter Property="Margin" Value="0,0,0,0"></Setter>
+        <Setter Property="ReturnType" Value="Done" />
+    </Style>
+
+    <Style x:Key="EmailAddressEntryStyle" TargetType="Entry">
+        <Setter Property="PlaceholderColor" Value="{StaticResource entryPlaceHolderColorDark}" />
+        <Setter Property="TextColor" Value="{StaticResource entryTextColor}" />
+        <Setter Property="HeightRequest" Value="50"></Setter>
+        <Setter Property="Margin" Value="0,0,0,0"></Setter>
+        <Setter Property="ReturnType" Value="Done" />
+    </Style>
+
+    <Style x:Key="UserNameEntryStyle" TargetType="Entry">
+        <Setter Property="PlaceholderColor" Value="{StaticResource entryPlaceHolderColorDark}" />
+        <Setter Property="TextColor" Value="{StaticResource entryTextColor}"></Setter>
+        <Setter Property="HeightRequest" Value="50"></Setter>
+        <Setter Property="Margin" Value="0,0,0,0"></Setter>
+        <Setter Property="ReturnType" Value="Done" />
+    </Style>
+
+    <Style x:Key="PasswordEntryStyle" TargetType="Entry">
+        <Setter Property="PlaceholderColor" Value="{StaticResource entryPlaceHolderColorDark}" />
+        <Setter Property="TextColor" Value="{StaticResource entryTextColor}"></Setter>
+        <Setter Property="HeightRequest" Value="50"></Setter>
+        <Setter Property="Margin" Value="0,0,0,0"></Setter>
+        <Setter Property="IsPassword" Value="True"></Setter>
+        <Setter Property="ReturnType" Value="Done" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="StandardButton">
+        <Setter Property="TextColor" Value="{StaticResource buttonTextColor}"/>
+        <Setter Property="FontFamily" Value="OpenSansRegular"/>
+        <Setter Property="BackgroundColor" Value="{StaticResource primary}"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="Padding" Value="15, 10"/>
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="CornerRadius" Value="20" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="StandardButtonSmall">
+        <Setter Property="TextColor" Value="{StaticResource buttonTextColor}"/>
+        <Setter Property="FontFamily" Value="OpenSansRegular"/>
+        <Setter Property="BackgroundColor" Value="{StaticResource primary}"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="Padding" Value="15, 10"/>
+        <Setter Property="HeightRequest" Value="30" />
+        <Setter Property="CornerRadius" Value="20" />
+    </Style>
+
+    <Style x:Key="MobileTopupButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{DynamicResource mobileTopup}"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource buttonTextColor}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular"/>
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+    </Style>
+
+    <Style x:Key="VoucherButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{DynamicResource voucher}"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource buttonTextColor}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular"/>
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="CornerRadius" Value="20" />
+    </Style>
+
+    <Style x:Key="MobileWalletButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{DynamicResource mobileWallet}"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource buttonTextColor}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular"/>
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="CornerRadius" Value="20" />
+    </Style>
+
+    <Style x:Key="BillPaymentButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{DynamicResource billPayment}"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource buttonTextColor}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular"/>
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="CornerRadius" Value="20" />
+    </Style>
+
+    <Style x:Key="AdminButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{DynamicResource admin}"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource buttonTextColor}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular"/>
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="CornerRadius" Value="20" />
+    </Style>
+
+    <Style x:Key="MyAccountButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{DynamicResource profile}"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource buttonTextColor}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular"/>
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="CornerRadius" Value="20" />
+    </Style>
+
+    <Style x:Key="ReportsButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{DynamicResource reports}"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource buttonTextColor}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular"/>
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="CornerRadius" Value="20" />
+    </Style>
+    <Style x:Key="Layout" TargetType="VerticalStackLayout">
+        <Setter Property="WidthRequest" Value="{OnPlatform Android=360,WinUI=400, iOS=340, MacCatalyst=400}"></Setter>
+        <Setter Property="HorizontalOptions" Value="Center"></Setter>
+    </Style>
+
+    <Style x:Key="LoginImage" TargetType="Image">
+        <Setter Property="HeightRequest"  Value="250"/>
+        <Setter Property="WidthRequest" Value="250"/>
+    </Style>
+
+    <Style x:Key="PaymentImage" TargetType="Image">
+        <Setter Property="HeightRequest"  Value="150"/>
+        <Setter Property="WidthRequest" Value="150"/>
+    </Style>
+    <Style x:Key="MainFrame" TargetType="Frame">
+        <Setter Property="WidthRequest" Value="{OnPlatform Android=320,WinUI=400, iOS=300, MacCatalyst=400}"></Setter>
+        <Setter Property="HasShadow" Value="True"></Setter>
+        <Setter Property="Padding" Value="50,20,50,20"></Setter>
+        <Setter Property="Margin" Value="0,0,0,0"></Setter>
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="CornerRadius" Value="20"></Setter>
+        <Setter Property="Opacity" Value="0.9"></Setter>
+        <Setter Property="BackgroundColor" Value="#f5f8fa"></Setter>
+    </Style>
+
+</ResourceDictionary>

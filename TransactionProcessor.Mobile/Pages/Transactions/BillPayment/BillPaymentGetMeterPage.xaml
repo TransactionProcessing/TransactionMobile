@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
+             x:Class="TransactionProcessor.Mobile.Pages.Transactions.BillPayment.BillPaymentGetMeterPage"
+             Shell.NavBarIsVisible="False">
+    <ScrollView>
+        <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
+            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+            <Frame Style="{DynamicResource MainFrame}">
+                <VerticalStackLayout Spacing="10">
+                    <Entry x:Name="MeterNumberEntry"
+               Placeholder="Meter Number"
+               AutomationId="MeterNumberEntry"
+               Style="{DynamicResource CustomerAccountNumberEntryStyle}"
+               Text="{Binding MeterNumber}"
+               Keyboard="Numeric">
+                    </Entry>
+
+                    <Button x:Name="GetMeterButton" 
+                            Text="Get Meter"
+                            Command="{Binding GetMeterCommand}"
+                            Style="{DynamicResource BillPaymentButtonStyle}"
+                            AutomationId="GetMeterButton"/>
+                    <Button Text="Back" Style="{StaticResource BillPaymentButtonStyle}" Command="{Binding BackButtonCommand}"/>
+                </VerticalStackLayout>
+                
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

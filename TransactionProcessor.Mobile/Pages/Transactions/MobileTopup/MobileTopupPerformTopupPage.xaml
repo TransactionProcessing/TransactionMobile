@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TransactionProcessor.Mobile.Pages.Transactions.MobileTopup.MobileTopupPerformTopupPage"
+             xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Shell.NavBarIsVisible="False">
+    <ScrollView>
+        <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
+            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+            <Frame Style="{DynamicResource MainFrame}">
+                <VerticalStackLayout Spacing="10">
+                    <Entry x:Name="CustomerMobileNumberEntry"
+               Placeholder="Customer Mobile Number"
+               Style="{DynamicResource MobileNumberEntryStyle}"
+               AutomationId="CustomerMobileNumberEntry"
+               Text="{Binding CustomerMobileNumber}"
+               Keyboard="Numeric">
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior             
+                    EventName="Completed"  
+                    Command="{Binding CustomerMobileNumberEntryCompletedCommand}" />
+                        </Entry.Behaviors>
+                    </Entry>
+
+                    <Entry x:Name="TopupAmountEntry"
+               Placeholder="100"
+               AutomationId="TopupAmountEntry"
+               Style="{DynamicResource AmountEntryStyle}"
+               Text="{Binding TopupAmount}"
+               Keyboard="Numeric">
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior             
+                    EventName="Completed"  
+                    Command="{Binding TopupAmountEntryCompletedCommand}" />
+                        </Entry.Behaviors>
+                    </Entry>
+
+                    <Entry x:Name="CustomerEmailAddressEntry"
+               Placeholder="customeremail@email.com"
+               AutomationId="CustomerEmailAddressEntry"
+               Style="{DynamicResource EmailAddressEntryStyle}"
+               Text="{Binding CustomerEmailAddress}">
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior             
+                    EventName="Completed"  
+                    Command="{Binding CustomerEmailAddressEntryCompletedCommand}" />
+                        </Entry.Behaviors>
+                    </Entry>
+
+                    <Button x:Name="PerformTopupButton" 
+                Text="Perform Topup"
+                Style="{DynamicResource MobileTopupButtonStyle}"
+                Command="{Binding PerformTopupCommand}"
+                AutomationId="PerformTopupButton"/>
+                <Button Text="Back" Style="{StaticResource MobileTopupButtonStyle}" Command="{Binding BackButtonCommand}"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

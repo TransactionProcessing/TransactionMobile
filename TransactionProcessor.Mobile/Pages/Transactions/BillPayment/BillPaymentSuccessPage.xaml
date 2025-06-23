@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
+             x:Class="TransactionProcessor.Mobile.Pages.Transactions.BillPayment.BillPaymentSuccessPage"
+             Shell.NavBarIsVisible="False">
+    <ScrollView>
+        <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
+            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center" VerticalOptions="End"
+               FontAttributes="Bold" Padding="20,0,0,20"/>
+            <Frame Style="{DynamicResource MainFrame}">
+                <VerticalStackLayout Spacing="10">
+
+                    <Image Source="paymentsuccess.png" VerticalOptions="Start" Style="{DynamicResource PaymentImage}"/>
+
+                    <!--  Payment description label  -->
+                    <Label Margin="17,8" Text="Thank you for your bill payment. An automated payment receipt will be sent to your email entered."/>
+
+                    <Button x:Name="CompleteButton" Margin="0,16" Text="Complete" Command="{Binding CompletedCommand}"
+                        Style="{DynamicResource BillPaymentButtonStyle}" AutomationId="CompleteButton"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

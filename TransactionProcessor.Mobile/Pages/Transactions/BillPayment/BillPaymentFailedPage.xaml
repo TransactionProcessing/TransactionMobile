@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TransactionProcessor.Mobile.Pages.Transactions.BillPayment.BillPaymentFailedPage"
+             xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
+             Shell.NavBarIsVisible="False">
+    <ScrollView>
+        <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
+            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center" VerticalOptions="End"
+               FontAttributes="Bold" Padding="20,0,0,20"/>
+            <Frame Style="{DynamicResource MainFrame}">
+                <VerticalStackLayout Spacing="10">
+
+                    <Image Source="paymentfailure.png" VerticalOptions="Start" Style="{DynamicResource PaymentImage}"/>
+
+                    <Label Margin="17,8"
+                       Text="Unfortunately, we could not process your bill payment, this may be for a variety of reasons.  If you wish you can retry the transaction."/>
+
+                    <Button x:Name="CancelButton" Grid.Row="5" Margin="0,16"
+                        Text="Cancel" Command="{Binding CancelledCommand}"
+                        Style="{DynamicResource BillPaymentButtonStyle}" AutomationId="CancelButton"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

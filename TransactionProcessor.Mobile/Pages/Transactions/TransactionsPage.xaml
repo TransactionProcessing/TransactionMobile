@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<common:NoBackWithoutLogoutPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                               x:Class="TransactionProcessor.Mobile.Pages.Transactions.TransactionsPage"
+                               xmlns:common="clr-namespace:TransactionProcessor.Mobile.Pages.Common"
+                               xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
+                               Shell.NavBarIsVisible="False">
+    <ScrollView>
+        <!-- This might be better as a flex layout if we had images-->
+        <VerticalStackLayout Style="{DynamicResource Layout}">
+            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+            <Frame Style="{DynamicResource MainFrame}">
+                <VerticalStackLayout Spacing="10">
+
+                    <Button AutomationId="MobileTopupButton" Command="{Binding MobileTopupCommand}" x:Name="MobileTopupButton" Text="Mobile Topup" Style="{DynamicResource MobileTopupButtonStyle}"/>
+                    <Button AutomationId="MobileWalletButton" Command="{Binding MobileWalletCommand}" x:Name="MobileWalletButton" Text="Mobile Wallet" Style="{DynamicResource MobileWalletButtonStyle}"/>
+                    <Button AutomationId="BillPaymentButton" Command="{Binding BillPaymentCommand}" x:Name="BillPaymentButton" Text="Bill Payment" Style="{DynamicResource BillPaymentButtonStyle}"/>
+                    <Button AutomationId="VoucherButton" Command="{Binding VoucherCommand}" x:Name="VoucherButton" Text="Voucher" Style="{DynamicResource VoucherButtonStyle}"/>
+                    <Button AutomationId="AdminButton" Command="{Binding AdminCommand}" x:Name="AdminButton" Text="Admin" Style="{DynamicResource AdminButtonStyle}"/>
+                    <Button Text="Back" AutomationId="BackButton"  Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</common:NoBackWithoutLogoutPage>

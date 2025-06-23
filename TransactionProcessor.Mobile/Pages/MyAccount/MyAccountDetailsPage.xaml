@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TransactionProcessor.Mobile.Pages.MyAccount.MyAccountDetailsPage"
+             xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
+             Shell.NavBarIsVisible="False">
+    <ScrollView>
+        <VerticalStackLayout Style="{DynamicResource Layout}">
+            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+
+            <Frame Style="{DynamicResource MainFrame}">
+                <VerticalStackLayout x:Name="SubLayout">
+
+                    <Label Text="Name:" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"/>
+                    <Label Text="{Binding MerchantName}"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"  Margin="0,0,0,10"
+                       AutomationId="MerchantNameLabel"/>
+
+                    <Label Text="Balance:" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"/>
+                    <Label Text="{Binding Balance}"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill" Margin="0,0,0,10"
+                       AutomationId="BalanceLabel"/>
+
+                    <Label Text="Available Balance:" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"/>
+                    <Label Text="{Binding AvailableBalance}"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"  Margin="0,0,0,10"
+                       AutomationId="AvailableBalanceLabel"/>
+
+                    <Label Text="Last Statement:" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"/>
+                    <Label Text="{Binding LastStatementDate, StringFormat='{0:dd/MM/yyyy}'}"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"  Margin="0,0,0,10"
+                       AutomationId="LastStatementDateLabel"/>
+
+                    <Label Text="Next Statement:" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"/>
+                    <Label Text="{Binding NextStatementDate, StringFormat='{0:dd/MM/yyyy}'}"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"  Margin="0,0,0,10"
+                       AutomationId="NextStatementDateLabel"/>
+
+                    <Label Text="Settlement Schedule:" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"/>
+                    <Label Text="{Binding SettlementSchedule}"
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Fill"  Margin="0,0,0,10"
+                       AutomationId="SettlementScheduleLabel"/>
+                </VerticalStackLayout>
+            </Frame>
+            <Button Text="Edit Details" Style="{StaticResource MyAccountButtonStyle}" 
+                Margin="10,0,0,10" AutomationId="EditDetailsButton"/>
+            <Button Margin="10,0,0,10" Text="Back" AutomationId="BackButton" Style="{StaticResource MyAccountButtonStyle}" Command="{Binding BackButtonCommand}"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
