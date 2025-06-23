@@ -72,8 +72,7 @@ jobs:
       - name: Install App
         shell: powershell
         run: |         
-         Import-Module Appx 
-         .\TransactionProcessor.Mobile/bin/Release/net9.0-windows10.0.19041.0/win-x64/AppPackages/TransactionProcessor.Mobile_1.0.0.0_Test/Install.ps1 -Force
+         Add-AppxPackage .\TransactionProcessor.Mobile/bin/Release/net9.0-windows10.0.19041.0/win-x64/TransactionProcessor.Mobile_1.0.0.0_x64.msix   
 
       - name: Run Windows Navigation Tests
         run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "(Category=PRNavTest)&(Category=Windows)" --no-restore
