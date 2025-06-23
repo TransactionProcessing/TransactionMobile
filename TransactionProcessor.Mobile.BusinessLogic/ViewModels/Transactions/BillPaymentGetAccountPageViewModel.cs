@@ -69,13 +69,21 @@ public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel
         Result<PerformBillPaymentGetAccountResponseModel> result = await this.Mediator.Send(request);
 
         if (result.IsSuccess && result.Data.IsSuccessful) {
-            ProductDetails productDetails = new ProductDetails {
-                                                                   ContractId = this.ProductDetails.ContractId,
-                                                                   ProductId = this.ProductDetails.ProductId,
-                                                                   OperatorId = this.ProductDetails.OperatorId
-                                                               };
+            ProductDetails productDetails = new()
+            {
+                ContractId = this.ProductDetails.ContractId,
+                ProductId = this.ProductDetails.ProductId,
+                OperatorId = this.ProductDetails.OperatorId
+            };
+            BillDetails billDetails = new()
+            {
+                AccountName = result.Data.BillDetails.AccountName,
+                AccountNumber = result.Data.BillDetails.AccountNumber,
+                Balance = result.Data.BillDetails.Balance,
+                DueDate = result.Data.BillDetails.DueDate
+            };
 
-            await this.NavigationService.GoToBillPaymentPayBillPage(productDetails, result.Data.BillDetails);
+            await this.NavigationService.GoToBillPaymentPayBillPage(productDetails, billDetails);
         }
         else {
             await this.NavigationService.GoToBillPaymentFailedPage();
@@ -153,7 +161,13 @@ public class BillPaymentGetMeterPageViewModel : ExtendedBaseViewModel
                 OperatorId = this.ProductDetails.OperatorId
             };
 
-            await this.NavigationService.GoToBillPaymentPayBillPage(productDetails, result.Data.MeterDetails);
+            MeterDetails meterDetails = new MeterDetails
+            {
+                CustomerName = result.Data.MeterDetails.CustomerName,
+                MeterNumber = result.Data.MeterDetails.MeterNumber
+            };
+
+            await this.NavigationService.GoToBillPaymentPayBillPage(productDetails, meterDetails);
         }
         else
         {

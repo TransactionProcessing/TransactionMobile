@@ -49,10 +49,10 @@ public interface INavigationService
 
     Task GoToBillPaymentGetMeterPage(ProductDetails productDetails);
     Task GoToBillPaymentPayBillPage(ProductDetails productDetails,
-                                    Models.BillDetails billDetails);
+                                    BillDetails billDetails);
 
     Task GoToBillPaymentPayBillPage(ProductDetails productDetails,
-                                    Models.MeterDetails meterDetails);
+                                    MeterDetails meterDetails);
 
     Task GoToLoginPage();
 

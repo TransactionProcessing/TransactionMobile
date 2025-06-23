@@ -69,7 +69,7 @@ public class BillPaymentGetMeterPageViewModelTests
 
         this.ViewModel.GetMeterCommand.Execute(null);
 
-        this.NavigationService.Verify(n => n.GoToBillPaymentPayBillPage(It.IsAny<ProductDetails>(), It.IsAny<Models.MeterDetails>()), Times.Once);
+        this.NavigationService.Verify(n => n.GoToBillPaymentPayBillPage(It.IsAny<ProductDetails>(), It.IsAny<MeterDetails>()), Times.Once);
     }
 
     [Fact]

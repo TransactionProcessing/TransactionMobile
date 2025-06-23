@@ -68,7 +68,7 @@ public class BillPaymentGetAccountPageViewModelTests
         
         this.ViewModel.GetAccountCommand.Execute(null);
         
-        this.NavigationService.Verify(n => n.GoToBillPaymentPayBillPage(It.IsAny<ProductDetails>(), It.IsAny<Models.BillDetails>()), Times.Once);
+        this.NavigationService.Verify(n => n.GoToBillPaymentPayBillPage(It.IsAny<ProductDetails>(), It.IsAny<BillDetails>()), Times.Once);
     }
 
     [Fact]

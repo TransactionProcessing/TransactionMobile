@@ -144,7 +144,7 @@ public class ShellNavigationService : INavigationService
     }
 
     public async Task GoToBillPaymentPayBillPage(ProductDetails productDetails,
-                                                 TransactionProcessor.Mobile.BusinessLogic.Models.BillDetails billDetails) {
+                                                 BillDetails billDetails) {
         Dictionary<String, Object> d = new Dictionary<String, Object>() {
                                                                             {nameof(ProductDetails), productDetails},
                                                                             {nameof(BillDetails), billDetails}
@@ -154,7 +154,7 @@ public class ShellNavigationService : INavigationService
     }
 
     public async Task GoToBillPaymentPayBillPage(ProductDetails productDetails,
-                                                 TransactionProcessor.Mobile.BusinessLogic.Models.MeterDetails meterDetails)
+                                                 MeterDetails meterDetails)
     {
         Dictionary<String, Object> d = new Dictionary<String, Object>() {
                                                                             {nameof(ProductDetails), productDetails},
