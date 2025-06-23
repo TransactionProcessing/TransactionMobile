@@ -32,11 +32,20 @@ jobs:
       #- name: Add nuget.org source for runtime packs
       #  run: dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org -p
 
-      - name: Pull required runtime packs manually
+      - name: Trigger runtime pack resolution with dummy project
         run: |
-           dotnet add package Microsoft.NETCore.App.Runtime.win10-x64 --version 9.0.6
-           dotnet add package Microsoft.WindowsDesktop.App.Runtime.win10-x64 --version 9.0.6
-        working-directory: TransactionProcessor.Mobile   
+            dotnet new console -n RuntimeWarmup
+            cd RuntimeWarmup
+            echo '<Project Sdk="Microsoft.NET.Sdk">
+            <PropertyGroup>
+            <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
+            <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+            <UseWindowsForms>false</UseWindowsForms>
+            <UseWPF>false</UseWPF>
+            </PropertyGroup>
+            </Project>' > RuntimeWarmup.csproj
+            dotnet restore RuntimeWarmup.csproj
+            dotnet build RuntimeWarmup.csproj   
 
       - name: Install Appium and Drivers
         run: |
