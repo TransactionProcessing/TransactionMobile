@@ -13,7 +13,7 @@ class Program
             return;
         }
 
-        var path = "args[0]";
+        var path = args[0];
         var asm = Assembly.LoadFrom(path);
 
         foreach (var type in asm.GetTypes())
