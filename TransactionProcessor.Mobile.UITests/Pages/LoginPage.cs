@@ -8,7 +8,7 @@ namespace TransactionProcessor.Mobile.UITests.Pages;
 public class LoginPage : BasePage2
 {
     protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch {
-        MobileTestPlatform.iOS => "Login Label",
+        MobileTestPlatform.iOS => "LoginLabel",
         _ => "LoginLabel"
     };
 
