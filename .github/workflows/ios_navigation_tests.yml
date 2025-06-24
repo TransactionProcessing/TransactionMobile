@@ -98,7 +98,7 @@ jobs:
             export PATH="$PATH:$HOME/.dotnet/tools"
 
             # Optional: clean + build test project if not already built
-            #dotnet build TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj -c Release --no-restore
+            dotnet build TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj -c Release --no-restore
 
             # Run the tests filtered by categories
             nunit TransactionProcessor.Mobile.UiTests/bin/Release/net9.0/TransactionProcessor.Mobile.UiTests.dll --where "cat == PRNavTest && cat == iOS" --labels=All --result=TestResult-iOS.xml
