@@ -82,6 +82,10 @@ jobs:
       #  run: |
       #    dotnet TestCategoryLister/bin/Release/net9.0/TestCategoryLister.dll TransactionProcessor.Mobile.UiTests/bin/Debug/net9.0/TransactionProcessor.Mobile.UiTests.dll
 
+      - name: List all files with full path
+        run: |
+            find /Users/runner/work/TransactionMobile/TransactionMobile/TransactionProcessor.Mobile/bin -type f
+
       - name: Run iOS Navigation Tests
         run: |
             #dotnet build TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj -c Debug --no-restore
