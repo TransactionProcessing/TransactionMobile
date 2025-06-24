@@ -71,8 +71,8 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             
             var caps = new AppiumOptions();
             caps.PlatformName = "iOS";
-            caps.PlatformVersion = "17.4";
-            caps.DeviceName = "iPhone 15";
+            caps.PlatformVersion = "18.0";
+            caps.DeviceName = "iPhone 16";
             caps.AutomationName = "XCUITest";
             caps.App = apkPath;
             caps.AddAdditionalAppiumOption("fullReset", true);
