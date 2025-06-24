@@ -73,19 +73,20 @@ jobs:
         #run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net9.0-ios -c Release --no-restore
         run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj -c Release -f net9.0-ios -r iossimulator-x64 /p:EnableAssemblyILStripping=false /p:EnableSymbolStrip=false /p:LinkMode=None
 
-      - name: Build TestCategoryLister
-        run: |
-          dotnet build TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj -c Debug --no-restore
-          dotnet build TestCategoryLister/TestCategoryLister.csproj -c Release
+      #- name: Build TestCategoryLister
+      #  run: |
+      #    dotnet build TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj -c Debug --no-restore
+      #    dotnet build TestCategoryLister/TestCategoryLister.csproj -c Release
 
-      - name: Run CategoryListerTool on UI Tests
-        run: |
-          dotnet TestCategoryLister/bin/Release/net9.0/TestCategoryLister.dll TransactionProcessor.Mobile.UiTests/bin/Debug/net9.0/TransactionProcessor.Mobile.UiTests.dll
+      #- name: Run CategoryListerTool on UI Tests
+      #  run: |
+      #    dotnet TestCategoryLister/bin/Release/net9.0/TestCategoryLister.dll TransactionProcessor.Mobile.UiTests/bin/Debug/net9.0/TransactionProcessor.Mobile.UiTests.dll
 
       - name: Run iOS Navigation Tests
         run: |
-            dotnet build TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj -c Debug --no-restore
-            dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)" --no-restore
+            #dotnet build TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj -c Debug --no-restore
+            #dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)" --no-restore
+            nunit3-console TransactionProcessor.Mobile.UiTests/bin/Release/net9.0/TransactionProcessor.Mobile.UiTests.dll --where "(cat == PRNavTest && cat == iOS)"
 
       - name: Upload Appium Logs on Failure      
         if: failure()
