@@ -18,17 +18,20 @@ class Program
 
         foreach (var type in asm.GetTypes())
         {
-            foreach (var method in type.GetMethods())
+            foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static))
             {
+                // Must be an [NUnit.Framework.Test] method
                 var testAttr = method.GetCustomAttribute<TestAttribute>();
-                if (testAttr != null)
-                {
-                    var categories = method.GetCustomAttributes<CategoryAttribute>()
-                        .Select(a => a.Name)
-                        .ToList();
+                if (testAttr is null)
+                    continue;
 
-                    Console.WriteLine($"{type.FullName}.{method.Name} - Categories: {(categories.Count == 0 ? "None" : string.Join(", ", categories))}");
-                }
+                // Collect [Category] from method and class
+                var methodCategories = method.GetCustomAttributes<CategoryAttribute>().Select(a => a.Name);
+                var classCategories = type.GetCustomAttributes<CategoryAttribute>().Select(a => a.Name);
+
+                var allCategories = methodCategories.Concat(classCategories).Distinct().ToList();
+
+                Console.WriteLine($"{type.FullName}.{method.Name} - Categories: {(allCategories.Count == 0 ? "None" : string.Join(", ", allCategories))}");
             }
         }
     }
