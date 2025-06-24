@@ -66,7 +66,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
 
         private static void SetupiOSDriver(AppiumLocalService appiumService) {
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionProcessor.Mobile/bin/Release/net9.0-ios/iossimulator-arm64/");
+            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionProcessor.Mobile/bin/Release/net9.0-ios/iossimulator-x64/");
             var apkPath = Path.Combine(binariesFolder, "TransactionProcessor.Mobile.app");
             
             var caps = new AppiumOptions();
