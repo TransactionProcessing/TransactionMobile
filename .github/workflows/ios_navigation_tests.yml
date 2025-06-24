@@ -82,12 +82,26 @@ jobs:
       #  run: |
       #    dotnet TestCategoryLister/bin/Release/net9.0/TestCategoryLister.dll TransactionProcessor.Mobile.UiTests/bin/Debug/net9.0/TransactionProcessor.Mobile.UiTests.dll
 
-      - name: Run iOS Navigation Tests
-        run: |
+      #- name: Run iOS Navigation Tests
+      #  run: |
             #dotnet build TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj -c Debug --no-restore
             #dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)" --no-restore
+      #      dotnet tool install --global NUnit.ConsoleRunner.NetCore
+      #      nunit3-console TransactionProcessor.Mobile.UiTests/bin/Release/net9.0/TransactionProcessor.Mobile.UiTests.dll --where "(cat == PRNavTest && cat == iOS)"
+
+      - name: Run iOS Navigation Tests
+        run: |
+            # Install NUnit Console Runner tool
             dotnet tool install --global NUnit.ConsoleRunner.NetCore
-            nunit3-console TransactionProcessor.Mobile.UiTests/bin/Release/net9.0/TransactionProcessor.Mobile.UiTests.dll --where "(cat == PRNavTest && cat == iOS)"
+
+            # Ensure the tool path is available in this step
+            export PATH="$PATH:$HOME/.dotnet/tools"
+
+            # Optional: clean + build test project if not already built
+            dotnet build TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj -c Release --no-restore
+
+            # Run the tests filtered by categories
+            nunit3-console TransactionProcessor.Mobile.UiTests/bin/Release/net9.0/TransactionProcessor.Mobile.UiTests.dll --where "cat == PRNavTest && cat == iOS" --labels=All --result=TestResult-iOS.xml
 
       - name: Upload Appium Logs on Failure      
         if: failure()
@@ -95,5 +109,11 @@ jobs:
         with:
             name: ios-software_navigation_tests_appium
             path: appium.log
+
+      - name: Upload NUnit Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: iOS-Test-Results
+          path: TestResult-iOS.xml
 
   
