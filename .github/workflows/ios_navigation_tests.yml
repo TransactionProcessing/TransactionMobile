@@ -47,10 +47,17 @@ jobs:
           xcrun simctl create "$SIMULATOR_NAME" "$DEVICE_NAME" "com.apple.CoreSimulator.SimRuntime.iOS-${PLATFORM_VERSION//./-}"
           echo "SIMULATOR_NAME=$SIMULATOR_NAME" >> $GITHUB_ENV
 
+      #- name: 🚀 Boot simulator
+      #  run: |
+      #    xcrun simctl boot "$SIMULATOR_NAME"
+      #    xcrun simctl list | grep Booted
+
       - name: 🚀 Boot simulator
         run: |
-          xcrun simctl boot "$SIMULATOR_NAME"
-          xcrun simctl list | grep Booted
+           xcrun simctl boot "$SIMULATOR_NAME"
+           SIMULATOR_ID=$(xcrun simctl list | grep 'Booted' | awk -F '[()]' '{print $2}')
+           echo "SIMULATOR_ID=$SIMULATOR_ID"
+           echo "SIMULATOR_ID=$SIMULATOR_ID" >> $GITHUB_ENV
 
       - name: Install MAUI Workloads
         run: |

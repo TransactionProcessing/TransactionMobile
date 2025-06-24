@@ -78,7 +78,8 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             caps.AddAdditionalAppiumOption("fullReset", true);
             caps.AddAdditionalAppiumOption("noReset", false);
             caps.AddAdditionalAppiumOption("useNewWDA", true);
-
+            var udid = Environment.GetEnvironmentVariable("SIMULATOR_ID");
+            caps.AddAdditionalAppiumOption("udid", udid);
             //var driverOptions = new AppiumOptions();
             //driverOptions.AutomationName = "XCUITest";
             ////driverOptions.PlatformName = "iOS";
