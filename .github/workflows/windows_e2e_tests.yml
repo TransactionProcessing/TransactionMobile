@@ -1,4 +1,4 @@
-﻿name: Build and Run Windows Navigation Tests
+﻿name: Build and Run Windows End to End Tests
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  end_to_end_tests:
+  software_navigation_tests:
     runs-on: windows-2022
     steps:
       - name: Checkout repository
@@ -39,8 +39,8 @@ jobs:
         run: dotnet restore TransactionProcessor.Mobile.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
-        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net9.0-android -c Release --no-restore     
-        
+        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net9.0-android -c Release --no-restore
+       
       - name: Decrypt PFX File
         run: |
           echo "${{ secrets.WINDOWSSIGNINGCERT }}" > cert.pfx.asc
@@ -52,21 +52,28 @@ jobs:
       - name: Publish App
         run: |
          dotnet publish TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj -c Release -f net9.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
-
+      
       - name: Install App
-        shell: powershell
+        shell: powershell      
         run: |         
          Import-Module Appx 
          .\TransactionProcessor.Mobile/bin/Release\net9.0-windows10.0.19041.0\win10-x64\AppPackages\TransactionProcessor.Mobile_1.0.0.1_Test\Install.ps1 -Force
 
-      - name: Run Windows Navigation Tests
-        run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "(Category=PRNavTest)&(Category=Windows)" --no-restore
+      - name: Run Windows End To End Tests
+        run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "(Category=PRTest)&(Category=Windows)" --no-restore
+
+      - name: Upload Logs on Failure
+        if: failure()  # Runs only if a previous step fails
+        uses: actions/upload-artifact@v4
+        with:
+            name: windows-e2e_tests
+            path: C:\\Users\\runneradmin\\txnproc
 
       - name: Upload Appium Logs on Failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-            name: windows-software_navigation_tests_appium
+            name: windows-e2e_tests_appium
             path: appium.log
 
   
