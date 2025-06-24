@@ -1,0 +1,95 @@
+﻿name: Build and Run Windows Navigation Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  software_navigation_tests:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          vs-prerelease: true
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '9.0.x'
+     
+      - name: Install MAUI workloads
+        run: |
+          dotnet workload install maui
+
+      - name: Install Appium and Drivers
+        run: |
+          npm install -g appium --unsafe-perm=true --allow-root
+          appium driver install --source=npm appium-windows-driver
+
+      - name: Start Appium Server
+        run: |
+          nohup appium --log appium.log &
+
+      - name: Restore MAUI App for Windows
+        run: dotnet restore TransactionProcessor.Mobile.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+      - name: Build Code
+        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net9.0-android -c Release --no-restore
+
+      # ✅ Restore the MAUI App separately with RID
+      #- name: Restore MAUI App Project
+      #  run: dotnet restore TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj --runtime win10-x64 --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+      # ✅ Restore all other projects without RID (via .sln)
+      #- name: Restore Solution (excluding RID conflicts)
+      #  run: dotnet restore TransactionProcessor.Mobile.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+      # ✅ Build the MAUI App with RuntimeIdentifier
+      #- name: Build MAUI App
+      #  run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj -f net9.0-windows10.0.19041.0 -c Release --runtime win10-x64 --no-restore
+
+      # ✅ Build all other projects (test libraries, class libs, etc.)
+      #- name: Build Solution (non-MAUI projects)
+      #  run: dotnet build TransactionProcessor.Mobile.sln -c Release --no-restore 
+        
+      - name: Decrypt PFX File
+        run: |
+          echo "${{ secrets.WINDOWSSIGNINGCERT }}" > cert.pfx.asc
+          certutil -decode cert.pfx.asc cert.pfx
+
+      - name: Add Cert to Store
+        run: certutil -user -q -p ${{ secrets.WINDOWSSIGNINGCERTPWD }} -importpfx cert.pfx NoRoot
+
+      - name: Publish App
+        run: |
+         dotnet publish TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj -c Release -f net9.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
+      
+      - name: List published files
+        shell: pwsh
+        run: |
+            Get-ChildItem "D:\a\TransactionMobile\TransactionMobile\TransactionProcessor.Mobile\bin\Release\net9.0-windows10.0.19041.0" -Recurse -File | ForEach-Object { $_.FullName }
+
+      - name: Install App
+        shell: powershell
+        #run: |         
+        # Add-AppxPackage .\TransactionProcessor.Mobile\bin\Release\net9.0-windows10.0.19041.0\win10-x64\AppPackages\TransactionProcessor.Mobile_1.0.0.1_Test\TransactionProcessor.Mobile_1.0.0.1_x64.msix
+        run: |         
+         Import-Module Appx 
+         .\TransactionProcessor.Mobile/bin/Release\net9.0-windows10.0.19041.0\win10-x64\AppPackages\TransactionProcessor.Mobile_1.0.0.1_Test\Install.ps1 -Force
+
+      - name: Run Windows Navigation Tests
+        run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "(Category=PRNavTest)&(Category=Windows)" --no-restore
+
+      - name: Upload Appium Logs on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+            name: windows-software_navigation_tests_appium
+            path: appium.log
+
+  
