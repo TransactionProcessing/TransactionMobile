@@ -70,7 +70,8 @@ jobs:
         run: sudo xcodebuild -license accept
 
       - name: Build Code
-        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net9.0-ios -c Release --no-restore
+        #run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net9.0-ios -c Release --no-restore
+        run: dotnet publish TransactionProcessor.Mobile.csproj -c Release -f net9.0-ios -r iossimulator-x64 /p:EnableAssemblyILStripping=false /p:EnableSymbolStrip=false /p:LinkMode=None
 
       - name: Run iOS Navigation Tests
         run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)" --no-restore
