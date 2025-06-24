@@ -1,4 +1,5 @@
 ﻿using TransactionProcessor.Mobile.UITests.Common;
+using TransactionProcessor.Mobile.UITests.Drivers;
 
 namespace TransactionProcessor.Mobile.UITests.Pages;
 
@@ -7,5 +8,9 @@ public class ViewLogsPage : BasePage2{
         
     }
 
-    protected override String Trait => "ViewLogs";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
+    {
+        MobileTestPlatform.iOS => "View Logs",
+        _ => "ViewLogs"
+    };
 }

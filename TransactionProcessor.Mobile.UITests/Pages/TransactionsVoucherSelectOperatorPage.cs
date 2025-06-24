@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using TransactionProcessor.Mobile.UITests.Common;
+using TransactionProcessor.Mobile.UITests.Drivers;
 
 namespace TransactionProcessor.Mobile.UITests.Pages;
 
@@ -11,9 +12,11 @@ public class TransactionsVoucherSelectOperatorPage : BasePage2
     }
 
     #region Properties
-
-    protected override String Trait => "SelectanOperator";
-
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
+    {
+        MobileTestPlatform.iOS => "Select an Operator",
+        _ => "SelectanOperator"
+    };
     #endregion
 
     public async Task ClickOperatorButton(String operatorName)

@@ -1,4 +1,5 @@
 ﻿using TransactionProcessor.Mobile.UITests.Common;
+using TransactionProcessor.Mobile.UITests.Drivers;
 
 namespace TransactionProcessor.Mobile.UITests.Pages;
 
@@ -30,7 +31,12 @@ public class ProfileContactsPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "MyContacts";
+    //protected override String Trait => "MyContacts";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
+    {
+        MobileTestPlatform.iOS => "My Contacts",
+        _ => "MyContacts"
+    };
 
     #endregion
 

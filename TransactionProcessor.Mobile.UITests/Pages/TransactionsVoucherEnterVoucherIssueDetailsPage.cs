@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using Shared.IntegrationTesting;
 using TransactionProcessor.Mobile.UITests.Common;
+using TransactionProcessor.Mobile.UITests.Drivers;
 
 namespace TransactionProcessor.Mobile.UITests.Pages;
 
@@ -24,7 +25,11 @@ public class TransactionsVoucherEnterVoucherIssueDetailsPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "EnterVoucherIssueDetails";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
+    {
+        MobileTestPlatform.iOS => "Enter Voucher Issue Details",
+        _ => "EnterVoucherIssueDetails"
+    };
 
     public async Task EnterRecipientMobileNumber(String recipientMobileNumber)
     {

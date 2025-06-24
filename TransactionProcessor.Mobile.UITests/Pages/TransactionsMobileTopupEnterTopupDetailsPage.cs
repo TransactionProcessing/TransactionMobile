@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using Shared.IntegrationTesting;
 using TransactionProcessor.Mobile.UITests.Common;
+using TransactionProcessor.Mobile.UITests.Drivers;
 
 namespace TransactionProcessor.Mobile.UITests.Pages;
 
@@ -20,7 +21,11 @@ public class TransactionsMobileTopupEnterTopupDetailsPage : BasePage2 {
 
     #region Properties
 
-    protected override String Trait => "EnterTopupDetails";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
+    {
+        MobileTestPlatform.iOS => "Enter Topup Details",
+        _ => "EnterTopupDetails"
+    };
 
     public async Task EnterCustomerMobileNumber(String customerMobileNumber) {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.CustomerMobileNumberEntry);
