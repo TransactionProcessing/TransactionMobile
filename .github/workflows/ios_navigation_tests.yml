@@ -76,7 +76,7 @@ jobs:
       - name: Build TestCategoryLister
         run: |
           dotnet build TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj -c Debug --no-restore
-          dotnet build TestCategoryLister/TestCategoryLister.csproj --configuration Release
+          dotnet build TestCategoryLister/TestCategoryLister.csproj -c Release
 
       - name: Run CategoryListerTool on UI Tests
         run: |
