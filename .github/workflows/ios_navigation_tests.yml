@@ -80,7 +80,7 @@ jobs:
 
       - name: Run CategoryListerTool on UI Tests
         run: |
-          dotnet TestCategoryLister/TestCategoryLister/bin/Release/net9.0/TestCategoryLister.dll TransactionProcessor.Mobile.UiTests/bin/Debug/net9.0/TransactionProcessor.Mobile.UiTests.dll
+          dotnet TestCategoryLister/bin/Release/net9.0/TestCategoryLister.dll TransactionProcessor.Mobile.UiTests/bin/Debug/net9.0/TransactionProcessor.Mobile.UiTests.dll
 
       - name: Run iOS Navigation Tests
         run: |
