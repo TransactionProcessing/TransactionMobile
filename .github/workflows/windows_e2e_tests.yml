@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  software_navigation_tests:
+  end_to_end_tests:
     runs-on: windows-2022
     steps:
       - name: Checkout repository
