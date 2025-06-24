@@ -86,6 +86,7 @@ jobs:
         run: |
             #dotnet build TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj -c Debug --no-restore
             #dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "(Category=PRNavTest)&(Category=iOS)" --no-restore
+            dotnet tool install --global NUnit.ConsoleRunner.NetCore
             nunit3-console TransactionProcessor.Mobile.UiTests/bin/Release/net9.0/TransactionProcessor.Mobile.UiTests.dll --where "(cat == PRNavTest && cat == iOS)"
 
       - name: Upload Appium Logs on Failure      
