@@ -60,7 +60,7 @@ jobs:
 
             # Set up vars
             WDA_DIR="/tmp/WebDriverAgent"            
-            DERIVED_DATA="$HOME/Library/Developer/Xcode/DerivedData"
+            DERIVED_DATA="/Users/runner/Library/Developer/Xcode/DerivedData/WebDriverAgent"
             #SIMULATOR_UDID="${{ env.UDID }}"
             echo "Using simulator $SIMULATOR_ID"
 
@@ -78,13 +78,13 @@ jobs:
               build-for-testing              
 
             # Verify build output
-            #echo "Looking for WDA build output..."
-            #WDA_APP=$(find "$DERIVED_DATA" -type d -name "WebDriverAgentRunner-Runner.app" | head -n 1)
-            #if [ -z "$WDA_APP" ]; then
-            #  echo "::error ::Failed to locate built WebDriverAgentRunner-Runner.app"
-            #  exit 1
-            #fi
-            #echo "Found built WDA app at: $WDA_APP"
+            echo "Looking for WDA build output..."
+            WDA_APP=$(find "$DERIVED_DATA" -type d -name "WebDriverAgentRunner-Runner.app" | head -n 1)
+            if [ -z "$WDA_APP" ]; then
+              echo "::error ::Failed to locate built WebDriverAgentRunner-Runner.app"
+              exit 1
+            fi
+            echo "Found built WDA app at: $WDA_APP"
 
             # Install app to simulator
             echo "Installing WDA app to simulator $SIMULATOR_ID..."
