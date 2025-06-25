@@ -61,7 +61,7 @@ jobs:
             # Set up vars
             WDA_DIR="/tmp/WebDriverAgent"
             DERIVED_DATA="$HOME/Library/Developer/Xcode/DerivedData"
-            SIMULATOR_UDID="${{ env.UDID }}"
+            #SIMULATOR_UDID="${{ env.UDID }}"
             echo "Using simulator $SIMULATOR_UDID"
 
             # Clone WDA
@@ -72,7 +72,7 @@ jobs:
             echo "Building WebDriverAgentRunner..."
             xcodebuild -project "$WDA_DIR/WebDriverAgent.xcodeproj" \
               -scheme WebDriverAgentRunner \
-              -destination "id=$SIMULATOR_UDID" \
+              -destination "id=$SIMULATOR_ID" \
               CODE_SIGNING_ALLOWED=NO \
               build-for-testing
 
@@ -86,12 +86,12 @@ jobs:
             echo "Found built WDA app at: $WDA_APP"
 
             # Install app to simulator
-            echo "Installing WDA app to simulator $SIMULATOR_UDID..."
-            xcrun simctl install "$SIMULATOR_UDID" "$WDA_APP"
+            echo "Installing WDA app to simulator $SIMULATOR_ID..."
+            xcrun simctl install "$SIMULATOR_ID" "$WDA_APP"
 
             # Launch WDA manually to ensure it's functional
             echo "Launching WDA app on simulator..."
-            LAUNCH_OUTPUT=$(xcrun simctl launch "$SIMULATOR_UDID" com.facebook.WebDriverAgentRunner.xctrunner || true)
+            LAUNCH_OUTPUT=$(xcrun simctl launch "$SIMULATOR_ID" com.facebook.WebDriverAgentRunner.xctrunner || true)
 
             if echo "$LAUNCH_OUTPUT" | grep -q "error"; then
               echo "::error ::Failed to launch WebDriverAgent on simulator. Output:"
