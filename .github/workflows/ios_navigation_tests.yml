@@ -62,7 +62,7 @@ jobs:
             WDA_DIR="/tmp/WebDriverAgent"
             DERIVED_DATA="$HOME/Library/Developer/Xcode/DerivedData"
             #SIMULATOR_UDID="${{ env.UDID }}"
-            echo "Using simulator $SIMULATOR_UDID"
+            echo "Using simulator $SIMULATOR_ID"
 
             # Clone WDA
             echo "Cloning WebDriverAgent..."
