@@ -47,17 +47,60 @@ jobs:
           xcrun simctl create "$SIMULATOR_NAME" "$DEVICE_NAME" "com.apple.CoreSimulator.SimRuntime.iOS-${PLATFORM_VERSION//./-}"
           echo "SIMULATOR_NAME=$SIMULATOR_NAME" >> $GITHUB_ENV
 
-      #- name: 🚀 Boot simulator
-      #  run: |
-      #    xcrun simctl boot "$SIMULATOR_NAME"
-      #    xcrun simctl list | grep Booted
-
       - name: 🚀 Boot simulator
         run: |
            xcrun simctl boot "$SIMULATOR_NAME"
            SIMULATOR_ID=$(xcrun simctl list | grep 'Booted' | awk -F '[()]' '{print $2}')
            echo "SIMULATOR_ID=$SIMULATOR_ID"
            echo "SIMULATOR_ID=$SIMULATOR_ID" >> $GITHUB_ENV
+
+      - name: Build, verify, and deploy WebDriverAgent
+        run: |
+            set -euo pipefail
+
+            # Set up vars
+            WDA_DIR="/tmp/WebDriverAgent"
+            DERIVED_DATA="$HOME/Library/Developer/Xcode/DerivedData"
+            SIMULATOR_UDID="${{ env.UDID }}"
+            echo "Using simulator $SIMULATOR_UDID"
+
+            # Clone WDA
+            echo "Cloning WebDriverAgent..."
+            git clone https://github.com/appium/WebDriverAgent.git "$WDA_DIR"
+
+            # Build WDA using xcodebuild without signing (safe for CI)
+            echo "Building WebDriverAgentRunner..."
+            xcodebuild -project "$WDA_DIR/WebDriverAgent.xcodeproj" \
+              -scheme WebDriverAgentRunner \
+              -destination "id=$SIMULATOR_UDID" \
+              CODE_SIGNING_ALLOWED=NO \
+              build-for-testing
+
+            # Verify build output
+            echo "Looking for WDA build output..."
+            WDA_APP=$(find "$DERIVED_DATA" -type d -name "WebDriverAgentRunner-Runner.app" | head -n 1)
+            if [ -z "$WDA_APP" ]; then
+              echo "::error ::Failed to locate built WebDriverAgentRunner-Runner.app"
+              exit 1
+            fi
+            echo "Found built WDA app at: $WDA_APP"
+
+            # Install app to simulator
+            echo "Installing WDA app to simulator $SIMULATOR_UDID..."
+            xcrun simctl install "$SIMULATOR_UDID" "$WDA_APP"
+
+            # Launch WDA manually to ensure it's functional
+            echo "Launching WDA app on simulator..."
+            LAUNCH_OUTPUT=$(xcrun simctl launch "$SIMULATOR_UDID" com.facebook.WebDriverAgentRunner.xctrunner || true)
+
+            if echo "$LAUNCH_OUTPUT" | grep -q "error"; then
+              echo "::error ::Failed to launch WebDriverAgent on simulator. Output:"
+              echo "$LAUNCH_OUTPUT"
+              exit 1
+            fi
+
+            echo "✅ WDA built, verified, installed, and launched successfully."
+
 
       - name: Install MAUI Workloads
         run: |
