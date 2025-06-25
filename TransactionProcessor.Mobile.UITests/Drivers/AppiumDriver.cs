@@ -77,7 +77,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             caps.App = apkPath;
             caps.AddAdditionalAppiumOption("fullReset", true);
             caps.AddAdditionalAppiumOption("noReset", false);
-            caps.AddAdditionalAppiumOption("useNewWDA", true);
+            //caps.AddAdditionalAppiumOption("useNewWDA", true);
             var udid = Environment.GetEnvironmentVariable("SIMULATOR_ID");
             caps.AddAdditionalAppiumOption("udid", udid);
             //var driverOptions = new AppiumOptions();
