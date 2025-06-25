@@ -75,10 +75,10 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             caps.DeviceName = "iPhone 16";
             caps.AutomationName = "XCUITest";
             caps.App = apkPath;
-            caps.AddAdditionalAppiumOption("fullReset", false);
-            caps.AddAdditionalAppiumOption("noReset", true);
-            //caps.AddAdditionalAppiumOption("useNewWDA", true);
-            caps.AddAdditionalAppiumOption("usePrebuiltWDA", true);
+            caps.AddAdditionalAppiumOption("fullReset", true);
+            caps.AddAdditionalAppiumOption("noReset", false);
+            caps.AddAdditionalAppiumOption("useNewWDA", true);
+            
             var udid = Environment.GetEnvironmentVariable("SIMULATOR_ID");
             caps.AddAdditionalAppiumOption("udid", udid);
             //var driverOptions = new AppiumOptions();
