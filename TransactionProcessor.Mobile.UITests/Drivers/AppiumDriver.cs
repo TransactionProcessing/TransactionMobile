@@ -78,7 +78,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             caps.AddAdditionalAppiumOption("fullReset", true);
             caps.AddAdditionalAppiumOption("noReset", false);
             caps.AddAdditionalAppiumOption("useNewWDA", true);
-            
+            caps.AddAdditionalAppiumOption("launchTimeout", 300000); // 5 minutes
             var udid = Environment.GetEnvironmentVariable("SIMULATOR_ID");
             caps.AddAdditionalAppiumOption("udid", udid);
             //var driverOptions = new AppiumOptions();
