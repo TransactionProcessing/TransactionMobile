@@ -121,7 +121,8 @@ jobs:
 
       - name: Build Code
         #run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net9.0-ios -c Release --no-restore
-        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj -c Release -f net9.0-ios -r iossimulator-arm64 /p:EnableAssemblyILStripping=false /p:EnableSymbolStrip=false /p:LinkMode=None
+        #run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj -c Release -f net9.0-ios -r iossimulator-arm64 /p:EnableAssemblyILStripping=false /p:EnableSymbolStrip=false /p:LinkMode=None
+        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj -c Release -f net9.0-ios -r iossimulator-arm64 /p:LinkMode=SdkOnly /p:EnableAssemblyILStripping=true /p:EnableSymbolStrip=true /p:Codesign=false /p:DebugSymbols=false /p:UseInterpreter=true
 
       #- name: Build TestCategoryLister
       #  run: |
