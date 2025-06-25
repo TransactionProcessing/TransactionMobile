@@ -59,7 +59,7 @@ jobs:
             set -euo pipefail
 
             # Set up vars
-            WDA_DIR="/tmp/WebDriverAgent"
+            WDA_DIR="/tmp/WebDriverAgent"            
             DERIVED_DATA="$HOME/Library/Developer/Xcode/DerivedData"
             #SIMULATOR_UDID="${{ env.UDID }}"
             echo "Using simulator $SIMULATOR_ID"

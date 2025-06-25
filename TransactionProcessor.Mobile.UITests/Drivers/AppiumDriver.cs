@@ -85,6 +85,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             caps.AddAdditionalAppiumOption("fullReset", false);
             caps.AddAdditionalAppiumOption("useNewWDA", false);
             caps.AddAdditionalAppiumOption("usePrebuiltWDA", true);
+            caps.AddAdditionalAppiumOption("derivedDataPath", "/Users/runner/Library/Developer/Xcode/DerivedData");
 
             var udid = Environment.GetEnvironmentVariable("SIMULATOR_ID");
             caps.AddAdditionalAppiumOption("udid", udid);
