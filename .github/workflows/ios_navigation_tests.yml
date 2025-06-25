@@ -70,20 +70,21 @@ jobs:
 
             # Build WDA using xcodebuild without signing (safe for CI)
             echo "Building WebDriverAgentRunner..."
-            xcodebuild -project "$WDA_DIR/WebDriverAgent.xcodeproj" \
+            xcodebuild build-for-testing
+              -project "$WDA_DIR/WebDriverAgent.xcodeproj" \
               -scheme WebDriverAgentRunner \
               -destination "id=$SIMULATOR_ID" \
               CODE_SIGNING_ALLOWED=NO \
-              build-for-testing
+              -derivedDataPath /Users/runner/Library/Developer/Xcode/DerivedData/WebDriverAgent
 
             # Verify build output
-            echo "Looking for WDA build output..."
-            WDA_APP=$(find "$DERIVED_DATA" -type d -name "WebDriverAgentRunner-Runner.app" | head -n 1)
-            if [ -z "$WDA_APP" ]; then
-              echo "::error ::Failed to locate built WebDriverAgentRunner-Runner.app"
-              exit 1
-            fi
-            echo "Found built WDA app at: $WDA_APP"
+            #echo "Looking for WDA build output..."
+            #WDA_APP=$(find "$DERIVED_DATA" -type d -name "WebDriverAgentRunner-Runner.app" | head -n 1)
+            #if [ -z "$WDA_APP" ]; then
+            #  echo "::error ::Failed to locate built WebDriverAgentRunner-Runner.app"
+            #  exit 1
+            #fi
+            #echo "Found built WDA app at: $WDA_APP"
 
             # Install app to simulator
             echo "Installing WDA app to simulator $SIMULATOR_ID..."
