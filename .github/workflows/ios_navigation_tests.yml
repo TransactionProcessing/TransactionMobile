@@ -70,12 +70,12 @@ jobs:
 
             # Build WDA using xcodebuild without signing (safe for CI)
             echo "Building WebDriverAgentRunner..."
-            xcodebuild build-for-testing
-              -project "$WDA_DIR/WebDriverAgent.xcodeproj" \
+            xcodebuild -project "$WDA_DIR/WebDriverAgent.xcodeproj" \
               -scheme WebDriverAgentRunner \
               -destination "id=$SIMULATOR_ID" \
               CODE_SIGNING_ALLOWED=NO \
               -derivedDataPath /Users/runner/Library/Developer/Xcode/DerivedData/WebDriverAgent
+              build-for-testing              
 
             # Verify build output
             #echo "Looking for WDA build output..."
