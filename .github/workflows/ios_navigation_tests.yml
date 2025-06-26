@@ -54,6 +54,10 @@ jobs:
            echo "SIMULATOR_ID=$SIMULATOR_ID"
            echo "SIMULATOR_ID=$SIMULATOR_ID" >> $GITHUB_ENV
 
+      - name: List available simulators
+        run: |
+          xcrun simctl list | grep $SIMULATOR_ID
+
       - name: Build, verify, and deploy WebDriverAgent
         run: |
             set -euo pipefail
