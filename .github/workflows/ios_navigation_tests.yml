@@ -37,10 +37,6 @@ jobs:
           rm -rf ~/Library/Developer/Xcode/DerivedData
           rm -rf ~/.appium/node_modules/appium-webdriveragent/Build
 
-      - name: 🧪 Start Appium Server
-        run: |
-          nohup appium --log appium.log &
-
       - name: 📱 Create iOS Simulator (if needed)
         run: |
           SIMULATOR_NAME="ci-sim-$RANDOM"
@@ -53,6 +49,13 @@ jobs:
            SIMULATOR_ID=$(xcrun simctl list | grep 'Booted' | awk -F '[()]' '{print $2}')
            echo "SIMULATOR_ID=$SIMULATOR_ID"
            echo "SIMULATOR_ID=$SIMULATOR_ID" >> $GITHUB_ENV
+           
+           # Open the simulator UI so Appium doesn’t force-restart it later
+           open -Fn /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app
+    
+           # Wait a bit to ensure the UI is up
+           sleep 5
+
 
       - name: List available simulators
         run: |
@@ -119,6 +122,9 @@ jobs:
 
             echo "✅ WDA built, verified, installed, and launched successfully."
 
+      - name: 🧪 Start Appium Server
+        run: |
+          nohup appium --log appium.log &
 
       - name: Install MAUI Workloads
         run: |
