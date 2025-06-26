@@ -149,7 +149,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             var options = new AppiumOptions();
             options.PlatformName = "iOS";
             options.PlatformVersion = "18.0";
-            options.DeviceName = simulatorName;
+            //options.DeviceName = simulatorName;
             options.AutomationName = "XCUITest";
             options.App = appPath;
             options.AddAdditionalAppiumOption("bundleId", "com.transactionprocessor.mobile");
@@ -164,8 +164,10 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             options.AddAdditionalAppiumOption("wdaLocalPort", 8100);
             options.AddAdditionalAppiumOption("startIWDP", false); // Unless you need Safari/WebView debugging
             options.AddAdditionalAppiumOption("preventWDAAttachments", true);
+            var simulatorId = Environment.GetEnvironmentVariable("$SIMULATOR_ID");
+            options.AddAdditionalAppiumOption("udid", simulatorId);
             
-            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, options, TimeSpan.FromMinutes(10));
+            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, options, TimeSpan.FromMinutes(2));
         }
 
         private static void SetupAndroidDriver(AppiumLocalService appiumService) {
