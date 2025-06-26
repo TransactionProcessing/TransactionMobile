@@ -177,7 +177,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             options.AutomationName = "XCUITest";
             options.DeviceName = "iPhone 16"; // Ensure you keep this for parity
             options.App = appPath;            // Keep this OR bundleId, not both
-            // options.AddAdditionalAppiumOption("bundleId", "com.transactionprocessor.mobile"); // REMOVE unless app is preinstalled
+            options.AddAdditionalAppiumOption("bundleId", "com.transactionprocessor.mobile"); // REMOVE unless app is preinstalled
 
             // Environment var check
             var simulatorId = Environment.GetEnvironmentVariable("SIMULATOR_ID")?.Trim();
