@@ -145,17 +145,57 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             //driverOptions.AddAdditionalAppiumOption("shouldUseSingletonTestManager", true); // avoids extra processes
             //driverOptions.AddAdditionalAppiumOption("showXcodeLog", true); // shows build errors in logs
             //driverOptions.AddAdditionalAppiumOption("bundleId", "com.appium.WebDriverAgentRunner"); // match WDA bundle ID
-            var simulatorName = Environment.GetEnvironmentVariable("$SIMULATOR_NAME");
+            //var simulatorName = Environment.GetEnvironmentVariable("$SIMULATOR_NAME");
+            //var options = new AppiumOptions();
+            //options.PlatformName = "iOS";
+            //options.PlatformVersion = "18.0";
+
+            ////options.DeviceName = simulatorName;
+            //options.AutomationName = "XCUITest";
+            //options.App = appPath;
+            //options.AddAdditionalAppiumOption("bundleId", "com.transactionprocessor.mobile");
+            //options.AddAdditionalAppiumOption("usePrebuiltWDA", true);
+            //options.AddAdditionalAppiumOption("useNewWDA", false);
+            //options.AddAdditionalAppiumOption("skipDeviceInitialization", true);
+            //options.AddAdditionalAppiumOption("wdaStartupRetries", 1);
+            //options.AddAdditionalAppiumOption("wdaStartupRetryInterval", 10000);
+            //options.AddAdditionalAppiumOption("shouldUseSingletonTestManager", true);
+            //options.AddAdditionalAppiumOption("connectHardwareKeyboard", false);
+            //options.AddAdditionalAppiumOption("waitForQuiescence", true);
+            //options.AddAdditionalAppiumOption("wdaLocalPort", 8100);
+            //options.AddAdditionalAppiumOption("startIWDP", false); // Unless you need Safari/WebView debugging
+            //options.AddAdditionalAppiumOption("preventWDAAttachments", true);
+            //var simulatorId = Environment.GetEnvironmentVariable("SIMULATOR_ID");
+
+            //if (string.IsNullOrWhiteSpace(simulatorId))
+            //    throw new InvalidOperationException("SIMULATOR_ID environment variable is not set.");
+
+            //options.AddAdditionalAppiumOption("udid", simulatorId);
             var options = new AppiumOptions();
             options.PlatformName = "iOS";
             options.PlatformVersion = "18.0";
-            
-            //options.DeviceName = simulatorName;
             options.AutomationName = "XCUITest";
-            options.App = appPath;
-            options.AddAdditionalAppiumOption("bundleId", "com.transactionprocessor.mobile");
+            options.DeviceName = "iPhone 16"; // Ensure you keep this for parity
+            options.App = appPath;            // Keep this OR bundleId, not both
+            // options.AddAdditionalAppiumOption("bundleId", "com.transactionprocessor.mobile"); // REMOVE unless app is preinstalled
+
+            // Environment var check
+            var simulatorId = Environment.GetEnvironmentVariable("SIMULATOR_ID")?.Trim();
+            if (string.IsNullOrWhiteSpace(simulatorId))
+                throw new InvalidOperationException("SIMULATOR_ID environment variable is not set.");
+
+            options.AddAdditionalAppiumOption("udid", simulatorId);
+
+            // Matching other working config
             options.AddAdditionalAppiumOption("usePrebuiltWDA", true);
             options.AddAdditionalAppiumOption("useNewWDA", false);
+            options.AddAdditionalAppiumOption("webDriverAgentUrl", "http://127.0.0.1:8100");
+            options.AddAdditionalAppiumOption("derivedDataPath", "/Users/runner/Library/Developer/Xcode/DerivedData/WebDriverAgent");
+
+            options.AddAdditionalAppiumOption("noReset", true);
+            options.AddAdditionalAppiumOption("fullReset", false);
+
+            // Optionally keep the rest if needed
             options.AddAdditionalAppiumOption("skipDeviceInitialization", true);
             options.AddAdditionalAppiumOption("wdaStartupRetries", 1);
             options.AddAdditionalAppiumOption("wdaStartupRetryInterval", 10000);
@@ -163,18 +203,11 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             options.AddAdditionalAppiumOption("connectHardwareKeyboard", false);
             options.AddAdditionalAppiumOption("waitForQuiescence", true);
             options.AddAdditionalAppiumOption("wdaLocalPort", 8100);
-            options.AddAdditionalAppiumOption("startIWDP", false); // Unless you need Safari/WebView debugging
+            options.AddAdditionalAppiumOption("startIWDP", false);
             options.AddAdditionalAppiumOption("preventWDAAttachments", true);
-            var simulatorId = Environment.GetEnvironmentVariable("SIMULATOR_ID");
 
-            if (string.IsNullOrWhiteSpace(simulatorId))
-                throw new InvalidOperationException("SIMULATOR_ID environment variable is not set.");
 
-            options.AddAdditionalAppiumOption("udid", simulatorId);
-
-            //var capabilities = options.ToCapabilities() as ICapabilities;
-
-            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(options));
+            Console.WriteLine(simulatorId);
 
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, options, TimeSpan.FromMinutes(2));
         }
