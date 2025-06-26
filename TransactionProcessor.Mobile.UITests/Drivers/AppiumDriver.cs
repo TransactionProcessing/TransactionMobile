@@ -149,6 +149,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             var options = new AppiumOptions();
             options.PlatformName = "iOS";
             options.PlatformVersion = "18.0";
+            
             //options.DeviceName = simulatorName;
             options.AutomationName = "XCUITest";
             options.App = appPath;
@@ -165,6 +166,10 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             options.AddAdditionalAppiumOption("startIWDP", false); // Unless you need Safari/WebView debugging
             options.AddAdditionalAppiumOption("preventWDAAttachments", true);
             var simulatorId = Environment.GetEnvironmentVariable("SIMULATOR_ID");
+
+            if (string.IsNullOrWhiteSpace(simulatorId))
+                throw new InvalidOperationException("SIMULATOR_ID environment variable is not set.");
+
             options.AddAdditionalAppiumOption("udid", simulatorId);
             
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, options, TimeSpan.FromMinutes(2));
