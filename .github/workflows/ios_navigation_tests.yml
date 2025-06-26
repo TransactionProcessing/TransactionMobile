@@ -100,6 +100,20 @@ jobs:
               exit 1
             fi
 
+            echo "Waiting for WDA to be available on http://127.0.0.1:8100/status..."
+
+            for i in {1..30}; do
+              if curl --silent --fail http://127.0.0.1:8100/status | grep -q "state"; then
+                echo "✅ WDA is up and running."
+                exit 0
+              fi
+              echo "Waiting... ($i)"
+              sleep 2
+            done
+
+            echo "::error::WDA failed to start within timeout."
+            exit 1
+
             echo "✅ WDA built, verified, installed, and launched successfully."
 
 

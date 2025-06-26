@@ -86,7 +86,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             caps.AddAdditionalAppiumOption("useNewWDA", false);
             caps.AddAdditionalAppiumOption("webDriverAgentUrl", "http://127.0.0.1:8100");
             caps.AddAdditionalAppiumOption("usePrebuiltWDA", true);
-            caps.AddAdditionalAppiumOption("derivedDataPath", "/Users/runner/Library/Developer/Xcode/DerivedData/WebDriverAgent");
+            //caps.AddAdditionalAppiumOption("derivedDataPath", "/Users/runner/Library/Developer/Xcode/DerivedData/WebDriverAgent");
 
             var udid = Environment.GetEnvironmentVariable("SIMULATOR_ID");
             caps.AddAdditionalAppiumOption("udid", udid);
