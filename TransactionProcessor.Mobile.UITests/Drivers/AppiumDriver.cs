@@ -171,7 +171,11 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
                 throw new InvalidOperationException("SIMULATOR_ID environment variable is not set.");
 
             options.AddAdditionalAppiumOption("udid", simulatorId);
-            
+
+            var capabilities = options.ToCapabilities() as ICapabilities;
+
+            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(capabilities));
+
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, options, TimeSpan.FromMinutes(2));
         }
 
