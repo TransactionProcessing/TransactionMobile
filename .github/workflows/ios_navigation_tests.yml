@@ -86,20 +86,19 @@ jobs:
             fi
             echo "Found built WDA app at: $WDA_APP"
 
-            # Install app to simulator
-            echo "Installing WDA app to simulator $SIMULATOR_ID..."
-            xcrun simctl install "$SIMULATOR_ID" "$WDA_APP"
+            # Launch WDA via xcodebuild test-without-building (required for XCTest runners)
+            echo "Launching WebDriverAgent test runner on simulator..."
+            xcodebuild test-without-building \
+                -project "$WDA_DIR/WebDriverAgent.xcodeproj" \
+                -scheme WebDriverAgentRunner \
+                -destination "id=$SIMULATOR_ID" \
+                -derivedDataPath "$DERIVED_DATA" \
+                IPHONEOS_DEPLOYMENT_TARGET=18.0 \
+                GCC_TREAT_WARNINGS_AS_ERRORS=0 \
+                COMPILER_INDEX_STORE_ENABLE=NO \
+                > /tmp/wda-launch.log 2>&1 &
 
-            # Launch WDA manually to ensure it's functional
-            echo "Launching WDA app on simulator..."
-            LAUNCH_OUTPUT=$(xcrun simctl launch "$SIMULATOR_ID" com.facebook.WebDriverAgentRunner.xctrunner || true)
-
-            if echo "$LAUNCH_OUTPUT" | grep -q "error"; then
-              echo "::error ::Failed to launch WebDriverAgent on simulator. Output:"
-              echo "$LAUNCH_OUTPUT"
-              exit 1
-            fi
-
+            # Wait for WDA to be ready
             echo "Waiting for WDA to be available on http://127.0.0.1:8100/status..."
 
             for i in {1..30}; do
