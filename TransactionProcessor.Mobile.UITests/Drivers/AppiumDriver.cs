@@ -172,9 +172,9 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
 
             options.AddAdditionalAppiumOption("udid", simulatorId);
 
-            var capabilities = options.ToCapabilities() as ICapabilities;
+            //var capabilities = options.ToCapabilities() as ICapabilities;
 
-            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(capabilities));
+            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(options));
 
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, options, TimeSpan.FromMinutes(2));
         }
