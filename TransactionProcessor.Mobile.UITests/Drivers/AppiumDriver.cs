@@ -164,7 +164,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             options.AddAdditionalAppiumOption("wdaLocalPort", 8100);
             options.AddAdditionalAppiumOption("startIWDP", false); // Unless you need Safari/WebView debugging
             options.AddAdditionalAppiumOption("preventWDAAttachments", true);
-            var simulatorId = Environment.GetEnvironmentVariable("$SIMULATOR_ID");
+            var simulatorId = Environment.GetEnvironmentVariable("SIMULATOR_ID");
             options.AddAdditionalAppiumOption("udid", simulatorId);
             
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, options, TimeSpan.FromMinutes(2));
