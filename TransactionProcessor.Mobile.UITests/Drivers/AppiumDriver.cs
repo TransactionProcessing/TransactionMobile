@@ -23,11 +23,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
         public static AppiumDriver Driver;
 
         public void StartApp() {
-            //OptionCollector o = new OptionCollector();
-            //o.AddArguments(GeneralOptionList.BasePath("/wd/hub"));
-            AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723)
-                //.WithArguments(o)
-                .Build();
+            AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723).Build();
             
             if (appiumService.IsRunning == false){
                 appiumService.OutputDataReceived += (sender,
@@ -42,7 +38,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
                 AppiumDriverWrapper.SetupAndroidDriver(appiumService);
             }
             else if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.iOS){
-                AppiumDriverWrapper.SetupiOSDriver(appiumService);
+                AppiumDriverWrapper.SetupiOSDriverX();
             }
             else if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
             {
@@ -62,6 +58,30 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             //driverOptions.AddAdditionalAppiumOption("appium:createSessionTimeout", "100000");
             driverOptions.App = "TransactionMobile_zct748q4xfh0m!App";
             AppiumDriverWrapper.Driver = new WindowsDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
+        }
+
+        public static void SetupiOSDriverX() {
+            String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionProcessor.Mobile/bin/Release/net9.0-ios/iossimulator-arm64/");
+            var appPath = Path.Combine(binariesFolder, "TransactionProcessor.Mobile.app");
+            var options = new AppiumOptions();
+            options.PlatformName = "iOS";
+            options.PlatformVersion = "18.0";
+            options.AutomationName = "XCUITest";
+            options.DeviceName = "iPhone 16";
+            options.App = appPath; // Only if you want Appium to install the app
+
+            var simulatorId = Environment.GetEnvironmentVariable("SIMULATOR_ID")?.Trim();
+            if (string.IsNullOrWhiteSpace(simulatorId))
+                throw new InvalidOperationException("SIMULATOR_ID environment variable is not set.");
+            options.AddAdditionalAppiumOption("udid", simulatorId);
+
+            options.AddAdditionalAppiumOption("usePrebuiltWDA", true);
+            options.AddAdditionalAppiumOption("noReset", true);
+            options.AddAdditionalAppiumOption("fullReset", false);
+
+            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(
+                new Uri("http://127.0.0.1:4723/wd/hub"), options, TimeSpan.FromMinutes(2));
         }
 
         private static void SetupiOSDriver(AppiumLocalService appiumService) {
@@ -175,45 +195,23 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             options.PlatformName = "iOS";
             options.PlatformVersion = "18.0";
             options.AutomationName = "XCUITest";
-            options.DeviceName = "iPhone 16"; // Ensure you keep this for parity
-            options.App = appPath;            // Keep this OR bundleId, not both
-            options.AddAdditionalAppiumOption("bundleId", "com.transactionprocessor.mobile"); // REMOVE unless app is preinstalled
+            options.DeviceName = "iPhone 16";
+            options.App = appPath; // Only if you want Appium to install the app
 
-            // Environment var check
             var simulatorId = Environment.GetEnvironmentVariable("SIMULATOR_ID")?.Trim();
             if (string.IsNullOrWhiteSpace(simulatorId))
                 throw new InvalidOperationException("SIMULATOR_ID environment variable is not set.");
-
             options.AddAdditionalAppiumOption("udid", simulatorId);
 
-            // Matching other working config
             options.AddAdditionalAppiumOption("usePrebuiltWDA", true);
-            options.AddAdditionalAppiumOption("useNewWDA", false);
-            options.AddAdditionalAppiumOption("webDriverAgentUrl", "http://127.0.0.1:8100");
-            options.AddAdditionalAppiumOption("derivedDataPath", "/Users/runner/Library/Developer/Xcode/DerivedData/WebDriverAgent");
-
             options.AddAdditionalAppiumOption("noReset", true);
             options.AddAdditionalAppiumOption("fullReset", false);
 
-            // Optionally keep the rest if needed
-            options.AddAdditionalAppiumOption("skipDeviceInitialization", true);
-            options.AddAdditionalAppiumOption("wdaStartupRetries", 1);
-            options.AddAdditionalAppiumOption("wdaStartupRetryInterval", 10000);
-            options.AddAdditionalAppiumOption("shouldUseSingletonTestManager", true);
-            options.AddAdditionalAppiumOption("connectHardwareKeyboard", false);
-            options.AddAdditionalAppiumOption("waitForQuiescence", true);
-            options.AddAdditionalAppiumOption("wdaLocalPort", 8100);
-            options.AddAdditionalAppiumOption("startIWDP", false);
-            options.AddAdditionalAppiumOption("preventWDAAttachments", true);
-
-
-            Console.WriteLine(simulatorId);
-
-            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, options, TimeSpan.FromMinutes(2));
+            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(
+                new Uri("http://127.0.0.1:4723/wd/hub"), options, TimeSpan.FromMinutes(2));
         }
 
         private static void SetupAndroidDriver(AppiumLocalService appiumService) {
-            // Do Android stuff to start up
             var driverOptions = new AppiumOptions();
             driverOptions.AddAdditionalAppiumOption("adbExecTimeout", TimeSpan.FromMinutes(5).TotalMilliseconds);
             driverOptions.AutomationName = "UIAutomator2";
@@ -221,7 +219,6 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             driverOptions.PlatformVersion = "15.0";
             driverOptions.DeviceName = "emulator-5554";
             
-            // TODO: Only do this locally
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
             driverOptions.AddAdditionalAppiumOption("appPackage", "com.transactionprocessor.mobile");
             driverOptions.AddAdditionalAppiumOption("enforceAppInstall", true);
@@ -237,7 +234,6 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             driverOptions.App = apkPath;
             
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.Android.AndroidDriver(appiumService, driverOptions, TimeSpan.FromMinutes(5));
-            
         }
 
         public List<LogEntry> GetLogs() {
