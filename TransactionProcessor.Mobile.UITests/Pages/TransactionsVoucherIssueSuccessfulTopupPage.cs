@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using Shared.IntegrationTesting;
 using TransactionProcessor.Mobile.UITests.Common;
+using TransactionProcessor.Mobile.UITests.Drivers;
 
 namespace TransactionProcessor.Mobile.UITests.Pages;
 
@@ -16,7 +17,11 @@ public class TransactionsVoucherIssueSuccessfulTopupPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "VoucherIssueSuccessful";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
+    {
+        MobileTestPlatform.iOS => "Voucher Issue Successful",
+        _ => "VoucherIssueSuccessful"
+    };
 
     public async Task ClickCompleteButton()
     {

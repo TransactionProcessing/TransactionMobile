@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using TransactionProcessor.Mobile.UITests.Common;
+using TransactionProcessor.Mobile.UITests.Drivers;
 
 namespace TransactionProcessor.Mobile.UITests.Pages;
 
@@ -12,7 +13,11 @@ public class TransactionsVoucherSelectProductPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "SelectaProduct";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
+    {
+        MobileTestPlatform.iOS => "Select a Product",
+        _ => "SelectaProduct"
+    };
 
     #endregion
 

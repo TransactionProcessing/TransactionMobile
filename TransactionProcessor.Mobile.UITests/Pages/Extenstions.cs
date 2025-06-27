@@ -60,34 +60,85 @@ public static class Extenstions
         }
         */
     // TODO: make the GetElement method more generic to handle both Android and iOS and make the android package configurable
+    //public static async Task<IWebElement> GetElement(this AppiumDriver driver,
+    //                                                 string automationId,
+    //                                                 string androidPackage = "com.transactionprocessor.mobile") {
+    //    TimeSpan retryFor = TimeSpan.FromSeconds(60);
+
+    //    IWebElement element = null;
+    //    await Retry.For(async () => {
+
+    //        string fullResourceId = $"{androidPackage}:id/{automationId}";
+
+    //        try {
+    //            element = driver.FindElement(MobileBy.Id(fullResourceId));
+    //        }
+    //        catch (NoSuchElementException) {
+    //            // Ignore and try AccessibilityId
+    //        }
+
+    //        if (element == null) {
+    //            try {
+    //                element = driver.FindElement(MobileBy.AccessibilityId(automationId));
+    //            }
+    //            catch (NoSuchElementException) {
+
+    //            }
+    //        }
+
+    //        element.ShouldNotBeNull($"element not found. used fullResourceId [{fullResourceId}] and automationId [{automationId}]");
+    //    }, retryFor);
+    //    return element;
+    //}
     public static async Task<IWebElement> GetElement(this AppiumDriver driver,
                                                      string automationId,
-                                                     string androidPackage = "com.transactionprocessor.mobile") {
+                                                     string androidPackage = "com.transactionprocessor.mobile")
+    {
         TimeSpan retryFor = TimeSpan.FromSeconds(60);
 
         IWebElement element = null;
-        await Retry.For(async () => {
 
-            string fullResourceId = $"{androidPackage}:id/{automationId}";
+        await Retry.For(async () =>
+        {
+            try
+            {
+                // Determine platform at runtime
+                var platform = driver.Capabilities.GetCapability("platformName")?.ToString()?.ToLowerInvariant();
 
-            try {
-                element = driver.FindElement(MobileBy.Id(fullResourceId));
-            }
-            catch (NoSuchElementException) {
-                // Ignore and try AccessibilityId
-            }
-
-            if (element == null) {
-                try {
-                    element = driver.FindElement(MobileBy.AccessibilityId(automationId));
+                if (platform == "android")
+                {
+                    string fullResourceId = $"{androidPackage}:id/{automationId}";
+                    try
+                    {
+                        element = driver.FindElement(MobileBy.Id(fullResourceId));
+                    }
+                    catch (NoSuchElementException)
+                    {
+                        // fallback to AccessibilityId
+                    }
                 }
-                catch (NoSuchElementException) {
 
+                if (element == null)
+                {
+                    try
+                    {
+                        element = driver.FindElement(MobileBy.AccessibilityId(automationId));
+                    }
+                    catch (NoSuchElementException)
+                    {
+                        // do nothing; handled by retry
+                    }
                 }
+
+                element.ShouldNotBeNull($"element not found. used automationId [{automationId}]");
+            }
+            catch (WebDriverException ex)
+            {
+                // optionally log or handle intermittent failures
             }
 
-            element.ShouldNotBeNull($"element not found. used fullResourceId [{fullResourceId}] and automationId [{automationId}]");
         }, retryFor);
+
         return element;
     }
 

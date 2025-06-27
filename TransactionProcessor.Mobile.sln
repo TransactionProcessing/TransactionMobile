@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionProcessor.Mobile
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionProcessor.Mobile.UITests", "TransactionProcessor.Mobile.UITests\TransactionProcessor.Mobile.UITests.csproj", "{E892CDC5-7DDF-4A0A-B8DB-AAC2DE758E56}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCategoryLister", "TestCategoryLister\TestCategoryLister.csproj", "{A9557544-11B0-4718-A52D-8D513C9DD619}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,7 @@ Global
 		{6BE81803-4FDB-4900-8ED4-971A6AD4140D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{6BE81803-4FDB-4900-8ED4-971A6AD4140D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BE81803-4FDB-4900-8ED4-971A6AD4140D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BE81803-4FDB-4900-8ED4-971A6AD4140D}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{93C672C9-E5CA-4AE5-A190-9FF15B28F318}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{93C672C9-E5CA-4AE5-A190-9FF15B28F318}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93C672C9-E5CA-4AE5-A190-9FF15B28F318}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -38,6 +41,10 @@ Global
 		{E892CDC5-7DDF-4A0A-B8DB-AAC2DE758E56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E892CDC5-7DDF-4A0A-B8DB-AAC2DE758E56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E892CDC5-7DDF-4A0A-B8DB-AAC2DE758E56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9557544-11B0-4718-A52D-8D513C9DD619}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9557544-11B0-4718-A52D-8D513C9DD619}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9557544-11B0-4718-A52D-8D513C9DD619}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9557544-11B0-4718-A52D-8D513C9DD619}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,6 +54,7 @@ Global
 		{93C672C9-E5CA-4AE5-A190-9FF15B28F318} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{327D1FDB-E953-4501-9DED-193EF75148E1} = {7AB22349-8BB9-41D3-A40F-268DFC30FD0C}
 		{E892CDC5-7DDF-4A0A-B8DB-AAC2DE758E56} = {7AB22349-8BB9-41D3-A40F-268DFC30FD0C}
+		{A9557544-11B0-4718-A52D-8D513C9DD619} = {7AB22349-8BB9-41D3-A40F-268DFC30FD0C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4A92260C-922A-4553-A4DE-94C3BE3BA20F}

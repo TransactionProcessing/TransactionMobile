@@ -23,11 +23,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
         public static AppiumDriver Driver;
 
         public void StartApp() {
-            //OptionCollector o = new OptionCollector();
-            //o.AddArguments(GeneralOptionList.BasePath("/wd/hub"));
-            AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723)
-                //.WithArguments(o)
-                .Build();
+            AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723).Build();
             
             if (appiumService.IsRunning == false){
                 appiumService.OutputDataReceived += (sender,
@@ -42,7 +38,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
                 AppiumDriverWrapper.SetupAndroidDriver(appiumService);
             }
             else if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.iOS){
-                AppiumDriverWrapper.SetupiOSDriver(appiumService);
+                AppiumDriverWrapper.SetupiOSDriverX();
             }
             else if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
             {
@@ -64,21 +60,56 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             AppiumDriverWrapper.Driver = new WindowsDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
         }
 
+        public static void SetupiOSDriverX() {
+            String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionProcessor.Mobile/bin/Release/net9.0-ios/iossimulator-arm64/");
+            var appPath = Path.Combine(binariesFolder, "TransactionProcessor.Mobile.app");
+            var options = new AppiumOptions();
+            options.PlatformName = "iOS";
+            options.PlatformVersion = "18.0";
+            options.AutomationName = "XCUITest";
+            options.DeviceName = "iPhone 16";
+            options.App = appPath; // Only if you want Appium to install the app
+
+            var simulatorId = Environment.GetEnvironmentVariable("SIMULATOR_ID")?.Trim();
+            if (string.IsNullOrWhiteSpace(simulatorId))
+                throw new InvalidOperationException("SIMULATOR_ID environment variable is not set.");
+            options.AddAdditionalAppiumOption("udid", simulatorId);
+
+            options.AddAdditionalAppiumOption("usePrebuiltWDA", true);
+            options.AddAdditionalAppiumOption("noReset", true);
+            options.AddAdditionalAppiumOption("fullReset", false);
+
+            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(
+                new Uri("http://127.0.0.1:4723/wd/hub"), options, TimeSpan.FromMinutes(2));
+        }
+
         private static void SetupiOSDriver(AppiumLocalService appiumService) {
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.Maui/bin/Release/net8.0-ios/iossimulator-arm64/");
-            var apkPath = Path.Combine(binariesFolder, "TransactionMobile.Maui.app");
-            
-            var caps = new AppiumOptions();
-            caps.PlatformName = "iOS";
-            caps.PlatformVersion = "17.4";
-            caps.DeviceName = "iPhone 15";
-            caps.AutomationName = "XCUITest";
-            caps.App = apkPath;
-            caps.AddAdditionalAppiumOption("fullReset", true);
-            caps.AddAdditionalAppiumOption("noReset", false);
-            caps.AddAdditionalAppiumOption("useNewWDA", true);
+            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionProcessor.Mobile/bin/Release/net9.0-ios/iossimulator-arm64/");
+            var appPath = Path.Combine(binariesFolder, "TransactionProcessor.Mobile.app");
 
+            //var caps = new AppiumOptions();
+            //caps.PlatformName = "iOS";
+            //caps.PlatformVersion = "18.0";
+            //caps.DeviceName = "iPhone 16";
+            //caps.AutomationName = "XCUITest";
+            //caps.App = apkPath;
+            // original code
+            //caps.AddAdditionalAppiumOption("fullReset", true);
+            //caps.AddAdditionalAppiumOption("noReset", false);
+            //caps.AddAdditionalAppiumOption("useNewWDA", true);
+            //caps.AddAdditionalAppiumOption("launchTimeout", 300000); // 5 minutes
+            // original code
+            //caps.AddAdditionalAppiumOption("noReset", true);
+            //caps.AddAdditionalAppiumOption("fullReset", false);
+            //caps.AddAdditionalAppiumOption("useNewWDA", false);
+            //caps.AddAdditionalAppiumOption("webDriverAgentUrl", "http://127.0.0.1:8100");
+            //caps.AddAdditionalAppiumOption("usePrebuiltWDA", true);
+            //caps.AddAdditionalAppiumOption("derivedDataPath", "/Users/runner/Library/Developer/Xcode/DerivedData/WebDriverAgent");
+
+            //var simulatorName = Environment.GetEnvironmentVariable("$SIMULATOR_NAME");
+            //caps.AddAdditionalAppiumOption("udid", udid);
             //var driverOptions = new AppiumOptions();
             //driverOptions.AutomationName = "XCUITest";
             ////driverOptions.PlatformName = "iOS";
@@ -134,13 +165,53 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             //driverOptions.AddAdditionalAppiumOption("shouldUseSingletonTestManager", true); // avoids extra processes
             //driverOptions.AddAdditionalAppiumOption("showXcodeLog", true); // shows build errors in logs
             //driverOptions.AddAdditionalAppiumOption("bundleId", "com.appium.WebDriverAgentRunner"); // match WDA bundle ID
+            //var simulatorName = Environment.GetEnvironmentVariable("$SIMULATOR_NAME");
+            //var options = new AppiumOptions();
+            //options.PlatformName = "iOS";
+            //options.PlatformVersion = "18.0";
 
+            ////options.DeviceName = simulatorName;
+            //options.AutomationName = "XCUITest";
+            //options.App = appPath;
+            //options.AddAdditionalAppiumOption("bundleId", "com.transactionprocessor.mobile");
+            //options.AddAdditionalAppiumOption("usePrebuiltWDA", true);
+            //options.AddAdditionalAppiumOption("useNewWDA", false);
+            //options.AddAdditionalAppiumOption("skipDeviceInitialization", true);
+            //options.AddAdditionalAppiumOption("wdaStartupRetries", 1);
+            //options.AddAdditionalAppiumOption("wdaStartupRetryInterval", 10000);
+            //options.AddAdditionalAppiumOption("shouldUseSingletonTestManager", true);
+            //options.AddAdditionalAppiumOption("connectHardwareKeyboard", false);
+            //options.AddAdditionalAppiumOption("waitForQuiescence", true);
+            //options.AddAdditionalAppiumOption("wdaLocalPort", 8100);
+            //options.AddAdditionalAppiumOption("startIWDP", false); // Unless you need Safari/WebView debugging
+            //options.AddAdditionalAppiumOption("preventWDAAttachments", true);
+            //var simulatorId = Environment.GetEnvironmentVariable("SIMULATOR_ID");
 
-            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(appiumService, caps, TimeSpan.FromMinutes(10));
+            //if (string.IsNullOrWhiteSpace(simulatorId))
+            //    throw new InvalidOperationException("SIMULATOR_ID environment variable is not set.");
+
+            //options.AddAdditionalAppiumOption("udid", simulatorId);
+            var options = new AppiumOptions();
+            options.PlatformName = "iOS";
+            options.PlatformVersion = "18.0";
+            options.AutomationName = "XCUITest";
+            options.DeviceName = "iPhone 16";
+            options.App = appPath; // Only if you want Appium to install the app
+
+            var simulatorId = Environment.GetEnvironmentVariable("SIMULATOR_ID")?.Trim();
+            if (string.IsNullOrWhiteSpace(simulatorId))
+                throw new InvalidOperationException("SIMULATOR_ID environment variable is not set.");
+            options.AddAdditionalAppiumOption("udid", simulatorId);
+
+            options.AddAdditionalAppiumOption("usePrebuiltWDA", true);
+            options.AddAdditionalAppiumOption("noReset", true);
+            options.AddAdditionalAppiumOption("fullReset", false);
+
+            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(
+                new Uri("http://127.0.0.1:4723/"), options, TimeSpan.FromMinutes(2));
         }
 
         private static void SetupAndroidDriver(AppiumLocalService appiumService) {
-            // Do Android stuff to start up
             var driverOptions = new AppiumOptions();
             driverOptions.AddAdditionalAppiumOption("adbExecTimeout", TimeSpan.FromMinutes(5).TotalMilliseconds);
             driverOptions.AutomationName = "UIAutomator2";
@@ -148,7 +219,6 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             driverOptions.PlatformVersion = "15.0";
             driverOptions.DeviceName = "emulator-5554";
             
-            // TODO: Only do this locally
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
             driverOptions.AddAdditionalAppiumOption("appPackage", "com.transactionprocessor.mobile");
             driverOptions.AddAdditionalAppiumOption("enforceAppInstall", true);
@@ -164,7 +234,6 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             driverOptions.App = apkPath;
             
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.Android.AndroidDriver(appiumService, driverOptions, TimeSpan.FromMinutes(5));
-            
         }
 
         public List<LogEntry> GetLogs() {
