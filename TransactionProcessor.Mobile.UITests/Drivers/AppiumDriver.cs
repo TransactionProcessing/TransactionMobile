@@ -208,7 +208,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             options.AddAdditionalAppiumOption("fullReset", false);
 
             AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.iOS.IOSDriver(
-                new Uri("http://127.0.0.1:4723/wd/hub"), options, TimeSpan.FromMinutes(2));
+                new Uri("http://127.0.0.1:4723/"), options, TimeSpan.FromMinutes(2));
         }
 
         private static void SetupAndroidDriver(AppiumLocalService appiumService) {
