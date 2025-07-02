@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using Shared.IntegrationTesting;
 using TransactionProcessor.Mobile.UITests.Common;
+using TransactionProcessor.Mobile.UITests.Drivers;
 
 namespace TransactionProcessor.Mobile.UITests.Pages;
 
@@ -12,8 +13,12 @@ public class TransactionsBillPaymentSelectOperatorPage : BasePage2
     }
 
     #region Properties
-
-    protected override String Trait => "SelectanOperator";
+    
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
+    {
+        MobileTestPlatform.iOS => "Select an Operator",
+        _ => "SelectanOperator"
+    };
 
     #endregion
 
@@ -49,7 +54,11 @@ public class TransactionsBillPaymentEnterAccountDetailsPage : BasePage2
         this.GetAccountButton = "GetAccountButton";
     }
 
-    protected override String Trait => "GetCustomerAccount";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
+    {
+        MobileTestPlatform.iOS => "Get Customer Account",
+        _ => "GetCustomerAccount"
+    };
 
     public async Task EnterCustomerAccountNumber(String customerAccountNumber)
     {
@@ -80,7 +89,11 @@ public class TransactionsBillPaymentEnterMeterDetailsPage : BasePage2
         this.GetMeterButton = "GetMeterButton";
     }
 
-    protected override String Trait => "GetMeter";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
+    {
+        MobileTestPlatform.iOS => "Get Meter",
+        _ => "GetMeter"
+    };
 
     public async Task EnterMeterNumber(String meterNumber)
     {
@@ -122,7 +135,11 @@ public class TransactionsBillPaymentMakeAPaymentPage : BasePage2
 
     }
 
-    protected override String Trait => "MakeBillPayment";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
+    {
+        MobileTestPlatform.iOS => "Make Bill Payment",
+        _ => "MakeBillPayment"
+    };
 
     public async Task EnterCustomerMobileNumber(String customerMobileNumber)
     {
@@ -195,7 +212,11 @@ public class TransactionsBillPaymentSuccessfulPaymentPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "BillPaymentSuccessful";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
+    {
+        MobileTestPlatform.iOS => "Bill Payment Successful",
+        _ => "BillPaymentSuccessful"
+    };
 
     public async Task ClickCompleteButton()
     {

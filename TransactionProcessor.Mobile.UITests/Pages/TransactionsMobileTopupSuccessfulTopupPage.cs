@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using Shared.IntegrationTesting;
 using TransactionProcessor.Mobile.UITests.Common;
+using TransactionProcessor.Mobile.UITests.Drivers;
 
 namespace TransactionProcessor.Mobile.UITests.Pages;
 
@@ -14,8 +15,12 @@ public class TransactionsMobileTopupSuccessfulTopupPage : BasePage2 {
 
     #region Properties
 
-    protected override String Trait => "MobileTopupSuccessful";
-    
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
+    {
+        MobileTestPlatform.iOS => "Mobile Topup Successful",
+        _ => "MobileTopupSuccessful"
+    };
+
     public async Task ClickCompleteButton() {
         await Retry.For(async () => {
                             IWebElement element = await this.WaitForElementByAccessibilityId(this.CompleteButton);
