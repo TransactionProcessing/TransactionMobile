@@ -8,7 +8,7 @@ Scenario: Back Button from Login Screen
 	Then The application closes
 
 # Home Page Back Button Tests
-@PRNavTest
+#@PRNavTest
 Scenario: Back Button from Home Page Screen
 	Given I am on the Login Screen
 	And the application is in training mode

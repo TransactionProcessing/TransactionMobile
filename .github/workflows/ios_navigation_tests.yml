@@ -9,8 +9,8 @@ jobs:
   software_navigation_tests:
     runs-on: macos-15
     env:
-      PLATFORM_VERSION: "18.0"
-      DEVICE_NAME: "iPhone 16"
+      PLATFORM_VERSION: "17.4"
+      DEVICE_NAME: "iPhone 14"
       APP_PATH: "./MyTestApp.app"
 
     steps:
@@ -32,10 +32,10 @@ jobs:
           npm install -g appium
           appium driver install xcuitest
 
-      - name: 🧹 Clean DerivedData and WDA cache
-        run: |
-          rm -rf ~/Library/Developer/Xcode/DerivedData
-          rm -rf ~/.appium/node_modules/appium-webdriveragent/Build
+      #- name: 🧹 Clean DerivedData and WDA cache
+      #  run: |
+      #    rm -rf ~/Library/Developer/Xcode/DerivedData
+      #    rm -rf ~/.appium/node_modules/appium-webdriveragent/Build
 
       - name: 📱 Create iOS Simulator (if needed)
         run: |
@@ -61,66 +61,66 @@ jobs:
         run: |
           xcrun simctl list | grep $SIMULATOR_ID
 
-      - name: Build, verify, and deploy WebDriverAgent
-        run: |
-            set -euo pipefail
+      #- name: Build, verify, and deploy WebDriverAgent
+      #  run: |
+      #      set -euo pipefail
 
-            # Set up vars
-            WDA_DIR="/tmp/WebDriverAgent"            
-            DERIVED_DATA="/Users/runner/Library/Developer/Xcode/DerivedData/WebDriverAgent"
-            #SIMULATOR_UDID="${{ env.UDID }}"
-            echo "Using simulator $SIMULATOR_ID"
+      #      # Set up vars
+      #      WDA_DIR="/tmp/WebDriverAgent"            
+      #      DERIVED_DATA="/Users/runner/Library/Developer/Xcode/DerivedData/WebDriverAgent"
+      #      #SIMULATOR_UDID="${{ env.UDID }}"
+            # echo "Using simulator $SIMULATOR_ID"
 
-            # Clone WDA
-            echo "Cloning WebDriverAgent..."
-            git clone https://github.com/appium/WebDriverAgent.git "$WDA_DIR"
+            # # Clone WDA
+            # echo "Cloning WebDriverAgent..."
+            # git clone https://github.com/appium/WebDriverAgent.git "$WDA_DIR"
 
-            # Build WDA using xcodebuild without signing (safe for CI)
-            echo "Building WebDriverAgentRunner..."
-            xcodebuild -project "$WDA_DIR/WebDriverAgent.xcodeproj" \
-                -scheme WebDriverAgentRunner \
-                -destination "id=$SIMULATOR_ID" \
-                -derivedDataPath "/Users/runner/Library/Developer/Xcode/DerivedData/WebDriverAgent" \
-                CODE_SIGNING_ALLOWED=NO \
-                build-for-testing             
+            # # Build WDA using xcodebuild without signing (safe for CI)
+            # echo "Building WebDriverAgentRunner..."
+            # xcodebuild -project "$WDA_DIR/WebDriverAgent.xcodeproj" \
+            #     -scheme WebDriverAgentRunner \
+            #     -destination "id=$SIMULATOR_ID" \
+            #     -derivedDataPath "/Users/runner/Library/Developer/Xcode/DerivedData/WebDriverAgent" \
+            #     CODE_SIGNING_ALLOWED=NO \
+            #     build-for-testing             
 
-            # Verify build output
-            echo "Looking for WDA build output..."
-            WDA_APP=$(find "$DERIVED_DATA" -type d -name "WebDriverAgentRunner-Runner.app" | head -n 1)
-            if [ -z "$WDA_APP" ]; then
-              echo "::error ::Failed to locate built WebDriverAgentRunner-Runner.app"
-              exit 1
-            fi
-            echo "Found built WDA app at: $WDA_APP"
+            # # Verify build output
+            # echo "Looking for WDA build output..."
+            # WDA_APP=$(find "$DERIVED_DATA" -type d -name "WebDriverAgentRunner-Runner.app" | head -n 1)
+            # if [ -z "$WDA_APP" ]; then
+            #   echo "::error ::Failed to locate built WebDriverAgentRunner-Runner.app"
+            #   exit 1
+            # fi
+            # echo "Found built WDA app at: $WDA_APP"
 
-            # Launch WDA via xcodebuild test-without-building (required for XCTest runners)
-            echo "Launching WebDriverAgent test runner on simulator..."
-            xcodebuild test-without-building \
-                -project "$WDA_DIR/WebDriverAgent.xcodeproj" \
-                -scheme WebDriverAgentRunner \
-                -destination "id=$SIMULATOR_ID" \
-                -derivedDataPath "$DERIVED_DATA" \
-                IPHONEOS_DEPLOYMENT_TARGET=18.0 \
-                GCC_TREAT_WARNINGS_AS_ERRORS=0 \
-                COMPILER_INDEX_STORE_ENABLE=NO \
-                > /tmp/wda-launch.log 2>&1 &
+            # # Launch WDA via xcodebuild test-without-building (required for XCTest runners)
+            # echo "Launching WebDriverAgent test runner on simulator..."
+            # xcodebuild test-without-building \
+            #     -project "$WDA_DIR/WebDriverAgent.xcodeproj" \
+            #     -scheme WebDriverAgentRunner \
+            #     -destination "id=$SIMULATOR_ID" \
+            #     -derivedDataPath "$DERIVED_DATA" \
+            #     IPHONEOS_DEPLOYMENT_TARGET=18.0 \
+            #     GCC_TREAT_WARNINGS_AS_ERRORS=0 \
+            #     COMPILER_INDEX_STORE_ENABLE=NO \
+            #     > /tmp/wda-launch.log 2>&1 &
 
-            # Wait for WDA to be ready
-            echo "Waiting for WDA to be available on http://127.0.0.1:8100/status..."
+            # # Wait for WDA to be ready
+            # echo "Waiting for WDA to be available on http://127.0.0.1:8100/status..."
 
-            for i in {1..30}; do
-              if curl --silent --fail http://127.0.0.1:8100/status | grep -q "state"; then
-                echo "✅ WDA is up and running."
-                exit 0
-              fi
-              echo "Waiting... ($i)"
-              sleep 2
-            done
+            # for i in {1..30}; do
+            #   if curl --silent --fail http://127.0.0.1:8100/status | grep -q "state"; then
+            #     echo "✅ WDA is up and running."
+            #     exit 0
+            #   fi
+            #   echo "Waiting... ($i)"
+            #   sleep 2
+            # done
 
-            echo "::error::WDA failed to start within timeout."
-            exit 1
+            # echo "::error::WDA failed to start within timeout."
+            # exit 1
 
-            echo "✅ WDA built, verified, installed, and launched successfully."
+            # echo "✅ WDA built, verified, installed, and launched successfully."
 
       - name: 🧪 Start Appium Server
         run: |
@@ -148,18 +148,9 @@ jobs:
         #run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj -c Release -f net9.0-ios -r iossimulator-arm64 /p:EnableAssemblyILStripping=false /p:EnableSymbolStrip=false /p:LinkMode=None
         run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj -c Release -f net9.0-ios -r iossimulator-arm64 /p:LinkMode=SdkOnly /p:EnableAssemblyILStripping=true /p:EnableSymbolStrip=true /p:Codesign=false /p:DebugSymbols=false /p:UseInterpreter=true
 
-      #- name: Build TestCategoryLister
-      #  run: |
-      #    dotnet build TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj -c Debug --no-restore
-      #    dotnet build TestCategoryLister/TestCategoryLister.csproj -c Release
-
-      #- name: Run CategoryListerTool on UI Tests
-      #  run: |
-      #    dotnet TestCategoryLister/bin/Release/net9.0/TestCategoryLister.dll TransactionProcessor.Mobile.UiTests/bin/Debug/net9.0/TransactionProcessor.Mobile.UiTests.dll
-
-      - name: List all files with full path
-        run: |
-            find /Users/runner/work/TransactionMobile/TransactionMobile/TransactionProcessor.Mobile/bin -type f
+      # - name: List all files with full path
+      #   run: |
+      #       find /Users/runner/work/TransactionMobile/TransactionMobile/TransactionProcessor.Mobile/bin -type f
 
       - name: Run iOS Navigation Tests
         run: |
