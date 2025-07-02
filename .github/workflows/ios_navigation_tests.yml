@@ -7,10 +7,10 @@ on:
 
 jobs:
   software_navigation_tests:
-    runs-on: macos-14
+    runs-on: macos-15
     env:
-      PLATFORM_VERSION: "17.5"
-      DEVICE_NAME: "iPhone 14"
+      PLATFORM_VERSION: "18.5"
+      DEVICE_NAME: "iPhone 16"
       APP_PATH: "./MyTestApp.app"
 
     steps:
@@ -134,14 +134,14 @@ jobs:
       - name: Restore MAUI App for iOS
         run: dotnet restore TransactionProcessor.Mobile.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
-      #- name: Select Xcode 16.4
-      #  run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
+      - name: Select Xcode 16.4
+        run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
 
       - name: Confirm Xcode version
         run: xcodebuild -version
 
-      #- name: Accept Xcode license
-      #  run: sudo xcodebuild -license accept
+      - name: Accept Xcode license
+        run: sudo xcodebuild -license accept
 
       - name: Build Code
         #run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net9.0-ios -c Release --no-restore
