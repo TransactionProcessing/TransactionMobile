@@ -21,6 +21,7 @@ namespace TransactionMobile.Maui.UIServices
                                               String message,
                                               String acceptString,
                                               String cancelString) {
+            await Task.Delay(200); // allow view to fully appear
             return await Application.Current.MainPage.DisplayAlert(title, message, acceptString, cancelString);
         }
 
