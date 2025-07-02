@@ -43,18 +43,36 @@ jobs:
       #   xcrun simctl create "$SIMULATOR_NAME" "$DEVICE_NAME" "com.apple.CoreSimulator.SimRuntime.iOS-${PLATFORM_VERSION//./-}"
       #    echo "SIMULATOR_NAME=$SIMULATOR_NAME" >> $GITHUB_ENV
 
+      # - name: 🚀 Boot simulator
+      #   run: |
+      #      xcrun simctl boot "iPhone 16"
+      #      SIMULATOR_ID=$(xcrun simctl list | grep 'Booted' | awk -F '[()]' '{print $2}')
+      #      echo "SIMULATOR_ID=$SIMULATOR_ID"
+      #      echo "SIMULATOR_ID=$SIMULATOR_ID" >> $GITHUB_ENV
+           
+      #      # Open the simulator UI so Appium doesn’t force-restart it later
+      #      open -Fn /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app
+    
+      #      # Wait a bit to ensure the UI is up
+      #      sleep 5
       - name: 🚀 Boot simulator
         run: |
-           xcrun simctl boot "iPhone 16"
-           SIMULATOR_ID=$(xcrun simctl list | grep 'Booted' | awk -F '[()]' '{print $2}')
-           echo "SIMULATOR_ID=$SIMULATOR_ID"
-           echo "SIMULATOR_ID=$SIMULATOR_ID" >> $GITHUB_ENV
-           
-           # Open the simulator UI so Appium doesn’t force-restart it later
-           open -Fn /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app
-    
-           # Wait a bit to ensure the UI is up
-           sleep 5
+            SIMULATOR_NAME="iPhone 16"
+
+            # Check if the simulator is already booted
+            BOOTED_ID=$(xcrun simctl list devices | grep "$SIMULATOR_NAME" | grep 'Booted' | awk -F '[()]' '{print $2}')
+
+            if [ -n "$BOOTED_ID" ]; then
+              echo "Simulator '$SIMULATOR_NAME' is already booted with ID: $BOOTED_ID"
+              SIMULATOR_ID="$BOOTED_ID"
+            else
+              echo "Booting simulator '$SIMULATOR_NAME'..."
+              SIMULATOR_ID=$(xcrun simctl list devices | grep "$SIMULATOR_NAME" | head -n 1 | awk -F '[()]' '{print $2}' | xargs)
+              xcrun simctl boot "$SIMULATOR_ID"
+            fi
+
+            echo "SIMULATOR_ID=$SIMULATOR_ID"
+            echo "SIMULATOR_ID=$SIMULATOR_ID" >> $GITHUB_ENV
 
 
       #- name: List available simulators
