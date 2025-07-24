@@ -155,7 +155,7 @@ jobs:
       - name: Run iOS Navigation Tests
         run: |
             #dotnet build TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj -c Debug --no-restore
-            dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "Category=PRTest" --no-restore
+            dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "Category=iOSPRTest" --no-restore
       #      dotnet tool install --global NUnit.ConsoleRunner.NetCore
       #      nunit3-console TransactionProcessor.Mobile.UiTests/bin/Release/net9.0/TransactionProcessor.Mobile.UiTests.dll --where "(cat == PRNavTest && cat == iOS)"
 
