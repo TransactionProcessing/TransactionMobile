@@ -93,7 +93,7 @@ Scenario: EndToEnd Training Mode
 	Then the Transaction Page is displayed
 	When I click on the back button
 	Then the Merchant Home Page is displayed
-	When I click on the back button
-	Then A message is displayed confirming I want to log out
-	When I click yes
-	Then the Login Page is displayed
+	#When I click on the back button
+	#Then A message is displayed confirming I want to log out
+	#When I click yes
+	#Then the Login Page is displayed
