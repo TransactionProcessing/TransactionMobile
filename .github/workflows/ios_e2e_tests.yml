@@ -1,4 +1,4 @@
-name: Build and Run iOS Navigation Tests
+name: Build and Run iOS End to End Tests
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  software_navigation_tests:
+  end_to_end_tests:
     runs-on: macos-15
     env:
       PLATFORM_VERSION: "18.5"
