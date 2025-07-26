@@ -46,7 +46,7 @@ public partial class VoucherSelectOperatorPage : ContentPage
                 }
             };
 
-            Binding command = new Binding("OperatorSelectedCommand");
+            Binding command = new Binding("OperatorSelectedCommand", source: this.viewModel);
 
             // Create the behavior and bind it to the command
             EventToCommandBehavior behavior = new EventToCommandBehavior

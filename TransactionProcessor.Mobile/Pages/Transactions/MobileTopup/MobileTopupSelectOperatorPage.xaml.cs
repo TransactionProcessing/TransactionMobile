@@ -61,12 +61,12 @@ public partial class MobileTopupSelectOperatorPage : ContentPage
                 }
             };
 
-            Binding command = new Binding("OperatorSelectedCommand");
+            Binding command = new Binding("OperatorSelectedCommand", source: this.viewModel);
 
             // Create the behavior and bind it to the command
             EventToCommandBehavior behavior = new EventToCommandBehavior
             {
-                EventName = "Clicked"
+                EventName = "Clicked",
             };
             behavior.SetBinding(EventToCommandBehavior.CommandProperty, command);
             behavior.SetBinding(EventToCommandBehavior.CommandParameterProperty, commandParameter);

@@ -47,7 +47,7 @@ public partial class ReportsPage : NoBackWithoutLogoutPage
                 }
             };
 
-            Binding command = new Binding("OptionSelectedCommand");
+            Binding command = new Binding("OptionSelectedCommand", source: this.viewModel);
 
             // Create the behavior and bind it to the command
             EventToCommandBehavior behavior = new EventToCommandBehavior

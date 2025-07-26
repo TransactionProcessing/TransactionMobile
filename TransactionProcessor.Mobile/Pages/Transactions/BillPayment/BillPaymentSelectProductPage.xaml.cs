@@ -39,7 +39,7 @@ public partial class BillPaymentSelectProductPage : ContentPage
             
             Binding commandParameter = new Binding { Source = new ItemSelected<ContractProductModel>() { SelectedItem = modelProduct, SelectedItemIndex = rowCount } };
 
-            Binding command = new Binding("ProductSelectedCommand");
+            Binding command = new Binding("ProductSelectedCommand", source: this.viewModel);
 
             // Create the behavior and bind it to the command
             EventToCommandBehavior behavior = new EventToCommandBehavior
