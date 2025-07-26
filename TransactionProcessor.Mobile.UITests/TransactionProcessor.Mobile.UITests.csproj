@@ -27,11 +27,11 @@
 	  <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
 	  <PackageReference Include="Reqnroll.NUnit" Version="2.4.1" />
 	  <PackageReference Include="Reqnroll.Tools.MsBuild.Generation" Version="2.4.1" />
-	  <PackageReference Include="TransactionProcessor.Client" Version="2025.5.2-build186" />
-	  <PackageReference Include="TransactionProcessor.IntegrationTesting.Helpers" Version="2025.5.2-build186" />
-	  <PackageReference Include="SecurityService.Client" Version="2025.5.2-build82" />
-	  <PackageReference Include="SecurityService.IntegrationTesting.Helpers" Version="2025.5.2-build82" />
-	  <PackageReference Include="TransactionProcessor.Database" Version="2025.5.2-build186" />
+	  <PackageReference Include="TransactionProcessor.Client" Version="2025.7.2-build191" />
+	  <PackageReference Include="TransactionProcessor.IntegrationTesting.Helpers" Version="2025.7.2-build191" />
+	  <PackageReference Include="SecurityService.Client" Version="2025.7.2-build90" />
+	  <PackageReference Include="SecurityService.IntegrationTesting.Helpers" Version="2025.7.2-build90" />
+	  <PackageReference Include="TransactionProcessor.Database" Version="2025.7.2-build191" />
 	  <PackageReference Include="EventStoreProjections" Version="2023.12.3" />
   </ItemGroup>
 
