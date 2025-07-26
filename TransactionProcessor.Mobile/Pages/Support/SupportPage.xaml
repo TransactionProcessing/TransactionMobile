@@ -4,7 +4,9 @@
                                x:Class="TransactionProcessor.Mobile.Pages.Support.SupportPage"
                                xmlns:common="clr-namespace:TransactionProcessor.Mobile.Pages.Common"
                                xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
-                               Shell.NavBarIsVisible="False">
+                               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                               Shell.NavBarIsVisible="False"
+                               x:Name="Support">
     <ScrollView>
         <VerticalStackLayout Style="{DynamicResource Layout}">
 
@@ -27,8 +29,20 @@
                     <Label Text="{Binding NumberTransactionsStored, Mode=OneTime}"
                        VerticalOptions="Center"/>
 
-                    <Button Text="Upload Logs" Style="{StaticResource StandardButton}" Command="{Binding UploadLogsCommand}" AutomationId="UploadLogsButton"/>
-                    <Button Text="View Logs" Style="{StaticResource StandardButton}" Command="{Binding ViewLogsCommand}" AutomationId="ViewLogsButton"/>
+                    <Button Text="Upload Logs" Style="{StaticResource StandardButton}" AutomationId="UploadLogsButton">
+                        <Button.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                EventName="Clicked"
+                                Command="{Binding UploadLogsCommand}" BindingContext="{Binding Source={x:Reference Support}, Path=BindingContext}" />
+                        </Button.Behaviors>
+                    </Button>
+                    <Button Text="View Logs" Style="{StaticResource StandardButton}" AutomationId="ViewLogsButton">
+                        <Button.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                EventName="Clicked"
+                                Command="{Binding ViewLogsCommand}" BindingContext="{Binding Source={x:Reference Support}, Path=BindingContext}" />
+                        </Button.Behaviors>
+                    </Button>
                     <Button Text="Back" Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}" AutomationId="BackButton"/>
                 </VerticalStackLayout>
             </Frame>

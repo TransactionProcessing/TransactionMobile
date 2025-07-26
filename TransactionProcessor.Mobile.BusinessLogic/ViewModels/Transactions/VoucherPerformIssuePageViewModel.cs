@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using MvvmHelpers.Commands;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
@@ -9,7 +10,7 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions;
 
-public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel
+public partial class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel
 {
     #region Fields
 
@@ -45,11 +46,6 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel
                                             INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
     {
         this.Mediator = mediator;
-        this.IssueVoucherCommand = new AsyncCommand(this.IssueVoucherCommandExecute);
-        this.RecipientMobileNumberEntryCompletedCommand = new AsyncCommand(this.RecipientMobileNumberEntryCompletedCommandExecute);
-        this.RecipientEmailAddressEntryCompletedCommand = new AsyncCommand(this.RecipientEmailAddressEntryCompletedCommandExecute);
-        this.VoucherAmountEntryCompletedCommand = new AsyncCommand(this.VoucherAmountEntryCompletedCommandExecute);
-        this.CustomerEmailAddressEntryCompletedCommand = new AsyncCommand(this.CustomerEmailAddressEntryCompletedCommandExecute);
         this.Title = "Enter Voucher Issue Details";
     }
 
@@ -63,8 +59,6 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel
         set => this.SetProperty(ref this.customerEmailAddress, value);
     }
 
-    public ICommand CustomerEmailAddressEntryCompletedCommand { get; }
-
     public String RecipientMobileNumber
     {
         get => this.recipientMobileNumber;
@@ -76,11 +70,7 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel
         get => this.recipientEmailAddress;
         set => this.SetProperty(ref this.recipientEmailAddress, value);
     }
-
-    public ICommand RecipientMobileNumberEntryCompletedCommand { get; }
-
-    public ICommand RecipientEmailAddressEntryCompletedCommand { get; }
-
+    
     public Action OnCustomerEmailAddressEntryCompleted { get; set; }
 
     public Action OnRecipientEmailAddressEntryCompleted { get; set; }
@@ -89,41 +79,39 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel
 
     public Action OnVoucherAmountEntryCompleted { get; set; }
     
-    public ICommand IssueVoucherCommand { get; }
-
     public Decimal VoucherAmount
     {
         get => this.voucherAmount;
         set => this.SetProperty(ref this.voucherAmount, value);
     }
 
-    public ICommand VoucherAmountEntryCompletedCommand { get; }
-
     #endregion
 
     #region Methods
 
-    private async Task CustomerEmailAddressEntryCompletedCommandExecute() {
-        Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
+    [RelayCommand]
+    private async Task CustomerEmailAddressEntryCompleted() {
+        Logger.LogInformation("CustomerEmailAddressEntryCompleted called");
         this.OnCustomerEmailAddressEntryCompleted();
     }
 
-    private async Task RecipientMobileNumberEntryCompletedCommandExecute() {
-        Logger.LogInformation("RecipientMobileNumberEntryCompletedCommandExecute called");
+    [RelayCommand]
+    private async Task RecipientMobileNumberEntryCompleted() {
+        Logger.LogInformation("RecipientMobileNumberEntryCompleted called");
         this.OnRecipientMobileNumberEntryCompleted();
     }
 
-    private async Task RecipientEmailAddressEntryCompletedCommandExecute()
+    [RelayCommand]
+    private async Task RecipientEmailAddressEntryCompleted()
     {
-         Logger.LogInformation("RecipientEmailAddressEntryCompletedCommandExecute called");
+         Logger.LogInformation("RecipientEmailAddressEntryCompleted called");
         this.OnRecipientEmailAddressEntryCompleted();
     }
 
-    private async Task IssueVoucherCommandExecute()
+    [RelayCommand]
+    private async Task IssueVoucher()
     {
-        
-
-        Logger.LogInformation("IssueVoucherCommandExecute called");
+        Logger.LogInformation("IssueVoucher called");
         // TODO: Create Command and Send
         PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(DateTime.Now,
                                                                                this.ProductDetails.ContractId,
@@ -151,9 +139,10 @@ public class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel
         }
     }
 
-    private async Task VoucherAmountEntryCompletedCommandExecute()
+    [RelayCommand]
+    private async Task VoucherAmountEntryCompleted()
     {
-        Logger.LogInformation("VoucherAmountEntryCompletedCommandExecute called");
+        Logger.LogInformation("VoucherAmountEntryCompleted called");
         this.OnVoucherAmountEntryCompleted();
     }
 

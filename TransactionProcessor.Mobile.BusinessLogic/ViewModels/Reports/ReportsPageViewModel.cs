@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using MvvmHelpers.Commands;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
@@ -9,7 +10,7 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports
 {
-    public class ReportsPageViewModel : ExtendedBaseViewModel
+    public partial class ReportsPageViewModel : ExtendedBaseViewModel
     {
         #region Fields
 
@@ -27,7 +28,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports
                                     INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService,navigationParameterService)
         {
             this.Mediator = mediator;
-            this.OptionSelectedCommand = new AsyncCommand<ItemSelected<ListViewItem>>(this.OptionSelectedCommandExecute);
             this.Title = "Reports";
         }
 
@@ -36,8 +36,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports
         #region Properties
 
         public List<ListViewItem> ReportsMenuOptions { get; set; }
-
-        public ICommand OptionSelectedCommand { get; set; }
 
         #endregion
 
@@ -56,7 +54,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports
             await base.Initialise(cancellationToken);
         }
 
-        private async Task OptionSelectedCommandExecute(ItemSelected<ListViewItem> arg)
+        [RelayCommand]
+        private async Task OptionSelected(ItemSelected<ListViewItem> arg)
         {
             ReportsOptions selectedOption = (ReportsOptions)arg.SelectedItemIndex;
 

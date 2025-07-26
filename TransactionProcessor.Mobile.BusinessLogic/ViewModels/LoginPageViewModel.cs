@@ -1,11 +1,12 @@
-﻿using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Windows.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Primitives;
 using MvvmHelpers.Commands;
 using SimpleResults;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Windows.Input;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
@@ -14,7 +15,7 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
 {
-    public class LoginPageViewModel : ExtendedBaseViewModel
+    public partial class LoginPageViewModel : ExtendedBaseViewModel
     {
         private readonly IApplicationInfoService ApplicationInfoService;
 
@@ -34,16 +35,13 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
                                   INavigationParameterService navigationParameterService) : base(applicationCache,dialogService,navigationService, deviceService, navigationParameterService)
         {
             this.ApplicationInfoService = applicationInfoService;
-            this.LoginCommand = new AsyncCommand(this.LoginCommandExecute);
             this.Mediator = mediator;
         }
         
         #endregion
 
         #region Properties
-
-        public ICommand LoginCommand { get; }
-
+        
         public IMediator Mediator { get; }
 
         public String UserName
@@ -155,13 +153,14 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
             return getMerchantBalanceResult;
         }
 
-        private async Task LoginCommandExecute(){
+        [RelayCommand]
+        private async Task Logon(){
             this.CacheUseTrainingMode();
 
             Stopwatch sw = Stopwatch.StartNew();
-            this.WriteTimingTrace(sw, "Start of LoginCommandExecute");
+            this.WriteTimingTrace(sw, "Start of Login");
             try {
-                Logger.LogInformation("LoginCommandExecute called");
+                Logger.LogInformation("Logon called");
                 
                 Result<Configuration> configurationResult = await this.GetConfiguration();
                 this.HandleResult(configurationResult);

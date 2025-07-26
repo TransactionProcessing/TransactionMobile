@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using MvvmHelpers.Commands;
 using SimpleResults;
@@ -10,7 +11,7 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions;
 
-public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel
+public partial class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel
 {
     #region Fields
     
@@ -54,24 +55,24 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel
                                            INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
     {
         this.Mediator = mediator;
-        this.MakeBillPaymentCommand = new AsyncCommand(this.MakeBillPaymentCommandExecute);
-        this.CustomerMobileNumberEntryCompletedCommand = new AsyncCommand(this.CustomerMobileNumberEntryCompletedExecute);
-        this.PaymentAmountEntryCompletedCommand = new AsyncCommand(this.PaymentAmountEntryCompletedCommandExecute);
         this.Title = "Make Bill Payment";
     }
-    private async Task PaymentAmountEntryCompletedCommandExecute() {
+    [RelayCommand]
+    private async Task PaymentAmountEntryCompleted() {
         Logger.LogInformation("PaymentAmountEntryCompletedCommandExecute called");
         this.OnPaymentAmountEntryCompleted();
     }
 
-    private async Task CustomerMobileNumberEntryCompletedExecute() {
+    [RelayCommand]
+    private async Task CustomerMobileNumberEntryCompleted() {
         Logger.LogInformation("CustomerMobileNumberEntryCompletedExecute called");
         this.OnCustomerMobileNumberEntryCompleted();
     }
 
     #endregion
 
-    private async Task MakeBillPaymentCommandExecute() {
+    [RelayCommand]
+    private async Task MakeBillPayment() {
         Logger.LogInformation("MakeBillPaymentCommandExecute called");
         IRequest<Result<PerformBillPaymentMakePaymentResponseModel>> request = null;
         
@@ -108,10 +109,6 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel
             await this.NavigationService.GoToBillPaymentFailedPage();
         }
     }
-
-    public ICommand CustomerMobileNumberEntryCompletedCommand { get; }
-
-    public ICommand PaymentAmountEntryCompletedCommand { get; }
     
     private Decimal paymentAmount;
     public Decimal PaymentAmount
@@ -137,9 +134,7 @@ public class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel
         get => this.meterdetails;
         set => this.SetProperty(ref this.meterdetails, value);
     }
-
-    public ICommand MakeBillPaymentCommand { get; }
-
+    
     private Boolean isPostPayVisible;
     public Boolean IsPostPayVisible
     {

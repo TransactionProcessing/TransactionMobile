@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Behaviors;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions;
@@ -35,22 +36,44 @@ public partial class MobileTopupSelectOperatorPage : ContentPage
                                 AutomationId = modelOperator.OperatorName,
                             };
             button.SetDynamicResource(VisualElement.StyleProperty, "MobileTopupButtonStyle");
-            Binding commandParameter = new Binding()
-                                       {
-                                           Source = new ItemSelected<ContractOperatorModel>(){ 
-                                                                                                 SelectedItem = modelOperator,
-                                                                                                 SelectedItemIndex = rowCount
-                                                                                             }
-                                       };
+            //Binding commandParameter = new Binding()
+            //                           {
+            //                               Source = new ItemSelected<ContractOperatorModel>(){ 
+            //                                                                                     SelectedItem = modelOperator,
+            //                                                                                     SelectedItemIndex = rowCount
+            //                                                                                 }
+            //                           };
 
-            Binding command = new Binding
-                        {
-                            Source = viewModel.OperatorSelectedCommand
-                        };
-            
-            button.SetBinding(Button.CommandProperty, command);
-            button.SetBinding(Button.CommandParameterProperty, commandParameter);
-            
+            //Binding command = new Binding
+            //            {
+            //                Source = viewModel.OperatorSelectedCommand
+            //            };
+
+            //button.SetBinding(Button.CommandProperty, command);
+            //button.SetBinding(Button.CommandParameterProperty, commandParameter);
+
+            Binding commandParameter = new Binding
+            {
+                Source = new ItemSelected<ContractOperatorModel>
+                {
+                    SelectedItem = modelOperator,
+                    SelectedItemIndex = rowCount
+                }
+            };
+
+            Binding command = new Binding("OperatorSelectedCommand");
+
+            // Create the behavior and bind it to the command
+            EventToCommandBehavior behavior = new EventToCommandBehavior
+            {
+                EventName = "Clicked"
+            };
+            behavior.SetBinding(EventToCommandBehavior.CommandProperty, command);
+            behavior.SetBinding(EventToCommandBehavior.CommandParameterProperty, commandParameter);
+
+            // Attach the behavior to the button
+            button.Behaviors.Add(behavior);
+
             this.OperatorList.Children.Add(button);
 
             rowCount++;

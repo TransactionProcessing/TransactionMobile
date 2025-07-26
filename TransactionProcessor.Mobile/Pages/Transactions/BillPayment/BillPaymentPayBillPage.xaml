@@ -4,7 +4,8 @@
              x:Class="TransactionProcessor.Mobile.Pages.Transactions.BillPayment.BillPaymentPayBillPage"
              xmlns:behaviors="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
              xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             x:Name="BillPaymentPayBill">
     <ScrollView>
         <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
             <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"
@@ -78,9 +79,14 @@
                     </Entry>
                 </VerticalStackLayout>
             </Frame>
-            
-            <Button x:Name="MakePaymentButton" Text="Make Payment" Command="{Binding MakeBillPaymentCommand}"
-                            Style="{DynamicResource BillPaymentButtonStyle}" AutomationId="MakePaymentButton"/>
+
+            <Button x:Name="MakePaymentButton" Text="Make Payment" Style="{DynamicResource BillPaymentButtonStyle}" AutomationId="MakePaymentButton">
+                <Button.Behaviors>
+                    <behaviors:EventToCommandBehavior
+                        EventName="Clicked"
+                        Command="{Binding MakeBillPaymentCommand}" BindingContext="{Binding Source={x:Reference BillPaymentPayBill}, Path=BindingContext}" />
+                </Button.Behaviors>
+            </Button>
             <Button Text="Back" Style="{StaticResource BillPaymentButtonStyle}"
                             Command="{Binding BackButtonCommand}"/>
         </VerticalStackLayout>

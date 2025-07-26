@@ -26,10 +26,6 @@ public class MyAccountContactPageViewModel : ExtendedBaseViewModel
 
     #endregion
 
-    #region Properties
-
-    #endregion
-
     public async Task Initialise(CancellationToken none) {
         MerchantDetailsModel merchantDetails = this.ApplicationCache.GetMerchantDetails();
 

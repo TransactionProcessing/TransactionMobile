@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
@@ -7,7 +8,7 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions;
 
-public class BillPaymentFailedPageViewModel : BaseViewModel
+public partial class BillPaymentFailedPageViewModel : BaseViewModel
 {
     private readonly INavigationService NavigationService;
 
@@ -16,23 +17,17 @@ public class BillPaymentFailedPageViewModel : BaseViewModel
     public BillPaymentFailedPageViewModel(INavigationService navigationService)
     {
         this.NavigationService = navigationService;
-        this.CancelledCommand = new AsyncCommand(this.CancelledCommandExecute);
         this.Title = "Bill Payment Failed";
     }
 
     #endregion
 
-    #region Properties
-
-    public ICommand CancelledCommand { get; }
-
-    #endregion
-
     #region Methods
 
-    private async Task CancelledCommandExecute()
+    [RelayCommand]
+    private async Task Cancelled()
     {
-        Logger.LogInformation("CancelledCommandExecute called");
+        Logger.LogInformation("Cancelled called");
         await this.NavigationService.PopToRoot();
     }
 

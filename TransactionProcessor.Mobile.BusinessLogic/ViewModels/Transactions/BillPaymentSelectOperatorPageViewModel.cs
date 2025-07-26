@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using MvvmHelpers.Commands;
 using SimpleResults;
@@ -11,7 +12,7 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions;
 
-public class BillPaymentSelectOperatorPageViewModel : ExtendedBaseViewModel
+public partial class BillPaymentSelectOperatorPageViewModel : ExtendedBaseViewModel
 {
     #region Fields
 
@@ -29,7 +30,6 @@ public class BillPaymentSelectOperatorPageViewModel : ExtendedBaseViewModel
 
     {
         this.Mediator = mediator;
-        this.OperatorSelectedCommand = new AsyncCommand<ItemSelected<ContractOperatorModel>>(this.OperatorSelectedCommandExecute);
         this.Title = "Select an Operator";
     }
 
@@ -38,9 +38,7 @@ public class BillPaymentSelectOperatorPageViewModel : ExtendedBaseViewModel
     #region Properties
 
     public List<ContractOperatorModel> Operators { get; private set; }
-
-    public ICommand OperatorSelectedCommand { get; }
-
+    
     #endregion
 
     #region Methods
@@ -69,9 +67,10 @@ public class BillPaymentSelectOperatorPageViewModel : ExtendedBaseViewModel
         this.Operators = operators;
     }
 
-    private async Task OperatorSelectedCommandExecute(ItemSelected<ContractOperatorModel> e)
+    [RelayCommand]
+    private async Task OperatorSelected(ItemSelected<ContractOperatorModel> e)
     {
-        Logger.LogInformation("OperatorSelectedCommandExecute called");
+        Logger.LogInformation("OperatorSelected called");
 
         ProductDetails productDetails = new() {
                                                   OperatorId = e.SelectedItem.OperatorId

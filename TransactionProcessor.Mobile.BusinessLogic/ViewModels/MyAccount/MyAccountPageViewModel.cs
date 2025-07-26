@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Primitives;
@@ -13,7 +14,7 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.MyAccount
 {
-    public class MyAccountPageViewModel : ExtendedBaseViewModel
+    public partial class MyAccountPageViewModel : ExtendedBaseViewModel
     {
         #region Fields
 
@@ -34,7 +35,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.MyAccount
                                       IMediator mediator,
                                       INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService,navigationParameterService) {
             this.Mediator = mediator;
-            this.OptionSelectedCommand = new AsyncCommand<ItemSelected<ListViewItem>>(this.OptionSelectedCommandExecute);
             this.Title = "My Account";
         }
 
@@ -53,9 +53,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.MyAccount
         }
 
         public List<ListViewItem> MyAccountOptions { get; set; }
-
-        public ICommand OptionSelectedCommand { get; set; }
-
+        
         #endregion
 
         #region Methods
@@ -105,7 +103,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.MyAccount
             await this.NavigationService.GoToLoginPage();
         }
 
-        private async Task OptionSelectedCommandExecute(ItemSelected<ListViewItem> arg) {
+        [RelayCommand]
+        private async Task OptionSelected(ItemSelected<ListViewItem> arg) {
             AccountOptions selectedOption = (AccountOptions)arg.SelectedItemIndex;
 
             Task navigationTask = selectedOption switch {

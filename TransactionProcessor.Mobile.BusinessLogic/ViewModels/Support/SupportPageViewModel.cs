@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using MvvmHelpers.Commands;
 using TransactionProcessor.Mobile.BusinessLogic.Database;
@@ -10,7 +11,7 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Support
 {
-    public class SupportPageViewModel : ExtendedBaseViewModel
+    public partial class SupportPageViewModel : ExtendedBaseViewModel
     {
         #region Fields
 
@@ -35,8 +36,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Support
         {
             this.ApplicationInfoService = applicationInfoService;
             this.DatabaseContext = databaseContext;
-            this.UploadLogsCommand = new AsyncCommand(this.UploadLogsCommandExecute);
-            this.ViewLogsCommand = new AsyncCommand(this.ViewLogsCommandExecute);
             this.Mediator = mediator;
             this.Title = "Support";
         }
@@ -60,16 +59,13 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Support
             }
         }
 
-        public ICommand UploadLogsCommand { get; }
-
-        public ICommand ViewLogsCommand { get; }
-
         #endregion
 
         #region Methods
 
-        private async Task UploadLogsCommandExecute() {
-            Logger.LogInformation("UploadLogsCommandExecute called");
+        [RelayCommand]
+        private async Task UploadLogs() {
+            Logger.LogInformation("UploadLogs called");
 
             UploadLogsRequest uploadLogsRequest = UploadLogsRequest.Create(String.Empty);
 
@@ -79,8 +75,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Support
             //await this.NavigationService.GoBack();
         }
 
-        private async Task ViewLogsCommandExecute() {
-            Logger.LogInformation("ViewLogsCommandExecute called");
+        [RelayCommand]
+        private async Task ViewLogs() {
+            Logger.LogInformation("ViewLogs called");
 
             // TODO: Act on the response (display message or something)...
             await this.NavigationService.GoToViewLogsPage();

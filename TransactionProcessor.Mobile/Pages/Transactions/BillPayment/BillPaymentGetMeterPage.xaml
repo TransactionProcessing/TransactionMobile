@@ -2,8 +2,10 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="TransactionProcessor.Mobile.Pages.Transactions.BillPayment.BillPaymentGetMeterPage"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             x:Name="BillPaymentGetMeter">
     <ScrollView>
         <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
             <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
@@ -21,7 +23,13 @@
                             Text="Get Meter"
                             Command="{Binding GetMeterCommand}"
                             Style="{DynamicResource BillPaymentButtonStyle}"
-                            AutomationId="GetMeterButton"/>
+                            AutomationId="GetMeterButton">
+                        <Button.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                EventName="Clicked"
+                                Command="{Binding GetMeterCommand}" BindingContext="{Binding Source={x:Reference BillPaymentGetMeter}, Path=BindingContext}" />
+                        </Button.Behaviors>
+                    </Button>
                     <Button Text="Back" Style="{StaticResource BillPaymentButtonStyle}" Command="{Binding BackButtonCommand}"/>
                 </VerticalStackLayout>
                 
