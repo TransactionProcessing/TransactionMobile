@@ -56,7 +56,7 @@
                         <Button.Behaviors>
                             <toolkit:EventToCommandBehavior
                                 EventName="Clicked"
-                                Command="{Binding CancelledCommand}" BindingContext="{Binding Source={x:Reference BillPaymentFailed}, Path=BindingContext}" />
+                                Command="{Binding CancelledCommand}" BindingContext="{Binding Source={x:Reference MobileTopPerformTopup}, Path=BindingContext}" />
                         </Button.Behaviors>
                     </Button>
                 <Button Text="Back" Style="{StaticResource MobileTopupButtonStyle}" Command="{Binding BackButtonCommand}"/>

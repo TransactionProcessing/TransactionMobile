@@ -69,7 +69,7 @@
                         <Button.Behaviors>
                             <toolkit:EventToCommandBehavior
                                 EventName="Clicked"
-                                Command="{Binding IssueVoucherCommand}" BindingContext="{Binding Source={x:Reference BillPaymentFailed}, Path=BindingContext}" />
+                                Command="{Binding IssueVoucherCommand}" BindingContext="{Binding Source={x:Reference VoucherPerformIssue}, Path=BindingContext}" />
                         </Button.Behaviors>
                     </Button>
                     <Button Text="Back" Style="{StaticResource VoucherButtonStyle}" Command="{Binding BackButtonCommand}"/>
