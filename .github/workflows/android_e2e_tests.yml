@@ -177,9 +177,11 @@ jobs:
             path: appium.log
 
       - name: Capture emulator logs
+        if: failure()
         run: adb logcat -d > emulator-log.txt
 
       - name: Upload emulator logs
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
             name: android-emulator-logs
