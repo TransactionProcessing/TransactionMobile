@@ -40,10 +40,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                               EnableAutoUpdates = false,
                                                               HostAddresses = new List<HostAddress>{
                                                                                                        new HostAddress{
-                                                                                                                          ServiceType = ServiceType.TransactionProcessor, 
-                                                                                                                          Uri = "http://localhost:5001"
-                                                                                                                      },
-                                                                                                       new HostAddress{
                                                                                                                           ServiceType = ServiceType.Security,
                                                                                                                           Uri = "http://localhost:5001"
                                                                                                                       },
@@ -67,7 +63,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
             configurationResult.Data.ClientSecret.ShouldBe(expectedConfiguration.ClientSecret);
             configurationResult.Data.ClientId.ShouldBe(expectedConfiguration.ClientId);
             configurationResult.Data.EnableAutoUpdates.ShouldBe(expectedConfiguration.EnableAutoUpdates);
-            configurationResult.Data.TransactionProcessorUri.ShouldBe(expectedConfiguration.HostAddresses.Single(s => s.ServiceType == ServiceType.TransactionProcessor).Uri);
             configurationResult.Data.SecurityServiceUri.ShouldBe(expectedConfiguration.HostAddresses.Single(s => s.ServiceType == ServiceType.Security).Uri);
             configurationResult.Data.TransactionProcessorAclUri.ShouldBe(expectedConfiguration.HostAddresses.Single(s => s.ServiceType == ServiceType.TransactionProcessorAcl).Uri);
             configurationResult.Data.LogLevel.ShouldBe(expectedLogLevel);
