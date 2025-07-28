@@ -208,17 +208,17 @@ namespace TransactionProcessor.Mobile.UITests.Steps
                                         hostAddresses = new List<Object>()
                                     };
             configRequest.hostAddresses.Add(new {
-                                                    servicetype = 0,
+                                                    servicetype = 1,
                                                     uri = this.TestingContext.DockerHelper.TransactionProcessorBaseAddressResolver("").Replace("127.0.0.1", this.TestingContext.DockerHelper.LocalIPAddress)
             });
             configRequest.hostAddresses.Add(new
                                             {
-                                                servicetype = 1,
+                                                servicetype = 2,
                                                 uri = this.TestingContext.DockerHelper.SecurityServiceBaseAddressResolver("").Replace("127.0.0.1", this.TestingContext.DockerHelper.LocalIPAddress)
             });
             configRequest.hostAddresses.Add(new
                                             {
-                                                servicetype = 2,
+                                                servicetype = 3,
                                                 uri = this.TestingContext.DockerHelper.TransactionProcessorAclBaseAddressResolver("").Replace("127.0.0.1", this.TestingContext.DockerHelper.LocalIPAddress)
             });
 

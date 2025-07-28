@@ -2,7 +2,7 @@
 
 public enum ServiceType
 {
-    TransactionProcessor = 0,
-    Security = 1,
-    TransactionProcessorAcl = 2
+    TransactionProcessor = 1,
+    Security = 2,
+    TransactionProcessorAcl = 3
 }
