@@ -6,12 +6,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Logging;
 
 [ExcludeFromCodeCoverage]
 public class ConsoleLogger : ILogger{
-    private readonly ICorrelationIdProvider CorrelationIdProvider;
-
+    
     #region Constructors
 
-    public ConsoleLogger(ICorrelationIdProvider correlationIdProvider) {
-        this.CorrelationIdProvider = correlationIdProvider;
+    public ConsoleLogger() {
         this.IsInitialised = true;
     }
 
@@ -33,7 +31,7 @@ public class ConsoleLogger : ILogger{
 
     internal void Log(List<LogMessage> logMessageModels)
     {
-        String correlationId = this.CorrelationIdProvider.CorrelationId;
+        String correlationId = CorrelationIdProvider.CorrelationId;
         foreach (LogMessage item in logMessageModels)
         {
             Console.WriteLine($"AppLog|{item.EntryDateTime}|Correlation Id: {correlationId}|{item.LogLevel}|{item.Message}");
