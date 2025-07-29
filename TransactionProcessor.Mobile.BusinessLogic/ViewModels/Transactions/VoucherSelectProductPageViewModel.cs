@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using MvvmHelpers.Commands;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
@@ -10,7 +11,7 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions;
 
-public class VoucherSelectProductPageViewModel : ExtendedBaseViewModel
+public partial class VoucherSelectProductPageViewModel : ExtendedBaseViewModel
 {
     #region Fields
 
@@ -30,7 +31,6 @@ public class VoucherSelectProductPageViewModel : ExtendedBaseViewModel
                                              INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
     {
         this.Mediator = mediator;
-        this.ProductSelectedCommand = new AsyncCommand<ItemSelected<ContractProductModel>>(this.ProductSelectedCommandExecute);
         this.Title = "Select a Product";
     }
 
@@ -39,8 +39,6 @@ public class VoucherSelectProductPageViewModel : ExtendedBaseViewModel
     #region Properties
 
     public List<ContractProductModel> Products { get; private set; }
-
-    public ICommand ProductSelectedCommand { get; }
 
     #endregion
 
@@ -60,9 +58,10 @@ public class VoucherSelectProductPageViewModel : ExtendedBaseViewModel
         this.Products = products;
     }
 
-    private async Task ProductSelectedCommandExecute(ItemSelected<ContractProductModel> e)
+    [RelayCommand]
+    private async Task ProductSelected(ItemSelected<ContractProductModel> e)
     {
-        Logger.LogInformation("ProductSelectedCommandExecute called");
+        Logger.LogInformation("ProductSelected called");
         ProductDetails productDetails = new ProductDetails()
                                         {
                                             OperatorId = e.SelectedItem.OperatorId,

@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using MvvmHelpers.Commands;
 using SimpleResults;
@@ -9,7 +10,7 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Admin
 {
-    public class AdminPageViewModel : ExtendedBaseViewModel
+    public partial class AdminPageViewModel : ExtendedBaseViewModel
     {
         private readonly IMediator Mediator;
         
@@ -26,21 +27,15 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Admin
         {
             this.Mediator = mediator;
             this.ApplicationInfoService = applicationInfoService;
-            this.ReconciliationCommand = new AsyncCommand(this.ReconciliationCommandExecute);
             this.Title = "Select Admin Transaction Type";
         }
 
         #endregion
 
-        #region Properties
-
-        public ICommand ReconciliationCommand { get; set; }
-
-        #endregion
-
         #region Methods
 
-        private async Task ReconciliationCommandExecute()
+        [RelayCommand]
+        private async Task Reconciliation()
         {
             PerformReconciliationRequest request =
                 PerformReconciliationRequest.Create(DateTime.Now, String.Empty, this.ApplicationInfoService.VersionString);

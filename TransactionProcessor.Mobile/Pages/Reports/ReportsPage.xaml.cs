@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Behaviors;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports;
@@ -38,21 +39,26 @@ public partial class ReportsPage : NoBackWithoutLogoutPage
             button.SetDynamicResource(VisualElement.StyleProperty, "ReportsButtonStyle");
 
             Binding commandParameter = new Binding
-                                       {
-                                           Source = new ItemSelected<ListViewItem>
-                                                    {
-                                                        SelectedItem = modelOption,
-                                                        SelectedItemIndex = rowCount
-                                                    }
-                                       };
+            {
+                Source = new ItemSelected<ListViewItem>
+                {
+                    SelectedItem = modelOption,
+                    SelectedItemIndex = rowCount
+                }
+            };
 
-            Binding command = new Binding
-                              {
-                                  Source = viewModel.OptionSelectedCommand
-                              };
+            Binding command = new Binding("OptionSelectedCommand", source: this.viewModel);
 
-            button.SetBinding(Button.CommandProperty, command);
-            button.SetBinding(Button.CommandParameterProperty, commandParameter);
+            // Create the behavior and bind it to the command
+            EventToCommandBehavior behavior = new EventToCommandBehavior
+            {
+                EventName = "Clicked"
+            };
+            behavior.SetBinding(EventToCommandBehavior.CommandProperty, command);
+            behavior.SetBinding(EventToCommandBehavior.CommandParameterProperty, commandParameter);
+
+            // Attach the behavior to the button
+            button.Behaviors.Add(behavior);
 
             rowCount++;
             this.ReportsList.Add(button);

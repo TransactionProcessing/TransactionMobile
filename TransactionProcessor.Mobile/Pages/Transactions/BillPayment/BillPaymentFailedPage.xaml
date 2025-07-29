@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TransactionProcessor.Mobile.Pages.Transactions.BillPayment.BillPaymentFailedPage"
              xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
-             Shell.NavBarIsVisible="False">
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Shell.NavBarIsVisible="False"
+             x:Name="BillPaymentFailed">
     <ScrollView>
         <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
             <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center" VerticalOptions="End"
@@ -17,8 +19,14 @@
                        Text="Unfortunately, we could not process your bill payment, this may be for a variety of reasons.  If you wish you can retry the transaction."/>
 
                     <Button x:Name="CancelButton" Grid.Row="5" Margin="0,16"
-                        Text="Cancel" Command="{Binding CancelledCommand}"
-                        Style="{DynamicResource BillPaymentButtonStyle}" AutomationId="CancelButton"/>
+                        Text="Cancel"
+                        Style="{DynamicResource BillPaymentButtonStyle}" AutomationId="CancelButton">
+                        <Button.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                EventName="Clicked"
+                                Command="{Binding CancelledCommand}" BindingContext="{Binding Source={x:Reference BillPaymentFailed}, Path=BindingContext}" />
+                        </Button.Behaviors>
+                    </Button>
                 </VerticalStackLayout>
             </Frame>
         </VerticalStackLayout>

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="TransactionProcessor.Mobile.Pages.LoginPage"
              Title="LoginPage"
              Shell.NavBarIsVisible="False"
-             Shell.FlyoutItemIsVisible="True">
+             Shell.FlyoutItemIsVisible="True"
+             x:Name="Logon">
     <ContentPage.Content>
         <ScrollView>
             <!-- Main structure-->
@@ -40,7 +42,13 @@
                                 />
                         </HorizontalStackLayout>
 
-                        <Button Text="Continue" Style="{StaticResource StandardButton}" Command="{Binding LoginCommand}" AutomationId="LoginButton"/>
+                        <Button Text="Continue" Style="{StaticResource StandardButton}" AutomationId="LoginButton">
+                            <Button.Behaviors>
+                                <toolkit:EventToCommandBehavior
+                                    EventName="Clicked"
+                                    Command="{Binding LogonCommand}" BindingContext="{Binding Source={x:Reference Logon}, Path=BindingContext}" />
+                            </Button.Behaviors>
+                        </Button>
 
                         <Label AutomationId="DeviceSerial" VerticalOptions="Center" HorizontalOptions="Start" Text="{Binding DeviceIdentifier}"/>
                         <Entry x:Name="ConfigHostUrlEntry" AutomationId="ConfigHostUrlEntry" Text="{Binding ConfigHostUrl}"/>

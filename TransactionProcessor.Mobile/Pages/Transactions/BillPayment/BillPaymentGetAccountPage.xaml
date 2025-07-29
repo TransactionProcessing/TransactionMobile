@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TransactionProcessor.Mobile.Pages.Transactions.BillPayment.BillPaymentGetAccountPage"
              xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
-             Shell.NavBarIsVisible="False">
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Shell.NavBarIsVisible="False"
+             x:Name="BillPaymentGetAccount">
     <ScrollView>
         <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
             <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
@@ -19,9 +21,14 @@
 
                     <Button x:Name="GetAccountButton" 
                             Text="Get Account"
-                            Command="{Binding GetAccountCommand}"
                             Style="{DynamicResource BillPaymentButtonStyle}"
-                            AutomationId="GetAccountButton"/>
+                            AutomationId="GetAccountButton">
+                        <Button.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                EventName="Clicked"
+                                Command="{Binding GetAccountCommand}" BindingContext="{Binding Source={x:Reference BillPaymentGetAccount}, Path=BindingContext}" />
+                        </Button.Behaviors>
+                    </Button>
                     <Button Text="Back" Style="{StaticResource BillPaymentButtonStyle}" Command="{Binding BackButtonCommand}"/>
                 </VerticalStackLayout>
                 

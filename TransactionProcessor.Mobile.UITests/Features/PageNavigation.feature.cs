@@ -156,11 +156,9 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Back Button from Home Page Screen")]
-        [NUnit.Framework.CategoryAttribute("PRNavTest")]
         public async global::System.Threading.Tasks.Task BackButtonFromHomePageScreen()
         {
-            string[] tagsOfScenario = new string[] {
-                    "PRNavTest"};
+            string[] tagsOfScenario = ((string[])(null));
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Back Button from Home Page Screen", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 12

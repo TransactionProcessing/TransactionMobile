@@ -4,7 +4,9 @@
                                x:Class="TransactionProcessor.Mobile.Pages.Transactions.TransactionsPage"
                                xmlns:common="clr-namespace:TransactionProcessor.Mobile.Pages.Common"
                                xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
-                               Shell.NavBarIsVisible="False">
+                               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                               Shell.NavBarIsVisible="False"
+                               x:Name="Transactions">
     <ScrollView>
         <!-- This might be better as a flex layout if we had images-->
         <VerticalStackLayout Style="{DynamicResource Layout}">
@@ -12,11 +14,41 @@
             <Frame Style="{DynamicResource MainFrame}">
                 <VerticalStackLayout Spacing="10">
 
-                    <Button AutomationId="MobileTopupButton" Command="{Binding MobileTopupCommand}" x:Name="MobileTopupButton" Text="Mobile Topup" Style="{DynamicResource MobileTopupButtonStyle}"/>
-                    <Button AutomationId="MobileWalletButton" Command="{Binding MobileWalletCommand}" x:Name="MobileWalletButton" Text="Mobile Wallet" Style="{DynamicResource MobileWalletButtonStyle}"/>
-                    <Button AutomationId="BillPaymentButton" Command="{Binding BillPaymentCommand}" x:Name="BillPaymentButton" Text="Bill Payment" Style="{DynamicResource BillPaymentButtonStyle}"/>
-                    <Button AutomationId="VoucherButton" Command="{Binding VoucherCommand}" x:Name="VoucherButton" Text="Voucher" Style="{DynamicResource VoucherButtonStyle}"/>
-                    <Button AutomationId="AdminButton" Command="{Binding AdminCommand}" x:Name="AdminButton" Text="Admin" Style="{DynamicResource AdminButtonStyle}"/>
+                    <Button AutomationId="MobileTopupButton" x:Name="MobileTopupButton" Text="Mobile Topup" Style="{DynamicResource MobileTopupButtonStyle}">
+                        <Button.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                EventName="Clicked"
+                                Command="{Binding MobileTopupCommand}" BindingContext="{Binding Source={x:Reference Transactions}, Path=BindingContext}" />
+                        </Button.Behaviors>
+                    </Button>
+                    <Button AutomationId="MobileWalletButton" x:Name="MobileWalletButton" Text="Mobile Wallet" Style="{DynamicResource MobileWalletButtonStyle}">
+                        <Button.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                EventName="Clicked"
+                                Command="{Binding MobileWalletCommand}" BindingContext="{Binding Source={x:Reference Transactions}, Path=BindingContext}" />
+                        </Button.Behaviors>
+                    </Button>
+                    <Button AutomationId="BillPaymentButton" x:Name="BillPaymentButton" Text="Bill Payment" Style="{DynamicResource BillPaymentButtonStyle}">
+                        <Button.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                EventName="Clicked"
+                                Command="{Binding BillPaymentCommand}" BindingContext="{Binding Source={x:Reference Transactions}, Path=BindingContext}" />
+                        </Button.Behaviors>
+                    </Button>
+                    <Button AutomationId="VoucherButton" x:Name="VoucherButton" Text="Voucher" Style="{DynamicResource VoucherButtonStyle}">
+                        <Button.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                EventName="Clicked"
+                                Command="{Binding VoucherCommand}" BindingContext="{Binding Source={x:Reference Transactions}, Path=BindingContext}" />
+                        </Button.Behaviors>
+                    </Button>
+                    <Button AutomationId="AdminButton" x:Name="AdminButton" Text="Admin" Style="{DynamicResource AdminButtonStyle}">
+                        <Button.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                EventName="Clicked"
+                                Command="{Binding AdminCommand}" BindingContext="{Binding Source={x:Reference Transactions}, Path=BindingContext}" />
+                        </Button.Behaviors>
+                    </Button>
                     <Button Text="Back" AutomationId="BackButton"  Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}"/>
                 </VerticalStackLayout>
             </Frame>

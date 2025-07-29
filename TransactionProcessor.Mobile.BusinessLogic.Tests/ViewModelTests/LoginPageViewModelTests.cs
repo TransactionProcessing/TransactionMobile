@@ -43,7 +43,7 @@ public class LoginPageViewModelTests
                                                 this.DialogService.Object, this.NavigationParameterService.Object);
         Logger.Initialise(new Logging.NullLogger());
     }
-
+    
     [Fact]
     public void LoginPageViewModel_LoginCommand_Execute_IsExecuted()
     {
@@ -53,7 +53,7 @@ public class LoginPageViewModelTests
         this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
         this.Mediator.Setup(m => m.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantBalance));
 
-        this.ViewModel.LoginCommand.Execute(null);
+        this.ViewModel.LogonCommand.Execute(null);
         
         this.Mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.Mediator.Verify(x => x.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>()), Times.Once);
@@ -74,7 +74,8 @@ public class LoginPageViewModelTests
         this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
         this.Mediator.Setup(m => m.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantBalance));
         this.ViewModel.ConfigHostUrl = configUrl;
-        this.ViewModel.LoginCommand.Execute(null);
+
+        this.ViewModel.LogonCommand.Execute(null);
 
         this.Mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.Mediator.Verify(x => x.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>()), Times.Once);
@@ -84,7 +85,6 @@ public class LoginPageViewModelTests
         if (String.IsNullOrEmpty(configUrl) == false){
             this.ApplicationCache.Verify(v => v.SetConfigHostUrl(It.IsAny<String>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Once);
         }
-
     }
 
     [Fact]
@@ -92,7 +92,7 @@ public class LoginPageViewModelTests
     {
         this.Mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Failure("Error"));
 
-        this.ViewModel.LoginCommand.Execute(null);
+        this.ViewModel.LogonCommand.Execute(null);
 
         this.Mediator.Verify(x => x.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.Mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Never);
@@ -111,7 +111,7 @@ public class LoginPageViewModelTests
         this.Mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new Configuration()));
         this.Mediator.Setup(m => m.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Failure("Error"));
 
-        this.ViewModel.LoginCommand.Execute(null);
+        this.ViewModel.LogonCommand.Execute(null);
 
         this.Mediator.Verify(x => x.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.Mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Once);
@@ -134,7 +134,7 @@ public class LoginPageViewModelTests
         this.Mediator.Setup(m => m.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
         this.Mediator.Setup(m => m.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Failure(""));
 
-        this.ViewModel.LoginCommand.Execute(null);
+        this.ViewModel.LogonCommand.Execute(null);
 
         this.Mediator.Verify(x => x.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.Mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Once);
@@ -158,7 +158,7 @@ public class LoginPageViewModelTests
         this.Mediator.Setup(m => m.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformLogonResponseModel));
         this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Failure(""));
 
-        this.ViewModel.LoginCommand.Execute(null);
+        this.ViewModel.LogonCommand.Execute(null);
 
         this.Mediator.Verify(x => x.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.Mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Once);
@@ -173,7 +173,7 @@ public class LoginPageViewModelTests
                                                      null,
                                                      CancellationToken.None), Times.Once);
     }
-
+    
     [Fact]
     public void LoginPageViewModel_BackButtonCommand_Execute_IsExecuted()
     {

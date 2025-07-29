@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
@@ -6,7 +7,7 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions
 {
-    public class MobileTopupSuccessPageViewModel : BaseViewModel
+    public partial class MobileTopupSuccessPageViewModel : BaseViewModel
     {
         private readonly INavigationService NavigationService;
         
@@ -15,23 +16,17 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions
         public MobileTopupSuccessPageViewModel(INavigationService navigationService)
         {
             this.NavigationService = navigationService;
-            this.CompletedCommand = new AsyncCommand(this.CompletedCommandExecute);
             this.Title = "Mobile Topup Successful";
         }
 
         #endregion
 
-        #region Properties
-
-        public ICommand CompletedCommand { get; }
-
-        #endregion
-
         #region Methods
 
-        private async Task CompletedCommandExecute()
+        [RelayCommand]
+        private async Task Completed()
         {
-            Logger.LogInformation("CompletedCommandExecute called");
+            Logger.LogInformation("Completed called");
             await this.NavigationService.PopToRoot();
         }
 

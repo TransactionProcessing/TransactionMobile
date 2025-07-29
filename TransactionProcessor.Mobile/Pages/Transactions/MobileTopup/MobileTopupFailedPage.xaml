@@ -2,8 +2,10 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="TransactionProcessor.Mobile.Pages.Transactions.MobileTopup.MobileTopupFailedPage"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             x:Name="MobileTopupFailed">
     <ScrollView>
         <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}" >
             <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center" VerticalOptions="End"
@@ -17,8 +19,13 @@
                        Text="Unfortunately, we could not process your mobile top-up, this may be for a variety of reasons.  If you wish you can retry the transaction."/>
 
                     <Button x:Name="CancelButton" Grid.Row="5" Margin="0,16"
-                        Text="Cancel" Command="{Binding CancelledCommand}"
-                        Style="{DynamicResource MobileTopupButtonStyle}" AutomationId="CancelButton"/>
+                        Style="{DynamicResource MobileTopupButtonStyle}" AutomationId="CancelButton">
+                        <Button.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                EventName="Clicked"
+                                Command="{Binding CancelledCommand}" BindingContext="{Binding Source={x:Reference MobileTopupFailed}, Path=BindingContext}" />
+                        </Button.Behaviors>
+                    </Button>
                 </VerticalStackLayout>
             </Frame>
         </VerticalStackLayout>

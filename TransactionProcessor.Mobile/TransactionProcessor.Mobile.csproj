@@ -187,6 +187,10 @@
 		<DefineConstants>ANDROID</DefineConstants>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android|AnyCPU'">
+	  <AndroidPackageFormat>apk</AndroidPackageFormat>
+	</PropertyGroup>
+
 	<ItemGroup>
 	  <ProjectReference Include="..\TransactionProcessor.Mobile.BusinessLogic\TransactionProcessor.Mobile.BusinessLogic.csproj" />
 	</ItemGroup>

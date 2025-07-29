@@ -1,6 +1,5 @@
-﻿using System.Windows.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using MediatR;
-using MvvmHelpers.Commands;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -10,7 +9,7 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions;
 
-public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel
+public partial class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel
 {
     #region Fields
 
@@ -31,7 +30,6 @@ public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel
                                               INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService) {
         this.Mediator = mediator;
         this.NavigationParameterService = navigationParameterService;
-        this.GetAccountCommand = new AsyncCommand(this.GetAccountCommandExecute);
         this.Title = "Get Customer Account";
     }
 
@@ -43,9 +41,7 @@ public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel
         get => this.customerAccountNumber;
         set => this.SetProperty(ref this.customerAccountNumber, value);
     }
-
-    public ICommand GetAccountCommand { get; }
-
+    
     public ProductDetails ProductDetails { get; set; }
 
     #endregion
@@ -57,8 +53,9 @@ public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel
         this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
     }
 
-    private async Task GetAccountCommandExecute() {
-        Logger.LogInformation("GetAccountCommandExecute called");
+    [RelayCommand]
+    private async Task GetAccount() {
+        Logger.LogInformation("GetAccount called");
 
         PerformBillPaymentGetAccountRequest request = PerformBillPaymentGetAccountRequest.Create(DateTime.Now,
                                                                                                  this.ProductDetails.ContractId,
@@ -92,92 +89,6 @@ public class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel
 
     #endregion
 }
-
-public class BillPaymentGetMeterPageViewModel : ExtendedBaseViewModel
-{
-    #region Fields
-
-    private String meterNumber;
-
-    private readonly IMediator Mediator;
-
-    #endregion
-
-    #region Constructors
-
-    public BillPaymentGetMeterPageViewModel(INavigationService navigationService,
-                                              IApplicationCache applicationCache,
-                                              IDialogService dialogService,
-                                              IDeviceService deviceService,
-                                              IMediator mediator,
-                                              INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
-    {
-        this.Mediator = mediator;
-        this.GetMeterCommand = new AsyncCommand(this.GetMeterCommandExecute);
-        this.Title = "Get Meter";
-    }
-
-    #endregion
-
-    #region Properties
-
-    public String MeterNumber
-    {
-        get => this.meterNumber;
-        set => this.SetProperty(ref this.meterNumber, value);
-    }
-
-    public ICommand GetMeterCommand { get; }
-
-    public ProductDetails ProductDetails { get; set; }
-
-    #endregion
-
-    #region Methods
-
-    public async Task Initialise(CancellationToken cancellationToken)
-    {
-        var query = this.NavigationParameterService.GetParameters();
-        this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
-    }
-    private async Task GetMeterCommandExecute()
-    {
-        Logger.LogInformation("GetMeterCommandExecute called");
-
-        PerformBillPaymentGetMeterRequest request = PerformBillPaymentGetMeterRequest.Create(DateTime.Now,
-                                                                                                 this.ProductDetails.ContractId,
-                                                                                                 this.ProductDetails.ProductId,
-                                                                                                 this.ProductDetails.OperatorId,
-                                                                                                 this.MeterNumber);
-
-        Result<PerformBillPaymentGetMeterResponseModel> result = await this.Mediator.Send(request);
-
-        if (result.IsSuccess && result.Data.IsSuccessful)
-        {
-            ProductDetails productDetails = new ProductDetails
-            {
-                ContractId = this.ProductDetails.ContractId,
-                ProductId = this.ProductDetails.ProductId,
-                OperatorId = this.ProductDetails.OperatorId
-            };
-
-            MeterDetails meterDetails = new MeterDetails
-            {
-                CustomerName = result.Data.MeterDetails.CustomerName,
-                MeterNumber = result.Data.MeterDetails.MeterNumber
-            };
-
-            await this.NavigationService.GoToBillPaymentPayBillPage(productDetails, meterDetails);
-        }
-        else
-        {
-            await this.NavigationService.GoToBillPaymentFailedPage();
-        }
-    }
-
-    #endregion
-}
-
 
 public class BillDetails
 {

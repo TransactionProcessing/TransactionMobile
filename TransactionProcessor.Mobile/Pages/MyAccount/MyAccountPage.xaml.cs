@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Behaviors;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.ViewModels.MyAccount;
@@ -52,9 +53,17 @@ public partial class MyAccountPage : NoBackWithoutLogoutPage
             {
                 Source = viewModel.OptionSelectedCommand
             };
+            
+            // Create the behavior and bind it to the command
+            EventToCommandBehavior behavior = new EventToCommandBehavior
+            {
+                EventName = "Clicked"
+            };
+            behavior.SetBinding(EventToCommandBehavior.CommandProperty, command);
+            behavior.SetBinding(EventToCommandBehavior.CommandParameterProperty, commandParameter);
 
-            button.SetBinding(Button.CommandProperty, command);
-            button.SetBinding(Button.CommandParameterProperty, commandParameter);
+            // Attach the behavior to the button
+            button.Behaviors.Add(behavior);
 
             this.MyAccountOptionsList.Add(button);
 

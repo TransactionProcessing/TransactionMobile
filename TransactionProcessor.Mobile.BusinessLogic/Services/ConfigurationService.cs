@@ -77,7 +77,6 @@ public class ConfigurationService : ClientProxyBase.ClientProxyBase, IConfigurat
                 ClientSecret = apiResponse.ClientSecret,
                 ClientId = apiResponse.ClientId,
                 EnableAutoUpdates = apiResponse.EnableAutoUpdates,
-                TransactionProcessorUri = apiResponse.HostAddresses.Single(h => h.ServiceType == ServiceType.TransactionProcessor).Uri,
                 SecurityServiceUri = apiResponse.HostAddresses.Single(h => h.ServiceType == ServiceType.Security).Uri,
                 TransactionProcessorAclUri =
                     apiResponse.HostAddresses.Single(h => h.ServiceType == ServiceType.TransactionProcessorAcl).Uri,

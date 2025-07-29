@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using MvvmHelpers.Commands;
 using SimpleResults;
@@ -11,7 +12,7 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions;
 
-public class MobileTopupSelectOperatorPageViewModel : ExtendedBaseViewModel
+public partial class MobileTopupSelectOperatorPageViewModel : ExtendedBaseViewModel
 {
     #region Fields
 
@@ -27,7 +28,6 @@ public class MobileTopupSelectOperatorPageViewModel : ExtendedBaseViewModel
                                                   INavigationParameterService navigationParameterService) : base(applicationCache,dialogService, navigationService, deviceService,navigationParameterService)
     {
         this.Mediator = mediator;
-        this.OperatorSelectedCommand = new AsyncCommand<ItemSelected<ContractOperatorModel>>(this.OperatorSelectedCommandExecute);
         this.Title = "Select an Operator";
     }
 
@@ -36,9 +36,7 @@ public class MobileTopupSelectOperatorPageViewModel : ExtendedBaseViewModel
     #region Properties
 
     public List<ContractOperatorModel> Operators { get; private set; }
-
-    public ICommand OperatorSelectedCommand { get; }
-
+    
     #endregion
 
     #region Methods
@@ -66,9 +64,10 @@ public class MobileTopupSelectOperatorPageViewModel : ExtendedBaseViewModel
         this.Operators = operators;
     }
 
-    private async Task OperatorSelectedCommandExecute(ItemSelected<ContractOperatorModel> e)
+    [RelayCommand]
+    private async Task OperatorSelected(ItemSelected<ContractOperatorModel> e)
     {
-        Logger.LogInformation("OperatorSelectedCommandExecute called");
+        Logger.LogInformation("OperatorSelected called");
         ProductDetails productDetails = new ProductDetails() {
                                                                  OperatorId = e.SelectedItem.OperatorId
                                                              };

@@ -200,7 +200,7 @@ public class ShellNavigationService : INavigationService
             await Shell.Current.GoToAsync(route);
             }
         catch(Exception e) {
-            Logger.LogError("Error navigating to {route}", e);
+            Logger.LogError($"Error navigating to {route}", e);
         }
     }
 
@@ -214,7 +214,7 @@ public class ShellNavigationService : INavigationService
         }
         catch (Exception e)
         {
-            Logger.LogError("Error navigating to {route}", e);
+            Logger.LogError($"Error navigating to {route} (String route,IDictionary<String,Object> parameters)", e);
         }
     }
 
@@ -226,7 +226,7 @@ public class ShellNavigationService : INavigationService
         }
         catch (Exception e)
         {
-            Logger.LogError("Error navigating to {route}", e);
+            Logger.LogError($"Error navigating to page (ContentPage page))", e);
         }
     }
 

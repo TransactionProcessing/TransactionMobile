@@ -22,26 +22,12 @@ public partial class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel
                                              IMediator mediator, INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
     {
         this.Mediator = mediator;
-        //this.ComparisonDatePickerSelectedIndexChangedCommand = new AsyncCommand(this.ComparisonDatePickerSelectedExecute);
         this.Title = "Sales Analysis";
     }
-
-    //public ICommand ComparisonDatePickerSelectedIndexChangedCommand { get; }
-
-    //private async Task ComparisonDatePickerSelectedExecute(){
-    //    // TODO: we will re fire the api calls here on a date change
-    //    await this.GetApiData();
-    //}
 
     [RelayCommand]
     private async Task ComparisonDatePickerSelectedIndexChanged()
     {
-        //// Access the updated SelectedItem property directly here
-        //if (_selectedItem != null)
-        //{
-        //    Console.WriteLine($"Picker selection changed to: {_selectedItem.DisplayText}");
-        //    // Perform your logic
-        //}
         await this.GetApiData();
     }
 
@@ -53,8 +39,7 @@ public partial class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel
         salesAnalysisList.Add(new SalesAnalysis("100", "90", "10%", "Sales Count", "Today's Sales", this.SelectedItem.DisplayText, "Variance:", "salescount.png"));
         this.SalesAnalysisList = salesAnalysisList;
     }
-
-
+    
     private List<ComparisonDate> comparisonDates;
 
     ComparisonDate _selectedItem;

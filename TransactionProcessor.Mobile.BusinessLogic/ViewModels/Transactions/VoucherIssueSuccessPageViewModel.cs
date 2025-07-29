@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
@@ -7,7 +8,7 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions
 {
-    public class VoucherIssueSuccessPageViewModel : BaseViewModel
+    public partial class VoucherIssueSuccessPageViewModel : BaseViewModel
     {
         private readonly INavigationService NavigationService;
         
@@ -16,23 +17,17 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions
         public VoucherIssueSuccessPageViewModel(INavigationService navigationService)
         {
             this.NavigationService = navigationService;
-            this.CompletedCommand = new AsyncCommand(this.CompletedCommandExecute);
             this.Title = "Voucher Issue Successful";
         }
 
         #endregion
 
-        #region Properties
-
-        public ICommand CompletedCommand { get; }
-
-        #endregion
-
         #region Methods
 
-        private async Task CompletedCommandExecute()
+        [RelayCommand]
+        private async Task Completed()
         {
-            Logger.LogInformation("CompletedCommandExecute called");
+            Logger.LogInformation("Completed called");
             await this.NavigationService.PopToRoot();
         }
 

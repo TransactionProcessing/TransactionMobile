@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using MvvmHelpers.Commands;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
@@ -9,7 +10,7 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions;
 
-public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel
+public partial class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel
 {
     #region Fields
 
@@ -43,32 +44,12 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel
                                                 INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
     {
         this.Mediator = mediator;
-        this.PerformTopupCommand = new AsyncCommand(this.PerformTopupCommandExecute);
-        this.CustomerMobileNumberEntryCompletedCommand = new AsyncCommand(this.CustomerMobileNumberEntryCompletedCommandExecute);
-        this.TopupAmountEntryCompletedCommand = new AsyncCommand(this.TopupAmountEntryCompletedCommandExecute);
-        this.CustomerEmailAddressEntryCompletedCommand = new AsyncCommand(this.CustomerEmailAddressEntryCompletedCommandExecute);
         this.Title = "Enter Topup Details";
     }
 
     #endregion
 
     #region Properties
-    
-    public String CustomerEmailAddress
-    {
-        get => this.customerEmailAddress;
-        set => this.SetProperty(ref this.customerEmailAddress, value);
-    }
-
-    public ICommand CustomerEmailAddressEntryCompletedCommand { get; }
-
-    public String CustomerMobileNumber
-    {
-        get => this.customerMobileNumber;
-        set => this.SetProperty(ref this.customerMobileNumber, value);
-    }
-
-    public ICommand CustomerMobileNumberEntryCompletedCommand { get; }
 
     public Action OnCustomerEmailAddressEntryCompleted { get; set; }
 
@@ -76,33 +57,44 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel
 
     public Action OnTopupAmountEntryCompleted { get; set; }
 
-    public ICommand PerformTopupCommand { get; }
-
+    public String CustomerEmailAddress
+    {
+        get => this.customerEmailAddress;
+        set => this.SetProperty(ref this.customerEmailAddress, value);
+    }
+    
+    public String CustomerMobileNumber
+    {
+        get => this.customerMobileNumber;
+        set => this.SetProperty(ref this.customerMobileNumber, value);
+    }
+    
     public Decimal TopupAmount
     {
         get => this.topupAmount;
         set => this.SetProperty(ref this.topupAmount, value);
     }
 
-    public ICommand TopupAmountEntryCompletedCommand { get; }
-
     #endregion
 
     #region Methods
 
-    private async Task CustomerEmailAddressEntryCompletedCommandExecute()
+    [RelayCommand]
+    private async Task CustomerEmailAddressEntryCompleted()
     {
-        Logger.LogInformation("CustomerEmailAddressEntryCompletedCommandExecute called");
+        Logger.LogInformation("CustomerEmailAddressEntryCompleted called");
         this.OnCustomerEmailAddressEntryCompleted();
     }
 
-    private async Task CustomerMobileNumberEntryCompletedCommandExecute()
+    [RelayCommand]
+    private async Task CustomerMobileNumberEntryCompleted()
     {
-        Logger.LogInformation("CustomerMobileNumberEntryCompletedCommandExecute called");
+        Logger.LogInformation("CustomerMobileNumberEntryCompleted called");
         this.OnCustomerMobileNumberEntryCompleted();
     }
 
-    private async Task PerformTopupCommandExecute()
+    [RelayCommand]
+    private async Task PerformTopup()
     {
         Logger.LogInformation("PerformTopupCommandExecute called");
         // Create Command and Send
@@ -126,9 +118,10 @@ public class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewModel
         }
     }
 
-    private async Task TopupAmountEntryCompletedCommandExecute()
+    [RelayCommand]
+    private async Task TopupAmountEntryCompleted()
     {
-        Logger.LogInformation("TopupAmountEntryCompletedCommandExecute called");
+        Logger.LogInformation("TopupAmountEntryCompleted called");
         this.OnTopupAmountEntryCompleted();
     }
 

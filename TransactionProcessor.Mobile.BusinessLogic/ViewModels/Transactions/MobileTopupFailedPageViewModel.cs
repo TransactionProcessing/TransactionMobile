@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
@@ -6,7 +7,7 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions;
 
-public class MobileTopupFailedPageViewModel : BaseViewModel
+public partial class MobileTopupFailedPageViewModel : BaseViewModel
 {
     private readonly INavigationService NavigationService;
     
@@ -14,23 +15,17 @@ public class MobileTopupFailedPageViewModel : BaseViewModel
 
     public MobileTopupFailedPageViewModel(INavigationService navigationService) {
         this.NavigationService = navigationService;
-        this.CancelledCommand = new AsyncCommand(this.CancelledCommandExecute);
         this.Title = "Mobile Topup Failed";
     }
 
     #endregion
 
-    #region Properties
-
-    public ICommand CancelledCommand { get; }
-
-    #endregion
-
     #region Methods
 
-    private async Task CancelledCommandExecute()
+    [RelayCommand]
+    private async Task Cancelled()
     {
-        Logger.LogInformation("CancelledCommandExecute called");
+        Logger.LogInformation("Cancelled called");
         await this.NavigationService.PopToRoot();
     }
 
