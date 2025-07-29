@@ -28,4 +28,28 @@
 
         public static Guid GenerateGuid(Object o) => IdGenerationService.GenerateUniqueId(o);
     }*/
+
+    public interface ICorrelationIdProvider
+    {
+        string CorrelationId { get; }
+        void SetCorrelationId(string correlationId);
+        void ResetCorrelationId();
+    }
+
+    public class CorrelationIdProvider : ICorrelationIdProvider
+    {
+        private static readonly AsyncLocal<string?> _correlationId = new();
+
+        public string CorrelationId => _correlationId.Value ??= Guid.NewGuid().ToString();
+
+        public void SetCorrelationId(string correlationId)
+        {
+            _correlationId.Value = correlationId ?? Guid.NewGuid().ToString();
+        }
+
+        public void ResetCorrelationId()
+        {
+            _correlationId.Value = Guid.NewGuid().ToString();
+        }
+    }
 }
