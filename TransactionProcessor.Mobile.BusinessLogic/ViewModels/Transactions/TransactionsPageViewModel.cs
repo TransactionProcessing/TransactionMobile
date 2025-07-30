@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using MvvmHelpers.Commands;
 using System.Windows.Input;
+using ClientProxyBase;
+using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
@@ -34,6 +36,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions
         [RelayCommand]
         public async Task BillPayment()
         {
+            CorrelationIdProvider.NewId();
             Logger.LogInformation("Bill Payment called");
             await this.NavigationService.GoToBillPaymentSelectOperatorPage();
         }
@@ -41,6 +44,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions
         [RelayCommand]
         public async Task MobileTopup()
         {
+            CorrelationIdProvider.NewId();
             Logger.LogInformation("Mobile Topup called");
             await this.NavigationService.GoToMobileTopupSelectOperatorPage();
         }
@@ -48,6 +52,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions
         [RelayCommand]
         public async Task MobileWallet()
         {
+            CorrelationIdProvider.NewId();
             Logger.LogInformation("MobileWallet called");
             await this.NavigationService.GoToHome();
         }
@@ -55,6 +60,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions
         [RelayCommand]
         public async Task Voucher()
         {
+            CorrelationIdProvider.NewId();
             Logger.LogInformation("Voucher called");
             await this.NavigationService.GoToVoucherSelectOperatorPage();
         }

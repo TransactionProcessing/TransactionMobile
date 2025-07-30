@@ -519,9 +519,6 @@ namespace TransactionProcessor.Mobile.UITests.Features
 #line 110
  await testRunner.GivenAsync("I make the following manual merchant deposits", ((string)(null)), table20, "Given ");
 #line hidden
-#line 114
- await testRunner.GivenAsync("I have created a config for my application", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
 #line 116
  await testRunner.GivenAsync("I have created a config for my device", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden

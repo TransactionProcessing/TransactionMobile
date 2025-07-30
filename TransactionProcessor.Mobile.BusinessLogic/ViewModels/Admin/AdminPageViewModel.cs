@@ -1,8 +1,9 @@
-﻿using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using MvvmHelpers.Commands;
 using SimpleResults;
+using System.Windows.Input;
+using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
@@ -37,6 +38,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Admin
         [RelayCommand]
         private async Task Reconciliation()
         {
+            CorrelationIdProvider.NewId();
             PerformReconciliationRequest request =
                 PerformReconciliationRequest.Create(DateTime.Now, String.Empty, this.ApplicationInfoService.VersionString);
 

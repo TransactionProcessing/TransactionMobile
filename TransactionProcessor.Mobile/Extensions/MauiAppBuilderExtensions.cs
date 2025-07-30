@@ -30,6 +30,8 @@ using TransactionProcessor.Mobile.Pages.Transactions.Voucher;
 //using TransactionProcessor.Mobile.Platforms.Android;
 using TransactionProcessor.Mobile.UIServices;
 using LogMessage = TransactionProcessor.Mobile.BusinessLogic.Models.LogMessage;
+using ClientProxyBase;
+
 
 #if ANDROID
 using Javax.Net.Ssl;
@@ -54,9 +56,21 @@ namespace TransactionProcessor.Mobile.Extensions {
         }
 
         public static MauiAppBuilder ConfigureAppServices(this MauiAppBuilder builder) {
+            //builder.Services.AddHttpClient()
+            //    .AddHttpMessageHandler<CorrelationIdHandler>()
+            //    .ConfigurePrimaryHttpMessageHandler(GetHandler);
 
-            HttpClient httpClient = CreateHttpClient();
-            builder.Services.AddSingleton<HttpClient>(httpClient);
+            builder.Services.AddHttpClient("default")
+                .AddHttpMessageHandler<CorrelationIdHandler>()
+                .ConfigurePrimaryHttpMessageHandler(GetHandler);
+
+            // Register as the default HttpClient
+            builder.Services.AddTransient(sp =>
+            {
+                var factory = sp.GetRequiredService<IHttpClientFactory>();
+                return factory.CreateClient("default");
+            });
+
             builder.Services.AddSingleton<Func<String, String>>(
                                                                 new Func<String, String>(configSetting =>
                                                                                          {
@@ -157,7 +171,7 @@ namespace TransactionProcessor.Mobile.Extensions {
                                                                                                                    }
                                                                                                                }));
 
-            builder.Services.AddSingleton<ISecurityServiceClient, SecurityServiceClient>();
+            builder.Services.RegisterHttpClientX<ISecurityServiceClient, SecurityServiceClient>();
             builder.Services.AddSingleton<IApplicationCache, ApplicationCache>();
 
             builder.ConfigureDeviceIdProvider();
@@ -165,8 +179,8 @@ namespace TransactionProcessor.Mobile.Extensions {
             return builder;
         }
 
-        private static HttpClient CreateHttpClient() {
-
+        public static HttpMessageHandler GetHandler()
+        {
 #if ANDROID
             CustomAndroidMessageHandler androidMessageHandler = new()
             {
@@ -177,22 +191,22 @@ namespace TransactionProcessor.Mobile.Extensions {
                     errors) => true,
 
             };
-            return new HttpClient(androidMessageHandler);
+            return androidMessageHandler;
 #else
-            HttpMessageHandler httpMessageHandler = new SocketsHttpHandler
-                                                    {
-                                                        SslOptions = new SslClientAuthenticationOptions
-                                                                     {
-                                                                         RemoteCertificateValidationCallback = (sender,
-                                                                                                                certificate,
-                                                                                                                chain,
-                                                                                                                errors) => true,
-                                                                     }
-                                                    };
-            return new HttpClient(httpMessageHandler);
+                        HttpMessageHandler httpMessageHandler = new SocketsHttpHandler
+                                                                {
+                                                                    SslOptions = new SslClientAuthenticationOptions
+                                                                                 {
+                                                                                     RemoteCertificateValidationCallback = (sender,
+                                                                                                                            certificate,
+                                                                                                                            chain,
+                                                                                                                            errors) => true,
+                                                                                 }
+                                                                };
+                        return httpMessageHandler;
 #endif
         }
-
+        
         public static MauiAppBuilder ConfigureUIServices(this MauiAppBuilder builder) {
             builder.Services.AddSingleton<IDialogService, DialogService>();
             builder.Services.AddSingleton<INavigationService, ShellNavigationService>();
@@ -311,6 +325,20 @@ namespace TransactionProcessor.Mobile.Extensions {
         }
 
         #endregion
+
+        public static IHttpClientBuilder RegisterHttpClientX<TInterface, TImplementation>(
+            this IServiceCollection services)
+            where TInterface : class
+            where TImplementation : class, TInterface
+        {
+            services.AddTransient<CorrelationIdHandler>();
+
+            services.AddHttpClient<TInterface, TImplementation>()
+                .AddHttpMessageHandler<CorrelationIdHandler>()
+                .ConfigurePrimaryHttpMessageHandler(GetHandler);
+
+            return services.AddHttpClient<TImplementation>();
+        }
     }
 
 #if ANDROID

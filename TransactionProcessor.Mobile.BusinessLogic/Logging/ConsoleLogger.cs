@@ -1,13 +1,15 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.Logging;
 
 [ExcludeFromCodeCoverage]
 public class ConsoleLogger : ILogger{
+    
     #region Constructors
 
-    public ConsoleLogger(){
+    public ConsoleLogger() {
         this.IsInitialised = true;
     }
 
@@ -23,17 +25,16 @@ public class ConsoleLogger : ILogger{
 
     internal void Log(LogMessage logMessageModel)
     {
-        List<LogMessage> logMessageModels = new List<LogMessage>{
-                                                                    logMessageModel
-                                                                };
+        List<LogMessage> logMessageModels = [logMessageModel];
         this.Log(logMessageModels);
     }
 
     internal void Log(List<LogMessage> logMessageModels)
     {
+        String correlationId = CorrelationIdProvider.CorrelationId;
         foreach (LogMessage item in logMessageModels)
         {
-            Console.WriteLine($"AppLog|{item.EntryDateTime}|{item.LogLevel}|{item.Message}");
+            Console.WriteLine($"AppLog|{item.EntryDateTime}|Correlation Id: {correlationId}|{item.LogLevel}|{item.Message}");
         }
     }
 

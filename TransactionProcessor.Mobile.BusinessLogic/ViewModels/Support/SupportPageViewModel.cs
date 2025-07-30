@@ -1,8 +1,9 @@
-﻿using System.Text;
-using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using MvvmHelpers.Commands;
+using System.Text;
+using System.Windows.Input;
+using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Database;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
@@ -65,6 +66,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Support
 
         [RelayCommand]
         private async Task UploadLogs() {
+            CorrelationIdProvider.NewId();
             Logger.LogInformation("UploadLogs called");
 
             UploadLogsRequest uploadLogsRequest = UploadLogsRequest.Create(String.Empty);
