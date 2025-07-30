@@ -181,7 +181,7 @@ jobs:
         run: adb logcat -d > emulator-log.txt
 
       - name: Upload emulator logs
-        if: failure()
+        #if: failure()
         uses: actions/upload-artifact@v4
         with:
             name: android-emulator-logs
