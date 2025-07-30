@@ -105,6 +105,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.MyAccount
 
         [RelayCommand]
         private async Task OptionSelected(ItemSelected<ListViewItem> arg) {
+            CorrelationIdProvider.NewId();
             AccountOptions selectedOption = (AccountOptions)arg.SelectedItemIndex;
 
             Task navigationTask = selectedOption switch {

@@ -57,6 +57,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports
         [RelayCommand]
         private async Task OptionSelected(ItemSelected<ListViewItem> arg)
         {
+            CorrelationIdProvider.NewId();
             ReportsOptions selectedOption = (ReportsOptions)arg.SelectedItemIndex;
 
             Task navigationTask = selectedOption switch

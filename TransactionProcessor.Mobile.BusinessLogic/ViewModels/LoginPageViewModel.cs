@@ -7,6 +7,7 @@ using SimpleResults;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Input;
+using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
@@ -155,6 +156,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
 
         [RelayCommand]
         private async Task Logon(){
+            CorrelationIdProvider.NewId();
+
             this.CacheUseTrainingMode();
 
             Stopwatch sw = Stopwatch.StartNew();

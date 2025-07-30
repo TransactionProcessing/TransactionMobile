@@ -1,6 +1,8 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SimpleResults;
+using System.Diagnostics;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Database;
 using TransactionProcessor.Mobile.BusinessLogic.Models;

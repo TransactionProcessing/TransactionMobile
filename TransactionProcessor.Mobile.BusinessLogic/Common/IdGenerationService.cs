@@ -54,5 +54,6 @@
         //}
 
         //public static void New() => CorrelationId = Guid.NewGuid().ToString();
+        public static void NewId() => CorrelationId = Guid.NewGuid().ToString();
     }
 }
