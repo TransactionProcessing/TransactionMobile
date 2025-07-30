@@ -33,12 +33,26 @@
     {
         private static readonly AsyncLocal<string?> _correlationId = new();
 
-        public static string? CorrelationId
+        public static string CorrelationId
         {
-            get => _correlationId.Value;
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_correlationId.Value))
+                {
+                    _correlationId.Value = Guid.NewGuid().ToString();
+                }
+
+                return _correlationId.Value;
+            }
             set => _correlationId.Value = value;
         }
 
-        public static void New() => CorrelationId = Guid.NewGuid().ToString();
+        //public static string? CorrelationId
+        //{
+        //    get => _correlationId.Value;
+        //    set => _correlationId.Value = value;
+        //}
+
+        //public static void New() => CorrelationId = Guid.NewGuid().ToString();
     }
 }
