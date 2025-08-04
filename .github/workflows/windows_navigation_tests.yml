@@ -63,7 +63,7 @@ jobs:
         run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "(Category=PRNavTest)&(Category=Windows)" --no-restore
 
       - name: Upload Appium Logs on Failure
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
             name: windows-software_navigation_tests_appium
