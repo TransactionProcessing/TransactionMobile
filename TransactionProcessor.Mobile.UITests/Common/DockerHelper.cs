@@ -200,7 +200,7 @@ namespace TransactionProcessor.Mobile.UITests.Common
             environmentVariables.Add("AppSettings:InMemoryDatabase=true");
             this.ConfigHostContainerName = $"mobileconfighost{this.TestId:N}";
 
-            String imageName = "stuartferguson/mobileconfiguration:latest";
+            String imageName = "stuartferguson/mobileconfiguration:master";
 
             if (FdOs.IsWindows() && Shared.IntegrationTesting.DockerHelper.GetDockerEnginePlatform() == DockerEnginePlatform.Windows){
                 imageName = "stuartferguson/mobileconfigurationwindows:master";

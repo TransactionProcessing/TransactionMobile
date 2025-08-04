@@ -89,15 +89,14 @@ namespace TransactionProcessor.Mobile.UITests.Steps
         }
 
         [Given(@"I have a token to access the estate management and transaction processor acl resources")]
-        public async Task GivenIHaveATokenToAccessTheEstateManagementAndTransactionProcessorAclResources(DataTable table)
-        {
+        public async Task GivenIHaveATokenToAccessTheEstateManagementAndTransactionProcessorAclResources(DataTable table) {
             DataTableRow firstRow = table.Rows.First();
             String clientId = ReqnrollTableHelper.GetStringRowValue(firstRow, "ClientId").Replace("[id]", this.TestingContext.DockerHelper.TestId.ToString("N"));
             ClientDetails clientDetails = this.TestingContext.GetClientDetails(clientId);
 
             this.TestingContext.AccessToken = await this.SecurityServiceSteps.GetClientToken(clientDetails.ClientId, clientDetails.ClientSecret, CancellationToken.None);
         }
-        
+
         [Given(@"I have created the following estates")]
         public async Task GivenIHaveCreatedTheFollowingEstates(DataTable table) {
             List<CreateEstateRequest> requests = table.Rows.ToCreateEstateRequests();

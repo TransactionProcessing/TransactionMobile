@@ -63,14 +63,14 @@ jobs:
         run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "(Category=PRTest)&(Category=Windows)" --no-restore
 
       - name: Upload Logs on Failure
-        if: failure()  # Runs only if a previous step fails
+        if: always()
         uses: actions/upload-artifact@v4
         with:
             name: windows-e2e_tests
             path: C:\\Users\\runneradmin\\txnproc
 
       - name: Upload Appium Logs on Failure
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
             name: windows-e2e_tests_appium

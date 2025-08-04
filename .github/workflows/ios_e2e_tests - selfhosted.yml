@@ -192,7 +192,7 @@ jobs:
       #       nunit TransactionProcessor.Mobile.UiTests/bin/Release/net9.0/TransactionProcessor.Mobile.UiTests.dll --where "cat == PRNavTest && cat == iOS" --labels=All --result=TestResult-iOS.xml
 
       - name: Upload Appium Logs on Failure      
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
             name: ios-software_navigation_tests_appium
