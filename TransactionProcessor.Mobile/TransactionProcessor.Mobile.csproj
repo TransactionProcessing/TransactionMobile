@@ -171,7 +171,7 @@
 
 	<ItemGroup>
 		<!--<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />-->
-		<PackageReference Include="ClientProxyBase" Version="2025.7.12" />
+		<PackageReference Include="ClientProxyBase" Version="2025.7.13" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.80" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.80" />
