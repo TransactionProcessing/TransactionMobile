@@ -1,0 +1,101 @@
+name: Codacy Bootstrap Issues
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Run without creating GitHub issues"
+        required: false
+        default: "false"
+  push:
+    # branches to consider in the event; optional, defaults to all
+    branches:
+      - main
+jobs:
+  sync-codacy-issues:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch Codacy Issues
+        run: |
+          curl --request POST \
+            --url "https://app.codacy.com/api/v3/analysis/organizations/gh/${{ github.repository_owner }}/repositories/${{ github.event.repository.name }}/issues/search" \
+            --header "api-token: ${{ secrets.CODACY_API_TOKEN }}" \
+            --header "content-type: application/json" \
+            --data '{"levels":["Error","Warning","High"]}' \
+            --silent \
+            --fail \
+            -o issues.json
+
+      - name: Extract issues
+        run: jq '.data' issues.json > filtered_issues.json
+
+      - name: Create GitHub Issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const dryRun = "${{ github.event.inputs.dry_run }}" === "true";
+
+            const rawIssues = JSON.parse(fs.readFileSync('filtered_issues.json', 'utf8'));
+
+            const grouped = {};
+            for (const issue of rawIssues) {
+              grouped[issue.issueId] = grouped[issue.issueId] || [];
+              grouped[issue.issueId].push(issue);
+            }
+
+            const openIssues = await github.paginate(
+              github.rest.issues.listForRepo,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: "open"
+              }
+            );
+
+            console.log(`Fetched ${openIssues.length} open issues from GitHub`);
+
+            const existingIds = new Set();
+            for (const ghIssue of openIssues) {
+              const matches = ghIssue.body?.match(/codacy-issue-([a-f0-9]+)/g);
+              if (matches) {
+                matches.forEach(m => existingIds.add(m.replace("codacy-issue-", "")));
+              }
+            }
+
+            console.log(`Found ${existingIds.size} existing Codacy issues in GitHub`);
+
+            for (const [issueId, issues] of Object.entries(grouped)) {
+              if (existingIds.has(issueId)) {
+                console.log(`Skipping duplicate Codacy issueId ${issueId}`);
+                continue;
+              }
+
+              const key = `codacy-issue-${issueId}`;
+              const first = issues[0];
+              const title = `[Codacy] ${first.patternInfo.severityLevel} issue(s) in ${first.filePath}`;
+
+              let body = `Codacy detected **${issues.length}** occurrence(s) of rule \`${first.patternInfo.id}\`:\n\n`;
+              for (const issue of issues) {
+                body += `- **${issue.patternInfo.severityLevel}** at \`${issue.filePath}:${issue.lineNumber}\` → ${issue.message}\n`;
+              }
+              body += `\nSee full details in [Codacy Report](https://app.codacy.com/gh/${context.repo.owner}/${context.repo.repo}/issues)\n\n`;
+              body += `Unique ID: \`${key}\``;
+
+              if (dryRun) {
+                console.log(`[DRY RUN] Would create issue: ${title}`);
+              } else {
+                await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title,
+                  body,
+                  labels: ["codacy"]
+                });
+                console.log(`✅ Created GitHub issue for Codacy issueId ${issueId}`);
+                await new Promise(resolve => setTimeout(resolve, 2000));
+              }
+            }
