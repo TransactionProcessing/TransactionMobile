@@ -1,3 +1,4 @@
+
 name: Sync Codacy Issues
 
 on:
@@ -165,5 +166,70 @@ jobs:
                 }
               }
             }
+
+      - name: Close Duplicate Codacy Issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const dryRun = "${{ github.event.inputs.dry_run }}" === "true";
+
+            // Fetch all issues with the codacy label (open + closed)
+            const allIssues = await github.paginate(
+              github.rest.issues.listForRepo,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: "all",
+                labels: ["codacy"]
+              }
+            );
+
+            const grouped = {};
+
+            for (const issue of allIssues) {
+              const matches = issue.body?.match(/codacy-issue-([a-f0-9]+)/g);
+              if (!matches) continue;
+
+              for (const match of matches) {
+                const issueId = match.replace("codacy-issue-", "");
+                if (!grouped[issueId]) grouped[issueId] = [];
+                grouped[issueId].push(issue);
+              }
+            }
+
+            for (const [issueId, issues] of Object.entries(grouped)) {
+              if (issues.length <= 1) continue; // No duplicates
+
+              // Sort by creation date descending (newest first)
+              issues.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+              const [latest, ...duplicates] = issues;
+              console.log(`Found ${issues.length} duplicates for Codacy issueId ${issueId}. Keeping #${latest.number}.`);
+
+              for (const dup of duplicates) {
+                if (dup.state === "closed") continue;
+
+                if (dryRun) {
+                  console.log(`[DRY RUN] Would close duplicate issue #${dup.number} (Codacy issueId ${issueId})`);
+                } else {
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: dup.number,
+                    body: `Auto-closing as duplicate of newer Codacy issue #${latest.number} for ID \`${issueId}\`.`
+                  });
+
+                  await github.rest.issues.update({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: dup.number,
+                    state: "closed"
+                  });
+
+                  console.log(`❌ Closed duplicate issue #${dup.number} (Codacy issueId ${issueId})`);
+                }
+              }
+            }
+            
 
             
