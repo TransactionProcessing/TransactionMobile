@@ -211,43 +211,26 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
     }
 
     public static ProductType GetProductType(String operatorName) {
-        ProductType productType = ProductType.NotSet;
-        switch(operatorName) {
-            case "Safaricom":
-                productType = ProductType.MobileTopup;
-                break;
-            case "Voucher":
-                productType = ProductType.Voucher;
-                break;
-            case "PataPawa PostPay":
-            case "PataPawa PrePay":
-                productType = ProductType.BillPayment;
-                break;
-        }
-
-        return productType;
+        return operatorName switch
+        {
+            "Safaricom" => ProductType.MobileTopup,
+            "Voucher" => ProductType.Voucher,
+            "PataPawa PostPay" => ProductType.BillPayment,
+            "PataPawa PrePay" => ProductType.BillPayment,
+            _ => ProductType.NotSet,
+        };
     }
 
     public static ProductSubType GetProductSubType(String operatorName)
     {
-        ProductSubType productType = ProductSubType.NotSet;
-        switch (operatorName)
+        return operatorName switch
         {
-            case "Safaricom":
-                productType = ProductSubType.MobileTopup;
-                break;
-            case "Voucher":
-                productType = ProductSubType.Voucher;
-                break;
-            case "PataPawa PostPay":
-                productType = ProductSubType.BillPaymentPostPay;
-                break;
-            case "PataPawa PrePay":
-                productType = ProductSubType.BillPaymentPrePay;
-                break;
-        }
-
-        return productType;
+            "Safaricom" => ProductSubType.MobileTopup,
+            "Voucher" => ProductSubType.Voucher,
+            "PataPawa PostPay" => ProductSubType.BillPaymentPostPay,
+            "PataPawa PrePay" => ProductSubType.BillPaymentPrePay,
+            _ => ProductSubType.NotSet,
+        };
     }
 
     #endregion

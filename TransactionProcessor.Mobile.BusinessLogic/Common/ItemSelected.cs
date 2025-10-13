@@ -2,6 +2,6 @@
 
 public class ItemSelected<T>
 {
-    public T SelectedItem;
-    public Int32 SelectedItemIndex;
+    public T SelectedItem { get; set; }
+    public Int32 SelectedItemIndex { get; set; }
 }

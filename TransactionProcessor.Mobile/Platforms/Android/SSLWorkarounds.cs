@@ -38,26 +38,52 @@ namespace TransactionProcessor.Mobile.Platforms.Android
 
         public class DangerousTrustManager : X509ExtendedTrustManager
         {
-            public override void CheckClientTrusted(X509Certificate[] chain, string authType, Socket socket) { }
+            public override void CheckClientTrusted(X509Certificate[] chain,
+                                                    string authType,
+                                                    Socket socket) {
+                // Do nothing
+            }
 
-            public override void CheckClientTrusted(X509Certificate[] chain, string authType, SSLEngine engine) { }
+            public override void CheckClientTrusted(X509Certificate[] chain,
+                                                    string authType,
+                                                    SSLEngine engine) {
+                // Do nothing
+            }
 
-            public override void CheckClientTrusted(X509Certificate[] chain, string authType) { }
+            public override void CheckClientTrusted(X509Certificate[] chain,
+                                                    string authType) {
+                // Do nothing
+            }
 
-            public override void CheckServerTrusted(X509Certificate[] chain, string authType, Socket socket) { }
+            public override void CheckServerTrusted(X509Certificate[] chain,
+                                                    string authType,
+                                                    Socket socket) {
+                // Do nothing
+            }
 
-            public override void CheckServerTrusted(X509Certificate[] chain, string authType, SSLEngine engine) { }
+            public override void CheckServerTrusted(X509Certificate[] chain,
+                                                    string authType,
+                                                    SSLEngine engine) {
+                // Do nothing
+            }
 
-            public override void CheckServerTrusted(X509Certificate[] chain, string authType) { }
+            public override void CheckServerTrusted(X509Certificate[] chain,
+                                                    string authType) {
+                // Do nothing
+            }
 
             public override X509Certificate[] GetAcceptedIssuers() => Array.Empty<X509Certificate>();
         }
 
         public class DangerousTrustManagerFactory : TrustManagerFactorySpi
         {
-            protected override void EngineInit(IManagerFactoryParameters mgrparams) { }
+            protected override void EngineInit(IManagerFactoryParameters mgrparams) {
+                // Do nothing
+            }
 
-            protected override void EngineInit(KeyStore keystore) { }
+            protected override void EngineInit(KeyStore keystore) {
+                // Do nothing
+            }
 
             protected override ITrustManager[] EngineGetTrustManagers() => new ITrustManager[] { new DangerousTrustManager() };
 

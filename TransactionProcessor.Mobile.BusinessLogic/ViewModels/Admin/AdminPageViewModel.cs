@@ -42,7 +42,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Admin
             PerformReconciliationRequest request =
                 PerformReconciliationRequest.Create(DateTime.Now, String.Empty, this.ApplicationInfoService.VersionString);
 
-            Result<PerformReconciliationResponseModel> result = await this.Mediator.Send(request);
+            await this.Mediator.Send(request);
 
             // TODO: Act on the response (display message or something)...
             await this.NavigationService.GoToHome();

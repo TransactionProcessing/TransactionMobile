@@ -40,6 +40,7 @@ public class NullLogger : ILogger{
     /// </summary>
     /// <param name="exception">The exception.</param>
     public void LogCritical(String message, Exception exception){
+        // Do nothing
     }
 
     /// <summary>
@@ -47,6 +48,7 @@ public class NullLogger : ILogger{
     /// </summary>
     /// <param name="message">The message.</param>
     public void LogDebug(String message){
+        // Do nothing
     }
 
     /// <summary>
@@ -54,6 +56,7 @@ public class NullLogger : ILogger{
     /// </summary>
     /// <param name="exception">The exception.</param>
     public void LogError(String message, Exception exception){
+        // Do nothing
     }
 
     /// <summary>
@@ -61,6 +64,7 @@ public class NullLogger : ILogger{
     /// </summary>
     /// <param name="message">The message.</param>
     public void LogInformation(String message){
+        // Do nothing
     }
 
     /// <summary>
@@ -68,6 +72,7 @@ public class NullLogger : ILogger{
     /// </summary>
     /// <param name="message">The message.</param>
     public void LogTrace(String message){
+        // Do nothing
     }
 
     /// <summary>
@@ -75,6 +80,7 @@ public class NullLogger : ILogger{
     /// </summary>
     /// <param name="message">The message.</param>
     public void LogWarning(String message){
+        // Do nothing
     }
 
     #endregion

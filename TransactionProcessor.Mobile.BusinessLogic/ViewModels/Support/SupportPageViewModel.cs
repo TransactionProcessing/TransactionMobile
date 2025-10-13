@@ -71,7 +71,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Support
 
             UploadLogsRequest uploadLogsRequest = UploadLogsRequest.Create(String.Empty);
 
-            Boolean response = await this.Mediator.Send(uploadLogsRequest, CancellationToken.None);
+            await this.Mediator.Send(uploadLogsRequest, CancellationToken.None);
 
             // TODO: Act on the response (display message or something)...
             //await this.NavigationService.GoBack();
