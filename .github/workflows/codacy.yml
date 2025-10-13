@@ -1,4 +1,3 @@
-
 name: Sync Codacy Issues
 
 on:
@@ -9,227 +8,166 @@ on:
         required: false
         default: "false"
   push:
-    # branches to consider in the event; optional, defaults to all
     branches:
+      - master
       - main
+
 jobs:
   sync-codacy-issues:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install jq and gh
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y jq gh
+
+      # 🔹 STEP 1: Fetch Codacy Issues
       - name: Fetch Codacy Issues
+        env:
+          CODACY_API_TOKEN: ${{ secrets.CODACY_API_TOKEN }}
         run: |
           curl --request POST \
             --url "https://app.codacy.com/api/v3/analysis/organizations/gh/${{ github.repository_owner }}/repositories/${{ github.event.repository.name }}/issues/search" \
-            --header "api-token: ${{ secrets.CODACY_API_TOKEN }}" \
+            --header "api-token: $CODACY_API_TOKEN" \
             --header "content-type: application/json" \
             --data '{"levels":["Error","Warning","High"]}' \
             --silent \
             --fail \
-            -o issues.json
+            -o codacy_issues.json
 
-      - name: Extract issues
-        run: jq '.data' issues.json > filtered_issues.json
+      # 🔹 STEP 2: Ensure standard labels exist with your colors
+      - name: Ensure standard labels exist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          declare -A LABELS=(
+            ["task"]="Tasks and work items|#aefcde"
+            ["refactor"]="Code cleanup and best practices|#eb69a2"
+            ["bug"]="Bugs and error-prone code|#b60205"
+            ["security"]="Security-related issues|#d93f0b"
+            ["performance"]="Performance optimization issues|#e57504"
+          )
+          for label in "${!LABELS[@]}"; do
+            desc=${LABELS[$label]%%|*}
+            color=${LABELS[$label]##*|}
+            echo "Creating/updating label '$label'"
+            gh label create "$label" --description "$desc" --color "$color" --repo ${{ github.repository }} --force
+          done
 
-      - name: Create GitHub Issues
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const dryRun = "${{ github.event.inputs.dry_run }}" === "true";
-
-            const rawIssues = JSON.parse(fs.readFileSync('filtered_issues.json', 'utf8'));
-
-            const grouped = {};
-            for (const issue of rawIssues) {
-              grouped[issue.issueId] = grouped[issue.issueId] || [];
-              grouped[issue.issueId].push(issue);
-            }
-
-            const openIssues = await github.paginate(
-              github.rest.issues.listForRepo,
-              {
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                state: "open"
-              }
-            );
-
-            console.log(`Fetched ${openIssues.length} open issues from GitHub`);
-
-            const existingIds = new Set();
-            for (const ghIssue of openIssues) {
-              const matches = ghIssue.body?.match(/codacy-issue-([a-f0-9]+)/g);
-              if (matches) {
-                matches.forEach(m => existingIds.add(m.replace("codacy-issue-", "")));
-              }
-            }
-
-            console.log(`Found ${existingIds.size} existing Codacy issues in GitHub`);
-
-            for (const [issueId, issues] of Object.entries(grouped)) {
-              if (existingIds.has(issueId)) {
-                console.log(`Skipping duplicate Codacy issueId ${issueId}`);
-                continue;
-              }
-
-              const key = `codacy-issue-${issueId}`;
-              const first = issues[0];
-              const title = `[Codacy] ${first.patternInfo.severityLevel} issue(s) in ${first.filePath}`;
-
-              let body = `Codacy detected **${issues.length}** occurrence(s) of rule \`${first.patternInfo.id}\`:\n\n`;
-              for (const issue of issues) {
-                body += `- **${issue.patternInfo.severityLevel}** at \`${issue.filePath}:${issue.lineNumber}\` → ${issue.message}\n`;
-              }
-              body += `\nSee full details in [Codacy Report](https://app.codacy.com/gh/${context.repo.owner}/${context.repo.repo}/issues)\n\n`;
-              body += `Unique ID: \`${key}\``;
-
-              if (dryRun) {
-                console.log(`[DRY RUN] Would create issue: ${title}`);
-              } else {
-                await github.rest.issues.create({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  title,
-                  body,
-                  labels: ["codacy"]
-                });
-                console.log(`✅ Created GitHub issue for Codacy issueId ${issueId}`);
-                await new Promise(resolve => setTimeout(resolve, 2000));
-              }
-            }
-
-      - name: Close Resolved GitHub Issues
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const dryRun = "${{ github.event.inputs.dry_run }}" === "true";
-            const rawIssues = JSON.parse(fs.readFileSync('filtered_issues.json', 'utf8'));
-
-            // Build current Codacy set (only *active* issues, not ignored)
-            const currentCodacyIds = new Set(
-              rawIssues.filter(i => !i.ignored).map(i => i.issueId)
-            );
-
-            // Build ignored Codacy set
-            const ignoredCodacyIds = new Set(
-              rawIssues.filter(i => i.ignored).map(i => i.issueId)
-            );
-
-            // Fetch ALL GitHub issues with codacy label
-            const allIssues = await github.paginate(
-              github.rest.issues.listForRepo,
-              {
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                state: "all",
-                labels: ["codacy"]
-              }
-            );
-
-            for (const ghIssue of allIssues) {
-              const matches = ghIssue.body?.match(/codacy-issue-([a-f0-9]+)/g);
-              if (!matches) continue;
-
-              for (const match of matches) {
-                const issueId = match.replace("codacy-issue-", "");
-
-                // Close if not active OR explicitly ignored
-                if ((!currentCodacyIds.has(issueId) || ignoredCodacyIds.has(issueId)) 
-                    && ghIssue.state === "open") {
-                  if (dryRun) {
-                    console.log(`[DRY RUN] Would close issue #${ghIssue.number} (Codacy issueId ${issueId})`);
-                  } else {
-                    // Add comment before closing
-                    const reason = ignoredCodacyIds.has(issueId)
-                      ? "Auto closed because Codacy issue is marked as *ignored*"
-                      : "Auto closed as not found in last analysis";
-
-                    await github.rest.issues.createComment({
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      issue_number: ghIssue.number,
-                      body: reason
-                    });
-
-                    await github.rest.issues.update({
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      issue_number: ghIssue.number,
-                      state: "closed"
-                    });
-                    console.log(`❌ Closed GitHub issue #${ghIssue.number} for Codacy issueId ${issueId}`);
-                  }
-                }
-              }
-            }
-
-      - name: Close Duplicate Codacy Issues
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const dryRun = "${{ github.event.inputs.dry_run }}" === "true";
-
-            // Fetch all issues with the codacy label (open + closed)
-            const allIssues = await github.paginate(
-              github.rest.issues.listForRepo,
-              {
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                state: "all",
-                labels: ["codacy"]
-              }
-            );
-
-            const grouped = {};
-
-            for (const issue of allIssues) {
-              const matches = issue.body?.match(/codacy-issue-([a-f0-9]+)/g);
-              if (!matches) continue;
-
-              for (const match of matches) {
-                const issueId = match.replace("codacy-issue-", "");
-                if (!grouped[issueId]) grouped[issueId] = [];
-                grouped[issueId].push(issue);
-              }
-            }
-
-            for (const [issueId, issues] of Object.entries(grouped)) {
-              if (issues.length <= 1) continue; // No duplicates
-
-              // Sort by creation date descending (newest first)
-              issues.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-
-              const [latest, ...duplicates] = issues;
-              console.log(`Found ${issues.length} duplicates for Codacy issueId ${issueId}. Keeping #${latest.number}.`);
-
-              for (const dup of duplicates) {
-                if (dup.state === "closed") continue;
-
-                if (dryRun) {
-                  console.log(`[DRY RUN] Would close duplicate issue #${dup.number} (Codacy issueId ${issueId})`);
-                } else {
-                  await github.rest.issues.createComment({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: dup.number,
-                    body: `Auto-closing as duplicate of newer Codacy issue #${latest.number} for ID \`${issueId}\`.`
-                  });
-
-                  await github.rest.issues.update({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: dup.number,
-                    state: "closed"
-                  });
-
-                  console.log(`❌ Closed duplicate issue #${dup.number} (Codacy issueId ${issueId})`);
-                }
-              }
-            }
+      # 🔹 STEP 3: Sync Codacy Issues (create/update)
+      - name: Sync Codacy Issues
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          dry_run="${{ github.event.inputs.dry_run }}"
+          current_issues=$(gh issue list --repo ${{ github.repository }} --state open --json number,title,body,labels)
+      
+          jq -c '.data[]' codacy_issues.json | while read -r issue; do
+            id=$(echo "$issue" | jq -r '.issueId')
+            file=$(echo "$issue" | jq -r '.filePath')
+            line=$(echo "$issue" | jq -r '.lineNumber')
+            message=$(echo "$issue" | jq -r '.message')
+            line_text=$(echo "$issue" | jq -r '.lineText // empty')
+            category=$(echo "$issue" | jq -r '.patternInfo.category')
+            severity=$(echo "$issue" | jq -r '.patternInfo.severityLevel')
+            sha=$(echo "$issue" | jq -r '.commitInfo.sha')
+      
+            title="[$category] $message"
+      
+            # Prepare the code snippet inline
+            if [ -n "$line_text" ]; then
+              # Replace literal \n from JSON and real newlines with space
+              clean_line_text=$(echo "$line_text" | tr -d '\r' | tr '\n' ' ' | sed 's/\\n/ /g')
+              code_snippet="\`\`\`
+            $clean_line_text
+            \`\`\`"
+            else
+            code_snippet=""
+            fi
+              
+            # Build the full body with Codacy ID at the top
+            body="**Codacy ID:** \`$id\`
             
-
+            **File:** \`$file\`
+            **Line:** $line
+            **Rule:** $category ($severity)
+            **Commit:** \`$sha\`"
             
+            # Append code snippet if present
+            if [ -n "$code_snippet" ]; then
+            body+="
+            
+            **Code Snippet:**
+            $code_snippet"
+            fi
+      
+            # Determine labels based on message/category
+            labels=()
+            if echo "$message" | grep -iq "todo"; then
+              labels+=("task")
+            elif echo "$category" | grep -Eiq "best[_ ]?practice|code[_ ]?style|complexity"; then
+              labels+=("refactor")
+            elif echo "$message" | grep -iq "security"; then
+              labels+=("task" "security")
+            elif echo "$category" | grep -iq "performance"; then
+              labels+=("task" "performance")
+            elif echo "$message" | grep -Eiq "error[_ ]?prone"; then
+              labels+=("bug")
+            fi
+      
+            label_string=$(IFS=,; echo "${labels[*]}")
+      
+            # Check if issue exists
+            existing_number=$(echo "$current_issues" | jq -r --arg id "$id" '.[] | select(.body | contains($id)) | .number')
+      
+            if [ -n "$existing_number" ]; then
+              echo "Updating existing issue #$existing_number ($id)"
+              if [ "$dry_run" != "true" ]; then
+                gh issue edit "$existing_number" \
+                  --body "$body" \
+                  --add-label "$label_string" \
+                  --repo ${{ github.repository }}
+              else
+                echo "[DRY RUN] Would update issue #$existing_number with labels: $label_string"
+              fi
+            else
+              echo "Creating new issue for Codacy ID $id"
+              if [ "$dry_run" != "true" ]; then
+                gh issue create \
+                  --title "$title" \
+                  --body "$body" \
+                  --label "$label_string" \
+                  --repo ${{ github.repository }}
+              else
+                echo "[DRY RUN] Would create issue '$title' with labels: $label_string"
+              fi
+            fi
+          done
+
+
+      # 🔹 STEP 4: Close resolved issues
+      - name: Close resolved issues
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          current_ids=$(jq -r '.data[].issueId' codacy_issues.json)
+          gh issue list --repo ${{ github.repository }} --state open --label codacy --json number,body | jq -c '.[]' | while read -r issue; do
+            number=$(echo "$issue" | jq -r '.number')
+            body=$(echo "$issue" | jq -r '.body')
+            id=$(echo "$body" | grep -oE 'Codacy ID: [a-f0-9]+' | awk '{print $3}')
+            if [ -n "$id" ] && ! echo "$current_ids" | grep -q "$id"; then
+              echo "Closing stale Codacy issue #$number ($id)"
+              if [ "$dry_run" != "true" ]; then
+                gh issue close "$number" --comment "This issue no longer appears in Codacy reports and has been auto-closed." --repo ${{ github.repository }}
+              else
+                echo "[DRY RUN] Would close issue #$number"
+              fi
+            fi
+          done
