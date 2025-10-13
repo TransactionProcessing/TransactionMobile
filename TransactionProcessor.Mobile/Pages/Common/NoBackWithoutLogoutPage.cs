@@ -14,7 +14,6 @@ public class NoBackWithoutLogoutPage : ContentPage
     protected override Boolean OnBackButtonPressed() {
         Type type = this.GetType().UnderlyingSystemType;
 
-        Boolean result = false;
         this.Dispatcher.Dispatch(async () => {
                                      Task t = type.Name switch {
                                          nameof(TransactionsPage) => this.ShowHomePage(),

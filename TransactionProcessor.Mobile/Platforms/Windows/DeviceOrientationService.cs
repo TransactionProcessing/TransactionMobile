@@ -10,7 +10,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.UIServices
     public static partial class DeviceOrientationService
     {
         public static partial void SetDeviceOrientation(DisplayOrientation displayOrientation){
-
+            // Do nothing
         }
     }
 }

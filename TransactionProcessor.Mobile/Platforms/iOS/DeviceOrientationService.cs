@@ -33,7 +33,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.UIServices
                 var scene = (UIApplication.SharedApplication.ConnectedScenes.ToArray()[0] as UIWindowScene);
                 if (scene != null)
                 {
-                    var uiAppplication = UIApplication.SharedApplication;
                     var test = UIApplication.SharedApplication.KeyWindow?.RootViewController;
                     if (test != null)
                     {

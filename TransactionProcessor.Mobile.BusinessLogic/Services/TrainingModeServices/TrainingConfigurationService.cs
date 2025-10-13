@@ -25,6 +25,6 @@ public class TrainingConfigurationService : IConfigurationService
     public async Task PostDiagnosticLogs(String deviceIdentifier,
                                          List<LogMessage> logMessages,
                                          CancellationToken cancellationToken) {
-            
+        // Do nothing
     }
 }

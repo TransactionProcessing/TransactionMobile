@@ -223,6 +223,9 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
             case "PataPawa PrePay":
                 productType = ProductType.BillPayment;
                 break;
+            default:
+                productType = ProductType.NotSet;
+                break;
         }
 
         return productType;
@@ -244,6 +247,9 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
                 break;
             case "PataPawa PrePay":
                 productType = ProductSubType.BillPaymentPrePay;
+                break;
+            default:
+                productType = ProductSubType.NotSet;
                 break;
         }
 

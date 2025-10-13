@@ -147,6 +147,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.UIServices
                         return "iPhone 5 Global";
                     case "iPhone5,1":
                         return "iPhone 5 GSM";
+                    default:
+                        return version;
                 }
             }
 
@@ -158,6 +160,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.UIServices
                         return "iPod touch 7G";
                     case "iPod7,1":
                         return "iPod touch 6G";
+                    default:
+                        return version;
                 }
             }
 
@@ -284,6 +288,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.UIServices
                         return "iPad (4th generation) Wi-Fi + Cellular";
                     case "iPad3,4":
                         return "iPad (4th generation) Wi-Fi";
+                    default:
+                        return version;
                 }
             }
 
