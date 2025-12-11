@@ -246,7 +246,6 @@ namespace TransactionProcessor.Mobile.UITests.Steps
             {
                 applicationId = "transactionMobilePOS",
                 androidkey = "android",
-                ioskey = "ios",
                 macoskey = "macos",
                 windowskey = "windows",
             };

@@ -33,8 +33,6 @@ public class DeviceService : IDeviceService
     {
         return DeviceInformationService.Platform();
     }
-
-    public Boolean IsIOS() => DeviceInfo.Platform == DevicePlatform.iOS;
     
     public String GetManufacturer(){
         return DeviceInfo.Manufacturer;

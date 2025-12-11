@@ -30,10 +30,8 @@ namespace TransactionProcessor.Mobile.UITests.Steps
 
         [Then(@"The application closes")]
         public void ThenTheApplicationCloses() {
-            if (AppiumDriverWrapper.MobileTestPlatform != MobileTestPlatform.iOS) {
-                AppState state = AppiumDriverWrapper.Driver.GetAppState("com.transactionprocessor.mobile");
-                state.ShouldBe(AppState.NotRunning);
-            }
+            AppState state = AppiumDriverWrapper.Driver.GetAppState("com.transactionprocessor.mobile");
+            state.ShouldBe(AppState.NotRunning);
         }
 
         [When(@"I click yes")]

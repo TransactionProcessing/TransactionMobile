@@ -23,8 +23,7 @@ public class GenericSteps
     [BeforeScenario(Order = 0)]
     public async Task StartSystem(){
         if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest") ||
-            this.ScenarioContext.ScenarioInfo.Tags.Contains("PRHWNavTest") ||
-            this.ScenarioContext.ScenarioInfo.Tags.Contains("iOSPRTest"))
+            this.ScenarioContext.ScenarioInfo.Tags.Contains("PRHWNavTest"))
         {
             // Initialise a logger
             String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
@@ -80,8 +79,7 @@ public class GenericSteps
     [AfterScenario(Order = 0)]
     public async Task StopSystem()
     {
-        if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest") == false && this.ScenarioContext.ScenarioInfo.Tags.Contains("PRHWNavTest") == false
-            && this.ScenarioContext.ScenarioInfo.Tags.Contains("iOSPRTest") == false)
+        if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest") == false && this.ScenarioContext.ScenarioInfo.Tags.Contains("PRHWNavTest") == false)
         {
             this.TestingContext.Logger.LogInformation("About to Stop Containers for Scenario Run");
             await this.TestingContext.DockerHelper.StopContainersForScenarioRun(DockerServices.SqlServer).ConfigureAwait(false);

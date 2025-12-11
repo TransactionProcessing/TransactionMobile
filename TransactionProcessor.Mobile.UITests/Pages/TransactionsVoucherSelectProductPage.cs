@@ -13,11 +13,7 @@ public class TransactionsVoucherSelectProductPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
-    {
-        MobileTestPlatform.iOS => "Select a Product",
-        _ => "SelectaProduct"
-    };
+    protected override String Trait => "SelectaProduct";
 
     #endregion
 

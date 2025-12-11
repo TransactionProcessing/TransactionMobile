@@ -12,11 +12,7 @@ public class TransactionsVoucherSelectOperatorPage : BasePage2
     }
 
     #region Properties
-    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
-    {
-        MobileTestPlatform.iOS => "Select an Operator",
-        _ => "SelectanOperator"
-    };
+    protected override String Trait => "SelectanOperator";
     #endregion
 
     public async Task ClickOperatorButton(String operatorName)

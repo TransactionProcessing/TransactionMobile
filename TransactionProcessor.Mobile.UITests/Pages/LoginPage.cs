@@ -5,12 +5,8 @@ using TransactionProcessor.Mobile.UITests.Drivers;
 
 namespace TransactionProcessor.Mobile.UITests.Pages;
 
-public class LoginPage : BasePage2
-{
-    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch {
-        MobileTestPlatform.iOS => "LoginLabel",
-        _ => "LoginLabel"
-    };
+public class LoginPage : BasePage2 {
+    protected override String Trait => "LoginLabel";
 
     private readonly String UserNameEntry;
     private readonly String PasswordEntry;
@@ -47,14 +43,6 @@ public class LoginPage : BasePage2
         if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
             var text = element.GetAttribute("checked");
             if (text == "false") {
-                return false;
-            }
-
-            return true;
-        }
-        if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.iOS) {
-            String? text = element.GetAttribute("value");
-            if (text == "0") {
                 return false;
             }
 

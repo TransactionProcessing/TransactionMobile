@@ -17,11 +17,7 @@ public class TransactionsVoucherIssueSuccessfulTopupPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
-    {
-        MobileTestPlatform.iOS => "Voucher Issue Successful",
-        _ => "VoucherIssueSuccessful"
-    };
+    protected override String Trait => "VoucherIssueSuccessful";
 
     public async Task ClickCompleteButton()
     {
