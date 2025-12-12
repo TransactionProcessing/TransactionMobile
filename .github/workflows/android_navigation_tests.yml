@@ -43,7 +43,7 @@ jobs:
           # Accept licenses and install required components
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
           # Install Android API level 35 and necessary system images
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-35" "system-images;android-35;google_apis;x86_64"
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-36" "system-images;android-36;google_apis;x86_64"
 
           # Export paths for future steps
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
@@ -54,11 +54,11 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.android/avd
-          key: android-emulator-x86-${{ runner.os }}-android-35
+          key: android-emulator-x86-${{ runner.os }}-android-36
 
       - name: Create Android Emulator (x86)
         run: |
-          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-35;google_apis;x86_64" --device "pixel_4"
+          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-36;google_apis;x86_64" --device "pixel_4"
 
       - name: List AVDs
         run: avdmanager list avd
@@ -119,7 +119,7 @@ jobs:
       - name: Install Android Build Tools
         run: |
           echo "Installing Android Build Tools..."
-          sdkmanager "build-tools;35.0.0"  # Updated to use Android 35 build tools
+          sdkmanager "build-tools;36.0.0"  # Updated to use Android 35 build tools
           sdkmanager --update
 
       - name: Install MAUI workloads
@@ -188,7 +188,7 @@ jobs:
           # Accept licenses and install required components
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
           # Install Android API level 35 and necessary system images
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-35" "system-images;android-35;google_apis;x86_64"
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-36" "system-images;android-36;google_apis;x86_64"
 
           # Export paths for future steps
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
@@ -199,11 +199,11 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.android/avd
-          key: android-emulator-x86-${{ runner.os }}-android-35
+          key: android-emulator-x86-${{ runner.os }}-android-36
 
       - name: Create Android Emulator (x86)
         run: |
-          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-35;google_apis;x86_64" --device "pixel_4"
+          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-36;google_apis;x86_64" --device "pixel_4"
 
       - name: List AVDs
         run: avdmanager list avd
@@ -264,7 +264,7 @@ jobs:
       - name: Install Android Build Tools
         run: |
           echo "Installing Android Build Tools..."
-          sdkmanager "build-tools;35.0.0"  # Updated to use Android 35 build tools
+          sdkmanager "build-tools;36.0.0"  # Updated to use Android 35 build tools
           sdkmanager --update
 
       - name: Install MAUI workloads
