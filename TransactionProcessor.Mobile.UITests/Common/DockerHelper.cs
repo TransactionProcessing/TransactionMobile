@@ -187,18 +187,18 @@ namespace TransactionProcessor.Mobile.UITests.Common
         }
 
 
-        public override ContainerBuilder SetupTransactionProcessorContainer()
-        {
-            //List<String> variables = new List<String>();
-            //variables.Add($"OperatorConfiguration:PataPawaPrePay:Url=http://{this.TestHostContainerName}:{DockerPorts.TestHostPort}/api/patapawaprepay");
+        //public override ContainerBuilder SetupTransactionProcessorContainer()
+        //{
+        //    //List<String> variables = new List<String>();
+        //    //variables.Add($"OperatorConfiguration:PataPawaPrePay:Url=http://{this.TestHostContainerName}:{DockerPorts.TestHostPort}/api/patapawaprepay");
 
-            //this.AdditionalVariables.Add(ContainerType.FileProcessor, variables);
-            this.AdditionalVariables.Add(ContainerType.TransactionProcessor, new Dictionary<String, String> {
-                {"OperatorConfiguration:PataPawaPrePay:Url", $"http://{this.TestHostContainerName}:{DockerPorts.TestHostPort}/api/patapawaprepay"}
-            });
+        //    //this.AdditionalVariables.Add(ContainerType.FileProcessor, variables);
+        //    this.AdditionalVariables.Add(ContainerType.TransactionProcessor, new Dictionary<String, String> {
+        //        {"OperatorConfiguration:PataPawaPrePay:Url", $"http://{this.TestHostContainerName}:{DockerPorts.TestHostPort}/api/patapawaprepay"}
+        //    });
             
-            return base.SetupTransactionProcessorContainer();
-        }
+        //    return base.SetupTransactionProcessorContainer();
+        //}
 
         #endregion
     }
