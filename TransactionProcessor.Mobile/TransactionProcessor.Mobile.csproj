@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	
 	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-		<TargetFrameworks>net9.0-android</TargetFrameworks>
+		<TargetFrameworks>net10.0-android</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-		<TargetFrameworks>net9.0-android;net9.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net10.0-android;net10.0-windows10.0.19041.0</TargetFrameworks>
 	</PropertyGroup>
 	
 	<PropertyGroup>
@@ -146,25 +146,25 @@
 
 	<ItemGroup>
 		<!--<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />-->
-		<PackageReference Include="ClientProxyBase" Version="2025.7.13" />
+		<PackageReference Include="ClientProxyBase" Version="2025.12.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.80" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.80" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.11" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="10.0.11" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.1" />
 		<PackageReference Include="banditoth.MAUI.DeviceId" Version="1.0.2" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="11.5.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="13.0.0" />
 		<PackageReference Include="LiveChartsCore.SkiaSharpView.Maui" Version="2.0.0-rc2" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
-		<PackageReference Include="Xamarin.AndroidX.Core" Version="1.16.0.2" />
+	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0-android'">
+		<PackageReference Include="Xamarin.AndroidX.Core" Version="1.17.0" />
 	</ItemGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net10.0-android'">
 		<DefineConstants>ANDROID</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-android|AnyCPU'">
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	</PropertyGroup>
 

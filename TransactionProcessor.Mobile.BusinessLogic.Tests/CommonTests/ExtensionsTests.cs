@@ -316,12 +316,12 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.CommonTests
             request.CustomerEmailAddress.ShouldBe(model.CustomerEmailAddress);
             request.ContractId.ShouldBe(model.ContractId);
             request.ProductId.ShouldBe(model.ProductId);
-            request.AdditionalRequestMetaData.ContainsKey("Amount").ShouldBeTrue();
-            request.AdditionalRequestMetaData["Amount"].ShouldBe(model.VoucherAmount.ToString());
-            request.AdditionalRequestMetaData.ContainsKey("RecipientEmail").ShouldBeTrue();
-            request.AdditionalRequestMetaData["RecipientEmail"].ShouldBe(model.RecipientEmailAddress);
-            request.AdditionalRequestMetaData.ContainsKey("RecipientMobile").ShouldBeTrue();
-            request.AdditionalRequestMetaData["RecipientMobile"].ShouldBe(model.RecipientMobileNumber);
+            request.AdditionalRequestMetadata.ContainsKey("Amount").ShouldBeTrue();
+            request.AdditionalRequestMetadata["Amount"].ShouldBe(model.VoucherAmount.ToString());
+            request.AdditionalRequestMetadata.ContainsKey("RecipientEmail").ShouldBeTrue();
+            request.AdditionalRequestMetadata["RecipientEmail"].ShouldBe(model.RecipientEmailAddress);
+            request.AdditionalRequestMetadata.ContainsKey("RecipientMobile").ShouldBeTrue();
+            request.AdditionalRequestMetadata["RecipientMobile"].ShouldBe(model.RecipientMobileNumber);
         }
 
         [Fact]
@@ -348,8 +348,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.CommonTests
             request.CustomerEmailAddress.ShouldBe(model.CustomerEmailAddress);
             request.ContractId.ShouldBe(model.ContractId);
             request.ProductId.ShouldBe(model.ProductId);
-            request.AdditionalRequestMetaData.ContainsKey("Amount").ShouldBeTrue();
-            request.AdditionalRequestMetaData["Amount"].ShouldBe(model.TopupAmount.ToString());
+            request.AdditionalRequestMetadata.ContainsKey("Amount").ShouldBeTrue();
+            request.AdditionalRequestMetadata["Amount"].ShouldBe(model.TopupAmount.ToString());
         }
 
         [Fact]
@@ -374,10 +374,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.CommonTests
             request.OperatorId.ShouldBe(model.OperatorId);
             request.ContractId.ShouldBe(model.ContractId);
             request.ProductId.ShouldBe(model.ProductId);
-            request.AdditionalRequestMetaData.ContainsKey("CustomerAccountNumber").ShouldBeTrue();
-            request.AdditionalRequestMetaData["CustomerAccountNumber"].ShouldBe(model.CustomerAccountNumber);
-            request.AdditionalRequestMetaData.ContainsKey("PataPawaPostPaidMessageType").ShouldBeTrue();
-            request.AdditionalRequestMetaData["PataPawaPostPaidMessageType"].ShouldBe("VerifyAccount");
+            request.AdditionalRequestMetadata.ContainsKey("CustomerAccountNumber").ShouldBeTrue();
+            request.AdditionalRequestMetadata["CustomerAccountNumber"].ShouldBe(model.CustomerAccountNumber);
+            request.AdditionalRequestMetadata.ContainsKey("PataPawaPostPaidMessageType").ShouldBeTrue();
+            request.AdditionalRequestMetadata["PataPawaPostPaidMessageType"].ShouldBe("VerifyAccount");
         }
 
         [Fact]
@@ -402,10 +402,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.CommonTests
             request.OperatorId.ShouldBe(model.OperatorId);
             request.ContractId.ShouldBe(model.ContractId);
             request.ProductId.ShouldBe(model.ProductId);
-            request.AdditionalRequestMetaData.ContainsKey("MeterNumber").ShouldBeTrue();
-            request.AdditionalRequestMetaData["MeterNumber"].ShouldBe(model.MeterNumber);
-            request.AdditionalRequestMetaData.ContainsKey("PataPawaPrePayMessageType").ShouldBeTrue();
-            request.AdditionalRequestMetaData["PataPawaPrePayMessageType"].ShouldBe("meter");
+            request.AdditionalRequestMetadata.ContainsKey("MeterNumber").ShouldBeTrue();
+            request.AdditionalRequestMetadata["MeterNumber"].ShouldBe(model.MeterNumber);
+            request.AdditionalRequestMetadata.ContainsKey("PataPawaPrePayMessageType").ShouldBeTrue();
+            request.AdditionalRequestMetadata["PataPawaPrePayMessageType"].ShouldBe("meter");
         }
 
         [Fact]
@@ -434,16 +434,16 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.CommonTests
             request.ContractId.ShouldBe(model.ContractId);
             request.ProductId.ShouldBe(model.ProductId);
 
-            request.AdditionalRequestMetaData.ContainsKey("MeterNumber").ShouldBeTrue();
-            request.AdditionalRequestMetaData["MeterNumber"].ShouldBe(model.CustomerAccountNumber);
-            request.AdditionalRequestMetaData.ContainsKey("CustomerName").ShouldBeTrue();
-            request.AdditionalRequestMetaData["CustomerName"].ShouldBe(model.CustomerAccountName);
-            request.AdditionalRequestMetaData.ContainsKey("MeterNumber").ShouldBeTrue();
-            request.AdditionalRequestMetaData["MeterNumber"].ShouldBe(model.CustomerAccountNumber);
-            request.AdditionalRequestMetaData.ContainsKey("Amount").ShouldBeTrue();
-            request.AdditionalRequestMetaData["Amount"].ShouldBe(model.PaymentAmount.ToString());
-            request.AdditionalRequestMetaData.ContainsKey("PataPawaPrePayMessageType").ShouldBeTrue();
-            request.AdditionalRequestMetaData["PataPawaPrePayMessageType"].ShouldBe("vend");
+            request.AdditionalRequestMetadata.ContainsKey("MeterNumber").ShouldBeTrue();
+            request.AdditionalRequestMetadata["MeterNumber"].ShouldBe(model.CustomerAccountNumber);
+            request.AdditionalRequestMetadata.ContainsKey("CustomerName").ShouldBeTrue();
+            request.AdditionalRequestMetadata["CustomerName"].ShouldBe(model.CustomerAccountName);
+            request.AdditionalRequestMetadata.ContainsKey("MeterNumber").ShouldBeTrue();
+            request.AdditionalRequestMetadata["MeterNumber"].ShouldBe(model.CustomerAccountNumber);
+            request.AdditionalRequestMetadata.ContainsKey("Amount").ShouldBeTrue();
+            request.AdditionalRequestMetadata["Amount"].ShouldBe(model.PaymentAmount.ToString());
+            request.AdditionalRequestMetadata.ContainsKey("PataPawaPrePayMessageType").ShouldBeTrue();
+            request.AdditionalRequestMetadata["PataPawaPrePayMessageType"].ShouldBe("vend");
         }
 
         [Fact]
@@ -473,16 +473,16 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.CommonTests
             request.ContractId.ShouldBe(model.ContractId);
             request.ProductId.ShouldBe(model.ProductId);
 
-            request.AdditionalRequestMetaData.ContainsKey("CustomerAccountNumber").ShouldBeTrue();
-            request.AdditionalRequestMetaData["CustomerAccountNumber"].ShouldBe(model.CustomerAccountNumber);
-            request.AdditionalRequestMetaData.ContainsKey("CustomerName").ShouldBeTrue();
-            request.AdditionalRequestMetaData["CustomerName"].ShouldBe(model.CustomerAccountName);
-            request.AdditionalRequestMetaData.ContainsKey("MobileNumber").ShouldBeTrue();
-            request.AdditionalRequestMetaData["MobileNumber"].ShouldBe(model.CustomerMobileNumber);
-            request.AdditionalRequestMetaData.ContainsKey("Amount").ShouldBeTrue();
-            request.AdditionalRequestMetaData["Amount"].ShouldBe(model.PaymentAmount.ToString());
-            request.AdditionalRequestMetaData.ContainsKey("PataPawaPostPaidMessageType").ShouldBeTrue();
-            request.AdditionalRequestMetaData["PataPawaPostPaidMessageType"].ShouldBe("ProcessBill");
+            request.AdditionalRequestMetadata.ContainsKey("CustomerAccountNumber").ShouldBeTrue();
+            request.AdditionalRequestMetadata["CustomerAccountNumber"].ShouldBe(model.CustomerAccountNumber);
+            request.AdditionalRequestMetadata.ContainsKey("CustomerName").ShouldBeTrue();
+            request.AdditionalRequestMetadata["CustomerName"].ShouldBe(model.CustomerAccountName);
+            request.AdditionalRequestMetadata.ContainsKey("MobileNumber").ShouldBeTrue();
+            request.AdditionalRequestMetadata["MobileNumber"].ShouldBe(model.CustomerMobileNumber);
+            request.AdditionalRequestMetadata.ContainsKey("Amount").ShouldBeTrue();
+            request.AdditionalRequestMetadata["Amount"].ShouldBe(model.PaymentAmount.ToString());
+            request.AdditionalRequestMetadata.ContainsKey("PataPawaPostPaidMessageType").ShouldBeTrue();
+            request.AdditionalRequestMetadata["PataPawaPostPaidMessageType"].ShouldBe("ProcessBill");
         }
 
         [Theory]

@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium.Appium.Enums;
+﻿using OpenQA.Selenium.Appium.Android;
+using OpenQA.Selenium.Appium.Enums;
 using Reqnroll;
 using Shouldly;
 using TransactionProcessor.Mobile.UITests.Common;
@@ -30,8 +31,11 @@ namespace TransactionProcessor.Mobile.UITests.Steps
 
         [Then(@"The application closes")]
         public void ThenTheApplicationCloses() {
-            AppState state = AppiumDriverWrapper.Driver.GetAppState("com.transactionprocessor.mobile");
-            state.ShouldBe(AppState.NotRunning);
+            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
+                var driver = AppiumDriverWrapper.Driver as AndroidDriver;
+                AppState state = driver.GetAppState("com.transactionprocessor.mobile");
+                state.ShouldBe(AppState.NotRunning);
+            }
         }
 
         [When(@"I click yes")]

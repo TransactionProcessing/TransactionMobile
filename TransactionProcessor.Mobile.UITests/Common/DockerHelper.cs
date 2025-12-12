@@ -1,13 +1,13 @@
 ﻿using System.Net;
 using System.Net.Sockets;
-using Ductus.FluentDocker.Builders;
-using Ductus.FluentDocker.Common;
-using Ductus.FluentDocker.Services;
-using Ductus.FluentDocker.Services.Extensions;
+using System.Runtime.InteropServices;
+using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Networks;
 using EventStore.Client;
 using Reqnroll;
 using SecurityService.Client;
 using Shared.IntegrationTesting;
+using Shared.IntegrationTesting.TestContainers;
 using Shared.Logger;
 using Shouldly;
 using TransactionProcessor.Client;
@@ -17,7 +17,7 @@ using ReqnrollTableHelper = Shared.IntegrationTesting.ReqnrollTableHelper;
 
 namespace TransactionProcessor.Mobile.UITests.Common
 {
-    public class DockerHelper : global::Shared.IntegrationTesting.DockerHelper
+    public class DockerHelper : global::Shared.IntegrationTesting.TestContainers.DockerHelper
     {
         #region Fields
         
@@ -86,11 +86,10 @@ namespace TransactionProcessor.Mobile.UITests.Common
         public String LocalIPAddress { get; private set; }
 
         public override ContainerBuilder SetupTransactionProcessorAclContainer(){
-            this.AdditionalVariables.Add(ContainerType.TransactionProcessorAcl, new List<String>());
-            this.SetAdditionalVariables(ContainerType.TransactionProcessorAcl,
-                                        new List<String>{
-                                                            "AppSettings:SkipVersionCheck=true"
-                                                        });
+            this.AdditionalVariables.Add(ContainerType.TransactionProcessorAcl, new Dictionary<String, String> {
+                {"AppSettings:SkipVersionCheck", "true"}
+            });
+            
             return base.SetupTransactionProcessorAclContainer();
         }
 
@@ -113,19 +112,18 @@ namespace TransactionProcessor.Mobile.UITests.Common
         /// <param name="scenarioName">Name of the scenario.</param>
         public override async Task StartContainersForScenarioRun(String scenarioName, DockerServices dockerServices)
         {
-            DockerEnginePlatform engineType = BaseDockerHelper.GetDockerEnginePlatform();
-            if (engineType == DockerEnginePlatform.Windows){
+            var engineType = await BaseDockerHelper.GetDockerEnginePlatform();
+            
+            if (engineType.Data == DockerEnginePlatform.Windows){
                 this.SetImageDetails(ContainerType.EventStore, ("stuartferguson/eventstore_windows", true));
             }
-
-            //this.SetImageDetails(ContainerType.TransactionProcessorAcl, ("transactionprocessoracl", false));
-
+            
             // Get the address of the host
             this.LocalIPAddress = this.GetLocalIPAddress();
             this.Trace(this.LocalIPAddress);
 
             await base.StartContainersForScenarioRun(scenarioName, dockerServices);
-            await this.SetupConfigHostContainer(this.TestNetworks);
+            await this.StartContainer2(this.SetupConfigHostContainer,this.TestNetworks, (DockerServices)512);
 
             // Setup the base address resolvers
 
@@ -159,33 +157,6 @@ namespace TransactionProcessor.Mobile.UITests.Common
 
         public String SecurityServiceBaseAddressResolver(String api) => $"https://127.0.0.1:{this.SecurityServicePort}";
         
-        private async Task RemoveEstateReadModel()
-        {
-            List<Guid> estateIdList = this.TestingContext.GetAllEstateIds();
-
-            foreach (Guid estateId in estateIdList)
-            {
-                String databaseName = $"EstateReportingReadModel{estateId}";
-
-                // Build the connection string (to master)
-                String connectionString = Setup.GetLocalConnectionString(databaseName);
-                await Retry.For(async () =>
-                {
-                    //EstateReportingSqlServerContext context = new EstateReportingSqlServerContext(connectionString);
-                    //await context.Database.EnsureDeletedAsync(CancellationToken.None);
-                }, retryFor: TimeSpan.FromMinutes(2), retryInterval: TimeSpan.FromSeconds(30));
-            }
-        }
-
-        /// <summary>
-        /// Stops the containers for scenario run.
-        /// </summary>
-        public override async Task StopContainersForScenarioRun(DockerServices sharedDockerServices) {
-            await this.RemoveEstateReadModel().ConfigureAwait(false);
-
-            await base.StopContainersForScenarioRun(sharedDockerServices);
-        }
-
         public const int ConfigHostDockerPort = 9200;
 
         public String ConfigHostContainerName;
@@ -193,53 +164,39 @@ namespace TransactionProcessor.Mobile.UITests.Common
 
         public HttpClient TestHostHttpClient;
 
-        public async Task<IContainerService> SetupConfigHostContainer(List<INetworkService> networkServices)
+        public ContainerBuilder SetupConfigHostContainer()
         {
             this.Trace("About to Start Config Host Container");
-            List<String> environmentVariables = new List<String>();
-            environmentVariables.Add("AppSettings:InMemoryDatabase=true");
+            Dictionary<String,String> environmentVariables = new();
+            environmentVariables.Add("AppSettings:InMemoryDatabase","true");
+
             this.ConfigHostContainerName = $"mobileconfighost{this.TestId:N}";
 
             String imageName = "stuartferguson/mobileconfiguration:master";
-
-            if (FdOs.IsWindows() && Shared.IntegrationTesting.DockerHelper.GetDockerEnginePlatform() == DockerEnginePlatform.Windows){
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && this.DockerPlatform == DockerEnginePlatform.Windows){
                 imageName = "stuartferguson/mobileconfigurationwindows:master";
             }
 
-            ContainerBuilder configHostContainer = new Builder().UseContainer().WithName(this.ConfigHostContainerName)
-                                                                .WithEnvironment(environmentVariables.ToArray())
-                                                                .UseImageDetails((imageName, true))
-                                                                .ExposePort(ConfigHostDockerPort)
-                                                                .MountHostFolder(this.DockerPlatform, this.HostTraceFolder)
-                                                                .SetDockerCredentials(this.DockerCredentials);
+            ContainerBuilder configHostContainer = new ContainerBuilder().WithName(this.ConfigHostContainerName)
+                .WithImage(imageName)
+                .WithEnvironment(environmentVariables)
+                .MountHostFolder(this.DockerPlatform, this.HostTraceFolder)
+                .WithPortBinding(ConfigHostDockerPort, true);
 
-            // Now build and return the container                
-            IContainerService builtContainer = configHostContainer.Build().Start().WaitForPort($"{ConfigHostDockerPort}/tcp", 30000);
-
-            foreach (INetworkService networkService in networkServices)
-            {
-                networkService.Attach(builtContainer, false);
-            }
-
-            this.Trace("Config Host Container Started");
-            this.Containers.Add((DockerServices.TestHost, builtContainer));
-
-            //  Do a health check here
-            this.ConfigHostPort = builtContainer.ToHostExposedEndpoint($"{ConfigHostDockerPort}/tcp").Port;
-
-            //await this.DoHealthCheck(ContainerType.CallbackHandler);
-            return builtContainer;
+            return configHostContainer;
         }
 
 
         public override ContainerBuilder SetupTransactionProcessorContainer()
         {
-            List<String> variables = new List<String>();
-            variables.Add($"OperatorConfiguration:PataPawaPrePay:Url=http://{this.TestHostContainerName}:{DockerPorts.TestHostPort}/api/patapawaprepay");
+            //List<String> variables = new List<String>();
+            //variables.Add($"OperatorConfiguration:PataPawaPrePay:Url=http://{this.TestHostContainerName}:{DockerPorts.TestHostPort}/api/patapawaprepay");
 
-            this.AdditionalVariables.Add(ContainerType.FileProcessor, variables);
-            //this.SetAdditionalVariables(ContainerType.FileProcessor, variables);
-
+            //this.AdditionalVariables.Add(ContainerType.FileProcessor, variables);
+            this.AdditionalVariables.Add(ContainerType.TransactionProcessor, new Dictionary<String, String> {
+                {"OperatorConfiguration:PataPawaPrePay:Url", $"http://{this.TestHostContainerName}:{DockerPorts.TestHostPort}/api/patapawaprepay"}
+            });
+            
             return base.SetupTransactionProcessorContainer();
         }
 
