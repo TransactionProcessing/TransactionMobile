@@ -41,7 +41,7 @@ jobs:
       - name: Install Android Build Tools
         run: |
           echo "Installing Android Build Tools..."
-          sdkmanager "build-tools;35.0.0"  # Updated to use Android 34 build tools
+          sdkmanager "build-tools;36.0.0"  # Updated to use Android 34 build tools
           sdkmanager --update
 
       - name: Install MAUI workloads
