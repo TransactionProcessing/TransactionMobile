@@ -49,7 +49,7 @@ jobs:
           dotnet workload install maui-android
 
       - name: Build Code
-        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json -f net9.0-android -c Release #--no-restore
+        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json -f net10.0-android -c Release #--no-restore
 
       - name: Run unit tests
         run: dotnet test TransactionProcessor.Mobile.BusinessLogic.Tests/TransactionProcessor.Mobile.BusinessLogic.Tests.csproj --configuration Release

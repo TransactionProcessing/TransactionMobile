@@ -152,7 +152,7 @@ jobs:
         run: dotnet restore TransactionProcessor.Mobile.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
-        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net9.0-android -c Release --no-restore
+        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net10.0-android -c Release --no-restore
 
       - name: Run Android Navigation Tests
         run: dotnet test TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=PRTest)&(Category=Android)" --no-restore
