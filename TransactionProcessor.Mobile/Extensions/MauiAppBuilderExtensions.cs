@@ -216,6 +216,9 @@ namespace TransactionProcessor.Mobile.Extensions {
         }
 
         public static MauiAppBuilder ConfigureRequestHandlers(this MauiAppBuilder builder) {
+            builder.Services.AddSingleton<MediatRServiceConfiguration>();
+            builder.Services.AddSingleton<ISender, Mediator>();
+            builder.Services.AddSingleton<IPublisher, Mediator>();
             builder.Services.AddSingleton<IMediator, Mediator>();
             builder.Services.AddSingleton<IRequestHandler<GetConfigurationRequest, Result<Configuration>>, LoginRequestHandler>();
             builder.Services.AddSingleton<IRequestHandler<LoginRequest, Result<TokenResponseModel>>, LoginRequestHandler>();
