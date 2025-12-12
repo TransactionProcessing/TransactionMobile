@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Containers;
 using DotNet.Testcontainers.Networks;
 using EventStore.Client;
 using Reqnroll;
@@ -124,6 +125,9 @@ namespace TransactionProcessor.Mobile.UITests.Common
 
             await base.StartContainersForScenarioRun(scenarioName, dockerServices);
             await this.StartContainer2(this.SetupConfigHostContainer,this.TestNetworks, (DockerServices)512);
+
+            (DockerServices, IContainer) c = this.Containers.SingleOrDefault(c => c.Item1 == (DockerServices)512);
+            this.ConfigHostPort = c.Item2.GetMappedPublicPort(ConfigHostDockerPort);
 
             // Setup the base address resolvers
 
