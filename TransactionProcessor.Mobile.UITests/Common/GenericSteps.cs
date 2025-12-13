@@ -36,7 +36,7 @@ public class GenericSteps
             DockerServices dockerServices = DockerServices.EventStore |
                                             DockerServices.MessagingService | DockerServices.SecurityService |
                                             DockerServices.TestHost | DockerServices.SqlServer | DockerServices.TransactionProcessor |
-                                            DockerServices.TransactionProcessorAcl;
+                                            DockerServices.TransactionProcessorAcl | (DockerServices)512;
 
             // Initialise a logger
             String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
