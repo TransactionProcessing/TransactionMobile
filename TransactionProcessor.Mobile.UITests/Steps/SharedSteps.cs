@@ -234,7 +234,8 @@ namespace TransactionProcessor.Mobile.UITests.Steps
             HttpClient httpClient = new HttpClient(clientHandler);
 
             var response = await httpClient.SendAsync(request, CancellationToken.None);
-            response.StatusCode.ShouldBe(HttpStatusCode.OK);
+            var content = await response.Content.ReadAsStringAsync();
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, content);
 
             this.TestingContext.Logger.LogInformation($"Config Created for serial {deviceSerial}");
         }
