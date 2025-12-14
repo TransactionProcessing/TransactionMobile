@@ -38,6 +38,8 @@ public class GenericSteps
                                             DockerServices.TestHost | DockerServices.SqlServer | DockerServices.TransactionProcessor |
                                             DockerServices.TransactionProcessorAcl | (DockerServices)512;
 
+            //dockerServices = DockerServices.EventStore | DockerServices.SqlServer | (DockerServices)512;
+
             // Initialise a logger
             String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
             NlogLogger logger = new NlogLogger();

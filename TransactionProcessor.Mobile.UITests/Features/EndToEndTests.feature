@@ -111,7 +111,7 @@ Background:
 	| Reference | Amount | DateTime | MerchantName    | EstateName    |
 	| Deposit1  | 100.00 | Today    | Test Merchant 1 | Test Estate 1 |
 
-	#Given I have created a config for my application
+	Given I have created a config for my application
 
 	Given I have created a config for my device
 
