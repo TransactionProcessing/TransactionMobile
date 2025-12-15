@@ -197,7 +197,7 @@ namespace TransactionProcessor.Mobile.UITests.Steps
             var deviceSerial = await this.loginPage.GetDeviceSerial();
             
             ClientDetails clientDetails = this.TestingContext.GetClientDetails("mobileAppClient");
-            
+            //ClientDetails clientDetails = ClientDetails.Create("clientId-mobileAppClient", "secret-mobile", new List<String>());
             var configRequest = new {
                                         clientId = clientDetails.ClientId,
                                         clientSecret = clientDetails.ClientSecret,
