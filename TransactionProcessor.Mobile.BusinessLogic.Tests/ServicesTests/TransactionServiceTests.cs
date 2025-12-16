@@ -48,7 +48,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                       MerchantId = TestData.MerchantId,
                                                                                                       ResponseCode = TestData.ResponseCode_Success,
                                                                                                       TransactionId = TestData.TransactionId,
-                                                                                                      AdditionalResponseMetaData = new Dictionary<String, String>()
+                                                                                                      AdditionalResponseMetadata = new Dictionary<String, String>()
                                                                                                   };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/logontransactions")
@@ -107,7 +107,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                     MerchantId = TestData.MerchantId,
                                                                                                     ResponseCode = TestData.ResponseCode_Success,
                                                                                                     TransactionId = TestData.TransactionId,
-                                                                                                    AdditionalResponseMetaData = new Dictionary<String, String>()
+                                                                                                    AdditionalResponseMetadata = new Dictionary<String, String>()
                                                                                                 };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/saletransactions")
@@ -170,7 +170,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                     MerchantId = TestData.MerchantId,
                                                                                                     ResponseCode = TestData.ResponseCode_Success,
                                                                                                     TransactionId = TestData.TransactionId,
-                                                                                                    AdditionalResponseMetaData = new Dictionary<String, String>()
+                                                                                                    AdditionalResponseMetadata = new Dictionary<String, String>()
                                                                                                 };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/saletransactions")
@@ -231,7 +231,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                     MerchantId = TestData.MerchantId,
                                                                                                     ResponseCode = TestData.ResponseCode_Success,
                                                                                                     TransactionId = TestData.TransactionId,
-                                                                                                    AdditionalResponseMetaData = new Dictionary<String, String>(){
+                                                                                                    AdditionalResponseMetadata = new Dictionary<String, String>(){
                                                                                                                                                                      { "customerAccountName", TestData.BillDetails.AccountName },
                                                                                                                                                                      { "customerAccountNumber", TestData.BillDetails.AccountNumber },
                                                                                                                                                                      { "customerBillBalance", TestData.BillDetails.Balance },
@@ -296,7 +296,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                     MerchantId = TestData.MerchantId,
                                                                                                     ResponseCode = TestData.ResponseCode_Success,
                                                                                                     TransactionId = TestData.TransactionId,
-                                                                                                    AdditionalResponseMetaData = new Dictionary<String, String>(){
+                                                                                                    AdditionalResponseMetadata = new Dictionary<String, String>(){
                                                                                                                                                                      { "pataPawaPrePaidCustomerName", TestData.BillDetails.AccountName }
                                                                                                                                                                  }
                                                                                                 };
@@ -333,7 +333,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                     MerchantId = TestData.MerchantId,
                                                                                                     ResponseCode = TestData.ResponseCode_Success,
                                                                                                     TransactionId = TestData.TransactionId,
-                                                                                                    AdditionalResponseMetaData = null
+                                                                                                    AdditionalResponseMetadata = null
                                                                                                 };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/saletransactions")
@@ -459,7 +459,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                 MerchantId = TestData.MerchantId,
                 ResponseCode = TestData.ResponseCode_Success,
                 TransactionId = TestData.TransactionId,
-                AdditionalResponseMetaData = null
+                AdditionalResponseMetadata = null
             };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/reconciliationtransactions")

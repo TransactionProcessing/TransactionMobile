@@ -55,8 +55,8 @@ jobs:
          .\TransactionProcessor.Mobile/bin/Release\net10.0-windows10.0.19041.0\win-x64\AppPackages\TransactionProcessor.Mobile_1.0.0.1_Test\Install.ps1 -Force
 
       - name: Run Windows End To End Tests
-        #run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj -f net10.0-windows10.0.19041.0 --filter "Category=PRTest&Category=Windows" --no-restore
-        run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --list-tests -v:d
+        run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "Category=PRTest&Category=Windows" --no-restore
+        #run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --list-tests -v:d
 
       - name: Upload Logs on Failure
         if: always()
