@@ -16,11 +16,6 @@ jobs:
         uses: microsoft/setup-msbuild@v1.1
         with:
           vs-prerelease: true
-
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '9.0.x'
      
       - name: Install MAUI workloads
         run: |
@@ -39,7 +34,7 @@ jobs:
         run: dotnet restore TransactionProcessor.Mobile.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
-        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net9.0-android -c Release --no-restore     
+        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net10.0-android -c Release --no-restore     
         
       - name: Decrypt PFX File
         run: |
@@ -51,13 +46,13 @@ jobs:
 
       - name: Publish App
         run: |
-         dotnet publish TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj -c Release -f net9.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
+         dotnet publish TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj -c Release -f net10.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
 
       - name: Install App
         shell: powershell
         run: |         
          Import-Module Appx 
-         .\TransactionProcessor.Mobile/bin/Release\net9.0-windows10.0.19041.0\win10-x64\AppPackages\TransactionProcessor.Mobile_1.0.0.1_Test\Install.ps1 -Force
+         .\TransactionProcessor.Mobile/bin/Release\net10.0-windows10.0.19041.0\win-x64\AppPackages\TransactionProcessor.Mobile_1.0.0.1_Test\Install.ps1 -Force
 
       - name: Run Windows Navigation Tests
         run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "(Category=PRNavTest)&(Category=Windows)" --no-restore

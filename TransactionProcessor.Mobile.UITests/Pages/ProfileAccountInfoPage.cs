@@ -36,11 +36,7 @@ public class ProfileAccountInfoPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
-    {
-        MobileTestPlatform.iOS => "My Details",
-        _ => "MyDetails"
-    };
+    protected override String Trait => "MyDetails";
 
     #endregion
 

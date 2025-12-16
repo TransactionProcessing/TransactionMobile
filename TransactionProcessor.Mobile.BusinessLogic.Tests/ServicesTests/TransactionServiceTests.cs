@@ -48,11 +48,11 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                       MerchantId = TestData.MerchantId,
                                                                                                       ResponseCode = TestData.ResponseCode_Success,
                                                                                                       TransactionId = TestData.TransactionId,
-                                                                                                      AdditionalResponseMetaData = new Dictionary<String, String>()
+                                                                                                      AdditionalResponseMetadata = new Dictionary<String, String>()
                                                                                                   };
 
-            this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
+            this.MockHttpMessageHandler.When($"http://localhost/api/logontransactions")
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
 
             Result<PerformLogonResponseModel> performLogonResult = await this.TransactionService.PerformLogon(requestModel, CancellationToken.None);
 
@@ -107,11 +107,11 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                     MerchantId = TestData.MerchantId,
                                                                                                     ResponseCode = TestData.ResponseCode_Success,
                                                                                                     TransactionId = TestData.TransactionId,
-                                                                                                    AdditionalResponseMetaData = new Dictionary<String, String>()
+                                                                                                    AdditionalResponseMetadata = new Dictionary<String, String>()
                                                                                                 };
 
-            this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
+            this.MockHttpMessageHandler.When($"http://localhost/api/saletransactions")
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
 
             Result<PerformMobileTopupResponseModel> performMobileTopupResult = await this.TransactionService.PerformMobileTopup(requestModel, CancellationToken.None);
 
@@ -170,11 +170,11 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                     MerchantId = TestData.MerchantId,
                                                                                                     ResponseCode = TestData.ResponseCode_Success,
                                                                                                     TransactionId = TestData.TransactionId,
-                                                                                                    AdditionalResponseMetaData = new Dictionary<String, String>()
+                                                                                                    AdditionalResponseMetadata = new Dictionary<String, String>()
                                                                                                 };
 
-            this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
+            this.MockHttpMessageHandler.When($"http://localhost/api/saletransactions")
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
 
             Result<PerformVoucherIssueResponseModel> performVoucherIssueResult = await this.TransactionService.PerformVoucherIssue(requestModel, CancellationToken.None);
 
@@ -231,7 +231,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                     MerchantId = TestData.MerchantId,
                                                                                                     ResponseCode = TestData.ResponseCode_Success,
                                                                                                     TransactionId = TestData.TransactionId,
-                                                                                                    AdditionalResponseMetaData = new Dictionary<String, String>(){
+                                                                                                    AdditionalResponseMetadata = new Dictionary<String, String>(){
                                                                                                                                                                      { "customerAccountName", TestData.BillDetails.AccountName },
                                                                                                                                                                      { "customerAccountNumber", TestData.BillDetails.AccountNumber },
                                                                                                                                                                      { "customerBillBalance", TestData.BillDetails.Balance },
@@ -239,8 +239,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                                                                                  }
                                                                                                 };
 
-            this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
+            this.MockHttpMessageHandler.When($"http://localhost/api/saletransactions")
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
 
             Result<PerformBillPaymentGetAccountResponseModel> performBillPaymentGetAccountResult = await this.TransactionService.PerformBillPaymentGetAccount(requestModel, CancellationToken.None);
             performBillPaymentGetAccountResult.ShouldNotBeNull();
@@ -296,13 +296,13 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                     MerchantId = TestData.MerchantId,
                                                                                                     ResponseCode = TestData.ResponseCode_Success,
                                                                                                     TransactionId = TestData.TransactionId,
-                                                                                                    AdditionalResponseMetaData = new Dictionary<String, String>(){
+                                                                                                    AdditionalResponseMetadata = new Dictionary<String, String>(){
                                                                                                                                                                      { "pataPawaPrePaidCustomerName", TestData.BillDetails.AccountName }
                                                                                                                                                                  }
                                                                                                 };
 
-            this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
+            this.MockHttpMessageHandler.When($"http://localhost/api/saletransactions")
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
 
             Result<PerformBillPaymentGetMeterResponseModel> performBillPaymentGetMeterResult = await this.TransactionService.PerformBillPaymentGetMeter(requestModel, CancellationToken.None);
 
@@ -333,11 +333,11 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                     MerchantId = TestData.MerchantId,
                                                                                                     ResponseCode = TestData.ResponseCode_Success,
                                                                                                     TransactionId = TestData.TransactionId,
-                                                                                                    AdditionalResponseMetaData = null
+                                                                                                    AdditionalResponseMetadata = null
                                                                                                 };
 
-            this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
+            this.MockHttpMessageHandler.When($"http://localhost/api/saletransactions")
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
 
             Result<PerformBillPaymentGetMeterResponseModel> performBillPaymentGetMeterResult = await this.TransactionService.PerformBillPaymentGetMeter(requestModel, CancellationToken.None);
 
@@ -395,8 +395,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                     TransactionId = TestData.TransactionId
                                                                                                 };
 
-            this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
+            this.MockHttpMessageHandler.When($"http://localhost/api/saletransactions")
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
 
             Result<PerformBillPaymentMakePaymentResponseModel> performBillPaymentGetMeterResult = await this.TransactionService.PerformBillPaymentMakePayment(requestModel, CancellationToken.None);
 
@@ -459,11 +459,11 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                 MerchantId = TestData.MerchantId,
                 ResponseCode = TestData.ResponseCode_Success,
                 TransactionId = TestData.TransactionId,
-                AdditionalResponseMetaData = null
+                AdditionalResponseMetadata = null
             };
 
-            this.MockHttpMessageHandler.When($"http://localhost/api/transactions")
-                .Respond("application/json", JsonConvert.SerializeObject(Result.Success(expectedResponse))); // Respond with JSON
+            this.MockHttpMessageHandler.When($"http://localhost/api/reconciliationtransactions")
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
 
             Result<PerformReconciliationResponseModel> performReconciliationResult = await this.TransactionService.PerformReconciliation(requestModel, CancellationToken.None);
 

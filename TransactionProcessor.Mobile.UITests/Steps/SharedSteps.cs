@@ -196,7 +196,8 @@ namespace TransactionProcessor.Mobile.UITests.Steps
         public async Task GivenIHaveCreatedAConfigForMyDevice() {
             var deviceSerial = await this.loginPage.GetDeviceSerial();
             
-            var clientDetails = this.TestingContext.GetClientDetails("mobileAppClient");
+            ClientDetails clientDetails = this.TestingContext.GetClientDetails("mobileAppClient");
+            //ClientDetails clientDetails = ClientDetails.Create("clientId-mobileAppClient", "secret-mobile", new List<String>());
             var configRequest = new {
                                         clientId = clientDetails.ClientId,
                                         clientSecret = clientDetails.ClientSecret,
@@ -234,8 +235,10 @@ namespace TransactionProcessor.Mobile.UITests.Steps
             HttpClient httpClient = new HttpClient(clientHandler);
 
             var response = await httpClient.SendAsync(request, CancellationToken.None);
-            response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
+            var req = JsonConvert.SerializeObject(configRequest);
+            var content = await response.Content.ReadAsStringAsync();
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Request [{req}] Response [{content}]");
+            
             this.TestingContext.Logger.LogInformation($"Config Created for serial {deviceSerial}");
         }
 
@@ -246,7 +249,6 @@ namespace TransactionProcessor.Mobile.UITests.Steps
             {
                 applicationId = "transactionMobilePOS",
                 androidkey = "android",
-                ioskey = "ios",
                 macoskey = "macos",
                 windowskey = "windows",
             };

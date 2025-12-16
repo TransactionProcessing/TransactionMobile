@@ -8,9 +8,5 @@ public class ViewLogsPage : BasePage2{
         
     }
 
-    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
-    {
-        MobileTestPlatform.iOS => "View Logs",
-        _ => "ViewLogs"
-    };
+    protected override String Trait => "ViewLogs";
 }

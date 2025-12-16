@@ -84,12 +84,12 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
 
         Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content.Data}");
 
-        ResponseData<List<ContractResponse>> responseData = this.HandleResponseContent<List<ContractResponse>>(content.Data);
+        List<ContractResponse>? responseData = JsonConvert.DeserializeObject<List<ContractResponse>>(content.Data);
 
-        Logger.LogInformation($"{responseData.Data.Count} for merchant requested successfully");
-        Logger.LogDebug($"Merchant Contract Response: [{JsonConvert.SerializeObject(responseData.Data)}]");
+        Logger.LogInformation($"{responseData.Count} for merchant requested successfully");
+        Logger.LogDebug($"Merchant Contract Response: [{JsonConvert.SerializeObject(responseData)}]");
 
-        foreach (ContractResponse contractResponse in responseData.Data) {
+        foreach (ContractResponse contractResponse in responseData) {
             foreach (ContractProduct contractResponseProduct in contractResponse.Products) {
                 var productType = GetProductType(contractResponse.OperatorName);
 
@@ -165,31 +165,31 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
 
         Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content.Data}");
 
-        ResponseData<MerchantResponse> responseData = this.HandleResponseContent<MerchantResponse>(content.Data);
-
+        //ResponseData<MerchantResponse> responseData = this.HandleResponseContent<MerchantResponse>(content.Data);
+        MerchantResponse responseData = JsonConvert.DeserializeObject<MerchantResponse>(content.Data);
         Logger.LogInformation("Merchant details requested successfully");
-        Logger.LogDebug($"Merchant Details Response: [{JsonConvert.SerializeObject(responseData.Data)}]");
+        Logger.LogDebug($"Merchant Details Response: [{JsonConvert.SerializeObject(responseData)}]");
 
         MerchantDetailsModel model = new MerchantDetailsModel {
-                                                                  MerchantName = responseData.Data.MerchantName,
-                                                                  NextStatementDate = responseData.Data.NextStatementDate,
+                                                                  MerchantName = responseData.MerchantName,
+                                                                  NextStatementDate = responseData.NextStatementDate,
                                                                   LastStatementDate = new DateTime(),
-                                                                  SettlementSchedule = responseData.Data.SettlementSchedule.ToString(),
+                                                                  SettlementSchedule = responseData.SettlementSchedule.ToString(),
                                                                   //AvailableBalance = merchantResponse.AvailableBalance,
                                                                   //Balance = merchantResponse.Balance,
                                                                   Contact = new ContactModel {
-                                                                                                 Name = responseData.Data.Contacts.First().ContactName,
-                                                                                                 EmailAddress = responseData.Data.Contacts.First().ContactEmailAddress,
-                                                                                                 MobileNumber = responseData.Data.Contacts.First().ContactPhoneNumber
+                                                                                                 Name = responseData.Contacts.First().ContactName,
+                                                                                                 EmailAddress = responseData.Contacts.First().ContactEmailAddress,
+                                                                                                 MobileNumber = responseData.Contacts.First().ContactPhoneNumber
                                                                                              },
                                                                   Address = new AddressModel {
-                                                                                                 AddressLine3 = responseData.Data.Addresses.First().AddressLine3,
-                                                                                                 Town = responseData.Data.Addresses.First().Town,
-                                                                                                 AddressLine4 = responseData.Data.Addresses.First().AddressLine4,
-                                                                                                 PostalCode = responseData.Data.Addresses.First().PostalCode,
-                                                                                                 Region = responseData.Data.Addresses.First().Region,
-                                                                                                 AddressLine1 = responseData.Data.Addresses.First().AddressLine1,
-                                                                                                 AddressLine2 = responseData.Data.Addresses.First().AddressLine2
+                                                                                                 AddressLine3 = responseData.Addresses.First().AddressLine3,
+                                                                                                 Town = responseData.Addresses.First().Town,
+                                                                                                 AddressLine4 = responseData.Addresses.First().AddressLine4,
+                                                                                                 PostalCode = responseData.Addresses.First().PostalCode,
+                                                                                                 Region = responseData.Addresses.First().Region,
+                                                                                                 AddressLine1 = responseData.Addresses.First().AddressLine1,
+                                                                                                 AddressLine2 = responseData.Addresses.First().AddressLine2
                                                                                              }
                                                               };
 

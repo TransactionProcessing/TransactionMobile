@@ -25,11 +25,7 @@ public class TransactionsVoucherEnterVoucherIssueDetailsPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform switch
-    {
-        MobileTestPlatform.iOS => "Enter Voucher Issue Details",
-        _ => "EnterVoucherIssueDetails"
-    };
+    protected override String Trait => "EnterVoucherIssueDetails";
 
     public async Task EnterRecipientMobileNumber(String recipientMobileNumber)
     {

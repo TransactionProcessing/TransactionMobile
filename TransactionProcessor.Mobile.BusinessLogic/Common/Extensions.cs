@@ -218,9 +218,9 @@ CustomerAccountNumber = request.CustomerAccountNumber,
             CustomerEmailAddress = model.CustomerEmailAddress,
             TransactionNumber = model.TransactionNumber
         };
-
+        
         // Add the additional request data
-        saleTransactionRequest.AdditionalRequestMetaData = new Dictionary<String, String> {
+        saleTransactionRequest.AdditionalRequestMetadata = new Dictionary<String, String> {
                                                                                                   {"Amount", model.VoucherAmount.ToString()},
                                                                                                   {"RecipientEmail", model.RecipientEmailAddress},
                                                                                                   {"RecipientMobile", model.RecipientMobileNumber}
@@ -244,7 +244,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
         };
 
         // Add the additional request data
-        saleTransactionRequest.AdditionalRequestMetaData = new Dictionary<String, String> {
+        saleTransactionRequest.AdditionalRequestMetadata = new Dictionary<String, String> {
                                                                                                   {"Amount", model.TopupAmount.ToString()},
                                                                                                   {"CustomerAccountNumber", model.CustomerAccountNumber}
                                                                                               };
@@ -264,7 +264,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
                                                                    TransactionNumber = model.TransactionNumber
                                                                };
         // Add the additional request data
-        saleTransactionRequest.AdditionalRequestMetaData = new Dictionary<String, String> {
+        saleTransactionRequest.AdditionalRequestMetadata = new Dictionary<String, String> {
                                                                                               {"CustomerAccountNumber", model.CustomerAccountNumber},
                                                                                               {"PataPawaPostPaidMessageType", "VerifyAccount"}
                                                                                           };
@@ -286,7 +286,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
                                                                };
         if (model.PostPayment){
             // Add the additional request data
-            saleTransactionRequest.AdditionalRequestMetaData = new Dictionary<String, String>{
+            saleTransactionRequest.AdditionalRequestMetadata = new Dictionary<String, String>{
                                                                                                  { "CustomerAccountNumber", model.CustomerAccountNumber },
                                                                                                  { "CustomerName", model.CustomerAccountName },
                                                                                                  { "MobileNumber", model.CustomerMobileNumber },
@@ -295,7 +295,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
                                                                                              };
         }
         else{
-            saleTransactionRequest.AdditionalRequestMetaData = new Dictionary<String, String>{
+            saleTransactionRequest.AdditionalRequestMetadata = new Dictionary<String, String>{
                                                                                                  { "MeterNumber", model.CustomerAccountNumber },
                                                                                                  { "CustomerName", model.CustomerAccountName },
                                                                                                  { "PataPawaPrePayMessageType", "vend" },
@@ -319,7 +319,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
             TransactionNumber = model.TransactionNumber
         };
         // Add the additional request data
-        saleTransactionRequest.AdditionalRequestMetaData = new Dictionary<String, String> {
+        saleTransactionRequest.AdditionalRequestMetadata = new Dictionary<String, String> {
                                                                                               {"MeterNumber", model.MeterNumber.ToString()},
                                                                                               {"PataPawaPrePayMessageType", "meter"}
                                                                                           };

@@ -64,7 +64,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                                                                                                           CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform bill payment get account transaction");
 
-            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
+            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), "api/saletransactions", cancellationToken);
 
             if (result.IsSuccess == false)
             {
@@ -74,7 +74,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
             PerformBillPaymentGetAccountResponseModel responseModel = new()
                                                                       {
-                                                                          BillDetails = result.Data.AdditionalResponseMetaData.ToBillDetails()
+                                                                          BillDetails = result.Data.AdditionalResponseMetadata.ToBillDetails()
                                                                       };
 
             Logger.LogInformation("Bill payment - get account transaction performed successfully");
@@ -86,7 +86,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                                                                                                             CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform bill payment make payment transaction");
             
-            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
+            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(),"api/saletransactions", cancellationToken);
             
             if (result.IsSuccess == false)
             {
@@ -112,7 +112,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
         public async Task<Result<PerformBillPaymentGetMeterResponseModel>> PerformBillPaymentGetMeter(PerformBillPaymentGetMeterModel model, CancellationToken cancellationToken){
             Logger.LogInformation("About to perform bill payment get meter transaction");
 
-            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
+            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), "api/saletransactions", cancellationToken);
 
             if (result.IsSuccess == false)
             {
@@ -121,9 +121,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
             }
 
-            MeterDetails meterDetails = result.Data.AdditionalResponseMetaData switch{
+            MeterDetails meterDetails = result.Data.AdditionalResponseMetadata switch{
                 null => null,
-                _ => result.Data.AdditionalResponseMetaData.ToMeterDetails(model.MeterNumber)
+                _ => result.Data.AdditionalResponseMetadata.ToMeterDetails(model.MeterNumber)
             };
 
             PerformBillPaymentGetMeterResponseModel responseModel = new()
@@ -140,7 +140,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                                                                           CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform logon transaction");
 
-            Result<LogonTransactionResponseMessage> result =  await this.SendTransactionRequest<LogonTransactionRequestMessage, LogonTransactionResponseMessage>(model.ToLogonTransactionRequest(), cancellationToken);
+            Result<LogonTransactionResponseMessage> result =  await this.SendTransactionRequest<LogonTransactionRequestMessage, LogonTransactionResponseMessage>(model.ToLogonTransactionRequest(), "api/logontransactions", cancellationToken);
 
             if (result.IsSuccess == false)
             {
@@ -167,7 +167,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
             Logger.LogInformation("About to perform mobile top-up transaction");
 
             Result<SaleTransactionResponseMessage> result =
-                await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
+                await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), "api/saletransactions", cancellationToken);
 
             if (result.IsSuccess == false) {
                 Logger.LogWarning("Error performing Mobile top-up transaction");
@@ -192,7 +192,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                                                                                             CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform reconciliation transaction");
 
-            Result<ReconciliationResponseMessage> result = await this.SendTransactionRequest<ReconciliationRequestMessage, ReconciliationResponseMessage>(model.ToReconciliationRequest(), cancellationToken);
+            Result<ReconciliationResponseMessage> result = await this.SendTransactionRequest<ReconciliationRequestMessage, ReconciliationResponseMessage>(model.ToReconciliationRequest(), "api/reconciliationtransactions", cancellationToken);
             
             if (result.IsSuccess == false)
             {
@@ -220,7 +220,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                                                                                       CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform voucher transaction");
 
-            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), cancellationToken);
+            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), "api/saletransactions", cancellationToken);
             
             if (result.IsSuccess == false)
             {
@@ -253,14 +253,15 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
         private String BuildRequestUrl(String route) {
             String baseAddress = this.BaseAddressResolver("TransactionProcessorACL");
 
-            String requestUri = $"{baseAddress}{route}";
+            String requestUri = $"{baseAddress}/{route}";
 
             return requestUri;
         }
 
         private async Task<Result<TResponse>> SendTransactionRequest<TRequest, TResponse>(TRequest request,
+                                                                                          String route, 
                                                                                           CancellationToken cancellationToken) {
-            String requestUri = this.BuildRequestUrl("/api/transactions");
+            String requestUri = this.BuildRequestUrl(route);
             try {
                 String requestSerialised = JsonConvert.SerializeObject(request, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
 
@@ -286,9 +287,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
                 Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {result.Data}");
 
-                ResponseData<TResponse> responseData = this.HandleResponseContent<TResponse>(result.Data);
+                var responseData = JsonConvert.DeserializeObject<TResponse>(result.Data);
 
-                return Result.Success(responseData.Data);
+                return Result.Success(responseData);
             }
             catch (Exception ex) {
                 // An exception has occurred, add some additional information to the message

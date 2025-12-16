@@ -200,27 +200,6 @@ public static class Extenstions
 
             });
         }
-        else if (platform == MobileTestPlatform.iOS)
-        {
-            Boolean isDisplayed = false;
-            int count = 0;
-            do
-            {
-                if (driver.PageSource.Contains(expectedToast))
-                {
-                    Console.WriteLine(driver.PageSource);
-                    isDisplayed = true;
-                    break;
-                }
-
-                Thread.Sleep(200); //Add your custom wait if exists
-                count++;
-
-            } while (count < 10);
-
-            Console.WriteLine(driver.PageSource);
-            isDisplayed.ShouldBeTrue();
-        }
     }
     public static async Task<String> GetPageSource(this AppiumDriver driver)
     {

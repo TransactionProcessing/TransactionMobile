@@ -23,8 +23,7 @@ public class GenericSteps
     [BeforeScenario(Order = 0)]
     public async Task StartSystem(){
         if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest") ||
-            this.ScenarioContext.ScenarioInfo.Tags.Contains("PRHWNavTest") ||
-            this.ScenarioContext.ScenarioInfo.Tags.Contains("iOSPRTest"))
+            this.ScenarioContext.ScenarioInfo.Tags.Contains("PRHWNavTest"))
         {
             // Initialise a logger
             String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
@@ -37,7 +36,9 @@ public class GenericSteps
             DockerServices dockerServices = DockerServices.EventStore |
                                             DockerServices.MessagingService | DockerServices.SecurityService |
                                             DockerServices.TestHost | DockerServices.SqlServer | DockerServices.TransactionProcessor |
-                                            DockerServices.TransactionProcessorAcl;
+                                            DockerServices.TransactionProcessorAcl | (DockerServices)512;
+
+            //dockerServices = DockerServices.EventStore | DockerServices.SqlServer | (DockerServices)512;
 
             // Initialise a logger
             String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
@@ -62,8 +63,6 @@ public class GenericSteps
 
             await Setup.GlobalSetup(this.TestingContext.DockerHelper);
             
-        this.TestingContext.DockerHelper.SqlServerContainer = Setup.DatabaseServerContainer;
-        this.TestingContext.DockerHelper.SqlServerNetwork = Setup.DatabaseServerNetwork;
         this.TestingContext.DockerHelper.DockerCredentials = Setup.DockerCredentials;
         this.TestingContext.DockerHelper.SqlCredentials = Setup.SqlCredentials;
         this.TestingContext.DockerHelper.SqlServerContainerName = "sharedsqlserver";
@@ -80,11 +79,10 @@ public class GenericSteps
     [AfterScenario(Order = 0)]
     public async Task StopSystem()
     {
-        if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest") == false && this.ScenarioContext.ScenarioInfo.Tags.Contains("PRHWNavTest") == false
-            && this.ScenarioContext.ScenarioInfo.Tags.Contains("iOSPRTest") == false)
+        if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest") == false && this.ScenarioContext.ScenarioInfo.Tags.Contains("PRHWNavTest") == false)
         {
             this.TestingContext.Logger.LogInformation("About to Stop Containers for Scenario Run");
-            await this.TestingContext.DockerHelper.StopContainersForScenarioRun(DockerServices.SqlServer).ConfigureAwait(false);
+            await this.TestingContext.DockerHelper.StopContainersForScenarioRun(DockerServices.None).ConfigureAwait(false);
             this.TestingContext.Logger.LogInformation("Containers for Scenario Run Stopped");
         }
     }
