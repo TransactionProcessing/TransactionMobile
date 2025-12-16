@@ -287,9 +287,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
                 Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {result.Data}");
 
-                ResponseData<TResponse> responseData = this.HandleResponseContent<TResponse>(result.Data);
+                var responseData = JsonConvert.DeserializeObject<TResponse>(result.Data);
 
-                return Result.Success(responseData.Data);
+                return Result.Success(responseData);
             }
             catch (Exception ex) {
                 // An exception has occurred, add some additional information to the message
