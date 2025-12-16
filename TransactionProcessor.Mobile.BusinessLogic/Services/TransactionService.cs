@@ -74,7 +74,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
             PerformBillPaymentGetAccountResponseModel responseModel = new()
                                                                       {
-                                                                          BillDetails = result.Data.AdditionalResponseMetaData.ToBillDetails()
+                                                                          BillDetails = result.Data.AdditionalResponseMetadata.ToBillDetails()
                                                                       };
 
             Logger.LogInformation("Bill payment - get account transaction performed successfully");
@@ -121,9 +121,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
             }
 
-            MeterDetails meterDetails = result.Data.AdditionalResponseMetaData switch{
+            MeterDetails meterDetails = result.Data.AdditionalResponseMetadata switch{
                 null => null,
-                _ => result.Data.AdditionalResponseMetaData.ToMeterDetails(model.MeterNumber)
+                _ => result.Data.AdditionalResponseMetadata.ToMeterDetails(model.MeterNumber)
             };
 
             PerformBillPaymentGetMeterResponseModel responseModel = new()

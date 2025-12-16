@@ -65,7 +65,7 @@ public class MerchantServiceTests{
 
 
         this.MockHttpMessageHandler.When($"http://localhost/api/merchants/contracts?application_version=1.0.0")
-            .Respond("application/json", JsonConvert.SerializeObject(Result.Success(contracts))); // Respond with JSON
+            .Respond("application/json", JsonConvert.SerializeObject(contracts)); // Respond with JSON
         
         var result = await this.MerchantService.GetContractProducts(CancellationToken.None);
         result.IsSuccess.ShouldBeTrue();
@@ -110,7 +110,7 @@ public class MerchantServiceTests{
                                                                 };
 
         this.MockHttpMessageHandler.When($"http://localhost/api/merchants?application_version=1.0.0")
-            .Respond("application/json", JsonConvert.SerializeObject(Result.Success(merchantResponse))); // Respond with JSON
+            .Respond("application/json", JsonConvert.SerializeObject(merchantResponse)); // Respond with JSON
 
         Result<MerchantDetailsModel> merchantDetails = await this.MerchantService.GetMerchantDetails(CancellationToken.None);
         merchantDetails.IsSuccess.ShouldBeTrue();
