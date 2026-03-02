@@ -44,11 +44,25 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <Button Text="Edit Contact" Style="{StaticResource MyAccountButtonStyle}"
-                        AutomationId="EditContactButton"/>
-                <Button Text="Back" AutomationId="BackButton"
-                        Style="{StaticResource MyAccountButtonStyle}"
-                        Command="{Binding BackButtonCommand}"/>
+                <!-- Action tiles row -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Frame Grid.Column="0" Style="{StaticResource ActionTileStyle}"
+                           BackgroundColor="{StaticResource profile}"
+                           AutomationId="EditContactButton">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="Edit Contact" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                    </Frame>
+
+                    <Frame Grid.Column="1" Style="{StaticResource ActionTileStyle}"
+                           BackgroundColor="{StaticResource MidGray}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BackButtonCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="Back" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                    </Frame>
+                </Grid>
 
             </VerticalStackLayout>
         </VerticalStackLayout>

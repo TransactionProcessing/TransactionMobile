@@ -9,9 +9,9 @@ public partial class BillPaymentSelectOperatorPage : ContentPage
 {
     private BillPaymentSelectOperatorPageViewModel viewModel => this.BindingContext as BillPaymentSelectOperatorPageViewModel;
 
-	public BillPaymentSelectOperatorPage(BillPaymentSelectOperatorPageViewModel vm)
-	{
-		this.InitializeComponent();
+public BillPaymentSelectOperatorPage(BillPaymentSelectOperatorPageViewModel vm)
+{
+this.InitializeComponent();
         this.BindingContext = vm;
     }
 
@@ -25,58 +25,52 @@ public partial class BillPaymentSelectOperatorPage : ContentPage
     private void LoadOperators(BillPaymentSelectOperatorPageViewModel viewModel)
     {
         this.OperatorList.Children.Clear();
-        
+
         Int32 rowCount = 0;
         foreach (ContractOperatorModel modelOperator in viewModel.Operators)
         {
-            Button button = new Button
-                            {
-                                Text = modelOperator.OperatorName,
-                                HorizontalOptions = LayoutOptions.FillAndExpand,
-                                AutomationId = modelOperator.OperatorName,
-                            };
-            button.SetDynamicResource(VisualElement.StyleProperty, "BillPaymentButtonStyle");
-            
-            Binding commandParameter = new Binding { Source = new ItemSelected<ContractOperatorModel>() { SelectedItem = modelOperator, SelectedItemIndex = rowCount } };
-
-            Binding command = new Binding("OperatorSelectedCommand", source: this.viewModel);
-
-            // Create the behavior and bind it to the command
-            EventToCommandBehavior behavior = new EventToCommandBehavior
+            Frame tile = this.CreateTile(modelOperator.OperatorName, (Color)Application.Current.Resources["billPayment"], modelOperator.OperatorName);
+            TapGestureRecognizer tap = new TapGestureRecognizer
             {
-                EventName = "Clicked"
+                Command = new Command(() => viewModel.OperatorSelectedCommand.Execute(
+                    new ItemSelected<ContractOperatorModel> { SelectedItem = modelOperator, SelectedItemIndex = rowCount }))
             };
-            behavior.SetBinding(EventToCommandBehavior.CommandProperty, command);
-            behavior.SetBinding(EventToCommandBehavior.CommandParameterProperty, commandParameter);
-
-            // Attach the behavior to the button
-            button.Behaviors.Add(behavior);
-
-            this.OperatorList.Add(button);
-
+            tile.GestureRecognizers.Add(tap);
+            this.OperatorList.Add(tile);
             rowCount++;
         }
-        this.OperatorList.Add(this.AddBackButton());
-        
+
+        this.OperatorList.Add(this.CreateBackTile(viewModel.BackButtonCommand));
     }
 
-    private Button AddBackButton()
+    private Frame CreateTile(string text, Color backgroundColor, string automationId)
     {
-        Button button = new Button
-                        {
-                            Text = "Back",
-                            HorizontalOptions = LayoutOptions.FillAndExpand,
-                            AutomationId = "BackButton",
-                        };
-        button.SetDynamicResource(VisualElement.StyleProperty, "BillPaymentButtonStyle");
+        return new Frame
+        {
+            CornerRadius = 14,
+            HasShadow = true,
+            Padding = new Thickness(14),
+            HeightRequest = 56,
+            BackgroundColor = backgroundColor,
+            BorderColor = Colors.Transparent,
+            HorizontalOptions = LayoutOptions.FillAndExpand,
+            AutomationId = automationId,
+            Content = new Label
+            {
+                Text = text,
+                TextColor = Colors.White,
+                FontAttributes = FontAttributes.Bold,
+                FontSize = 16,
+                HorizontalTextAlignment = TextAlignment.Center,
+                VerticalTextAlignment = TextAlignment.Center
+            }
+        };
+    }
 
-        Binding backButtonCommand = new Binding
-                                    {
-                                        Source = this.viewModel.BackButtonCommand
-                                    };
-
-        button.SetBinding(Button.CommandProperty, backButtonCommand);
-
-        return button;
+    private Frame CreateBackTile(System.Windows.Input.ICommand command)
+    {
+        Frame frame = this.CreateTile("Back", (Color)Application.Current.Resources["MidGray"], "BackButton");
+        frame.GestureRecognizers.Add(new TapGestureRecognizer { Command = command });
+        return frame;
     }
 }

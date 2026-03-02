@@ -11,8 +11,8 @@ public partial class ReportsPage : NoBackWithoutLogoutPage
     private ReportsPageViewModel viewModel => BindingContext as ReportsPageViewModel;
 
     public ReportsPage(ReportsPageViewModel vm)
-	{
-		this.InitializeComponent();
+{
+this.InitializeComponent();
         BindingContext = vm;
     }
 
@@ -30,62 +30,48 @@ public partial class ReportsPage : NoBackWithoutLogoutPage
         Int32 rowCount = 0;
         foreach (ListViewItem modelOption in viewModel.ReportsMenuOptions)
         {
-            Button button = new Button
-                            {
-                                Text = modelOption.Title,
-                                HorizontalOptions = LayoutOptions.FillAndExpand,
-                                AutomationId = $"{modelOption.Title.Replace(" ", "")}Button",
-                            };
-            button.SetDynamicResource(VisualElement.StyleProperty, "ReportsButtonStyle");
-
-            Binding commandParameter = new Binding
+            Frame tile = this.CreateTile(modelOption.Title, (Color)Application.Current.Resources["reports"], $"{modelOption.Title.Replace(" ", "")}Button");
+            TapGestureRecognizer tap = new TapGestureRecognizer
             {
-                Source = new ItemSelected<ListViewItem>
-                {
-                    SelectedItem = modelOption,
-                    SelectedItemIndex = rowCount
-                }
+                Command = new Command(() => viewModel.OptionSelectedCommand.Execute(
+                    new ItemSelected<ListViewItem> { SelectedItem = modelOption, SelectedItemIndex = rowCount }))
             };
-
-            Binding command = new Binding("OptionSelectedCommand", source: this.viewModel);
-
-            // Create the behavior and bind it to the command
-            EventToCommandBehavior behavior = new EventToCommandBehavior
-            {
-                EventName = "Clicked"
-            };
-            behavior.SetBinding(EventToCommandBehavior.CommandProperty, command);
-            behavior.SetBinding(EventToCommandBehavior.CommandParameterProperty, commandParameter);
-
-            // Attach the behavior to the button
-            button.Behaviors.Add(behavior);
-
+            tile.GestureRecognizers.Add(tap);
+            this.ReportsList.Add(tile);
             rowCount++;
-            this.ReportsList.Add(button);
-
         }
 
-        this.ReportsList.Add(this.AddBackButton());
+        this.ReportsList.Add(this.CreateBackTile(viewModel.BackButtonCommand));
     }
 
-    private Button AddBackButton()
+    private Frame CreateTile(string text, Color backgroundColor, string automationId)
     {
-        Button button = new Button
+        return new Frame
         {
-            Text = "Back",
+            CornerRadius = 14,
+            HasShadow = true,
+            Padding = new Thickness(14),
+            HeightRequest = 56,
+            BackgroundColor = backgroundColor,
+            BorderColor = Colors.Transparent,
             HorizontalOptions = LayoutOptions.FillAndExpand,
-            AutomationId = "BackButton",
+            AutomationId = automationId,
+            Content = new Label
+            {
+                Text = text,
+                TextColor = Colors.White,
+                FontAttributes = FontAttributes.Bold,
+                FontSize = 16,
+                HorizontalTextAlignment = TextAlignment.Center,
+                VerticalTextAlignment = TextAlignment.Center
+            }
         };
-        button.SetDynamicResource(VisualElement.StyleProperty, "ReportsButtonStyle");
-
-        Binding backButtonCommand = new Binding
-        {
-            Source = this.viewModel.BackButtonCommand
-        };
-
-        button.SetBinding(Button.CommandProperty, backButtonCommand);
-
-        return button;
     }
 
+    private Frame CreateBackTile(System.Windows.Input.ICommand command)
+    {
+        Frame frame = this.CreateTile("Back", (Color)Application.Current.Resources["MidGray"], "BackButton");
+        frame.GestureRecognizers.Add(new TapGestureRecognizer { Command = command });
+        return frame;
+    }
 }

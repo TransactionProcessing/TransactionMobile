@@ -9,9 +9,9 @@ public partial class VoucherSelectProductPage : ContentPage
 {
     private VoucherSelectProductPageViewModel viewModel => this.BindingContext as VoucherSelectProductPageViewModel;
 
-	public VoucherSelectProductPage(VoucherSelectProductPageViewModel vm)
-	{
-		this.InitializeComponent();
+public VoucherSelectProductPage(VoucherSelectProductPageViewModel vm)
+{
+this.InitializeComponent();
         this.BindingContext = vm;
     }
 
@@ -29,60 +29,48 @@ public partial class VoucherSelectProductPage : ContentPage
         Int32 rowCount = 0;
         foreach (ContractProductModel modelProduct in viewModel.Products)
         {
-            Button button = new Button
+            Frame tile = this.CreateTile(modelProduct.ProductDisplayText, (Color)Application.Current.Resources["voucher"], modelProduct.ProductDisplayText);
+            TapGestureRecognizer tap = new TapGestureRecognizer
             {
-                                  Text = modelProduct.ProductDisplayText,
-                                  HorizontalOptions = LayoutOptions.FillAndExpand,
-                                  AutomationId = modelProduct.ProductDisplayText,
+                Command = new Command(() => viewModel.ProductSelectedCommand.Execute(
+                    new ItemSelected<ContractProductModel> { SelectedItem = modelProduct, SelectedItemIndex = rowCount }))
             };
-            button.SetDynamicResource(VisualElement.StyleProperty, "VoucherButtonStyle");
-
-            Binding commandParameter = new Binding
-            {
-                Source = new ItemSelected<ContractProductModel>
-                {
-                    SelectedItem = modelProduct,
-                    SelectedItemIndex = rowCount
-                }
-            };
-
-            Binding command = new Binding("ProductSelectedCommand", source: this.viewModel);
-
-            // Create the behavior and bind it to the command
-            EventToCommandBehavior behavior = new EventToCommandBehavior
-            {
-                EventName = "Clicked"
-            };
-            behavior.SetBinding(EventToCommandBehavior.CommandProperty, command);
-            behavior.SetBinding(EventToCommandBehavior.CommandParameterProperty, commandParameter);
-
-            // Attach the behavior to the button
-            button.Behaviors.Add(behavior);
-
-            this.ProductsList.Add(button);
-
+            tile.GestureRecognizers.Add(tap);
+            this.ProductsList.Add(tile);
             rowCount++;
         }
-        this.ProductsList.Add(this.AddBackButton());
+
+        this.ProductsList.Add(this.CreateBackTile(viewModel.BackButtonCommand));
     }
 
-    private Button AddBackButton()
+    private Frame CreateTile(string text, Color backgroundColor, string automationId)
     {
-        Button button = new Button
-                        {
-                            Text = "Back",
-                            HorizontalOptions = LayoutOptions.FillAndExpand,
-                            AutomationId = "BackButton",
-                        };
-        button.SetDynamicResource(VisualElement.StyleProperty, "VoucherButtonStyle");
+        return new Frame
+        {
+            CornerRadius = 14,
+            HasShadow = true,
+            Padding = new Thickness(14),
+            HeightRequest = 56,
+            BackgroundColor = backgroundColor,
+            BorderColor = Colors.Transparent,
+            HorizontalOptions = LayoutOptions.FillAndExpand,
+            AutomationId = automationId,
+            Content = new Label
+            {
+                Text = text,
+                TextColor = Colors.White,
+                FontAttributes = FontAttributes.Bold,
+                FontSize = 16,
+                HorizontalTextAlignment = TextAlignment.Center,
+                VerticalTextAlignment = TextAlignment.Center
+            }
+        };
+    }
 
-        Binding backButtonCommand = new Binding
-                                    {
-                                        Source = this.viewModel.BackButtonCommand
-                                    };
-
-        button.SetBinding(Button.CommandProperty, backButtonCommand);
-
-        return button;
+    private Frame CreateBackTile(System.Windows.Input.ICommand command)
+    {
+        Frame frame = this.CreateTile("Back", (Color)Application.Current.Resources["MidGray"], "BackButton");
+        frame.GestureRecognizers.Add(new TapGestureRecognizer { Command = command });
+        return frame;
     }
 }

@@ -98,11 +98,15 @@
             </CollectionView.ItemsLayout>
         </CollectionView>
 
-        <!-- Back button -->
-        <Button Grid.Row="3" Text="Back" AutomationId="BackButton"
-                Style="{StaticResource ReportsButtonStyle}"
-                Command="{Binding BackButtonCommand}"
-                Margin="16,8"/>
+        <!-- Back tile -->
+        <Frame Grid.Row="3" Style="{StaticResource ActionTileStyle}"
+               BackgroundColor="{StaticResource MidGray}"
+               AutomationId="BackButton" Margin="16,8">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding BackButtonCommand}"/>
+            </Frame.GestureRecognizers>
+            <Label Text="Back" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+        </Frame>
 
     </Grid>
 </ContentPage>

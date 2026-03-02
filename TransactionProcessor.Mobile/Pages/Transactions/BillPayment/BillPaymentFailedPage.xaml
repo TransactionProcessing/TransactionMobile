@@ -33,16 +33,15 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <Button x:Name="CancelButton" Text="Cancel"
-                        Style="{DynamicResource BillPaymentButtonStyle}"
-                        AutomationId="CancelButton">
-                    <Button.Behaviors>
-                        <toolkit:EventToCommandBehavior
-                            EventName="Clicked"
-                            Command="{Binding CancelledCommand}"
-                            BindingContext="{Binding Source={x:Reference BillPaymentFailed}, Path=BindingContext}"/>
-                    </Button.Behaviors>
-                </Button>
+                <!-- Action tile -->
+                <Frame Style="{StaticResource ActionTileStyle}"
+                       BackgroundColor="{StaticResource admin}"
+                       AutomationId="CancelButton">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CancelledCommand}"/>
+                    </Frame.GestureRecognizers>
+                    <Label Text="Cancel" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                </Frame>
 
             </VerticalStackLayout>
         </VerticalStackLayout>

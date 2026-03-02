@@ -61,11 +61,25 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <Button Text="Edit Address" Style="{StaticResource MyAccountButtonStyle}"
-                        AutomationId="EditAddressButton"/>
-                <Button Text="Back" AutomationId="BackButton"
-                        Style="{StaticResource MyAccountButtonStyle}"
-                        Command="{Binding BackButtonCommand}"/>
+                <!-- Action tiles row -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Frame Grid.Column="0" Style="{StaticResource ActionTileStyle}"
+                           BackgroundColor="{StaticResource profile}"
+                           AutomationId="EditAddressButton">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="Edit Address" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                    </Frame>
+
+                    <Frame Grid.Column="1" Style="{StaticResource ActionTileStyle}"
+                           BackgroundColor="{StaticResource MidGray}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BackButtonCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="Back" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                    </Frame>
+                </Grid>
 
             </VerticalStackLayout>
         </VerticalStackLayout>

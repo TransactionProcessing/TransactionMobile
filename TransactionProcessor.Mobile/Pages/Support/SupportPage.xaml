@@ -33,29 +33,34 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- Support actions -->
-                <Button Text="Upload Logs" Style="{StaticResource StandardButton}"
-                        AutomationId="UploadLogsButton">
-                    <Button.Behaviors>
-                        <toolkit:EventToCommandBehavior
-                            EventName="Clicked"
-                            Command="{Binding UploadLogsCommand}"
-                            BindingContext="{Binding Source={x:Reference Support}, Path=BindingContext}"/>
-                    </Button.Behaviors>
-                </Button>
+                <!-- Support action tiles -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Frame Grid.Column="0" Style="{StaticResource ActionTileStyle}"
+                           BackgroundColor="{StaticResource support}"
+                           AutomationId="UploadLogsButton">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding UploadLogsCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="Upload Logs" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                    </Frame>
 
-                <Button Text="View Logs" Style="{StaticResource StandardButton}"
-                        AutomationId="ViewLogsButton">
-                    <Button.Behaviors>
-                        <toolkit:EventToCommandBehavior
-                            EventName="Clicked"
-                            Command="{Binding ViewLogsCommand}"
-                            BindingContext="{Binding Source={x:Reference Support}, Path=BindingContext}"/>
-                    </Button.Behaviors>
-                </Button>
+                    <Frame Grid.Column="1" Style="{StaticResource ActionTileStyle}"
+                           BackgroundColor="{StaticResource support}"
+                           AutomationId="ViewLogsButton">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ViewLogsCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="View Logs" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                    </Frame>
+                </Grid>
 
-                <Button Text="Back" Style="{StaticResource StandardButton}"
-                        Command="{Binding BackButtonCommand}" AutomationId="BackButton"/>
+                <Frame Style="{StaticResource ActionTileStyle}"
+                       BackgroundColor="{StaticResource MidGray}" AutomationId="BackButton">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BackButtonCommand}"/>
+                    </Frame.GestureRecognizers>
+                    <Label Text="Back" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                </Frame>
 
             </VerticalStackLayout>
         </VerticalStackLayout>

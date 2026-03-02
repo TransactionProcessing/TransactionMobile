@@ -13,9 +13,7 @@ public partial class MyAccountPage : NoBackWithoutLogoutPage
     public MyAccountPage(MyAccountPageViewModel vm)
     {
         this.InitializeComponent();
-        
         BindingContext = vm;
-        
     }
 
     protected override async void OnAppearing()
@@ -32,43 +30,39 @@ public partial class MyAccountPage : NoBackWithoutLogoutPage
         Int32 rowCount = 0;
         foreach (ListViewItem modelOption in viewModel.MyAccountOptions)
         {
-            Button button = new Button
+            Frame tile = this.CreateTile(modelOption.Title, (Color)Application.Current.Resources["profile"], $"{modelOption.Title.Replace(" ", "")}Button");
+            TapGestureRecognizer tap = new TapGestureRecognizer
             {
-                Text = modelOption.Title,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                AutomationId = $"{modelOption.Title.Replace(" ", "")}Button",
+                Command = new Command(() => viewModel.OptionSelectedCommand.Execute(
+                    new ItemSelected<ListViewItem> { SelectedItem = modelOption, SelectedItemIndex = rowCount }))
             };
-            button.SetDynamicResource(VisualElement.StyleProperty, "MyAccountButtonStyle");
-
-            Binding commandParameter = new Binding
-            {
-                Source = new ItemSelected<ListViewItem>
-                {
-                    SelectedItem = modelOption,
-                    SelectedItemIndex = rowCount
-                }
-            };
-
-            Binding command = new Binding
-            {
-                Source = viewModel.OptionSelectedCommand
-            };
-            
-            // Create the behavior and bind it to the command
-            EventToCommandBehavior behavior = new EventToCommandBehavior
-            {
-                EventName = "Clicked"
-            };
-            behavior.SetBinding(EventToCommandBehavior.CommandProperty, command);
-            behavior.SetBinding(EventToCommandBehavior.CommandParameterProperty, commandParameter);
-
-            // Attach the behavior to the button
-            button.Behaviors.Add(behavior);
-
-            this.MyAccountOptionsList.Add(button);
-
+            tile.GestureRecognizers.Add(tap);
+            this.MyAccountOptionsList.Add(tile);
             rowCount++;
         }
     }
 
+    private Frame CreateTile(string text, Color backgroundColor, string automationId)
+    {
+        return new Frame
+        {
+            CornerRadius = 14,
+            HasShadow = true,
+            Padding = new Thickness(14),
+            HeightRequest = 56,
+            BackgroundColor = backgroundColor,
+            BorderColor = Colors.Transparent,
+            HorizontalOptions = LayoutOptions.FillAndExpand,
+            AutomationId = automationId,
+            Content = new Label
+            {
+                Text = text,
+                TextColor = Colors.White,
+                FontAttributes = FontAttributes.Bold,
+                FontSize = 16,
+                HorizontalTextAlignment = TextAlignment.Center,
+                VerticalTextAlignment = TextAlignment.Center
+            }
+        };
+    }
 }

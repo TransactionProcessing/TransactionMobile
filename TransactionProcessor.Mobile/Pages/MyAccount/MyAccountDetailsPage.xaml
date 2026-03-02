@@ -72,9 +72,14 @@
                     </Grid>
                 </Frame>
 
-                <Button Text="Back" AutomationId="BackButton"
-                        Style="{StaticResource MyAccountButtonStyle}"
-                        Command="{Binding BackButtonCommand}"/>
+                <Frame Style="{StaticResource ActionTileStyle}"
+                       BackgroundColor="{StaticResource MidGray}"
+                       AutomationId="BackButton">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BackButtonCommand}"/>
+                    </Frame.GestureRecognizers>
+                    <Label Text="Back" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                </Frame>
 
             </VerticalStackLayout>
         </VerticalStackLayout>

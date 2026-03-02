@@ -236,6 +236,16 @@
         <Setter Property="BorderColor" Value="Transparent"/>
     </Style>
 
+    <!-- Action tile: full-width card replacing action buttons -->
+    <Style x:Key="ActionTileStyle" TargetType="Frame">
+        <Setter Property="CornerRadius" Value="14"/>
+        <Setter Property="HasShadow" Value="True"/>
+        <Setter Property="Padding" Value="14"/>
+        <Setter Property="HeightRequest" Value="56"/>
+        <Setter Property="BorderColor" Value="Transparent"/>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+    </Style>
+
     <Style x:Key="TileLabelStyle" TargetType="Label">
         <Setter Property="TextColor" Value="{StaticResource headerTextColor}"/>
         <Setter Property="FontFamily" Value="OpenSansRegular"/>

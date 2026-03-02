@@ -33,16 +33,25 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <Button x:Name="CompleteButton" Text="Complete"
-                        Style="{DynamicResource VoucherButtonStyle}"
-                        AutomationId="CompleteButton">
-                    <Button.Behaviors>
-                        <toolkit:EventToCommandBehavior
-                            EventName="Clicked"
-                            Command="{Binding CompletedCommand}"
-                            BindingContext="{Binding Source={x:Reference VoucherIssueSuccess}, Path=BindingContext}"/>
-                    </Button.Behaviors>
-                </Button>
+                <!-- Action tiles row -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Frame Grid.Column="0" Style="{StaticResource ActionTileStyle}"
+                           BackgroundColor="{StaticResource successGreen}"
+                           AutomationId="CompleteButton">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding CompletedCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="Complete" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                    </Frame>
+
+                    <Frame Grid.Column="1" Style="{StaticResource ActionTileStyle}"
+                           BackgroundColor="{StaticResource MidGray}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BackButtonCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="Back" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                    </Frame>
+                </Grid>
 
             </VerticalStackLayout>
         </VerticalStackLayout>

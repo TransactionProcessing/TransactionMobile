@@ -88,10 +88,14 @@
                 </Grid>
 
                 <!-- Exit button -->
-                <Button Text="Exit Application" AutomationId="BackButton"
-                        Style="{StaticResource StandardButton}"
-                        Command="{Binding BackButtonCommand}"
-                        Margin="0,20,0,0"/>
+                <Frame Style="{StaticResource ActionTileStyle}"
+                       BackgroundColor="{StaticResource MidGray}"
+                       AutomationId="BackButton">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BackButtonCommand}"/>
+                    </Frame.GestureRecognizers>
+                    <Label Text="Exit Application" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                </Frame>
 
             </VerticalStackLayout>
         </VerticalStackLayout>

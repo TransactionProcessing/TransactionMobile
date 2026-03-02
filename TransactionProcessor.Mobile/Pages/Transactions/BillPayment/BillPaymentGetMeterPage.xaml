@@ -34,19 +34,25 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <Button x:Name="GetMeterButton" Text="Get Meter"
-                        Style="{DynamicResource BillPaymentButtonStyle}"
-                        AutomationId="GetMeterButton">
-                    <Button.Behaviors>
-                        <toolkit:EventToCommandBehavior
-                            EventName="Clicked"
-                            Command="{Binding GetMeterCommand}"
-                            BindingContext="{Binding Source={x:Reference BillPaymentGetMeter}, Path=BindingContext}"/>
-                    </Button.Behaviors>
-                </Button>
+                <!-- Action tiles row -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Frame Grid.Column="0" Style="{StaticResource ActionTileStyle}"
+                           BackgroundColor="{StaticResource billPayment}"
+                           AutomationId="GetMeterButton">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GetMeterCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="Get Meter" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                    </Frame>
 
-                <Button Text="Back" Style="{StaticResource BillPaymentButtonStyle}"
-                        Command="{Binding BackButtonCommand}"/>
+                    <Frame Grid.Column="1" Style="{StaticResource ActionTileStyle}"
+                           BackgroundColor="{StaticResource MidGray}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BackButtonCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="Back" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                    </Frame>
+                </Grid>
 
             </VerticalStackLayout>
         </VerticalStackLayout>
