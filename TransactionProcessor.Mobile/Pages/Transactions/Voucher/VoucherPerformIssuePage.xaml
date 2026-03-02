@@ -6,76 +6,104 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              Shell.NavBarIsVisible="False"
              x:Name="VoucherPerformIssue">
-    <ScrollView>
-        <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-            <Frame Style="{DynamicResource MainFrame}">
-                <VerticalStackLayout Spacing="10">
-                    <Entry x:Name="RecipientMobileNumberEntry"
-               Placeholder="Recipient Mobile Number"
-               AutomationId="RecipientMobileNumberEntry"
-               Style="{DynamicResource MobileNumberEntryStyle}"
-               Text="{Binding RecipientMobileNumber}"
-               Keyboard="Numeric">
-                        <Entry.Behaviors>
-                            <toolkit:EventToCommandBehavior             
-                    EventName="Completed"  
-                    Command="{Binding RecipientMobileNumberEntryCompletedCommand}" />
-                        </Entry.Behaviors>
-                    </Entry>
+    <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
+        <VerticalStackLayout Spacing="0">
 
-                    <Entry x:Name="RecipientEmailAddressEntry"
-               Placeholder="Recipient Email Address"
-               AutomationId="RecipientEmailAddressEntry"
-               Style="{DynamicResource EmailAddressEntryStyle}"
-               Text="{Binding RecipientEmailAddress}"
-               Keyboard="Numeric">
-                        <Entry.Behaviors>
-                            <toolkit:EventToCommandBehavior             
-                    EventName="Completed"  
-                    Command="{Binding RecipientEmailAddressEntryCompletedCommand}" />
-                        </Entry.Behaviors>
-                    </Entry>
-
-                    <Entry x:Name="VoucherAmountEntry"
-               Placeholder="100"
-               AutomationId="VoucherAmountEntry"
-               Style="{DynamicResource AmountEntryStyle}"
-               Text="{Binding VoucherAmount}"
-               Keyboard="Numeric">
-                        <Entry.Behaviors>
-                            <toolkit:EventToCommandBehavior             
-                    EventName="Completed"  
-                    Command="{Binding VoucherAmountEntryCompletedCommand}" />
-                        </Entry.Behaviors>
-                    </Entry>
-
-                    <Entry x:Name="CustomerEmailAddressEntry"
-               Placeholder="customeremail@email.com"
-               AutomationId="CustomerEmailAddressEntry"
-               Style="{DynamicResource EmailAddressEntryStyle}"
-               Text="{Binding CustomerEmailAddress}">
-                        <Entry.Behaviors>
-                            <toolkit:EventToCommandBehavior             
-                    EventName="Completed"  
-                    Command="{Binding CustomerEmailAddressEntryCompletedCommand}" />
-                        </Entry.Behaviors>
-                    </Entry>
-
-                    <Button x:Name="IssueVoucherButton" 
-                Text="Issue Voucher"
-                Style="{DynamicResource VoucherButtonStyle}"
-                AutomationId="IssueVoucherButton">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding IssueVoucherCommand}" BindingContext="{Binding Source={x:Reference VoucherPerformIssue}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                    <Button Text="Back" Style="{StaticResource VoucherButtonStyle}" Command="{Binding BackButtonCommand}"/>
-                </VerticalStackLayout>
-                
+            <!-- Header -->
+            <Frame Style="{StaticResource PageHeaderStyle}">
+                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
+                       AutomationId="{Binding Title}"/>
             </Frame>
+
+            <VerticalStackLayout Padding="16,16,16,16" Spacing="12">
+
+                <Frame Style="{StaticResource SectionCardStyle}">
+                    <VerticalStackLayout Spacing="12">
+
+                        <Label Text="Recipient Mobile Number" FontSize="13"
+                               TextColor="{StaticResource labelTextColor}" FontAttributes="Bold"/>
+                        <Frame Style="{StaticResource FormEntryStyle}">
+                            <Entry x:Name="RecipientMobileNumberEntry"
+                                   Placeholder="Recipient Mobile Number"
+                                   AutomationId="RecipientMobileNumberEntry"
+                                   Style="{DynamicResource MobileNumberEntryStyle}"
+                                   Text="{Binding RecipientMobileNumber}"
+                                   Keyboard="Numeric">
+                                <Entry.Behaviors>
+                                    <toolkit:EventToCommandBehavior
+                                        EventName="Completed"
+                                        Command="{Binding RecipientMobileNumberEntryCompletedCommand}"/>
+                                </Entry.Behaviors>
+                            </Entry>
+                        </Frame>
+
+                        <Label Text="Recipient Email Address" FontSize="13"
+                               TextColor="{StaticResource labelTextColor}" FontAttributes="Bold"/>
+                        <Frame Style="{StaticResource FormEntryStyle}">
+                            <Entry x:Name="RecipientEmailAddressEntry"
+                                   Placeholder="Recipient Email Address"
+                                   AutomationId="RecipientEmailAddressEntry"
+                                   Style="{DynamicResource EmailAddressEntryStyle}"
+                                   Text="{Binding RecipientEmailAddress}">
+                                <Entry.Behaviors>
+                                    <toolkit:EventToCommandBehavior
+                                        EventName="Completed"
+                                        Command="{Binding RecipientEmailAddressEntryCompletedCommand}"/>
+                                </Entry.Behaviors>
+                            </Entry>
+                        </Frame>
+
+                        <Label Text="Voucher Amount" FontSize="13"
+                               TextColor="{StaticResource labelTextColor}" FontAttributes="Bold"/>
+                        <Frame Style="{StaticResource FormEntryStyle}">
+                            <Entry x:Name="VoucherAmountEntry"
+                                   Placeholder="100"
+                                   AutomationId="VoucherAmountEntry"
+                                   Style="{DynamicResource AmountEntryStyle}"
+                                   Text="{Binding VoucherAmount}"
+                                   Keyboard="Numeric">
+                                <Entry.Behaviors>
+                                    <toolkit:EventToCommandBehavior
+                                        EventName="Completed"
+                                        Command="{Binding VoucherAmountEntryCompletedCommand}"/>
+                                </Entry.Behaviors>
+                            </Entry>
+                        </Frame>
+
+                        <Label Text="Customer Email (optional)" FontSize="13"
+                               TextColor="{StaticResource labelTextColor}" FontAttributes="Bold"/>
+                        <Frame Style="{StaticResource FormEntryStyle}">
+                            <Entry x:Name="CustomerEmailAddressEntry"
+                                   Placeholder="customer@email.com"
+                                   AutomationId="CustomerEmailAddressEntry"
+                                   Style="{DynamicResource EmailAddressEntryStyle}"
+                                   Text="{Binding CustomerEmailAddress}">
+                                <Entry.Behaviors>
+                                    <toolkit:EventToCommandBehavior
+                                        EventName="Completed"
+                                        Command="{Binding CustomerEmailAddressEntryCompletedCommand}"/>
+                                </Entry.Behaviors>
+                            </Entry>
+                        </Frame>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Button x:Name="IssueVoucherButton" Text="Issue Voucher"
+                        Style="{DynamicResource VoucherButtonStyle}"
+                        AutomationId="IssueVoucherButton">
+                    <Button.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            EventName="Clicked"
+                            Command="{Binding IssueVoucherCommand}"
+                            BindingContext="{Binding Source={x:Reference VoucherPerformIssue}, Path=BindingContext}"/>
+                    </Button.Behaviors>
+                </Button>
+
+                <Button Text="Back" Style="{StaticResource VoucherButtonStyle}"
+                        Command="{Binding BackButtonCommand}"/>
+
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

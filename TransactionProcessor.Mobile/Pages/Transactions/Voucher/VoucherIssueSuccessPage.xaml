@@ -6,29 +6,45 @@
              x:Class="TransactionProcessor.Mobile.Pages.Transactions.Voucher.VoucherIssueSuccessPage"
              Shell.NavBarIsVisible="False"
              x:Name="VoucherIssueSuccess">
-    <ScrollView>
-        <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center" VerticalOptions="End"
-               FontAttributes="Bold" Padding="20,0,0,20"/>
-            <Frame Style="{DynamicResource MainFrame}">
-                <VerticalStackLayout Spacing="10">
+    <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
+        <VerticalStackLayout Spacing="0">
 
-                    <Image Source="paymentsuccess.png" VerticalOptions="Start" Style="{DynamicResource PaymentImage}"/>
-
-                    <!--  Payment description label  -->
-                    <Label Margin="17,8"
-                       Text="Thank you for your voucher purchase. An automated payment receipt will be sent to your email entered."/>
-
-                    <Button x:Name="CompleteButton" Margin="0,16" Text="Complete"
-                        Style="{DynamicResource VoucherButtonStyle}" AutomationId="CompleteButton">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding CompletedCommand}" BindingContext="{Binding Source={x:Reference VoucherIssueSuccess}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                </VerticalStackLayout>
+            <!-- Header -->
+            <Frame Style="{StaticResource PageHeaderStyle}" BackgroundColor="{StaticResource successGreen}">
+                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
+                       AutomationId="{Binding Title}"/>
             </Frame>
+
+            <VerticalStackLayout Padding="16,24,16,16" Spacing="16">
+
+                <Frame Style="{StaticResource SectionCardStyle}">
+                    <VerticalStackLayout Spacing="12" HorizontalOptions="Center">
+                        <Image Source="paymentsuccess.png" VerticalOptions="Start"
+                               HeightRequest="120" WidthRequest="120"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Voucher Issued!"
+                               FontSize="20" FontAttributes="Bold"
+                               TextColor="{StaticResource successGreen}"
+                               HorizontalTextAlignment="Center"/>
+                        <Label Text="Thank you for your voucher purchase. An automated payment receipt will be sent to the email address entered."
+                               FontSize="14" TextColor="{StaticResource DarkGray}"
+                               HorizontalTextAlignment="Center"
+                               Margin="8,0"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Button x:Name="CompleteButton" Text="Complete"
+                        Style="{DynamicResource VoucherButtonStyle}"
+                        AutomationId="CompleteButton">
+                    <Button.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            EventName="Clicked"
+                            Command="{Binding CompletedCommand}"
+                            BindingContext="{Binding Source={x:Reference VoucherIssueSuccess}, Path=BindingContext}"/>
+                    </Button.Behaviors>
+                </Button>
+
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

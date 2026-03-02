@@ -5,40 +5,42 @@
                                xmlns:common="clr-namespace:TransactionProcessor.Mobile.Pages.Common"
                                xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
                                Shell.NavBarIsVisible="False">
-    <ScrollView>
-        <VerticalStackLayout Style="{DynamicResource Layout}">
+    <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
+        <VerticalStackLayout Spacing="0">
 
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-
-            <Frame Style="{DynamicResource MainFrame}">
-                <VerticalStackLayout>
-                <HorizontalStackLayout>
-                    <Label Text="Merchant Name:"
-                           HorizontalTextAlignment="Center"
-                           HorizontalOptions="Fill"
-                           FontAttributes="Bold" FontSize="15"
-                           Margin="0,0,5,5"/>
-                    <Label Text="{Binding MerchantName}"
-                           HorizontalTextAlignment="Center"
-                           HorizontalOptions="Fill"
-                           FontSize="15"/>
-                </HorizontalStackLayout>
-                    <HorizontalStackLayout>
-                        <Label Text="Last Login:"
-                           HorizontalTextAlignment="Center"
-                           HorizontalOptions="Fill"
-                           FontAttributes="Bold" FontSize="15"
-                           Margin="0,0,5,10"/>
-                    <Label Text="{Binding LastLogin, StringFormat='{0:dd/MM/yyyy HH:mm:ss}'}"
-                           HorizontalTextAlignment="Center"
-                           HorizontalOptions="Fill"
-                           FontSize="15"/>
-                    </HorizontalStackLayout>
-                    <VerticalStackLayout x:Name="MyAccountOptionsList" Spacing="10">
-                    </VerticalStackLayout>
-                    <Button Text="Back" AutomationId="BackButton" Style="{StaticResource MyAccountButtonStyle}" Command="{Binding BackButtonCommand}"/>
+            <!-- Header section -->
+            <Frame Style="{StaticResource PageHeaderStyle}">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
+                           AutomationId="{Binding Title}"/>
+                    <Label Text="{Binding MerchantName}" Style="{StaticResource HeaderSubtitleStyle}"/>
                 </VerticalStackLayout>
             </Frame>
+
+            <!-- Account info section -->
+            <VerticalStackLayout Padding="16,16,16,16" Spacing="0">
+
+                <!-- Last login card -->
+                <Frame Style="{StaticResource SectionCardStyle}">
+                    <Grid ColumnDefinitions="*,auto">
+                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                            <Label Text="Last Login" FontSize="12" TextColor="{StaticResource MidGray}"/>
+                            <Label Text="{Binding LastLogin, StringFormat='{0:dd/MM/yyyy HH:mm}'}"
+                                   FontSize="16" FontAttributes="Bold"
+                                   TextColor="{StaticResource labelTextColor}"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Frame>
+
+                <!-- Options list (dynamically populated) -->
+                <VerticalStackLayout x:Name="MyAccountOptionsList" Spacing="10"/>
+
+                <Button Text="Back" AutomationId="BackButton"
+                        Style="{StaticResource MyAccountButtonStyle}"
+                        Command="{Binding BackButtonCommand}"
+                        Margin="0,8,0,0"/>
+
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </common:NoBackWithoutLogoutPage>

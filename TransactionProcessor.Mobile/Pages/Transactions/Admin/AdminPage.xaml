@@ -6,20 +6,32 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              Shell.NavBarIsVisible="False"
              x:Name="Admin">
-    <ScrollView>
-        <VerticalStackLayout Style="{DynamicResource Layout}">
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-            <Frame Style="{DynamicResource MainFrame}">
-                <VerticalStackLayout Spacing="10">
-                    <Button AutomationId="ReconciliationButton" x:Name="ReconciliationButton" Text="Reconciliation" Style="{DynamicResource AdminButtonStyle}">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding ReconciliationCommand}" BindingContext="{Binding Source={x:Reference Admin}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                </VerticalStackLayout>
+    <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Header -->
+            <Frame Style="{StaticResource PageHeaderStyle}" BackgroundColor="{StaticResource admin}">
+                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
+                       AutomationId="{Binding Title}"/>
             </Frame>
+
+            <VerticalStackLayout Padding="16,16,16,16" Spacing="10">
+
+                <Button AutomationId="ReconciliationButton" x:Name="ReconciliationButton"
+                        Text="Reconciliation"
+                        Style="{DynamicResource AdminButtonStyle}">
+                    <Button.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            EventName="Clicked"
+                            Command="{Binding ReconciliationCommand}"
+                            BindingContext="{Binding Source={x:Reference Admin}, Path=BindingContext}"/>
+                    </Button.Behaviors>
+                </Button>
+
+                <Button Text="Back" Style="{StaticResource AdminButtonStyle}"
+                        Command="{Binding BackButtonCommand}"/>
+
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

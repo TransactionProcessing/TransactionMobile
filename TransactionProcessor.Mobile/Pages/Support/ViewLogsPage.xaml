@@ -1,25 +1,43 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TransactionProcessor.Mobile.Pages.Support.ViewLogsPage"
              xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
              Shell.NavBarIsVisible="False">
-    <StackLayout Margin="20" Style="{DynamicResource Layout}">
-        <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"
-                                 VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-        <ListView ItemsSource="{Binding LogMessages}" HasUnevenRows="true" VerticalScrollBarVisibility="Always">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout>
-                            <Label Text="{Binding Path=EntryDateTime, StringFormat='{0:dd/MM/yyyy hh:MM:ss}'}" FontAttributes="Bold" TextColor="{Binding TextColor}"/>
-                            <Label Text="{Binding LogLevel}" TextColor="{Binding TextColor}"/>
-                            <Label Text="{Binding Message}" LineBreakMode="WordWrap" TextColor="{Binding TextColor}"/>
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        <Button Text="Back" Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}" AutomationId="BackButton"/>
-    </StackLayout>
+    <Grid RowDefinitions="auto,*,auto" BackgroundColor="{StaticResource pageBackgroundColor}">
+
+        <!-- Header -->
+        <Frame Grid.Row="0" Style="{StaticResource PageHeaderStyle}">
+            <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
+                   AutomationId="{Binding Title}"/>
+        </Frame>
+
+        <!-- Log messages list -->
+        <ListView Grid.Row="1" ItemsSource="{Binding LogMessages}"
+                  HasUnevenRows="True" VerticalScrollBarVisibility="Always"
+                  Margin="16,8">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <VerticalStackLayout Padding="8,6" Spacing="2">
+                            <Label Text="{Binding Path=EntryDateTime, StringFormat='{0:dd/MM/yyyy HH:mm:ss}'}"
+                                   FontAttributes="Bold" FontSize="12"
+                                   TextColor="{Binding TextColor}"/>
+                            <Label Text="{Binding LogLevel}" FontSize="11"
+                                   TextColor="{Binding TextColor}"/>
+                            <Label Text="{Binding Message}" LineBreakMode="WordWrap" FontSize="12"
+                                   TextColor="{Binding TextColor}"/>
+                        </VerticalStackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!-- Back button -->
+        <Button Grid.Row="2" Text="Back" Margin="16,8"
+                Style="{StaticResource StandardButton}"
+                Command="{Binding BackButtonCommand}"
+                AutomationId="BackButton"/>
+
+    </Grid>
 </ContentPage>

@@ -186,6 +186,10 @@ public class ShellNavigationService : INavigationService
         await NavigateTo(nameof(MyAccountDetailsPage));
     }
 
+    public async Task GoToTransactionsPage() {
+        await NavigateTo("///main/transactions");
+    }
+
     public async Task GoToReportsSalesAnalysis(){
         await NavigateTo(nameof(ReportsSalesAnalysisPage));
     }

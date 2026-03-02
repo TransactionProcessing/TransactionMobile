@@ -4,65 +4,79 @@
              x:Class="TransactionProcessor.Mobile.Pages.MyAccount.MyAccountDetailsPage"
              xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
              Shell.NavBarIsVisible="False">
-    <ScrollView>
-        <VerticalStackLayout Style="{DynamicResource Layout}">
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+    <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
+        <VerticalStackLayout Spacing="0">
 
-            <Frame Style="{DynamicResource MainFrame}">
-                <VerticalStackLayout x:Name="SubLayout">
-
-                    <Label Text="Name:" FontAttributes="Bold"
-                       HorizontalTextAlignment="Start"
-                       HorizontalOptions="Fill"/>
-                    <Label Text="{Binding MerchantName}"
-                       HorizontalTextAlignment="Start"
-                       HorizontalOptions="Fill"  Margin="0,0,0,10"
-                       AutomationId="MerchantNameLabel"/>
-
-                    <Label Text="Balance:" FontAttributes="Bold"
-                       HorizontalTextAlignment="Start"
-                       HorizontalOptions="Fill"/>
-                    <Label Text="{Binding Balance}"
-                       HorizontalTextAlignment="Start"
-                       HorizontalOptions="Fill" Margin="0,0,0,10"
-                       AutomationId="BalanceLabel"/>
-
-                    <Label Text="Available Balance:" FontAttributes="Bold"
-                       HorizontalTextAlignment="Start"
-                       HorizontalOptions="Fill"/>
-                    <Label Text="{Binding AvailableBalance}"
-                       HorizontalTextAlignment="Start"
-                       HorizontalOptions="Fill"  Margin="0,0,0,10"
-                       AutomationId="AvailableBalanceLabel"/>
-
-                    <Label Text="Last Statement:" FontAttributes="Bold"
-                       HorizontalTextAlignment="Start"
-                       HorizontalOptions="Fill"/>
-                    <Label Text="{Binding LastStatementDate, StringFormat='{0:dd/MM/yyyy}'}"
-                       HorizontalTextAlignment="Start"
-                       HorizontalOptions="Fill"  Margin="0,0,0,10"
-                       AutomationId="LastStatementDateLabel"/>
-
-                    <Label Text="Next Statement:" FontAttributes="Bold"
-                       HorizontalTextAlignment="Start"
-                       HorizontalOptions="Fill"/>
-                    <Label Text="{Binding NextStatementDate, StringFormat='{0:dd/MM/yyyy}'}"
-                       HorizontalTextAlignment="Start"
-                       HorizontalOptions="Fill"  Margin="0,0,0,10"
-                       AutomationId="NextStatementDateLabel"/>
-
-                    <Label Text="Settlement Schedule:" FontAttributes="Bold"
-                       HorizontalTextAlignment="Start"
-                       HorizontalOptions="Fill"/>
-                    <Label Text="{Binding SettlementSchedule}"
-                       HorizontalTextAlignment="Start"
-                       HorizontalOptions="Fill"  Margin="0,0,0,10"
-                       AutomationId="SettlementScheduleLabel"/>
-                </VerticalStackLayout>
+            <!-- Header -->
+            <Frame Style="{StaticResource PageHeaderStyle}">
+                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
+                       AutomationId="{Binding Title}"/>
             </Frame>
-            <Button Text="Edit Details" Style="{StaticResource MyAccountButtonStyle}" 
-                Margin="10,0,0,10" AutomationId="EditDetailsButton"/>
-            <Button Margin="10,0,0,10" Text="Back" AutomationId="BackButton" Style="{StaticResource MyAccountButtonStyle}" Command="{Binding BackButtonCommand}"/>
+
+            <VerticalStackLayout Padding="16,16,16,16" Spacing="12">
+
+                <!-- Merchant info card -->
+                <Frame Style="{StaticResource SectionCardStyle}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Merchant" FontSize="13" TextColor="{StaticResource MidGray}"/>
+                        <Label Text="{Binding MerchantName}" FontSize="18" FontAttributes="Bold"
+                               TextColor="{StaticResource labelTextColor}"
+                               AutomationId="MerchantNameLabel"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Balance card -->
+                <Frame Style="{StaticResource BalanceCardStyle}">
+                    <Grid ColumnDefinitions="*,*">
+                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                            <Label Text="Balance" TextColor="White" FontSize="13" Opacity="0.85"/>
+                            <Label Text="{Binding Balance}" TextColor="White"
+                                   FontSize="22" FontAttributes="Bold"
+                                   AutomationId="BalanceLabel"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label Text="Available" TextColor="White" FontSize="13" Opacity="0.85"/>
+                            <Label Text="{Binding AvailableBalance}" TextColor="White"
+                                   FontSize="22" FontAttributes="Bold"
+                                   AutomationId="AvailableBalanceLabel"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Frame>
+
+                <!-- Statement info -->
+                <Frame Style="{StaticResource SectionCardStyle}">
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="auto,auto,auto">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Last Statement"
+                               FontSize="12" TextColor="{StaticResource MidGray}"/>
+                        <Label Grid.Row="1" Grid.Column="0"
+                               Text="{Binding LastStatementDate, StringFormat='{0:dd/MM/yyyy}'}"
+                               FontSize="15" FontAttributes="Bold"
+                               TextColor="{StaticResource labelTextColor}"
+                               AutomationId="LastStatementDateLabel"/>
+
+                        <Label Grid.Row="0" Grid.Column="1" Text="Next Statement"
+                               FontSize="12" TextColor="{StaticResource MidGray}"/>
+                        <Label Grid.Row="1" Grid.Column="1"
+                               Text="{Binding NextStatementDate, StringFormat='{0:dd/MM/yyyy}'}"
+                               FontSize="15" FontAttributes="Bold"
+                               TextColor="{StaticResource labelTextColor}"
+                               AutomationId="NextStatementDateLabel"/>
+
+                        <Label Grid.Row="2" Grid.Column="0" Text="Settlement Schedule"
+                               FontSize="12" TextColor="{StaticResource MidGray}" Margin="0,8,0,0"/>
+                        <Label Grid.Row="2" Grid.Column="1"
+                               Text="{Binding SettlementSchedule}"
+                               FontSize="15" FontAttributes="Bold"
+                               TextColor="{StaticResource labelTextColor}" Margin="0,8,0,0"
+                               AutomationId="SettlementScheduleLabel"/>
+                    </Grid>
+                </Frame>
+
+                <Button Text="Back" AutomationId="BackButton"
+                        Style="{StaticResource MyAccountButtonStyle}"
+                        Command="{Binding BackButtonCommand}"/>
+
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

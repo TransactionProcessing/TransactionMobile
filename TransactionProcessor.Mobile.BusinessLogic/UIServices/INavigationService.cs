@@ -62,6 +62,8 @@ public interface INavigationService
     Task GoToMyAccountContacts();
     Task GoToMyAccountDetails();
 
+    Task GoToTransactionsPage();
+
     Task GoToReportsSalesAnalysis();
     Task GoToReportsBalanceAnalysis();
 

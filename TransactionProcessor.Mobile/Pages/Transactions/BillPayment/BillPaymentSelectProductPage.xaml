@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
              x:Class="TransactionProcessor.Mobile.Pages.Transactions.BillPayment.BillPaymentSelectProductPage"
+             xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
              Shell.NavBarIsVisible="False">
-    <ScrollView>
-        <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center" VerticalOptions="End"
-               FontAttributes="Bold" Padding="20,0,0,20"/>
-            <Frame Style="{DynamicResource MainFrame}">
-                <VerticalStackLayout Spacing="10" x:Name="ProductsList">
-                </VerticalStackLayout>
+    <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Header -->
+            <Frame Style="{StaticResource PageHeaderStyle}">
+                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
+                       AutomationId="{Binding Title}"/>
             </Frame>
+
+            <VerticalStackLayout Padding="16,16,16,16" Spacing="10">
+                <VerticalStackLayout Spacing="10" x:Name="ProductsList"/>
+            </VerticalStackLayout>
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

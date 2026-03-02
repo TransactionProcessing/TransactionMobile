@@ -6,29 +6,45 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              Shell.NavBarIsVisible="False"
              x:Name="BillPaymentFailed">
-    <ScrollView>
-        <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center" VerticalOptions="End"
-               FontAttributes="Bold" Padding="20,0,0,20"/>
-            <Frame Style="{DynamicResource MainFrame}">
-                <VerticalStackLayout Spacing="10">
+    <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
+        <VerticalStackLayout Spacing="0">
 
-                    <Image Source="paymentfailure.png" VerticalOptions="Start" Style="{DynamicResource PaymentImage}"/>
-
-                    <Label Margin="17,8"
-                       Text="Unfortunately, we could not process your bill payment, this may be for a variety of reasons.  If you wish you can retry the transaction."/>
-
-                    <Button x:Name="CancelButton" Grid.Row="5" Margin="0,16"
-                        Text="Cancel"
-                        Style="{DynamicResource BillPaymentButtonStyle}" AutomationId="CancelButton">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding CancelledCommand}" BindingContext="{Binding Source={x:Reference BillPaymentFailed}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                </VerticalStackLayout>
+            <!-- Header -->
+            <Frame Style="{StaticResource PageHeaderStyle}" BackgroundColor="{StaticResource admin}">
+                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
+                       AutomationId="{Binding Title}"/>
             </Frame>
+
+            <VerticalStackLayout Padding="16,24,16,16" Spacing="16">
+
+                <Frame Style="{StaticResource SectionCardStyle}">
+                    <VerticalStackLayout Spacing="12" HorizontalOptions="Center">
+                        <Image Source="paymentfailure.png" VerticalOptions="Start"
+                               HeightRequest="120" WidthRequest="120"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Payment Failed"
+                               FontSize="20" FontAttributes="Bold"
+                               TextColor="{StaticResource admin}"
+                               HorizontalTextAlignment="Center"/>
+                        <Label Text="Unfortunately, we could not process your bill payment. If you wish you can retry the transaction."
+                               FontSize="14" TextColor="{StaticResource DarkGray}"
+                               HorizontalTextAlignment="Center"
+                               Margin="8,0"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Button x:Name="CancelButton" Text="Cancel"
+                        Style="{DynamicResource BillPaymentButtonStyle}"
+                        AutomationId="CancelButton">
+                    <Button.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            EventName="Clicked"
+                            Command="{Binding CancelledCommand}"
+                            BindingContext="{Binding Source={x:Reference BillPaymentFailed}, Path=BindingContext}"/>
+                    </Button.Behaviors>
+                </Button>
+
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

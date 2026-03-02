@@ -6,34 +6,49 @@
              x:Class="TransactionProcessor.Mobile.Pages.Transactions.BillPayment.BillPaymentGetMeterPage"
              Shell.NavBarIsVisible="False"
              x:Name="BillPaymentGetMeter">
-    <ScrollView>
-        <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-            <Frame Style="{DynamicResource MainFrame}">
-                <VerticalStackLayout Spacing="10">
-                    <Entry x:Name="MeterNumberEntry"
-               Placeholder="Meter Number"
-               AutomationId="MeterNumberEntry"
-               Style="{DynamicResource CustomerAccountNumberEntryStyle}"
-               Text="{Binding MeterNumber}"
-               Keyboard="Numeric">
-                    </Entry>
+    <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
+        <VerticalStackLayout Spacing="0">
 
-                    <Button x:Name="GetMeterButton" 
-                            Text="Get Meter"
-                            Command="{Binding GetMeterCommand}"
-                            Style="{DynamicResource BillPaymentButtonStyle}"
-                            AutomationId="GetMeterButton">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding GetMeterCommand}" BindingContext="{Binding Source={x:Reference BillPaymentGetMeter}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                    <Button Text="Back" Style="{StaticResource BillPaymentButtonStyle}" Command="{Binding BackButtonCommand}"/>
-                </VerticalStackLayout>
-                
+            <!-- Header -->
+            <Frame Style="{StaticResource PageHeaderStyle}">
+                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
+                       AutomationId="{Binding Title}"/>
             </Frame>
+
+            <VerticalStackLayout Padding="16,16,16,16" Spacing="12">
+
+                <Frame Style="{StaticResource SectionCardStyle}">
+                    <VerticalStackLayout Spacing="12">
+
+                        <Label Text="Meter Number" FontSize="13"
+                               TextColor="{StaticResource labelTextColor}" FontAttributes="Bold"/>
+                        <Frame Style="{StaticResource FormEntryStyle}">
+                            <Entry x:Name="MeterNumberEntry"
+                                   Placeholder="Meter Number"
+                                   AutomationId="MeterNumberEntry"
+                                   Style="{DynamicResource CustomerAccountNumberEntryStyle}"
+                                   Text="{Binding MeterNumber}"
+                                   Keyboard="Numeric"/>
+                        </Frame>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Button x:Name="GetMeterButton" Text="Get Meter"
+                        Style="{DynamicResource BillPaymentButtonStyle}"
+                        AutomationId="GetMeterButton">
+                    <Button.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            EventName="Clicked"
+                            Command="{Binding GetMeterCommand}"
+                            BindingContext="{Binding Source={x:Reference BillPaymentGetMeter}, Path=BindingContext}"/>
+                    </Button.Behaviors>
+                </Button>
+
+                <Button Text="Back" Style="{StaticResource BillPaymentButtonStyle}"
+                        Command="{Binding BackButtonCommand}"/>
+
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

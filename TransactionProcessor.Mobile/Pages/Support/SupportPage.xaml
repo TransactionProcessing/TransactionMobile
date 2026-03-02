@@ -7,45 +7,57 @@
                                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                                Shell.NavBarIsVisible="False"
                                x:Name="Support">
-    <ScrollView>
-        <VerticalStackLayout Style="{DynamicResource Layout}">
+    <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
+        <VerticalStackLayout Spacing="0">
 
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-
-            <!--Main image-->
-            <Image Source="techsupport.jpg" VerticalOptions="Start" Aspect="AspectFit"/>
-
-
-            <Frame Style="{DynamicResource MainFrame}">
-                <VerticalStackLayout x:Name="SubLayout" Spacing="5">
-
-                    <Label Text="{Binding ApplicationName, Mode=OneTime}"
-                       HorizontalTextAlignment="Center"
-                       HorizontalOptions="Fill"/>
-
-                    <Label Text="{Binding Platform, Mode=OneTime}"
-                       VerticalOptions="Center"/>
-
-                    <Label Text="{Binding NumberTransactionsStored, Mode=OneTime}"
-                       VerticalOptions="Center"/>
-
-                    <Button Text="Upload Logs" Style="{StaticResource StandardButton}" AutomationId="UploadLogsButton">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding UploadLogsCommand}" BindingContext="{Binding Source={x:Reference Support}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                    <Button Text="View Logs" Style="{StaticResource StandardButton}" AutomationId="ViewLogsButton">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding ViewLogsCommand}" BindingContext="{Binding Source={x:Reference Support}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                    <Button Text="Back" Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}" AutomationId="BackButton"/>
-                </VerticalStackLayout>
+            <!-- Header -->
+            <Frame Style="{StaticResource PageHeaderStyle}">
+                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
+                       AutomationId="{Binding Title}"/>
             </Frame>
+
+            <!-- Support content -->
+            <VerticalStackLayout Padding="16,16,16,16" Spacing="12">
+
+                <!-- App info card -->
+                <Frame Style="{StaticResource SectionCardStyle}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="App Information" FontSize="14" FontAttributes="Bold"
+                               TextColor="{StaticResource labelTextColor}"/>
+                        <Label Text="{Binding ApplicationName, Mode=OneTime}"
+                               TextColor="{StaticResource DarkGray}" FontSize="14"/>
+                        <Label Text="{Binding Platform, Mode=OneTime}"
+                               TextColor="{StaticResource DarkGray}" FontSize="14"/>
+                        <Label Text="{Binding NumberTransactionsStored, Mode=OneTime}"
+                               TextColor="{StaticResource DarkGray}" FontSize="14"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Support actions -->
+                <Button Text="Upload Logs" Style="{StaticResource StandardButton}"
+                        AutomationId="UploadLogsButton">
+                    <Button.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            EventName="Clicked"
+                            Command="{Binding UploadLogsCommand}"
+                            BindingContext="{Binding Source={x:Reference Support}, Path=BindingContext}"/>
+                    </Button.Behaviors>
+                </Button>
+
+                <Button Text="View Logs" Style="{StaticResource StandardButton}"
+                        AutomationId="ViewLogsButton">
+                    <Button.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            EventName="Clicked"
+                            Command="{Binding ViewLogsCommand}"
+                            BindingContext="{Binding Source={x:Reference Support}, Path=BindingContext}"/>
+                    </Button.Behaviors>
+                </Button>
+
+                <Button Text="Back" Style="{StaticResource StandardButton}"
+                        Command="{Binding BackButtonCommand}" AutomationId="BackButton"/>
+
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </common:NoBackWithoutLogoutPage>

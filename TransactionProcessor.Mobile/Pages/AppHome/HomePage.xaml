@@ -4,13 +4,96 @@
                                x:Class="TransactionProcessor.Mobile.Pages.AppHome.HomePage"
                                xmlns:controls="using:TransactionProcessor.Mobile.Controls"
                                xmlns:common="using:TransactionProcessor.Mobile.Pages.Common"
-                               Shell.NavBarIsVisible="False">
-    <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
-        <controls:TitleLabel Text="Home" AutomationId="Home" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-        <Image Source="loginimage.jpg" VerticalOptions="Start" Style="{DynamicResource LoginImage}"/>
-        <Label Text="Welcome to .NET MAUI!"
-               VerticalOptions="CenterAndExpand" 
-               HorizontalOptions="CenterAndExpand" />
-        <Button Text="Exit Application" AutomationId="BackButton" Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}"/>
-    </VerticalStackLayout>
+                               Shell.NavBarIsVisible="False"
+                               x:Name="HomeView">
+    <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Header section -->
+            <Frame Style="{StaticResource PageHeaderStyle}">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Transaction Processor" Style="{StaticResource HeaderTitleStyle}"
+                           AutomationId="Home"/>
+                    <Label Text="{Binding MerchantName}" Style="{StaticResource HeaderSubtitleStyle}"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Dashboard content -->
+            <VerticalStackLayout Padding="16,16,16,16" Spacing="0">
+
+                <!-- Available balance card -->
+                <Frame Style="{StaticResource BalanceCardStyle}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Available Balance" TextColor="White" FontSize="13" Opacity="0.85"/>
+                        <Label Text="{Binding AvailableBalance}" TextColor="White"
+                               FontSize="32" FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Quick Actions label -->
+                <Label Text="Quick Actions" FontSize="16" FontAttributes="Bold"
+                       TextColor="{StaticResource labelTextColor}" Margin="4,0,0,8"/>
+
+                <!-- Quick action tiles grid (2 columns) -->
+                <Grid ColumnDefinitions="*,*" RowDefinitions="auto,auto">
+
+                    <!-- Mobile Topup tile -->
+                    <Frame Grid.Row="0" Grid.Column="0" Style="{StaticResource DashboardTileStyle}"
+                           BackgroundColor="{StaticResource mobileTopup}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding MobileTopupCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
+                            <Label Text="Mobile" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                            <Label Text="Topup" Style="{StaticResource TileLabelStyle}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Bill Payment tile -->
+                    <Frame Grid.Row="0" Grid.Column="1" Style="{StaticResource DashboardTileStyle}"
+                           BackgroundColor="{StaticResource billPayment}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BillPaymentCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
+                            <Label Text="Bill" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                            <Label Text="Payment" Style="{StaticResource TileLabelStyle}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Voucher tile -->
+                    <Frame Grid.Row="1" Grid.Column="0" Style="{StaticResource DashboardTileStyle}"
+                           BackgroundColor="{StaticResource voucher}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding VoucherCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
+                            <Label Text="Voucher" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                            <Label Text="Issue" Style="{StaticResource TileLabelStyle}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- All Transactions tile (navigates to Transactions tab) -->
+                    <Frame Grid.Row="1" Grid.Column="1" Style="{StaticResource DashboardTileStyle}"
+                           BackgroundColor="{StaticResource primary}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding AllTransactionsCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
+                            <Label Text="All" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                            <Label Text="Transactions" Style="{StaticResource TileLabelStyle}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                </Grid>
+
+                <!-- Exit button -->
+                <Button Text="Exit Application" AutomationId="BackButton"
+                        Style="{StaticResource StandardButton}"
+                        Command="{Binding BackButtonCommand}"
+                        Margin="0,20,0,0"/>
+
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
 </common:NoBackWithoutLogoutPage>

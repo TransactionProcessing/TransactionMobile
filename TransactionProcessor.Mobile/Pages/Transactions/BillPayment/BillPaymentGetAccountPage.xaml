@@ -6,33 +6,49 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              Shell.NavBarIsVisible="False"
              x:Name="BillPaymentGetAccount">
-    <ScrollView>
-        <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-            <Frame Style="{DynamicResource MainFrame}">
-                <VerticalStackLayout Spacing="10">
-                    <Entry x:Name="CustomerAccountNumberEntry"
-               Placeholder="Customer Account Number"
-               AutomationId="CustomerAccountNumberEntry"
-               Style="{DynamicResource CustomerAccountNumberEntryStyle}"
-               Text="{Binding CustomerAccountNumber}"
-               Keyboard="Numeric">
-                    </Entry>
+    <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
+        <VerticalStackLayout Spacing="0">
 
-                    <Button x:Name="GetAccountButton" 
-                            Text="Get Account"
-                            Style="{DynamicResource BillPaymentButtonStyle}"
-                            AutomationId="GetAccountButton">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding GetAccountCommand}" BindingContext="{Binding Source={x:Reference BillPaymentGetAccount}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                    <Button Text="Back" Style="{StaticResource BillPaymentButtonStyle}" Command="{Binding BackButtonCommand}"/>
-                </VerticalStackLayout>
-                
+            <!-- Header -->
+            <Frame Style="{StaticResource PageHeaderStyle}">
+                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
+                       AutomationId="{Binding Title}"/>
             </Frame>
+
+            <VerticalStackLayout Padding="16,16,16,16" Spacing="12">
+
+                <Frame Style="{StaticResource SectionCardStyle}">
+                    <VerticalStackLayout Spacing="12">
+
+                        <Label Text="Account Number" FontSize="13"
+                               TextColor="{StaticResource labelTextColor}" FontAttributes="Bold"/>
+                        <Frame Style="{StaticResource FormEntryStyle}">
+                            <Entry x:Name="CustomerAccountNumberEntry"
+                                   Placeholder="Customer Account Number"
+                                   AutomationId="CustomerAccountNumberEntry"
+                                   Style="{DynamicResource CustomerAccountNumberEntryStyle}"
+                                   Text="{Binding CustomerAccountNumber}"
+                                   Keyboard="Numeric"/>
+                        </Frame>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Button x:Name="GetAccountButton" Text="Get Account"
+                        Style="{DynamicResource BillPaymentButtonStyle}"
+                        AutomationId="GetAccountButton">
+                    <Button.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            EventName="Clicked"
+                            Command="{Binding GetAccountCommand}"
+                            BindingContext="{Binding Source={x:Reference BillPaymentGetAccount}, Path=BindingContext}"/>
+                    </Button.Behaviors>
+                </Button>
+
+                <Button Text="Back" Style="{StaticResource BillPaymentButtonStyle}"
+                        Command="{Binding BackButtonCommand}"/>
+
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

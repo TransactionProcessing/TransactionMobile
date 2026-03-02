@@ -30,6 +30,9 @@
     <Color x:Key="DarkGray">#212125</Color>
     <Color x:Key="MidGray">#CFCFD3</Color>
     <Color x:Key="LightGray">#EFEFEF</Color>
+    <Color x:Key="headerTextColor">#FFFFFF</Color>
+    <Color x:Key="cardBackgroundColor">#F8FAFF</Color>
+    <Color x:Key="successGreen">#27AE60</Color>
 
     <!-- Styles -->
     <Style TargetType="Page" ApplyToDerivedTypes="True">
@@ -204,6 +207,89 @@
         <Setter Property="CornerRadius" Value="20"></Setter>
         <Setter Property="Opacity" Value="0.9"></Setter>
         <Setter Property="BackgroundColor" Value="#f5f8fa"></Setter>
+    </Style>
+
+    <!-- Dashboard styles -->
+    <Style x:Key="PageHeaderStyle" TargetType="Frame">
+        <Setter Property="BackgroundColor" Value="{StaticResource primary}"/>
+        <Setter Property="CornerRadius" Value="0"/>
+        <Setter Property="HasShadow" Value="True"/>
+        <Setter Property="Padding" Value="20,30,20,20"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="BorderColor" Value="Transparent"/>
+    </Style>
+
+    <Style x:Key="BalanceCardStyle" TargetType="Frame">
+        <Setter Property="BackgroundColor" Value="{StaticResource successGreen}"/>
+        <Setter Property="CornerRadius" Value="16"/>
+        <Setter Property="HasShadow" Value="True"/>
+        <Setter Property="Padding" Value="20,16"/>
+        <Setter Property="Margin" Value="0,0,0,16"/>
+    </Style>
+
+    <Style x:Key="DashboardTileStyle" TargetType="Frame">
+        <Setter Property="CornerRadius" Value="16"/>
+        <Setter Property="HasShadow" Value="True"/>
+        <Setter Property="Padding" Value="12"/>
+        <Setter Property="Margin" Value="6"/>
+        <Setter Property="HeightRequest" Value="100"/>
+        <Setter Property="BorderColor" Value="Transparent"/>
+    </Style>
+
+    <Style x:Key="TileLabelStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource headerTextColor}"/>
+        <Setter Property="FontFamily" Value="OpenSansRegular"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="HorizontalTextAlignment" Value="Center"/>
+        <Setter Property="VerticalTextAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="TileIconStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource headerTextColor}"/>
+        <Setter Property="FontSize" Value="32"/>
+        <Setter Property="HorizontalTextAlignment" Value="Center"/>
+        <Setter Property="VerticalTextAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="HeaderTitleStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource headerTextColor}"/>
+        <Setter Property="FontFamily" Value="OpenSansRegular"/>
+        <Setter Property="FontSize" Value="22"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+    </Style>
+
+    <Style x:Key="HeaderSubtitleStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource headerTextColor}"/>
+        <Setter Property="FontFamily" Value="OpenSansRegular"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Opacity" Value="0.85"/>
+    </Style>
+
+    <Style x:Key="LoginFormFrameStyle" TargetType="Frame">
+        <Setter Property="BackgroundColor" Value="White"/>
+        <Setter Property="CornerRadius" Value="24"/>
+        <Setter Property="HasShadow" Value="True"/>
+        <Setter Property="Padding" Value="28,24"/>
+        <Setter Property="Margin" Value="20,0,20,20"/>
+        <Setter Property="BorderColor" Value="Transparent"/>
+    </Style>
+
+    <Style x:Key="FormEntryStyle" TargetType="Frame">
+        <Setter Property="BackgroundColor" Value="{StaticResource LightGray}"/>
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="HasShadow" Value="False"/>
+        <Setter Property="Padding" Value="12,4"/>
+        <Setter Property="Margin" Value="0,6"/>
+        <Setter Property="BorderColor" Value="{StaticResource MidGray}"/>
+    </Style>
+
+    <Style x:Key="SectionCardStyle" TargetType="Frame">
+        <Setter Property="BackgroundColor" Value="{StaticResource cardBackgroundColor}"/>
+        <Setter Property="CornerRadius" Value="16"/>
+        <Setter Property="HasShadow" Value="True"/>
+        <Setter Property="Padding" Value="16"/>
+        <Setter Property="Margin" Value="0,0,0,12"/>
+        <Setter Property="BorderColor" Value="Transparent"/>
     </Style>
 
 </ResourceDictionary>

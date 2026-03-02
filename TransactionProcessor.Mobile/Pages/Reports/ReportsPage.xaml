@@ -5,11 +5,20 @@
                                xmlns:common="clr-namespace:TransactionProcessor.Mobile.Pages.Common"
                                x:Class="TransactionProcessor.Mobile.Pages.Reports.ReportsPage"
                                Shell.NavBarIsVisible="False">
-    <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
-        <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-        <Frame Style="{DynamicResource MainFrame}">
-            <VerticalStackLayout x:Name="ReportsList" Spacing="10">
+    <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Header -->
+            <Frame Style="{StaticResource PageHeaderStyle}">
+                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
+                       AutomationId="{Binding Title}"/>
+            </Frame>
+
+            <!-- Reports list (dynamically populated) -->
+            <VerticalStackLayout Padding="16,16,16,16" Spacing="10">
+                <VerticalStackLayout x:Name="ReportsList" Spacing="10"/>
             </VerticalStackLayout>
-        </Frame>
-    </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </common:NoBackWithoutLogoutPage>

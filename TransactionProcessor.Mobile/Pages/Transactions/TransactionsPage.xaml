@@ -7,51 +7,92 @@
                                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                                Shell.NavBarIsVisible="False"
                                x:Name="Transactions">
-    <ScrollView>
-        <!-- This might be better as a flex layout if we had images-->
-        <VerticalStackLayout Style="{DynamicResource Layout}">
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-            <Frame Style="{DynamicResource MainFrame}">
-                <VerticalStackLayout Spacing="10">
+    <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
+        <VerticalStackLayout Spacing="0">
 
-                    <Button AutomationId="MobileTopupButton" x:Name="MobileTopupButton" Text="Mobile Topup" Style="{DynamicResource MobileTopupButtonStyle}">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding MobileTopupCommand}" BindingContext="{Binding Source={x:Reference Transactions}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                    <Button AutomationId="MobileWalletButton" x:Name="MobileWalletButton" Text="Mobile Wallet" Style="{DynamicResource MobileWalletButtonStyle}">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding MobileWalletCommand}" BindingContext="{Binding Source={x:Reference Transactions}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                    <Button AutomationId="BillPaymentButton" x:Name="BillPaymentButton" Text="Bill Payment" Style="{DynamicResource BillPaymentButtonStyle}">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding BillPaymentCommand}" BindingContext="{Binding Source={x:Reference Transactions}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                    <Button AutomationId="VoucherButton" x:Name="VoucherButton" Text="Voucher" Style="{DynamicResource VoucherButtonStyle}">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding VoucherCommand}" BindingContext="{Binding Source={x:Reference Transactions}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                    <Button AutomationId="AdminButton" x:Name="AdminButton" Text="Admin" Style="{DynamicResource AdminButtonStyle}">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding AdminCommand}" BindingContext="{Binding Source={x:Reference Transactions}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                    <Button Text="Back" AutomationId="BackButton"  Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}"/>
-                </VerticalStackLayout>
+            <!-- Header -->
+            <Frame Style="{StaticResource PageHeaderStyle}">
+                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
+                       AutomationId="{Binding Title}"/>
             </Frame>
+
+            <!-- Transaction type grid -->
+            <VerticalStackLayout Padding="16,16,16,16" Spacing="0">
+
+                <Label Text="Select a transaction type" FontSize="14"
+                       TextColor="{StaticResource labelTextColor}" Margin="4,0,0,12"/>
+
+                <!-- 2-column grid of transaction type cards -->
+                <Grid ColumnDefinitions="*,*" RowDefinitions="auto,auto,auto">
+
+                    <!-- Mobile Topup -->
+                    <Frame Grid.Row="0" Grid.Column="0" Style="{StaticResource DashboardTileStyle}"
+                           BackgroundColor="{StaticResource mobileTopup}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding MobileTopupCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
+                            <Label Text="Mobile" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                            <Label Text="Topup" Style="{StaticResource TileLabelStyle}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Mobile Wallet -->
+                    <Frame Grid.Row="0" Grid.Column="1" Style="{StaticResource DashboardTileStyle}"
+                           BackgroundColor="{StaticResource mobileWallet}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding MobileWalletCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
+                            <Label Text="Mobile" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                            <Label Text="Wallet" Style="{StaticResource TileLabelStyle}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Bill Payment -->
+                    <Frame Grid.Row="1" Grid.Column="0" Style="{StaticResource DashboardTileStyle}"
+                           BackgroundColor="{StaticResource billPayment}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BillPaymentCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
+                            <Label Text="Bill" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                            <Label Text="Payment" Style="{StaticResource TileLabelStyle}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Voucher -->
+                    <Frame Grid.Row="1" Grid.Column="1" Style="{StaticResource DashboardTileStyle}"
+                           BackgroundColor="{StaticResource voucher}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding VoucherCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
+                            <Label Text="Voucher" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                            <Label Text="Issue" Style="{StaticResource TileLabelStyle}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Admin (full width) -->
+                    <Frame Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                           Style="{StaticResource DashboardTileStyle}"
+                           BackgroundColor="{StaticResource admin}" HeightRequest="64">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding AdminCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="Admin" Style="{StaticResource TileLabelStyle}"
+                               FontAttributes="Bold" FontSize="16"
+                               VerticalOptions="Center" HorizontalOptions="Center"/>
+                    </Frame>
+
+                </Grid>
+
+                <Button Text="Back" AutomationId="BackButton"
+                        Style="{StaticResource StandardButton}"
+                        Command="{Binding BackButtonCommand}"
+                        Margin="0,12,0,0"/>
+
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </common:NoBackWithoutLogoutPage>
