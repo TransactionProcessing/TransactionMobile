@@ -14,7 +14,7 @@
             </Frame>
 
             <VerticalStackLayout Padding="16,16,16,16" Spacing="10">
-                <VerticalStackLayout x:Name="ProductsList" Spacing="10"/>
+                <Grid x:Name="ProductsList" ColumnDefinitions="*,*" ColumnSpacing="10" RowSpacing="10"/>
             </VerticalStackLayout>
 
         </VerticalStackLayout>

@@ -25,8 +25,10 @@ public partial class MyAccountPage : NoBackWithoutLogoutPage
 
     private void LoadOptions(MyAccountPageViewModel viewModel)
     {
-        this.MyAccountOptionsList.Clear();
+        this.MyAccountOptionsList.Children.Clear();
+        this.MyAccountOptionsList.RowDefinitions.Clear();
 
+        var tiles = new List<Frame>();
         Int32 rowCount = 0;
         foreach (ListViewItem modelOption in viewModel.MyAccountOptions)
         {
@@ -37,8 +39,24 @@ public partial class MyAccountPage : NoBackWithoutLogoutPage
                     new ItemSelected<ListViewItem> { SelectedItem = modelOption, SelectedItemIndex = rowCount }))
             };
             tile.GestureRecognizers.Add(tap);
-            this.MyAccountOptionsList.Add(tile);
+            tiles.Add(tile);
             rowCount++;
+        }
+
+        int row = 0;
+        for (int i = 0; i < tiles.Count; i += 2)
+        {
+            this.MyAccountOptionsList.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            Grid.SetRow(tiles[i], row);
+            Grid.SetColumn(tiles[i], 0);
+            this.MyAccountOptionsList.Children.Add(tiles[i]);
+            if (i + 1 < tiles.Count)
+            {
+                Grid.SetRow(tiles[i + 1], row);
+                Grid.SetColumn(tiles[i + 1], 1);
+                this.MyAccountOptionsList.Children.Add(tiles[i + 1]);
+            }
+            row++;
         }
     }
 
@@ -46,10 +64,10 @@ public partial class MyAccountPage : NoBackWithoutLogoutPage
     {
         return new Frame
         {
-            CornerRadius = 14,
+            CornerRadius = 16,
             HasShadow = true,
-            Padding = new Thickness(14),
-            HeightRequest = 56,
+            Padding = new Thickness(12),
+            HeightRequest = 100,
             BackgroundColor = backgroundColor,
             BorderColor = Colors.Transparent,
             HorizontalOptions = LayoutOptions.FillAndExpand,

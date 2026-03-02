@@ -25,7 +25,9 @@ this.InitializeComponent();
     private void LoadOperators(BillPaymentSelectOperatorPageViewModel viewModel)
     {
         this.OperatorList.Children.Clear();
+        this.OperatorList.RowDefinitions.Clear();
 
+        var tiles = new List<Frame>();
         Int32 rowCount = 0;
         foreach (ContractOperatorModel modelOperator in viewModel.Operators)
         {
@@ -36,21 +38,42 @@ this.InitializeComponent();
                     new ItemSelected<ContractOperatorModel> { SelectedItem = modelOperator, SelectedItemIndex = rowCount }))
             };
             tile.GestureRecognizers.Add(tap);
-            this.OperatorList.Add(tile);
+            tiles.Add(tile);
             rowCount++;
         }
 
-        this.OperatorList.Add(this.CreateBackTile(viewModel.BackButtonCommand));
+        int row = 0;
+        for (int i = 0; i < tiles.Count; i += 2)
+        {
+            this.OperatorList.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            Grid.SetRow(tiles[i], row);
+            Grid.SetColumn(tiles[i], 0);
+            this.OperatorList.Children.Add(tiles[i]);
+            if (i + 1 < tiles.Count)
+            {
+                Grid.SetRow(tiles[i + 1], row);
+                Grid.SetColumn(tiles[i + 1], 1);
+                this.OperatorList.Children.Add(tiles[i + 1]);
+            }
+            row++;
+        }
+
+        Frame backTile = this.CreateBackTile(viewModel.BackButtonCommand);
+        this.OperatorList.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        Grid.SetRow(backTile, row);
+        Grid.SetColumn(backTile, 0);
+        Grid.SetColumnSpan(backTile, 2);
+        this.OperatorList.Children.Add(backTile);
     }
 
     private Frame CreateTile(string text, Color backgroundColor, string automationId)
     {
         return new Frame
         {
-            CornerRadius = 14,
+            CornerRadius = 16,
             HasShadow = true,
-            Padding = new Thickness(14),
-            HeightRequest = 56,
+            Padding = new Thickness(12),
+            HeightRequest = 100,
             BackgroundColor = backgroundColor,
             BorderColor = Colors.Transparent,
             HorizontalOptions = LayoutOptions.FillAndExpand,

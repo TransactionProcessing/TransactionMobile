@@ -14,9 +14,9 @@
                        AutomationId="{Binding Title}"/>
             </Frame>
 
-            <!-- Reports list (dynamically populated) -->
+            <!-- Reports grid (dynamically populated) -->
             <VerticalStackLayout Padding="16,16,16,16" Spacing="10">
-                <VerticalStackLayout x:Name="ReportsList" Spacing="10"/>
+                <Grid x:Name="ReportsList" ColumnDefinitions="*,*" ColumnSpacing="10" RowSpacing="10"/>
             </VerticalStackLayout>
 
         </VerticalStackLayout>

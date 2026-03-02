@@ -31,8 +31,10 @@ public partial class MobileTopupSelectProductPage : ContentPage
     }
 
     private void LoadProducts(MobileTopupSelectProductPageViewModel viewModel) {
-        this.ProductsList.Clear();
+        this.ProductsList.Children.Clear();
+        this.ProductsList.RowDefinitions.Clear();
 
+        var tiles = new List<Frame>();
         Int32 rowCount = 0;
         foreach (ContractProductModel modelProduct in viewModel.Products) {
             Frame tile = this.CreateTile(modelProduct.ProductDisplayText, (Color)Application.Current.Resources["mobileTopup"], modelProduct.ProductDisplayText);
@@ -42,21 +44,42 @@ public partial class MobileTopupSelectProductPage : ContentPage
                     new ItemSelected<ContractProductModel> { SelectedItem = modelProduct, SelectedItemIndex = rowCount }))
             };
             tile.GestureRecognizers.Add(tap);
-            this.ProductsList.Add(tile);
+            tiles.Add(tile);
             rowCount++;
         }
 
-        this.ProductsList.Add(this.CreateBackTile(viewModel.BackButtonCommand));
+        int row = 0;
+        for (int i = 0; i < tiles.Count; i += 2)
+        {
+            this.ProductsList.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            Grid.SetRow(tiles[i], row);
+            Grid.SetColumn(tiles[i], 0);
+            this.ProductsList.Children.Add(tiles[i]);
+            if (i + 1 < tiles.Count)
+            {
+                Grid.SetRow(tiles[i + 1], row);
+                Grid.SetColumn(tiles[i + 1], 1);
+                this.ProductsList.Children.Add(tiles[i + 1]);
+            }
+            row++;
+        }
+
+        Frame backTile = this.CreateBackTile(viewModel.BackButtonCommand);
+        this.ProductsList.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        Grid.SetRow(backTile, row);
+        Grid.SetColumn(backTile, 0);
+        Grid.SetColumnSpan(backTile, 2);
+        this.ProductsList.Children.Add(backTile);
     }
 
     private Frame CreateTile(string text, Color backgroundColor, string automationId)
     {
         return new Frame
         {
-            CornerRadius = 14,
+            CornerRadius = 16,
             HasShadow = true,
-            Padding = new Thickness(14),
-            HeightRequest = 56,
+            Padding = new Thickness(12),
+            HeightRequest = 100,
             BackgroundColor = backgroundColor,
             BorderColor = Colors.Transparent,
             HorizontalOptions = LayoutOptions.FillAndExpand,

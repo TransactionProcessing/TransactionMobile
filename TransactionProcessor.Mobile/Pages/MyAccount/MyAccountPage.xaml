@@ -32,8 +32,8 @@
                     </Grid>
                 </Frame>
 
-                <!-- Options list (dynamically populated) -->
-                <VerticalStackLayout x:Name="MyAccountOptionsList" Spacing="10"/>
+                <!-- Options grid (dynamically populated) -->
+                <Grid x:Name="MyAccountOptionsList" ColumnDefinitions="*,*" ColumnSpacing="10" RowSpacing="10"/>
 
                 <Frame Style="{StaticResource ActionTileStyle}"
                        BackgroundColor="{StaticResource MidGray}"
