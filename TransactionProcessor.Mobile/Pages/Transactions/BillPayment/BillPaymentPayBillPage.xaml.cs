@@ -16,7 +16,6 @@ public partial class BillPaymentPayBillPage : ContentPage
                                                   };
         vm.OnPaymentAmountEntryCompleted = () =>
                                                   {
-                                                      this.MakePaymentButton.Focus();
                                                   };
     }
     

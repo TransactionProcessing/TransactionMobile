@@ -27,7 +27,6 @@ public partial class MobileTopupPerformTopupPage : ContentPage
                                          };
         vm.OnCustomerEmailAddressEntryCompleted = () =>
                                          {
-                                             this.PerformTopupButton.Focus();
                                          };
     }
     

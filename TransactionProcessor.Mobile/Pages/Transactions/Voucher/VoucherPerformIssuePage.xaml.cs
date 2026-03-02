@@ -38,7 +38,6 @@ public partial class VoucherPerformIssuePage : ContentPage
                                               };
         vm.OnCustomerEmailAddressEntryCompleted = () =>
                                          {
-                                             this.IssueVoucherButton.Focus();
                                          };
     }
     
