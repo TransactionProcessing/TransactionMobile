@@ -5,23 +5,35 @@
              xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
              xmlns:liveChartsCore="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
              Shell.NavBarIsVisible="False">
+    <Grid RowDefinitions="auto,*,auto" BackgroundColor="{StaticResource pageBackgroundColor}">
 
-    <ScrollView>
-        <VerticalStackLayout>
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+        <!-- Header -->
+        <Frame Grid.Row="0" Style="{StaticResource PageHeaderStyle}">
+            <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
+                   AutomationId="{Binding Title}"/>
+        </Frame>
 
-            <liveChartsCore:CartesianChart x:Name="Chart"
-                                           Series="{Binding Series}" 
-                                           YAxes="{Binding YAxes}"
-                                           XAxes="{Binding XAxes}"
-                                           TooltipFindingStrategy="{Binding TooltipFindingStrategy}"
-                                           TooltipPosition="{Binding TooltipPosition}"
-                                           HeightRequest="200" HorizontalOptions="FillAndExpand">
-            </liveChartsCore:CartesianChart>
-
-            <VerticalStackLayout Style="{DynamicResource Layout}">
-            <Button Text="Back" AutomationId="BackButton" Style="{StaticResource ReportsButtonStyle}" Command="{Binding BackButtonCommand}"/>
+        <!-- Chart -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16,16,16,0">
+                <Frame Style="{StaticResource SectionCardStyle}" Padding="8">
+                    <liveChartsCore:CartesianChart x:Name="Chart"
+                                                   Series="{Binding Series}"
+                                                   YAxes="{Binding YAxes}"
+                                                   XAxes="{Binding XAxes}"
+                                                   TooltipFindingStrategy="{Binding TooltipFindingStrategy}"
+                                                   TooltipPosition="{Binding TooltipPosition}"
+                                                   HeightRequest="300"
+                                                   HorizontalOptions="FillAndExpand"/>
+                </Frame>
             </VerticalStackLayout>
-        </VerticalStackLayout>
-    </ScrollView>
+        </ScrollView>
+
+        <!-- Back button -->
+        <Button Grid.Row="2" Text="Back" AutomationId="BackButton"
+                Style="{StaticResource ReportsButtonStyle}"
+                Command="{Binding BackButtonCommand}"
+                Margin="16,8"/>
+
+    </Grid>
 </ContentPage>

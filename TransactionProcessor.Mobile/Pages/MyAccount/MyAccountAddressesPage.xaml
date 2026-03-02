@@ -4,42 +4,70 @@
              x:Class="TransactionProcessor.Mobile.Pages.MyAccount.MyAccountAddressesPage"
              xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
              Shell.NavBarIsVisible="False">
-    <ScrollView>
-        <VerticalStackLayout Style="{DynamicResource Layout}">
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+    <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
+        <VerticalStackLayout Spacing="0">
 
-            <Frame Style="{DynamicResource MainFrame}">
-                <VerticalStackLayout x:Name="SubLayout">
-                    <Label Text="Primary Address" HorizontalTextAlignment="Center"
-                       HorizontalOptions="Fill" FontAttributes="Bold" FontSize="20"
-                       Margin="10,0,0,10" AutomationId="PrimaryAddressLabel"/>
-
-                    <Label Text="{Binding Address.AddressLine1}"
-                       HorizontalTextAlignment="Start"
-                       HorizontalOptions="Fill" AutomationId="AddressLine1Label"/>
-                    <Label Text="{Binding Address.AddressLine2}" x:Name="AddressLine2"
-               HorizontalTextAlignment="Start"
-               HorizontalOptions="Fill"  AutomationId="AddressLine2Label"/>
-                    <Label Text="{Binding Address.AddressLine3}"  x:Name="AddressLine3"
-               HorizontalTextAlignment="Start"
-               HorizontalOptions="Fill" AutomationId="AddressLine3Label"/>
-                    <Label Text="{Binding Address.AddressLine4}"  x:Name="AddressLine4"
-               HorizontalTextAlignment="Start"
-               HorizontalOptions="Fill" AutomationId="AddressLine4Label"/>
-                    <Label Text="{Binding Address.PostalCode}"
-               HorizontalTextAlignment="Start"
-               HorizontalOptions="Fill"  AutomationId="AddressPostCodeLabel"/>
-                    <Label Text="{Binding Address.Region}"
-               HorizontalTextAlignment="Start"
-               HorizontalOptions="Fill"  AutomationId="AddressRegionLabel"/>
-                    <Label Text="{Binding Address.Town}"
-               HorizontalTextAlignment="Start"
-               HorizontalOptions="Fill" AutomationId="AddressTownLabel"/>
-                </VerticalStackLayout>
+            <!-- Header -->
+            <Frame Style="{StaticResource PageHeaderStyle}">
+                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
+                       AutomationId="{Binding Title}"/>
             </Frame>
-            <Button Text="Edit Address" Style="{StaticResource MyAccountButtonStyle}" 
-                Margin="10,0,10,0" AutomationId="EditAddressButton"/>
-            <Button Margin="10,0,10,0" Text="Back" AutomationId="BackButton" Style="{StaticResource MyAccountButtonStyle}" Command="{Binding BackButtonCommand}"/>
+
+            <VerticalStackLayout Padding="16,16,16,16" Spacing="12">
+
+                <!-- Primary Address card -->
+                <Frame Style="{StaticResource SectionCardStyle}">
+                    <VerticalStackLayout x:Name="SubLayout" Spacing="6">
+
+                        <Label Text="Primary Address" FontSize="16" FontAttributes="Bold"
+                               TextColor="{StaticResource labelTextColor}" Margin="0,0,0,8"
+                               AutomationId="PrimaryAddressLabel"/>
+
+                        <Label Text="{Binding Address.AddressLine1}"
+                               TextColor="{StaticResource DarkGray}" FontSize="14"
+                               AutomationId="AddressLine1Label"/>
+                        <Label Text="{Binding Address.AddressLine2}" x:Name="AddressLine2"
+                               TextColor="{StaticResource DarkGray}" FontSize="14"
+                               AutomationId="AddressLine2Label"/>
+                        <Label Text="{Binding Address.AddressLine3}" x:Name="AddressLine3"
+                               TextColor="{StaticResource DarkGray}" FontSize="14"
+                               AutomationId="AddressLine3Label"/>
+                        <Label Text="{Binding Address.AddressLine4}" x:Name="AddressLine4"
+                               TextColor="{StaticResource DarkGray}" FontSize="14"
+                               AutomationId="AddressLine4Label"/>
+
+                        <!-- Town / Region / PostCode row -->
+                        <Grid ColumnDefinitions="*,*,auto" Margin="0,4,0,0">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label Text="Town" FontSize="11" TextColor="{StaticResource MidGray}"/>
+                                <Label Text="{Binding Address.Town}" FontSize="14"
+                                       FontAttributes="Bold" TextColor="{StaticResource labelTextColor}"
+                                       AutomationId="AddressTownLabel"/>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                <Label Text="Region" FontSize="11" TextColor="{StaticResource MidGray}"/>
+                                <Label Text="{Binding Address.Region}" FontSize="14"
+                                       FontAttributes="Bold" TextColor="{StaticResource labelTextColor}"
+                                       AutomationId="AddressRegionLabel"/>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                <Label Text="Post Code" FontSize="11" TextColor="{StaticResource MidGray}"/>
+                                <Label Text="{Binding Address.PostalCode}" FontSize="14"
+                                       FontAttributes="Bold" TextColor="{StaticResource labelTextColor}"
+                                       AutomationId="AddressPostCodeLabel"/>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Button Text="Edit Address" Style="{StaticResource MyAccountButtonStyle}"
+                        AutomationId="EditAddressButton"/>
+                <Button Text="Back" AutomationId="BackButton"
+                        Style="{StaticResource MyAccountButtonStyle}"
+                        Command="{Binding BackButtonCommand}"/>
+
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

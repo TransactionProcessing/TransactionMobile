@@ -10,100 +10,99 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <toolkit:SelectedItemEventArgsConverter x:Key="SelectedItemEventArgsConverter" />
+            <toolkit:SelectedItemEventArgsConverter x:Key="SelectedItemEventArgsConverter"/>
         </ResourceDictionary>
 
         <DataTemplate x:Key="CardTemplate">
-            <Frame
-            Padding="0"
-            CornerRadius="20"
-            HasShadow="False"
-            x:DataType="reports1:SalesAnalysis"
-            BackgroundColor="{StaticResource LightGray}">
-                <Grid
-                            RowDefinitions="42,40,*"
-                            Padding="20">
-                    <Image
-                                Source="{Binding Icon}"
-                                WidthRequest="36"
-                                HeightRequest="36"
-                                VerticalOptions="Start"
-                                HorizontalOptions="End"/>
+            <Frame CornerRadius="16" HasShadow="True" Padding="0" Margin="0,0,0,8"
+                   BorderColor="Transparent"
+                   x:DataType="reports1:SalesAnalysis"
+                   BackgroundColor="{StaticResource cardBackgroundColor}">
+                <Grid RowDefinitions="auto,auto,auto" Padding="16,12">
 
-                    <Label Text="{Binding MainTitle}" class="LargeTitle"/>
+                    <!-- Title row with icon -->
+                    <Grid Grid.Row="0" ColumnDefinitions="*,auto">
+                        <Label Grid.Column="0" Text="{Binding MainTitle}"
+                               FontSize="16" FontAttributes="Bold"
+                               TextColor="{StaticResource labelTextColor}"/>
+                        <Image Grid.Column="1" Source="{Binding Icon}"
+                               WidthRequest="32" HeightRequest="32"
+                               VerticalOptions="Center"/>
+                    </Grid>
 
-                    <VerticalStackLayout
-                                Spacing="0"
-                                Grid.RowSpan="3" 
-                                VerticalOptions="Center">
-                        <Label Text="{Binding TodaysTitle}" class="Subhead" />
-                        <Label Text="{Binding TodaysValue}" class="Subhead" />
-                    </VerticalStackLayout>
+                    <!-- Today's value -->
+                    <Grid Grid.Row="1" ColumnDefinitions="*,auto" Margin="0,8,0,0">
+                        <Label Grid.Column="0" Text="{Binding TodaysTitle}"
+                               FontSize="12" TextColor="{StaticResource MidGray}"/>
+                        <Label Grid.Column="1" Text="{Binding TodaysValue}"
+                               FontSize="14" FontAttributes="Bold"
+                               TextColor="{StaticResource labelTextColor}"/>
+                    </Grid>
 
-                    <HorizontalStackLayout
-                            Grid.Row="2"
-                            Spacing="10"
-                            VerticalOptions="End">
-                        <Label Text="{Binding ComparisonTitle}" class="Small" VerticalOptions="Center"/>
-                        <Label Text="{Binding ComparisonValue}" class="Small" VerticalOptions="Center"/>
-                    </HorizontalStackLayout>
+                    <!-- Comparison and variance -->
+                    <Grid Grid.Row="2" ColumnDefinitions="*,auto,auto,auto" Margin="0,4,0,0">
+                        <Label Grid.Column="0" Text="{Binding ComparisonTitle}"
+                               FontSize="12" TextColor="{StaticResource MidGray}"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="{Binding ComparisonValue}"
+                               FontSize="13" TextColor="{StaticResource DarkGray}"
+                               VerticalOptions="Center" Margin="0,0,12,0"/>
+                        <Label Grid.Column="2" Text="{Binding VarianceTitle}"
+                               FontSize="12" TextColor="{StaticResource MidGray}"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="3" Text="{Binding VarianceValue}"
+                               FontSize="13" FontAttributes="Bold"
+                               TextColor="{StaticResource successGreen}"
+                               VerticalOptions="Center" Margin="4,0,0,0"/>
+                    </Grid>
 
-                    <HorizontalStackLayout
-                                Grid.Row="2"
-                                Spacing="10"
-                                HorizontalOptions="End"
-                                VerticalOptions="End">
-                        <Label Text="{Binding VarianceTitle}" class="Small" VerticalOptions="Center"/>
-                        <Label Text="{Binding VarianceValue}" class="Small" VerticalOptions="Center"/>
-                    </HorizontalStackLayout>
                 </Grid>
             </Frame>
-
-
-
         </DataTemplate>
-
     </ContentPage.Resources>
 
-    <ScrollView>
-        <VerticalStackLayout Style="{DynamicResource Layout}">
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+    <Grid RowDefinitions="auto,auto,*,auto" BackgroundColor="{StaticResource pageBackgroundColor}">
 
+        <!-- Header -->
+        <Frame Grid.Row="0" Style="{StaticResource PageHeaderStyle}">
+            <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
+                   AutomationId="{Binding Title}"/>
+        </Frame>
+
+        <!-- Date picker -->
+        <Frame Grid.Row="1" Style="{StaticResource SectionCardStyle}" Margin="16,12,16,0">
             <Picker x:Name="ComparisonDate"
                     Title="Select Date for Comparison"
                     ItemDisplayBinding="{Binding DisplayText}"
                     ItemsSource="{Binding ComparisonDates}"
-                    SelectedItem="{Binding SelectedItem}">
+                    SelectedItem="{Binding SelectedItem}"
+                    TextColor="{StaticResource labelTextColor}">
                 <Picker.Behaviors>
                     <toolkit:EventToCommandBehavior
                         EventName="SelectedIndexChanged"
                         Command="{Binding ComparisonDatePickerSelectedIndexChangedCommand}"
-                        BindingContext="{Binding Source={x:Reference SalesAnalysisPage}, Path=BindingContext}" />
+                        BindingContext="{Binding Source={x:Reference SalesAnalysisPage}, Path=BindingContext}"/>
                 </Picker.Behaviors>
             </Picker>
+        </Frame>
 
-            <ScrollView>
-                <VerticalStackLayout>
-
-                    <!-- Actual Content -->
-                    <CollectionView
-                        Margin="15"
+        <!-- Sales analysis list -->
+        <CollectionView Grid.Row="2"
+                        Margin="16,8,16,0"
                         ItemsSource="{Binding SalesAnalysisList}"
                         ItemTemplate="{StaticResource CardTemplate}">
-                        <CollectionView.ItemsLayout>
-                            <GridItemsLayout Orientation="Vertical"
-                                             Span="1"
-                                             VerticalItemSpacing="8"
-                                             HorizontalItemSpacing="8"/>
-                        </CollectionView.ItemsLayout>
-                    </CollectionView>
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="1"
+                                 VerticalItemSpacing="0"
+                                 HorizontalItemSpacing="0"/>
+            </CollectionView.ItemsLayout>
+        </CollectionView>
 
-                </VerticalStackLayout>
-            </ScrollView>
+        <!-- Back button -->
+        <Button Grid.Row="3" Text="Back" AutomationId="BackButton"
+                Style="{StaticResource ReportsButtonStyle}"
+                Command="{Binding BackButtonCommand}"
+                Margin="16,8"/>
 
-
-            <Button Text="Back" AutomationId="BackButton" Style="{StaticResource ReportsButtonStyle}" Command="{Binding BackButtonCommand}"/>
-
-        </VerticalStackLayout>
-    </ScrollView>
+    </Grid>
 </ContentPage>
