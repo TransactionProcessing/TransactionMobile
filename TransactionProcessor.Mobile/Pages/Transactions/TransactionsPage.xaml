@@ -27,7 +27,8 @@
 
                     <!-- Mobile Topup -->
                     <Frame Grid.Row="0" Grid.Column="0" Style="{StaticResource DashboardTileStyle}"
-                           BackgroundColor="{StaticResource mobileTopup}">
+                           BackgroundColor="{StaticResource mobileTopup}"
+                           AutomationId="MobileTopupButton">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding MobileTopupCommand}"/>
                         </Frame.GestureRecognizers>
@@ -39,7 +40,8 @@
 
                     <!-- Mobile Wallet -->
                     <Frame Grid.Row="0" Grid.Column="1" Style="{StaticResource DashboardTileStyle}"
-                           BackgroundColor="{StaticResource mobileWallet}">
+                           BackgroundColor="{StaticResource mobileWallet}"
+                           AutomationId="MobileWalletButton">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding MobileWalletCommand}"/>
                         </Frame.GestureRecognizers>
@@ -51,7 +53,8 @@
 
                     <!-- Bill Payment -->
                     <Frame Grid.Row="1" Grid.Column="0" Style="{StaticResource DashboardTileStyle}"
-                           BackgroundColor="{StaticResource billPayment}">
+                           BackgroundColor="{StaticResource billPayment}"
+                           AutomationId="BillPaymentButton">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding BillPaymentCommand}"/>
                         </Frame.GestureRecognizers>
@@ -63,7 +66,8 @@
 
                     <!-- Voucher -->
                     <Frame Grid.Row="1" Grid.Column="1" Style="{StaticResource DashboardTileStyle}"
-                           BackgroundColor="{StaticResource voucher}">
+                           BackgroundColor="{StaticResource voucher}"
+                           AutomationId="VoucherButton">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding VoucherCommand}"/>
                         </Frame.GestureRecognizers>
@@ -76,7 +80,8 @@
                     <!-- Admin (full width) -->
                     <Frame Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                            Style="{StaticResource DashboardTileStyle}"
-                           BackgroundColor="{StaticResource admin}" HeightRequest="64">
+                           BackgroundColor="{StaticResource admin}" HeightRequest="64"
+                           AutomationId="AdminButton">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding AdminCommand}"/>
                         </Frame.GestureRecognizers>

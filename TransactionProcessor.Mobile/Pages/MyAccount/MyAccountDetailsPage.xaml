@@ -73,6 +73,12 @@
                 </Frame>
 
                 <Frame Style="{StaticResource ActionTileStyle}"
+                       BackgroundColor="{StaticResource profile}"
+                       AutomationId="EditDetailsButton">
+                    <Label Text="Edit Details" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                </Frame>
+
+                <Frame Style="{StaticResource ActionTileStyle}"
                        BackgroundColor="{StaticResource MidGray}"
                        AutomationId="BackButton">
                     <Frame.GestureRecognizers>
