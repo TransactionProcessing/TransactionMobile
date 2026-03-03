@@ -61,10 +61,10 @@
         </DataTemplate>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="auto,auto,*,auto" BackgroundColor="{StaticResource pageBackgroundColor}">
+    <Grid AutomationId="SalesAnalysis" RowDefinitions="auto,auto,*,auto" BackgroundColor="{StaticResource pageBackgroundColor}">
 
         <!-- Header -->
-        <Frame Grid.Row="0" Style="{StaticResource PageHeaderStyle}" AutomationId="{Binding Title}">
+        <Frame Grid.Row="0" Style="{StaticResource PageHeaderStyle}">
             <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"/>
         </Frame>
 
