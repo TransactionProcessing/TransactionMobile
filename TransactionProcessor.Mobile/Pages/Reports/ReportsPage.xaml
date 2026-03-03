@@ -9,9 +9,8 @@
         <VerticalStackLayout Spacing="0">
 
             <!-- Header -->
-            <Frame Style="{StaticResource PageHeaderStyle}">
-                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
-                       AutomationId="{Binding Title}"/>
+            <Frame Style="{StaticResource PageHeaderStyle}" AutomationId="{Binding Title}">
+                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"/>
             </Frame>
 
             <!-- Reports grid (dynamically populated) -->

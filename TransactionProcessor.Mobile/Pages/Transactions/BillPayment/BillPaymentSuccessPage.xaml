@@ -10,9 +10,8 @@
         <VerticalStackLayout Spacing="0">
 
             <!-- Header -->
-            <Frame Style="{StaticResource PageHeaderStyle}" BackgroundColor="{StaticResource successGreen}">
-                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
-                       AutomationId="{Binding Title}"/>
+            <Frame Style="{StaticResource PageHeaderStyle}" BackgroundColor="{StaticResource successGreen}" AutomationId="{Binding Title}">
+                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"/>
             </Frame>
 
             <VerticalStackLayout Padding="16,24,16,16" Spacing="16">

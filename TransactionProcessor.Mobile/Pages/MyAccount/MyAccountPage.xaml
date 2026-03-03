@@ -9,10 +9,9 @@
         <VerticalStackLayout Spacing="0">
 
             <!-- Header section -->
-            <Frame Style="{StaticResource PageHeaderStyle}">
+            <Frame Style="{StaticResource PageHeaderStyle}" AutomationId="{Binding Title}">
                 <VerticalStackLayout Spacing="4">
-                    <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"
-                           AutomationId="{Binding Title}"/>
+                    <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"/>
                     <Label Text="{Binding MerchantName}" Style="{StaticResource HeaderSubtitleStyle}"/>
                 </VerticalStackLayout>
             </Frame>
