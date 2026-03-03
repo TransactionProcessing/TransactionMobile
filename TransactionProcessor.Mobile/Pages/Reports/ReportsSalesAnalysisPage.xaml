@@ -64,8 +64,8 @@
     <Grid RowDefinitions="auto,auto,*,auto" BackgroundColor="{StaticResource pageBackgroundColor}">
 
         <!-- Header -->
-        <Frame Grid.Row="0" Style="{StaticResource PageHeaderStyle}" AutomationId="SalesAnalysis">
-            <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"/>
+        <Frame Grid.Row="0" Style="{StaticResource PageHeaderStyle}">
+            <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}" AutomationId="SalesAnalysis"/>
         </Frame>
 
         <!-- Date picker -->
