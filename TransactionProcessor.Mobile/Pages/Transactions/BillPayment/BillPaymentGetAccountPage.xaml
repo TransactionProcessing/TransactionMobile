@@ -6,13 +6,12 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              Shell.NavBarIsVisible="False"
              x:Name="BillPaymentGetAccount">
-    <Grid AutomationId="GetCustomerAccount">
-        <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
+    <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
         <VerticalStackLayout Spacing="0">
 
             <!-- Header -->
             <Frame Style="{StaticResource PageHeaderStyle}">
-                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"/>
+                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}" AutomationId="GetCustomerAccount"/>
             </Frame>
 
             <VerticalStackLayout Padding="16,16,16,16" Spacing="12">
@@ -57,5 +56,4 @@
             </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
-    </Grid>
 </ContentPage>
