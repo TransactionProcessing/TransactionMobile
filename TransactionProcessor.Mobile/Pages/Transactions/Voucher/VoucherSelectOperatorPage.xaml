@@ -4,7 +4,8 @@
              x:Class="TransactionProcessor.Mobile.Pages.Transactions.Voucher.VoucherSelectOperatorPage"
              xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
              Shell.NavBarIsVisible="False">
-    <ScrollView AutomationId="SelectanOperator" BackgroundColor="{StaticResource pageBackgroundColor}">
+    <Grid AutomationId="SelectanOperator">
+        <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
         <VerticalStackLayout Spacing="0">
 
             <!-- Header -->
@@ -18,4 +19,5 @@
 
         </VerticalStackLayout>
     </ScrollView>
+    </Grid>
 </ContentPage>

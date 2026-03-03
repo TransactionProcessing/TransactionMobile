@@ -6,7 +6,8 @@
              x:Class="TransactionProcessor.Mobile.Pages.Transactions.BillPayment.BillPaymentGetMeterPage"
              Shell.NavBarIsVisible="False"
              x:Name="BillPaymentGetMeter">
-    <ScrollView AutomationId="GetMeter" BackgroundColor="{StaticResource pageBackgroundColor}">
+    <Grid AutomationId="GetMeter">
+        <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
         <VerticalStackLayout Spacing="0">
 
             <!-- Header -->
@@ -56,4 +57,5 @@
             </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
+    </Grid>
 </ContentPage>

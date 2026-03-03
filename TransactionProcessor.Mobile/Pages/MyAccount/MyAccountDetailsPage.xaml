@@ -4,7 +4,8 @@
              x:Class="TransactionProcessor.Mobile.Pages.MyAccount.MyAccountDetailsPage"
              xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
              Shell.NavBarIsVisible="False">
-    <ScrollView AutomationId="MyDetails" BackgroundColor="{StaticResource pageBackgroundColor}">
+    <Grid AutomationId="MyDetails">
+        <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
         <VerticalStackLayout Spacing="0">
 
             <!-- Header -->
@@ -89,4 +90,5 @@
             </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
+    </Grid>
 </ContentPage>

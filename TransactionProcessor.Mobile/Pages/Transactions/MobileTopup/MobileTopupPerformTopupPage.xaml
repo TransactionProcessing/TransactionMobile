@@ -6,7 +6,8 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              Shell.NavBarIsVisible="False"
              x:Name="MobileTopPerformTopup">
-    <ScrollView AutomationId="EnterTopupDetails" BackgroundColor="{StaticResource pageBackgroundColor}">
+    <Grid AutomationId="EnterTopupDetails">
+        <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
         <VerticalStackLayout Spacing="0">
 
             <!-- Header -->
@@ -95,4 +96,5 @@
             </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
+    </Grid>
 </ContentPage>

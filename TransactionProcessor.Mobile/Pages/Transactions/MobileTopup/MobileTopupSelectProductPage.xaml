@@ -4,7 +4,8 @@
              xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
              x:Class="TransactionProcessor.Mobile.Pages.Transactions.MobileTopup.MobileTopupSelectProductPage"
              Shell.NavBarIsVisible="False">
-    <ScrollView AutomationId="SelectaProduct" BackgroundColor="{StaticResource pageBackgroundColor}">
+    <Grid AutomationId="SelectaProduct">
+        <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
         <VerticalStackLayout Spacing="0">
 
             <!-- Header -->
@@ -18,4 +19,5 @@
 
         </VerticalStackLayout>
     </ScrollView>
+    </Grid>
 </ContentPage>

@@ -6,7 +6,8 @@
              x:Class="TransactionProcessor.Mobile.Pages.Transactions.MobileTopup.MobileTopupSuccessPage"
              Shell.NavBarIsVisible="False"
              x:Name="MobileTopupSuccess">
-    <ScrollView AutomationId="MobileTopupSuccessful" BackgroundColor="{StaticResource pageBackgroundColor}">
+    <Grid AutomationId="MobileTopupSuccessful">
+        <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
         <VerticalStackLayout Spacing="0">
 
             <!-- Header -->
@@ -56,4 +57,5 @@
             </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
+    </Grid>
 </ContentPage>

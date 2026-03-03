@@ -6,7 +6,8 @@
              x:Class="TransactionProcessor.Mobile.Pages.Transactions.Voucher.VoucherIssueSuccessPage"
              Shell.NavBarIsVisible="False"
              x:Name="VoucherIssueSuccess">
-    <ScrollView AutomationId="VoucherIssueSuccessful" BackgroundColor="{StaticResource pageBackgroundColor}">
+    <Grid AutomationId="VoucherIssueSuccessful">
+        <ScrollView BackgroundColor="{StaticResource pageBackgroundColor}">
         <VerticalStackLayout Spacing="0">
 
             <!-- Header -->
@@ -55,4 +56,5 @@
             </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
+    </Grid>
 </ContentPage>
