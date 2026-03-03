@@ -36,12 +36,11 @@
                 <!-- Action tiles row -->
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                     <Frame Grid.Column="0" Style="{StaticResource ActionTileStyle}"
-                           BackgroundColor="{StaticResource billPayment}"
-                           AutomationId="GetMeterButton">
+                           BackgroundColor="{StaticResource billPayment}">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding GetMeterCommand}"/>
                         </Frame.GestureRecognizers>
-                        <Label Text="Get Meter" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                        <Label Text="Get Meter" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="GetMeterButton"/>
                     </Frame>
 
                     <Frame Grid.Column="1" Style="{StaticResource ActionTileStyle}"

@@ -75,12 +75,11 @@
                 <!-- Action tiles row -->
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                     <Frame Grid.Column="0" Style="{StaticResource ActionTileStyle}"
-                           BackgroundColor="{StaticResource mobileTopup}"
-                           AutomationId="PerformTopupButton">
+                           BackgroundColor="{StaticResource mobileTopup}">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding PerformTopupCommand}"/>
                         </Frame.GestureRecognizers>
-                        <Label Text="Perform Topup" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                        <Label Text="Perform Topup" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="PerformTopupButton"/>
                     </Frame>
 
                     <Frame Grid.Column="1" Style="{StaticResource ActionTileStyle}"

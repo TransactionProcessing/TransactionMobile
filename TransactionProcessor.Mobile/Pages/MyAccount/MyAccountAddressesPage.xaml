@@ -63,12 +63,11 @@
                 <!-- Action tiles row -->
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                     <Frame Grid.Column="0" Style="{StaticResource ActionTileStyle}"
-                           BackgroundColor="{StaticResource profile}"
-                           AutomationId="EditAddressButton">
+                           BackgroundColor="{StaticResource profile}">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer/>
                         </Frame.GestureRecognizers>
-                        <Label Text="Edit Address" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                        <Label Text="Edit Address" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="EditAddressButton"/>
                     </Frame>
 
                     <Frame Grid.Column="1" Style="{StaticResource ActionTileStyle}"

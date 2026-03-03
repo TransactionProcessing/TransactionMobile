@@ -31,7 +31,7 @@ this.InitializeComponent();
         Int32 rowCount = 0;
         foreach (ContractProductModel modelProduct in viewModel.Products)
         {
-            Frame tile = this.CreateTile(modelProduct.ProductDisplayText, (Color)Application.Current.Resources["billPayment"], modelProduct.ProductDisplayText);
+            Frame tile = this.CreateTile(modelProduct.ProductDisplayText, (Color)Application.Current.Resources["billPayment"], modelProduct.ProductDisplayText.Replace(" ", ""));
             TapGestureRecognizer tap = new TapGestureRecognizer
             {
                 Command = new Command(() => viewModel.ProductSelectedCommand.Execute(
@@ -77,7 +77,6 @@ this.InitializeComponent();
             BackgroundColor = backgroundColor,
             BorderColor = Colors.Transparent,
             HorizontalOptions = LayoutOptions.FillAndExpand,
-            AutomationId = automationId,
             Content = new Label
             {
                 Text = text,
@@ -85,7 +84,8 @@ this.InitializeComponent();
                 FontAttributes = FontAttributes.Bold,
                 FontSize = 16,
                 HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.Center
+                VerticalTextAlignment = TextAlignment.Center,
+                AutomationId = automationId
             }
         };
     }

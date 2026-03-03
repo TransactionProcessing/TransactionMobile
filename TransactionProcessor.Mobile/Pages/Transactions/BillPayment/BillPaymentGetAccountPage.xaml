@@ -36,12 +36,11 @@
                 <!-- Action tiles row -->
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                     <Frame Grid.Column="0" Style="{StaticResource ActionTileStyle}"
-                           BackgroundColor="{StaticResource billPayment}"
-                           AutomationId="GetAccountButton">
+                           BackgroundColor="{StaticResource billPayment}">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding GetAccountCommand}"/>
                         </Frame.GestureRecognizers>
-                        <Label Text="Get Account" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                        <Label Text="Get Account" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="GetAccountButton"/>
                     </Frame>
 
                     <Frame Grid.Column="1" Style="{StaticResource ActionTileStyle}"

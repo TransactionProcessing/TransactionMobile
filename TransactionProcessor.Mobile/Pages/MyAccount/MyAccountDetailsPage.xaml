@@ -72,18 +72,16 @@
                 </Frame>
 
                 <Frame Style="{StaticResource ActionTileStyle}"
-                       BackgroundColor="{StaticResource profile}"
-                       AutomationId="EditDetailsButton">
-                    <Label Text="Edit Details" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                       BackgroundColor="{StaticResource profile}">
+                    <Label Text="Edit Details" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="EditDetailsButton"/>
                 </Frame>
 
                 <Frame Style="{StaticResource ActionTileStyle}"
-                       BackgroundColor="{StaticResource MidGray}"
-                       AutomationId="BackButton">
+                       BackgroundColor="{StaticResource MidGray}">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding BackButtonCommand}"/>
                     </Frame.GestureRecognizers>
-                    <Label Text="Back" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                    <Label Text="Back" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="BackButton"/>
                 </Frame>
 
             </VerticalStackLayout>

@@ -35,12 +35,11 @@
 
                 <!-- Action tile -->
                 <Frame Style="{StaticResource ActionTileStyle}"
-                       BackgroundColor="{StaticResource admin}"
-                       AutomationId="CancelButton">
+                       BackgroundColor="{StaticResource admin}">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding CancelledCommand}"/>
                     </Frame.GestureRecognizers>
-                    <Label Text="Cancel" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                    <Label Text="Cancel" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="CancelButton"/>
                 </Frame>
 
             </VerticalStackLayout>

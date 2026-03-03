@@ -100,11 +100,11 @@
         <!-- Back tile -->
         <Frame Grid.Row="3" Style="{StaticResource ActionTileStyle}"
                BackgroundColor="{StaticResource MidGray}"
-               AutomationId="BackButton" Margin="16,8">
+               Margin="16,8">
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding BackButtonCommand}"/>
             </Frame.GestureRecognizers>
-            <Label Text="Back" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+            <Label Text="Back" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="BackButton"/>
         </Frame>
 
     </Grid>

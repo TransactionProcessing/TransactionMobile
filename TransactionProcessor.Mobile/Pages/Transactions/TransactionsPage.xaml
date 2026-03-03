@@ -26,52 +26,48 @@
 
                     <!-- Mobile Topup -->
                     <Frame Grid.Row="0" Grid.Column="0" Style="{StaticResource DashboardTileStyle}"
-                           BackgroundColor="{StaticResource mobileTopup}"
-                           AutomationId="MobileTopupButton">
+                           BackgroundColor="{StaticResource mobileTopup}">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding MobileTopupCommand}"/>
                         </Frame.GestureRecognizers>
                         <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
-                            <Label Text="Mobile" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                            <Label Text="Mobile" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="MobileTopupButton"/>
                             <Label Text="Topup" Style="{StaticResource TileLabelStyle}"/>
                         </VerticalStackLayout>
                     </Frame>
 
                     <!-- Mobile Wallet -->
                     <Frame Grid.Row="0" Grid.Column="1" Style="{StaticResource DashboardTileStyle}"
-                           BackgroundColor="{StaticResource mobileWallet}"
-                           AutomationId="MobileWalletButton">
+                           BackgroundColor="{StaticResource mobileWallet}">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding MobileWalletCommand}"/>
                         </Frame.GestureRecognizers>
                         <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
-                            <Label Text="Mobile" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                            <Label Text="Mobile" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="MobileWalletButton"/>
                             <Label Text="Wallet" Style="{StaticResource TileLabelStyle}"/>
                         </VerticalStackLayout>
                     </Frame>
 
                     <!-- Bill Payment -->
                     <Frame Grid.Row="1" Grid.Column="0" Style="{StaticResource DashboardTileStyle}"
-                           BackgroundColor="{StaticResource billPayment}"
-                           AutomationId="BillPaymentButton">
+                           BackgroundColor="{StaticResource billPayment}">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding BillPaymentCommand}"/>
                         </Frame.GestureRecognizers>
                         <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
-                            <Label Text="Bill" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                            <Label Text="Bill" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="BillPaymentButton"/>
                             <Label Text="Payment" Style="{StaticResource TileLabelStyle}"/>
                         </VerticalStackLayout>
                     </Frame>
 
                     <!-- Voucher -->
                     <Frame Grid.Row="1" Grid.Column="1" Style="{StaticResource DashboardTileStyle}"
-                           BackgroundColor="{StaticResource voucher}"
-                           AutomationId="VoucherButton">
+                           BackgroundColor="{StaticResource voucher}">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding VoucherCommand}"/>
                         </Frame.GestureRecognizers>
                         <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4">
-                            <Label Text="Voucher" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                            <Label Text="Voucher" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="VoucherButton"/>
                             <Label Text="Issue" Style="{StaticResource TileLabelStyle}"/>
                         </VerticalStackLayout>
                     </Frame>
@@ -79,13 +75,12 @@
                     <!-- Admin (full width) -->
                     <Frame Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                            Style="{StaticResource DashboardTileStyle}"
-                           BackgroundColor="{StaticResource admin}" HeightRequest="64"
-                           AutomationId="AdminButton">
+                           BackgroundColor="{StaticResource admin}" HeightRequest="64">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding AdminCommand}"/>
                         </Frame.GestureRecognizers>
                         <Label Text="Admin" Style="{StaticResource TileLabelStyle}"
-                               FontAttributes="Bold" FontSize="16"
+                               FontAttributes="Bold" FontSize="16" AutomationId="AdminButton"
                                VerticalOptions="Center" HorizontalOptions="Center"/>
                     </Frame>
 
@@ -93,11 +88,11 @@
 
                 <Frame Style="{StaticResource ActionTileStyle}"
                        BackgroundColor="{StaticResource MidGray}"
-                       AutomationId="BackButton" Margin="0,12,0,0">
+                       Margin="0,12,0,0">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding BackButtonCommand}"/>
                     </Frame.GestureRecognizers>
-                    <Label Text="Back" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                    <Label Text="Back" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="BackButton"/>
                 </Frame>
 
             </VerticalStackLayout>

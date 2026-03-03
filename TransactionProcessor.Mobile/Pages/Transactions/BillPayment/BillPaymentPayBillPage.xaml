@@ -100,12 +100,11 @@
                 <!-- Action tiles row -->
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                     <Frame Grid.Column="0" Style="{StaticResource ActionTileStyle}"
-                           BackgroundColor="{StaticResource billPayment}"
-                           AutomationId="MakePaymentButton">
+                           BackgroundColor="{StaticResource billPayment}">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding MakeBillPaymentCommand}"/>
                         </Frame.GestureRecognizers>
-                        <Label Text="Make Payment" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                        <Label Text="Make Payment" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="MakePaymentButton"/>
                     </Frame>
 
                     <Frame Grid.Column="1" Style="{StaticResource ActionTileStyle}"

@@ -71,7 +71,6 @@ public partial class MyAccountPage : NoBackWithoutLogoutPage
             BackgroundColor = backgroundColor,
             BorderColor = Colors.Transparent,
             HorizontalOptions = LayoutOptions.FillAndExpand,
-            AutomationId = automationId,
             Content = new Label
             {
                 Text = text,
@@ -79,7 +78,8 @@ public partial class MyAccountPage : NoBackWithoutLogoutPage
                 FontAttributes = FontAttributes.Bold,
                 FontSize = 16,
                 HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.Center
+                VerticalTextAlignment = TextAlignment.Center,
+                AutomationId = automationId
             }
         };
     }

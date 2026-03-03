@@ -36,11 +36,11 @@
 
                 <Frame Style="{StaticResource ActionTileStyle}"
                        BackgroundColor="{StaticResource MidGray}"
-                       AutomationId="BackButton" Margin="0,8,0,0">
+                       Margin="0,8,0,0">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding BackButtonCommand}"/>
                     </Frame.GestureRecognizers>
-                    <Label Text="Back" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                    <Label Text="Back" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="BackButton"/>
                 </Frame>
 
             </VerticalStackLayout>

@@ -37,7 +37,7 @@ public partial class MobileTopupSelectProductPage : ContentPage
         var tiles = new List<Frame>();
         Int32 rowCount = 0;
         foreach (ContractProductModel modelProduct in viewModel.Products) {
-            Frame tile = this.CreateTile(modelProduct.ProductDisplayText, (Color)Application.Current.Resources["mobileTopup"], modelProduct.ProductDisplayText);
+            Frame tile = this.CreateTile(modelProduct.ProductDisplayText, (Color)Application.Current.Resources["mobileTopup"], modelProduct.ProductDisplayText.Replace(" ", ""));
             TapGestureRecognizer tap = new TapGestureRecognizer
             {
                 Command = new Command(() => viewModel.ProductSelectedCommand.Execute(
@@ -83,7 +83,6 @@ public partial class MobileTopupSelectProductPage : ContentPage
             BackgroundColor = backgroundColor,
             BorderColor = Colors.Transparent,
             HorizontalOptions = LayoutOptions.FillAndExpand,
-            AutomationId = automationId,
             Content = new Label
             {
                 Text = text,
@@ -91,7 +90,8 @@ public partial class MobileTopupSelectProductPage : ContentPage
                 FontAttributes = FontAttributes.Bold,
                 FontSize = 16,
                 HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.Center
+                VerticalTextAlignment = TextAlignment.Center,
+                AutomationId = automationId
             }
         };
     }

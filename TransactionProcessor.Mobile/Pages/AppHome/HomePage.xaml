@@ -89,12 +89,11 @@
 
                 <!-- Exit button -->
                 <Frame Style="{StaticResource ActionTileStyle}"
-                       BackgroundColor="{StaticResource MidGray}"
-                       AutomationId="BackButton">
+                       BackgroundColor="{StaticResource MidGray}">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding BackButtonCommand}"/>
                     </Frame.GestureRecognizers>
-                    <Label Text="Exit Application" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                    <Label Text="Exit Application" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="BackButton"/>
                 </Frame>
 
             </VerticalStackLayout>

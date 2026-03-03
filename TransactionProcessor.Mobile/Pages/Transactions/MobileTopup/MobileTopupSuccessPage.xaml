@@ -36,12 +36,11 @@
                 <!-- Action tiles row -->
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                     <Frame Grid.Column="0" Style="{StaticResource ActionTileStyle}"
-                           BackgroundColor="{StaticResource successGreen}"
-                           AutomationId="CompleteButton">
+                           BackgroundColor="{StaticResource successGreen}">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding CompletedCommand}"/>
                         </Frame.GestureRecognizers>
-                        <Label Text="Complete" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                        <Label Text="Complete" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="CompleteButton"/>
                     </Frame>
 
                     <Frame Grid.Column="1" Style="{StaticResource ActionTileStyle}"

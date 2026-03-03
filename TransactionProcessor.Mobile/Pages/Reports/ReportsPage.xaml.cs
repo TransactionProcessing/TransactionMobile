@@ -78,7 +78,6 @@ this.InitializeComponent();
             BackgroundColor = backgroundColor,
             BorderColor = Colors.Transparent,
             HorizontalOptions = LayoutOptions.FillAndExpand,
-            AutomationId = automationId,
             Content = new Label
             {
                 Text = text,
@@ -86,7 +85,8 @@ this.InitializeComponent();
                 FontAttributes = FontAttributes.Bold,
                 FontSize = 16,
                 HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.Center
+                VerticalTextAlignment = TextAlignment.Center,
+                AutomationId = automationId
             }
         };
     }

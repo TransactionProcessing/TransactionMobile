@@ -91,12 +91,11 @@
                 <!-- Action tiles row -->
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                     <Frame Grid.Column="0" Style="{StaticResource ActionTileStyle}"
-                           BackgroundColor="{StaticResource voucher}"
-                           AutomationId="IssueVoucherButton">
+                           BackgroundColor="{StaticResource voucher}">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding IssueVoucherCommand}"/>
                         </Frame.GestureRecognizers>
-                        <Label Text="Issue Voucher" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                        <Label Text="Issue Voucher" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="IssueVoucherButton"/>
                     </Frame>
 
                     <Frame Grid.Column="1" Style="{StaticResource ActionTileStyle}"

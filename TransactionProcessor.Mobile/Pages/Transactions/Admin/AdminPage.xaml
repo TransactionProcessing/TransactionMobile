@@ -19,12 +19,11 @@
                 <!-- Action tiles row -->
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                     <Frame Grid.Column="0" Style="{StaticResource ActionTileStyle}"
-                           BackgroundColor="{StaticResource admin}"
-                           AutomationId="ReconciliationButton">
+                           BackgroundColor="{StaticResource admin}">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding ReconciliationCommand}"/>
                         </Frame.GestureRecognizers>
-                        <Label Text="Reconciliation" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold"/>
+                        <Label Text="Reconciliation" Style="{StaticResource TileLabelStyle}" FontAttributes="Bold" AutomationId="ReconciliationButton"/>
                     </Frame>
 
                     <Frame Grid.Column="1" Style="{StaticResource ActionTileStyle}"
