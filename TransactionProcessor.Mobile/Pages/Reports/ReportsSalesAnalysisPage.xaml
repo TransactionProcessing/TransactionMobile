@@ -61,11 +61,11 @@
         </DataTemplate>
     </ContentPage.Resources>
 
-    <Grid AutomationId="SalesAnalysis" RowDefinitions="auto,auto,*,auto" BackgroundColor="{StaticResource pageBackgroundColor}">
+    <Grid RowDefinitions="auto,auto,*,auto" BackgroundColor="{StaticResource pageBackgroundColor}">
 
         <!-- Header -->
         <Frame Grid.Row="0" Style="{StaticResource PageHeaderStyle}">
-            <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"/>
+            <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}" AutomationId="SalesAnalysis"/>
         </Frame>
 
         <!-- Date picker -->

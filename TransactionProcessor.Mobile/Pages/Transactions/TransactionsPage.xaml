@@ -11,8 +11,8 @@
         <VerticalStackLayout Spacing="0">
 
             <!-- Header -->
-            <Frame Style="{StaticResource PageHeaderStyle}" AutomationId="{Binding Title}">
-                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"/>
+            <Frame Style="{StaticResource PageHeaderStyle}">
+                <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}" AutomationId="Transactions"/>
             </Frame>
 
             <!-- Transaction type grid -->

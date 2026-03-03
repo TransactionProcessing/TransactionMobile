@@ -4,11 +4,11 @@
              x:Class="TransactionProcessor.Mobile.Pages.Support.ViewLogsPage"
              xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
              Shell.NavBarIsVisible="False">
-    <Grid AutomationId="ViewLogs" RowDefinitions="auto,*,auto" BackgroundColor="{StaticResource pageBackgroundColor}">
+    <Grid RowDefinitions="auto,*,auto" BackgroundColor="{StaticResource pageBackgroundColor}">
 
         <!-- Header -->
         <Frame Grid.Row="0" Style="{StaticResource PageHeaderStyle}">
-            <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}"/>
+            <Label Text="{Binding Title}" Style="{StaticResource HeaderTitleStyle}" AutomationId="ViewLogs"/>
         </Frame>
 
         <!-- Log messages list -->
