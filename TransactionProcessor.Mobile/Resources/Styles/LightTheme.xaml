@@ -4,6 +4,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
                     x:Class="TransactionProcessor.Mobile.Resources.Styles.LightTheme">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
     <!-- Colors in use -->
     <Color x:Key="pageBackgroundColor">#FFFFFF</Color>
     <Color x:Key="textColor">#E5E9F0</Color>
