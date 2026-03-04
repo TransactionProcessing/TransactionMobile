@@ -5,7 +5,7 @@
                     x:Class="TransactionProcessor.Mobile.Resources.Styles.LightTheme">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+        <ResourceDictionary Source="Colors.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!-- Colors in use -->
