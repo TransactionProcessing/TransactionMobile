@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   Android 12+ (API 31+) splash screen overrides.
-  Extends the MAUI-generated Maui.SplashTheme with the SplashScreen API attributes:
-    • windowSplashScreenBackground     – full-screen background colour
-    • windowSplashScreenAnimatedIcon   – centred icon (108dp, 72dp safe zone)
-    • windowSplashScreenIconBackground – icon background circle colour
-    • windowSplashScreenBrandingImage  – branding shown at the bottom of the screen
+  Overrides the MAUI-generated Maui.SplashTheme using only native Android 12 framework
+  attributes (all prefixed with android:) which are available without any additional
+  library on API 31+.  The parent Theme.AppCompat.Light.NoActionBar is always available
+  from the AppCompat library already included transitively by MAUI.
+    • windowSplashScreenBackground      – full-screen background colour
+    • windowSplashScreenAnimatedIcon    – centred icon (108dp total, 72dp safe zone)
+    • windowSplashScreenIconBackground  – icon background circle colour
+    • windowSplashScreenBrandingImage   – branding shown at the bottom of the screen
 -->
 <resources>
-    <style name="Maui.SplashTheme" parent="Theme.SplashScreen">
+    <style name="Maui.SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowSplashScreenBackground">@color/colorPrimary</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_splash_icon</item>
         <item name="android:windowSplashScreenIconBackgroundColor">@color/colorPrimaryDark</item>
         <item name="android:windowSplashScreenBrandingImage">@drawable/splash_branding</item>
-        <item name="postSplashScreenTheme">@style/Maui.MainTheme.NoActionBar</item>
     </style>
 </resources>
