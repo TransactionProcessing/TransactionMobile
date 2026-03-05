@@ -1,54 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Splash screen SVG — full-screen portrait (450×900 dp reference).
-  BaseSize in the .csproj matches this viewBox so the image covers the whole
-  screen at every Android density, giving a proper branded splash experience.
+  Splash screen icon — payment-card + upward-arrow, drawn in white on a
+  transparent background.  The background colour (#4267B2) is specified
+  via the Color attribute of <MauiSplashScreen> in the .csproj so that
+  MAUI fills the entire screen with the solid colour and centres this
+  icon on top — preventing any stretching caused by aspect-ratio
+  mismatches between the SVG and the device screen.
+
+  Coordinates mirror ic_splash_icon.xml (Android 12+ windowSplashScreenAnimatedIcon)
+  so both platforms show the same visual.
 -->
-<svg viewBox="0 0 450 900" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <!-- Top-to-bottom gradient matching the LoadingPage gradient -->
-    <linearGradient id="bgGrad" gradientUnits="objectBoundingBox"
-                    x1="0.5" y1="0" x2="0.5" y2="1">
-      <stop offset="0%"   stop-color="#4267B2"/>
-      <stop offset="100%" stop-color="#2B4A8C"/>
-    </linearGradient>
-  </defs>
+<svg viewBox="0 0 108 108" xmlns="http://www.w3.org/2000/svg">
 
-  <!-- ── Full-screen gradient background ─────────────────────────────── -->
-  <rect width="450" height="900" fill="url(#bgGrad)"/>
+  <!-- Frosted-glass badge background -->
+  <path fill="rgba(255,255,255,0.18)"
+        d="M32,32 L76,32 Q84,32 84,40 L84,76 Q84,84 76,84 L32,84 Q24,84 24,76 L24,40 Q24,32 32,32 Z"/>
 
-  <!-- ── Frosted-glass rounded badge ──────────────────────────────────── -->
-  <rect x="153" y="272" width="144" height="144" rx="34" ry="34"
-        fill="white" fill-opacity="0.18"
-        stroke="white" stroke-opacity="0.55" stroke-width="2.5"/>
+  <!-- Payment card outline -->
+  <path fill="none" stroke="white" stroke-width="3.5"
+        d="M36,57 L72,57 Q75,57 75,60 L75,78 Q75,81 72,81 L36,81 Q33,81 33,78 L33,60 Q33,57 36,57 Z"/>
 
-  <!-- Payment card body -->
-  <rect x="175" y="350" width="100" height="58" rx="9" ry="9"
-        fill="none" stroke="white" stroke-width="4.5"/>
+  <!-- Magnetic stripe -->
+  <rect x="33" y="61" width="42" height="7" fill="rgba(255,255,255,0.5)"/>
 
-  <!-- Magnetic stripe across top of card -->
-  <rect x="175" y="359" width="100" height="12"
-        fill="white" fill-opacity="0.50"/>
+  <!-- Three EMV chip dots -->
+  <circle cx="43" cy="71" r="4" fill="rgba(255,255,255,0.8)"/>
+  <circle cx="54" cy="71" r="4" fill="rgba(255,255,255,0.8)"/>
+  <circle cx="65" cy="71" r="4" fill="rgba(255,255,255,0.8)"/>
 
-  <!-- Three EMV chip indicator dots -->
-  <circle cx="196" cy="389" r="5.5" fill="white" fill-opacity="0.80"/>
-  <circle cx="225" cy="389" r="5.5" fill="white" fill-opacity="0.80"/>
-  <circle cx="254" cy="389" r="5.5" fill="white" fill-opacity="0.80"/>
+  <!-- Upward arrow stem -->
+  <line x1="54" y1="52" x2="54" y2="34"
+        stroke="white" stroke-width="4" stroke-linecap="round"/>
 
-  <!-- Upward arrow above the card (transaction / send) -->
-  <line x1="225" y1="344" x2="225" y2="308"
-        stroke="white" stroke-width="5.5" stroke-linecap="round"/>
-  <polyline points="210,323 225,306 240,323"
-            fill="none" stroke="white" stroke-width="5.5"
+  <!-- Upward arrow head -->
+  <polyline points="44,44 54,33 64,44"
+            fill="none" stroke="white" stroke-width="4"
             stroke-linecap="round" stroke-linejoin="round"/>
 
-  <!-- ── App name ───────────────────────────────────────────────────── -->
-  <text x="225" y="462"
-        font-family="sans-serif" font-size="28" font-weight="700"
-        fill="white" text-anchor="middle">Transaction Processor</text>
-
-  <!-- ── Tagline ────────────────────────────────────────────────────── -->
-  <text x="225" y="494"
-        font-family="sans-serif" font-size="14"
-        fill="white" fill-opacity="0.75" text-anchor="middle">Secure Mobile Payments</text>
 </svg>
