@@ -25,58 +25,56 @@ public partial class BillPaymentSelectOperatorPage : ContentPage
     private void LoadOperators(BillPaymentSelectOperatorPageViewModel viewModel)
     {
         this.OperatorList.Children.Clear();
-        
+
         Int32 rowCount = 0;
         foreach (ContractOperatorModel modelOperator in viewModel.Operators)
         {
-            Button button = new Button
-                            {
-                                Text = modelOperator.OperatorName,
-                                HorizontalOptions = LayoutOptions.FillAndExpand,
-                                AutomationId = modelOperator.OperatorName,
-                            };
-            button.SetDynamicResource(VisualElement.StyleProperty, "BillPaymentButtonStyle");
-            
-            Binding commandParameter = new Binding { Source = new ItemSelected<ContractOperatorModel>() { SelectedItem = modelOperator, SelectedItemIndex = rowCount } };
-
-            Binding command = new Binding("OperatorSelectedCommand", source: this.viewModel);
-
-            // Create the behavior and bind it to the command
-            EventToCommandBehavior behavior = new EventToCommandBehavior
-            {
-                EventName = "Clicked"
-            };
-            behavior.SetBinding(EventToCommandBehavior.CommandProperty, command);
-            behavior.SetBinding(EventToCommandBehavior.CommandParameterProperty, commandParameter);
-
-            // Attach the behavior to the button
-            button.Behaviors.Add(behavior);
-
-            this.OperatorList.Add(button);
-
+            Frame tile = this.CreateOperatorTile(modelOperator, rowCount);
+            this.OperatorList.Children.Add(tile);
             rowCount++;
         }
-        this.OperatorList.Add(this.AddBackButton());
-        
     }
 
-    private Button AddBackButton()
+    private Frame CreateOperatorTile(ContractOperatorModel modelOperator, Int32 rowCount)
     {
-        Button button = new Button
-                        {
-                            Text = "Back",
-                            HorizontalOptions = LayoutOptions.FillAndExpand,
-                            AutomationId = "BackButton",
-                        };
-        button.SetDynamicResource(VisualElement.StyleProperty, "BillPaymentButtonStyle");
+        Frame tile = new Frame();
+        tile.SetDynamicResource(VisualElement.StyleProperty, "OperatorTileFrame");
+        tile.AutomationId = modelOperator.OperatorName;
 
-        Binding backButtonCommand = new Binding
-                                    {
-                                        Source = this.viewModel.BackButtonCommand
-                                    };
+        Image icon = new Image
+        {
+            Source = "transactionsbutton.svg",
+            HeightRequest = 36,
+            WidthRequest = 36,
+            HorizontalOptions = LayoutOptions.Center
+        };
 
-        button.SetBinding(Button.CommandProperty, backButtonCommand);
+        Label nameLabel = new Label
+        {
+            Text = modelOperator.OperatorName,
+            HorizontalTextAlignment = TextAlignment.Center,
+            HorizontalOptions = LayoutOptions.Center,
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 13
+        };
+        nameLabel.SetDynamicResource(Label.TextColorProperty, "billPayment");
 
-        return button;
+        tile.Content = new VerticalStackLayout
+        {
+            Spacing = 8,
+            HorizontalOptions = LayoutOptions.Center,
+            Children = { icon, nameLabel }
+        };
+
+        Binding commandParameter = new Binding { Source = new ItemSelected<ContractOperatorModel>() { SelectedItem = modelOperator, SelectedItemIndex = rowCount } };
+        Binding command = new Binding("OperatorSelectedCommand", source: this.viewModel);
+
+        TapGestureRecognizer tapGesture = new TapGestureRecognizer();
+        tapGesture.SetBinding(TapGestureRecognizer.CommandProperty, command);
+        tapGesture.SetBinding(TapGestureRecognizer.CommandParameterProperty, commandParameter);
+
+        tile.GestureRecognizers.Add(tapGesture);
+
+        return tile;
     }
 }

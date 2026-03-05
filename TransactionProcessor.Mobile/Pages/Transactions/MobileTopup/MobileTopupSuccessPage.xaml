@@ -1,33 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="TransactionProcessor.Mobile.Pages.Transactions.MobileTopup.MobileTopupSuccessPage"
              Shell.NavBarIsVisible="False"
+             Padding="0"
              x:Name="MobileTopupSuccess">
     <ScrollView>
-        <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center" VerticalOptions="End"
-               FontAttributes="Bold" Padding="20,0,0,20"/>
-            <Frame Style="{DynamicResource MainFrame}">
-                <VerticalStackLayout Spacing="10">
+        <VerticalStackLayout Spacing="0">
 
-                    <Image Source="paymentsuccess.png" VerticalOptions="Start" Style="{DynamicResource PaymentImage}"/>
-
-                    <!--  Payment description label -->
-                    <Label Margin="17,8"
-                           Text="Thank you for your topup. An automated payment receipt will be sent to your email entered."/>
-                    <Button x:Name="CompleteButton" Margin="0,16" Text="Complete"
-                        Style="{DynamicResource MobileTopupButtonStyle}" AutomationId="CompleteButton">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding CompletedCommand}" BindingContext="{Binding Source={x:Reference MobileTopupSuccess}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
+            <!-- Header with gradient background -->
+            <Grid HeightRequest="130">
+                <Grid.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource mobileTopup}" Offset="0.0"/>
+                        <GradientStop Color="#4a7d14" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4" Padding="20">
+                    <Label Text="{Binding Title}"
+                           AutomationId="{Binding Title}"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
                 </VerticalStackLayout>
-            </Frame>
+            </Grid>
+
+            <!-- Status card -->
+            <VerticalStackLayout Padding="20,20,20,16" Spacing="12">
+                <Frame Style="{StaticResource StatusCardFrame}">
+                    <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                        <Image Source="paymentsuccess.svg" VerticalOptions="Start" Style="{DynamicResource PaymentImage}" HorizontalOptions="Center"/>
+                        <Label Style="{StaticResource StatusMessageLabel}"
+                               Text="Thank you for your topup. An automated payment receipt will be sent to your email entered."/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Button x:Name="CompleteButton" Text="Complete"
+                        Style="{DynamicResource MobileTopupButtonStyle}" AutomationId="CompleteButton">
+                    <Button.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            EventName="Clicked"
+                            Command="{Binding CompletedCommand}" BindingContext="{Binding Source={x:Reference MobileTopupSuccess}, Path=BindingContext}" />
+                    </Button.Behaviors>
+                </Button>
+            </VerticalStackLayout>
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
