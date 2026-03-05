@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Transparent background — rounded glass badge border -->
+  <rect x="8" y="8" width="184" height="184" rx="44" ry="44"
+        fill="white" fill-opacity="0.15"
+        stroke="white" stroke-opacity="0.52" stroke-width="2.5"/>
+
+  <!-- Payment card body outline -->
+  <rect x="32" y="88" width="136" height="80" rx="11" ry="11"
+        fill="none" stroke="white" stroke-width="5.5"/>
+
+  <!-- Magnetic stripe across top of card -->
+  <rect x="32" y="101" width="136" height="15"
+        fill="white" fill-opacity="0.48"/>
+
+  <!-- Three EMV chip indicator dots -->
+  <circle cx="62"  cy="147" r="7" fill="white" fill-opacity="0.78"/>
+  <circle cx="100" cy="147" r="7" fill="white" fill-opacity="0.78"/>
+  <circle cx="138" cy="147" r="7" fill="white" fill-opacity="0.78"/>
+
+  <!-- Upward arrow above the card (transaction / send) -->
+  <line x1="100" y1="82" x2="100" y2="44"
+        stroke="white" stroke-width="7.5" stroke-linecap="round"/>
+  <polyline points="82,60 100,42 118,60"
+            fill="none" stroke="white" stroke-width="7.5"
+            stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

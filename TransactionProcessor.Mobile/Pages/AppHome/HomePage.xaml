@@ -10,7 +10,7 @@
         <VerticalStackLayout Spacing="0">
 
             <!-- Header with gradient background -->
-            <Grid HeightRequest="200">
+            <Grid HeightRequest="230">
                 <Grid.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                         <GradientStop Color="{StaticResource primary}" Offset="0.0"/>
@@ -18,7 +18,7 @@
                     </LinearGradientBrush>
                 </Grid.Background>
                 <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="6" Padding="20">
-                    <Image Source="loginimage.jpg" HeightRequest="64" WidthRequest="64" HorizontalOptions="Center"/>
+                    <Image Source="headerlogo.svg" HeightRequest="90" WidthRequest="90" HorizontalOptions="Center"/>
                     <Label Text="Transaction Processor"
                            AutomationId="Home"
                            FontSize="22"
