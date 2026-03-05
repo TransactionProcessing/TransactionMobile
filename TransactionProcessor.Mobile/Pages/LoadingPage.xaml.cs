@@ -1,4 +1,3 @@
-using Microsoft.Maui.Controls;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
 
 namespace TransactionProcessor.Mobile.Pages;
@@ -6,14 +5,15 @@ namespace TransactionProcessor.Mobile.Pages;
 public partial class LoadingPage : ContentPage {
     public LoadingPage() {
         InitializeComponent();
-
     }
+
     protected override async void OnNavigatedTo(NavigatedToEventArgs args) {
+        StatusLabel.Text = "Checking authentication…";
         if (await this.isAuthenticated()) {
             await Shell.Current.GoToAsync("///home");
         }
         else {
-            await Shell.Current.GoToAsync("login");
+            await Shell.Current.GoToAsync("///login");
         }
         base.OnNavigatedTo(args);
     }

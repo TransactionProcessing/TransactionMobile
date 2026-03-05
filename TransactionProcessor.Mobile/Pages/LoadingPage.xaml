@@ -4,15 +4,85 @@
              xmlns:behaviors="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="TransactionProcessor.Mobile.Pages.LoadingPage"
              Title="LoadingPage"
+             BackgroundColor="{StaticResource primary}"
              Shell.NavBarIsVisible="False"
-             Shell.FlyoutItemIsVisible="True">
+             Shell.TabBarIsVisible="False"
+             Shell.FlyoutBehavior="Disabled"
+             Shell.FlyoutItemIsVisible="False"
+             Padding="0">
     <ContentPage.Behaviors>
         <behaviors:StatusBarBehavior StatusBarColor="{StaticResource primary}"/>
     </ContentPage.Behaviors>
-    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
-        <ActivityIndicator Color="{StaticResource primary}"
-                           IsRunning="True" HeightRequest="50" WidthRequest="50"
-                           IsVisible="True" />
-        <Label Text="Checking authentication..." HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+    <!-- Root Grid: BoxView gradient layer + content layer stacked on top -->
+    <Grid>
+
+        <!-- Full-screen gradient background (more reliable than ContentPage.Background on Android) -->
+        <BoxView>
+            <BoxView.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="{StaticResource primary}" Offset="0.0"/>
+                    <GradientStop Color="#2B4A8C" Offset="1.0"/>
+                </LinearGradientBrush>
+            </BoxView.Background>
+        </BoxView>
+
+        <!-- Content overlaid on the gradient -->
+        <Grid RowDefinitions="*,Auto,Auto" Padding="32">
+
+            <!-- Centered branding block -->
+            <VerticalStackLayout Grid.Row="0"
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 Spacing="20">
+
+                <!-- Logo – SVG already carries its own frosted-glass badge border -->
+                <Image Source="headerlogo.svg"
+                       HeightRequest="150"
+                       WidthRequest="150"
+                       HorizontalOptions="Center"/>
+
+                <!-- App name -->
+                <Label Text="Transaction Processor"
+                       FontSize="26"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center"/>
+
+                <!-- Tagline -->
+                <Label Text="Secure Mobile Payments"
+                       FontSize="14"
+                       TextColor="White"
+                       Opacity="0.75"
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+
+            <!-- Loading indicator -->
+            <VerticalStackLayout Grid.Row="1"
+                                 HorizontalOptions="Center"
+                                 Spacing="12"
+                                 Margin="0,0,0,40">
+                <ActivityIndicator Color="White"
+                                   IsRunning="True"
+                                   HeightRequest="40"
+                                   WidthRequest="40"
+                                   HorizontalOptions="Center"/>
+                <Label x:Name="StatusLabel"
+                       Text="Loading…"
+                       TextColor="White"
+                       Opacity="0.75"
+                       FontSize="13"
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+
+            <!-- Version footer -->
+            <Label Grid.Row="2"
+                   Text="© Transaction Processor"
+                   TextColor="White"
+                   Opacity="0.45"
+                   FontSize="11"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,16"/>
+        </Grid>
+    </Grid>
 </ContentPage>
