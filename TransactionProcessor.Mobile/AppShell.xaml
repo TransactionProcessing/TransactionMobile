@@ -13,6 +13,13 @@
     Title="TransactionProcessor.Mobile">
 
     <ShellContent
+        Title="Loading"
+        ContentTemplate="{DataTemplate pages:LoadingPage}"
+        Route="loading"
+        Shell.NavBarIsVisible="False"
+        Shell.TabBarIsVisible="False"/>
+
+    <ShellContent
         Title="Login"
         ContentTemplate="{DataTemplate pages:LoginPage}"
         Route="login"/>
