@@ -1,27 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg viewBox="0 0 456 456" xmlns="http://www.w3.org/2000/svg">
-  <!-- Transparent rounded glass badge border -->
-  <rect x="128" y="128" width="200" height="200" rx="48" ry="48"
-        fill="white" fill-opacity="0.18"
-        stroke="white" stroke-opacity="0.55" stroke-width="3"/>
+<!--
+  Splash screen SVG — full-screen portrait (450×900 dp reference).
+  BaseSize in the .csproj matches this viewBox so the image covers the whole
+  screen at every Android density, giving a proper branded splash experience.
+-->
+<svg viewBox="0 0 450 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Top-to-bottom gradient matching the LoadingPage gradient -->
+    <linearGradient id="bgGrad" gradientUnits="objectBoundingBox"
+                    x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%"   stop-color="#4267B2"/>
+      <stop offset="100%" stop-color="#2B4A8C"/>
+    </linearGradient>
+  </defs>
 
-  <!-- Payment card body outline -->
-  <rect x="152" y="218" width="152" height="88" rx="12" ry="12"
-        fill="none" stroke="white" stroke-width="6"/>
+  <!-- ── Full-screen gradient background ─────────────────────────────── -->
+  <rect width="450" height="900" fill="url(#bgGrad)"/>
+
+  <!-- ── Frosted-glass rounded badge ──────────────────────────────────── -->
+  <rect x="153" y="272" width="144" height="144" rx="34" ry="34"
+        fill="white" fill-opacity="0.18"
+        stroke="white" stroke-opacity="0.55" stroke-width="2.5"/>
+
+  <!-- Payment card body -->
+  <rect x="175" y="350" width="100" height="58" rx="9" ry="9"
+        fill="none" stroke="white" stroke-width="4.5"/>
 
   <!-- Magnetic stripe across top of card -->
-  <rect x="152" y="231" width="152" height="17"
+  <rect x="175" y="359" width="100" height="12"
         fill="white" fill-opacity="0.50"/>
 
   <!-- Three EMV chip indicator dots -->
-  <circle cx="182" cy="277" r="8" fill="white" fill-opacity="0.80"/>
-  <circle cx="228" cy="277" r="8" fill="white" fill-opacity="0.80"/>
-  <circle cx="274" cy="277" r="8" fill="white" fill-opacity="0.80"/>
+  <circle cx="196" cy="389" r="5.5" fill="white" fill-opacity="0.80"/>
+  <circle cx="225" cy="389" r="5.5" fill="white" fill-opacity="0.80"/>
+  <circle cx="254" cy="389" r="5.5" fill="white" fill-opacity="0.80"/>
 
   <!-- Upward arrow above the card (transaction / send) -->
-  <line x1="228" y1="212" x2="228" y2="168"
-        stroke="white" stroke-width="8" stroke-linecap="round"/>
-  <polyline points="208,186 228,166 248,186"
-            fill="none" stroke="white" stroke-width="8"
+  <line x1="225" y1="344" x2="225" y2="308"
+        stroke="white" stroke-width="5.5" stroke-linecap="round"/>
+  <polyline points="210,323 225,306 240,323"
+            fill="none" stroke="white" stroke-width="5.5"
             stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- ── App name ───────────────────────────────────────────────────── -->
+  <text x="225" y="462"
+        font-family="sans-serif" font-size="28" font-weight="700"
+        fill="white" text-anchor="middle">Transaction Processor</text>
+
+  <!-- ── Tagline ────────────────────────────────────────────────────── -->
+  <text x="225" y="494"
+        font-family="sans-serif" font-size="14"
+        fill="white" fill-opacity="0.75" text-anchor="middle">Secure Mobile Payments</text>
 </svg>
