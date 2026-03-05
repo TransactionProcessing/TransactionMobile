@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Splash screen icon — payment-card + upward-arrow, drawn in white.
+  Sized for the Android 12+ windowSplashScreenAnimatedIcon safe zone
+  (108dp total, 72dp content inside the inner 66.7% circle).
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Frosted-glass badge background -->
+    <path
+        android:fillColor="#2DFFFFFF"
+        android:pathData="M32,32 L76,32 Q84,32 84,40 L84,76 Q84,84 76,84 L32,84 Q24,84 24,76 L24,40 Q24,32 32,32 Z"/>
+
+    <!-- Payment card outline -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3.5"
+        android:fillColor="#00000000"
+        android:pathData="M36,57 L72,57 Q75,57 75,60 L75,78 Q75,81 72,81 L36,81 Q33,81 33,78 L33,60 Q33,57 36,57 Z"/>
+
+    <!-- Magnetic stripe -->
+    <path
+        android:fillColor="#80FFFFFF"
+        android:pathData="M33,61 L75,61 L75,68 L33,68 Z"/>
+
+    <!-- Three EMV chip dots -->
+    <path
+        android:fillColor="#CCFFFFFF"
+        android:pathData="M43,71 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0"/>
+    <path
+        android:fillColor="#CCFFFFFF"
+        android:pathData="M54,71 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0"/>
+    <path
+        android:fillColor="#CCFFFFFF"
+        android:pathData="M65,71 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0"/>
+
+    <!-- Upward arrow stem -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:pathData="M54,52 L54,34"/>
+
+    <!-- Upward arrow head -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M44,44 L54,33 L64,44"/>
+
+</vector>
