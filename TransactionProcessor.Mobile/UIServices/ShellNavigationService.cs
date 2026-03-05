@@ -198,18 +198,6 @@ public class ShellNavigationService : INavigationService
         await NavigateTo("///main/transactions");
     }
 
-    public async Task GoToReports() {
-        await NavigateTo("///main/reports");
-    }
-
-    public async Task GoToMyAccount() {
-        await NavigateTo("///main/myaccount");
-    }
-
-    public async Task GoToSupport() {
-        await NavigateTo("///main/support");
-    }
-
     private async Task NavigateTo(String route) {
         try {
             Logger.LogInformation($"navigating to {route}");
