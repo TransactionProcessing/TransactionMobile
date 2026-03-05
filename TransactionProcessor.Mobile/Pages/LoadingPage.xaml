@@ -27,20 +27,11 @@
                              HorizontalOptions="Center"
                              Spacing="20">
 
-            <!-- Logo -->
-            <Border StrokeShape="RoundRectangle 28"
-                    BackgroundColor="#33FFFFFF"
-                    Stroke="#55FFFFFF"
-                    StrokeThickness="1.5"
-                    HeightRequest="120"
-                    WidthRequest="120"
-                    HorizontalOptions="Center">
-                <Image Source="headerlogo.svg"
-                       HeightRequest="72"
-                       WidthRequest="72"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"/>
-            </Border>
+            <!-- Logo – SVG already carries its own frosted-glass badge border -->
+            <Image Source="headerlogo.svg"
+                   HeightRequest="150"
+                   WidthRequest="150"
+                   HorizontalOptions="Center"/>
 
             <!-- App name -->
             <Label Text="Transaction Processor"
