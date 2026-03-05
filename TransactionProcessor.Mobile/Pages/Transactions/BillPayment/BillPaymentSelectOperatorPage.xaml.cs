@@ -38,7 +38,7 @@ public partial class BillPaymentSelectOperatorPage : ContentPage
     private Frame CreateOperatorTile(ContractOperatorModel modelOperator, Int32 rowCount)
     {
         Frame tile = new Frame();
-        tile.SetDynamicResource(VisualElement.StyleProperty, "OperatorTileFrame");
+        tile.SetDynamicResource(VisualElement.StyleProperty, "SelectionTileFrame");
         tile.AutomationId = modelOperator.OperatorName;
 
         Image icon = new Image

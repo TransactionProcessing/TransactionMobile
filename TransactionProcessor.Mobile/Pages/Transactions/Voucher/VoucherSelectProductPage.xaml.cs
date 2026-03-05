@@ -38,7 +38,7 @@ public partial class VoucherSelectProductPage : ContentPage
     private Frame CreateProductTile(ContractProductModel modelProduct, Int32 rowCount)
     {
         Frame tile = new Frame();
-        tile.SetDynamicResource(VisualElement.StyleProperty, "OperatorTileFrame");
+        tile.SetDynamicResource(VisualElement.StyleProperty, "SelectionTileFrame");
         tile.AutomationId = modelProduct.ProductDisplayText;
 
         Image icon = new Image
