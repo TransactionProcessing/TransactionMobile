@@ -63,4 +63,44 @@ public class HomePageViewModelTests
                                                It.IsAny<String>(),
                                                It.IsAny<String>()), Times.Once);
     }
+
+    [Fact]
+    public void HomePageViewModel_GoToTransactionsCommand_Execute_TransactionsPageDisplayed()
+    {
+        this.viewModel.GoToTransactionsCommand.Execute(null);
+
+        this.navigationService.Verify(n => n.GoToTransactions(), Times.Once);
+    }
+
+    [Fact]
+    public void HomePageViewModel_GoToMobileTopupCommand_Execute_MobileTopupSelectOperatorPageDisplayed()
+    {
+        this.viewModel.GoToMobileTopupCommand.Execute(null);
+
+        this.navigationService.Verify(n => n.GoToMobileTopupSelectOperatorPage(), Times.Once);
+    }
+
+    [Fact]
+    public void HomePageViewModel_GoToBillPaymentCommand_Execute_BillPaymentSelectOperatorPageDisplayed()
+    {
+        this.viewModel.GoToBillPaymentCommand.Execute(null);
+
+        this.navigationService.Verify(n => n.GoToBillPaymentSelectOperatorPage(), Times.Once);
+    }
+
+    [Fact]
+    public void HomePageViewModel_GoToVoucherCommand_Execute_VoucherSelectOperatorPageDisplayed()
+    {
+        this.viewModel.GoToVoucherCommand.Execute(null);
+
+        this.navigationService.Verify(n => n.GoToVoucherSelectOperatorPage(), Times.Once);
+    }
+
+    [Fact]
+    public void HomePageViewModel_GoToAdminCommand_Execute_AdminPageDisplayed()
+    {
+        this.viewModel.GoToAdminCommand.Execute(null);
+
+        this.navigationService.Verify(n => n.GoToAdminPage(), Times.Once);
+    }
 }

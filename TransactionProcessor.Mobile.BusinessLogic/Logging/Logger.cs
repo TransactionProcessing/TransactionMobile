@@ -58,6 +58,10 @@ public static class Logger
     /// <param name="exception">The exception.</param>
     public static void LogCritical(String message, Exception exception)
     {
+        if (Logger.LoggerObjects == null || Logger.LoggerObjects.Any() == false) {
+            Console.WriteLine($"{message}: {exception}");
+            return;
+        }
         foreach (ILogger loggerObject in Logger.LoggerObjects) {
             loggerObject.LogCritical(message, exception);
         }
@@ -70,6 +74,10 @@ public static class Logger
     /// <param name="message">The message.</param>
     public static void LogDebug(String message)
     {
+        if (Logger.LoggerObjects == null || Logger.LoggerObjects.Any() == false) {
+            Console.WriteLine(message);
+            return;
+        }
         foreach (ILogger loggerObject in Logger.LoggerObjects)
         {
             loggerObject.LogDebug(message);
@@ -82,6 +90,10 @@ public static class Logger
     /// <param name="exception">The exception.</param>
     public static void LogError(String message, Exception exception)
     {
+        if (Logger.LoggerObjects == null || Logger.LoggerObjects.Any() == false) {
+            Console.WriteLine($"{message}: {exception}");
+            return;
+        }
         foreach (ILogger loggerObject in Logger.LoggerObjects) {
             loggerObject.LogError(message, exception);
         }
@@ -109,6 +121,10 @@ public static class Logger
     /// <param name="message">The message.</param>
     public static void LogTrace(String message)
     {
+        if (Logger.LoggerObjects == null || Logger.LoggerObjects.Any() == false) {
+            Console.WriteLine(message);
+            return;
+        }
         foreach (ILogger loggerObject in Logger.LoggerObjects) {
             loggerObject.LogTrace(message);
         }
@@ -120,6 +136,10 @@ public static class Logger
     /// <param name="message">The message.</param>
     public static void LogWarning(String message)
     {
+        if (Logger.LoggerObjects == null || Logger.LoggerObjects.Any() == false) {
+            Console.WriteLine(message);
+            return;
+        }
         foreach (ILogger loggerObject in Logger.LoggerObjects)
         {
             loggerObject.LogWarning(message);

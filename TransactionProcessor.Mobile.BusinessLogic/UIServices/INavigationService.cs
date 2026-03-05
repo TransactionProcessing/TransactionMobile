@@ -65,5 +65,7 @@ public interface INavigationService
     Task GoToReportsSalesAnalysis();
     Task GoToReportsBalanceAnalysis();
 
+    Task GoToTransactions();
+
     #endregion
 }

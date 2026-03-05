@@ -194,6 +194,10 @@ public class ShellNavigationService : INavigationService
         await NavigateTo(nameof(ReportsBalanceAnalysisPage));
     }
 
+    public async Task GoToTransactions() {
+        await NavigateTo("///main/transactions");
+    }
+
     private async Task NavigateTo(String route) {
         try {
             Logger.LogInformation($"navigating to {route}");
