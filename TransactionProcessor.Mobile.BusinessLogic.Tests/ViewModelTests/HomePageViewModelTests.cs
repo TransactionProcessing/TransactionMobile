@@ -63,4 +63,36 @@ public class HomePageViewModelTests
                                                It.IsAny<String>(),
                                                It.IsAny<String>()), Times.Once);
     }
+
+    [Fact]
+    public void HomePageViewModel_GoToTransactionsCommand_Execute_TransactionsPageDisplayed()
+    {
+        this.viewModel.GoToTransactionsCommand.Execute(null);
+
+        this.navigationService.Verify(n => n.GoToTransactions(), Times.Once);
+    }
+
+    [Fact]
+    public void HomePageViewModel_GoToReportsCommand_Execute_ReportsPageDisplayed()
+    {
+        this.viewModel.GoToReportsCommand.Execute(null);
+
+        this.navigationService.Verify(n => n.GoToReports(), Times.Once);
+    }
+
+    [Fact]
+    public void HomePageViewModel_GoToMyAccountCommand_Execute_MyAccountPageDisplayed()
+    {
+        this.viewModel.GoToMyAccountCommand.Execute(null);
+
+        this.navigationService.Verify(n => n.GoToMyAccount(), Times.Once);
+    }
+
+    [Fact]
+    public void HomePageViewModel_GoToSupportCommand_Execute_SupportPageDisplayed()
+    {
+        this.viewModel.GoToSupportCommand.Execute(null);
+
+        this.navigationService.Verify(n => n.GoToSupport(), Times.Once);
+    }
 }

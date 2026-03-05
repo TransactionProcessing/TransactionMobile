@@ -4,13 +4,117 @@
                                x:Class="TransactionProcessor.Mobile.Pages.AppHome.HomePage"
                                xmlns:controls="using:TransactionProcessor.Mobile.Controls"
                                xmlns:common="using:TransactionProcessor.Mobile.Pages.Common"
-                               Shell.NavBarIsVisible="False">
-    <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
-        <controls:TitleLabel Text="Home" AutomationId="Home" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-        <Image Source="loginimage.jpg" VerticalOptions="Start" Style="{DynamicResource LoginImage}"/>
-        <Label Text="Welcome to .NET MAUI!"
-               VerticalOptions="CenterAndExpand" 
-               HorizontalOptions="CenterAndExpand" />
-        <Button Text="Exit Application" AutomationId="BackButton" Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}"/>
-    </VerticalStackLayout>
+                               Shell.NavBarIsVisible="False"
+                               Padding="0">
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Header with gradient background -->
+            <Grid HeightRequest="200">
+                <Grid.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource primary}" Offset="0.0"/>
+                        <GradientStop Color="#2B4A8C" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="6" Padding="20">
+                    <Image Source="loginimage.jpg" HeightRequest="64" WidthRequest="64" HorizontalOptions="Center"/>
+                    <Label Text="Transaction Processor"
+                           AutomationId="Home"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Welcome back"
+                           FontSize="14"
+                           TextColor="White"
+                           Opacity="0.85"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <!-- Quick Actions section -->
+            <VerticalStackLayout Padding="20,24,20,16" Spacing="16">
+                <Label Text="Quick Actions"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource labelTextColor}"/>
+
+                <Grid ColumnDefinitions="*,*"
+                      RowDefinitions="Auto,Auto"
+                      ColumnSpacing="12"
+                      RowSpacing="12">
+
+                    <!-- Transactions card -->
+                    <Frame Grid.Row="0" Grid.Column="0" Style="{StaticResource HomeCardFrame}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoToTransactionsCommand}" AutomationId="TransactionsCard"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                            <Image Source="transactionsbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Label Text="Transactions"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource transactions}"
+                                   HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Reports card -->
+                    <Frame Grid.Row="0" Grid.Column="1" Style="{StaticResource HomeCardFrame}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoToReportsCommand}" AutomationId="ReportsCard"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                            <Image Source="reportbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Label Text="Reports"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource reports}"
+                                   HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- My Account card -->
+                    <Frame Grid.Row="1" Grid.Column="0" Style="{StaticResource HomeCardFrame}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoToMyAccountCommand}" AutomationId="MyAccountCard"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                            <Image Source="profilebutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Label Text="My Account"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource profile}"
+                                   HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Support card -->
+                    <Frame Grid.Row="1" Grid.Column="1" Style="{StaticResource HomeCardFrame}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoToSupportCommand}" AutomationId="SupportCard"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                            <Image Source="supportbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Label Text="Support"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource support}"
+                                   HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                </Grid>
+            </VerticalStackLayout>
+
+            <!-- Log Out button -->
+            <Button Text="Log Out"
+                    AutomationId="BackButton"
+                    Style="{StaticResource StandardButton}"
+                    Command="{Binding BackButtonCommand}"
+                    Margin="20,8,20,32"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </common:NoBackWithoutLogoutPage>
