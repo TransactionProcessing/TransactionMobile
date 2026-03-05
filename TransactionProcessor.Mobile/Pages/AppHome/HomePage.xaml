@@ -112,6 +112,7 @@
                         AutomationId="AllTransactionsButton"
                         Style="{StaticResource StandardButton}"
                         Command="{Binding GoToTransactionsCommand}"/>
+
             </VerticalStackLayout>
 
             <!-- Log Out button -->
