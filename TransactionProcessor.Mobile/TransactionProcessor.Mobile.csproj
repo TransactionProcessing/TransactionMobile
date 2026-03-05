@@ -148,8 +148,8 @@
 		<!--<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />-->
 		<PackageReference Include="ClientProxyBase" Version="2025.12.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.11" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="10.0.11" />
+		<!--<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.11" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="10.0.11" />-->
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.1" />
 		<PackageReference Include="banditoth.MAUI.DeviceId" Version="1.0.2" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="13.0.0" />
