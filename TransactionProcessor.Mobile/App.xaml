@@ -4,12 +4,11 @@
              xmlns:local="clr-namespace:TransactionProcessor.Mobile"
              x:Class="TransactionProcessor.Mobile.App">
     <Application.Resources>
-        <!--<ResourceDictionary>
+        <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
-                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+                <ResourceDictionary Source="Resources/Styles/LightTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>-->
-        <ResourceDictionary Source="Resources/Styles/LightTheme.xaml"/>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
