@@ -16,13 +16,13 @@ public class HomePageViewModel : ExtendedBaseViewModel
                              INavigationParameterService navigationParameterService) :base(applicationCache,dialogService, navigationService, deviceService,navigationParameterService)
     {
         this.GoToTransactionsCommand = new AsyncCommand(async () => await this.NavigationService.GoToTransactions());
-        this.GoToReportsCommand = new AsyncCommand(async () => await this.NavigationService.GoToReports());
-        this.GoToMyAccountCommand = new AsyncCommand(async () => await this.NavigationService.GoToMyAccount());
-        this.GoToSupportCommand = new AsyncCommand(async () => await this.NavigationService.GoToSupport());
+        this.MobileTopupCommand = new AsyncCommand(async () => await this.NavigationService.GoToMobileTopupSelectOperatorPage());
+        this.BillPaymentCommand = new AsyncCommand(async () => await this.NavigationService.GoToBillPaymentSelectOperatorPage());
+        this.VoucherCommand = new AsyncCommand(async () => await this.NavigationService.GoToVoucherSelectOperatorPage());
     }
 
     public ICommand GoToTransactionsCommand { get; }
-    public ICommand GoToReportsCommand { get; }
-    public ICommand GoToMyAccountCommand { get; }
-    public ICommand GoToSupportCommand { get; }
+    public ICommand MobileTopupCommand { get; }
+    public ICommand BillPaymentCommand { get; }
+    public ICommand VoucherCommand { get; }
 }
