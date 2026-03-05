@@ -15,14 +15,16 @@ public class HomePageViewModel : ExtendedBaseViewModel
                              INavigationService navigationService,
                              INavigationParameterService navigationParameterService) :base(applicationCache,dialogService, navigationService, deviceService,navigationParameterService)
     {
+        this.GoToMobileTopupCommand = new AsyncCommand(async () => await this.NavigationService.GoToMobileTopupSelectOperatorPage());
+        this.GoToBillPaymentCommand = new AsyncCommand(async () => await this.NavigationService.GoToBillPaymentSelectOperatorPage());
+        this.GoToVoucherCommand = new AsyncCommand(async () => await this.NavigationService.GoToVoucherSelectOperatorPage());
+        this.GoToAdminCommand = new AsyncCommand(async () => await this.NavigationService.GoToAdminPage());
         this.GoToTransactionsCommand = new AsyncCommand(async () => await this.NavigationService.GoToTransactions());
-        this.GoToReportsCommand = new AsyncCommand(async () => await this.NavigationService.GoToReports());
-        this.GoToMyAccountCommand = new AsyncCommand(async () => await this.NavigationService.GoToMyAccount());
-        this.GoToSupportCommand = new AsyncCommand(async () => await this.NavigationService.GoToSupport());
     }
 
+    public ICommand GoToMobileTopupCommand { get; }
+    public ICommand GoToBillPaymentCommand { get; }
+    public ICommand GoToVoucherCommand { get; }
+    public ICommand GoToAdminCommand { get; }
     public ICommand GoToTransactionsCommand { get; }
-    public ICommand GoToReportsCommand { get; }
-    public ICommand GoToMyAccountCommand { get; }
-    public ICommand GoToSupportCommand { get; }
 }

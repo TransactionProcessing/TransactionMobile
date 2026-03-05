@@ -73,26 +73,34 @@ public class HomePageViewModelTests
     }
 
     [Fact]
-    public void HomePageViewModel_GoToReportsCommand_Execute_ReportsPageDisplayed()
+    public void HomePageViewModel_GoToMobileTopupCommand_Execute_MobileTopupSelectOperatorPageDisplayed()
     {
-        this.viewModel.GoToReportsCommand.Execute(null);
+        this.viewModel.GoToMobileTopupCommand.Execute(null);
 
-        this.navigationService.Verify(n => n.GoToReports(), Times.Once);
+        this.navigationService.Verify(n => n.GoToMobileTopupSelectOperatorPage(), Times.Once);
     }
 
     [Fact]
-    public void HomePageViewModel_GoToMyAccountCommand_Execute_MyAccountPageDisplayed()
+    public void HomePageViewModel_GoToBillPaymentCommand_Execute_BillPaymentSelectOperatorPageDisplayed()
     {
-        this.viewModel.GoToMyAccountCommand.Execute(null);
+        this.viewModel.GoToBillPaymentCommand.Execute(null);
 
-        this.navigationService.Verify(n => n.GoToMyAccount(), Times.Once);
+        this.navigationService.Verify(n => n.GoToBillPaymentSelectOperatorPage(), Times.Once);
     }
 
     [Fact]
-    public void HomePageViewModel_GoToSupportCommand_Execute_SupportPageDisplayed()
+    public void HomePageViewModel_GoToVoucherCommand_Execute_VoucherSelectOperatorPageDisplayed()
     {
-        this.viewModel.GoToSupportCommand.Execute(null);
+        this.viewModel.GoToVoucherCommand.Execute(null);
 
-        this.navigationService.Verify(n => n.GoToSupport(), Times.Once);
+        this.navigationService.Verify(n => n.GoToVoucherSelectOperatorPage(), Times.Once);
+    }
+
+    [Fact]
+    public void HomePageViewModel_GoToAdminCommand_Execute_AdminPageDisplayed()
+    {
+        this.viewModel.GoToAdminCommand.Execute(null);
+
+        this.navigationService.Verify(n => n.GoToAdminPage(), Times.Once);
     }
 }

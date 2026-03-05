@@ -45,67 +45,74 @@
                       ColumnSpacing="12"
                       RowSpacing="12">
 
-                    <!-- Transactions card -->
+                    <!-- Mobile Topup card -->
                     <Frame Grid.Row="0" Grid.Column="0" Style="{StaticResource HomeCardFrame}">
                         <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding GoToTransactionsCommand}" AutomationId="TransactionsCard"/>
+                            <TapGestureRecognizer Command="{Binding GoToMobileTopupCommand}" AutomationId="MobileTopupCard"/>
                         </Frame.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                             <Image Source="transactionsbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
-                            <Label Text="Transactions"
+                            <Label Text="Mobile Topup"
                                    FontSize="13"
                                    FontAttributes="Bold"
-                                   TextColor="{StaticResource transactions}"
+                                   TextColor="{StaticResource mobileTopup}"
                                    HorizontalOptions="Center"/>
                         </VerticalStackLayout>
                     </Frame>
 
-                    <!-- Reports card -->
+                    <!-- Bill Payment card -->
                     <Frame Grid.Row="0" Grid.Column="1" Style="{StaticResource HomeCardFrame}">
                         <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding GoToReportsCommand}" AutomationId="ReportsCard"/>
+                            <TapGestureRecognizer Command="{Binding GoToBillPaymentCommand}" AutomationId="BillPaymentCard"/>
                         </Frame.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                            <Image Source="reportbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
-                            <Label Text="Reports"
+                            <Image Source="transactionsbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Label Text="Bill Payment"
                                    FontSize="13"
                                    FontAttributes="Bold"
-                                   TextColor="{StaticResource reports}"
+                                   TextColor="{StaticResource billPayment}"
                                    HorizontalOptions="Center"/>
                         </VerticalStackLayout>
                     </Frame>
 
-                    <!-- My Account card -->
+                    <!-- Voucher card -->
                     <Frame Grid.Row="1" Grid.Column="0" Style="{StaticResource HomeCardFrame}">
                         <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding GoToMyAccountCommand}" AutomationId="MyAccountCard"/>
+                            <TapGestureRecognizer Command="{Binding GoToVoucherCommand}" AutomationId="VoucherCard"/>
                         </Frame.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                            <Image Source="profilebutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
-                            <Label Text="My Account"
+                            <Image Source="transactionsbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Label Text="Voucher"
                                    FontSize="13"
                                    FontAttributes="Bold"
-                                   TextColor="{StaticResource profile}"
+                                   TextColor="{StaticResource voucher}"
                                    HorizontalOptions="Center"/>
                         </VerticalStackLayout>
                     </Frame>
 
-                    <!-- Support card -->
+                    <!-- Admin card -->
                     <Frame Grid.Row="1" Grid.Column="1" Style="{StaticResource HomeCardFrame}">
                         <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding GoToSupportCommand}" AutomationId="SupportCard"/>
+                            <TapGestureRecognizer Command="{Binding GoToAdminCommand}" AutomationId="AdminCard"/>
                         </Frame.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                            <Image Source="supportbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
-                            <Label Text="Support"
+                            <Image Source="transactionsbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Label Text="Admin"
                                    FontSize="13"
                                    FontAttributes="Bold"
-                                   TextColor="{StaticResource support}"
+                                   TextColor="{StaticResource admin}"
                                    HorizontalOptions="Center"/>
                         </VerticalStackLayout>
                     </Frame>
 
                 </Grid>
+
+                <!-- All Transactions button -->
+                <Button Text="All Transactions"
+                        AutomationId="AllTransactionsButton"
+                        Style="{StaticResource StandardButton}"
+                        Command="{Binding GoToTransactionsCommand}"/>
+
             </VerticalStackLayout>
 
             <!-- Log Out button -->
