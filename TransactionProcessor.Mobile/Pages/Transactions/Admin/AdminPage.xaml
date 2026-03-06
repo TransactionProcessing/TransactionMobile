@@ -2,24 +2,60 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TransactionProcessor.Mobile.Pages.Transactions.Admin.AdminPage"
-             xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              Shell.NavBarIsVisible="False"
+             Padding="0"
              x:Name="Admin">
     <ScrollView>
-        <VerticalStackLayout Style="{DynamicResource Layout}">
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-            <Frame Style="{DynamicResource MainFrame}">
-                <VerticalStackLayout Spacing="10">
-                    <Button AutomationId="ReconciliationButton" x:Name="ReconciliationButton" Text="Reconciliation" Style="{DynamicResource AdminButtonStyle}">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding ReconciliationCommand}" BindingContext="{Binding Source={x:Reference Admin}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Header with gradient background -->
+            <Grid HeightRequest="130">
+                <Grid.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource admin}" Offset="0.0"/>
+                        <GradientStop Color="#8b1a1a" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4" Padding="20">
+                    <Label Text="{Binding Title}"
+                           AutomationId="{Binding Title}"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Administrative options"
+                           FontSize="13"
+                           TextColor="White"
+                           Opacity="0.85"
+                           HorizontalOptions="Center"/>
                 </VerticalStackLayout>
-            </Frame>
+            </Grid>
+
+            <!-- Admin tiles -->
+            <VerticalStackLayout Padding="20,24,20,16" Spacing="16">
+
+                <!-- Reconciliation tile -->
+                <Frame Style="{StaticResource HomeCardFrame}" AutomationId="ReconciliationButton">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ReconciliationCommand}"/>
+                    </Frame.GestureRecognizers>
+                    <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Image Source="transactionsbutton.svg" HeightRequest="36" WidthRequest="36" VerticalOptions="Center"/>
+                        <Label Text="Reconciliation"
+                               FontSize="15"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource admin}"
+                               VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </Frame>
+
+                <Button Text="Back"
+                        AutomationId="BackButton"
+                        Style="{StaticResource StandardButton}"
+                        Command="{Binding BackButtonCommand}"/>
+
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

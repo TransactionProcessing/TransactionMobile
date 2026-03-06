@@ -2,37 +2,62 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TransactionProcessor.Mobile.Pages.Transactions.BillPayment.BillPaymentGetAccountPage"
-             xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              Shell.NavBarIsVisible="False"
+             Padding="0"
              x:Name="BillPaymentGetAccount">
     <ScrollView>
-        <VerticalStackLayout x:Name="MainLayout" Style="{DynamicResource Layout}">
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-            <Frame Style="{DynamicResource MainFrame}">
-                <VerticalStackLayout Spacing="10">
-                    <Entry x:Name="CustomerAccountNumberEntry"
-               Placeholder="Customer Account Number"
-               AutomationId="CustomerAccountNumberEntry"
-               Style="{DynamicResource CustomerAccountNumberEntryStyle}"
-               Text="{Binding CustomerAccountNumber}"
-               Keyboard="Numeric">
-                    </Entry>
+        <VerticalStackLayout Spacing="0">
 
-                    <Button x:Name="GetAccountButton" 
-                            Text="Get Account"
-                            Style="{DynamicResource BillPaymentButtonStyle}"
-                            AutomationId="GetAccountButton">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding GetAccountCommand}" BindingContext="{Binding Source={x:Reference BillPaymentGetAccount}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                    <Button Text="Back" Style="{StaticResource BillPaymentButtonStyle}" Command="{Binding BackButtonCommand}"/>
+            <!-- Header with gradient background -->
+            <Grid HeightRequest="130">
+                <Grid.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource billPayment}" Offset="0.0"/>
+                        <GradientStop Color="#2b8ccc" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4" Padding="20">
+                    <Label Text="{Binding Title}"
+                           AutomationId="{Binding Title}"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Enter account details below"
+                           FontSize="13"
+                           TextColor="White"
+                           Opacity="0.85"
+                           HorizontalOptions="Center"/>
                 </VerticalStackLayout>
-                
-            </Frame>
+            </Grid>
+
+            <!-- Form card -->
+            <VerticalStackLayout Padding="20,20,20,16" Spacing="12">
+                <Frame Style="{StaticResource TransactionFormCard}">
+                    <VerticalStackLayout Spacing="12">
+                        <Entry x:Name="CustomerAccountNumberEntry"
+                               Placeholder="Customer Account Number"
+                               AutomationId="CustomerAccountNumberEntry"
+                               Style="{DynamicResource CustomerAccountNumberEntryStyle}"
+                               Text="{Binding CustomerAccountNumber}"
+                               Keyboard="Numeric"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Button x:Name="GetAccountButton"
+                        Text="Get Account"
+                        Style="{DynamicResource BillPaymentButtonStyle}"
+                        AutomationId="GetAccountButton">
+                    <Button.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            EventName="Clicked"
+                            Command="{Binding GetAccountCommand}" BindingContext="{Binding Source={x:Reference BillPaymentGetAccount}, Path=BindingContext}" />
+                    </Button.Behaviors>
+                </Button>
+                <Button Text="Back" Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}"/>
+            </VerticalStackLayout>
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

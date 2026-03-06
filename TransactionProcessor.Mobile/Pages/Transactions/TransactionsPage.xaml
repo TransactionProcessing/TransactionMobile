@@ -3,55 +3,136 @@
                                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                                x:Class="TransactionProcessor.Mobile.Pages.Transactions.TransactionsPage"
                                xmlns:common="clr-namespace:TransactionProcessor.Mobile.Pages.Common"
-                               xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
-                               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                                Shell.NavBarIsVisible="False"
+                               Padding="0"
                                x:Name="Transactions">
     <ScrollView>
-        <!-- This might be better as a flex layout if we had images-->
-        <VerticalStackLayout Style="{DynamicResource Layout}">
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-            <Frame Style="{DynamicResource MainFrame}">
-                <VerticalStackLayout Spacing="10">
+        <VerticalStackLayout Spacing="0">
 
-                    <Button AutomationId="MobileTopupButton" x:Name="MobileTopupButton" Text="Mobile Topup" Style="{DynamicResource MobileTopupButtonStyle}">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding MobileTopupCommand}" BindingContext="{Binding Source={x:Reference Transactions}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                    <Button AutomationId="MobileWalletButton" x:Name="MobileWalletButton" Text="Mobile Wallet" Style="{DynamicResource MobileWalletButtonStyle}">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding MobileWalletCommand}" BindingContext="{Binding Source={x:Reference Transactions}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                    <Button AutomationId="BillPaymentButton" x:Name="BillPaymentButton" Text="Bill Payment" Style="{DynamicResource BillPaymentButtonStyle}">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding BillPaymentCommand}" BindingContext="{Binding Source={x:Reference Transactions}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                    <Button AutomationId="VoucherButton" x:Name="VoucherButton" Text="Voucher" Style="{DynamicResource VoucherButtonStyle}">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding VoucherCommand}" BindingContext="{Binding Source={x:Reference Transactions}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                    <Button AutomationId="AdminButton" x:Name="AdminButton" Text="Admin" Style="{DynamicResource AdminButtonStyle}">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding AdminCommand}" BindingContext="{Binding Source={x:Reference Transactions}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                    <Button Text="Back" AutomationId="BackButton"  Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}"/>
+            <!-- Header with gradient background -->
+            <Grid HeightRequest="160">
+                <Grid.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource primary}" Offset="0.0"/>
+                        <GradientStop Color="#2B4A8C" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="6" Padding="20">
+                    <Image Source="transactionsbutton.svg" HeightRequest="60" WidthRequest="60" HorizontalOptions="Center"/>
+                    <Label Text="Select Transaction Type"
+                           AutomationId="SelectTransactionType"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
                 </VerticalStackLayout>
-            </Frame>
+            </Grid>
+
+            <!-- Transaction tiles -->
+            <VerticalStackLayout Padding="20,24,20,16" Spacing="16">
+
+                <Grid ColumnDefinitions="*,*"
+                      RowDefinitions="Auto,Auto,Auto"
+                      ColumnSpacing="12"
+                      RowSpacing="12">
+
+                    <!-- Mobile Topup tile -->
+                    <Frame Grid.Row="0" Grid.Column="0"
+                           Style="{StaticResource HomeCardFrame}"
+                           AutomationId="MobileTopupButton">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding MobileTopupCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                            <Image Source="transactionsbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Label Text="Mobile Topup"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource mobileTopup}"
+                                   HorizontalOptions="Center"
+                                   HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Mobile Wallet tile -->
+                    <Frame Grid.Row="0" Grid.Column="1"
+                           Style="{StaticResource HomeCardFrame}"
+                           AutomationId="MobileWalletButton">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding MobileWalletCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                            <Image Source="transactionsbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Label Text="Mobile Wallet"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource mobileWallet}"
+                                   HorizontalOptions="Center"
+                                   HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Bill Payment tile -->
+                    <Frame Grid.Row="1" Grid.Column="0"
+                           Style="{StaticResource HomeCardFrame}"
+                           AutomationId="BillPaymentButton">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BillPaymentCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                            <Image Source="transactionsbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Label Text="Bill Payment"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource billPayment}"
+                                   HorizontalOptions="Center"
+                                   HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Voucher tile -->
+                    <Frame Grid.Row="1" Grid.Column="1"
+                           Style="{StaticResource HomeCardFrame}"
+                           AutomationId="VoucherButton">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding VoucherCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                            <Image Source="transactionsbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Label Text="Voucher"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource voucher}"
+                                   HorizontalOptions="Center"
+                                   HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Admin tile (spans full width) -->
+                    <Frame Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                           Style="{StaticResource HomeCardFrame}"
+                           AutomationId="AdminButton">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding AdminCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                            <Image Source="transactionsbutton.svg" HeightRequest="36" WidthRequest="36" VerticalOptions="Center"/>
+                            <Label Text="Admin"
+                                   FontSize="15"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource admin}"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Frame>
+
+                </Grid>
+
+                <Button Text="Back"
+                        AutomationId="BackButton"
+                        Style="{StaticResource StandardButton}"
+                        Command="{Binding BackButtonCommand}"/>
+
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </common:NoBackWithoutLogoutPage>

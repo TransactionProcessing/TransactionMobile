@@ -31,65 +31,64 @@ public partial class MobileTopupSelectProductPage : ContentPage
     }
 
     private void LoadProducts(MobileTopupSelectProductPageViewModel viewModel) {
-        this.ProductsList.Clear();
+        this.ProductsList.Children.Clear();
 
         Int32 rowCount = 0;
         foreach (ContractProductModel modelProduct in viewModel.Products) {
-            Button button = new Button {
-                                           Text = modelProduct.ProductDisplayText,
-                                           HorizontalOptions = LayoutOptions.FillAndExpand,
-                                           AutomationId = modelProduct.ProductDisplayText,
-                                       };
-            button.SetDynamicResource(VisualElement.StyleProperty, "MobileTopupButtonStyle");
-
-            Binding commandParameter = new Binding
-            {
-                Source = new ItemSelected<ContractProductModel>
-                {
-                    SelectedItem = modelProduct,
-                    SelectedItemIndex = rowCount
-                }
-            };
-
-            Binding command = new Binding("ProductSelectedCommand", source: this.viewModel);
-
-            // Create the behavior and bind it to the command
-            EventToCommandBehavior behavior = new EventToCommandBehavior
-            {
-                EventName = "Clicked"
-            };
-            behavior.SetBinding(EventToCommandBehavior.CommandProperty, command);
-            behavior.SetBinding(EventToCommandBehavior.CommandParameterProperty, commandParameter);
-
-            // Attach the behavior to the button
-            button.Behaviors.Add(behavior);
-
-            this.ProductsList.Add(button);
-
+            Frame tile = this.CreateProductTile(modelProduct, rowCount);
+            this.ProductsList.Children.Add(tile);
             rowCount++;
         }
-
-        this.ProductsList.Add(this.AddBackButton());
     }
 
-    private Button AddBackButton()
-    {
-        Button button = new Button
-                        {
-                            Text = "Back",
-                            HorizontalOptions = LayoutOptions.FillAndExpand,
-                            AutomationId = "BackButton",
-                        };
-        button.SetDynamicResource(VisualElement.StyleProperty, "MobileTopupButtonStyle");
+    private Frame CreateProductTile(ContractProductModel modelProduct, Int32 rowCount) {
+        Frame tile = new Frame();
+        tile.SetDynamicResource(VisualElement.StyleProperty, "SelectionTileFrame");
+        tile.AutomationId = modelProduct.ProductDisplayText.Replace(" ", "");
 
-        Binding backButtonCommand = new Binding
-                                    {
-                                        Source = this.viewModel.BackButtonCommand
-                                    };
+        Image icon = new Image
+        {
+            Source = "transactionsbutton.svg",
+            HeightRequest = 36,
+            WidthRequest = 36,
+            HorizontalOptions = LayoutOptions.Center
+        };
 
-        button.SetBinding(Button.CommandProperty, backButtonCommand);
+        Label nameLabel = new Label
+        {
+            Text = modelProduct.ProductDisplayText,
+            HorizontalTextAlignment = TextAlignment.Center,
+            HorizontalOptions = LayoutOptions.Center,
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 13
+        };
+        nameLabel.SetDynamicResource(Label.TextColorProperty, "mobileTopup");
 
-        return button;
+        tile.Content = new VerticalStackLayout
+        {
+            Spacing = 8,
+            HorizontalOptions = LayoutOptions.Center,
+            Children = { icon, nameLabel }
+        };
+
+        Binding commandParameter = new Binding
+        {
+            Source = new ItemSelected<ContractProductModel>
+            {
+                SelectedItem = modelProduct,
+                SelectedItemIndex = rowCount
+            }
+        };
+
+        Binding command = new Binding("ProductSelectedCommand", source: this.viewModel);
+
+        TapGestureRecognizer tapGesture = new TapGestureRecognizer();
+        tapGesture.SetBinding(TapGestureRecognizer.CommandProperty, command);
+        tapGesture.SetBinding(TapGestureRecognizer.CommandParameterProperty, commandParameter);
+
+        tile.GestureRecognizers.Add(tapGesture);
+
+        return tile;
     }
 
     #endregion
