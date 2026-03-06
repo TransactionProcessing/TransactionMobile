@@ -1,4 +1,3 @@
-using CommunityToolkit.Maui.Behaviors;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports;
@@ -20,72 +19,77 @@ public partial class ReportsPage : NoBackWithoutLogoutPage
     {
         base.OnAppearing();
         await this.viewModel.Initialise(CancellationToken.None);
-        this.LoadProducts(this.viewModel);
+        this.LoadReports(this.viewModel);
     }
 
-    private void LoadProducts(ReportsPageViewModel viewModel)
+    private void LoadReports(ReportsPageViewModel viewModel)
     {
-        this.ReportsList.Clear();
+        this.ReportsList.Children.Clear();
 
         Int32 rowCount = 0;
         foreach (ListViewItem modelOption in viewModel.ReportsMenuOptions)
         {
-            Button button = new Button
-                            {
-                                Text = modelOption.Title,
-                                HorizontalOptions = LayoutOptions.FillAndExpand,
-                                AutomationId = $"{modelOption.Title.Replace(" ", "")}Button",
-                            };
-            button.SetDynamicResource(VisualElement.StyleProperty, "ReportsButtonStyle");
-
-            Binding commandParameter = new Binding
-            {
-                Source = new ItemSelected<ListViewItem>
-                {
-                    SelectedItem = modelOption,
-                    SelectedItemIndex = rowCount
-                }
-            };
-
-            Binding command = new Binding("OptionSelectedCommand", source: this.viewModel);
-
-            // Create the behavior and bind it to the command
-            EventToCommandBehavior behavior = new EventToCommandBehavior
-            {
-                EventName = "Clicked"
-            };
-            behavior.SetBinding(EventToCommandBehavior.CommandProperty, command);
-            behavior.SetBinding(EventToCommandBehavior.CommandParameterProperty, commandParameter);
-
-            // Attach the behavior to the button
-            button.Behaviors.Add(behavior);
-
+            Frame tile = this.CreateReportTile(modelOption, rowCount);
+            this.ReportsList.Children.Add(tile);
             rowCount++;
-            this.ReportsList.Add(button);
-
         }
-
-        this.ReportsList.Add(this.AddBackButton());
     }
 
-    private Button AddBackButton()
+    private Frame CreateReportTile(ListViewItem modelOption, Int32 rowCount)
     {
-        Button button = new Button
-        {
-            Text = "Back",
-            HorizontalOptions = LayoutOptions.FillAndExpand,
-            AutomationId = "BackButton",
-        };
-        button.SetDynamicResource(VisualElement.StyleProperty, "ReportsButtonStyle");
+        Frame tile = new Frame();
+        tile.SetDynamicResource(VisualElement.StyleProperty, "SelectionTileFrame");
+        tile.AutomationId = $"{modelOption.Title.Replace(" ", "")}Button";
 
-        Binding backButtonCommand = new Binding
+        String iconSource = modelOption.Title switch
         {
-            Source = this.viewModel.BackButtonCommand
+            "Sales Analysis" => "transactionsbutton.svg",
+            "Balance Analysis" => "reportbutton.svg",
+            _ => "reportbutton.svg"
         };
 
-        button.SetBinding(Button.CommandProperty, backButtonCommand);
+        Image icon = new Image
+        {
+            Source = iconSource,
+            HeightRequest = 36,
+            WidthRequest = 36,
+            HorizontalOptions = LayoutOptions.Center
+        };
 
-        return button;
+        Label nameLabel = new Label
+        {
+            Text = modelOption.Title,
+            HorizontalTextAlignment = TextAlignment.Center,
+            HorizontalOptions = LayoutOptions.Center,
+            FontAttributes = FontAttributes.Bold,
+            FontSize = 13
+        };
+        nameLabel.SetDynamicResource(Label.TextColorProperty, "reports");
+
+        tile.Content = new VerticalStackLayout
+        {
+            Spacing = 8,
+            HorizontalOptions = LayoutOptions.Center,
+            Children = { icon, nameLabel }
+        };
+
+        Binding commandParameter = new Binding
+        {
+            Source = new ItemSelected<ListViewItem>
+            {
+                SelectedItem = modelOption,
+                SelectedItemIndex = rowCount
+            }
+        };
+
+        Binding command = new Binding("OptionSelectedCommand", source: this.viewModel);
+
+        TapGestureRecognizer tapGesture = new TapGestureRecognizer();
+        tapGesture.SetBinding(TapGestureRecognizer.CommandProperty, command);
+        tapGesture.SetBinding(TapGestureRecognizer.CommandParameterProperty, commandParameter);
+
+        tile.GestureRecognizers.Add(tapGesture);
+
+        return tile;
     }
-
 }
