@@ -3,42 +3,81 @@
                                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                                x:Class="TransactionProcessor.Mobile.Pages.MyAccount.MyAccountPage"
                                xmlns:common="clr-namespace:TransactionProcessor.Mobile.Pages.Common"
-                               xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
-                               Shell.NavBarIsVisible="False">
+                               Shell.NavBarIsVisible="False"
+                               Padding="0">
     <ScrollView>
-        <VerticalStackLayout Style="{DynamicResource Layout}">
+        <VerticalStackLayout Spacing="0">
 
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-
-            <Frame Style="{DynamicResource MainFrame}">
-                <VerticalStackLayout>
-                <HorizontalStackLayout>
-                    <Label Text="Merchant Name:"
-                           HorizontalTextAlignment="Center"
-                           HorizontalOptions="Fill"
-                           FontAttributes="Bold" FontSize="15"
-                           Margin="0,0,5,5"/>
+            <!-- Header with gradient background -->
+            <Grid HeightRequest="160">
+                <Grid.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource profile}" Offset="0.0"/>
+                        <GradientStop Color="#2aab83" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4" Padding="20">
+                    <Image Source="profilebutton.svg" HeightRequest="52" WidthRequest="52" HorizontalOptions="Center"/>
+                    <Label Text="{Binding Title}"
+                           AutomationId="{Binding Title}"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
                     <Label Text="{Binding MerchantName}"
-                           HorizontalTextAlignment="Center"
-                           HorizontalOptions="Fill"
-                           FontSize="15"/>
-                </HorizontalStackLayout>
-                    <HorizontalStackLayout>
-                        <Label Text="Last Login:"
-                           HorizontalTextAlignment="Center"
-                           HorizontalOptions="Fill"
-                           FontAttributes="Bold" FontSize="15"
-                           Margin="0,0,5,10"/>
-                    <Label Text="{Binding LastLogin, StringFormat='{0:dd/MM/yyyy HH:mm:ss}'}"
-                           HorizontalTextAlignment="Center"
-                           HorizontalOptions="Fill"
-                           FontSize="15"/>
-                    </HorizontalStackLayout>
-                    <VerticalStackLayout x:Name="MyAccountOptionsList" Spacing="10">
-                    </VerticalStackLayout>
-                    <Button Text="Back" AutomationId="BackButton" Style="{StaticResource MyAccountButtonStyle}" Command="{Binding BackButtonCommand}"/>
+                           FontSize="13"
+                           TextColor="White"
+                           Opacity="0.9"
+                           HorizontalOptions="Center"/>
                 </VerticalStackLayout>
-            </Frame>
+            </Grid>
+
+            <!-- Account info card -->
+            <VerticalStackLayout Padding="20,20,20,0" Spacing="16">
+                <Frame Style="{StaticResource HomeCardFrame}">
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="8" RowSpacing="4">
+                        <Label Grid.Row="0" Grid.Column="0"
+                               Text="Merchant Name"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource labelTextColor}"/>
+                        <Label Grid.Row="1" Grid.Column="0"
+                               Text="{Binding MerchantName}"
+                               FontSize="14"
+                               AutomationId="MerchantNameLabel"
+                               TextColor="{StaticResource labelTextColor}"/>
+                        <Label Grid.Row="0" Grid.Column="1"
+                               Text="Last Login"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource labelTextColor}"/>
+                        <Label Grid.Row="1" Grid.Column="1"
+                               Text="{Binding LastLogin, StringFormat='{0:dd/MM/yyyy HH:mm}'}"
+                               FontSize="14"
+                               AutomationId="LastLoginLabel"
+                               TextColor="{StaticResource labelTextColor}"/>
+                    </Grid>
+                </Frame>
+            </VerticalStackLayout>
+
+            <!-- Account option tiles -->
+            <VerticalStackLayout Padding="20,16,20,16" Spacing="16">
+                <Label Text="Account Options"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource labelTextColor}"/>
+
+                <FlexLayout x:Name="MyAccountOptionsList"
+                            Wrap="Wrap"
+                            JustifyContent="SpaceEvenly"
+                            AlignItems="Start"/>
+
+                <Button Text="Back"
+                        AutomationId="BackButton"
+                        Style="{StaticResource StandardButton}"
+                        Command="{Binding BackButtonCommand}"/>
+            </VerticalStackLayout>
+
         </VerticalStackLayout>
     </ScrollView>
 </common:NoBackWithoutLogoutPage>
