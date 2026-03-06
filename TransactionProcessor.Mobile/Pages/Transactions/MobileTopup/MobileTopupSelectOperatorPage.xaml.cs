@@ -39,7 +39,7 @@ public partial class MobileTopupSelectOperatorPage : ContentPage
     {
         Frame tile = new Frame();
         tile.SetDynamicResource(VisualElement.StyleProperty, "SelectionTileFrame");
-        tile.AutomationId = modelOperator.OperatorName;
+        tile.AutomationId = modelOperator.OperatorName.Replace(" ", "");
 
         Image icon = new Image
         {

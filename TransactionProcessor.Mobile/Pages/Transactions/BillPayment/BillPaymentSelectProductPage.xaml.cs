@@ -39,7 +39,7 @@ public partial class BillPaymentSelectProductPage : ContentPage
     {
         Frame tile = new Frame();
         tile.SetDynamicResource(VisualElement.StyleProperty, "SelectionTileFrame");
-        tile.AutomationId = modelProduct.ProductDisplayText;
+        tile.AutomationId = modelProduct.ProductDisplayText.Replace(" ", "");
 
         Image icon = new Image
         {

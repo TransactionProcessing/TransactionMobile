@@ -44,7 +44,7 @@ public partial class MobileTopupSelectProductPage : ContentPage
     private Frame CreateProductTile(ContractProductModel modelProduct, Int32 rowCount) {
         Frame tile = new Frame();
         tile.SetDynamicResource(VisualElement.StyleProperty, "SelectionTileFrame");
-        tile.AutomationId = modelProduct.ProductDisplayText;
+        tile.AutomationId = modelProduct.ProductDisplayText.Replace(" ", "");
 
         Image icon = new Image
         {
