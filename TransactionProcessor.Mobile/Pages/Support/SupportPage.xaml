@@ -3,49 +3,66 @@
                                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                                x:Class="TransactionProcessor.Mobile.Pages.Support.SupportPage"
                                xmlns:common="clr-namespace:TransactionProcessor.Mobile.Pages.Common"
-                               xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
-                               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                                Shell.NavBarIsVisible="False"
-                               x:Name="Support">
+                               Padding="0">
     <ScrollView>
-        <VerticalStackLayout Style="{DynamicResource Layout}">
+        <VerticalStackLayout Spacing="0">
 
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
-
-            <!--Main image-->
-            <Image Source="techsupport.jpg" VerticalOptions="Start" Aspect="AspectFit"/>
-
-
-            <Frame Style="{DynamicResource MainFrame}">
-                <VerticalStackLayout x:Name="SubLayout" Spacing="5">
-
-                    <Label Text="{Binding ApplicationName, Mode=OneTime}"
-                       HorizontalTextAlignment="Center"
-                       HorizontalOptions="Fill"/>
-
-                    <Label Text="{Binding Platform, Mode=OneTime}"
-                       VerticalOptions="Center"/>
-
-                    <Label Text="{Binding NumberTransactionsStored, Mode=OneTime}"
-                       VerticalOptions="Center"/>
-
-                    <Button Text="Upload Logs" Style="{StaticResource StandardButton}" AutomationId="UploadLogsButton">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding UploadLogsCommand}" BindingContext="{Binding Source={x:Reference Support}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                    <Button Text="View Logs" Style="{StaticResource StandardButton}" AutomationId="ViewLogsButton">
-                        <Button.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="Clicked"
-                                Command="{Binding ViewLogsCommand}" BindingContext="{Binding Source={x:Reference Support}, Path=BindingContext}" />
-                        </Button.Behaviors>
-                    </Button>
-                    <Button Text="Back" Style="{StaticResource StandardButton}" Command="{Binding BackButtonCommand}" AutomationId="BackButton"/>
+            <!-- Header with gradient background -->
+            <Grid HeightRequest="160">
+                <Grid.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource support}" Offset="0.0"/>
+                        <GradientStop Color="#e8819a" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4" Padding="20">
+                    <Image Source="supportbutton.svg" HeightRequest="52" WidthRequest="52" HorizontalOptions="Center"/>
+                    <Label Text="{Binding Title}"
+                           AutomationId="{Binding Title}"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
                 </VerticalStackLayout>
-            </Frame>
+            </Grid>
+
+            <!-- Device and app info card -->
+            <VerticalStackLayout Padding="20,20,20,0" Spacing="16">
+                <Frame Style="{StaticResource HomeCardFrame}">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="{Binding ApplicationName, Mode=OneTime}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource labelTextColor}"/>
+                        <Label Text="{Binding Platform, Mode=OneTime}"
+                               FontSize="13"
+                               TextColor="{StaticResource labelTextColor}"/>
+                        <Label Text="{Binding NumberTransactionsStored, Mode=OneTime}"
+                               FontSize="13"
+                               TextColor="{StaticResource labelTextColor}"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+
+            <!-- Support action tiles -->
+            <VerticalStackLayout Padding="20,16,20,16" Spacing="16">
+                <Label Text="Support Options"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource labelTextColor}"/>
+
+                <FlexLayout x:Name="SupportOptionsList"
+                            Wrap="Wrap"
+                            JustifyContent="SpaceEvenly"
+                            AlignItems="Start"/>
+
+                <Button Text="Back"
+                        AutomationId="BackButton"
+                        Style="{StaticResource StandardButton}"
+                        Command="{Binding BackButtonCommand}"/>
+            </VerticalStackLayout>
+
         </VerticalStackLayout>
     </ScrollView>
 </common:NoBackWithoutLogoutPage>
