@@ -1,4 +1,5 @@
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using TransactionProcessor.Mobile.BusinessLogic.ViewModels.Support;
 using TransactionProcessor.Mobile.Pages.Common;
 
@@ -21,7 +22,8 @@ namespace TransactionProcessor.Mobile.Pages.Support
         private void LoadSupportOptions(SupportPageViewModel viewModel) {
             this.SupportOptionsList.Children.Clear();
 
-            var options = new List<(String Title, String Icon, String AutomationId, ICommand Command)>
+            var options = new List<(String Title, String Icon, String AutomationId, IRelayCommand Command)>
+
             {
                 ("Upload Logs", "supportbutton.svg", "UploadLogsButton", viewModel.UploadLogsCommand),
                 ("View Logs",   "reportbutton.svg",  "ViewLogsButton",   viewModel.ViewLogsCommand),
@@ -33,7 +35,7 @@ namespace TransactionProcessor.Mobile.Pages.Support
             }
         }
 
-        private Frame CreateSupportTile(String title, String iconSource, String automationId, ICommand command) {
+        private Frame CreateSupportTile(String title, String iconSource, String automationId, IRelayCommand command) {
             Frame tile = new Frame();
             tile.SetDynamicResource(VisualElement.StyleProperty, "SelectionTileFrame");
             tile.AutomationId = automationId;
