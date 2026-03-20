@@ -90,11 +90,22 @@ namespace TransactionProcessor.Mobile.Extensions {
 
                                                                                              Configuration configuration = applicationCache.GetConfiguration();
 
-                                                                                             if (configuration != null)
-                                                                                             {
-                                                                                                 if (configSetting == "SecurityService")
-                                                                                                 {
-                                                                                                     return configuration.SecurityServiceUri;
+                                                                                              if (configuration != null)
+                                                                                              {
+                                                                                                  if (configSetting == "ApplicationUpdateServiceUrl")
+                                                                                                  {
+                                                                                                      if (String.IsNullOrWhiteSpace(configuration.ApplicationUpdateUri) == false)
+                                                                                                      {
+                                                                                                          return configuration.ApplicationUpdateUri;
+                                                                                                      }
+
+                                                                                                      String configHostUrl = applicationCache.GetConfigHostUrl();
+                                                                                                      return configHostUrl ?? String.Empty;
+                                                                                                  }
+
+                                                                                                  if (configSetting == "SecurityService")
+                                                                                                  {
+                                                                                                      return configuration.SecurityServiceUri;
                                                                                                  }
 
                                                                                                  if (configSetting == "TransactionProcessorACL")
@@ -122,6 +133,7 @@ namespace TransactionProcessor.Mobile.Extensions {
             builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
             builder.Services.AddSingleton<ITransactionService, TransactionService>();
             builder.Services.AddSingleton<IMerchantService, MerchantService>();
+            builder.Services.AddSingleton<IUpdateService, UpdateService>();
 
             builder.Services.AddSingleton<Func<Boolean, IConfigurationService>>(new Func<Boolean, IConfigurationService>(useTrainingMode =>
                                                                                 {
@@ -211,6 +223,7 @@ namespace TransactionProcessor.Mobile.Extensions {
             builder.Services.AddSingleton<IDialogService, DialogService>();
             builder.Services.AddSingleton<INavigationService, ShellNavigationService>();
             builder.Services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
+            builder.Services.AddSingleton<IApplicationUpdateLauncherService, ApplicationUpdateLauncherService>();
             builder.Services.AddSingleton<INavigationParameterService, NavigationParameterService>();
             return builder;
         }

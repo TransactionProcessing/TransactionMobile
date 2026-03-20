@@ -31,6 +31,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Models
 
         public String EstateReportingUri { get; set; }
 
+        public String ApplicationUpdateUri { get; set; }
+
         public LogLevel LogLevel { get; set; }
 
         public Boolean EnableAutoUpdates { get; set; }

@@ -19,6 +19,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
     public partial class LoginPageViewModel : ExtendedBaseViewModel
     {
         private readonly IApplicationInfoService ApplicationInfoService;
+        private readonly IApplicationUpdateLauncherService ApplicationUpdateLauncherService;
+        private readonly IUpdateService UpdateService;
 
         private String userName;
 
@@ -33,10 +35,14 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
         public LoginPageViewModel(IMediator mediator, INavigationService navigationService, IApplicationCache applicationCache,
                                   IDeviceService deviceService,IApplicationInfoService applicationInfoService,
                                   IDialogService dialogService,
-                                  INavigationParameterService navigationParameterService) : base(applicationCache,dialogService,navigationService, deviceService, navigationParameterService)
+                                  INavigationParameterService navigationParameterService,
+                                  IUpdateService updateService,
+                                  IApplicationUpdateLauncherService applicationUpdateLauncherService) : base(applicationCache,dialogService,navigationService, deviceService, navigationParameterService)
         {
             this.ApplicationInfoService = applicationInfoService;
+            this.ApplicationUpdateLauncherService = applicationUpdateLauncherService;
             this.Mediator = mediator;
+            this.UpdateService = updateService;
         }
         
         #endregion
@@ -154,6 +160,44 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
             return getMerchantBalanceResult;
         }
 
+        private async Task CheckForUpdates(Configuration configuration) {
+            if (configuration?.EnableAutoUpdates != true) {
+                return;
+            }
+
+            Result<ApplicationUpdateCheckResponse> updateCheckResult = await this.UpdateService.CheckForUpdates(this.ApplicationInfoService.VersionString,
+                                                                                                                this.ApplicationInfoService.PackageName,
+                                                                                                                this.DeviceService.GetPlatform(),
+                                                                                                                this.DeviceService.GetIdentifier(),
+                                                                                                                CancellationToken.None);
+
+            if (updateCheckResult.IsFailed) {
+                Logger.LogWarning($"Application update check failed: {updateCheckResult.Message}");
+                return;
+            }
+
+            if (updateCheckResult.Data.UpdateRequired == false) {
+                return;
+            }
+
+            String message = String.IsNullOrWhiteSpace(updateCheckResult.Data.Message)
+                                 ? $"Version {updateCheckResult.Data.LatestVersion ?? "latest"} is available and must be installed before you can continue."
+                                 : updateCheckResult.Data.Message;
+
+            Boolean startUpdate = await this.DialogService.ShowDialog("Application Update Required", message, "Install", "Cancel");
+
+            if (startUpdate == false) {
+                throw new ApplicationException("An application update is required before you can continue.");
+            }
+
+            if (String.IsNullOrWhiteSpace(updateCheckResult.Data.DownloadUri)) {
+                throw new ApplicationException("An application update is required, but no download location is configured.");
+            }
+
+            await this.ApplicationUpdateLauncherService.LaunchUpdateAsync(updateCheckResult.Data.DownloadUri, CancellationToken.None);
+            throw new ApplicationException("The application update has started. Complete the installation and reopen the app.");
+        }
+
         [RelayCommand]
         private async Task Logon(){
             CorrelationIdProvider.NewId();
@@ -167,6 +211,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
                 
                 Result<Configuration> configurationResult = await this.GetConfiguration();
                 this.HandleResult(configurationResult);
+                await this.CheckForUpdates(configurationResult.Data);
 
                 await this.WriteTimingTrace(sw, "After GetConfiguration");
                 Result<TokenResponseModel> getTokenResult = await this.GetUserToken();

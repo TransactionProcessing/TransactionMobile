@@ -12,6 +12,8 @@ public class ConfigurationResponse
 
     public bool EnableAutoUpdates { get; set; }
 
+    public string ApplicationUpdateUri { get; set; }
+
     public List<HostAddress> HostAddresses { get; set; }
 
     public string Id { get; set; }
