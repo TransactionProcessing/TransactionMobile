@@ -181,7 +181,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
             }
 
             String message = String.IsNullOrWhiteSpace(updateCheckResult.Data.Message)
-                                 ? $"Version {updateCheckResult.Data.LatestVersion ?? "latest"} is available and must be installed before you can continue."
+                                 ? $"Version {updateCheckResult.Data.LatestVersion ?? "latest"} is available and must be installed before you can continue. The installer will open and the app will close."
                                  : updateCheckResult.Data.Message;
 
             Boolean startUpdate = await this.DialogService.ShowDialog("Application Update Required", message, "Install", "Cancel");
@@ -195,7 +195,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
             }
 
             await this.ApplicationUpdateLauncherService.LaunchUpdateAsync(updateCheckResult.Data.DownloadUri, CancellationToken.None);
-            throw new ApplicationException("The application update has started. Complete the installation and reopen the app.");
+            await this.NavigationService.QuitApplication();
         }
 
         [RelayCommand]

@@ -161,7 +161,7 @@ public class LoginPageViewModelTests
     }
 
     [Fact]
-    public void LoginPageViewModel_LoginCommand_Execute_UpdateRequired_UpdateLauncherIsCalled_And_LogonStops()
+    public void LoginPageViewModel_LoginCommand_Execute_UpdateRequired_UpdateLauncherIsCalled_And_AppQuits()
     {
         this.Mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Success(new Configuration { EnableAutoUpdates = true }));
@@ -182,13 +182,14 @@ public class LoginPageViewModelTests
         this.ViewModel.LogonCommand.Execute(null);
 
         this.ApplicationUpdateLauncherService.Verify(l => l.LaunchUpdateAsync("https://updates.example.com/transactionmobile.apk", It.IsAny<CancellationToken>()), Times.Once);
+        this.NavigationService.Verify(n => n.QuitApplication(), Times.Once);
         this.Mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Never);
         this.NavigationService.Verify(n => n.GoToHome(), Times.Never);
-        this.DialogService.Verify(n => n.ShowWarningToast(It.Is<String>(message => message.Contains("update", StringComparison.OrdinalIgnoreCase)),
+        this.DialogService.Verify(n => n.ShowWarningToast(It.IsAny<String>(),
                                                           null,
                                                           "OK",
                                                           null,
-                                                          CancellationToken.None), Times.Once);
+                                                          CancellationToken.None), Times.Never);
     }
 
     [Fact]
