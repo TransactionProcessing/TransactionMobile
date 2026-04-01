@@ -4,7 +4,6 @@ using LiveChartsCore.Defaults;
 using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
-using MediatR;
 using System.Diagnostics.CodeAnalysis;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
@@ -14,15 +13,12 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports;
 
 public partial class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel
 {
-
-    private readonly IMediator Mediator;
     public ReportsSalesAnalysisPageViewModel(INavigationService navigationService,
                                              IApplicationCache applicationCache,
                                              IDialogService dialogService,
                                              IDeviceService deviceService,
-                                             IMediator mediator, INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
+                                             INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
     {
-        this.Mediator = mediator;
         this.Title = "Sales Analysis";
     }
 
@@ -34,6 +30,12 @@ public partial class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel
 
     private async Task GetApiData()
     {
+        if (this.SelectedItem is null)
+        {
+            this.SalesAnalysisList = new List<SalesAnalysis>();
+            return;
+        }
+
         // TODO: Initial api call to get data would be done here
         List<SalesAnalysis> salesAnalysisList = new List<SalesAnalysis>();
         salesAnalysisList.Add(new SalesAnalysis("100.00 KES", "90.00 KES", "10%", "Sales Value", "Today's Sales", this.SelectedItem.DisplayText, "Variance:", "salesvalue.png"));
@@ -86,7 +88,6 @@ public record SalesAnalysis(String TodaysValue, String ComparisonValue, String V
 
 public class ReportsBalanceAnalysisPageViewModel : ExtendedBaseViewModel
 {
-    private readonly IMediator Mediator;
     private TooltipPosition tooltipPosition;
     private List<ICartesianAxis> yAxes;
     private List<ICartesianAxis> xAxes;
@@ -97,10 +98,8 @@ public class ReportsBalanceAnalysisPageViewModel : ExtendedBaseViewModel
                                                IApplicationCache applicationCache,
                                                IDialogService dialogService,
                                                IDeviceService deviceService,
-                                               IMediator mediator,
                                                INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
     {
-        this.Mediator = mediator;
         this.Title = "Balance Analysis";
     }
 
