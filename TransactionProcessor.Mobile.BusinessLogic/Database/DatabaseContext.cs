@@ -38,10 +38,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Database
             return SQLite3.LastInsertRowid(this.Connection.Handle);
         }
 
-        public async Task<String?> GetApplicationOption(String optionName) {
+        public Task<String?> GetApplicationOption(String optionName) {
             ApplicationOption option = this.Connection.Find<ApplicationOption>(optionName);
 
-            return option?.OptionValue;
+            return Task.FromResult(option?.OptionValue);
         }
 
         public async Task<List<LogMessage>> GetLogMessages(Int32 batchSize, Boolean isTrainingMode) {
@@ -90,12 +90,14 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Database
             }
         }
 
-        public async Task SaveApplicationOption(String optionName,
-                                                String optionValue) {
+        public Task SaveApplicationOption(String optionName,
+                                         String optionValue) {
             this.Connection.InsertOrReplace(new ApplicationOption {
                                                                   OptionName = optionName,
                                                                   OptionValue = optionValue
                                                               });
+
+            return Task.CompletedTask;
         }
 
         public async Task UpdateTransaction(TransactionRecord transactionRecord) {

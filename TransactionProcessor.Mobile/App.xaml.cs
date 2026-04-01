@@ -9,6 +9,7 @@ using TransactionProcessor.Mobile.Pages.Transactions.BillPayment;
 using TransactionProcessor.Mobile.Pages.Transactions.MobileTopup;
 using TransactionProcessor.Mobile.Pages.Transactions.Voucher;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
+using Microsoft.Maui.ApplicationModel;
 
 #if ANDROID
 using AndroidX.Core.View;
@@ -51,7 +52,7 @@ namespace TransactionProcessor.Mobile
         public App(IApplicationThemeService applicationThemeService)
         {
             InitializeComponent();
-            applicationThemeService.ApplyConfiguredTheme().GetAwaiter().GetResult();
+            MainThread.BeginInvokeOnMainThread(async () => await applicationThemeService.ApplyConfiguredTheme());
 
 #if ANDROID
             ApplyAutomationIdMapping(ViewHandler.ViewMapper);
