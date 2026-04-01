@@ -43,7 +43,7 @@ public class ApplicationThemeService : IApplicationThemeService
 
         Application.Current.UserAppTheme = isDarkThemeEnabled ? AppTheme.Dark : AppTheme.Light;
 
-        IList<ResourceDictionary> mergedDictionaries = Application.Current.Resources.MergedDictionaries;
+        ICollection<ResourceDictionary> mergedDictionaries = Application.Current.Resources.MergedDictionaries;
         ResourceDictionary? existingTheme = mergedDictionaries.FirstOrDefault(d => d is LightTheme or DarkTheme);
         ResourceDictionary selectedTheme = isDarkThemeEnabled ? new DarkTheme() : new LightTheme();
 
@@ -53,8 +53,34 @@ public class ApplicationThemeService : IApplicationThemeService
             return;
         }
 
-        Int32 themeIndex = mergedDictionaries.IndexOf(existingTheme);
-        mergedDictionaries.RemoveAt(themeIndex);
-        mergedDictionaries.Insert(themeIndex, selectedTheme);
+        if (mergedDictionaries is IList<ResourceDictionary> dictionaryList)
+        {
+            Int32 themeIndex = dictionaryList.IndexOf(existingTheme);
+            if (themeIndex < 0)
+            {
+                mergedDictionaries.Add(selectedTheme);
+                return;
+            }
+
+            dictionaryList.RemoveAt(themeIndex);
+            dictionaryList.Insert(themeIndex, selectedTheme);
+            return;
+        }
+
+        List<ResourceDictionary> dictionaries = mergedDictionaries.ToList();
+        Int32 replacementIndex = dictionaries.IndexOf(existingTheme);
+        if (replacementIndex < 0)
+        {
+            mergedDictionaries.Add(selectedTheme);
+            return;
+        }
+
+        dictionaries[replacementIndex] = selectedTheme;
+
+        mergedDictionaries.Clear();
+        foreach (ResourceDictionary resourceDictionary in dictionaries)
+        {
+            mergedDictionaries.Add(resourceDictionary);
+        }
     }
 }
