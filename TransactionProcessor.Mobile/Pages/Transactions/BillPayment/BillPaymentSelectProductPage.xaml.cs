@@ -2,6 +2,7 @@ using CommunityToolkit.Maui.Behaviors;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions;
+using TransactionProcessor.Mobile.Pages.Common;
 
 namespace TransactionProcessor.Mobile.Pages.Transactions.BillPayment;
 
@@ -43,7 +44,7 @@ public partial class BillPaymentSelectProductPage : ContentPage
 
         Image icon = new Image
         {
-            Source = "transactionsbutton.svg",
+            Source = ThemeButtonImageSource.Get("transactionsbutton.svg"),
             HeightRequest = 36,
             WidthRequest = 36,
             HorizontalOptions = LayoutOptions.Center

@@ -41,7 +41,7 @@
                         <TapGestureRecognizer Command="{Binding ReconciliationCommand}"/>
                     </Frame.GestureRecognizers>
                     <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                        <Image Source="transactionsbutton.svg" HeightRequest="36" WidthRequest="36" VerticalOptions="Center"/>
+                        <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton-dark.svg}" HeightRequest="36" WidthRequest="36" VerticalOptions="Center"/>
                         <Label Text="Reconciliation"
                                FontSize="15"
                                FontAttributes="Bold"
