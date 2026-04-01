@@ -12,6 +12,6 @@ internal static class ThemeButtonImageSource
         String imageExtension = Path.GetExtension(imageSource);
         String imageName = Path.GetFileNameWithoutExtension(imageSource);
 
-        return $"{imageName}-dark{imageExtension}";
+        return $"{imageName}_dark{imageExtension}";
     }
 }
