@@ -15,7 +15,9 @@
 
          <DataTemplate x:Key="CardTemplate">
             <Frame x:DataType="reports1:SalesAnalysis"
-                   Style="{StaticResource TransactionFormCard}">
+                   Style="{StaticResource TransactionFormCard}"
+                   BackgroundColor="{DynamicResource salesAnalysisCardBackgroundColor}"
+                   BorderColor="{DynamicResource salesAnalysisCardBorderColor}">
                 <Grid RowDefinitions="Auto,Auto,Auto"
                       ColumnDefinitions="*,Auto"
                       RowSpacing="12">
@@ -30,7 +32,7 @@
                     <Label Text="{Binding MainTitle}"
                            FontSize="18"
                            FontAttributes="Bold"
-                           TextColor="{DynamicResource labelTextColor}"/>
+                           TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}"/>
 
                     <VerticalStackLayout
                         Grid.Row="1"
@@ -38,11 +40,11 @@
                         Spacing="2">
                         <Label Text="{Binding TodaysTitle}"
                                FontSize="14"
-                               TextColor="{DynamicResource labelTextColor}" />
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
                         <Label Text="{Binding TodaysValue}"
                                FontSize="20"
                                FontAttributes="Bold"
-                               TextColor="{DynamicResource labelTextColor}" />
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
                     </VerticalStackLayout>
 
                     <HorizontalStackLayout
@@ -51,12 +53,12 @@
                         VerticalOptions="End">
                         <Label Text="{Binding ComparisonTitle}"
                                FontSize="12"
-                               TextColor="{DynamicResource labelTextColor}"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}"
                                Opacity="0.8"
                                VerticalOptions="Center"/>
                         <Label Text="{Binding ComparisonValue}"
                                FontSize="12"
-                               TextColor="{DynamicResource labelTextColor}"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}"
                                Opacity="0.8"
                                VerticalOptions="Center"/>
                     </HorizontalStackLayout>
@@ -69,12 +71,12 @@
                         VerticalOptions="End">
                         <Label Text="{Binding VarianceTitle}"
                                FontSize="12"
-                               TextColor="{DynamicResource labelTextColor}"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}"
                                Opacity="0.8"
                                VerticalOptions="Center"/>
                         <Label Text="{Binding VarianceValue}"
                                FontSize="12"
-                               TextColor="{DynamicResource labelTextColor}"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}"
                                Opacity="0.8"
                                VerticalOptions="Center"/>
                     </HorizontalStackLayout>
@@ -92,7 +94,7 @@
                                  HorizontalTextAlignment="Center"
                                  VerticalOptions="End"
                                  FontAttributes="Bold"
-                                 TextColor="{DynamicResource labelTextColor}"
+                                 TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}"
                                  Padding="20,0,20,20"/>
 
             <Picker x:Name="ComparisonDate"
@@ -100,8 +102,8 @@
                     ItemDisplayBinding="{Binding DisplayText}"
                     ItemsSource="{Binding ComparisonDates}"
                     SelectedItem="{Binding SelectedItem}"
-                    TextColor="{DynamicResource labelTextColor}"
-                    TitleColor="{DynamicResource labelTextColor}">
+                    TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}"
+                    TitleColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource Gray200}}">
                 <Picker.Behaviors>
                     <toolkit:EventToCommandBehavior
                         EventName="SelectedIndexChanged"

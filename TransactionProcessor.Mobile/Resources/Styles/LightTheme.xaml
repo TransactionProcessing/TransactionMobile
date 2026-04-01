@@ -38,6 +38,8 @@
     <Color x:Key="cardBorderColor">#E1E1E1</Color>
     <Color x:Key="entryContainerBorderColor">#CFCFD3</Color>
     <Color x:Key="entryContainerBackgroundColor">#EFEFEF</Color>
+    <Color x:Key="salesAnalysisCardBackgroundColor">#FFFFFF</Color>
+    <Color x:Key="salesAnalysisCardBorderColor">#E1E1E1</Color>
     <Color x:Key="shellTabBarBackgroundColor">#FFFFFF</Color>
     <Color x:Key="shellTabBarForegroundColor">#4267B2</Color>
     <Color x:Key="shellTabBarUnselectedColor">#212125</Color>
