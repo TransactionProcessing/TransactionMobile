@@ -53,6 +53,13 @@ public class ApplicationThemeService : IApplicationThemeService
             return;
         }
 
+        ReplaceThemeDictionary(mergedDictionaries, existingTheme, selectedTheme);
+    }
+
+    private static void ReplaceThemeDictionary(ICollection<ResourceDictionary> mergedDictionaries,
+                                               ResourceDictionary existingTheme,
+                                               ResourceDictionary selectedTheme)
+    {
         if (mergedDictionaries is IList<ResourceDictionary> dictionaryList)
         {
             Int32 themeIndex = dictionaryList.IndexOf(existingTheme);
