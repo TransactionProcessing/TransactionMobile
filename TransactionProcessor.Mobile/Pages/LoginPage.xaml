@@ -42,9 +42,9 @@
                 <Frame CornerRadius="30"
                        Padding="30,30,30,40"
                        HasShadow="True"
-                       BackgroundColor="White"
+                       BackgroundColor="{DynamicResource cardBackgroundColor}"
                        Margin="0"
-                       BorderColor="Transparent">
+                       BorderColor="{DynamicResource cardBorderColor}">
                     <VerticalStackLayout Spacing="8">
 
                         <!-- Username field -->

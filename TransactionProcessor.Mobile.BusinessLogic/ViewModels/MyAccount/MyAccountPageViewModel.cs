@@ -21,8 +21,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.MyAccount
         private DateTime lastLogin;
 
         private readonly IMediator Mediator;
+        private readonly IApplicationThemeService ApplicationThemeService;
 
         private String merchantName;
+        private Boolean isDarkThemeEnabled;
 
         #endregion
 
@@ -32,8 +34,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.MyAccount
                                       IApplicationCache applicationCache,
                                       IDialogService dialogService,
                                       IDeviceService deviceService,
+                                      IApplicationThemeService applicationThemeService,
                                       IMediator mediator,
                                       INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService,navigationParameterService) {
+            this.ApplicationThemeService = applicationThemeService;
             this.Mediator = mediator;
             this.Title = "My Account";
         }
@@ -45,6 +49,11 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.MyAccount
         public DateTime LastLogin {
             get => this.lastLogin;
             set => this.SetProperty(ref this.lastLogin, value);
+        }
+
+        public Boolean IsDarkThemeEnabled {
+            get => this.isDarkThemeEnabled;
+            set => this.SetProperty(ref this.isDarkThemeEnabled, value);
         }
 
         public String MerchantName {
@@ -93,6 +102,13 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.MyAccount
             this.ApplicationCache.SetMerchantDetails(merchantDetailsResult.Data, cacheEntryOptions);
 
             this.LastLogin = DateTime.Now; // TODO: might cache this in the application
+            this.IsDarkThemeEnabled = await this.ApplicationThemeService.GetDarkThemeEnabled();
+        }
+
+        public async Task SetDarkTheme(Boolean isEnabled) {
+            this.IsDarkThemeEnabled = isEnabled;
+
+            await this.ApplicationThemeService.SetDarkTheme(isEnabled);
         }
 
         private async Task LogoutCommandExecute() {

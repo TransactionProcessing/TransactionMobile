@@ -4,6 +4,10 @@
     {
         Task InitialiseDatabase();
 
+        Task<String?> GetApplicationOption(String optionName);
+
+        Task SaveApplicationOption(String optionName, String optionValue);
+
         Task<Int64> CreateTransaction(TransactionRecord transactionRecord);
 
         Task UpdateTransaction(TransactionRecord transactionRecord);

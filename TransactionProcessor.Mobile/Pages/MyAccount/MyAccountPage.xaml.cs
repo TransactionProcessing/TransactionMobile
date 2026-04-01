@@ -95,4 +95,15 @@ public partial class MyAccountPage : NoBackWithoutLogoutPage
 
         return tile;
     }
+
+    private async void DarkThemeSwitch_Toggled(Object sender,
+                                               ToggledEventArgs e)
+    {
+        if (this.viewModel == null)
+        {
+            return;
+        }
+
+        await this.viewModel.SetDarkTheme(e.Value);
+    }
 }
