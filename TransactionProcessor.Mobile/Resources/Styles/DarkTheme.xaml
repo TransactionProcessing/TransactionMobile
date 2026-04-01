@@ -32,4 +32,7 @@
     <Color x:Key="cardBorderColor">#2F3640</Color>
     <Color x:Key="entryContainerBorderColor">#374151</Color>
     <Color x:Key="entryContainerBackgroundColor">#111827</Color>
+    <Color x:Key="shellTabBarBackgroundColor">#1F2937</Color>
+    <Color x:Key="shellTabBarForegroundColor">#F5F7FA</Color>
+    <Color x:Key="shellTabBarUnselectedColor">#9CA3AF</Color>
 </ResourceDictionary>

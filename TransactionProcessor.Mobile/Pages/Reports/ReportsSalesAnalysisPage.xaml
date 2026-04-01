@@ -13,67 +13,95 @@
             <toolkit:SelectedItemEventArgsConverter x:Key="SelectedItemEventArgsConverter" />
         </ResourceDictionary>
 
-        <DataTemplate x:Key="CardTemplate">
-            <Frame
-            Padding="0"
-            CornerRadius="20"
-            HasShadow="False"
-            x:DataType="reports1:SalesAnalysis"
-            BackgroundColor="{StaticResource LightGray}">
-                <Grid
-                            RowDefinitions="42,40,*"
-                            Padding="20">
+         <DataTemplate x:Key="CardTemplate">
+            <Frame x:DataType="reports1:SalesAnalysis"
+                   Style="{StaticResource TransactionFormCard}">
+                <Grid RowDefinitions="Auto,Auto,Auto"
+                      ColumnDefinitions="*,Auto"
+                      RowSpacing="12">
                     <Image
-                                Source="{Binding Icon}"
-                                WidthRequest="36"
-                                HeightRequest="36"
-                                VerticalOptions="Start"
-                                HorizontalOptions="End"/>
+                        Grid.Column="1"
+                        Source="{Binding Icon}"
+                        WidthRequest="36"
+                        HeightRequest="36"
+                        VerticalOptions="Start"
+                        HorizontalOptions="End"/>
 
-                    <Label Text="{Binding MainTitle}" class="LargeTitle"/>
+                    <Label Text="{Binding MainTitle}"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="{DynamicResource labelTextColor}"/>
 
                     <VerticalStackLayout
-                                Spacing="0"
-                                Grid.RowSpan="3" 
-                                VerticalOptions="Center">
-                        <Label Text="{Binding TodaysTitle}" class="Subhead" />
-                        <Label Text="{Binding TodaysValue}" class="Subhead" />
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        Spacing="2">
+                        <Label Text="{Binding TodaysTitle}"
+                               FontSize="14"
+                               TextColor="{DynamicResource labelTextColor}" />
+                        <Label Text="{Binding TodaysValue}"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource labelTextColor}" />
                     </VerticalStackLayout>
 
                     <HorizontalStackLayout
-                            Grid.Row="2"
-                            Spacing="10"
-                            VerticalOptions="End">
-                        <Label Text="{Binding ComparisonTitle}" class="Small" VerticalOptions="Center"/>
-                        <Label Text="{Binding ComparisonValue}" class="Small" VerticalOptions="Center"/>
+                        Grid.Row="2"
+                        Spacing="8"
+                        VerticalOptions="End">
+                        <Label Text="{Binding ComparisonTitle}"
+                               FontSize="12"
+                               TextColor="{DynamicResource labelTextColor}"
+                               Opacity="0.8"
+                               VerticalOptions="Center"/>
+                        <Label Text="{Binding ComparisonValue}"
+                               FontSize="12"
+                               TextColor="{DynamicResource labelTextColor}"
+                               Opacity="0.8"
+                               VerticalOptions="Center"/>
                     </HorizontalStackLayout>
 
                     <HorizontalStackLayout
-                                Grid.Row="2"
-                                Spacing="10"
-                                HorizontalOptions="End"
-                                VerticalOptions="End">
-                        <Label Text="{Binding VarianceTitle}" class="Small" VerticalOptions="Center"/>
-                        <Label Text="{Binding VarianceValue}" class="Small" VerticalOptions="Center"/>
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Spacing="8"
+                        HorizontalOptions="End"
+                        VerticalOptions="End">
+                        <Label Text="{Binding VarianceTitle}"
+                               FontSize="12"
+                               TextColor="{DynamicResource labelTextColor}"
+                               Opacity="0.8"
+                               VerticalOptions="Center"/>
+                        <Label Text="{Binding VarianceValue}"
+                               FontSize="12"
+                               TextColor="{DynamicResource labelTextColor}"
+                               Opacity="0.8"
+                               VerticalOptions="Center"/>
                     </HorizontalStackLayout>
                 </Grid>
             </Frame>
-
-
-
         </DataTemplate>
 
     </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout Style="{DynamicResource Layout}">
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+            <controls:TitleLabel Text="{Binding Title}"
+                                 AutomationId="{Binding Title}"
+                                 FontSize="20"
+                                 HorizontalTextAlignment="Center"
+                                 VerticalOptions="End"
+                                 FontAttributes="Bold"
+                                 TextColor="{DynamicResource labelTextColor}"
+                                 Padding="20,0,20,20"/>
 
             <Picker x:Name="ComparisonDate"
                     Title="Select Date for Comparison"
                     ItemDisplayBinding="{Binding DisplayText}"
                     ItemsSource="{Binding ComparisonDates}"
-                    SelectedItem="{Binding SelectedItem}">
+                    SelectedItem="{Binding SelectedItem}"
+                    TextColor="{DynamicResource labelTextColor}"
+                    TitleColor="{DynamicResource labelTextColor}">
                 <Picker.Behaviors>
                     <toolkit:EventToCommandBehavior
                         EventName="SelectedIndexChanged"
@@ -82,26 +110,10 @@
                 </Picker.Behaviors>
             </Picker>
 
-            <ScrollView>
-                <VerticalStackLayout>
-
-                    <!-- Actual Content -->
-                    <CollectionView
-                        Margin="15"
-                        ItemsSource="{Binding SalesAnalysisList}"
-                        ItemTemplate="{StaticResource CardTemplate}">
-                        <CollectionView.ItemsLayout>
-                            <GridItemsLayout Orientation="Vertical"
-                                             Span="1"
-                                             VerticalItemSpacing="8"
-                                             HorizontalItemSpacing="8"/>
-                        </CollectionView.ItemsLayout>
-                    </CollectionView>
-
-                </VerticalStackLayout>
-            </ScrollView>
-
-
+            <VerticalStackLayout Margin="15,0,15,0"
+                                 Spacing="0"
+                                 BindableLayout.ItemsSource="{Binding SalesAnalysisList}"
+                                 BindableLayout.ItemTemplate="{StaticResource CardTemplate}" />
             <Button Text="Back" AutomationId="BackButton" Style="{StaticResource ReportsButtonStyle}" Command="{Binding BackButtonCommand}"/>
 
         </VerticalStackLayout>
