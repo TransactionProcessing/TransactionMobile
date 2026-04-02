@@ -124,8 +124,8 @@ namespace TransactionProcessor.Mobile.UITests.Common
             this.Trace(this.LocalIPAddress);
 
             await base.StartContainersForScenarioRun(scenarioName, dockerServices);
-            var c = await this.StartContainer2(this.SetupConfigHostContainer,this.TestNetworks, (DockerServices)512);
-            this.ConfigHostPort = c.GetMappedPublicPort(ConfigHostDockerPort);
+            //var c = await this.StartContainer2(this.SetupConfigHostContainer,this.TestNetworks, (DockerServices)512);
+            //this.ConfigHostPort = c.GetMappedPublicPort(ConfigHostDockerPort);
 
             // Setup the base address resolvers
 
