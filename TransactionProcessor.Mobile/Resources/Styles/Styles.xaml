@@ -161,7 +161,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="Label">
+    <Style TargetType="Label" ApplyToDerivedTypes="True">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="FontFamily" Value="OpenSansRegular" />

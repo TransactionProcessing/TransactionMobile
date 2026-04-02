@@ -36,7 +36,7 @@ public class GenericSteps
             DockerServices dockerServices = DockerServices.EventStore |
                                             DockerServices.MessagingService | DockerServices.SecurityService |
                                             DockerServices.TestHost | DockerServices.SqlServer | DockerServices.TransactionProcessor |
-                                            DockerServices.TransactionProcessorAcl | (DockerServices)512;
+                                            DockerServices.TransactionProcessorAcl | DockerServices.ConfigurationHost;
 
             //dockerServices = DockerServices.EventStore | DockerServices.SqlServer | (DockerServices)512;
 

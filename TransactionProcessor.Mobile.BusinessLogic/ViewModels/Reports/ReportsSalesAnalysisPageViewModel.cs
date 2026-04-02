@@ -4,7 +4,6 @@ using LiveChartsCore.Defaults;
 using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
-using MediatR;
 using System.Diagnostics.CodeAnalysis;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
@@ -14,15 +13,12 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports;
 
 public partial class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel
 {
-
-    private readonly IMediator Mediator;
     public ReportsSalesAnalysisPageViewModel(INavigationService navigationService,
                                              IApplicationCache applicationCache,
                                              IDialogService dialogService,
                                              IDeviceService deviceService,
-                                             IMediator mediator, INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
+                                             INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
     {
-        this.Mediator = mediator;
         this.Title = "Sales Analysis";
     }
 
@@ -34,6 +30,12 @@ public partial class ReportsSalesAnalysisPageViewModel : ExtendedBaseViewModel
 
     private async Task GetApiData()
     {
+        if (this.SelectedItem is null)
+        {
+            this.SalesAnalysisList = new List<SalesAnalysis>();
+            return;
+        }
+
         // TODO: Initial api call to get data would be done here
         List<SalesAnalysis> salesAnalysisList = new List<SalesAnalysis>();
         salesAnalysisList.Add(new SalesAnalysis("100.00 KES", "90.00 KES", "10%", "Sales Value", "Today's Sales", this.SelectedItem.DisplayText, "Variance:", "salesvalue.png"));
@@ -84,21 +86,25 @@ public record ComparisonDate(DateTime DateTime, String DisplayText);
 [ExcludeFromCodeCoverage]
 public record SalesAnalysis(String TodaysValue, String ComparisonValue, String VarianceValue, String MainTitle, String TodaysTitle, String ComparisonTitle, String VarianceTitle, String Icon);
 
-public class ReportsBalanceAnalysisPageViewModel : ExtendedBaseViewModel{
-    private readonly IMediator Mediator;
+public class ReportsBalanceAnalysisPageViewModel : ExtendedBaseViewModel
+{
+    private TooltipPosition tooltipPosition;
+    private List<ICartesianAxis> yAxes;
+    private List<ICartesianAxis> xAxes;
+    private ISeries[] series;
+    private TooltipFindingStrategy tooltipFindingStrategy;
     
     public ReportsBalanceAnalysisPageViewModel(INavigationService navigationService,
                                                IApplicationCache applicationCache,
                                                IDialogService dialogService,
                                                IDeviceService deviceService,
-                                               IMediator mediator,
-                                               INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService, Orientation.Landscape)
+                                               INavigationParameterService navigationParameterService) : base(applicationCache, dialogService, navigationService, deviceService, navigationParameterService)
     {
-        this.Mediator = mediator;
         this.Title = "Balance Analysis";
     }
 
-    public async Task Initialise(CancellationToken cancellationToken){
+    public override async Task Initialise(CancellationToken cancellationToken)
+    {
         await base.Initialise(cancellationToken);
 
         DateTimeAxis axis1 = new DateTimeAxis(TimeSpan.FromDays(1), (d) => d.ToString("dd/MM/yyyy"));
@@ -134,15 +140,35 @@ public class ReportsBalanceAnalysisPageViewModel : ExtendedBaseViewModel{
                                          };
     }
 
-    public TooltipPosition TooltipPosition{ get; set; }
+    public TooltipPosition TooltipPosition
+    {
+        get => this.tooltipPosition;
+        set => this.SetProperty(ref this.tooltipPosition, value);
+    }
 
-    public List<ICartesianAxis> YAxes{ get; set; }
+    public List<ICartesianAxis> YAxes
+    {
+        get => this.yAxes;
+        set => this.SetProperty(ref this.yAxes, value);
+    }
 
-    public List<ICartesianAxis> XAxes{ get; set; }
+    public List<ICartesianAxis> XAxes
+    {
+        get => this.xAxes;
+        set => this.SetProperty(ref this.xAxes, value);
+    }
 
-    public ISeries[] Series { get; set; }
+    public ISeries[] Series
+    {
+        get => this.series;
+        set => this.SetProperty(ref this.series, value);
+    }
 
-    public TooltipFindingStrategy TooltipFindingStrategy { get; set; }
+    public TooltipFindingStrategy TooltipFindingStrategy
+    {
+        get => this.tooltipFindingStrategy;
+        set => this.SetProperty(ref this.tooltipFindingStrategy, value);
+    }
 
 
 }

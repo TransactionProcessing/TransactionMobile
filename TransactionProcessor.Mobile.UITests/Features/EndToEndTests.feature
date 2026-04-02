@@ -82,8 +82,8 @@ Background:
 	| Test Estate 1 | PataPawa PrePay  | PataPawa PrePay Contract  | Pre Pay Bill Pay  | Percentage      | Merchant Commission | 0.50  |
 
 	Given I create the following merchants
-	| MerchantName    | AddressLine1        | AddressLine2        | AddressLine3        | AddressLine4        | Town     | Region      | Country        | ContactName    | EmailAddress                 | EstateName    |
-	| Test Merchant 1 | test address line 1 | test address line 2 | test address line 3 | test address line 4 | TestTown | Test Region | United Kingdom | Test Contact 1 | testcontact1@merchant1.co.uk | Test Estate 1 |
+	| MerchantName    | AddressLine1        | AddressLine2        | AddressLine3        | AddressLine4        | Town     | Region      | PostalCode | Country        | ContactName    | EmailAddress                 | EstateName    |
+	| Test Merchant 1 | test address line 1 | test address line 2 | test address line 3 | test address line 4 | TestTown | Test Region | TE57 1NG   | United Kingdom | Test Contact 1 | testcontact1@merchant1.co.uk | Test Estate 1 |
 
 	Given I have assigned the following  operator to the merchants
 	| OperatorName     | MerchantName    | MerchantNumber | TerminalNumber | EstateName    |

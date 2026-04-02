@@ -51,7 +51,7 @@
                             <TapGestureRecognizer Command="{Binding GoToMobileTopupCommand}" AutomationId="MobileTopupCard"/>
                         </Frame.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                            <Image Source="transactionsbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label Text="Mobile Topup"
                                    FontSize="13"
                                    FontAttributes="Bold"
@@ -66,7 +66,7 @@
                             <TapGestureRecognizer Command="{Binding GoToBillPaymentCommand}" AutomationId="BillPaymentCard"/>
                         </Frame.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                            <Image Source="transactionsbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label Text="Bill Payment"
                                    FontSize="13"
                                    FontAttributes="Bold"
@@ -81,7 +81,7 @@
                             <TapGestureRecognizer Command="{Binding GoToVoucherCommand}" AutomationId="VoucherCard"/>
                         </Frame.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                            <Image Source="transactionsbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label Text="Voucher"
                                    FontSize="13"
                                    FontAttributes="Bold"
@@ -96,7 +96,7 @@
                             <TapGestureRecognizer Command="{Binding GoToAdminCommand}" AutomationId="AdminCard"/>
                         </Frame.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                            <Image Source="transactionsbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label Text="Admin"
                                    FontSize="13"
                                    FontAttributes="Bold"

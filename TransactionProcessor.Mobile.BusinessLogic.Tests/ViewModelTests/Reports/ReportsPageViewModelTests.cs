@@ -89,7 +89,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
         private readonly Mock<IApplicationCache> ApplicationCache;
         private readonly Mock<IDialogService> DialogService;
         private readonly Mock<IDeviceService> DeviceService;
-        private readonly Mock<IMediator> Mediator;
 
         public ReportsSalesAnalysisPageViewModelTests(){
             this.NavigationService = new Mock<INavigationService>();
@@ -97,13 +96,11 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
             this.ApplicationCache = new Mock<IApplicationCache>();
             this.DialogService = new Mock<IDialogService>();
             this.DeviceService = new Mock<IDeviceService>();
-            this.Mediator = new Mock<IMediator>();
 
             this.ViewModel = new ReportsSalesAnalysisPageViewModel(this.NavigationService.Object,
                                                                    this.ApplicationCache.Object,
                                                                    this.DialogService.Object,
                                                                    this.DeviceService.Object,
-                                                                   this.Mediator.Object,
                                                                    this.NavigationParameterService.Object);
         }
 
@@ -125,6 +122,15 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
         }
 
         [Fact]
+        public void ReportsSalesAnalysisPageViewModel_ComparisonDatePickerSelectedIndexChangedCommand_WithoutSelectedItem_ReturnsEmptyList()
+        {
+            this.ViewModel.ComparisonDatePickerSelectedIndexChangedCommand.Execute(null);
+
+            this.ViewModel.SalesAnalysisList.ShouldNotBeNull();
+            this.ViewModel.SalesAnalysisList.ShouldBeEmpty();
+        }
+
+        [Fact]
         public async Task ReportsSalesAnalysisPageViewModel_BackButtonCommand_HomePageIsShown()
         {
             this.ViewModel.BackButtonCommand.Execute(null);
@@ -141,7 +147,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
         private Mock<IApplicationCache> ApplicationCache;
         private Mock<IDialogService> DialogService;
         private readonly Mock<IDeviceService> DeviceService;
-        private Mock<IMediator> Mediator;
 
         public ReportsBalanceAnalysisPageViewModelTests()
         {
@@ -150,13 +155,11 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
             this.ApplicationCache = new Mock<IApplicationCache>();
             this.DialogService = new Mock<IDialogService>();
             this.DeviceService = new Mock<IDeviceService>();
-            this.Mediator = new Mock<IMediator>();
 
             this.ViewModel = new ReportsBalanceAnalysisPageViewModel(this.NavigationService.Object,
                                                                      this.ApplicationCache.Object,
                                                                      this.DialogService.Object,
                                                                      this.DeviceService.Object,
-                                                                     this.Mediator.Object,
                                                                      this.NavigationParameterService.Object);
         }
 

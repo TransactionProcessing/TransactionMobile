@@ -42,7 +42,7 @@ namespace TransactionProcessor.Mobile.Pages.Support
 
             Image icon = new Image
             {
-                Source = iconSource,
+                Source = ThemeButtonImageSource.Get(iconSource),
                 HeightRequest = 36,
                 WidthRequest = 36,
                 HorizontalOptions = LayoutOptions.Center

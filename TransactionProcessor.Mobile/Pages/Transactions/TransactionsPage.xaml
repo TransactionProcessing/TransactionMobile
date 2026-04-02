@@ -18,7 +18,7 @@
                     </LinearGradientBrush>
                 </Grid.Background>
                 <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="6" Padding="20">
-                    <Image Source="transactionsbutton.svg" HeightRequest="60" WidthRequest="60" HorizontalOptions="Center"/>
+                    <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="60" WidthRequest="60" HorizontalOptions="Center"/>
                     <Label Text="Select Transaction Type"
                            AutomationId="SelectTransactionType"
                            FontSize="20"
@@ -44,7 +44,7 @@
                             <TapGestureRecognizer Command="{Binding MobileTopupCommand}"/>
                         </Frame.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                            <Image Source="transactionsbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label Text="Mobile Topup"
                                    FontSize="13"
                                    FontAttributes="Bold"
@@ -62,7 +62,7 @@
                             <TapGestureRecognizer Command="{Binding MobileWalletCommand}"/>
                         </Frame.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                            <Image Source="transactionsbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label Text="Mobile Wallet"
                                    FontSize="13"
                                    FontAttributes="Bold"
@@ -80,7 +80,7 @@
                             <TapGestureRecognizer Command="{Binding BillPaymentCommand}"/>
                         </Frame.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                            <Image Source="transactionsbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label Text="Bill Payment"
                                    FontSize="13"
                                    FontAttributes="Bold"
@@ -98,7 +98,7 @@
                             <TapGestureRecognizer Command="{Binding VoucherCommand}"/>
                         </Frame.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
-                            <Image Source="transactionsbutton.svg" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
+                            <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label Text="Voucher"
                                    FontSize="13"
                                    FontAttributes="Bold"
@@ -116,7 +116,7 @@
                             <TapGestureRecognizer Command="{Binding AdminCommand}"/>
                         </Frame.GestureRecognizers>
                         <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                            <Image Source="transactionsbutton.svg" HeightRequest="36" WidthRequest="36" VerticalOptions="Center"/>
+                            <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="36" WidthRequest="36" VerticalOptions="Center"/>
                             <Label Text="Admin"
                                    FontSize="15"
                                    FontAttributes="Bold"
