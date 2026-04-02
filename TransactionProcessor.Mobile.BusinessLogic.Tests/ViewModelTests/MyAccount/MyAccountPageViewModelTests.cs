@@ -25,6 +25,7 @@ public class MyAccountPageViewModelTests
     private readonly Mock<IDialogService> DialogService;
 
     private readonly Mock<IMediator> Mediator;
+    private readonly Mock<IApplicationThemeService> ApplicationThemeService;
 
     private readonly MyAccountPageViewModel ViewModel;
 
@@ -37,22 +38,33 @@ public class MyAccountPageViewModelTests
         this.DialogService = new Mock<IDialogService>();
         this.DeviceService = new Mock<IDeviceService>();
         this.Mediator = new Mock<IMediator>();
+        this.ApplicationThemeService = new Mock<IApplicationThemeService>();
         this.ViewModel = new MyAccountPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object,
-                                                                      this.DialogService.Object, this.DeviceService.Object,
-                                                                      this.Mediator.Object,
-                                                                      this.NavigationParameterService.Object);
+                                                                       this.DialogService.Object, this.DeviceService.Object,
+                                                                       this.ApplicationThemeService.Object,
+                                                                       this.Mediator.Object,
+                                                                       this.NavigationParameterService.Object);
     }
 
     [Fact]
     public async Task MyAccountPageViewModel_Initialise_IsInitialised() {
-        
+        this.ApplicationThemeService.Setup(s => s.GetDarkThemeEnabled()).ReturnsAsync(true);
         this.Mediator.Setup(m => m.Send(It.IsAny<GetMerchantDetailsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success( TestData.MerchantDetailsModel));
 
         await this.ViewModel.Initialise(CancellationToken.None);
 
         this.ViewModel.MerchantName.ShouldBe(TestData.MerchantDetailsModel.MerchantName);
         this.ViewModel.LastLogin.ShouldBe(DateTime.Now, TimeSpan.FromSeconds(30));
+        this.ViewModel.IsDarkThemeEnabled.ShouldBeTrue();
         this.ApplicationCache.Verify(a => a.SetMerchantDetails(It.IsAny<MerchantDetailsModel>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task MyAccountPageViewModel_SetDarkTheme_ThemeStoredAndPropertyUpdated() {
+        await this.ViewModel.SetDarkTheme(true);
+
+        this.ViewModel.IsDarkThemeEnabled.ShouldBeTrue();
+        this.ApplicationThemeService.Verify(s => s.SetDarkTheme(true), Times.Once);
     }
 
     [Fact]

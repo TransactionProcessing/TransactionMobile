@@ -7,21 +7,28 @@
              Shell.NavBarIsVisible="False">
 
     <ScrollView>
-        <VerticalStackLayout>
-            <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
+        <VerticalStackLayout Style="{DynamicResource Layout}">
+            <controls:TitleLabel Text="{Binding Title}"
+                                 AutomationId="{Binding Title}"
+                                 FontSize="20"
+                                 HorizontalTextAlignment="Center"
+                                 VerticalOptions="End"
+                                 FontAttributes="Bold"
+                                 TextColor="{DynamicResource labelTextColor}"
+                                 Padding="20,0,20,20"/>
 
-            <liveChartsCore:CartesianChart x:Name="Chart"
-                                           Series="{Binding Series}" 
-                                           YAxes="{Binding YAxes}"
-                                           XAxes="{Binding XAxes}"
-                                           TooltipFindingStrategy="{Binding TooltipFindingStrategy}"
-                                           TooltipPosition="{Binding TooltipPosition}"
-                                           HeightRequest="200" HorizontalOptions="FillAndExpand">
-            </liveChartsCore:CartesianChart>
+            <Frame Style="{StaticResource TransactionFormCard}">
+                <liveChartsCore:CartesianChart x:Name="Chart"
+                                               Series="{Binding Series}"
+                                               YAxes="{Binding YAxes}"
+                                               XAxes="{Binding XAxes}"
+                                               TooltipFindingStrategy="{Binding TooltipFindingStrategy}"
+                                               TooltipPosition="{Binding TooltipPosition}"
+                                               HeightRequest="260"
+                                               HorizontalOptions="FillAndExpand" />
+            </Frame>
 
-            <VerticalStackLayout Style="{DynamicResource Layout}">
             <Button Text="Back" AutomationId="BackButton" Style="{StaticResource ReportsButtonStyle}" Command="{Binding BackButtonCommand}"/>
-            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

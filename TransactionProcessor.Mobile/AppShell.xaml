@@ -10,7 +10,11 @@
     xmlns:reports="clr-namespace:TransactionProcessor.Mobile.Pages.Reports"
     xmlns:myAccount="clr-namespace:TransactionProcessor.Mobile.Pages.MyAccount"
     xmlns:support="clr-namespace:TransactionProcessor.Mobile.Pages.Support"
-    Title="TransactionProcessor.Mobile">
+    Title="TransactionProcessor.Mobile"
+    Shell.TabBarBackgroundColor="{DynamicResource shellTabBarBackgroundColor}"
+    Shell.TabBarForegroundColor="{DynamicResource shellTabBarForegroundColor}"
+    Shell.TabBarTitleColor="{DynamicResource shellTabBarForegroundColor}"
+    Shell.TabBarUnselectedColor="{DynamicResource shellTabBarUnselectedColor}">
 
     <ShellContent
         Title="Loading"

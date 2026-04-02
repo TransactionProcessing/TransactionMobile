@@ -17,7 +17,7 @@
                     </LinearGradientBrush>
                 </Grid.Background>
                 <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4" Padding="20">
-                    <Image Source="reportbutton.svg" HeightRequest="44" WidthRequest="44" HorizontalOptions="Center"/>
+                    <Image Source="{AppThemeBinding Light=reportbutton.svg, Dark=reportbutton_dark.svg}" HeightRequest="44" WidthRequest="44" HorizontalOptions="Center"/>
                     <Label Text="{Binding Title}"
                            AutomationId="{Binding Title}"
                            FontSize="20"

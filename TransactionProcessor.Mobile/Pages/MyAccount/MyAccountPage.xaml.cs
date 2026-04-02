@@ -53,7 +53,7 @@ public partial class MyAccountPage : NoBackWithoutLogoutPage
 
         Image icon = new Image
         {
-            Source = iconSource,
+            Source = ThemeButtonImageSource.Get(iconSource),
             HeightRequest = 36,
             WidthRequest = 36,
             HorizontalOptions = LayoutOptions.Center
@@ -94,5 +94,17 @@ public partial class MyAccountPage : NoBackWithoutLogoutPage
         tile.GestureRecognizers.Add(tapGesture);
 
         return tile;
+    }
+
+    private async void DarkThemeSwitch_Toggled(Object sender,
+                                               ToggledEventArgs e)
+    {
+        if (this.viewModel == null)
+        {
+            return;
+        }
+
+        await this.viewModel.SetDarkTheme(e.Value);
+        this.LoadOptions(this.viewModel);
     }
 }

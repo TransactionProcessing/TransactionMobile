@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using System.Diagnostics;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Windows;
 using Shared.IntegrationTesting;
@@ -10,6 +11,19 @@ namespace TransactionProcessor.Mobile.UITests.Pages;
 
 public static class Extenstions
 {
+    private static IWebElement? TryScrollIntoView(AppiumDriver driver, string selector, string automationId)
+    {
+        try
+        {
+            return driver.FindElement(MobileBy.AndroidUIAutomator(selector));
+        }
+        catch (WebDriverException ex)
+        {
+            Debug.WriteLine($"Unable to scroll to element [{automationId}]: {ex.Message}");
+            return null;
+        }
+    }
+
     /*
         // TODO: Mac & Windows Extensions
         // TODO: May need a platform switch
@@ -127,6 +141,22 @@ public static class Extenstions
                     catch (NoSuchElementException)
                     {
                         // do nothing; handled by retry
+                    }
+                }
+
+                if (element == null && platform == "android")
+                {
+                    string fullResourceId = $"{androidPackage}:id/{automationId}";
+
+                    element = TryScrollIntoView(driver,
+                                                $"new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().resourceId(\"{fullResourceId}\"))",
+                                                automationId);
+
+                    if (element == null)
+                    {
+                        element = TryScrollIntoView(driver,
+                                                    $"new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().description(\"{automationId}\"))",
+                                                    automationId);
                     }
                 }
 

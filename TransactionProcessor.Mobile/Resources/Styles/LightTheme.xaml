@@ -34,61 +34,69 @@
     <Color x:Key="DarkGray">#212125</Color>
     <Color x:Key="MidGray">#CFCFD3</Color>
     <Color x:Key="LightGray">#EFEFEF</Color>
+    <Color x:Key="cardBackgroundColor">#FFFFFF</Color>
+    <Color x:Key="cardBorderColor">#E1E1E1</Color>
+    <Color x:Key="entryContainerBorderColor">#CFCFD3</Color>
+    <Color x:Key="entryContainerBackgroundColor">#EFEFEF</Color>
+    <Color x:Key="salesAnalysisCardBackgroundColor">#FFFFFF</Color>
+    <Color x:Key="salesAnalysisCardBorderColor">#E1E1E1</Color>
+    <Color x:Key="shellTabBarBackgroundColor">#FFFFFF</Color>
+    <Color x:Key="shellTabBarForegroundColor">#4267B2</Color>
+    <Color x:Key="shellTabBarUnselectedColor">#212125</Color>
 
     <!-- Styles -->
     <Style TargetType="Page" ApplyToDerivedTypes="True">
-        <Setter Property="BackgroundColor" Value="{StaticResource pageBackgroundColor}"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource pageBackgroundColor}"/>
         <Setter Property="Padding" Value="20,20,20, 20"/>
     </Style>
 
     <Style x:Key="LabelStyle" TargetType="Label">
-        <Setter Property="TextColor" Value="{StaticResource labelTextColor}"/>
+        <Setter Property="TextColor" Value="{DynamicResource labelTextColor}"/>
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
     </Style>
 
     <Style x:Key="SmallLabelStyle" TargetType="Label">
-        <Setter Property="TextColor" Value="{StaticResource labelTextColor}"/>
+        <Setter Property="TextColor" Value="{DynamicResource labelTextColor}"/>
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
         <Setter Property="FontSize" Value="12" />
         <Setter Property="LineHeight" Value="1.25" />
     </Style>
 
     <Style x:Key="AmountEntryStyle" TargetType="Entry">
-        <Setter Property="PlaceholderColor" Value="{StaticResource entryPlaceHolderColorDark}" />
-        <Setter Property="TextColor" Value="{StaticResource entryTextColor}" />
+        <Setter Property="PlaceholderColor" Value="{DynamicResource entryPlaceHolderColorDark}" />
+        <Setter Property="TextColor" Value="{DynamicResource entryTextColor}" />
         <Setter Property="HeightRequest" Value="50"></Setter>
         <Setter Property="Margin" Value="0,0,0,0"></Setter>
         <Setter Property="ReturnType" Value="Done" />
     </Style>
 
     <Style x:Key="MobileNumberEntryStyle" TargetType="Entry">
-        <Setter Property="PlaceholderColor" Value="{StaticResource entryPlaceHolderColorDark}" />
-        <Setter Property="TextColor" Value="{StaticResource entryTextColor}" />
-        <Setter Property="TextColor" Value="Blue"></Setter>
+        <Setter Property="PlaceholderColor" Value="{DynamicResource entryPlaceHolderColorDark}" />
+        <Setter Property="TextColor" Value="{DynamicResource entryTextColor}" />
         <Setter Property="HeightRequest" Value="50"></Setter>
         <Setter Property="Margin" Value="0,0,0,0"></Setter>
         <Setter Property="ReturnType" Value="Done" />
     </Style>
 
     <Style x:Key="EmailAddressEntryStyle" TargetType="Entry">
-        <Setter Property="PlaceholderColor" Value="{StaticResource entryPlaceHolderColorDark}" />
-        <Setter Property="TextColor" Value="{StaticResource entryTextColor}" />
+        <Setter Property="PlaceholderColor" Value="{DynamicResource entryPlaceHolderColorDark}" />
+        <Setter Property="TextColor" Value="{DynamicResource entryTextColor}" />
         <Setter Property="HeightRequest" Value="50"></Setter>
         <Setter Property="Margin" Value="0,0,0,0"></Setter>
         <Setter Property="ReturnType" Value="Done" />
     </Style>
 
     <Style x:Key="UserNameEntryStyle" TargetType="Entry">
-        <Setter Property="PlaceholderColor" Value="{StaticResource entryPlaceHolderColorDark}" />
-        <Setter Property="TextColor" Value="{StaticResource entryTextColor}"></Setter>
+        <Setter Property="PlaceholderColor" Value="{DynamicResource entryPlaceHolderColorDark}" />
+        <Setter Property="TextColor" Value="{DynamicResource entryTextColor}"></Setter>
         <Setter Property="HeightRequest" Value="50"></Setter>
         <Setter Property="Margin" Value="0,0,0,0"></Setter>
         <Setter Property="ReturnType" Value="Done" />
     </Style>
 
     <Style x:Key="PasswordEntryStyle" TargetType="Entry">
-        <Setter Property="PlaceholderColor" Value="{StaticResource entryPlaceHolderColorDark}" />
-        <Setter Property="TextColor" Value="{StaticResource entryTextColor}"></Setter>
+        <Setter Property="PlaceholderColor" Value="{DynamicResource entryPlaceHolderColorDark}" />
+        <Setter Property="TextColor" Value="{DynamicResource entryTextColor}"></Setter>
         <Setter Property="HeightRequest" Value="50"></Setter>
         <Setter Property="Margin" Value="0,0,0,0"></Setter>
         <Setter Property="IsPassword" Value="True"></Setter>
@@ -96,9 +104,9 @@
     </Style>
 
     <Style TargetType="Button" x:Key="StandardButton">
-        <Setter Property="TextColor" Value="{StaticResource buttonTextColor}"/>
+        <Setter Property="TextColor" Value="{DynamicResource buttonTextColor}"/>
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
-        <Setter Property="BackgroundColor" Value="{StaticResource primary}"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource primary}"/>
         <Setter Property="CornerRadius" Value="10"/>
         <Setter Property="Padding" Value="15, 10"/>
         <Setter Property="HeightRequest" Value="40" />
@@ -106,9 +114,9 @@
     </Style>
 
     <Style TargetType="Button" x:Key="StandardButtonSmall">
-        <Setter Property="TextColor" Value="{StaticResource buttonTextColor}"/>
+        <Setter Property="TextColor" Value="{DynamicResource buttonTextColor}"/>
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
-        <Setter Property="BackgroundColor" Value="{StaticResource primary}"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource primary}"/>
         <Setter Property="CornerRadius" Value="10"/>
         <Setter Property="Padding" Value="15, 10"/>
         <Setter Property="HeightRequest" Value="30" />
@@ -207,11 +215,11 @@
         <Setter Property="VerticalOptions" Value="Center"/>
         <Setter Property="CornerRadius" Value="20"></Setter>
         <Setter Property="Opacity" Value="0.9"></Setter>
-        <Setter Property="BackgroundColor" Value="#f5f8fa"></Setter>
+        <Setter Property="BackgroundColor" Value="{DynamicResource cardBackgroundColor}"></Setter>
     </Style>
 
     <Style x:Key="LoginFieldLabel" TargetType="Label">
-        <Setter Property="TextColor" Value="{StaticResource labelTextColor}"/>
+        <Setter Property="TextColor" Value="{DynamicResource labelTextColor}"/>
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="FontAttributes" Value="Bold"/>
@@ -221,23 +229,23 @@
         <Setter Property="CornerRadius" Value="12"/>
         <Setter Property="Padding" Value="10,0"/>
         <Setter Property="HasShadow" Value="False"/>
-        <Setter Property="BorderColor" Value="{StaticResource MidGray}"/>
-        <Setter Property="BackgroundColor" Value="{StaticResource LightGray}"/>
+        <Setter Property="BorderColor" Value="{DynamicResource entryContainerBorderColor}"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource entryContainerBackgroundColor}"/>
         <Setter Property="Margin" Value="0"/>
     </Style>
 
     <Style x:Key="LoginEntryCardStyle" TargetType="Entry">
-        <Setter Property="PlaceholderColor" Value="{StaticResource Gray400}"/>
-        <Setter Property="TextColor" Value="{StaticResource DarkGray}"/>
+        <Setter Property="PlaceholderColor" Value="{DynamicResource entryPlaceHolderColorDark}"/>
+        <Setter Property="TextColor" Value="{DynamicResource entryTextColor}"/>
         <Setter Property="HeightRequest" Value="45"/>
         <Setter Property="BackgroundColor" Value="Transparent"/>
         <Setter Property="ReturnType" Value="Done"/>
     </Style>
 
     <Style x:Key="LoginButton" TargetType="Button">
-        <Setter Property="TextColor" Value="{StaticResource buttonTextColor}"/>
+        <Setter Property="TextColor" Value="{DynamicResource buttonTextColor}"/>
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
-        <Setter Property="BackgroundColor" Value="{StaticResource primary}"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource primary}"/>
         <Setter Property="CornerRadius" Value="25"/>
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="FontAttributes" Value="Bold"/>
@@ -248,18 +256,18 @@
     <Style x:Key="HomeCardFrame" TargetType="Frame">
         <Setter Property="CornerRadius" Value="16"/>
         <Setter Property="HasShadow" Value="True"/>
-        <Setter Property="BackgroundColor" Value="White"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource cardBackgroundColor}"/>
         <Setter Property="Padding" Value="16,20"/>
-        <Setter Property="BorderColor" Value="{StaticResource Gray100}"/>
+        <Setter Property="BorderColor" Value="{DynamicResource cardBorderColor}"/>
         <Setter Property="Margin" Value="0"/>
     </Style>
 
     <Style x:Key="SelectionTileFrame" TargetType="Frame">
         <Setter Property="CornerRadius" Value="16"/>
         <Setter Property="HasShadow" Value="True"/>
-        <Setter Property="BackgroundColor" Value="White"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource cardBackgroundColor}"/>
         <Setter Property="Padding" Value="12,16"/>
-        <Setter Property="BorderColor" Value="{StaticResource Gray100}"/>
+        <Setter Property="BorderColor" Value="{DynamicResource cardBorderColor}"/>
         <Setter Property="Margin" Value="4"/>
         <Setter Property="WidthRequest" Value="150"/>
         <Setter Property="HeightRequest" Value="110"/>
@@ -268,24 +276,24 @@
     <Style x:Key="TransactionFormCard" TargetType="Frame">
         <Setter Property="CornerRadius" Value="16"/>
         <Setter Property="HasShadow" Value="True"/>
-        <Setter Property="BackgroundColor" Value="White"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource cardBackgroundColor}"/>
         <Setter Property="Padding" Value="20,16"/>
-        <Setter Property="BorderColor" Value="{StaticResource Gray100}"/>
+        <Setter Property="BorderColor" Value="{DynamicResource cardBorderColor}"/>
         <Setter Property="Margin" Value="0,8,0,8"/>
     </Style>
 
     <Style x:Key="StatusCardFrame" TargetType="Frame">
         <Setter Property="CornerRadius" Value="16"/>
         <Setter Property="HasShadow" Value="True"/>
-        <Setter Property="BackgroundColor" Value="White"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource cardBackgroundColor}"/>
         <Setter Property="Padding" Value="24,20"/>
-        <Setter Property="BorderColor" Value="{StaticResource Gray100}"/>
+        <Setter Property="BorderColor" Value="{DynamicResource cardBorderColor}"/>
         <Setter Property="Margin" Value="0,8,0,8"/>
     </Style>
 
     <Style x:Key="StatusMessageLabel" TargetType="Label">
         <Setter Property="FontSize" Value="15"/>
-        <Setter Property="TextColor" Value="{StaticResource labelTextColor}"/>
+        <Setter Property="TextColor" Value="{DynamicResource labelTextColor}"/>
         <Setter Property="HorizontalTextAlignment" Value="Center"/>
         <Setter Property="LineHeight" Value="1.4"/>
         <Setter Property="Margin" Value="0,8,0,16"/>
@@ -294,7 +302,7 @@
     <Style x:Key="SectionTitleLabel" TargetType="Label">
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="FontAttributes" Value="Bold"/>
-        <Setter Property="TextColor" Value="{StaticResource labelTextColor}"/>
+        <Setter Property="TextColor" Value="{DynamicResource labelTextColor}"/>
         <Setter Property="Margin" Value="0,0,0,8"/>
     </Style>
 

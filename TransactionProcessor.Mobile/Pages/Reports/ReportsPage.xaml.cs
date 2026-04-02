@@ -50,7 +50,7 @@ public partial class ReportsPage : NoBackWithoutLogoutPage
 
         Image icon = new Image
         {
-            Source = iconSource,
+            Source = ThemeButtonImageSource.Get(iconSource),
             HeightRequest = 36,
             WidthRequest = 36,
             HorizontalOptions = LayoutOptions.Center

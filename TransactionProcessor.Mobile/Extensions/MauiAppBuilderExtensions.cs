@@ -224,6 +224,7 @@ namespace TransactionProcessor.Mobile.Extensions {
             builder.Services.AddSingleton<INavigationService, ShellNavigationService>();
             builder.Services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
             builder.Services.AddSingleton<IApplicationUpdateLauncherService, ApplicationUpdateLauncherService>();
+            builder.Services.AddSingleton<IApplicationThemeService, ApplicationThemeService>();
             builder.Services.AddSingleton<INavigationParameterService, NavigationParameterService>();
             return builder;
         }
