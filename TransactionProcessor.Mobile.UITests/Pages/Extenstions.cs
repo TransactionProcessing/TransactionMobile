@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using System.Diagnostics;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Windows;
 using Shared.IntegrationTesting;
@@ -10,6 +11,19 @@ namespace TransactionProcessor.Mobile.UITests.Pages;
 
 public static class Extenstions
 {
+    private static IWebElement? TryScrollIntoView(AppiumDriver driver, string selector, string automationId)
+    {
+        try
+        {
+            return driver.FindElement(MobileBy.AndroidUIAutomator(selector));
+        }
+        catch (WebDriverException ex)
+        {
+            Debug.WriteLine($"Unable to scroll to element [{automationId}]: {ex.Message}");
+            return null;
+        }
+    }
+
     /*
         // TODO: Mac & Windows Extensions
         // TODO: May need a platform switch
@@ -134,25 +148,15 @@ public static class Extenstions
                 {
                     string fullResourceId = $"{androidPackage}:id/{automationId}";
 
-                    try
-                    {
-                        element = driver.FindElement(MobileBy.AndroidUIAutomator($"new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().resourceId(\"{fullResourceId}\"))"));
-                    }
-                    catch (WebDriverException)
-                    {
-                        // do nothing; handled by retry
-                    }
+                    element = TryScrollIntoView(driver,
+                                                $"new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().resourceId(\"{fullResourceId}\"))",
+                                                automationId);
 
                     if (element == null)
                     {
-                        try
-                        {
-                            element = driver.FindElement(MobileBy.AndroidUIAutomator($"new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().description(\"{automationId}\"))"));
-                        }
-                        catch (WebDriverException)
-                        {
-                            // do nothing; handled by retry
-                        }
+                        element = TryScrollIntoView(driver,
+                                                    $"new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().description(\"{automationId}\"))",
+                                                    automationId);
                     }
                 }
 
