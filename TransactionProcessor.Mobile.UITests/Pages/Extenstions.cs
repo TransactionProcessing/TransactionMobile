@@ -130,6 +130,32 @@ public static class Extenstions
                     }
                 }
 
+                if (element == null && platform == "android")
+                {
+                    string fullResourceId = $"{androidPackage}:id/{automationId}";
+
+                    try
+                    {
+                        element = driver.FindElement(MobileBy.AndroidUIAutomator($"new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().resourceId(\"{fullResourceId}\"))"));
+                    }
+                    catch (WebDriverException)
+                    {
+                        // do nothing; handled by retry
+                    }
+
+                    if (element == null)
+                    {
+                        try
+                        {
+                            element = driver.FindElement(MobileBy.AndroidUIAutomator($"new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().description(\"{automationId}\"))"));
+                        }
+                        catch (WebDriverException)
+                        {
+                            // do nothing; handled by retry
+                        }
+                    }
+                }
+
                 element.ShouldNotBeNull($"element not found. used automationId [{automationId}]");
             }
             catch (WebDriverException ex)
