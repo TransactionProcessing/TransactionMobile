@@ -160,7 +160,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
             return getMerchantBalanceResult;
         }
 
-        private async Task<Boolean> CheckForUpdates(Configuration configuration) {
+        private async Task<bool> CheckForUpdates(Configuration configuration) {
             if (!this.ShouldCheckForUpdates(configuration)) {
                 return true;
             }
