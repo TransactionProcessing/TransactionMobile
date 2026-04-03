@@ -4,7 +4,6 @@ using Microsoft.Maui.ApplicationModel;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 #if ANDROID
 using Android.Content;
-using Android.OS;
 using Android.Provider;
 using AndroidX.Core.Content;
 using JavaFile = Java.IO.File;
@@ -16,6 +15,7 @@ namespace TransactionProcessor.Mobile.UIServices;
 public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherService
 {
     private const Int32 DownloadBufferSize = 81920;
+    private const String AndroidPackageArchiveMimeType = "application/vnd.android.package-archive";
     private readonly IHttpClientFactory HttpClientFactory;
 
     public ApplicationUpdateLauncherService(IHttpClientFactory httpClientFactory)
@@ -26,14 +26,9 @@ public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherServic
     public async Task LaunchUpdateAsync(String downloadUri,
                                         CancellationToken cancellationToken = default)
     {
-        if (String.IsNullOrWhiteSpace(downloadUri))
-        {
-            throw new ApplicationException("An application update is required, but the download address is invalid.");
-        }
-
         if (Uri.TryCreate(downloadUri, UriKind.Absolute, out Uri? updateUri) == false)
         {
-            throw new ApplicationException("An application update is required, but the download address is invalid.");
+            throw new ArgumentException("An application update is required, but the download address is invalid.", nameof(downloadUri));
         }
 
 #if ANDROID
@@ -64,14 +59,14 @@ public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherServic
     {
         if (updateUri.Scheme != Uri.UriSchemeHttp && updateUri.Scheme != Uri.UriSchemeHttps)
         {
-            throw new ApplicationException("Android updates require a valid HTTP or HTTPS download address.");
+            throw new ArgumentException("Android updates require a valid HTTP or HTTPS download address.", nameof(updateUri));
         }
 
         try
         {
             Context context = Platform.AppContext ?? Android.App.Application.Context;
 
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.O && context.PackageManager?.CanRequestPackageInstalls() != true)
+            if (OperatingSystem.IsAndroidVersionAtLeast(26) && context.PackageManager?.CanRequestPackageInstalls() != true)
             {
                 Intent settingsIntent = new(Settings.ActionManageUnknownAppSources);
                 settingsIntent.SetData(Android.Net.Uri.Parse($"package:{context.PackageName}"));
@@ -91,8 +86,8 @@ public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherServic
 
             Android.Net.Uri installerUri = MauiFileProvider.GetUriForFile(context, $"{context.PackageName}.fileprovider", updateFile);
 
-            Intent installIntent = new(Intent.ActionInstallPackage);
-            installIntent.SetData(installerUri);
+            Intent installIntent = new(Intent.ActionView);
+            installIntent.SetDataAndType(installerUri, AndroidPackageArchiveMimeType);
             installIntent.AddFlags(ActivityFlags.GrantReadUriPermission | ActivityFlags.NewTask);
             installIntent.PutExtra(Intent.ExtraReturnResult, false);
 
@@ -103,15 +98,7 @@ public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherServic
 
             context.StartActivity(installIntent);
         }
-        catch (ApplicationException)
-        {
-            throw;
-        }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not ApplicationException && ex is not ArgumentException && ex is not OperationCanceledException)
         {
             throw new ApplicationException("Unable to start the application update installer.", ex);
         }

@@ -45,8 +45,8 @@ public class UpdateService : ClientProxyBase.ClientProxyBase, IUpdateService
             Logger.LogInformation($"About to check for application updates for device identifier {deviceIdentifier}");
             Logger.LogDebug($"Application update request details: Uri {requestUri}");
 
-            StringContent content = new(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
-            HttpResponseMessage httpResponse = await this.HttpClient.PostAsync(requestUri, content, cancellationToken);
+            using StringContent content = new(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+            using HttpResponseMessage httpResponse = await this.HttpClient.PostAsync(requestUri, content, cancellationToken);
             Logger.LogDebug($"Application update response [{httpResponse.StatusCode}]");
 
             String responseContent = await this.HandleResponse(httpResponse, cancellationToken);
