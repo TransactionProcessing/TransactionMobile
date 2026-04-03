@@ -92,6 +92,9 @@ public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherServic
         }
     }
 
+    /// <summary>
+    /// Validates that Android update downloads use an HTTP or HTTPS URI.
+    /// </summary>
     private void ValidateAndroidUpdateUri(Uri updateUri)
     {
         if (updateUri.Scheme != Uri.UriSchemeHttp && updateUri.Scheme != Uri.UriSchemeHttps)
@@ -100,6 +103,10 @@ public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherServic
         }
     }
 
+    /// <summary>
+    /// Ensures Android 8.0+ install permissions are enabled before attempting to launch the installer.
+    /// Opens system settings and throws when the permission is not currently granted.
+    /// </summary>
     private void EnsureInstallPermission(Context context)
     {
         if (!OperatingSystem.IsAndroidVersionAtLeast(26) || context.PackageManager?.CanRequestPackageInstalls() is true)
@@ -115,6 +122,9 @@ public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherServic
         throw new ApplicationException("Allow installs from this app, then retry the update.");
     }
 
+    /// <summary>
+    /// Creates the platform installer intent, using Android 10+ view semantics and legacy install-package semantics on older versions.
+    /// </summary>
     private Intent CreateInstallIntent(Android.Net.Uri installerUri)
     {
         Intent installIntent = OperatingSystem.IsAndroidVersionAtLeast(29)

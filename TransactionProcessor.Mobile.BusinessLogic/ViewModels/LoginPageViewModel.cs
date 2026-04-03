@@ -188,8 +188,15 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
             await this.LaunchRequiredUpdate(downloadUri);
         }
 
+        /// <summary>
+        /// Determines whether automatic update checks should run for the current configuration.
+        /// </summary>
         private Boolean ShouldCheckForUpdates(Configuration configuration) => configuration?.EnableAutoUpdates is true;
 
+        /// <summary>
+        /// Evaluates the update check result and returns whether a mandatory update is required.
+        /// Logs a warning when the update check fails.
+        /// </summary>
         private Boolean IsUpdateRequired(Result<ApplicationUpdateCheckResponse> updateCheckResult)
         {
             if (updateCheckResult.IsFailed) {
@@ -200,11 +207,17 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
             return updateCheckResult.Data.UpdateRequired;
         }
 
+        /// <summary>
+        /// Builds the user-facing mandatory update message, preferring the server-provided value.
+        /// </summary>
         private String BuildUpdateMessage(ApplicationUpdateCheckResponse updateResponse) =>
             String.IsNullOrWhiteSpace(updateResponse.Message)
                 ? $"Version {updateResponse.LatestVersion ?? "latest"} is available and must be installed before you can continue. The installer will open and the app will close."
                 : updateResponse.Message;
 
+        /// <summary>
+        /// Returns the configured download URI for a mandatory update or throws when none is available.
+        /// </summary>
         private String GetRequiredDownloadUri(ApplicationUpdateCheckResponse updateResponse)
         {
             if (String.IsNullOrWhiteSpace(updateResponse.DownloadUri)) {
@@ -214,6 +227,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
             return updateResponse.DownloadUri;
         }
 
+        /// <summary>
+        /// Starts the mandatory update flow, notifies the user, and closes the app after launching the installer.
+        /// </summary>
         private async Task LaunchRequiredUpdate(String downloadUri)
         {
             this.IsBusy = true;
