@@ -35,6 +35,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
 
             ConfigurationResponse expectedConfiguration = new ConfigurationResponse
                                                           {
+                                                              ApplicationUpdateUri = "http://localhost:9210",
                                                               ClientId = "clientId",
                                                               ClientSecret = Guid.NewGuid().ToString(),
                                                               EnableAutoUpdates = false,
@@ -62,6 +63,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
             configurationResult.Data.ShouldNotBeNull();
             configurationResult.Data.ClientSecret.ShouldBe(expectedConfiguration.ClientSecret);
             configurationResult.Data.ClientId.ShouldBe(expectedConfiguration.ClientId);
+            configurationResult.Data.ApplicationUpdateUri.ShouldBe(expectedConfiguration.ApplicationUpdateUri);
             configurationResult.Data.EnableAutoUpdates.ShouldBe(expectedConfiguration.EnableAutoUpdates);
             configurationResult.Data.SecurityServiceUri.ShouldBe(expectedConfiguration.HostAddresses.Single(s => s.ServiceType == ServiceType.Security).Uri);
             configurationResult.Data.TransactionProcessorAclUri.ShouldBe(expectedConfiguration.HostAddresses.Single(s => s.ServiceType == ServiceType.TransactionProcessorAcl).Uri);

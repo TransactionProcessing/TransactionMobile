@@ -10,6 +10,7 @@ public class TrainingConfigurationService : IConfigurationService
     public async Task<Result<Configuration>> GetConfiguration(String deviceIdentifier,
                                                               CancellationToken cancellationToken) {
         return Result.Success(new Configuration {
+                                                    ApplicationUpdateUri = String.Empty,
                                                     ClientId = "dummyClientId",
                                                     ClientSecret = "dummyClientSecret",
                                                     EnableAutoUpdates = false,

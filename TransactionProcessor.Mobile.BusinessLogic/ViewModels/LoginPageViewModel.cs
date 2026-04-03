@@ -19,6 +19,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
     public partial class LoginPageViewModel : ExtendedBaseViewModel
     {
         private readonly IApplicationInfoService ApplicationInfoService;
+        private readonly IApplicationUpdateLauncherService ApplicationUpdateLauncherService;
+        private readonly IUpdateService UpdateService;
 
         private String userName;
 
@@ -33,10 +35,14 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
         public LoginPageViewModel(IMediator mediator, INavigationService navigationService, IApplicationCache applicationCache,
                                   IDeviceService deviceService,IApplicationInfoService applicationInfoService,
                                   IDialogService dialogService,
-                                  INavigationParameterService navigationParameterService) : base(applicationCache,dialogService,navigationService, deviceService, navigationParameterService)
+                                  INavigationParameterService navigationParameterService,
+                                  IUpdateService updateService,
+                                  IApplicationUpdateLauncherService applicationUpdateLauncherService) : base(applicationCache,dialogService,navigationService, deviceService, navigationParameterService)
         {
             this.ApplicationInfoService = applicationInfoService;
+            this.ApplicationUpdateLauncherService = applicationUpdateLauncherService;
             this.Mediator = mediator;
+            this.UpdateService = updateService;
         }
         
         #endregion
@@ -77,7 +83,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
         private void CacheUseTrainingMode() => this.ApplicationCache.SetUseTrainingMode(this.useTrainingMode);
 
         private async Task<Result<Configuration>> GetConfiguration() {
-            if (String.IsNullOrEmpty(this.ConfigHostUrl) == false) {
+            if (!String.IsNullOrEmpty(this.ConfigHostUrl)) {
                 this.ApplicationCache.SetConfigHostUrl(this.ConfigHostUrl);
             }
 
@@ -154,6 +160,93 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
             return getMerchantBalanceResult;
         }
 
+        private async Task<bool> CheckForUpdates(Configuration configuration) {
+            if (!this.ShouldCheckForUpdates(configuration)) {
+                return true;
+            }
+
+            Result<ApplicationUpdateCheckResponse> updateCheckResult = await this.UpdateService.CheckForUpdates(this.ApplicationInfoService.VersionString,
+                                                                                                                 this.ApplicationInfoService.PackageName,
+                                                                                                                 this.DeviceService.GetPlatform(),
+                                                                                                                 this.DeviceService.GetIdentifier(),
+                                                                                                                 CancellationToken.None);
+
+            if (!this.IsUpdateRequired(updateCheckResult)) {
+                return true;
+            }
+
+            ApplicationUpdateCheckResponse updateResponse = updateCheckResult.Data;
+            String message = this.BuildUpdateMessage(updateResponse);
+            Boolean startUpdate = await this.DialogService.ShowDialog("Application Update Required", message, "Install", "Cancel");
+
+            if (!startUpdate) {
+                throw new ApplicationException("An application update is required before you can continue.");
+            }
+
+            String downloadUri = this.GetRequiredDownloadUri(updateResponse);
+
+            await this.LaunchRequiredUpdate(downloadUri);
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether automatic update checks should run for the current configuration.
+        /// </summary>
+        private Boolean ShouldCheckForUpdates(Configuration configuration) => configuration?.EnableAutoUpdates is true;
+
+        /// <summary>
+        /// Evaluates the update check result and returns whether a mandatory update is required.
+        /// Logs a warning when the update check fails.
+        /// </summary>
+        private Boolean IsUpdateRequired(Result<ApplicationUpdateCheckResponse> updateCheckResult)
+        {
+            if (updateCheckResult.IsFailed) {
+                Logger.LogWarning($"Application update check failed: {updateCheckResult.Message}");
+                return false;
+            }
+
+            return updateCheckResult.Data.UpdateRequired;
+        }
+
+        /// <summary>
+        /// Builds the user-facing mandatory update message, preferring the server-provided value.
+        /// </summary>
+        private String BuildUpdateMessage(ApplicationUpdateCheckResponse updateResponse) =>
+            String.IsNullOrWhiteSpace(updateResponse.Message)
+                ? $"Version {updateResponse.LatestVersion ?? "latest"} is available and must be installed before you can continue. The installer will open and the app will close."
+                : updateResponse.Message;
+
+        /// <summary>
+        /// Returns the configured download URI for a mandatory update or throws when none is available.
+        /// </summary>
+        private String GetRequiredDownloadUri(ApplicationUpdateCheckResponse updateResponse)
+        {
+            if (String.IsNullOrWhiteSpace(updateResponse.DownloadUri)) {
+                throw new ApplicationException("An application update is required, but no download location is configured.");
+            }
+
+            return updateResponse.DownloadUri;
+        }
+
+        /// <summary>
+        /// Starts the mandatory update flow, notifies the user, and closes the app after launching the installer.
+        /// </summary>
+        private async Task LaunchRequiredUpdate(String downloadUri)
+        {
+            this.IsBusy = true;
+
+            try
+            {
+                await this.DialogService.ShowInformationToast("Downloading the required update...");
+                await this.ApplicationUpdateLauncherService.LaunchUpdateAsync(downloadUri, CancellationToken.None);
+                await this.NavigationService.QuitApplication();
+            }
+            finally
+            {
+                this.IsBusy = false;
+            }
+        }
+
         [RelayCommand]
         private async Task Logon(){
             CorrelationIdProvider.NewId();
@@ -167,6 +260,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
                 
                 Result<Configuration> configurationResult = await this.GetConfiguration();
                 this.HandleResult(configurationResult);
+                if (!await this.CheckForUpdates(configurationResult.Data)) {
+                    return;
+                }
 
                 await this.WriteTimingTrace(sw, "After GetConfiguration");
                 Result<TokenResponseModel> getTokenResult = await this.GetUserToken();

@@ -28,7 +28,11 @@ public class LoginPageViewModelTests
 
     private readonly Mock<IApplicationInfoService> ApplicationInfoService;
 
+    private readonly Mock<IApplicationUpdateLauncherService> ApplicationUpdateLauncherService;
+
     private readonly Mock<IDialogService> DialogService;
+
+    private readonly Mock<IUpdateService> UpdateService;
     public LoginPageViewModelTests() {
         this.Mediator = new Mock<IMediator>();
         this.NavigationService = new Mock<INavigationService>();
@@ -36,11 +40,14 @@ public class LoginPageViewModelTests
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DeviceService = new Mock<IDeviceService>();
         this.ApplicationInfoService = new Mock<IApplicationInfoService>();
+        this.ApplicationUpdateLauncherService = new Mock<IApplicationUpdateLauncherService>();
         this.DialogService = new Mock<IDialogService>();
+        this.UpdateService = new Mock<IUpdateService>();
 
         this.ViewModel = new LoginPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object,
                                                 this.DeviceService.Object, this.ApplicationInfoService.Object,
-                                                this.DialogService.Object, this.NavigationParameterService.Object);
+                                                this.DialogService.Object, this.NavigationParameterService.Object,
+                                                this.UpdateService.Object, this.ApplicationUpdateLauncherService.Object);
         Logger.Initialise(new Logging.NullLogger());
     }
     
@@ -121,6 +128,101 @@ public class LoginPageViewModelTests
         this.NavigationService.Verify(n => n.GoToHome(), Times.Never);
 
         this.DialogService.Verify(n => n.ShowWarningToast(It.IsAny<String>(),
+                                                          null,
+                                                          "OK",
+                                                          null,
+                                                          CancellationToken.None), Times.Once);
+    }
+
+    [Fact]
+    public async Task LoginPageViewModel_LoginCommand_Execute_UpdateCheckFails_LogonContinues()
+    {
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Result.Success(new Configuration { EnableAutoUpdates = true }));
+        this.Mediator.Setup(m => m.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
+        this.Mediator.Setup(m => m.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformLogonResponseModel));
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantBalance));
+        this.ApplicationInfoService.Setup(a => a.VersionString).Returns(TestData.ApplicationVersion);
+        this.ApplicationInfoService.Setup(a => a.PackageName).Returns("com.transactionprocessor.mobile");
+        this.DeviceService.Setup(d => d.GetPlatform()).Returns("Android");
+        this.DeviceService.Setup(d => d.GetIdentifier()).Returns(TestData.DeviceIdentifier);
+        this.UpdateService.Setup(u => u.CheckForUpdates(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Result.Failure("Update check failed"));
+
+        await this.ViewModel.LogonCommand.ExecuteAsync(null);
+
+        this.UpdateService.Verify(u => u.CheckForUpdates(TestData.ApplicationVersion,
+                                                         "com.transactionprocessor.mobile",
+                                                         "Android",
+                                                         TestData.DeviceIdentifier,
+                                                         It.IsAny<CancellationToken>()), Times.Once);
+        this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
+    }
+
+    [Fact]
+    public async Task LoginPageViewModel_LoginCommand_Execute_UpdateRequired_UpdateLauncherIsCalled_And_AppQuits()
+    {
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Result.Success(new Configuration { EnableAutoUpdates = true }));
+        this.ApplicationInfoService.Setup(a => a.VersionString).Returns(TestData.ApplicationVersion);
+        this.ApplicationInfoService.Setup(a => a.PackageName).Returns("com.transactionprocessor.mobile");
+        this.DeviceService.Setup(d => d.GetPlatform()).Returns("Android");
+        this.DeviceService.Setup(d => d.GetIdentifier()).Returns(TestData.DeviceIdentifier);
+        this.UpdateService.Setup(u => u.CheckForUpdates(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Result.Success(new ApplicationUpdateCheckResponse
+            {
+                DownloadUri = "https://updates.example.com/transactionmobile.apk",
+                LatestVersion = "1.0.1",
+                Message = "Install update",
+                UpdateRequired = true
+            }));
+        this.DialogService.Setup(d => d.ShowDialog(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>())).ReturnsAsync(true);
+
+        await this.ViewModel.LogonCommand.ExecuteAsync(null);
+
+        this.DialogService.Verify(d => d.ShowInformationToast("Downloading the required update...",
+                                                              null,
+                                                              "OK",
+                                                              null,
+                                                              CancellationToken.None), Times.Once);
+        this.ApplicationUpdateLauncherService.Verify(l => l.LaunchUpdateAsync("https://updates.example.com/transactionmobile.apk", It.IsAny<CancellationToken>()), Times.Once);
+        this.NavigationService.Verify(n => n.QuitApplication(), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Never);
+        this.NavigationService.Verify(n => n.GoToHome(), Times.Never);
+        this.DialogService.Verify(n => n.ShowWarningToast(It.IsAny<String>(),
+                                                          null,
+                                                          "OK",
+                                                          null,
+                                                          CancellationToken.None), Times.Never);
+    }
+
+    [Fact]
+    public async Task LoginPageViewModel_LoginCommand_Execute_UpdateLauncherFails_WarningToastIsShown_And_AppStaysOpen()
+    {
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Result.Success(new Configuration { EnableAutoUpdates = true }));
+        this.ApplicationInfoService.Setup(a => a.VersionString).Returns(TestData.ApplicationVersion);
+        this.ApplicationInfoService.Setup(a => a.PackageName).Returns("com.transactionprocessor.mobile");
+        this.DeviceService.Setup(d => d.GetPlatform()).Returns("Android");
+        this.DeviceService.Setup(d => d.GetIdentifier()).Returns(TestData.DeviceIdentifier);
+        this.UpdateService.Setup(u => u.CheckForUpdates(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Result.Success(new ApplicationUpdateCheckResponse
+            {
+                DownloadUri = "https://updates.example.com/transactionmobile.apk",
+                LatestVersion = "1.0.1",
+                Message = "Install update",
+                UpdateRequired = true
+            }));
+        this.DialogService.Setup(d => d.ShowDialog(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>())).ReturnsAsync(true);
+        this.ApplicationUpdateLauncherService.Setup(l => l.LaunchUpdateAsync(It.IsAny<String>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new ApplicationException("Unable to start the application update installer."));
+
+        await this.ViewModel.LogonCommand.ExecuteAsync(null);
+
+        this.NavigationService.Verify(n => n.QuitApplication(), Times.Never);
+        this.NavigationService.Verify(n => n.GoToHome(), Times.Never);
+        this.DialogService.Verify(d => d.ShowWarningToast("Unable to start the application update installer.",
                                                           null,
                                                           "OK",
                                                           null,

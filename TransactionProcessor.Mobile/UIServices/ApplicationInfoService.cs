@@ -15,5 +15,5 @@ public class ApplicationInfoService : IApplicationInfoService
 
     public Version Version => AppInfo.Version;
 
-    public String VersionString => "1.0.0";//AppInfo.VersionString;
+    public String VersionString => AppInfo.VersionString;
 }
