@@ -160,9 +160,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
             return getMerchantBalanceResult;
         }
 
-        private async Task CheckForUpdates(Configuration configuration) {
+        private async Task<Boolean> CheckForUpdates(Configuration configuration) {
             if (!this.ShouldCheckForUpdates(configuration)) {
-                return;
+                return true;
             }
 
             Result<ApplicationUpdateCheckResponse> updateCheckResult = await this.UpdateService.CheckForUpdates(this.ApplicationInfoService.VersionString,
@@ -172,7 +172,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
                                                                                                                  CancellationToken.None);
 
             if (!this.IsUpdateRequired(updateCheckResult)) {
-                return;
+                return true;
             }
 
             ApplicationUpdateCheckResponse updateResponse = updateCheckResult.Data;
@@ -186,6 +186,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
             String downloadUri = this.GetRequiredDownloadUri(updateResponse);
 
             await this.LaunchRequiredUpdate(downloadUri);
+            return false;
         }
 
         /// <summary>
@@ -259,7 +260,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
                 
                 Result<Configuration> configurationResult = await this.GetConfiguration();
                 this.HandleResult(configurationResult);
-                await this.CheckForUpdates(configurationResult.Data);
+                if (!await this.CheckForUpdates(configurationResult.Data)) {
+                    return;
+                }
 
                 await this.WriteTimingTrace(sw, "After GetConfiguration");
                 Result<TokenResponseModel> getTokenResult = await this.GetUserToken();
