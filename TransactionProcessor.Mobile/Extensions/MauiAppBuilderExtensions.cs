@@ -92,16 +92,15 @@ namespace TransactionProcessor.Mobile.Extensions {
 
                                                                                               if (configuration != null)
                                                                                               {
-                                                                                                  if (configSetting == "ApplicationUpdateServiceUrl")
-                                                                                                  {
-                                                                                                      if (String.IsNullOrWhiteSpace(configuration.ApplicationUpdateUri) == false)
-                                                                                                      {
-                                                                                                          return configuration.ApplicationUpdateUri;
-                                                                                                      }
+                                                                                                  if (configSetting == "ApplicationUpdateServiceUrl") {
+                                                                                                     if (String.IsNullOrWhiteSpace(configuration.ApplicationUpdateUri) == false)
+                                                                                                     {
+                                                                                                         return configuration.ApplicationUpdateUri;
+                                                                                                     }
 
-                                                                                                      String configHostUrl = applicationCache.GetConfigHostUrl();
-                                                                                                      return configHostUrl ?? String.Empty;
-                                                                                                  }
+                                                                                                     String configHostUrl = applicationCache.GetConfigHostUrl();
+                                                                                                     return configHostUrl ?? String.Empty;
+                                                                                                 }
 
                                                                                                   if (configSetting == "SecurityService")
                                                                                                   {
