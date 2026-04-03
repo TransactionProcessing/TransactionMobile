@@ -194,8 +194,18 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
                 throw new ApplicationException("An application update is required, but no download location is configured.");
             }
 
-            await this.ApplicationUpdateLauncherService.LaunchUpdateAsync(updateCheckResult.Data.DownloadUri, CancellationToken.None);
-            await this.NavigationService.QuitApplication();
+            this.IsBusy = true;
+
+            try
+            {
+                await this.DialogService.ShowInformationToast("Downloading the required update...");
+                await this.ApplicationUpdateLauncherService.LaunchUpdateAsync(updateCheckResult.Data.DownloadUri, CancellationToken.None);
+                await this.NavigationService.QuitApplication();
+            }
+            finally
+            {
+                this.IsBusy = false;
+            }
         }
 
         [RelayCommand]

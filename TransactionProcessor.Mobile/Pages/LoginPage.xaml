@@ -15,103 +15,123 @@
         </LinearGradientBrush>
     </ContentPage.Background>
     <ContentPage.Content>
-        <ScrollView>
-            <VerticalStackLayout Spacing="0">
+        <Grid>
+            <ScrollView InputTransparent="{Binding IsBusy}">
+                <VerticalStackLayout Spacing="0">
 
-                <!-- Branding section -->
-                <VerticalStackLayout HorizontalOptions="Center" Spacing="10" Padding="20,80,20,40">
-                    <Image Source="headerlogo.svg"
-                           HeightRequest="150"
-                           WidthRequest="150"
-                           HorizontalOptions="Center"/>
-                    <Label Text="Transaction Processor"
-                           FontSize="24"
-                           FontAttributes="Bold"
-                           TextColor="White"
-                           HorizontalOptions="Center"
-                           AutomationId="LoginLabel"
-                           x:Name="LoginLabel"/>
-                    <Label Text="Sign in to your account"
-                           FontSize="14"
-                           TextColor="White"
-                           Opacity="0.75"
-                           HorizontalOptions="Center"/>
-                </VerticalStackLayout>
-
-                <!-- Login card -->
-                <Frame CornerRadius="30"
-                       Padding="30,30,30,40"
-                       HasShadow="True"
-                       BackgroundColor="{DynamicResource cardBackgroundColor}"
-                       Margin="0"
-                       BorderColor="{DynamicResource cardBorderColor}">
-                    <VerticalStackLayout Spacing="8">
-
-                        <!-- Username field -->
-                        <Label Text="Email / Username" Style="{StaticResource LoginFieldLabel}"/>
-                        <Frame Style="{StaticResource LoginEntryContainerFrame}">
-                            <Entry x:Name="UserNameEntry"
-                                   Placeholder="Enter your email or username"
-                                   AutomationId="UserNameEntry"
-                                   Style="{StaticResource LoginEntryCardStyle}"
-                                   Text="{Binding UserName}"/>
-                        </Frame>
-
-                        <!-- Password field -->
-                        <Label Text="Password" Style="{StaticResource LoginFieldLabel}" Margin="0,12,0,0"/>
-                        <Frame Style="{StaticResource LoginEntryContainerFrame}">
-                            <Entry x:Name="PasswordEntry"
-                                   Placeholder="Enter your password"
-                                   AutomationId="PasswordEntry"
-                                   IsPassword="True"
-                                   Style="{StaticResource LoginEntryCardStyle}"
-                                   Text="{Binding Password}"/>
-                        </Frame>
-
-                        <!-- Training mode toggle -->
-                        <HorizontalStackLayout Spacing="10" Margin="0,12,0,4">
-                            <Label Text="Training Mode"
-                                   VerticalOptions="Center"
-                                   TextColor="{StaticResource labelTextColor}"
-                                   FontSize="14"/>
-                            <Switch x:Name="UseTrainingMode"
-                                    VerticalOptions="Center"
-                                    AutomationId="UseTrainingModeSwitch"
-                                    IsToggled="{Binding UseTrainingMode}"/>
-                        </HorizontalStackLayout>
-
-                        <!-- Sign in button -->
-                        <Button Text="Sign In"
-                                Style="{StaticResource LoginButton}"
-                                AutomationId="LoginButton"
-                                Margin="0,8,0,0">
-                            <Button.Behaviors>
-                                <toolkit:EventToCommandBehavior
-                                    EventName="Clicked"
-                                    Command="{Binding LogonCommand}"
-                                    BindingContext="{Binding Source={x:Reference Logon}, Path=BindingContext}" />
-                            </Button.Behaviors>
-                        </Button>
-
-                        <!-- Device info -->
-                        <Label AutomationId="DeviceSerial"
-                               TextColor="{StaticResource Gray400}"
-                               FontSize="11"
+                    <!-- Branding section -->
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="10" Padding="20,80,20,40">
+                        <Image Source="headerlogo.svg"
+                               HeightRequest="150"
+                               WidthRequest="150"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Transaction Processor"
+                               FontSize="24"
+                               FontAttributes="Bold"
+                               TextColor="White"
                                HorizontalOptions="Center"
-                               Text="{Binding DeviceIdentifier}"
-                               Margin="0,16,0,0"/>
-                        <Entry x:Name="ConfigHostUrlEntry"
-                               AutomationId="ConfigHostUrlEntry"
-                               Text="{Binding ConfigHostUrl}"
-                               FontSize="11"
-                               TextColor="{StaticResource Gray400}"
-                               PlaceholderColor="{StaticResource Gray300}"
-                               Placeholder="Configuration URL"/>
+                               AutomationId="LoginLabel"
+                               x:Name="LoginLabel"/>
+                        <Label Text="Sign in to your account"
+                               FontSize="14"
+                               TextColor="White"
+                               Opacity="0.75"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
 
+                    <!-- Login card -->
+                    <Frame CornerRadius="30"
+                           Padding="30,30,30,40"
+                           HasShadow="True"
+                           BackgroundColor="{DynamicResource cardBackgroundColor}"
+                           Margin="0"
+                           BorderColor="{DynamicResource cardBorderColor}">
+                        <VerticalStackLayout Spacing="8">
+
+                            <!-- Username field -->
+                            <Label Text="Email / Username" Style="{StaticResource LoginFieldLabel}"/>
+                            <Frame Style="{StaticResource LoginEntryContainerFrame}">
+                                <Entry x:Name="UserNameEntry"
+                                       Placeholder="Enter your email or username"
+                                       AutomationId="UserNameEntry"
+                                       Style="{StaticResource LoginEntryCardStyle}"
+                                       Text="{Binding UserName}"/>
+                            </Frame>
+
+                            <!-- Password field -->
+                            <Label Text="Password" Style="{StaticResource LoginFieldLabel}" Margin="0,12,0,0"/>
+                            <Frame Style="{StaticResource LoginEntryContainerFrame}">
+                                <Entry x:Name="PasswordEntry"
+                                       Placeholder="Enter your password"
+                                       AutomationId="PasswordEntry"
+                                       IsPassword="True"
+                                       Style="{StaticResource LoginEntryCardStyle}"
+                                       Text="{Binding Password}"/>
+                            </Frame>
+
+                            <!-- Training mode toggle -->
+                            <HorizontalStackLayout Spacing="10" Margin="0,12,0,4">
+                                <Label Text="Training Mode"
+                                       VerticalOptions="Center"
+                                       TextColor="{StaticResource labelTextColor}"
+                                       FontSize="14"/>
+                                <Switch x:Name="UseTrainingMode"
+                                        VerticalOptions="Center"
+                                        AutomationId="UseTrainingModeSwitch"
+                                        IsToggled="{Binding UseTrainingMode}"/>
+                            </HorizontalStackLayout>
+
+                            <!-- Sign in button -->
+                            <Button Text="Sign In"
+                                    Style="{StaticResource LoginButton}"
+                                    AutomationId="LoginButton"
+                                    Margin="0,8,0,0">
+                                <Button.Behaviors>
+                                    <toolkit:EventToCommandBehavior
+                                        EventName="Clicked"
+                                        Command="{Binding LogonCommand}"
+                                        BindingContext="{Binding Source={x:Reference Logon}, Path=BindingContext}" />
+                                </Button.Behaviors>
+                            </Button>
+
+                            <!-- Device info -->
+                            <Label AutomationId="DeviceSerial"
+                                   TextColor="{StaticResource Gray400}"
+                                   FontSize="11"
+                                   HorizontalOptions="Center"
+                                   Text="{Binding DeviceIdentifier}"
+                                   Margin="0,16,0,0"/>
+                            <Entry x:Name="ConfigHostUrlEntry"
+                                   AutomationId="ConfigHostUrlEntry"
+                                   Text="{Binding ConfigHostUrl}"
+                                   FontSize="11"
+                                   TextColor="{StaticResource Gray400}"
+                                   PlaceholderColor="{StaticResource Gray300}"
+                                   Placeholder="Configuration URL"/>
+
+                        </VerticalStackLayout>
+                    </Frame>
+
+                </VerticalStackLayout>
+            </ScrollView>
+            <Grid IsVisible="{Binding IsBusy}" BackgroundColor="#80000000" InputTransparent="False">
+                <Frame HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Padding="24"
+                       CornerRadius="18"
+                       BackgroundColor="#CC1F2A44"
+                       BorderColor="#00FFFFFF">
+                    <VerticalStackLayout Spacing="12">
+                        <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                           Color="White"
+                                           HorizontalOptions="Center" />
+                        <Label Text="Preparing update..."
+                               TextColor="White"
+                               FontAttributes="Bold"
+                               HorizontalTextAlignment="Center" />
                     </VerticalStackLayout>
                 </Frame>
-
-            </VerticalStackLayout>
-        </ScrollView>
+            </Grid>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>
