@@ -1,11 +1,14 @@
-﻿using Microsoft.Maui.ApplicationModel;
+﻿using Browser = Microsoft.Maui.ApplicationModel.Browser;
+using OperationCanceledException = System.OperationCanceledException;
+using Microsoft.Maui.ApplicationModel;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 #if ANDROID
 using Android.Content;
 using Android.OS;
 using Android.Provider;
 using AndroidX.Core.Content;
-using Java.IO;
+using JavaFile = Java.IO.File;
+using MauiFileProvider = AndroidX.Core.Content.FileProvider;
 #endif
 
 namespace TransactionProcessor.Mobile.UIServices;
@@ -79,14 +82,14 @@ public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherServic
             }
 
             String updateFilePath = await this.DownloadUpdatePackageAsync(updateUri, cancellationToken);
-            File updateFile = new(updateFilePath);
+            JavaFile updateFile = new(updateFilePath);
 
             if (updateFile.Exists() == false)
             {
                 throw new ApplicationException("The update package could not be prepared for installation.");
             }
 
-            Android.Net.Uri installerUri = FileProvider.GetUriForFile(context, $"{context.PackageName}.fileprovider", updateFile);
+            Android.Net.Uri installerUri = MauiFileProvider.GetUriForFile(context, $"{context.PackageName}.fileprovider", updateFile);
 
             Intent installIntent = new(Intent.ActionInstallPackage);
             installIntent.SetData(installerUri);
