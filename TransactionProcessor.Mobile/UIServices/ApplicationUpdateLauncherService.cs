@@ -15,6 +15,12 @@ public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherServic
 
         Uri updateUri = new(downloadUri, UriKind.Absolute);
 
+        if (updateUri.Scheme == Uri.UriSchemeHttp || updateUri.Scheme == Uri.UriSchemeHttps)
+        {
+            await Browser.Default.OpenAsync(updateUri, BrowserLaunchMode.External);
+            return;
+        }
+
         if (await Launcher.Default.CanOpenAsync(updateUri) == false)
         {
             throw new InvalidOperationException($"The application update address '{downloadUri}' cannot be opened on this device.");
