@@ -26,6 +26,8 @@ public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherServic
     public async Task LaunchUpdateAsync(String downloadUri,
                                         CancellationToken cancellationToken = default)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(downloadUri);
+
         if (Uri.TryCreate(downloadUri, UriKind.Absolute, out Uri? updateUri) == false)
         {
             throw new ArgumentException("An application update is required, but the download address is invalid.", nameof(downloadUri));
@@ -86,8 +88,19 @@ public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherServic
 
             Android.Net.Uri installerUri = MauiFileProvider.GetUriForFile(context, $"{context.PackageName}.fileprovider", updateFile);
 
-            Intent installIntent = new(Intent.ActionView);
-            installIntent.SetDataAndType(installerUri, AndroidPackageArchiveMimeType);
+            Intent installIntent = OperatingSystem.IsAndroidVersionAtLeast(29)
+                                       ? new Intent(Intent.ActionView)
+                                       : new Intent(Intent.ActionInstallPackage);
+
+            if (OperatingSystem.IsAndroidVersionAtLeast(29))
+            {
+                installIntent.SetDataAndType(installerUri, AndroidPackageArchiveMimeType);
+            }
+            else
+            {
+                installIntent.SetData(installerUri);
+            }
+
             installIntent.AddFlags(ActivityFlags.GrantReadUriPermission | ActivityFlags.NewTask);
             installIntent.PutExtra(Intent.ExtraReturnResult, false);
 
