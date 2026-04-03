@@ -12,6 +12,7 @@ namespace TransactionProcessor.Mobile.UIServices;
 
 public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherService
 {
+    private const Int32 DownloadBufferSize = 81920;
     private readonly IHttpClientFactory HttpClientFactory;
 
     public ApplicationUpdateLauncherService(IHttpClientFactory httpClientFactory)
@@ -136,7 +137,7 @@ public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherServic
         }
 
         await using Stream responseStream = await response.Content.ReadAsStreamAsync(cancellationToken);
-        await using FileStream destinationStream = new(updateFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 81920, true);
+        await using FileStream destinationStream = new(updateFilePath, FileMode.Create, FileAccess.Write, FileShare.None, DownloadBufferSize, true);
         await responseStream.CopyToAsync(destinationStream, cancellationToken);
 
         return updateFilePath;
