@@ -100,7 +100,11 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
         public String GetConfigHostUrl()
         {
-            return this.TryGetValue<String>("ConfigHostUrl");
+            var url = this.TryGetValue<String>("ConfigHostUrl");
+            if (String.IsNullOrWhiteSpace(url)) {
+                return "http://192.168.1.163:9200";
+            }
+            return url;
         }
 
         public void SetConfigHostUrl(String value,

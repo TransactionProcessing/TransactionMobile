@@ -46,7 +46,7 @@ namespace TransactionProcessor.Mobile.Extensions {
 
         public static MauiAppBuilder ConfigureDatabase(this MauiAppBuilder builder) {
             String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "transactionpos1.db");
-            Func< BusinessLogic.Database.LogLevel > logLevelFunc = new Func<BusinessLogic.Database.LogLevel>(() => BusinessLogic.Database.LogLevel.Warn);
+            Func< BusinessLogic.Database.LogLevel > logLevelFunc = () => BusinessLogic.Database.LogLevel.Warn;
 
             IDatabaseContext database = new DatabaseContext(connectionString, logLevelFunc);
             database.InitialiseDatabase();
@@ -56,10 +56,6 @@ namespace TransactionProcessor.Mobile.Extensions {
         }
 
         public static MauiAppBuilder ConfigureAppServices(this MauiAppBuilder builder) {
-            //builder.Services.AddHttpClient()
-            //    .AddHttpMessageHandler<CorrelationIdHandler>()
-            //    .ConfigurePrimaryHttpMessageHandler(GetHandler);
-
             builder.Services.AddHttpClient("default")
                 .AddHttpMessageHandler<CorrelationIdHandler>()
                 .ConfigurePrimaryHttpMessageHandler(GetHandler);
@@ -72,61 +68,22 @@ namespace TransactionProcessor.Mobile.Extensions {
             });
 
             builder.Services.AddSingleton<Func<String, String>>(
-                                                                new Func<String, String>(configSetting =>
-                                                                                         {
-                                                                                             IApplicationCache applicationCache = MauiProgram.Container.Services
-                                                                                                 .GetService<IApplicationCache>();
+                                                                new Func<String, String>(configSetting => {
+                                                                    IApplicationCache applicationCache = MauiProgram.Container.Services.GetService<IApplicationCache>();
 
-                                                                                             if (configSetting == "ConfigServiceUrl")
-                                                                                             {
-                                                                                                 String configHostUrl = applicationCache.GetConfigHostUrl();
-                                                                                                 if (String.IsNullOrEmpty(configHostUrl) == false)
-                                                                                                 {
-                                                                                                     return configHostUrl;
-                                                                                                 }
-                                                                                                 //return "https://sferguson.ddns.net:9200";
-                                                                                                 return "http://192.168.1.167:9200";
-                                                                                             }
+                                                                    if (applicationCache != null)
+                                                                        return configSetting switch {
+                                                                            "ConfigServiceUrl" => applicationCache.GetConfigHostUrl() ?? String.Empty,
+                                                                            "ApplicationUpdateServiceUrl" when String.IsNullOrWhiteSpace(applicationCache.GetConfiguration()?.ApplicationUpdateUri) == false => applicationCache.GetConfiguration().ApplicationUpdateUri,
+                                                                            "SecurityService" => applicationCache.GetConfiguration()?.SecurityServiceUri ?? String.Empty,
+                                                                            "TransactionProcessorACL" => applicationCache.GetConfiguration()?.TransactionProcessorAclUri ?? String.Empty,
+                                                                            "TransactionProcessorApi" => applicationCache.GetConfiguration()?.TransactionProcessorUri ?? String.Empty,
+                                                                            "EstateReportingApi" => applicationCache.GetConfiguration()?.EstateReportingUri ?? String.Empty,
+                                                                            _ => String.Empty
+                                                                        };
 
-                                                                                             Configuration configuration = applicationCache.GetConfiguration();
-
-                                                                                              if (configuration != null)
-                                                                                              {
-                                                                                                  if (configSetting == "ApplicationUpdateServiceUrl") {
-                                                                                                     if (String.IsNullOrWhiteSpace(configuration.ApplicationUpdateUri) == false)
-                                                                                                     {
-                                                                                                         return configuration.ApplicationUpdateUri;
-                                                                                                     }
-
-                                                                                                     String configHostUrl = applicationCache.GetConfigHostUrl();
-                                                                                                     return configHostUrl ?? String.Empty;
-                                                                                                 }
-
-                                                                                                  if (configSetting == "SecurityService")
-                                                                                                  {
-                                                                                                      return configuration.SecurityServiceUri;
-                                                                                                 }
-
-                                                                                                 if (configSetting == "TransactionProcessorACL")
-                                                                                                 {
-                                                                                                     return configuration.TransactionProcessorAclUri;
-                                                                                                 }
-
-                                                                                                 if (configSetting == "TransactionProcessorApi")
-                                                                                                 {
-                                                                                                     return configuration.TransactionProcessorUri;
-                                                                                                 }
-
-                                                                                                 if (configSetting == "EstateReportingApi")
-                                                                                                 {
-                                                                                                     return configuration.EstateReportingUri;
-                                                                                                 }
-
-                                                                                                 return string.Empty;
-                                                                                             }
-
-                                                                                             return string.Empty;
-                                                                                         }));
+                                                                    return null;
+                                                                }));
 
             builder.Services.AddSingleton<IConfigurationService, ConfigurationService>();
             builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
@@ -135,53 +92,38 @@ namespace TransactionProcessor.Mobile.Extensions {
             builder.Services.AddSingleton<IUpdateService, UpdateService>();
 
             builder.Services.AddSingleton<Func<Boolean, IConfigurationService>>(new Func<Boolean, IConfigurationService>(useTrainingMode =>
-                                                                                {
-                                                                                    if (useTrainingMode)
-                                                                                    {
-                                                                                        return new TrainingConfigurationService();
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        return MauiProgram.Container.Services.GetService<IConfigurationService>();
-                                                                                    }
-                                                                                }));
+            {
+                return useTrainingMode switch {
+                    true => new TrainingConfigurationService(),
+                    _ => MauiProgram.Container.Services.GetService<IConfigurationService>()
+                } ?? throw new InvalidOperationException("Failed to resolve IConfigurationService.");
+            }));
 
-            builder.Services.AddSingleton<Func<Boolean, IAuthenticationService>>(new Func<Boolean, IAuthenticationService>(useTrainingMode =>
-                                                                                 {
-                                                                                     if (useTrainingMode)
-                                                                                     {
-                                                                                         return new TrainingAuthenticationService();
-                                                                                     }
-                                                                                     else
-                                                                                     {
-                                                                                         return MauiProgram.Container.Services.GetService<IAuthenticationService>();
-                                                                                     }
-                                                                                 }));
+            builder.Services.AddSingleton(new Func<Boolean, IAuthenticationService>(useTrainingMode => {
+                return useTrainingMode switch {
+                    true => new TrainingAuthenticationService(),
+                    _ => MauiProgram.Container.Services.GetService<IAuthenticationService>()
+                } ?? throw new InvalidOperationException("Failed to resolve IConfigurationService.");
+            }));
 
             builder.Services.AddSingleton<Func<Boolean, ITransactionService>>(new Func<Boolean, ITransactionService>(useTrainingMode =>
-                                                                              {
-                                                                                  if (useTrainingMode)
-                                                                                  {
-                                                                                      return new TrainingTransactionService();
-                                                                                  }
-                                                                                  else
-                                                                                  {
-                                                                                      return MauiProgram.Container.Services.GetService<ITransactionService>();
-                                                                                  }
-                                                                              }));
-
+            {
+                return useTrainingMode switch
+                {
+                    true => new TrainingTransactionService(),
+                    _ => MauiProgram.Container.Services.GetService<ITransactionService>()
+                } ?? throw new InvalidOperationException("Failed to resolve ITransactionService.");
+            }));
+            
             builder.Services.AddSingleton<Func<Boolean, IMerchantService>>(new Func<Boolean, IMerchantService>(useTrainingMode =>
-                                                                                                               {
-                                                                                                                   if (useTrainingMode)
-                                                                                                                   {
-                                                                                                                       return new TrainingMerchantService();
-                                                                                                                   }
-                                                                                                                   else
-                                                                                                                   {
-                                                                                                                       return MauiProgram.Container.Services.GetService<IMerchantService>();
-                                                                                                                   }
-                                                                                                               }));
-
+            {
+                return useTrainingMode switch
+                {
+                    true => new TrainingMerchantService(),
+                    _ => MauiProgram.Container.Services.GetService<IMerchantService>()
+                } ?? throw new InvalidOperationException("Failed to resolve ITransactionService.");
+            }));
+            
             builder.Services.RegisterHttpClientX<ISecurityServiceClient, SecurityServiceClient>();
             builder.Services.AddSingleton<IApplicationCache, ApplicationCache>();
 
@@ -190,17 +132,13 @@ namespace TransactionProcessor.Mobile.Extensions {
             return builder;
         }
 
-        public static HttpMessageHandler GetHandler()
-        {
+        public static HttpMessageHandler GetHandler() {
 #if ANDROID
-            CustomAndroidMessageHandler androidMessageHandler = new()
-            {
-
+            CustomAndroidMessageHandler androidMessageHandler = new() {
                 ServerCertificateCustomValidationCallback = (sender,
-                    certificate,
-                    chain,
-                    errors) => true,
-
+                                                             certificate,
+                                                             chain,
+                                                             errors) => true,
             };
             return androidMessageHandler;
 #else
@@ -217,7 +155,7 @@ namespace TransactionProcessor.Mobile.Extensions {
                         return httpMessageHandler;
 #endif
         }
-        
+
         public static MauiAppBuilder ConfigureUIServices(this MauiAppBuilder builder) {
             builder.Services.AddSingleton<IDialogService, DialogService>();
             builder.Services.AddSingleton<INavigationService, ShellNavigationService>();
