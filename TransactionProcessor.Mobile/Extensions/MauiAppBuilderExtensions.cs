@@ -81,6 +81,8 @@ namespace TransactionProcessor.Mobile.Extensions {
                                                                             "EstateReportingApi" => applicationCache.GetConfiguration()?.EstateReportingUri ?? String.Empty,
                                                                             _ => String.Empty
                                                                         };
+
+                                                                    return null;
                                                                 }));
 
             builder.Services.AddSingleton<IConfigurationService, ConfigurationService>();
