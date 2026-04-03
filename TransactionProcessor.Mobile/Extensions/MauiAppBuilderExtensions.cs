@@ -73,7 +73,7 @@ namespace TransactionProcessor.Mobile.Extensions {
 
                                                                     if (applicationCache != null)
                                                                         return configSetting switch {
-                                                                            "ConfigHostUrl" => applicationCache.GetConfigHostUrl() ?? String.Empty,
+                                                                            "ConfigServiceUrl" => applicationCache.GetConfigHostUrl() ?? String.Empty,
                                                                             "ApplicationUpdateServiceUrl" when String.IsNullOrWhiteSpace(applicationCache.GetConfiguration()?.ApplicationUpdateUri) == false => applicationCache.GetConfiguration().ApplicationUpdateUri,
                                                                             "SecurityService" => applicationCache.GetConfiguration()?.SecurityServiceUri ?? String.Empty,
                                                                             "TransactionProcessorACL" => applicationCache.GetConfiguration()?.TransactionProcessorAclUri ?? String.Empty,
