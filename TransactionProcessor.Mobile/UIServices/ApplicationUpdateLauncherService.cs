@@ -28,7 +28,7 @@ public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherServic
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(downloadUri);
 
-        if (Uri.TryCreate(downloadUri, UriKind.Absolute, out Uri? updateUri) == false)
+        if (!Uri.TryCreate(downloadUri, UriKind.Absolute, out Uri? updateUri))
         {
             throw new ArgumentException("An application update is required, but the download address is invalid.", nameof(downloadUri));
         }
@@ -47,7 +47,7 @@ public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherServic
             return;
         }
 
-        if (await Launcher.Default.CanOpenAsync(updateUri) == false)
+        if (!await Launcher.Default.CanOpenAsync(updateUri))
         {
             throw new InvalidOperationException($"The application update address '{downloadUri}' cannot be opened on this device.");
         }
@@ -59,52 +59,27 @@ public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherServic
     private async Task LaunchAndroidUpdateAsync(Uri updateUri,
                                                 CancellationToken cancellationToken)
     {
-        if (updateUri.Scheme != Uri.UriSchemeHttp && updateUri.Scheme != Uri.UriSchemeHttps)
-        {
-            throw new ArgumentException("Android updates require a valid HTTP or HTTPS download address.", nameof(updateUri));
-        }
+        this.ValidateAndroidUpdateUri(updateUri);
 
         try
         {
             Context context = Platform.AppContext ?? Android.App.Application.Context;
-
-            if (OperatingSystem.IsAndroidVersionAtLeast(26) && context.PackageManager?.CanRequestPackageInstalls() != true)
-            {
-                Intent settingsIntent = new(Settings.ActionManageUnknownAppSources);
-                settingsIntent.SetData(Android.Net.Uri.Parse($"package:{context.PackageName}"));
-                settingsIntent.AddFlags(ActivityFlags.NewTask);
-                context.StartActivity(settingsIntent);
-
-                throw new ApplicationException("Allow installs from this app, then retry the update.");
-            }
+            this.EnsureInstallPermission(context);
 
             String updateFilePath = await this.DownloadUpdatePackageAsync(updateUri, cancellationToken);
             JavaFile updateFile = new(updateFilePath);
 
-            if (updateFile.Exists() == false)
+            if (!updateFile.Exists())
             {
                 throw new ApplicationException("The update package could not be prepared for installation.");
             }
 
             Android.Net.Uri installerUri = MauiFileProvider.GetUriForFile(context, $"{context.PackageName}.fileprovider", updateFile);
-
-            Intent installIntent = OperatingSystem.IsAndroidVersionAtLeast(29)
-                                       ? new Intent(Intent.ActionView)
-                                       : new Intent(Intent.ActionInstallPackage);
-
-            if (OperatingSystem.IsAndroidVersionAtLeast(29))
-            {
-                installIntent.SetDataAndType(installerUri, AndroidPackageArchiveMimeType);
-            }
-            else
-            {
-                installIntent.SetData(installerUri);
-            }
-
+            Intent installIntent = this.CreateInstallIntent(installerUri);
             installIntent.AddFlags(ActivityFlags.GrantReadUriPermission | ActivityFlags.NewTask);
             installIntent.PutExtra(Intent.ExtraReturnResult, false);
 
-            if (installIntent.ResolveActivity(context.PackageManager) == null)
+            if (installIntent.ResolveActivity(context.PackageManager) is null)
             {
                 throw new ApplicationException("No installer is available on this device to open the update package.");
             }
@@ -115,6 +90,47 @@ public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherServic
         {
             throw new ApplicationException("Unable to start the application update installer.", ex);
         }
+    }
+
+    private void ValidateAndroidUpdateUri(Uri updateUri)
+    {
+        if (updateUri.Scheme != Uri.UriSchemeHttp && updateUri.Scheme != Uri.UriSchemeHttps)
+        {
+            throw new ArgumentException("Android updates require a valid HTTP or HTTPS download address.", nameof(updateUri));
+        }
+    }
+
+    private void EnsureInstallPermission(Context context)
+    {
+        if (!OperatingSystem.IsAndroidVersionAtLeast(26) || context.PackageManager?.CanRequestPackageInstalls() is true)
+        {
+            return;
+        }
+
+        Intent settingsIntent = new(Settings.ActionManageUnknownAppSources);
+        settingsIntent.SetData(Android.Net.Uri.Parse($"package:{context.PackageName}"));
+        settingsIntent.AddFlags(ActivityFlags.NewTask);
+        context.StartActivity(settingsIntent);
+
+        throw new ApplicationException("Allow installs from this app, then retry the update.");
+    }
+
+    private Intent CreateInstallIntent(Android.Net.Uri installerUri)
+    {
+        Intent installIntent = OperatingSystem.IsAndroidVersionAtLeast(29)
+                                   ? new Intent(Intent.ActionView)
+                                   : new Intent(Intent.ActionInstallPackage);
+
+        if (OperatingSystem.IsAndroidVersionAtLeast(29))
+        {
+            installIntent.SetDataAndType(installerUri, AndroidPackageArchiveMimeType);
+        }
+        else
+        {
+            installIntent.SetData(installerUri);
+        }
+
+        return installIntent;
     }
 
     private async Task<String> DownloadUpdatePackageAsync(Uri updateUri,
@@ -134,7 +150,7 @@ public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherServic
         HttpClient httpClient = this.HttpClientFactory.CreateClient("default");
         using HttpResponseMessage response = await httpClient.GetAsync(updateUri, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
-        if (response.IsSuccessStatusCode == false)
+        if (!response.IsSuccessStatusCode)
         {
             throw new ApplicationException($"The update package could not be downloaded ({(Int32)response.StatusCode} {response.ReasonPhrase}).");
         }
@@ -160,7 +176,7 @@ public class ApplicationUpdateLauncherService : IApplicationUpdateLauncherServic
             fileName = fileName.Replace(invalidCharacter, '_');
         }
 
-        if (fileName.EndsWith(".apk", StringComparison.OrdinalIgnoreCase) == false)
+        if (!fileName.EndsWith(".apk", StringComparison.OrdinalIgnoreCase))
         {
             fileName = $"{fileName}.apk";
         }

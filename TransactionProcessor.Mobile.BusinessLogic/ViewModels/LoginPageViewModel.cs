@@ -83,7 +83,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
         private void CacheUseTrainingMode() => this.ApplicationCache.SetUseTrainingMode(this.useTrainingMode);
 
         private async Task<Result<Configuration>> GetConfiguration() {
-            if (String.IsNullOrEmpty(this.ConfigHostUrl) == false) {
+            if (!String.IsNullOrEmpty(this.ConfigHostUrl)) {
                 this.ApplicationCache.SetConfigHostUrl(this.ConfigHostUrl);
             }
 
@@ -161,45 +161,67 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
         }
 
         private async Task CheckForUpdates(Configuration configuration) {
-            if (configuration?.EnableAutoUpdates != true) {
+            if (!this.ShouldCheckForUpdates(configuration)) {
                 return;
             }
 
             Result<ApplicationUpdateCheckResponse> updateCheckResult = await this.UpdateService.CheckForUpdates(this.ApplicationInfoService.VersionString,
-                                                                                                                this.ApplicationInfoService.PackageName,
-                                                                                                                this.DeviceService.GetPlatform(),
-                                                                                                                this.DeviceService.GetIdentifier(),
-                                                                                                                CancellationToken.None);
+                                                                                                                 this.ApplicationInfoService.PackageName,
+                                                                                                                 this.DeviceService.GetPlatform(),
+                                                                                                                 this.DeviceService.GetIdentifier(),
+                                                                                                                 CancellationToken.None);
 
-            if (updateCheckResult.IsFailed) {
-                Logger.LogWarning($"Application update check failed: {updateCheckResult.Message}");
+            if (!this.IsUpdateRequired(updateCheckResult)) {
                 return;
             }
 
-            if (updateCheckResult.Data.UpdateRequired == false) {
-                return;
-            }
-
-            String message = String.IsNullOrWhiteSpace(updateCheckResult.Data.Message)
-                                 ? $"Version {updateCheckResult.Data.LatestVersion ?? "latest"} is available and must be installed before you can continue. The installer will open and the app will close."
-                                 : updateCheckResult.Data.Message;
-
+            ApplicationUpdateCheckResponse updateResponse = updateCheckResult.Data;
+            String message = this.BuildUpdateMessage(updateResponse);
             Boolean startUpdate = await this.DialogService.ShowDialog("Application Update Required", message, "Install", "Cancel");
 
-            if (startUpdate == false) {
+            if (!startUpdate) {
                 throw new ApplicationException("An application update is required before you can continue.");
             }
 
-            if (String.IsNullOrWhiteSpace(updateCheckResult.Data.DownloadUri)) {
+            String downloadUri = this.GetRequiredDownloadUri(updateResponse);
+
+            await this.LaunchRequiredUpdate(downloadUri);
+        }
+
+        private Boolean ShouldCheckForUpdates(Configuration configuration) => configuration?.EnableAutoUpdates is true;
+
+        private Boolean IsUpdateRequired(Result<ApplicationUpdateCheckResponse> updateCheckResult)
+        {
+            if (updateCheckResult.IsFailed) {
+                Logger.LogWarning($"Application update check failed: {updateCheckResult.Message}");
+                return false;
+            }
+
+            return updateCheckResult.Data.UpdateRequired;
+        }
+
+        private String BuildUpdateMessage(ApplicationUpdateCheckResponse updateResponse) =>
+            String.IsNullOrWhiteSpace(updateResponse.Message)
+                ? $"Version {updateResponse.LatestVersion ?? "latest"} is available and must be installed before you can continue. The installer will open and the app will close."
+                : updateResponse.Message;
+
+        private String GetRequiredDownloadUri(ApplicationUpdateCheckResponse updateResponse)
+        {
+            if (String.IsNullOrWhiteSpace(updateResponse.DownloadUri)) {
                 throw new ApplicationException("An application update is required, but no download location is configured.");
             }
 
+            return updateResponse.DownloadUri;
+        }
+
+        private async Task LaunchRequiredUpdate(String downloadUri)
+        {
             this.IsBusy = true;
 
             try
             {
                 await this.DialogService.ShowInformationToast("Downloading the required update...");
-                await this.ApplicationUpdateLauncherService.LaunchUpdateAsync(updateCheckResult.Data.DownloadUri, CancellationToken.None);
+                await this.ApplicationUpdateLauncherService.LaunchUpdateAsync(downloadUri, CancellationToken.None);
                 await this.NavigationService.QuitApplication();
             }
             finally

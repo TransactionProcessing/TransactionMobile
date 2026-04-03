@@ -17,6 +17,11 @@ public interface IUpdateService
 
 public class UpdateService : ClientProxyBase.ClientProxyBase, IUpdateService
 {
+    private sealed record ApplicationUpdateCheckRequest(String ApplicationVersion,
+                                                        String PackageName,
+                                                        String Platform,
+                                                        String DeviceIdentifier);
+
     private readonly Func<String, String> BaseAddressResolver;
 
     public UpdateService(Func<String, String> baseAddressResolver,
@@ -32,13 +37,7 @@ public class UpdateService : ClientProxyBase.ClientProxyBase, IUpdateService
                                                                               CancellationToken cancellationToken)
     {
         String requestUri = this.BuildRequestUrl("/api/applicationupdates/check");
-        var request = new
-        {
-            ApplicationVersion = applicationVersion,
-            PackageName = packageName,
-            Platform = platform,
-            DeviceIdentifier = deviceIdentifier
-        };
+        ApplicationUpdateCheckRequest request = new(applicationVersion, packageName, platform, deviceIdentifier);
 
         try
         {

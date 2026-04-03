@@ -135,7 +135,7 @@ public class LoginPageViewModelTests
     }
 
     [Fact]
-    public void LoginPageViewModel_LoginCommand_Execute_UpdateCheckFails_LogonContinues()
+    public async Task LoginPageViewModel_LoginCommand_Execute_UpdateCheckFails_LogonContinues()
     {
         this.Mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Success(new Configuration { EnableAutoUpdates = true }));
@@ -150,7 +150,7 @@ public class LoginPageViewModelTests
         this.UpdateService.Setup(u => u.CheckForUpdates(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Failure("Update check failed"));
 
-        this.ViewModel.LogonCommand.Execute(null);
+        await this.ViewModel.LogonCommand.ExecuteAsync(null);
 
         this.UpdateService.Verify(u => u.CheckForUpdates(TestData.ApplicationVersion,
                                                          "com.transactionprocessor.mobile",
@@ -161,7 +161,7 @@ public class LoginPageViewModelTests
     }
 
     [Fact]
-    public void LoginPageViewModel_LoginCommand_Execute_UpdateRequired_UpdateLauncherIsCalled_And_AppQuits()
+    public async Task LoginPageViewModel_LoginCommand_Execute_UpdateRequired_UpdateLauncherIsCalled_And_AppQuits()
     {
         this.Mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Success(new Configuration { EnableAutoUpdates = true }));
@@ -179,7 +179,7 @@ public class LoginPageViewModelTests
             }));
         this.DialogService.Setup(d => d.ShowDialog(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>())).ReturnsAsync(true);
 
-        this.ViewModel.LogonCommand.Execute(null);
+        await this.ViewModel.LogonCommand.ExecuteAsync(null);
 
         this.DialogService.Verify(d => d.ShowInformationToast("Downloading the required update...",
                                                               null,
@@ -198,7 +198,7 @@ public class LoginPageViewModelTests
     }
 
     [Fact]
-    public void LoginPageViewModel_LoginCommand_Execute_UpdateLauncherFails_WarningToastIsShown_And_AppStaysOpen()
+    public async Task LoginPageViewModel_LoginCommand_Execute_UpdateLauncherFails_WarningToastIsShown_And_AppStaysOpen()
     {
         this.Mediator.Setup(m => m.Send(It.IsAny<GetConfigurationRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Success(new Configuration { EnableAutoUpdates = true }));
@@ -218,7 +218,7 @@ public class LoginPageViewModelTests
         this.ApplicationUpdateLauncherService.Setup(l => l.LaunchUpdateAsync(It.IsAny<String>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new ApplicationException("Unable to start the application update installer."));
 
-        this.ViewModel.LogonCommand.Execute(null);
+        await this.ViewModel.LogonCommand.ExecuteAsync(null);
 
         this.NavigationService.Verify(n => n.QuitApplication(), Times.Never);
         this.NavigationService.Verify(n => n.GoToHome(), Times.Never);
