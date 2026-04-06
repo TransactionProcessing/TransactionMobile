@@ -1,6 +1,8 @@
-﻿using System.Net;
+using System.Net;
+using System.Text;
 using Moq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RichardSzalay.MockHttp;
 using Shouldly;
 using SimpleResults;
@@ -63,6 +65,46 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
             performLogonResult.Data.ResponseCode.ShouldBe(expectedResponse.ResponseCode);
             performLogonResult.Data.ResponseMessage.ShouldBe(expectedResponse.ResponseMessage);
             performLogonResult.Data.IsSuccessful.ShouldBeTrue();
+        }
+
+        [Fact]
+        public async Task TransactionService_PerformLogon_RequestPayload_DoesNotContainTypeMetadata(){
+            PerformLogonRequestModel requestModel = new PerformLogonRequestModel{
+                                                                                    ApplicationVersion = TestData.ApplicationVersion,
+                                                                                    DeviceIdentifier = TestData.DeviceIdentifier,
+                                                                                    TransactionDateTime = TestData.TransactionDateTime,
+                                                                                    TransactionNumber = TestData.TransactionNumber
+                                                                                };
+
+            LogonTransactionResponseMessage expectedResponse = new LogonTransactionResponseMessage{
+                                                                                                      ResponseMessage = TestData.ResponseMessage_Success,
+                                                                                                      EstateId = TestData.EstateId,
+                                                                                                      MerchantId = TestData.MerchantId,
+                                                                                                      ResponseCode = TestData.ResponseCode_Success,
+                                                                                                      TransactionId = TestData.TransactionId,
+                                                                                                      AdditionalResponseMetadata = new Dictionary<String, String>()
+                                                                                                  };
+
+            String requestPayload = String.Empty;
+
+            this.MockHttpMessageHandler.When($"http://localhost/api/logontransactions")
+                .Respond(req => {
+                             requestPayload = req.Content!.ReadAsStringAsync().GetAwaiter().GetResult();
+
+                             return new HttpResponseMessage(HttpStatusCode.OK){
+                                                                                 Content = new StringContent(JsonConvert.SerializeObject(expectedResponse), Encoding.UTF8, "application/json")
+                                                                             };
+                         });
+
+            Result<PerformLogonResponseModel> performLogonResult = await this.TransactionService.PerformLogon(requestModel, CancellationToken.None);
+
+            performLogonResult.IsSuccess.ShouldBeTrue();
+            requestPayload.ShouldNotBeNullOrWhiteSpace();
+            requestPayload.ShouldNotContain("$type");
+
+            JObject requestJson = JObject.Parse(requestPayload);
+            requestJson["ApplicationVersion"]?.Value<String>().ShouldBe(TestData.ApplicationVersion);
+            requestJson["DeviceIdentifier"]?.Value<String>().ShouldBe(TestData.DeviceIdentifier);
         }
 
         [Theory]

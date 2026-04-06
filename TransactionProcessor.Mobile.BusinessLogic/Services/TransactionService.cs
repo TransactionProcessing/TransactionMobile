@@ -263,7 +263,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                                                                                           CancellationToken cancellationToken) {
             String requestUri = this.BuildRequestUrl(route);
             try {
-                String requestSerialised = JsonConvert.SerializeObject(request, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+                String requestSerialised = JsonConvert.SerializeObject(request);
 
                 StringContent httpContent = new StringContent(requestSerialised, Encoding.UTF8, "application/json");
 
