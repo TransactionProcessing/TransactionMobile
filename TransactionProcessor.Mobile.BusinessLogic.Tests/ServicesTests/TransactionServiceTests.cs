@@ -105,6 +105,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
             JObject requestJson = JObject.Parse(requestPayload);
             requestJson["ApplicationVersion"]?.Value<String>().ShouldBe(TestData.ApplicationVersion);
             requestJson["DeviceIdentifier"]?.Value<String>().ShouldBe(TestData.DeviceIdentifier);
+            requestJson["TransactionDateTime"]?.Value<DateTime>().ShouldBe(TestData.TransactionDateTime);
+            requestJson["TransactionNumber"]?.Value<String>().ShouldBe(TestData.TransactionNumber);
         }
 
         [Theory]
