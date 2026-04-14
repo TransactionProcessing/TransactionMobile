@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Shared.Results;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
@@ -8,7 +9,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers;
 
 public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest, Result<List<ContractProductModel>>>,
                                       IRequestHandler<GetMerchantBalanceRequest, Result<Decimal>>,
-                                      IRequestHandler<GetMerchantDetailsRequest, Result<MerchantDetailsModel>>
+                                      IRequestHandler<GetMerchantDetailsRequest, Result<MerchantDetailsModel>>,
+                                      IRequestHandler<GetProductOperators, Result<List<ContractOperatorModel>>>
 {
     #region Fields
 
@@ -74,4 +76,43 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
     }
 
     #endregion
+
+    public async Task<Result<List<ContractOperatorModel>>> Handle(GetProductOperators request,
+                                                                  CancellationToken cancellationToken) {
+        List<ContractProductModel> products = this.ApplicationCache.GetContractProducts();
+
+        Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+        IMerchantService merchantService = this.MerchantServiceResolver(useTrainingMode);
+
+        if (products == null || products.Any() == false)
+        {
+            Result<List<ContractProductModel>> getProductsResult = await merchantService.GetContractProducts(cancellationToken);
+            if (getProductsResult.IsSuccess)
+            {
+                products = getProductsResult.Data;
+
+                if (request.ProductType.HasValue)
+                {
+                    products = products.Where(p => p.ProductType == request.ProductType).ToList();
+                }
+            }
+            
+            return ResultHelpers.CreateFailure(getProductsResult);
+        }
+
+        List<ContractOperatorModel> operators = products.GroupBy(c => new
+        {
+            c.OperatorName,
+            c.OperatorId,
+            c.OperatorIdentfier
+        }).Select(g => new ContractOperatorModel
+        {
+            OperatorId = g.Key.OperatorId,
+            OperatorName = g.Key.OperatorName,
+            OperatorIdentfier = g.Key.OperatorIdentfier
+        }).ToList();
+
+        return Result.Success(operators);
+
+    }
 }

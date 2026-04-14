@@ -28,3 +28,5 @@ public class GetContractProductsRequest : IRequest<Result<List<ContractProductMo
 
     #endregion
 }
+
+public record GetProductOperators(ProductType? ProductType) : IRequest<Result<List<ContractOperatorModel>>>;
