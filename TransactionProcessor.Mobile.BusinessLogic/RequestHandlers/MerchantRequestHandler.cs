@@ -87,17 +87,16 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
         if (products == null || products.Any() == false)
         {
             Result<List<ContractProductModel>> getProductsResult = await merchantService.GetContractProducts(cancellationToken);
-            if (getProductsResult.IsSuccess)
-            {
-                products = getProductsResult.Data;
-
-                if (request.ProductType.HasValue)
-                {
-                    products = products.Where(p => p.ProductType == request.ProductType).ToList();
-                }
+            if (getProductsResult.IsFailed) {
+                return ResultHelpers.CreateFailure(getProductsResult);
             }
-            
-            return ResultHelpers.CreateFailure(getProductsResult);
+
+            products = getProductsResult.Data;
+
+            if (request.ProductType.HasValue)
+            {
+                products = products.Where(p => p.ProductType == request.ProductType).ToList();
+            }
         }
 
         List<ContractOperatorModel> operators = products.GroupBy(c => new
