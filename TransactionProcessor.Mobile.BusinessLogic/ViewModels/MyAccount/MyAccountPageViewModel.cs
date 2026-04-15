@@ -68,29 +68,25 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.MyAccount
         #region Methods
 
         public async Task Initialise(CancellationToken cancellationToken) {
-            this.MyAccountOptions = new List<ListViewItem> {
-                                                               new ListViewItem {
-                                                                                    Title = "Addresses"
-                                                                                },
-                                                               new ListViewItem {
-                                                                                    Title = "Contacts"
-                                                                                },
-                                                               new ListViewItem {
-                                                                                    Title = "Account Info"
-                                                                                },
-                                                               new ListViewItem {
-                                                                                    Title = "Logout"
-                                                                                }
-                                                           };
+            this.MyAccountOptions = [
+                new() { Title = "Addresses" },
+                new() { Title = "Contacts" },
+                new() { Title = "Account Info" },
+                new() { Title = "Logout" }
+            ];
 
             GetMerchantDetailsRequest request = GetMerchantDetailsRequest.Create();
 
             Result<MerchantDetailsModel> merchantDetailsResult = await this.Mediator.Send(request, cancellationToken);
-            // TODO: handle failure result
+            if (merchantDetailsResult.IsFailed) {
+                await this.DialogService.ShowWarningToast("Unable to load merchant details. Please try again later.", cancellationToken: cancellationToken);
+                return;
+            }
+
             this.MerchantName = merchantDetailsResult.Data.MerchantName;
 
             DateTime expirationTime = DateTime.Now.AddMinutes(60);
-            CancellationChangeToken expirationToken = new CancellationChangeToken(new CancellationTokenSource(TimeSpan.FromMinutes(60)).Token);
+            CancellationChangeToken expirationToken = new(new CancellationTokenSource(TimeSpan.FromMinutes(60)).Token);
             MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
                                                         // Pin to cache.
                                                         .SetPriority(CacheItemPriority.NeverRemove)
