@@ -38,5 +38,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Models
         public Boolean EnableAutoUpdates { get; set; }
 
         public Boolean ShowDebugMessages { get; set; }
+        public Int32? LogMessageBatchSize { get; set; }
     }
 }

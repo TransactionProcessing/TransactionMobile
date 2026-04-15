@@ -81,6 +81,7 @@ public class ConfigurationService : ClientProxyBase.ClientProxyBase, IConfigurat
                 SecurityServiceUri = apiResponse.HostAddresses.Single(h => h.ServiceType == ServiceType.Security).Uri,
                 TransactionProcessorAclUri =
                     apiResponse.HostAddresses.Single(h => h.ServiceType == ServiceType.TransactionProcessorAcl).Uri,
+                LogMessageBatchSize = apiResponse.LogMessageBatchSize.GetValueOrDefault(),
             };
 
             Logger.LogDebug($"About to xlate log level");
