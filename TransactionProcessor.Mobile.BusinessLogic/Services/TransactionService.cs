@@ -33,7 +33,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
         #endregion
     }
 
-    //[ExcludeFromCodeCoverage(Justification = "Need to refactor to allow injection of client for mocking")]
     public class TransactionService : ClientProxyBase.ClientProxyBase, ITransactionService
     {
         #region Fields
@@ -66,16 +65,12 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
             Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), "api/saletransactions", cancellationToken);
 
-            if (result.IsSuccess == false)
-            {
+            if (result.IsSuccess == false) {
                 Logger.LogWarning("Error performing bill payment - get account transaction");
                 return Result.Failure("Error performing bill payment - get account transaction");
             }
 
-            PerformBillPaymentGetAccountResponseModel responseModel = new()
-                                                                      {
-                                                                          BillDetails = result.Data.AdditionalResponseMetadata.ToBillDetails()
-                                                                      };
+            PerformBillPaymentGetAccountResponseModel responseModel = Factory.ToPerformBillPaymentGetAccountResponseModel(result.Data);
 
             Logger.LogInformation("Bill payment - get account transaction performed successfully");
 
@@ -87,22 +82,13 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
             Logger.LogInformation("About to perform bill payment make payment transaction");
             
             Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(),"api/saletransactions", cancellationToken);
-            
-            if (result.IsSuccess == false)
-            {
+
+            if (result.IsSuccess == false) {
                 Logger.LogWarning("Error performing bill payment - make payment transaction");
                 return Result.Failure("Error performing bill payment - make payment transaction");
-
             }
 
-            // TODO: Factory
-            PerformBillPaymentMakePaymentResponseModel responseModel = new()
-                                                                       {
-                                                                           EstateId = result.Data.EstateId,
-                                                                           MerchantId = result.Data.EstateId,
-                                                                           ResponseCode = result.Data.ResponseCode,
-                                                                           ResponseMessage = result.Data.ResponseMessage
-                                                                       };
+            PerformBillPaymentMakePaymentResponseModel responseModel = Factory.ToPerformBillPaymentMakePaymentResponseModel(result.Data);
 
             Logger.LogInformation("Bill payment - make payment transaction performed successfully");
 
@@ -114,22 +100,12 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
             Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), "api/saletransactions", cancellationToken);
 
-            if (result.IsSuccess == false)
-            {
+            if (result.IsSuccess == false) {
                 Logger.LogWarning("Error performing bill payment - get meter transaction");
                 return Result.Failure("Error performing bill payment - get meter transaction");
-
             }
 
-            MeterDetails meterDetails = result.Data.AdditionalResponseMetadata switch{
-                null => null,
-                _ => result.Data.AdditionalResponseMetadata.ToMeterDetails(model.MeterNumber)
-            };
-
-            PerformBillPaymentGetMeterResponseModel responseModel = new()
-                                                                    {
-                                                                        MeterDetails = meterDetails
-            };
+            PerformBillPaymentGetMeterResponseModel responseModel = Factory.ToPerformBillPaymentGetMeterResponseModel(result.Data, model.MeterNumber);
 
             Logger.LogInformation("Bill payment - get meter transaction performed successfully");
 
@@ -148,14 +124,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                 return Result.Failure("Error performing Logon transaction");
             }
 
-            // TODO: Factory
-            PerformLogonResponseModel responseModel = new()
-                                                      {
-                                                          EstateId = result.Data.EstateId,
-                                                          MerchantId = result.Data.MerchantId,
-                                                          ResponseCode = result.Data.ResponseCode,
-                                                          ResponseMessage = result.Data.ResponseMessage,
-                                                      };
+            PerformLogonResponseModel responseModel = Factory.ToPerformLogonResponseModel(result.Data);
 
             Logger.LogInformation("Logon transaction performed successfully");
 
@@ -172,15 +141,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
             if (result.IsSuccess == false) {
                 Logger.LogWarning("Error performing Mobile top-up transaction");
                 return Result.Failure("Error performing Mobile top-up transaction");
-                
             }
 
-            PerformMobileTopupResponseModel responseModel = new (){
-                                                                                                    EstateId = result.Data.EstateId,
-                                                                                                    MerchantId = result.Data.MerchantId,
-                                                                                                    ResponseCode = result.Data.ResponseCode,
-                                                                                                    ResponseMessage = result.Data.ResponseMessage
-                                                                                                };
+            PerformMobileTopupResponseModel responseModel = Factory.ToPerformMobileTopupResponseModel(result.Data);
 
             Logger.LogInformation("Mobile top-up transaction performed successfully");
 
@@ -198,17 +161,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
             {
                 Logger.LogWarning("Error performing Reconciliation transaction");
                 return Result.Failure("Error performing Reconciliation transaction");
-
             }
 
-            // TODO: Factory
-            PerformReconciliationResponseModel responseModel = new()
-                                                               {
-                                                                   EstateId = result.Data.EstateId,
-                                                                   MerchantId = result.Data.MerchantId,
-                                                                   ResponseCode = result.Data.ResponseCode,
-                                                                   ResponseMessage = result.Data.ResponseMessage
-                                                               };
+            PerformReconciliationResponseModel responseModel = Factory.ToPerformReconciliationResponseModel(result.Data);
 
             Logger.LogInformation("Reconciliation transaction performed successfully");
 
@@ -228,13 +183,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                 return Result.Failure("Error performing Voucher transaction");
             }
 
-            PerformVoucherIssueResponseModel responseModel = new()
-                                                             {
-                                                                 EstateId = result.Data.EstateId,
-                                                                 MerchantId = result.Data.MerchantId,
-                                                                 ResponseCode = result.Data.ResponseCode,
-                                                                 ResponseMessage = result.Data.ResponseMessage
-                                                             };
+            PerformVoucherIssueResponseModel responseModel = Factory.ToPerformVoucherIssueResponseModel(result.Data);
 
             Logger.LogInformation("Voucher transaction performed successfully");
 
