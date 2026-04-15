@@ -1,9 +1,12 @@
 ﻿using Moq;
 using Shouldly;
 using TransactionProcessor.Mobile.BusinessLogic.Database;
+using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.RequestHandlers;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
+using LogLevel = TransactionProcessor.Mobile.BusinessLogic.Database.LogLevel;
+using LogMessage = TransactionProcessor.Mobile.BusinessLogic.Database.LogMessage;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.Tests.RequestHandlerTests;
 
@@ -22,7 +25,7 @@ public class SupportRequestHandlerTests
         Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
         databaseContext.Setup(d => d.GetLogMessages(It.IsAny<Int32>(), It.IsAny<Boolean>())).ReturnsAsync(new List<Database.LogMessage>());
         Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
-
+        applicationCache.Setup(s => s.GetConfiguration()).Returns(new Configuration());
         SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, applicationCache.Object);
 
         UploadLogsRequest request = UploadLogsRequest.Create(TestData.DeviceIdentifier);
@@ -56,6 +59,7 @@ public class SupportRequestHandlerTests
         }).ReturnsAsync(new List<Database.LogMessage>());
 
         Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        applicationCache.Setup(s => s.GetConfiguration()).Returns(new Configuration());
 
         SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, applicationCache.Object);
 
@@ -98,6 +102,7 @@ public class SupportRequestHandlerTests
         }).ReturnsAsync(new List<Database.LogMessage>());
 
         Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        applicationCache.Setup(s => s.GetConfiguration()).Returns(new Configuration());
 
         SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, applicationCache.Object);
 
