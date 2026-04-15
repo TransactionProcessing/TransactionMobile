@@ -1,7 +1,8 @@
-﻿using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using MvvmHelpers.Commands;
+using SimpleResults;
+using System.Windows.Input;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -43,25 +44,14 @@ public partial class VoucherSelectOperatorPageViewModel : ExtendedBaseViewModel
 
     public async Task Initialise(CancellationToken cancellationToken)
     {
-        GetContractProductsRequest request = GetContractProductsRequest.Create(ProductType.Voucher);
-
-        var productsresult = await this.Mediator.Send(request, cancellationToken);
-        List<ContractProductModel> products = productsresult.Data;
-
-        // TODO: Should this logic live in the Reqest handler ???
-        List<ContractOperatorModel> operators = products.GroupBy(c => new
-            {
-                c.OperatorName,
-                c.OperatorId,
-                c.OperatorIdentfier
-            }).Select(g => new ContractOperatorModel
-                           {
-                               OperatorId = g.Key.OperatorId,
-                               OperatorName = g.Key.OperatorName,
-                               OperatorIdentfier = g.Key.OperatorIdentfier
-                           }).ToList();
-
-        this.Operators = operators;
+        GetProductOperators request = new GetProductOperators(ProductType.Voucher);
+        Result<List<ContractOperatorModel>> operatorsResult = await this.Mediator.Send(request, cancellationToken);
+        if (operatorsResult.IsFailed)
+        {
+            await this.DialogService.ShowWarningToast("Unable to load operators. Please try again later.", cancellationToken: cancellationToken);
+            return;
+        }
+        this.Operators = operatorsResult.Data;
     }
 
     [RelayCommand]

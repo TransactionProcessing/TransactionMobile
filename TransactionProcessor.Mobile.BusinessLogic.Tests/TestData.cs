@@ -154,6 +154,11 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests
                                                                            TestData.Operator3Product_200KES
                                                                        };
 
+        public static List<ContractOperatorModel> ContractOperatorList = new List<ContractOperatorModel>
+                                                                       {
+                                                                           ContractOperatorModel
+                                                                       };
+
         public static List<ContractProductModel> ContractProductListEmpty = new List<ContractProductModel>();
 
         public static ContractOperatorModel ContractOperatorModel = new ContractOperatorModel

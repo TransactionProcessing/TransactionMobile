@@ -183,29 +183,31 @@ namespace TransactionProcessor.Mobile.Extensions {
         }
 
         public static MauiAppBuilder ConfigureRequestHandlers(this MauiAppBuilder builder) {
-            builder.Services.AddSingleton<MediatRServiceConfiguration>();
-            builder.Services.AddSingleton<ISender, Mediator>();
-            builder.Services.AddSingleton<IPublisher, Mediator>();
-            builder.Services.AddSingleton<IMediator, Mediator>();
-            builder.Services.AddSingleton<IRequestHandler<GetConfigurationRequest, Result<Configuration>>, LoginRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<LoginRequest, Result<TokenResponseModel>>, LoginRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<RefreshTokenRequest, Result<TokenResponseModel>>, LoginRequestHandler>();
+            //builder.Services.AddSingleton<MediatRServiceConfiguration>();
+            //builder.Services.AddSingleton<ISender, Mediator>();
+            //builder.Services.AddSingleton<IPublisher, Mediator>();
+            //builder.Services.AddSingleton<IMediator, Mediator>();
+            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(LoginRequestHandler).Assembly));
+            //builder.Services.AddSingleton<IRequestHandler<GetConfigurationRequest, Result<Configuration>>, LoginRequestHandler>();
+            //builder.Services.AddSingleton<IRequestHandler<LoginRequest, Result<TokenResponseModel>>, LoginRequestHandler>();
+            //builder.Services.AddSingleton<IRequestHandler<RefreshTokenRequest, Result<TokenResponseModel>>, LoginRequestHandler>();
 
-            builder.Services.AddSingleton<IRequestHandler<GetContractProductsRequest, Result<List<ContractProductModel>>>, MerchantRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<GetMerchantBalanceRequest, Result<Decimal>>, MerchantRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<GetMerchantDetailsRequest, Result<MerchantDetailsModel>>, MerchantRequestHandler>();
+            //builder.Services.AddSingleton<IRequestHandler<GetContractProductsRequest, Result<List<ContractProductModel>>>, MerchantRequestHandler>();
+            //builder.Services.AddSingleton<IRequestHandler<GetProductOperators, Result<List<ContractOperatorModel>>>, MerchantRequestHandler>();
+            //builder.Services.AddSingleton<IRequestHandler<GetMerchantBalanceRequest, Result<Decimal>>, MerchantRequestHandler>();
+            //builder.Services.AddSingleton<IRequestHandler<GetMerchantDetailsRequest, Result<MerchantDetailsModel>>, MerchantRequestHandler>();
 
-            builder.Services.AddSingleton<IRequestHandler<PerformMobileTopupRequest, Result<PerformMobileTopupResponseModel>>, TransactionRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<LogonTransactionRequest, Result<PerformLogonResponseModel>>, TransactionRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<PerformVoucherIssueRequest, Result<PerformVoucherIssueResponseModel>>, TransactionRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<PerformReconciliationRequest, Result<PerformReconciliationResponseModel>>, TransactionRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentGetAccountRequest, Result<PerformBillPaymentGetAccountResponseModel>>, TransactionRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentGetMeterRequest, Result<PerformBillPaymentGetMeterResponseModel>>, TransactionRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentMakePostPaymentRequest, Result<PerformBillPaymentMakePaymentResponseModel>>, TransactionRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentMakePrePaymentRequest, Result<PerformBillPaymentMakePaymentResponseModel>>, TransactionRequestHandler>();
+            //builder.Services.AddSingleton<IRequestHandler<PerformMobileTopupRequest, Result<PerformMobileTopupResponseModel>>, TransactionRequestHandler>();
+            //builder.Services.AddSingleton<IRequestHandler<LogonTransactionRequest, Result<PerformLogonResponseModel>>, TransactionRequestHandler>();
+            //builder.Services.AddSingleton<IRequestHandler<PerformVoucherIssueRequest, Result<PerformVoucherIssueResponseModel>>, TransactionRequestHandler>();
+            //builder.Services.AddSingleton<IRequestHandler<PerformReconciliationRequest, Result<PerformReconciliationResponseModel>>, TransactionRequestHandler>();
+            //builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentGetAccountRequest, Result<PerformBillPaymentGetAccountResponseModel>>, TransactionRequestHandler>();
+            //builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentGetMeterRequest, Result<PerformBillPaymentGetMeterResponseModel>>, TransactionRequestHandler>();
+            //builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentMakePostPaymentRequest, Result<PerformBillPaymentMakePaymentResponseModel>>, TransactionRequestHandler>();
+            //builder.Services.AddSingleton<IRequestHandler<PerformBillPaymentMakePrePaymentRequest, Result<PerformBillPaymentMakePaymentResponseModel>>, TransactionRequestHandler>();
 
-            builder.Services.AddSingleton<IRequestHandler<UploadLogsRequest, Boolean>, SupportRequestHandler>();
-            builder.Services.AddSingleton<IRequestHandler<ViewLogsRequest, List<LogMessage>>, SupportRequestHandler>();
+            //builder.Services.AddSingleton<IRequestHandler<UploadLogsRequest, Boolean>, SupportRequestHandler>();
+            //builder.Services.AddSingleton<IRequestHandler<ViewLogsRequest, List<LogMessage>>, SupportRequestHandler>();
 
             return builder;
         }

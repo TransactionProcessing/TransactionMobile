@@ -46,22 +46,22 @@ public class MobileTopupSelectOperatorPageViewModelTests
     [Fact]
     public async Task MobileTopupSelectOperatorPageViewModel_Initialise_IsInitialised()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
-        
-        await this.ViewModel.Initialise(CancellationToken.None);
-        this.Mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetProductOperators>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractOperatorList));
 
-        this.ViewModel.Operators.Count.ShouldBe(3);
+        await this.ViewModel.Initialise(CancellationToken.None);
+        this.Mediator.Verify(x => x.Send(It.IsAny<GetProductOperators>(), It.IsAny<CancellationToken>()), Times.Once);
+
+        this.ViewModel.Operators.Count.ShouldBe(1);
     }
 
     [Fact]
     public async Task MobileTopupSelectOperatorPageViewModel_OperatorSelectedCommand_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
-        
+        this.Mediator.Setup(m => m.Send(It.IsAny<GetProductOperators>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractOperatorList));
+
         await this.ViewModel.Initialise(CancellationToken.None);
 
-        this.ViewModel.Operators.Count.ShouldBe(3);
+        this.ViewModel.Operators.Count.ShouldBe(1);
 
         ItemSelected<ContractOperatorModel> selectedContractOperator = new ItemSelected<ContractOperatorModel>
                                                                        {
