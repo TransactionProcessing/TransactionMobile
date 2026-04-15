@@ -51,9 +51,13 @@ public partial class BillPaymentSelectProductPageViewModel : ExtendedBaseViewMod
 
         GetContractProductsRequest request = GetContractProductsRequest.Create(ProductType.BillPayment);
 
-        Result<List<ContractProductModel>> productsresult = await this.Mediator.Send(request, cancellationToken);
-        // TODO: Handle the failure result
-        List<ContractProductModel> products = productsresult.Data;
+        Result<List<ContractProductModel>> productsResult = await this.Mediator.Send(request, cancellationToken);
+        if (productsResult.IsFailed) {
+            await this.DialogService.ShowWarningToast("Unable to load products. Please try again later.", cancellationToken: cancellationToken);
+            return;
+        }
+
+        List<ContractProductModel> products = productsResult.Data;
         products = products.Where(p => p.OperatorId == this.ProductDetails.OperatorId).ToList();
 
         this.Products = products;
