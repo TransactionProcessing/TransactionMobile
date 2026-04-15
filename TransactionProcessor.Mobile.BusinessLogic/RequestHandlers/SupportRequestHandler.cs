@@ -31,7 +31,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
             while (true) {
                 IConfigurationService configurationService = this.ConfigurationServiceResolver(useTrainingMode);
 
-                List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(configuration.LogMessageBatchSize.GetValueOrDefault(10), useTrainingMode); // TODO: Configurable batch size
+                List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(configuration.LogMessageBatchSize.GetValueOrDefault(10), useTrainingMode);
 
                 if (logEntries.Any() == false) {
                     break;
