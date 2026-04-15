@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using TransactionProcessor.Mobile.BusinessLogic.Database;
+using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
+using LogMessage = TransactionProcessor.Mobile.BusinessLogic.Database.LogMessage;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
 {
@@ -25,20 +27,19 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
         public async Task<Boolean> Handle(UploadLogsRequest request, CancellationToken cancellationToken)
         {
             Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+            Configuration configuration = this.ApplicationCache.GetConfiguration();
+            while (true) {
+                IConfigurationService configurationService = this.ConfigurationServiceResolver(useTrainingMode);
 
-            while (true)
-            {
-                List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(10, useTrainingMode); // TODO: Configurable batch size
+                List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(configuration.LogMessageBatchSize.GetValueOrDefault(10), useTrainingMode);
 
-                if (logEntries.Any() == false)
-                {
+                if (logEntries.Any() == false) {
                     break;
                 }
 
-                List<Models.LogMessage> logMessageModels = new List<Models.LogMessage>();
+                List<Models.LogMessage> logMessageModels = new();
 
-                logEntries.ForEach(l => logMessageModels.Add(new Models.LogMessage
-                {
+                logEntries.ForEach(l => logMessageModels.Add(new Models.LogMessage {
                     LogLevel = Enum.Parse<Models.LogLevel>(l.LogLevel),
                     LogLevelString = l.LogLevel,
                     Message = l.Message,
@@ -46,7 +47,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
                     Id = l.Id
                 }));
 
-                IConfigurationService configurationService = this.ConfigurationServiceResolver(useTrainingMode);
+
                 await configurationService.PostDiagnosticLogs(request.DeviceIdentifier, logMessageModels, CancellationToken.None);
 
                 // Clear the logs that have been uploaded
@@ -60,9 +61,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
                                                     CancellationToken cancellationToken) {
             Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
 
-            List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(50, useTrainingMode); // TODO: Configurable batch size
+            List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(50, useTrainingMode);
 
-            List<Models.LogMessage> logMessageModels = new List<Models.LogMessage>();
+            List<Models.LogMessage> logMessageModels = new();
 
             logEntries.ForEach(l => logMessageModels.Add(new Models.LogMessage {
                                                                                    LogLevel = Enum.Parse<Models.LogLevel>(l.LogLevel),

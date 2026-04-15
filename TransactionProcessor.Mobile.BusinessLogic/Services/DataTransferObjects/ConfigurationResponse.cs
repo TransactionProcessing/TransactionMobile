@@ -19,4 +19,6 @@ public class ConfigurationResponse
     public string Id { get; set; }
 
     public LoggingLevel LogLevel { get; set; }
+
+    public Int32? LogMessageBatchSize { get; set; }
 }
