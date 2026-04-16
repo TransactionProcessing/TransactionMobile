@@ -1,5 +1,9 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Primitives;
+using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
+using TransactionProcessor.Mobile.BusinessLogic.Requests;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
@@ -42,7 +46,28 @@ public class MyAccountAddressPageViewModel : ExtendedBaseViewModel
     public async Task Initialise(CancellationToken cancellationToken) {
         MerchantDetailsModel merchantDetails = this.ApplicationCache.GetMerchantDetails();
 
-        // TODO: handle a null
+        if (merchantDetails == null) {
+            GetMerchantDetailsRequest request = GetMerchantDetailsRequest.Create();
+
+            Result<MerchantDetailsModel> merchantDetailsResult = await this.Mediator.Send(request, cancellationToken);
+            if (merchantDetailsResult.IsFailed) {
+                await this.DialogService.ShowWarningToast("Unable to load merchant details. Please try again later.", cancellationToken: cancellationToken);
+                return;
+            }
+
+            DateTime expirationTime = DateTime.Now.AddMinutes(60);
+            CancellationChangeToken expirationToken = new(new CancellationTokenSource(TimeSpan.FromMinutes(60)).Token);
+            MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
+                // Pin to cache.
+                .SetPriority(CacheItemPriority.NeverRemove)
+                // Set the actual expiration time
+                .SetAbsoluteExpiration(expirationTime)
+                // Force eviction to run
+                .AddExpirationToken(expirationToken);
+
+            this.ApplicationCache.SetMerchantDetails(merchantDetailsResult.Data, cacheEntryOptions);
+            merchantDetails = this.ApplicationCache.GetMerchantDetails();
+        }
 
         this.Address = merchantDetails.Address;
     }
