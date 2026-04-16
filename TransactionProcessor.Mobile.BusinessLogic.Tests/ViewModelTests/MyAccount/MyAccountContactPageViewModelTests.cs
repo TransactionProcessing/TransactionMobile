@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using MediatR;
+using Moq;
 using Shouldly;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
@@ -19,6 +20,7 @@ public class MyAccountContactPageViewModelTests
     private readonly MyAccountContactPageViewModel ViewModel;
 
     private readonly Mock<IDeviceService> DeviceService;
+    private readonly Mock<IMediator> Mediator;
 
     public MyAccountContactPageViewModelTests() {
         this.NavigationService = new Mock<INavigationService>();
@@ -26,10 +28,13 @@ public class MyAccountContactPageViewModelTests
         this.NavigationParameterService = new Mock<INavigationParameterService>();
         this.DialogService = new Mock<IDialogService>();
         this.DeviceService = new Mock<IDeviceService>();
+        this.Mediator = new Mock<IMediator>();
+
         this.ViewModel = new MyAccountContactPageViewModel(this.NavigationService.Object,
                                                            this.ApplicationCache.Object,
                                                            this.DialogService.Object, this.DeviceService.Object,
-                                                           this.NavigationParameterService.Object);
+                                                           this.NavigationParameterService.Object,
+                                                           this.Mediator.Object);
     }
 
     [Fact]
