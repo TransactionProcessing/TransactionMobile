@@ -33,6 +33,8 @@ public class LoginPageViewModelTests
     private readonly Mock<IDialogService> DialogService;
 
     private readonly Mock<IUpdateService> UpdateService;
+
+    private readonly Mock<IBalanceRefresher> BalanceRefresher;
     public LoginPageViewModelTests() {
         this.Mediator = new Mock<IMediator>();
         this.NavigationService = new Mock<INavigationService>();
@@ -43,11 +45,14 @@ public class LoginPageViewModelTests
         this.ApplicationUpdateLauncherService = new Mock<IApplicationUpdateLauncherService>();
         this.DialogService = new Mock<IDialogService>();
         this.UpdateService = new Mock<IUpdateService>();
+        this.BalanceRefresher = new Mock<IBalanceRefresher>();
+
 
         this.ViewModel = new LoginPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object,
                                                 this.DeviceService.Object, this.ApplicationInfoService.Object,
                                                 this.DialogService.Object, this.NavigationParameterService.Object,
-                                                this.UpdateService.Object, this.ApplicationUpdateLauncherService.Object);
+                                                this.UpdateService.Object, this.ApplicationUpdateLauncherService.Object,
+                                                this.BalanceRefresher.Object);
         Logger.Initialise(new Logging.NullLogger());
     }
     
@@ -58,14 +63,12 @@ public class LoginPageViewModelTests
         this.Mediator.Setup(m => m.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
         this.Mediator.Setup(m => m.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformLogonResponseModel));
         this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantBalance));
-
+        
         this.ViewModel.LogonCommand.Execute(null);
         
         this.Mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.Mediator.Verify(x => x.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.Mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.Mediator.Verify(x => x.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
     }
 
@@ -79,7 +82,6 @@ public class LoginPageViewModelTests
         this.Mediator.Setup(m => m.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
         this.Mediator.Setup(m => m.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformLogonResponseModel));
         this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantBalance));
         this.ViewModel.ConfigHostUrl = configUrl;
 
         this.ViewModel.LogonCommand.Execute(null);
@@ -87,7 +89,6 @@ public class LoginPageViewModelTests
         this.Mediator.Verify(x => x.Send(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.Mediator.Verify(x => x.Send(It.IsAny<LogonTransactionRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.Mediator.Verify(x => x.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.Mediator.Verify(x => x.Send(It.IsAny<GetMerchantBalanceRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
         if (String.IsNullOrEmpty(configUrl) == false){
             this.ApplicationCache.Verify(v => v.SetConfigHostUrl(It.IsAny<String>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Once);
