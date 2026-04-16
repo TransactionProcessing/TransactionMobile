@@ -46,6 +46,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
         MerchantDetailsModel GetMerchantDetails();
 
         void SetMerchantDetails(MerchantDetailsModel value, MemoryCacheEntryOptions options = default);
+
+        Decimal GetMerchantBalance();
+
+        void SetMerchantBalance(Decimal value, MemoryCacheEntryOptions options = default);
     }
 
     [ExcludeFromCodeCoverage]
@@ -163,6 +167,15 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                                        MemoryCacheEntryOptions options = default)
         {
             this.Set("MerchantDetails", value, options);
+        }
+
+        public Decimal GetMerchantBalance() {
+            return this.TryGetValue<Decimal>("MerchantBalance");
+        }
+
+        public void SetMerchantBalance(Decimal value,
+                                       MemoryCacheEntryOptions options = default) {
+            this.Set("MerchantBalance", value, options);
         }
 
         public void SetUseTrainingMode(Boolean value,

@@ -117,8 +117,7 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
             TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
             Guid estateId = this.ApplicationCache.GetEstateId();
             Guid merchantId = this.ApplicationCache.GetMerchantId();
-
-
+            
             Logger.LogInformation("About to request merchant balance");
             Logger.LogDebug($"Merchant Balance Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
 
