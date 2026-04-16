@@ -89,7 +89,7 @@ namespace TransactionProcessor.Mobile.Extensions {
             builder.Services.AddSingleton<ITransactionService, TransactionService>();
             builder.Services.AddSingleton<IMerchantService, MerchantService>();
             builder.Services.AddSingleton<IUpdateService, UpdateService>();
-
+            builder.Services.AddSingleton<IBalanceRefresher,BalanceRefresher>();
             builder.RegisterConfigurationService().RegisterAuthenticationService().RegisterTransactionService().RegisterMerchantService();
             
             builder.Services.RegisterHttpClientX<ISecurityServiceClient, SecurityServiceClient>();

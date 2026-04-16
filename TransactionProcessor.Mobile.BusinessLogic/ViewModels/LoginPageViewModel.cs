@@ -20,6 +20,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
     {
         private readonly IApplicationInfoService ApplicationInfoService;
         private readonly IApplicationUpdateLauncherService ApplicationUpdateLauncherService;
+        private readonly IBalanceRefresher BalanceRefresher;
         private readonly IUpdateService UpdateService;
 
         private String userName;
@@ -37,10 +38,12 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
                                   IDialogService dialogService,
                                   INavigationParameterService navigationParameterService,
                                   IUpdateService updateService,
-                                  IApplicationUpdateLauncherService applicationUpdateLauncherService) : base(applicationCache,dialogService,navigationService, deviceService, navigationParameterService)
+                                  IApplicationUpdateLauncherService applicationUpdateLauncherService,
+                                  IBalanceRefresher balanceRefresher) : base(applicationCache,dialogService,navigationService, deviceService, navigationParameterService)
         {
             this.ApplicationInfoService = applicationInfoService;
             this.ApplicationUpdateLauncherService = applicationUpdateLauncherService;
+            this.BalanceRefresher = balanceRefresher;
             this.Mediator = mediator;
             this.UpdateService = updateService;
         }
@@ -276,13 +279,15 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
                 Result<List<ContractProductModel>> getMerchantContractProductsResult = await this.GetMerchantContractProducts();
                 this.HandleResult(getMerchantContractProductsResult);
 
-                await this.WriteTimingTrace(sw, "After GetMerchantContractProducts");
-                Result<Decimal> getMerchantBalanceResult =  await this.GetMerchantBalance();
-                this.HandleResult(getMerchantBalanceResult);
+                //await this.WriteTimingTrace(sw, "After GetMerchantContractProducts");
+                //Result<Decimal> getMerchantBalanceResult =  await this.GetMerchantBalance();
+                //this.HandleResult(getMerchantBalanceResult);
 
-                await this.WriteTimingTrace(sw, "After GetMerchantBalance");
+                //await this.WriteTimingTrace(sw, "After GetMerchantBalance");
                 this.ApplicationCache.SetIsLoggedIn(true);
-
+                
+                this.BalanceRefresher.StartRefreshing();
+                
                 await this.WriteTimingTrace(sw, "After SetIsLoggedIn");
                 await this.NavigationService.GoToHome();
             }
