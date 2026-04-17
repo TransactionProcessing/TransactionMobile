@@ -71,17 +71,20 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Support
 
             SupportCommands.UploadLogsCommand command = new(String.Empty);
 
-            await this.Mediator.Send(command, CancellationToken.None);
+            var result = await this.Mediator.Send(command, CancellationToken.None);
 
-            // TODO: Act on the response (display message or something)...
-            //await this.NavigationService.GoBack();
+            if (result.IsSuccess) {
+                await this.DialogService.ShowInformationToast("Logs have been uploaded successfully.");
+                await this.NavigationService.GoBack();
+            } else {
+                await this.DialogService.ShowWarningToast("Failed to upload logs.");
+            }
         }
 
         [RelayCommand]
         private async Task ViewLogs() {
             Logger.LogInformation("ViewLogs called");
 
-            // TODO: Act on the response (display message or something)...
             await this.NavigationService.GoToViewLogsPage();
         }
 

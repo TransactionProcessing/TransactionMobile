@@ -2,6 +2,7 @@
 using MediatR;
 using Moq;
 using Shouldly;
+using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Database;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
@@ -52,6 +53,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Support
         [Fact]
         public void SupportPageViewModel_UploadLogsCommand_Execute_IsExecuted()
         {
+            this.Mediator.Setup(m => m.Send(It.IsAny<SupportCommands.UploadLogsCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success());
             this.ViewModel.UploadLogsCommand.Execute(null);
 
             this.Mediator.Verify(m => m.Send(It.IsAny<SupportCommands.UploadLogsCommand>(),It.IsAny<CancellationToken>()),Times.Once);

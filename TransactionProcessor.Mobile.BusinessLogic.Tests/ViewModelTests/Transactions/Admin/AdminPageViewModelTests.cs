@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Moq;
+using SimpleResults;
+using TransactionProcessor.Mobile.BusinessLogic.Requests;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 using TransactionProcessor.Mobile.BusinessLogic.ViewModels.Admin;
@@ -42,6 +44,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Transac
         [Fact]
         public void AdminPageViewModel_AdminCommand_Execute_IsExecuted()
         {
+            this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformReconciliationCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success());
             this.ViewModel.ReconciliationCommand.Execute(null);
             this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
         }
