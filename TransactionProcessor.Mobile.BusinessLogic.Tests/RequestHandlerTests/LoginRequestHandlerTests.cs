@@ -40,7 +40,7 @@ public class LoginRequestHandlerTests
         this.AuthenticationService.Setup(a => a.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
         this.ConfigurationService.Setup(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new Configuration()));
            
-        LoginRequest request = LoginRequest.Create(TestData.UserName,TestData.Password);
+        LogonCommands.GetTokenCommand request = new(TestData.UserName, TestData.Password);
 
         Result<TokenResponseModel> result = await this.LoginRequestHandler.Handle(request, CancellationToken.None);
 
@@ -66,7 +66,7 @@ public class LoginRequestHandlerTests
         this.AuthenticationService.Setup(a => a.RefreshAccessToken(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
         this.ConfigurationService.Setup(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new Configuration()));
 
-        RefreshTokenRequest request = RefreshTokenRequest.Create(TestData.RefreshToken);
+        LogonCommands.RefreshTokenCommand request = new LogonCommands.RefreshTokenCommand(TestData.RefreshToken);
 
         Result<TokenResponseModel> result = await this.LoginRequestHandler .Handle(request, CancellationToken.None);
 
@@ -82,7 +82,7 @@ public class LoginRequestHandlerTests
         this.AuthenticationService.Setup(a => a.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
         this.ConfigurationService.Setup(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new Configuration()));
 
-        GetConfigurationRequest request = GetConfigurationRequest.Create(TestData.DeviceIdentifier);
+        LogonQueries.GetConfigurationQuery request = new LogonQueries.GetConfigurationQuery(TestData.DeviceIdentifier);
 
         Result<Configuration> result = await this.LoginRequestHandler.Handle(request, CancellationToken.None);
 

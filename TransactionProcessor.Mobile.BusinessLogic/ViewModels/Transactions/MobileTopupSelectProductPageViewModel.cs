@@ -1,8 +1,8 @@
-﻿using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using MvvmHelpers.Commands;
 using SimpleResults;
+using System.Windows.Input;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -49,7 +49,7 @@ public partial class MobileTopupSelectProductPageViewModel : ExtendedBaseViewMod
         IDictionary<String, Object> query = this.NavigationParameterService.GetParameters();
         this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
 
-        GetContractProductsRequest request = GetContractProductsRequest.Create(ProductType.MobileTopup);
+        MerchantQueries.GetContractProductsQuery request = new MerchantQueries.GetContractProductsQuery(ProductType.MobileTopup);
 
         Result<List<ContractProductModel>> productsResult = await this.Mediator.Send(request, cancellationToken);
         List<ContractProductModel> products = productsResult.Data;

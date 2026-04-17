@@ -44,7 +44,7 @@ public partial class VoucherSelectOperatorPageViewModel : ExtendedBaseViewModel
 
     public async Task Initialise(CancellationToken cancellationToken)
     {
-        GetProductOperators request = new GetProductOperators(ProductType.Voucher);
+        MerchantQueries.GetProductOperatorsQuery request = new(ProductType.Voucher);
         Result<List<ContractOperatorModel>> operatorsResult = await this.Mediator.Send(request, cancellationToken);
         if (operatorsResult.IsFailed)
         {

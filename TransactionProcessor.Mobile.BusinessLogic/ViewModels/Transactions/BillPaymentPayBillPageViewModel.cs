@@ -78,7 +78,7 @@ public partial class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel
         IRequest<Result<PerformBillPaymentMakePaymentResponseModel>> request = null;
         
         if (this.BillDetails != null){
-            request = PerformBillPaymentMakePostPaymentRequest.Create(DateTime.Now,
+            request = new TransactionCommands.PerformBillPaymentMakePostPaymentCommand(DateTime.Now,
                                                                       this.ProductDetails.ContractId,
                                                                       this.ProductDetails.ProductId,
                                                                       this.ProductDetails.OperatorId,
@@ -90,7 +90,7 @@ public partial class BillPaymentPayBillPageViewModel : ExtendedBaseViewModel
 
         }
         else if (this.MeterDetails != null){
-            request = PerformBillPaymentMakePrePaymentRequest.Create(DateTime.Now,
+            request = new TransactionCommands.PerformBillPaymentMakePrePaymentCommand(DateTime.Now,
                                                                                                              this.ProductDetails.ContractId,
                                                                                                              this.ProductDetails.ProductId,
                                                                                                              this.ProductDetails.OperatorId,

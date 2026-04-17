@@ -1,7 +1,7 @@
-﻿using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using MvvmHelpers.Commands;
+using System.Windows.Input;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -49,7 +49,7 @@ public partial class VoucherSelectProductPageViewModel : ExtendedBaseViewModel
         IDictionary<String, Object> query = this.NavigationParameterService.GetParameters();
         this.ProductDetails = query[nameof(this.ProductDetails)] as ProductDetails;
 
-        GetContractProductsRequest request = GetContractProductsRequest.Create(ProductType.Voucher);
+        MerchantQueries.GetContractProductsQuery request = new MerchantQueries.GetContractProductsQuery(ProductType.Voucher);
 
         var result = await this.Mediator.Send(request, cancellationToken);
         var products = result.Data;

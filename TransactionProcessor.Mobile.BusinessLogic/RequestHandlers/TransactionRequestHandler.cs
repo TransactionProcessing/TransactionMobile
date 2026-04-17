@@ -12,14 +12,14 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers;
 
-public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupRequest, Result<PerformMobileTopupResponseModel>>,
-                                         IRequestHandler<LogonTransactionRequest, Result<PerformLogonResponseModel>>,
-                                         IRequestHandler<PerformVoucherIssueRequest, Result<PerformVoucherIssueResponseModel>>,
-                                         IRequestHandler<PerformReconciliationRequest, Result<PerformReconciliationResponseModel>>,
-                                         IRequestHandler<PerformBillPaymentGetAccountRequest, Result<PerformBillPaymentGetAccountResponseModel>>,
-                                         IRequestHandler<PerformBillPaymentGetMeterRequest, Result<PerformBillPaymentGetMeterResponseModel>>,
-                                         IRequestHandler<PerformBillPaymentMakePostPaymentRequest, Result<PerformBillPaymentMakePaymentResponseModel>>,
-                                         IRequestHandler<PerformBillPaymentMakePrePaymentRequest, Result<PerformBillPaymentMakePaymentResponseModel>>
+public class TransactionRequestHandler : IRequestHandler<TransactionCommands.PerformMobileTopupCommand, Result<PerformMobileTopupResponseModel>>,
+                                         IRequestHandler<TransactionCommands.PerformLogonCommand, Result<PerformLogonResponseModel>>,
+                                         IRequestHandler<TransactionCommands.PerformVoucherIssueCommand, Result<PerformVoucherIssueResponseModel>>,
+                                         IRequestHandler<TransactionCommands.PerformReconciliationCommand, Result<PerformReconciliationResponseModel>>,
+                                         IRequestHandler<TransactionCommands.PerformBillPaymentGetAccountCommand, Result<PerformBillPaymentGetAccountResponseModel>>,
+                                         IRequestHandler<TransactionCommands.PerformBillPaymentGetMeterCommand, Result<PerformBillPaymentGetMeterResponseModel>>,
+                                         IRequestHandler<TransactionCommands.PerformBillPaymentMakePostPaymentCommand, Result<PerformBillPaymentMakePaymentResponseModel>>,
+                                         IRequestHandler<TransactionCommands.PerformBillPaymentMakePrePaymentCommand, Result<PerformBillPaymentMakePaymentResponseModel>>
 {
     #region Fields
     
@@ -53,7 +53,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
 
     #region Methods
 
-    public async Task<Result<PerformMobileTopupResponseModel>> Handle(PerformMobileTopupRequest request,
+    public async Task<Result<PerformMobileTopupResponseModel>> Handle(TransactionCommands.PerformMobileTopupCommand request,
                                                                       CancellationToken cancellationToken){
 
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
@@ -102,7 +102,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         await this.DatabaseContext.UpdateTransaction(transactionRecord);
     }
 
-    public async Task<Result<PerformLogonResponseModel>> Handle(LogonTransactionRequest request,
+    public async Task<Result<PerformLogonResponseModel>> Handle(TransactionCommands.PerformLogonCommand request,
                                                                 CancellationToken cancellationToken)
     {
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
@@ -129,7 +129,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         return Result.Success(result.Data);
     }
 
-    public async Task<Result<PerformVoucherIssueResponseModel>> Handle(PerformVoucherIssueRequest request,
+    public async Task<Result<PerformVoucherIssueResponseModel>> Handle(TransactionCommands.PerformVoucherIssueCommand request,
                                                                        CancellationToken cancellationToken)
     {
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
@@ -164,7 +164,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         return Result.Success(result.Data);
     }
 
-    public async Task<Result<PerformBillPaymentGetAccountResponseModel>> Handle(PerformBillPaymentGetAccountRequest request,
+    public async Task<Result<PerformBillPaymentGetAccountResponseModel>> Handle(TransactionCommands.PerformBillPaymentGetAccountCommand request,
                                                                                 CancellationToken cancellationToken)
     {
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
@@ -191,7 +191,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         return result;
     }
 
-    public async Task<Result<PerformReconciliationResponseModel>> Handle(PerformReconciliationRequest request,
+    public async Task<Result<PerformReconciliationResponseModel>> Handle(TransactionCommands.PerformReconciliationCommand request,
                                                                          CancellationToken cancellationToken)
     {
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
@@ -252,7 +252,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
         return result;
     }
 
-    public async Task<Result<PerformBillPaymentMakePaymentResponseModel>> Handle(PerformBillPaymentMakePostPaymentRequest request,
+    public async Task<Result<PerformBillPaymentMakePaymentResponseModel>> Handle(TransactionCommands.PerformBillPaymentMakePostPaymentCommand request,
                                                                                  CancellationToken cancellationToken)
     {
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
@@ -289,7 +289,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
 
     }
 
-    public async Task<Result<PerformBillPaymentMakePaymentResponseModel>> Handle(PerformBillPaymentMakePrePaymentRequest request,
+    public async Task<Result<PerformBillPaymentMakePaymentResponseModel>> Handle(TransactionCommands.PerformBillPaymentMakePrePaymentCommand request,
                                                                                  CancellationToken cancellationToken)
     {
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
@@ -326,7 +326,7 @@ public class TransactionRequestHandler : IRequestHandler<PerformMobileTopupReque
     }
     #endregion
 
-    public async Task<Result<PerformBillPaymentGetMeterResponseModel>> Handle(PerformBillPaymentGetMeterRequest request, CancellationToken cancellationToken){
+    public async Task<Result<PerformBillPaymentGetMeterResponseModel>> Handle(TransactionCommands.PerformBillPaymentGetMeterCommand request, CancellationToken cancellationToken){
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
         (Int64 transactionNumber, TransactionRecord transactionRecord) transaction = await this.CreateTransactionRecord(request.ToTransactionRecord(useTrainingMode));
 

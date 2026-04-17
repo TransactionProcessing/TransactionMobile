@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
@@ -37,13 +38,13 @@ public class ViewLogsPageViewModel : ExtendedBaseViewModel
     #region Methods
 
     public async Task LoadLogMessages() {
-        ViewLogsRequest viewLogsRequest = ViewLogsRequest.Create();
+        SupportQueries.ViewLogsQuery query = new SupportQueries.ViewLogsQuery();
 
-        List<LogMessage> logMessages = await this.Mediator.Send(viewLogsRequest, CancellationToken.None);
+        Result<List<LogMessage>> logMessages = await this.Mediator.Send(query, CancellationToken.None);
 
         List<LogMessageModel> logMessageViewModels = new List<LogMessageModel>();
 
-        logMessages.ForEach(l => {
+        logMessages.Data.ForEach(l => {
                                 logMessageViewModels.Add(new LogMessageModel
                                                          {
                                                                                      LogLevel = l.LogLevel,

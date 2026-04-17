@@ -1,8 +1,8 @@
-﻿using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using MvvmHelpers.Commands;
 using SimpleResults;
+using System.Windows.Input;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -43,7 +43,7 @@ public partial class MobileTopupSelectOperatorPageViewModel : ExtendedBaseViewMo
 
     public async Task Initialise(CancellationToken cancellationToken)
     {
-        GetProductOperators request = new GetProductOperators(ProductType.MobileTopup);
+        MerchantQueries.GetProductOperatorsQuery request = new(ProductType.MobileTopup);
         Result<List<ContractOperatorModel>> operatorsResult = await this.Mediator.Send(request, cancellationToken);
         if (operatorsResult.IsFailed)
         {

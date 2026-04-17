@@ -46,7 +46,7 @@ public class BillPaymentGetAccountPageViewModelTests
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_ApplyQueryAttributes_QueryAttributesApplied()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
+        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
 
         this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> { { nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel }, });
         await this.ViewModel.Initialise(CancellationToken.None);
@@ -60,7 +60,7 @@ public class BillPaymentGetAccountPageViewModelTests
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_GetAccountCommand_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentGetAccountRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetAccountResponseModel));
+        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformBillPaymentGetAccountCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetAccountResponseModel));
 
         this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> { { nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel }, });
         await this.ViewModel.Initialise(CancellationToken.None);
@@ -74,7 +74,7 @@ public class BillPaymentGetAccountPageViewModelTests
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_GetAccountCommand_Failed_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentGetAccountRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetAccountResponseModelFailed));
+        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformBillPaymentGetAccountCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetAccountResponseModelFailed));
 
         this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> { { nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel }, });
         await this.ViewModel.Initialise(CancellationToken.None);

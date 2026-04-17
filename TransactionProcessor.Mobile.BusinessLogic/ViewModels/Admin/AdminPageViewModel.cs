@@ -39,10 +39,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Admin
         private async Task Reconciliation()
         {
             CorrelationIdProvider.NewId();
-            PerformReconciliationRequest request =
-                PerformReconciliationRequest.Create(DateTime.Now, String.Empty, this.ApplicationInfoService.VersionString);
+            TransactionCommands.PerformReconciliationCommand command = new TransactionCommands.PerformReconciliationCommand(DateTime.Now, String.Empty, this.ApplicationInfoService.VersionString);
 
-            await this.Mediator.Send(request);
+            await this.Mediator.Send(command);
 
             // TODO: Act on the response (display message or something)...
             await this.NavigationService.GoToHome();

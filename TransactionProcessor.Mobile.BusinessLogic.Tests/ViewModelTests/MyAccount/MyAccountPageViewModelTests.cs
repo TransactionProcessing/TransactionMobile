@@ -49,7 +49,7 @@ public class MyAccountPageViewModelTests
     [Fact]
     public async Task MyAccountPageViewModel_Initialise_IsInitialised() {
         this.ApplicationThemeService.Setup(s => s.GetDarkThemeEnabled()).ReturnsAsync(true);
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetMerchantDetailsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success( TestData.MerchantDetailsModel));
+        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success( TestData.MerchantDetailsModel));
 
         await this.ViewModel.Initialise(CancellationToken.None);
 

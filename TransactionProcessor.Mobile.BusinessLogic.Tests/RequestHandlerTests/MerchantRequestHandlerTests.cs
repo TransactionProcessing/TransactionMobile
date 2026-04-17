@@ -42,7 +42,7 @@ public class MerchantRequestHandlerTests
         this.MerchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Success(TestData.ContractProductList));
 
-        GetContractProductsRequest request = GetContractProductsRequest.Create();
+        MerchantQueries.GetContractProductsQuery request = new MerchantQueries.GetContractProductsQuery();
 
         Result<List<ContractProductModel>> result = await this.MerchantRequestHandler.Handle(request, CancellationToken.None);
 
@@ -58,7 +58,7 @@ public class MerchantRequestHandlerTests
         this.MerchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Success(TestData.ContractProductList));
 
-        GetContractProductsRequest request = GetContractProductsRequest.Create();
+        MerchantQueries.GetContractProductsQuery request = new MerchantQueries.GetContractProductsQuery();
 
         Result<List<ContractProductModel>> result = await this.MerchantRequestHandler.Handle(request, CancellationToken.None);
 
@@ -75,7 +75,7 @@ public class MerchantRequestHandlerTests
         this.MerchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Failure("failed"));
 
-        GetContractProductsRequest request = GetContractProductsRequest.Create();
+        MerchantQueries.GetContractProductsQuery request = new MerchantQueries.GetContractProductsQuery();
 
         Result<List<ContractProductModel>> result = await this.MerchantRequestHandler.Handle(request, CancellationToken.None);
 
@@ -88,7 +88,7 @@ public class MerchantRequestHandlerTests
         this.MerchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Success(TestData.ContractProductList));
 
-        GetContractProductsRequest request = GetContractProductsRequest.Create(ProductType.Voucher);
+        MerchantQueries.GetContractProductsQuery request = new MerchantQueries.GetContractProductsQuery(ProductType.Voucher);
 
         Result<List<ContractProductModel>> result = await this.MerchantRequestHandler.Handle(request, CancellationToken.None);
 
@@ -105,7 +105,7 @@ public class MerchantRequestHandlerTests
         this.MerchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Success(TestData.ContractProductList));
 
-        GetContractProductsRequest request = GetContractProductsRequest.Create();
+        MerchantQueries.GetContractProductsQuery request = new MerchantQueries.GetContractProductsQuery();
 
         Result<List<ContractProductModel>> result = await this.MerchantRequestHandler.Handle(request, CancellationToken.None);
 
@@ -117,7 +117,7 @@ public class MerchantRequestHandlerTests
     public async Task MerchantRequestHandler_GetMerchantBalanceRequest_Handle_IsHandled() {
         this.MerchantService.Setup(m => m.GetMerchantBalance(It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantBalance));
 
-        GetMerchantBalanceRequest request = GetMerchantBalanceRequest.Create();
+        MerchantQueries.GetMerchantBalanceQuery request = new MerchantQueries.GetMerchantBalanceQuery();
 
         Result<Decimal> result = await this.MerchantRequestHandler.Handle(request, CancellationToken.None);
 
@@ -130,7 +130,7 @@ public class MerchantRequestHandlerTests
     {
         this.MerchantService.Setup(m => m.GetMerchantDetails(It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
 
-        GetMerchantDetailsRequest request = GetMerchantDetailsRequest.Create();
+        MerchantQueries.GetMerchantDetailsQuery request = new MerchantQueries.GetMerchantDetailsQuery();
 
         Result<MerchantDetailsModel> result = await this.MerchantRequestHandler.Handle(request, CancellationToken.None);
 

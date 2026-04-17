@@ -3,7 +3,9 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using MvvmHelpers.Commands;
+using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
+using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
@@ -98,7 +100,7 @@ public partial class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewMode
     {
         Logger.LogInformation("PerformTopupCommandExecute called");
         // Create Command and Send
-        PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(DateTime.Now,
+        TransactionCommands.PerformMobileTopupCommand command = new(DateTime.Now,
                                                                              this.ProductDetails.ContractId,
                                                                              this.ProductDetails.ProductId,
                                                                              this.ProductDetails.OperatorId,
@@ -106,14 +108,12 @@ public partial class MobileTopupPerformTopupPageViewModel : ExtendedBaseViewMode
                                                                              this.TopupAmount,
                                                                              this.CustomerEmailAddress);
 
-        var response = await this.Mediator.Send(request);
+        Result<PerformMobileTopupResponseModel> response = await this.Mediator.Send(command);
 
-        if (response.IsSuccess && response.Data.IsSuccessful)
-        {
+        if (response.IsSuccess && response.Data.IsSuccessful) {
             await this.NavigationService.GoToMobileTopupSuccessPage();
         }
-        else
-        {
+        else {
             await this.NavigationService.GoToMobileTopupFailedPage();
         }
     }

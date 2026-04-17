@@ -58,13 +58,9 @@ public partial class BillPaymentGetAccountPageViewModel : ExtendedBaseViewModel
     private async Task GetAccount() {
         Logger.LogInformation("GetAccount called");
 
-        PerformBillPaymentGetAccountRequest request = PerformBillPaymentGetAccountRequest.Create(DateTime.Now,
-                                                                                                 this.ProductDetails.ContractId,
-                                                                                                 this.ProductDetails.ProductId,
-                                                                                                 this.ProductDetails.OperatorId,
-                                                                                                 this.CustomerAccountNumber);
+        TransactionCommands.PerformBillPaymentGetAccountCommand command = new(DateTime.Now, this.ProductDetails.ContractId, this.ProductDetails.ProductId, this.ProductDetails.OperatorId, this.CustomerAccountNumber);
 
-        Result<PerformBillPaymentGetAccountResponseModel> result = await this.Mediator.Send(request);
+        Result<PerformBillPaymentGetAccountResponseModel> result = await this.Mediator.Send(command);
 
         if (result.IsSuccess && result.Data.IsSuccessful) {
             ProductDetails productDetails = new()

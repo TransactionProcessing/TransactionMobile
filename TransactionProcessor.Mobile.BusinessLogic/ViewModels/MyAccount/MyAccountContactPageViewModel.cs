@@ -39,9 +39,9 @@ public class MyAccountContactPageViewModel : ExtendedBaseViewModel
 
         if (merchantDetails == null)
         {
-            GetMerchantDetailsRequest request = GetMerchantDetailsRequest.Create();
+            MerchantQueries.GetMerchantDetailsQuery query = new MerchantQueries.GetMerchantDetailsQuery();
 
-            Result<MerchantDetailsModel> merchantDetailsResult = await this.Mediator.Send(request, cancellationToken);
+            Result<MerchantDetailsModel> merchantDetailsResult = await this.Mediator.Send(query, cancellationToken);
             if (merchantDetailsResult.IsFailed)
             {
                 await this.DialogService.ShowWarningToast("Unable to load merchant details. Please try again later.", cancellationToken: cancellationToken);

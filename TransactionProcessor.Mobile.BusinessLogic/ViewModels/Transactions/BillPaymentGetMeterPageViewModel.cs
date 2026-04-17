@@ -62,13 +62,13 @@ public partial class BillPaymentGetMeterPageViewModel : ExtendedBaseViewModel
     {
         Logger.LogInformation("GetMeter called");
 
-        PerformBillPaymentGetMeterRequest request = PerformBillPaymentGetMeterRequest.Create(DateTime.Now,
+        TransactionCommands.PerformBillPaymentGetMeterCommand command = new (DateTime.Now,
             this.ProductDetails.ContractId,
             this.ProductDetails.ProductId,
             this.ProductDetails.OperatorId,
             this.MeterNumber);
 
-        Result<PerformBillPaymentGetMeterResponseModel> result = await this.Mediator.Send(request);
+        Result<PerformBillPaymentGetMeterResponseModel> result = await this.Mediator.Send(command);
 
         if (result.IsSuccess && result.Data.IsSuccessful)
         {

@@ -44,7 +44,7 @@ public class BillPaymentGetMeterPageViewModelTests
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_ApplyQueryAttributes_QueryAttributesApplied()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetContractProductsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
+        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
 
         this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
             {nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel},
@@ -59,7 +59,7 @@ public class BillPaymentGetMeterPageViewModelTests
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_GetMeterCommand_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentGetMeterRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetMeterResponseModel));
+        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformBillPaymentGetMeterCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetMeterResponseModel));
 
         this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
             {nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel},
@@ -75,7 +75,7 @@ public class BillPaymentGetMeterPageViewModelTests
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_GetMeterCommand_Failed_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformBillPaymentGetMeterRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetMeterResponseModelFailed));
+        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformBillPaymentGetMeterCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetMeterResponseModelFailed));
 
         this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
             {nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel},
