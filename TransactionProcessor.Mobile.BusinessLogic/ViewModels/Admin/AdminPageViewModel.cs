@@ -41,10 +41,15 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Admin
             CorrelationIdProvider.NewId();
             TransactionCommands.PerformReconciliationCommand command = new TransactionCommands.PerformReconciliationCommand(DateTime.Now, String.Empty, this.ApplicationInfoService.VersionString);
 
-            await this.Mediator.Send(command);
+            Result<PerformReconciliationResponseModel> result = await this.Mediator.Send(command);
 
-            // TODO: Act on the response (display message or something)...
-            await this.NavigationService.GoToHome();
+            if (result.IsSuccess) {
+                await this.DialogService.ShowInformationToast("Reconciliation Succeeded");
+                await this.NavigationService.GoToHome();
+            }
+            else {
+                await this.DialogService.ShowWarningToast("Reconciliation Failed");
+            }
         }
         
         #endregion
