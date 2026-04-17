@@ -52,7 +52,7 @@ public class TransactionRequestHandlerTests
         this.TransactionService.Setup(t => t.PerformLogon(It.IsAny<PerformLogonRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(
          Result.Success(TestData.PerformLogonResponseModel));
      
-        LogonTransactionRequest request = LogonTransactionRequest.Create(TestData.TransactionDateTime);
+        TransactionCommands.PerformLogonCommand request = new(TestData.TransactionDateTime);
 
         Result<PerformLogonResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
@@ -66,7 +66,7 @@ public class TransactionRequestHandlerTests
         this.TransactionService.Setup(t => t.PerformLogon(It.IsAny<PerformLogonRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(
                                                                                                                                              Result.Success(TestData.PerformLogonResponseFailedModel));
 
-        LogonTransactionRequest request = LogonTransactionRequest.Create(TestData.TransactionDateTime);
+        TransactionCommands.PerformLogonCommand request = new(TestData.TransactionDateTime);
 
         Result<PerformLogonResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
@@ -81,7 +81,7 @@ public class TransactionRequestHandlerTests
                                                                                                                                                                             ResponseCode = "0000"
                                                                                                                                                                         }));
      
-        PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(TestData.TransactionDateTime,
+        TransactionCommands.PerformMobileTopupCommand request = new TransactionCommands.PerformMobileTopupCommand(TestData.TransactionDateTime,
                                                                              TestData.OperatorId1ContractId,
                                                                              TestData.Operator1Product_100KES.ProductId,
                                                                              TestData.OperatorId1,
@@ -103,7 +103,7 @@ public class TransactionRequestHandlerTests
                                                                                                                                                                             ResponseCode = "1000"
                                                                                                                                                                         }));
 
-        PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(TestData.TransactionDateTime,
+        TransactionCommands.PerformMobileTopupCommand request = new TransactionCommands.PerformMobileTopupCommand(TestData.TransactionDateTime,
                                                                              TestData.OperatorId1ContractId,
                                                                              TestData.Operator1Product_100KES.ProductId,
                                                                              TestData.OperatorId1,
@@ -123,8 +123,7 @@ public class TransactionRequestHandlerTests
                                                                                                                                                                           {
                                                                                                                                                                               ResponseCode = "0000"
                                                                                                                                                                           }));
-
-        PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(TestData.TransactionDateTime,
+        TransactionCommands.PerformVoucherIssueCommand request = new TransactionCommands.PerformVoucherIssueCommand(TestData.TransactionDateTime,
                                                                                TestData.OperatorId3ContractId,
                                                                                TestData.Operator3Product_200KES.ProductId,
                                                                                TestData.OperatorId3,
@@ -147,7 +146,7 @@ public class TransactionRequestHandlerTests
                                                                                                                                                                               ResponseCode = "1000"
                                                                                                                                                                           }));
 
-        PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(TestData.TransactionDateTime,
+        TransactionCommands.PerformVoucherIssueCommand request = new TransactionCommands.PerformVoucherIssueCommand(TestData.TransactionDateTime,
                                                                                TestData.OperatorId3ContractId,
                                                                                TestData.Operator3Product_200KES.ProductId,
                                                                                TestData.OperatorId3,
@@ -168,7 +167,7 @@ public class TransactionRequestHandlerTests
         this.TransactionService.Setup(t => t.PerformBillPaymentGetAccount(It.IsAny<PerformBillPaymentGetAccountModel>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetAccountResponseModel));
 
-        PerformBillPaymentGetAccountRequest request = PerformBillPaymentGetAccountRequest.Create(TestData.TransactionDateTime,
+        TransactionCommands.PerformBillPaymentGetAccountCommand request = new TransactionCommands.PerformBillPaymentGetAccountCommand(TestData.TransactionDateTime,
                                                                                                  TestData.OperatorId1ContractId,
                                                                                                  TestData.Operator1Product_100KES.ProductId,
                                                                                                  TestData.OperatorId1,
@@ -188,7 +187,7 @@ public class TransactionRequestHandlerTests
         this.TransactionService.Setup(t => t.PerformBillPaymentGetAccount(It.IsAny<PerformBillPaymentGetAccountModel>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetAccountResponseModelFailed));
 
-        PerformBillPaymentGetAccountRequest request = PerformBillPaymentGetAccountRequest.Create(TestData.TransactionDateTime,
+        TransactionCommands.PerformBillPaymentGetAccountCommand request = new TransactionCommands.PerformBillPaymentGetAccountCommand(TestData.TransactionDateTime,
                                                                                                  TestData.OperatorId1ContractId,
                                                                                                  TestData.Operator1Product_100KES.ProductId,
                                                                                                  TestData.OperatorId1,
@@ -207,7 +206,7 @@ public class TransactionRequestHandlerTests
         this.TransactionService.Setup(t => t.PerformBillPaymentGetMeter(It.IsAny<PerformBillPaymentGetMeterModel>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetMeterResponseModel));
 
-        PerformBillPaymentGetMeterRequest request = PerformBillPaymentGetMeterRequest.Create(TestData.TransactionDateTime,
+        TransactionCommands.PerformBillPaymentGetMeterCommand request = new TransactionCommands.PerformBillPaymentGetMeterCommand(TestData.TransactionDateTime,
                                                                                              TestData.OperatorId1ContractId,
                                                                                              TestData.Operator1Product_100KES.ProductId,
                                                                                              TestData.OperatorId1,
@@ -227,11 +226,11 @@ public class TransactionRequestHandlerTests
         this.TransactionService.Setup(t => t.PerformBillPaymentGetMeter(It.IsAny<PerformBillPaymentGetMeterModel>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetMeterResponseModelFailed));
 
-        PerformBillPaymentGetMeterRequest request = PerformBillPaymentGetMeterRequest.Create(TestData.TransactionDateTime,
-                                                                                             TestData.OperatorId1ContractId,
-                                                                                             TestData.Operator1Product_100KES.ProductId,
-                                                                                             TestData.OperatorId1,
-                                                                                             TestData.CustomerAccountNumber);
+        TransactionCommands.PerformBillPaymentGetMeterCommand request = new TransactionCommands.PerformBillPaymentGetMeterCommand(TestData.TransactionDateTime,
+            TestData.OperatorId1ContractId,
+            TestData.Operator1Product_100KES.ProductId,
+            TestData.OperatorId1,
+            TestData.CustomerAccountNumber);
 
         Result<PerformBillPaymentGetMeterResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
@@ -248,7 +247,7 @@ public class TransactionRequestHandlerTests
                                                                                                                                                                                            ResponseCode = "0000"
                                                                                                                                                                                        }));
 
-        PerformBillPaymentMakePostPaymentRequest request = PerformBillPaymentMakePostPaymentRequest.Create(TestData.TransactionDateTime,
+        TransactionCommands.PerformBillPaymentMakePostPaymentCommand request = new TransactionCommands.PerformBillPaymentMakePostPaymentCommand(TestData.TransactionDateTime,
                                                                                                            TestData.OperatorId1ContractId,
                                                                                                            TestData.Operator1Product_100KES.ProductId,
                                                                                                            TestData.OperatorId1,
@@ -270,8 +269,7 @@ public class TransactionRequestHandlerTests
                                                                                                                                                                                        {
                                                                                                                                                                                            ResponseCode = "0000"
                                                                                                                                                                                        }));
-
-        PerformBillPaymentMakePrePaymentRequest request = PerformBillPaymentMakePrePaymentRequest.Create(TestData.TransactionDateTime,
+        TransactionCommands.PerformBillPaymentMakePrePaymentCommand request = new TransactionCommands.PerformBillPaymentMakePrePaymentCommand(TestData.TransactionDateTime,
                                                                                                          TestData.OperatorId1ContractId,
                                                                                                          TestData.Operator1Product_100KES.ProductId,
                                                                                                          TestData.OperatorId1,
@@ -293,14 +291,14 @@ public class TransactionRequestHandlerTests
                                                                                                                                                                                            ResponseCode = "0001"
                                                                                                                                                                                        }));
 
-        PerformBillPaymentMakePostPaymentRequest request = PerformBillPaymentMakePostPaymentRequest.Create(TestData.TransactionDateTime,
-                                                                                                           TestData.OperatorId1ContractId,
-                                                                                                           TestData.Operator1Product_100KES.ProductId,
-                                                                                                           TestData.OperatorId1,
-                                                                                                           TestData.CustomerAccountNumber,
-                                                                                                           TestData.CustomerAccountName,
-                                                                                                           TestData.CustomerMobileNumber,
-                                                                                                           TestData.PaymentAmount);
+        TransactionCommands.PerformBillPaymentMakePostPaymentCommand request = new TransactionCommands.PerformBillPaymentMakePostPaymentCommand(TestData.TransactionDateTime,
+            TestData.OperatorId1ContractId,
+            TestData.Operator1Product_100KES.ProductId,
+            TestData.OperatorId1,
+            TestData.CustomerAccountNumber,
+            TestData.CustomerAccountName,
+            TestData.CustomerMobileNumber,
+            TestData.PaymentAmount);
 
         Result<PerformBillPaymentMakePaymentResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
@@ -315,13 +313,13 @@ public class TransactionRequestHandlerTests
                                                                                                                                                                                            ResponseCode = "0001"
                                                                                                                                                                                        }));
 
-        PerformBillPaymentMakePrePaymentRequest request = PerformBillPaymentMakePrePaymentRequest.Create(TestData.TransactionDateTime,
-                                                                                                         TestData.OperatorId1ContractId,
-                                                                                                         TestData.Operator1Product_100KES.ProductId,
-                                                                                                         TestData.OperatorId1,
-                                                                                                         TestData.MeterNumber,
-                                                                                                         TestData.CustomerAccountName,
-                                                                                                         TestData.PaymentAmount);
+        TransactionCommands.PerformBillPaymentMakePrePaymentCommand request = new TransactionCommands.PerformBillPaymentMakePrePaymentCommand(TestData.TransactionDateTime,
+            TestData.OperatorId1ContractId,
+            TestData.Operator1Product_100KES.ProductId,
+            TestData.OperatorId1,
+            TestData.MeterNumber,
+            TestData.CustomerAccountName,
+            TestData.PaymentAmount);
 
         Result<PerformBillPaymentMakePaymentResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
@@ -337,9 +335,7 @@ public class TransactionRequestHandlerTests
                                                                                                                                                                               }));
         this.DatabaseContext.Setup(d => d.GetTransactions(It.IsAny<Boolean>())).ReturnsAsync(new List<TransactionRecord>());
 
-        PerformReconciliationRequest request = PerformReconciliationRequest.Create(TestData.TransactionDateTime,
-                                                                                   TestData.DeviceIdentifier,
-                                                                                   TestData.ApplicationVersion);
+        TransactionCommands.PerformReconciliationCommand request = new TransactionCommands.PerformReconciliationCommand(TestData.TransactionDateTime, TestData.DeviceIdentifier, TestData.ApplicationVersion);
 
         Result<PerformReconciliationResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
@@ -356,7 +352,7 @@ public class TransactionRequestHandlerTests
 
         this.DatabaseContext.Setup(d => d.GetTransactions(It.IsAny<Boolean>())).ReturnsAsync(TestData.StoredTransactions);
 
-        PerformReconciliationRequest request = PerformReconciliationRequest.Create(TestData.TransactionDateTime, TestData.DeviceIdentifier, TestData.ApplicationVersion);
+        TransactionCommands.PerformReconciliationCommand request = new TransactionCommands.PerformReconciliationCommand(TestData.TransactionDateTime, TestData.DeviceIdentifier, TestData.ApplicationVersion);
 
         Result<PerformReconciliationResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 

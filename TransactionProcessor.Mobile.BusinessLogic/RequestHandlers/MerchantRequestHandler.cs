@@ -7,10 +7,10 @@ using TransactionProcessor.Mobile.BusinessLogic.Services;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers;
 
-public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest, Result<List<ContractProductModel>>>,
-                                      IRequestHandler<GetMerchantBalanceRequest, Result<Decimal>>,
-                                      IRequestHandler<GetMerchantDetailsRequest, Result<MerchantDetailsModel>>,
-                                      IRequestHandler<GetProductOperators, Result<List<ContractOperatorModel>>>
+public class MerchantRequestHandler : IRequestHandler<MerchantQueries.GetContractProductsQuery, Result<List<ContractProductModel>>>,
+                                      IRequestHandler<MerchantQueries.GetMerchantBalanceQuery, Result<Decimal>>,
+                                      IRequestHandler<MerchantQueries.GetMerchantDetailsQuery, Result<MerchantDetailsModel>>,
+                                      IRequestHandler<MerchantQueries.GetProductOperatorsQuery, Result<List<ContractOperatorModel>>>
 {
     #region Fields
 
@@ -32,7 +32,7 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
 
     #region Methods
 
-    public async Task<Result<List<ContractProductModel>>> Handle(GetContractProductsRequest request,
+    public async Task<Result<List<ContractProductModel>>> Handle(MerchantQueries.GetContractProductsQuery request,
                                                                  CancellationToken cancellationToken) {
         List<ContractProductModel> products = this.ApplicationCache.GetContractProducts();
 
@@ -56,7 +56,7 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
         return Result.Success(products);
     }
 
-    public async Task<Result<Decimal>> Handle(GetMerchantBalanceRequest request,
+    public async Task<Result<Decimal>> Handle(MerchantQueries.GetMerchantBalanceQuery request,
                                               CancellationToken cancellationToken) {
 
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
@@ -65,7 +65,7 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
         return await merchantService.GetMerchantBalance(cancellationToken);
     }
 
-    public async Task<Result<MerchantDetailsModel>> Handle(GetMerchantDetailsRequest request,
+    public async Task<Result<MerchantDetailsModel>> Handle(MerchantQueries.GetMerchantDetailsQuery request,
                                                    CancellationToken cancellationToken) {
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
         IMerchantService merchantService = this.MerchantServiceResolver(useTrainingMode);
@@ -77,7 +77,7 @@ public class MerchantRequestHandler : IRequestHandler<GetContractProductsRequest
 
     #endregion
 
-    public async Task<Result<List<ContractOperatorModel>>> Handle(GetProductOperators request,
+    public async Task<Result<List<ContractOperatorModel>>> Handle(MerchantQueries.GetProductOperatorsQuery request,
                                                                   CancellationToken cancellationToken) {
         List<ContractProductModel> products = this.ApplicationCache.GetContractProducts();
 

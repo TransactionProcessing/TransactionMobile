@@ -6,9 +6,9 @@ using TransactionProcessor.Mobile.BusinessLogic.Services;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
 {
-    public class LoginRequestHandler : IRequestHandler<LoginRequest, Result<TokenResponseModel>>,
-                                       IRequestHandler<RefreshTokenRequest, Result<TokenResponseModel>>,
-                                       IRequestHandler<GetConfigurationRequest, Result<Configuration>>
+    public class LoginRequestHandler : IRequestHandler<LogonCommands.GetTokenCommand, Result<TokenResponseModel>>,
+                                       IRequestHandler<LogonCommands.RefreshTokenCommand, Result<TokenResponseModel>>,
+                                       IRequestHandler<LogonQueries.GetConfigurationQuery, Result<Configuration>>
     {
         private readonly Func<Boolean, IConfigurationService> ConfigurationServiceResolver;
         private readonly IApplicationCache ApplicationCache;
@@ -29,7 +29,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
 
         #region Methods
 
-        public async Task<Result<TokenResponseModel>> Handle(LoginRequest request,
+        public async Task<Result<TokenResponseModel>> Handle(LogonCommands.GetTokenCommand request,
                                                              CancellationToken cancellationToken) {
 
             Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
@@ -41,7 +41,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
             return tokenResult;
         }
 
-        public async Task<Result<Configuration>> Handle(GetConfigurationRequest request,
+        public async Task<Result<Configuration>> Handle(LogonQueries.GetConfigurationQuery request,
                                                         CancellationToken cancellationToken) {
 
             Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
@@ -53,7 +53,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
 
         #endregion
 
-        public async Task<Result<TokenResponseModel>> Handle(RefreshTokenRequest request,
+        public async Task<Result<TokenResponseModel>> Handle(LogonCommands.RefreshTokenCommand request,
                                                              CancellationToken cancellationToken)
         {
             Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();

@@ -111,7 +111,7 @@ public class MobileTopupPerformTopupPageViewModelTests
     [Fact]
     public async Task MobileTopupPerformTopupPageViewModel_PerformTopupCommand_Execute_SuccessfulTopup_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformMobileTopupResponseModel() {
+        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformMobileTopupCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformMobileTopupResponseModel() {
                                                                                                                                                                                      ResponseCode = "0000"
                                                                                                                                                                                  }));
 
@@ -121,14 +121,14 @@ public class MobileTopupPerformTopupPageViewModelTests
         });
         await this.ViewModel.Initialise(CancellationToken.None);
         this.ViewModel.PerformTopupCommand.Execute(null);
-        this.Mediator.Verify(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(m => m.Send(It.IsAny<TransactionCommands.PerformMobileTopupCommand>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(v => v.GoToMobileTopupSuccessPage(), Times.Once);
     }
 
     [Fact]
     public async Task MobileTopupPerformTopupPageViewModel_PerformTopupCommand_Execute_FailedTopup_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformMobileTopupResponseModel()
+        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformMobileTopupCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformMobileTopupResponseModel()
                                                                                                                                            {
                                                                                                                                                ResponseCode = "0001"
                                                                                                                                            }));
@@ -140,7 +140,7 @@ public class MobileTopupPerformTopupPageViewModelTests
         await this.ViewModel.Initialise(CancellationToken.None);
 
         this.ViewModel.PerformTopupCommand.Execute(null);
-        this.Mediator.Verify(m => m.Send(It.IsAny<PerformMobileTopupRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(m => m.Send(It.IsAny<TransactionCommands.PerformMobileTopupCommand>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(v => v.GoToMobileTopupFailedPage(), Times.Once);
     }
 

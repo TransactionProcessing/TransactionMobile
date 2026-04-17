@@ -1,5 +1,6 @@
 ﻿using Moq;
 using Shouldly;
+using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Database;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.RequestHandlers;
@@ -28,11 +29,11 @@ public class SupportRequestHandlerTests
         applicationCache.Setup(s => s.GetConfiguration()).Returns(new Configuration());
         SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, applicationCache.Object);
 
-        UploadLogsRequest request = UploadLogsRequest.Create(TestData.DeviceIdentifier);
+        SupportCommands.UploadLogsCommand request = new(TestData.DeviceIdentifier);
 
-        Boolean response = await handler.Handle(request, CancellationToken.None);
+        Result response = await handler.Handle(request, CancellationToken.None);
 
-        response.ShouldBeTrue();
+        response.IsSuccess.ShouldBeTrue();
     }
 
     [Fact]
@@ -63,11 +64,11 @@ public class SupportRequestHandlerTests
 
         SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, applicationCache.Object);
 
-        UploadLogsRequest request = UploadLogsRequest.Create(TestData.DeviceIdentifier);
+        SupportCommands.UploadLogsCommand request = new(TestData.DeviceIdentifier);
 
-        Boolean response = await handler.Handle(request, CancellationToken.None);
+        Result response = await handler.Handle(request, CancellationToken.None);
 
-        response.ShouldBeTrue();
+        response.IsSuccess.ShouldBeTrue();
         databaseContext.Verify(d => d.RemoveUploadedMessages(It.IsAny<List<Database.LogMessage>>()), Times.Once);
     }
 
@@ -106,11 +107,11 @@ public class SupportRequestHandlerTests
 
         SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, applicationCache.Object);
 
-        UploadLogsRequest request = UploadLogsRequest.Create(TestData.DeviceIdentifier);
+        SupportCommands.UploadLogsCommand request = new(TestData.DeviceIdentifier);
 
-        Boolean response = await handler.Handle(request, CancellationToken.None);
+        Result response = await handler.Handle(request, CancellationToken.None);
 
-        response.ShouldBeTrue();
+        response.IsSuccess.ShouldBeTrue();
         databaseContext.Verify(d => d.RemoveUploadedMessages(It.IsAny<List<Database.LogMessage>>()), Times.Exactly(2));
     }
 
@@ -145,9 +146,10 @@ public class SupportRequestHandlerTests
         applicationCache.Setup(s => s.GetUseTrainingMode()).Returns(isTrainingMode);
         SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext, applicationCache.Object);
 
-        ViewLogsRequest request = ViewLogsRequest.Create();
-        List<Models.LogMessage>? result = await handler.Handle(request, CancellationToken.None);
+        SupportQueries.ViewLogsQuery request = new();
+        Result<List<Models.LogMessage>> result = await handler.Handle(request, CancellationToken.None);
 
-        result.Count.ShouldBe(expectedNumberMessages);
+        result.IsSuccess.ShouldBeTrue();
+        result.Data.Count.ShouldBe(expectedNumberMessages);
     }
 }

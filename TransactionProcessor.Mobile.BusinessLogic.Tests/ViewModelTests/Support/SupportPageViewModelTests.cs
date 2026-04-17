@@ -54,7 +54,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Support
         {
             this.ViewModel.UploadLogsCommand.Execute(null);
 
-            this.Mediator.Verify(m => m.Send(It.IsAny<UploadLogsRequest>(),It.IsAny<CancellationToken>()),Times.Once);
+            this.Mediator.Verify(m => m.Send(It.IsAny<SupportCommands.UploadLogsCommand>(),It.IsAny<CancellationToken>()),Times.Once);
         }
 
         [Fact]

@@ -14,7 +14,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.CommonTests
         [InlineData(true)]
         [InlineData(false)]
         public void LogonTransactionRequest_ToTransactionRecord_IsTranslated(Boolean inTrainingMode){
-            LogonTransactionRequest request = LogonTransactionRequest.Create(TestData.TransactionDateTime);
+            TransactionCommands.PerformLogonCommand request = new(TestData.TransactionDateTime);
             TransactionRecord transactionRecord = request.ToTransactionRecord(inTrainingMode);
             transactionRecord.TransactionDateTime.ShouldBe(request.TransactionDateTime);
             transactionRecord.TransactionType.ShouldBe(1);
@@ -25,7 +25,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.CommonTests
         [InlineData(true)]
         [InlineData(false)]
         public void PerformMobileTopupRequest_ToTransactionRecord_IsTranslated(Boolean inTrainingMode){
-            PerformMobileTopupRequest request = PerformMobileTopupRequest.Create(TestData.TransactionDateTime,
+            TransactionCommands.PerformMobileTopupCommand request = new(TestData.TransactionDateTime,
                                                                                  TestData.OperatorId1ContractId,
                                                                                  TestData.Operator1Product_100KES.ProductId,
                                                                                  TestData.OperatorId1,
@@ -49,7 +49,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.CommonTests
         [InlineData(true)]
         [InlineData(false)]
         public void PerformVoucherIssueRequest_ToTransactionRecord_IsTranslated(Boolean inTrainingMode){
-            PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(TestData.TransactionDateTime,
+            TransactionCommands.PerformVoucherIssueCommand request = new(TestData.TransactionDateTime,
                                                                                    TestData.OperatorId3ContractId,
                                                                                    TestData.Operator3Product_200KES.ProductId,
                                                                                    TestData.OperatorId3,
@@ -75,7 +75,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.CommonTests
         [InlineData(true)]
         [InlineData(false)]
         public void PerformBillPaymentGetAccountRequest_ToTransactionRecord_IsTranslated(Boolean inTrainingMode){
-            PerformBillPaymentGetAccountRequest request = PerformBillPaymentGetAccountRequest.Create(TestData.TransactionDateTime,
+            TransactionCommands.PerformBillPaymentGetAccountCommand request = new(TestData.TransactionDateTime,
                                                                                                      TestData.OperatorId3ContractId,
                                                                                                      TestData.Operator3Product_200KES.ProductId,
                                                                                                      TestData.OperatorId3,
@@ -95,7 +95,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.CommonTests
         [InlineData(true)]
         [InlineData(false)]
         public void PerformBillPaymentMakePostPaymentRequest_ToTransactionRecord_IsTranslated(Boolean inTrainingMode){
-            PerformBillPaymentMakePostPaymentRequest request = PerformBillPaymentMakePostPaymentRequest.Create(TestData.TransactionDateTime,
+            TransactionCommands.PerformBillPaymentMakePostPaymentCommand request = new(TestData.TransactionDateTime,
                                                                                                                TestData.OperatorId3ContractId,
                                                                                                                TestData.Operator3Product_200KES.ProductId,
                                                                                                                TestData.OperatorId3,
@@ -118,13 +118,12 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.CommonTests
         [InlineData(true)]
         [InlineData(false)]
         public void PerformBillPaymentMakePrePaymentRequest_ToTransactionRecord_IsTranslated(Boolean inTrainingMode){
-            PerformBillPaymentMakePostPaymentRequest request = PerformBillPaymentMakePostPaymentRequest.Create(TestData.TransactionDateTime,
+            TransactionCommands.PerformBillPaymentMakePrePaymentCommand request = new(TestData.TransactionDateTime,
                                                                                                                TestData.OperatorId3ContractId,
                                                                                                                TestData.Operator3Product_200KES.ProductId,
                                                                                                                TestData.OperatorId3,
-                                                                                                               TestData.CustomerAccountNumber,
+                                                                                                               TestData.MeterNumber,
                                                                                                                TestData.CustomerAccountName,
-                                                                                                               TestData.CustomerMobileNumber,
                                                                                                                TestData.PaymentAmount);
 
             TransactionRecord transactionRecord = request.ToTransactionRecord(inTrainingMode);
@@ -133,7 +132,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.CommonTests
             transactionRecord.IsTrainingMode.ShouldBe(inTrainingMode);
             transactionRecord.ProductId.ShouldBe(request.ProductId);
             transactionRecord.ContractId.ShouldBe(request.ContractId);
-            transactionRecord.CustomerAccountNumber.ShouldBe(request.CustomerAccountNumber);
+            transactionRecord.CustomerAccountNumber.ShouldBe(request.MeterNumber);
             transactionRecord.OperatorId.ShouldBe(request.OperatorId);
         }
 
@@ -141,7 +140,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.CommonTests
         [InlineData(true)]
         [InlineData(false)]
         public void PerformBillPaymentGetMeterRequest_ToTransactionRecord_IsTranslated(Boolean inTrainingMode){
-            PerformBillPaymentGetMeterRequest request = PerformBillPaymentGetMeterRequest.Create(TestData.TransactionDateTime,
+            TransactionCommands.PerformBillPaymentGetMeterCommand request = new(TestData.TransactionDateTime,
                                                                                                  TestData.OperatorId3ContractId,
                                                                                                  TestData.Operator3Product_200KES.ProductId,
                                                                                                  TestData.OperatorId3,

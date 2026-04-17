@@ -69,9 +69,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Support
             CorrelationIdProvider.NewId();
             Logger.LogInformation("UploadLogs called");
 
-            UploadLogsRequest uploadLogsRequest = UploadLogsRequest.Create(String.Empty);
+            SupportCommands.UploadLogsCommand command = new(String.Empty);
 
-            await this.Mediator.Send(uploadLogsRequest, CancellationToken.None);
+            await this.Mediator.Send(command, CancellationToken.None);
 
             // TODO: Act on the response (display message or something)...
             //await this.NavigationService.GoBack();

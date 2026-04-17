@@ -45,7 +45,7 @@ public partial class BillPaymentSelectOperatorPageViewModel : ExtendedBaseViewMo
 
     public async Task Initialise(CancellationToken cancellationToken)
     {
-        GetProductOperators request = new GetProductOperators(ProductType.BillPayment);
+        MerchantQueries.GetProductOperatorsQuery request = new(ProductType.BillPayment);
         Result<List<ContractOperatorModel>> operatorsResult = await this.Mediator.Send(request, cancellationToken);
         if (operatorsResult.IsFailed)
         {

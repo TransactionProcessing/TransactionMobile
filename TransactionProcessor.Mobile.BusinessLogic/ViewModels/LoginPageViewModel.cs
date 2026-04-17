@@ -90,7 +90,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
                 this.ApplicationCache.SetConfigHostUrl(this.ConfigHostUrl);
             }
 
-            GetConfigurationRequest getConfigurationRequest = GetConfigurationRequest.Create(this.DeviceService.GetIdentifier());
+            LogonQueries.GetConfigurationQuery getConfigurationRequest = new (this.DeviceService.GetIdentifier());
             Result<Configuration> configurationResult = await this.Mediator.Send(getConfigurationRequest);
 
             if (configurationResult.IsSuccess) {
@@ -102,8 +102,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
         }
 
         private async Task<Result<TokenResponseModel>> GetUserToken() {
-            LoginRequest loginRequest = LoginRequest.Create(this.UserName, this.Password);
-            Result<TokenResponseModel> tokenResult = await this.Mediator.Send(loginRequest);
+            LogonCommands.GetTokenCommand command = new(this.UserName, this.Password);
+            Result<TokenResponseModel> tokenResult = await this.Mediator.Send(command);
 
             if (tokenResult.IsSuccess) {
                 // Cache the token
@@ -115,8 +115,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
 
         private async Task<Result<PerformLogonResponseModel>> PerformLogonTransaction() {
             // Logon Transaction
-            LogonTransactionRequest logonTransactionRequest = LogonTransactionRequest.Create(DateTime.Now);
-            Result<PerformLogonResponseModel> logonResult = await this.Mediator.Send(logonTransactionRequest);
+            TransactionCommands.PerformLogonCommand command = new(DateTime.Now);
+            Result<PerformLogonResponseModel> logonResult = await this.Mediator.Send(command);
 
             if (logonResult.IsSuccess) {
                 // Set the user information
@@ -129,7 +129,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
 
         private async Task<Result<List<ContractProductModel>>> GetMerchantContractProducts() {
             // Get Contracts
-            GetContractProductsRequest getContractProductsRequest = GetContractProductsRequest.Create();
+            MerchantQueries.GetContractProductsQuery getContractProductsRequest = new MerchantQueries.GetContractProductsQuery();
             Result<List<ContractProductModel>> productsResult = await this.Mediator.Send(getContractProductsRequest);
 
             if (productsResult.IsSuccess) {
@@ -153,16 +153,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
 
             this.ApplicationCache.SetContractProducts(contractProductModels, cacheEntryOptions);
         }
-
-        private async Task<Result<Decimal>> GetMerchantBalance() {
-            // Get the merchant balance
-            // TODO: Cache the result, but will add this to a timer call to keep up to date...
-            GetMerchantBalanceRequest getMerchantBalanceRequest = GetMerchantBalanceRequest.Create();
-            Result<Decimal> getMerchantBalanceResult = await this.Mediator.Send(getMerchantBalanceRequest);
-
-            return getMerchantBalanceResult;
-        }
-
+        
         private async Task<bool> CheckForUpdates(Configuration configuration) {
             if (!this.ShouldCheckForUpdates(configuration)) {
                 return true;
@@ -314,8 +305,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
                 // access token has expired need to make another call to get new one
                 TokenResponseModel token = value as TokenResponseModel;
 
-                RefreshTokenRequest request = RefreshTokenRequest.Create(token.RefreshToken);
-                Result<TokenResponseModel> newTokenResult = await this.Mediator.Send(request, CancellationToken.None);
+                LogonCommands.RefreshTokenCommand command = new (token.RefreshToken);
+                Result<TokenResponseModel> newTokenResult = await this.Mediator.Send(command, CancellationToken.None);
 
                 if (newTokenResult.IsSuccess) {
                     this.CacheAccessToken(newTokenResult.Data);

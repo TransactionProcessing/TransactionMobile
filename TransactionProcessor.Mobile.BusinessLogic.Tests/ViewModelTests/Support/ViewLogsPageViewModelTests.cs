@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Moq;
 using Shouldly;
+using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
@@ -43,9 +44,9 @@ public class ViewLogsPageViewModelTests
     [Fact]
     public async Task SupportPageViewModel_UploadLogsCommand_Execute_IsExecuted(){
 
-        this.Mediator.Setup(m => m.Send<List<LogMessage>>(It.IsAny<ViewLogsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new List<LogMessage>(){
+        this.Mediator.Setup(m => m.Send(It.IsAny<SupportQueries.ViewLogsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new List<LogMessage>(){
                                                                                                                                                               new LogMessage()
-                                                                                                                                                          });
+                                                                                                                                                          }));
 
         await this.ViewModel.LoadLogMessages();
         this.ViewModel.LogMessages.Count.ShouldBe(1);

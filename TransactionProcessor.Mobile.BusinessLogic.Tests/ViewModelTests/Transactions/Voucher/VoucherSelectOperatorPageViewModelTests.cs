@@ -42,10 +42,10 @@ public class VoucherSelectOperatorPageViewModelTests
     [Fact]
     public async Task VoucherSelectOperatorPageViewModel_Initialise_IsInitialised()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetProductOperators>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractOperatorList));
+        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetProductOperatorsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractOperatorList));
 
         await this.ViewModel.Initialise(CancellationToken.None);
-        this.Mediator.Verify(x => x.Send(It.IsAny<GetProductOperators>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<MerchantQueries.GetProductOperatorsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
 
         this.ViewModel.Operators.Count.ShouldBe(1);
     }
@@ -53,7 +53,7 @@ public class VoucherSelectOperatorPageViewModelTests
     [Fact]
     public async Task VoucherSelectOperatorPageViewModel_OperatorSelectedCommand_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<GetProductOperators>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractOperatorList));
+        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetProductOperatorsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractOperatorList));
 
         await this.ViewModel.Initialise(CancellationToken.None);
 

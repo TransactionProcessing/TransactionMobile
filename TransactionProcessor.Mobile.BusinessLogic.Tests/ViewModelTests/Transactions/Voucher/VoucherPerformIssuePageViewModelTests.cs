@@ -126,7 +126,7 @@ public class VoucherPerformIssuePageViewModelTests
     [Fact]
     public async Task VoucherPerformIssuePageViewModel_IssueVoucherCommand_Execute_SuccessfulVoucher_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformVoucherIssueResponseModel() {
+        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformVoucherIssueCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformVoucherIssueResponseModel() {
                                                                                                                                                                                        ResponseCode = "0000"
                                                                                                                                                                                    }));
 
@@ -137,14 +137,14 @@ public class VoucherPerformIssuePageViewModelTests
         await this.ViewModel.Initialise(CancellationToken.None);
 
         this.ViewModel.IssueVoucherCommand.Execute(null);
-        this.Mediator.Verify(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(m => m.Send(It.IsAny<TransactionCommands.PerformVoucherIssueCommand>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(v => v.GoToVoucherIssueSuccessPage(), Times.Once);
     }
 
     [Fact]
     public async Task VoucherPerformIssuePageViewModel_IssueVoucherCommand_Execute_FailedVoucher_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformVoucherIssueResponseModel()
+        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformVoucherIssueCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformVoucherIssueResponseModel()
                                                                                                                                             {
                                                                                                                                                 ResponseCode = "1010"
                                                                                                                                             }));
@@ -156,7 +156,7 @@ public class VoucherPerformIssuePageViewModelTests
         await this.ViewModel.Initialise(CancellationToken.None);
 
         this.ViewModel.IssueVoucherCommand.Execute(null);
-        this.Mediator.Verify(m => m.Send(It.IsAny<PerformVoucherIssueRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(m => m.Send(It.IsAny<TransactionCommands.PerformVoucherIssueCommand>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(v => v.GoToVoucherIssueFailedPage(), Times.Once);
     }
 

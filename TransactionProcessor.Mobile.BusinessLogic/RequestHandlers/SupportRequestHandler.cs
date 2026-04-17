@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Database;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
@@ -7,8 +8,8 @@ using LogMessage = TransactionProcessor.Mobile.BusinessLogic.Database.LogMessage
 
 namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
 {
-    public class SupportRequestHandler : IRequestHandler<UploadLogsRequest, Boolean>,
-                                         IRequestHandler<ViewLogsRequest, List<Models.LogMessage>>
+    public class SupportRequestHandler : IRequestHandler<SupportCommands.UploadLogsCommand, Result>,
+                                         IRequestHandler<SupportQueries.ViewLogsQuery, Result<List<Models.LogMessage>>>
     {
         private readonly Func<Boolean, IConfigurationService> ConfigurationServiceResolver;
         private readonly IDatabaseContext DatabaseContext;
@@ -24,7 +25,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
             this.ApplicationCache = applicationCache;
         }
 
-        public async Task<Boolean> Handle(UploadLogsRequest request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(SupportCommands.UploadLogsCommand request, CancellationToken cancellationToken)
         {
             Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
             Configuration configuration = this.ApplicationCache.GetConfiguration();
@@ -54,10 +55,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
                 await this.DatabaseContext.RemoveUploadedMessages(logEntries);
             }
 
-            return true;
+            return Result.Success();
         }
 
-        public async Task<List<Models.LogMessage>> Handle(ViewLogsRequest request,
+        public async Task<Result<List<Models.LogMessage>>> Handle(SupportQueries.ViewLogsQuery request,
                                                     CancellationToken cancellationToken) {
             Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
 
@@ -73,7 +74,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
                                                                                    Id = l.Id
                                                                                }));
 
-            return logMessageModels.OrderByDescending(l => l.EntryDateTime).ToList();
+            return Result.Success(logMessageModels.OrderByDescending(l => l.EntryDateTime).ToList());
         }
     }
 }

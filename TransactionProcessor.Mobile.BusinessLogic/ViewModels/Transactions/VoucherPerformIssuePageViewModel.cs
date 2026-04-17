@@ -113,18 +113,18 @@ public partial class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel
     {
         Logger.LogInformation("IssueVoucher called");
         // TODO: Create Command and Send
-        PerformVoucherIssueRequest request = PerformVoucherIssueRequest.Create(DateTime.Now,
-                                                                               this.ProductDetails.ContractId,
-                                                                               this.ProductDetails.ProductId,
-                                                                               this.ProductDetails.OperatorId,
-                                                                               this.RecipientMobileNumber,
-                                                                               this.recipientMobileNumber,
-                                                                               this.VoucherAmount,
-                                                                               this.CustomerEmailAddress);
+        TransactionCommands.PerformVoucherIssueCommand command = new TransactionCommands.PerformVoucherIssueCommand(DateTime.Now,
+                                                                                                       this.ProductDetails.ContractId,
+                                                                                                       this.ProductDetails.ProductId,
+                                                                                                       this.ProductDetails.OperatorId,
+                                                                                                       this.RecipientMobileNumber,
+                                                                                                       this.recipientMobileNumber,
+                                                                                                       this.VoucherAmount,
+                                                                                                       this.CustomerEmailAddress);
 
 
         Logger.LogInformation("about to call Send ");
-        var result = await this.Mediator.Send(request);
+        var result = await this.Mediator.Send(command);
         Logger.LogInformation("about to check result ");
         if (result.IsSuccess && result.Data.IsSuccessful)
         {

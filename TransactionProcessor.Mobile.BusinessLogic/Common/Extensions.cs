@@ -9,7 +9,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Common;
 
 public static class Extensions
 {
-    public static TransactionRecord ToTransactionRecord(this LogonTransactionRequest request,
+    public static TransactionRecord ToTransactionRecord(this TransactionCommands.PerformLogonCommand request,
                                                         Boolean isTrainingMode) {
         TransactionRecord transactionRecord = new TransactionRecord {
                                                                         TransactionDateTime = request.TransactionDateTime,
@@ -20,7 +20,7 @@ public static class Extensions
         return transactionRecord;
     }
 
-    public static TransactionRecord ToTransactionRecord(this PerformMobileTopupRequest request,
+    public static TransactionRecord ToTransactionRecord(this TransactionCommands.PerformMobileTopupCommand request,
                                                         Boolean isTrainingMode) {
         TransactionRecord transactionRecord = new TransactionRecord {
                                                                         TransactionDateTime = request.TransactionDateTime,
@@ -37,7 +37,7 @@ public static class Extensions
         return transactionRecord;
     }
 
-    public static TransactionRecord ToTransactionRecord(this PerformVoucherIssueRequest request, Boolean isTrainingMode) {
+    public static TransactionRecord ToTransactionRecord(this TransactionCommands.PerformVoucherIssueCommand request, Boolean isTrainingMode) {
         TransactionRecord transactionRecord = new TransactionRecord {
                                                                         TransactionDateTime = request.TransactionDateTime,
                                                                         TransactionType = 2,
@@ -54,7 +54,7 @@ public static class Extensions
         return transactionRecord;
     }
 
-    public static TransactionRecord ToTransactionRecord(this PerformBillPaymentGetAccountRequest request, Boolean isTrainingMode) {
+    public static TransactionRecord ToTransactionRecord(this TransactionCommands.PerformBillPaymentGetAccountCommand request, Boolean isTrainingMode) {
         TransactionRecord transactionRecord = new TransactionRecord
                                               {
                                                   TransactionDateTime = request.TransactionDateTime,
@@ -69,7 +69,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
         return transactionRecord;
     }
 
-    public static TransactionRecord ToTransactionRecord(this PerformBillPaymentMakePostPaymentRequest request, Boolean isTrainingMode) {
+    public static TransactionRecord ToTransactionRecord(this TransactionCommands.PerformBillPaymentMakePostPaymentCommand request, Boolean isTrainingMode) {
         TransactionRecord transactionRecord = new TransactionRecord
                                               {
                                                   TransactionDateTime = request.TransactionDateTime,
@@ -84,7 +84,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
         return transactionRecord;
     }
 
-    public static TransactionRecord ToTransactionRecord(this PerformBillPaymentMakePrePaymentRequest request, Boolean isTrainingMode)
+    public static TransactionRecord ToTransactionRecord(this TransactionCommands.PerformBillPaymentMakePrePaymentCommand request, Boolean isTrainingMode)
     {
         TransactionRecord transactionRecord = new TransactionRecord
                                               {
@@ -100,7 +100,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
         return transactionRecord;
     }
 
-    public static TransactionRecord ToTransactionRecord(this PerformBillPaymentGetMeterRequest request, Boolean isTrainingMode)
+    public static TransactionRecord ToTransactionRecord(this TransactionCommands.PerformBillPaymentGetMeterCommand request, Boolean isTrainingMode)
     {
         TransactionRecord transactionRecord = new TransactionRecord
                                               {
