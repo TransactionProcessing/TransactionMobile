@@ -5,9 +5,11 @@ namespace TransactionProcessor.Mobile.UIServices;
 
 public class SentryService : ISentryService
 {
+    private Boolean isInitialized;
+
     public void InitializeSentry(String dsn)
     {
-        if (String.IsNullOrWhiteSpace(dsn))
+        if (this.isInitialized || String.IsNullOrWhiteSpace(dsn))
         {
             return;
         }
@@ -16,5 +18,7 @@ public class SentryService : ISentryService
         {
             o.Dsn = dsn;
         });
+
+        this.isInitialized = true;
     }
 }
