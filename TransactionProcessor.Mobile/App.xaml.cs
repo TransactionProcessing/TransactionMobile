@@ -153,40 +153,44 @@ namespace TransactionProcessor.Mobile
 #endif
             MainPage = new AppShell();
 
-            Routing.RegisterRoute("login", typeof(LoginPage));
-            Routing.RegisterRoute("home", typeof(HomePage));
 
-            Routing.RegisterRoute(nameof(MobileTopupSelectOperatorPage), typeof(MobileTopupSelectOperatorPage));
-            Routing.RegisterRoute(nameof(MobileTopupSelectProductPage), typeof(MobileTopupSelectProductPage));
-            Routing.RegisterRoute(nameof(MobileTopupPerformTopupPage), typeof(MobileTopupPerformTopupPage));
-            Routing.RegisterRoute(nameof(MobileTopupSuccessPage), typeof(MobileTopupSuccessPage));
-            Routing.RegisterRoute(nameof(MobileTopupFailedPage), typeof(MobileTopupFailedPage));
+            RegisterRouteOnce(nameof(MobileTopupSelectOperatorPage), typeof(MobileTopupSelectOperatorPage));
+            RegisterRouteOnce(nameof(MobileTopupSelectProductPage), typeof(MobileTopupSelectProductPage));
+            RegisterRouteOnce(nameof(MobileTopupPerformTopupPage), typeof(MobileTopupPerformTopupPage));
+            RegisterRouteOnce(nameof(MobileTopupSuccessPage), typeof(MobileTopupSuccessPage));
+            RegisterRouteOnce(nameof(MobileTopupFailedPage), typeof(MobileTopupFailedPage));
 
-            Routing.RegisterRoute(nameof(VoucherSelectOperatorPage), typeof(VoucherSelectOperatorPage));
-            Routing.RegisterRoute(nameof(VoucherSelectProductPage), typeof(VoucherSelectProductPage));
-            Routing.RegisterRoute(nameof(VoucherPerformIssuePage), typeof(VoucherPerformIssuePage));
-            Routing.RegisterRoute(nameof(VoucherIssueSuccessPage), typeof(VoucherIssueSuccessPage));
-            Routing.RegisterRoute(nameof(VoucherIssueFailedPage), typeof(VoucherIssueFailedPage));
+            RegisterRouteOnce(nameof(VoucherSelectOperatorPage), typeof(VoucherSelectOperatorPage));
+            RegisterRouteOnce(nameof(VoucherSelectProductPage), typeof(VoucherSelectProductPage));
+            RegisterRouteOnce(nameof(VoucherPerformIssuePage), typeof(VoucherPerformIssuePage));
+            RegisterRouteOnce(nameof(VoucherIssueSuccessPage), typeof(VoucherIssueSuccessPage));
+            RegisterRouteOnce(nameof(VoucherIssueFailedPage), typeof(VoucherIssueFailedPage));
 
-            Routing.RegisterRoute(nameof(BillPaymentSelectOperatorPage), typeof(BillPaymentSelectOperatorPage));
-            Routing.RegisterRoute(nameof(BillPaymentSelectProductPage), typeof(BillPaymentSelectProductPage));
-            Routing.RegisterRoute(nameof(BillPaymentGetAccountPage), typeof(BillPaymentGetAccountPage));
-            Routing.RegisterRoute(nameof(BillPaymentGetMeterPage), typeof(BillPaymentGetMeterPage));
-            Routing.RegisterRoute(nameof(BillPaymentPayBillPage), typeof(BillPaymentPayBillPage));
-            Routing.RegisterRoute(nameof(BillPaymentSuccessPage), typeof(BillPaymentSuccessPage));
-            Routing.RegisterRoute(nameof(BillPaymentFailedPage), typeof(BillPaymentFailedPage));
+            RegisterRouteOnce(nameof(BillPaymentSelectOperatorPage), typeof(BillPaymentSelectOperatorPage));
+            RegisterRouteOnce(nameof(BillPaymentSelectProductPage), typeof(BillPaymentSelectProductPage));
+            RegisterRouteOnce(nameof(BillPaymentGetAccountPage), typeof(BillPaymentGetAccountPage));
+            RegisterRouteOnce(nameof(BillPaymentGetMeterPage), typeof(BillPaymentGetMeterPage));
+            RegisterRouteOnce(nameof(BillPaymentPayBillPage), typeof(BillPaymentPayBillPage));
+            RegisterRouteOnce(nameof(BillPaymentSuccessPage), typeof(BillPaymentSuccessPage));
+            RegisterRouteOnce(nameof(BillPaymentFailedPage), typeof(BillPaymentFailedPage));
+            RegisterRouteOnce(nameof(AdminPage), typeof(AdminPage));
 
-            Routing.RegisterRoute(nameof(AdminPage), typeof(AdminPage));
-            Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
+            RegisterRouteOnce(nameof(ViewLogsPage), typeof(ViewLogsPage));
 
-            Routing.RegisterRoute(nameof(ViewLogsPage), typeof(ViewLogsPage));
+            RegisterRouteOnce(nameof(ReportsBalanceAnalysisPage), typeof(ReportsBalanceAnalysisPage));
+            RegisterRouteOnce(nameof(ReportsSalesAnalysisPage), typeof(ReportsSalesAnalysisPage));
 
-            Routing.RegisterRoute(nameof(ReportsBalanceAnalysisPage), typeof(ReportsBalanceAnalysisPage));
-            Routing.RegisterRoute(nameof(ReportsSalesAnalysisPage), typeof(ReportsSalesAnalysisPage));
+            RegisterRouteOnce(nameof(MyAccountAddressesPage), typeof(MyAccountAddressesPage));
+            RegisterRouteOnce(nameof(MyAccountContactPage), typeof(MyAccountContactPage));
+            RegisterRouteOnce(nameof(MyAccountDetailsPage), typeof(MyAccountDetailsPage));
+        }
 
-            Routing.RegisterRoute(nameof(MyAccountAddressesPage), typeof(MyAccountAddressesPage));
-            Routing.RegisterRoute(nameof(MyAccountContactPage), typeof(MyAccountContactPage));
-            Routing.RegisterRoute(nameof(MyAccountDetailsPage), typeof(MyAccountDetailsPage));
+        static readonly HashSet<string> s_registeredRoutes = new();
+
+        static void RegisterRouteOnce(string route, Type pageType)
+        {
+            if (s_registeredRoutes.Add(route))
+                Routing.RegisterRoute(route, pageType);
         }
     }
 
