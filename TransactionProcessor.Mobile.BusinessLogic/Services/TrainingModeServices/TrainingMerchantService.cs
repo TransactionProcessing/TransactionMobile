@@ -12,7 +12,7 @@ public class TrainingMerchantService : IMerchantService
     private readonly Contract Hospital1Contract = new(Guid.Parse("21DA6AC5-70E6-478E-A5E9-74C9B27F5725"), Guid.Parse("2CA5F4C7-34EC-425B-BB53-7EEDF48D9967"), "Hospital 1 Contract", "Hospital 1 Contract");
     private readonly Contract SafaricomContract = new(Guid.Parse("D57DAC9B-4039-4120-B5A8-F7FDF1D3A3C2"), Guid.Parse("2CA5F4C7-34EC-425B-BB53-7EEDF48D9967"), "Safaricom", "Safaricom");
     private readonly Contract PataPawaPostPayContract = new(Guid.Parse("0615E7F6-2749-4507-8588-E019E8110C95"), Guid.Parse("C485F21B-EF17-448D-8B8C-E217A07C1863"), "PataPawaPostPay", "PataPawaPostPay");
-    private readonly Contract PataPawaPrePayContract = new(Guid.Parse("7AAFFE8D-4EA2-485F-8600-D4D29A0043F0"), Guid.Parse("C485F21B-EF17-448D-8B8C-E217A07C1863"), "PataPawaPrePay", "PataPawaPrePay");
+    private readonly Contract PataPawaPrePayContract = new(Guid.Parse("7AAFFE8D-4EA2-485F-8600-D4D29A0043F0"), Guid.Parse("DD5F1E0D-797C-4A00-ADD8-CA328A8543C3"), "PataPawaPrePay", "PataPawaPrePay");
 
     private static ContractProductModel CreateContractProductModel(Contract contract, string productDisplayText, Guid productId, ProductType productType, decimal? value = null) {
         ContractProductModel product = new() {

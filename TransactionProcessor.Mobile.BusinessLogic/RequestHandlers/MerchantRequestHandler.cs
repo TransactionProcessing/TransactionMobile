@@ -92,11 +92,11 @@ public class MerchantRequestHandler : IRequestHandler<MerchantQueries.GetContrac
             }
 
             products = getProductsResult.Data;
+        }
 
-            if (request.ProductType.HasValue)
-            {
-                products = products.Where(p => p.ProductType == request.ProductType).ToList();
-            }
+        if (request.ProductType.HasValue)
+        {
+            products = products.Where(p => p.ProductType == request.ProductType).ToList();
         }
 
         List<ContractOperatorModel> operators = products.GroupBy(c => new

@@ -37,7 +37,6 @@ public class ShellNavigationService : INavigationService
     }
 
     public async Task GoToHome() {
-        Application.Current.MainPage = new AppShell();
         await NavigateTo("///main/home");
     }
 
@@ -166,7 +165,7 @@ public class ShellNavigationService : INavigationService
 
     public async Task GoToLoginPage() {
         Application.Current.MainPage = new AppShell();
-        await NavigateTo("///loginpage");
+        await NavigateTo("///login");
     }
 
     public async Task GoToViewLogsPage() {
