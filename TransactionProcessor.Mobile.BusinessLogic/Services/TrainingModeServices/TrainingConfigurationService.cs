@@ -19,7 +19,8 @@ public class TrainingConfigurationService : IConfigurationService
                                                     EstateReportingUri = "http://localhost:5006",
                                                     LogLevel = LogLevel.Debug,
                                                     SecurityServiceUri = "http://localhost:5001",
-                                                    TransactionProcessorAclUri = "http://localhost:5003"
+                                                    TransactionProcessorAclUri = "http://localhost:5003",
+                                                    SentryDsn = String.Empty
                                                 });
     }
 

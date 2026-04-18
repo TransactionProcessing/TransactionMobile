@@ -52,6 +52,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                               DeviceIdentifier = TestData.DeviceIdentifier,
                                                               LogLevel = configLoggingLevel,
                                                               Id = Guid.NewGuid().ToString(),
+                                                              SentryDsn = "https://key@sentry.io/123",
                                                           };
             Logger.Initialise(new NullLogger());
 
@@ -68,6 +69,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
             configurationResult.Data.SecurityServiceUri.ShouldBe(expectedConfiguration.HostAddresses.Single(s => s.ServiceType == ServiceType.Security).Uri);
             configurationResult.Data.TransactionProcessorAclUri.ShouldBe(expectedConfiguration.HostAddresses.Single(s => s.ServiceType == ServiceType.TransactionProcessorAcl).Uri);
             configurationResult.Data.LogLevel.ShouldBe(expectedLogLevel);
+            configurationResult.Data.SentryDsn.ShouldBe(expectedConfiguration.SentryDsn);
         }
 
         [Fact]
