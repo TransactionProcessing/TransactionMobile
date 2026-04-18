@@ -164,7 +164,8 @@ public class ShellNavigationService : INavigationService
     }
 
     public async Task GoToLoginPage() {
-        await NavigateTo("///loginpage");
+        Application.Current.MainPage = new AppShell();
+        await NavigateTo("///login");
     }
 
     public async Task GoToViewLogsPage() {

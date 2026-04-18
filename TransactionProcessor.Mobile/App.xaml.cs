@@ -153,6 +153,8 @@ namespace TransactionProcessor.Mobile
 #endif
             MainPage = new AppShell();
 
+            //RegisterRouteOnce("login", typeof(LoginPage));
+            //RegisterRouteOnce("home", typeof(HomePage));
 
             RegisterRouteOnce(nameof(MobileTopupSelectOperatorPage), typeof(MobileTopupSelectOperatorPage));
             RegisterRouteOnce(nameof(MobileTopupSelectProductPage), typeof(MobileTopupSelectProductPage));
@@ -174,6 +176,7 @@ namespace TransactionProcessor.Mobile
             RegisterRouteOnce(nameof(BillPaymentSuccessPage), typeof(BillPaymentSuccessPage));
             RegisterRouteOnce(nameof(BillPaymentFailedPage), typeof(BillPaymentFailedPage));
             RegisterRouteOnce(nameof(AdminPage), typeof(AdminPage));
+            //RegisterRouteOnce(nameof(LoginPage), typeof(LoginPage));
 
             RegisterRouteOnce(nameof(ViewLogsPage), typeof(ViewLogsPage));
 
