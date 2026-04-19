@@ -6,7 +6,7 @@ on:
 
 jobs:
   release_windows:
-    runs-on: windows-2022
+    runs-on: [self-hosted, windows]
     permissions:
       contents: write
     steps:
@@ -69,6 +69,15 @@ jobs:
             exit 1
           }
           echo "MSIX_PATH=$($msix.FullName)" >> $env:GITHUB_ENV
+
+      - name: Copy app packages to AppUpdates
+        shell: powershell
+        run: |
+          $dest = "C:\inetpub\wwwroot\AppUpdates"
+          New-Item -ItemType Directory -Force -Path $dest | Out-Null
+          $src = "TransactionProcessor.Mobile/bin/Release/net10.0-windows10.0.19041.0/win-x64/AppPackages"
+          Copy-Item -Path "$src\*" -Destination $dest -Recurse -Force
+          Write-Host "Copied app packages to $dest"
 
       - name: Upload MSIX to release
         uses: softprops/action-gh-release@v1
