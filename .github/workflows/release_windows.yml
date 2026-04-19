@@ -1,0 +1,111 @@
+name: Release Windows
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  release_windows:
+    runs-on: windows-2022
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Extract version from tag
+        shell: powershell
+        run: |
+          $tag = "${{ github.event.release.tag_name }}"
+          $version = $tag.TrimStart('v')
+          $parts = $version.Split('.')
+          $major = [int]($parts[0])
+          $minor = if ($parts.Length -gt 1) { [int]($parts[1]) } else { 0 }
+          $patch = if ($parts.Length -gt 2) { [int]($parts[2]) } else { 0 }
+          $versionCode = $major * 10000 + $minor * 100 + $patch
+          echo "APP_VERSION=$version" >> $env:GITHUB_ENV
+          echo "APP_VERSION_CODE=$versionCode" >> $env:GITHUB_ENV
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          vs-prerelease: true
+
+      - name: Install MAUI workloads
+        run: |
+          dotnet workload install maui
+
+      - name: Restore packages
+        run: dotnet restore TransactionProcessor.Mobile.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+      - name: Decrypt PFX File
+        run: |
+          echo "${{ secrets.WINDOWSSIGNINGCERT }}" > cert.pfx.asc
+          certutil -decode cert.pfx.asc cert.pfx
+
+      - name: Add Cert to Store
+        run: certutil -user -q -p ${{ secrets.WINDOWSSIGNINGCERTPWD }} -importpfx cert.pfx NoRoot
+
+      - name: Publish Windows App
+        run: |
+          dotnet publish TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj `
+            -c Release `
+            -f net10.0-windows10.0.19041.0 `
+            --no-restore `
+            /p:ApplicationDisplayVersion=${{ env.APP_VERSION }} `
+            /p:ApplicationVersion=${{ env.APP_VERSION_CODE }} `
+            /p:AppxPackageSigningEnabled=true `
+            /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"
+
+      - name: Find MSIX package
+        shell: powershell
+        run: |
+          $msix = Get-ChildItem -Path "TransactionProcessor.Mobile/bin/Release/net10.0-windows10.0.19041.0/win-x64/AppPackages" -Recurse -Filter "*.msixbundle" | Select-Object -First 1
+          if ($msix -eq $null) {
+            $msix = Get-ChildItem -Path "TransactionProcessor.Mobile/bin/Release/net10.0-windows10.0.19041.0/win-x64/AppPackages" -Recurse -Filter "*.msix" | Select-Object -First 1
+          }
+          if ($msix -eq $null) {
+            Write-Error "No .msix or .msixbundle file found in AppPackages directory."
+            exit 1
+          }
+          echo "MSIX_PATH=$($msix.FullName)" >> $env:GITHUB_ENV
+
+      - name: Upload Windows app packages artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-app-packages
+          path: TransactionProcessor.Mobile/bin/Release/net10.0-windows10.0.19041.0/win-x64/AppPackages/
+
+      - name: Upload MSIX to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ env.MSIX_PATH }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Clean up certificate
+        if: always()
+        run: |
+          Remove-Item -Force cert.pfx -ErrorAction SilentlyContinue
+          Remove-Item -Force cert.pfx.asc -ErrorAction SilentlyContinue
+        shell: powershell
+
+  deploy_to_staging:
+    needs: release_windows
+    runs-on: [self-hosted, windows]
+    permissions:
+      contents: read
+    steps:
+      - name: Download Windows app packages artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-app-packages
+          path: windows-app-packages
+
+      - name: Copy Windows packages to AppUpdates
+        shell: powershell
+        run: |
+          $dest = "C:\inetpub\wwwroot\AppUpdates\Windows"
+          New-Item -ItemType Directory -Force -Path $dest | Out-Null
+          Copy-Item -Path "windows-app-packages\*" -Destination $dest -Recurse -Force
+          Write-Host "Copied Windows app packages to $dest"
