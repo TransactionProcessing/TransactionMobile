@@ -81,6 +81,32 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Upload Android APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: TransactionProcessor.Mobile/bin/Release/net10.0-android/*-Signed.apk
+
       - name: Clean up keystore
         if: always()
         run: rm -f android_keystore.jks
+
+  deploy_to_staging:
+    needs: release_android
+    runs-on: [self-hosted, windows]
+    permissions:
+      contents: read
+    steps:
+      - name: Download Android APK artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: android-apk
+          path: android-apk
+
+      - name: Copy Android APK to AppUpdates
+        shell: powershell
+        run: |
+          $dest = "C:\inetpub\wwwroot\AppUpdates\Android"
+          New-Item -ItemType Directory -Force -Path $dest | Out-Null
+          Copy-Item -Path "android-apk\*" -Destination $dest -Recurse -Force
+          Write-Host "Copied Android APK to $dest"
