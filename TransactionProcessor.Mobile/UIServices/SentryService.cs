@@ -5,7 +5,12 @@ namespace TransactionProcessor.Mobile.UIServices;
 
 public class SentryService : ISentryService
 {
+    private readonly IApplicationInfoService ApplicationInfoService;
     private Boolean isInitialized;
+
+    public SentryService(IApplicationInfoService applicationInfoService) {
+        this.ApplicationInfoService = applicationInfoService;
+    }
 
     public void InitializeSentry(String dsn)
     {
@@ -17,6 +22,9 @@ public class SentryService : ISentryService
         SentrySdk.Init(o =>
         {
             o.Dsn = dsn;
+            o.Native.AttachScreenshot = true;
+            o.SendDefaultPii = true;
+            o.Release = this.ApplicationInfoService.VersionString;
         });
 
         this.isInitialized = true;
