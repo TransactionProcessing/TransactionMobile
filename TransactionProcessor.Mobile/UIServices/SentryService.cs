@@ -22,7 +22,9 @@ public class SentryService : ISentryService
         SentrySdk.Init(o =>
         {
             o.Dsn = dsn;
+#if ANDROID || IOS || MACCATALYST
             o.Native.AttachScreenshot = true;
+#endif
             o.SendDefaultPii = true;
             o.Release = this.ApplicationInfoService.VersionString;
         });
