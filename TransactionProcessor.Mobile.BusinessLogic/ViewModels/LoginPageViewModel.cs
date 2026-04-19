@@ -146,17 +146,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
 
         private void CacheContractData(List<ContractProductModel> contractProductModels)
         {
-            DateTime expirationTime = DateTime.Now.AddMinutes(60);
-            CancellationChangeToken expirationToken = new CancellationChangeToken(new CancellationTokenSource(TimeSpan.FromMinutes(60)).Token);
-            MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
-                                                        // Pin to cache.
-                                                        .SetPriority(CacheItemPriority.NeverRemove)
-                                                        // Set the actual expiration time
-                                                        .SetAbsoluteExpiration(expirationTime)
-                                                        // Force eviction to run
-                                                        .AddExpirationToken(expirationToken);
-
-            this.ApplicationCache.SetContractProducts(contractProductModels, cacheEntryOptions);
+            this.ApplicationCache.SetContractProducts(contractProductModels, 600);
         }
         
         private async Task<bool> CheckForUpdates(Configuration configuration) {

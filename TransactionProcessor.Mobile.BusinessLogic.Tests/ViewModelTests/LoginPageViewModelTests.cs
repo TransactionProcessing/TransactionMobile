@@ -95,7 +95,7 @@ public class LoginPageViewModelTests
         this.Mediator.Verify(x => x.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
         if (String.IsNullOrEmpty(configUrl) == false){
-            this.ApplicationCache.Verify(v => v.SetConfigHostUrl(It.IsAny<String>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Once);
+            this.ApplicationCache.Verify(v => v.SetConfigHostUrl(It.IsAny<String>(), It.IsAny<Int32>()), Times.Once);
         }
     }
 

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Primitives;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.Services
@@ -13,43 +14,41 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
     {
         String GetConfigHostUrl();
 
-        void SetConfigHostUrl(String value, MemoryCacheEntryOptions options = default);
+        void SetConfigHostUrl(String value, Int32 timeout=60);
 
         Boolean GetUseTrainingMode();
 
-        void SetUseTrainingMode(Boolean value, MemoryCacheEntryOptions options = default);
+        void SetUseTrainingMode(Boolean value, Int32 timeout = 60);
 
         Boolean GetIsLoggedIn();
 
-        void SetIsLoggedIn(Boolean value, MemoryCacheEntryOptions options = default);
+        void SetIsLoggedIn(Boolean value, Int32 timeout = 60);
 
         Configuration GetConfiguration();
 
-        void SetConfiguration(Configuration value, MemoryCacheEntryOptions options = default);
+        void SetConfiguration(Configuration value, Int32 timeout = 60);
 
         List<ContractProductModel> GetContractProducts();
 
-        void SetContractProducts(List<ContractProductModel> value, MemoryCacheEntryOptions options = default);
+        void SetContractProducts(List<ContractProductModel> value, Int32 timeout = 60);
 
         TokenResponseModel GetAccessToken();
 
-        void SetAccessToken(TokenResponseModel value, MemoryCacheEntryOptions options = default);
-
+        void SetAccessToken(TokenResponseModel value, MemoryCacheEntryOptions cacheEntryOptions = null);
         Guid GetEstateId();
 
-        void SetEstateId(Guid value, MemoryCacheEntryOptions options = default);
+        void SetEstateId(Guid value, Int32 timeout = 60);
 
         Guid GetMerchantId();
 
-        void SetMerchantId(Guid value, MemoryCacheEntryOptions options = default);
-
+        void SetMerchantId(Guid value, Int32 timeout = 60);
         MerchantDetailsModel GetMerchantDetails();
 
-        void SetMerchantDetails(MerchantDetailsModel value, MemoryCacheEntryOptions options = default);
+        void SetMerchantDetails(MerchantDetailsModel value, Int32 timeout = 60);
 
         Decimal GetMerchantBalance();
 
-        void SetMerchantBalance(Decimal value, MemoryCacheEntryOptions options = default);
+        void SetMerchantBalance(Decimal value);
     }
 
     [ExcludeFromCodeCoverage]
@@ -112,9 +111,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
         }
 
         public void SetConfigHostUrl(String value,
-                                     MemoryCacheEntryOptions options = default)
+                                     Int32 timeout = 60)
         {
-            this.Set("ConfigHostUrl", value, options);
+            this.Set("ConfigHostUrl", value, timeout);
         }
 
         public Boolean GetUseTrainingMode()
@@ -123,39 +122,39 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
         }
 
         public void SetAccessToken(TokenResponseModel value,
-                                   MemoryCacheEntryOptions options = default)
+                                   MemoryCacheEntryOptions cacheEntryOptions = null)
         {
-            this.Set("AccessToken", value, options);
+            this.Set("AccessToken", value, cacheEntryOptions);
         }
 
         public void SetConfiguration(Configuration value,
-                                     MemoryCacheEntryOptions options = default)
+                                     Int32 timeout = 60)
         {
-            this.Set("Configuration", value, options);
+            this.Set("Configuration", value, timeout);
         }
 
         public void SetContractProducts(List<ContractProductModel> value,
-                                        MemoryCacheEntryOptions options = default)
+                                        Int32 timeout = 60)
         {
-            this.Set("ContractProducts", value, options);
+            this.Set("ContractProducts", value, timeout);
         }
 
         public void SetEstateId(Guid value,
-                                MemoryCacheEntryOptions options = default)
+                                Int32 timeout = 60)
         {
-            this.Set("EstateId", value, options);
+            this.Set("EstateId", value, timeout);
         }
 
         public void SetIsLoggedIn(Boolean value,
-                                  MemoryCacheEntryOptions options = default)
+                                  Int32 timeout = 60)
         {
-            this.Set("isLoggedIn", value, options);
+            this.Set("isLoggedIn", value, timeout);
         }
 
         public void SetMerchantId(Guid value,
-                                  MemoryCacheEntryOptions options = default)
+                                  Int32 timeout = 60)
         {
-            this.Set("MerchantId", value, options);
+            this.Set("MerchantId", value, timeout);
         }
 
         public MerchantDetailsModel GetMerchantDetails()
@@ -164,31 +163,47 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
         }
 
         public void SetMerchantDetails(MerchantDetailsModel value,
-                                       MemoryCacheEntryOptions options = default)
+                                       Int32 timeout = 60)
         {
-            this.Set("MerchantDetails", value, options);
+            this.Set("MerchantDetails", value, timeout);
         }
 
         public Decimal GetMerchantBalance() {
             return this.TryGetValue<Decimal>("MerchantBalance");
         }
 
-        public void SetMerchantBalance(Decimal value,
-                                       MemoryCacheEntryOptions options = default) {
-            this.Set("MerchantBalance", value, options);
+        public void SetMerchantBalance(Decimal value) {
+            this.Set("MerchantBalance", value, 60);
         }
 
         public void SetUseTrainingMode(Boolean value,
-                                       MemoryCacheEntryOptions options = default)
+                                       Int32 timeout = 60)
         {
-            this.Set("UseTrainingMode", value, options);
+            this.Set("UseTrainingMode", value, timeout);
         }
 
         private void Set<T>(String key,
                             T cache,
-                            MemoryCacheEntryOptions options)
+                            Int32 timeout)
         {
-            this.MemoryCache.Set(key, cache, options);
+            DateTime expirationTime = DateTime.Now.AddSeconds(timeout);
+            CancellationChangeToken expirationToken = new(new CancellationTokenSource(TimeSpan.FromSeconds(timeout)).Token);
+            MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
+                // Pin to cache.
+                .SetPriority(CacheItemPriority.NeverRemove)
+                // Set the actual expiration time
+                .SetAbsoluteExpiration(expirationTime)
+                // Force eviction to run
+                .AddExpirationToken(expirationToken);
+
+            this.MemoryCache.Set(key, cache, cacheEntryOptions);
+        }
+
+        private void Set<T>(String key,
+                            T cache,
+                            MemoryCacheEntryOptions cacheEntryOptions)
+        {
+            this.MemoryCache.Set(key, cache, cacheEntryOptions);
         }
 
         private T TryGetValue<T>(String Key)

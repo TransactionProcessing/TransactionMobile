@@ -48,17 +48,7 @@ public class MyAccountContactPageViewModel : ExtendedBaseViewModel
                 return;
             }
 
-            DateTime expirationTime = DateTime.Now.AddMinutes(60);
-            CancellationChangeToken expirationToken = new(new CancellationTokenSource(TimeSpan.FromMinutes(60)).Token);
-            MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
-                // Pin to cache.
-                .SetPriority(CacheItemPriority.NeverRemove)
-                // Set the actual expiration time
-                .SetAbsoluteExpiration(expirationTime)
-                // Force eviction to run
-                .AddExpirationToken(expirationToken);
-
-            this.ApplicationCache.SetMerchantDetails(merchantDetailsResult.Data, cacheEntryOptions);
+            this.ApplicationCache.SetMerchantDetails(merchantDetailsResult.Data, 3600);
             merchantDetails = this.ApplicationCache.GetMerchantDetails();
         }
 
