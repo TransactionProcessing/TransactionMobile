@@ -22,6 +22,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
         private readonly IApplicationUpdateLauncherService ApplicationUpdateLauncherService;
         private readonly IBalanceRefresher BalanceRefresher;
         private readonly IUpdateService UpdateService;
+        private readonly ISentryService SentryService;
 
         private String userName;
 
@@ -39,13 +40,15 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
                                   INavigationParameterService navigationParameterService,
                                   IUpdateService updateService,
                                   IApplicationUpdateLauncherService applicationUpdateLauncherService,
-                                  IBalanceRefresher balanceRefresher) : base(applicationCache,dialogService,navigationService, deviceService, navigationParameterService)
+                                  IBalanceRefresher balanceRefresher,
+                                  ISentryService sentryService) : base(applicationCache,dialogService,navigationService, deviceService, navigationParameterService)
         {
             this.ApplicationInfoService = applicationInfoService;
             this.ApplicationUpdateLauncherService = applicationUpdateLauncherService;
             this.BalanceRefresher = balanceRefresher;
             this.Mediator = mediator;
             this.UpdateService = updateService;
+            this.SentryService = sentryService;
         }
         
         #endregion
@@ -96,6 +99,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
             if (configurationResult.IsSuccess) {
                 // Cache the config object
                 this.ApplicationCache.SetConfiguration(configurationResult.Data);
+                // Initialise Sentry with the DSN from the configuration service
+                this.SentryService.InitializeSentry(configurationResult.Data.SentryDsn);
             }
 
             return configurationResult;

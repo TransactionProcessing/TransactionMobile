@@ -39,5 +39,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Models
 
         public Boolean ShowDebugMessages { get; set; }
         public Int32? LogMessageBatchSize { get; set; }
+        public String SentryDsn { get; set; }
     }
 }

@@ -35,6 +35,9 @@ public class LoginPageViewModelTests
     private readonly Mock<IUpdateService> UpdateService;
 
     private readonly Mock<IBalanceRefresher> BalanceRefresher;
+
+    private readonly Mock<ISentryService> SentryService;
+
     public LoginPageViewModelTests() {
         this.Mediator = new Mock<IMediator>();
         this.NavigationService = new Mock<INavigationService>();
@@ -46,13 +49,14 @@ public class LoginPageViewModelTests
         this.DialogService = new Mock<IDialogService>();
         this.UpdateService = new Mock<IUpdateService>();
         this.BalanceRefresher = new Mock<IBalanceRefresher>();
+        this.SentryService = new Mock<ISentryService>();
 
 
         this.ViewModel = new LoginPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object,
                                                 this.DeviceService.Object, this.ApplicationInfoService.Object,
                                                 this.DialogService.Object, this.NavigationParameterService.Object,
                                                 this.UpdateService.Object, this.ApplicationUpdateLauncherService.Object,
-                                                this.BalanceRefresher.Object);
+                                                this.BalanceRefresher.Object, this.SentryService.Object);
         Logger.Initialise(new Logging.NullLogger());
     }
     
@@ -280,6 +284,21 @@ public class LoginPageViewModelTests
     {
         this.ViewModel.BackButtonCommand.Execute(null);
         this.NavigationService.Verify(n => n.QuitApplication(), Times.Once);
+    }
+
+    [Fact]
+    public async Task LoginPageViewModel_LoginCommand_Execute_SentryInitialisedWithDsnFromConfiguration()
+    {
+        String sentryDsn = "https://key@sentry.io/123";
+        this.Mediator.Setup(m => m.Send(It.IsAny<LogonQueries.GetConfigurationQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Result.Success(new Configuration { SentryDsn = sentryDsn }));
+        this.Mediator.Setup(m => m.Send(It.IsAny<LogonCommands.GetTokenCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
+        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformLogonCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformLogonResponseModel));
+        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
+
+        await this.ViewModel.LogonCommand.ExecuteAsync(null);
+
+        this.SentryService.Verify(s => s.InitializeSentry(sentryDsn), Times.Once);
     }
     
     [Fact]

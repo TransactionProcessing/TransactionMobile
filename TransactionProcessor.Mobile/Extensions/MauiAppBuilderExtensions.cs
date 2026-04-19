@@ -178,6 +178,7 @@ namespace TransactionProcessor.Mobile.Extensions {
             builder.Services.AddSingleton<IApplicationUpdateLauncherService, ApplicationUpdateLauncherService>();
             builder.Services.AddSingleton<IApplicationThemeService, ApplicationThemeService>();
             builder.Services.AddSingleton<INavigationParameterService, NavigationParameterService>();
+            builder.Services.AddSingleton<ISentryService, SentryService>();
             return builder;
         }
 
