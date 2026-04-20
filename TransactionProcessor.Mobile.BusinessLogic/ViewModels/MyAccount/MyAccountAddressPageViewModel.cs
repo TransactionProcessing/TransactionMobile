@@ -1,6 +1,4 @@
 ﻿using MediatR;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Primitives;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
@@ -44,32 +42,15 @@ public class MyAccountAddressPageViewModel : ExtendedBaseViewModel
     #region Methods
 
     public async Task Initialise(CancellationToken cancellationToken) {
-        MerchantDetailsModel merchantDetails = this.ApplicationCache.GetMerchantDetails();
+        MerchantQueries.GetMerchantDetailsQuery query = new MerchantQueries.GetMerchantDetailsQuery();
 
-        if (merchantDetails == null) {
-            MerchantQueries.GetMerchantDetailsQuery query = new MerchantQueries.GetMerchantDetailsQuery();
-
-            Result<MerchantDetailsModel> merchantDetailsResult = await this.Mediator.Send(query, cancellationToken);
-            if (merchantDetailsResult.IsFailed) {
-                await this.DialogService.ShowWarningToast("Unable to load merchant details. Please try again later.", cancellationToken: cancellationToken);
-                return;
-            }
-
-            DateTime expirationTime = DateTime.Now.AddMinutes(60);
-            CancellationChangeToken expirationToken = new(new CancellationTokenSource(TimeSpan.FromMinutes(60)).Token);
-            MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
-                // Pin to cache.
-                .SetPriority(CacheItemPriority.NeverRemove)
-                // Set the actual expiration time
-                .SetAbsoluteExpiration(expirationTime)
-                // Force eviction to run
-                .AddExpirationToken(expirationToken);
-
-            this.ApplicationCache.SetMerchantDetails(merchantDetailsResult.Data, cacheEntryOptions);
-            merchantDetails = this.ApplicationCache.GetMerchantDetails();
+        Result<MerchantDetailsModel> merchantDetailsResult = await this.Mediator.Send(query, cancellationToken);
+        if (merchantDetailsResult.IsFailed) {
+            await this.DialogService.ShowWarningToast("Unable to load merchant details. Please try again later.", cancellationToken: cancellationToken);
+            return;
         }
 
-        this.Address = merchantDetails.Address;
+        this.Address = merchantDetailsResult.Data.Address;
     }
 
     #endregion

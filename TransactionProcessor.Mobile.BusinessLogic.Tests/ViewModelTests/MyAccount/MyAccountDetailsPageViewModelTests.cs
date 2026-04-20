@@ -1,5 +1,9 @@
-﻿using Moq;
+﻿using MediatR;
+using Moq;
 using Shouldly;
+using SimpleResults;
+using TransactionProcessor.Mobile.BusinessLogic.Models;
+using TransactionProcessor.Mobile.BusinessLogic.Requests;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 using TransactionProcessor.Mobile.BusinessLogic.ViewModels.MyAccount;
@@ -20,6 +24,8 @@ public class MyAccountDetailsPageViewModelTests
 
     private readonly Mock<IDeviceService> DeviceService;
 
+    private readonly Mock<IMediator> Mediator;
+
     public MyAccountDetailsPageViewModelTests()
     {
         this.NavigationService = new Mock<INavigationService>();
@@ -27,20 +33,23 @@ public class MyAccountDetailsPageViewModelTests
         this.ApplicationCache = new Mock<IApplicationCache>();
         this.DialogService = new Mock<IDialogService>();
         this.DeviceService = new Mock<IDeviceService>();
+        this.Mediator = new Mock<IMediator>();
         this.ViewModel = new MyAccountDetailsPageViewModel(this.NavigationService.Object,
                                                            this.ApplicationCache.Object,
                                                            this.DialogService.Object,
-                                                           this.DeviceService.Object, this.NavigationParameterService.Object);
+                                                           this.DeviceService.Object,
+                                                           this.NavigationParameterService.Object,
+                                                           this.Mediator.Object);
     }
 
     [Fact]
     public async Task MyAccountDetailsPageViewModel_Initialise_IsInitialised()
     {
-        this.ApplicationCache.Setup(a => a.GetMerchantDetails()).Returns(TestData.MerchantDetailsModel);
+        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
 
         await this.ViewModel.Initialise(CancellationToken.None);
 
-        this.ApplicationCache.Verify(a => a.GetMerchantDetails(), Times.Once);
+        this.Mediator.Verify(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
         this.ViewModel.Balance.ShouldBe(TestData.Balance);
         this.ViewModel.AvailableBalance.ShouldBe(TestData.AvailableBalance);
         this.ViewModel.MerchantName.ShouldBe(TestData.MerchantName);

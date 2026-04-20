@@ -1,6 +1,9 @@
 ﻿using MediatR;
 using Moq;
 using Shouldly;
+using SimpleResults;
+using TransactionProcessor.Mobile.BusinessLogic.Models;
+using TransactionProcessor.Mobile.BusinessLogic.Requests;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 using TransactionProcessor.Mobile.BusinessLogic.ViewModels.MyAccount;
@@ -40,11 +43,11 @@ public class MyAccountContactPageViewModelTests
     [Fact]
     public async Task MyAccountContactPageViewModel_Initialise_IsInitialised()
     {
-        this.ApplicationCache.Setup(a => a.GetMerchantDetails()).Returns(TestData.MerchantDetailsModel);
+        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
 
         await this.ViewModel.Initialise(CancellationToken.None);
 
-        this.ApplicationCache.Verify(a => a.GetMerchantDetails(), Times.Once);
+        this.Mediator.Verify(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
         this.ViewModel.Contact.ShouldNotBeNull();
         this.ViewModel.Contact.EmailAddress.ShouldBe(TestData.ContactEmailAddress);
         this.ViewModel.Contact.Name.ShouldBe(TestData.ContactName);

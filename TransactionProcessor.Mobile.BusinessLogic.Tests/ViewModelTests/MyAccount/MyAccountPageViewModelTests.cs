@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using Shouldly;
 using SimpleResults;
@@ -56,7 +55,6 @@ public class MyAccountPageViewModelTests
         this.ViewModel.MerchantName.ShouldBe(TestData.MerchantDetailsModel.MerchantName);
         this.ViewModel.LastLogin.ShouldBe(DateTime.Now, TimeSpan.FromSeconds(30));
         this.ViewModel.IsDarkThemeEnabled.ShouldBeTrue();
-        this.ApplicationCache.Verify(a => a.SetMerchantDetails(It.IsAny<MerchantDetailsModel>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Once);
     }
 
     [Fact]

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using SimpleResults;
+using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
@@ -32,23 +33,38 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
         public async Task<Result<TokenResponseModel>> Handle(LogonCommands.GetTokenCommand request,
                                                              CancellationToken cancellationToken) {
 
-            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+            Configuration configuration = this.ApplicationCache.GetConfiguration();
+            if (configuration == null) {
+                return Result.Failure("App configuration is not available. Please restart the application and try again.");
+            }
 
+            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
             IAuthenticationService authenticationService = this.AuthenticationServiceResolver(useTrainingMode);
 
-            Result<TokenResponseModel> tokenResult = await authenticationService.GetToken(request.UserName, request.Password, cancellationToken);
-
-            return tokenResult;
+            return await authenticationService.GetToken(request.UserName, request.Password, configuration.ClientId, configuration.ClientSecret, cancellationToken);
         }
 
         public async Task<Result<Configuration>> Handle(LogonQueries.GetConfigurationQuery request,
                                                         CancellationToken cancellationToken) {
 
-            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+            Configuration cachedConfiguration = this.ApplicationCache.GetConfiguration();
+            if (cachedConfiguration != null) {
+                return Result.Success(cachedConfiguration);
+            }
 
+            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
             IConfigurationService configurationService = this.ConfigurationServiceResolver(useTrainingMode);
 
-            return await configurationService.GetConfiguration(request.DeviceIdentifier, cancellationToken);
+            Result<Configuration> configurationResult = await configurationService.GetConfiguration(request.DeviceIdentifier, cancellationToken);
+
+            if (configurationResult.IsSuccess) {
+                // Configuration TTL is set longer than the token lifetime so that the
+                // AccessToken eviction callback can always read ClientId/ClientSecret
+                // from the config when it fires a token refresh.
+                this.ApplicationCache.SetConfiguration(configurationResult.Data, CacheEntryOptionsFactory.WithAbsoluteExpiry(120));
+            }
+
+            return configurationResult;
         }
 
         #endregion
@@ -56,13 +72,15 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
         public async Task<Result<TokenResponseModel>> Handle(LogonCommands.RefreshTokenCommand request,
                                                              CancellationToken cancellationToken)
         {
-            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+            Configuration configuration = this.ApplicationCache.GetConfiguration();
+            if (configuration == null) {
+                return Result.Failure("App configuration is not available. Token refresh failed.");
+            }
 
+            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
             IAuthenticationService authenticationService = this.AuthenticationServiceResolver(useTrainingMode);
 
-            Result<TokenResponseModel> tokenResult = await authenticationService.RefreshAccessToken(request.RefreshToken, cancellationToken);
-
-            return tokenResult;
+            return await authenticationService.RefreshAccessToken(request.RefreshToken, configuration.ClientId, configuration.ClientSecret, cancellationToken);
         }
     }
 }
