@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 using Shared.Results;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Common;

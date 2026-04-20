@@ -35,7 +35,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
 
             Configuration configuration = this.ApplicationCache.GetConfiguration();
             if (configuration == null) {
-                return Result.Failure<TokenResponseModel>("App configuration is not available. Please restart the application and try again.");
+                return Result.Failure("App configuration is not available. Please restart the application and try again.");
             }
 
             Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
@@ -74,7 +74,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
         {
             Configuration configuration = this.ApplicationCache.GetConfiguration();
             if (configuration == null) {
-                return Result.Failure<TokenResponseModel>("App configuration is not available. Token refresh failed.");
+                return Result.Failure("App configuration is not available. Token refresh failed.");
             }
 
             Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();

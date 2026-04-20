@@ -15,14 +15,14 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
     public class BalanceRefresher : IBalanceRefresher
     {
         private readonly IApplicationCache ApplicationCache;
-        private readonly IMerchantService MerchantService;
+        private readonly Func<Boolean, IMerchantService> MerchantServiceResolver;
         private CancellationTokenSource? _cts;
 
         public event Action<Decimal> BalanceChanged;
 
-        public BalanceRefresher(IApplicationCache applicationCache, IMerchantService merchantService) {
+        public BalanceRefresher(IApplicationCache applicationCache, Func<Boolean, IMerchantService> merchantServiceResolver) {
             this.ApplicationCache = applicationCache;
-            this.MerchantService = merchantService;
+            this.MerchantServiceResolver = merchantServiceResolver;
         }
 
         public void StartRefreshing()
@@ -65,9 +65,12 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
         private async Task<decimal> GetBalanceFromApi()
         {
-            var result = await this.MerchantService.GetMerchantBalance(CancellationToken.None);
-            if (result.IsSuccess)
-            {
+            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+            IMerchantService merchantService = this.MerchantServiceResolver(useTrainingMode);
+
+            var result = await merchantService.GetMerchantBalance(CancellationToken.None);
+            if (result.IsSuccess) {
+                Logger.LogInformation($"Refreshed merchant balance: {result.Data}");
                 return result.Data;
             }
 
