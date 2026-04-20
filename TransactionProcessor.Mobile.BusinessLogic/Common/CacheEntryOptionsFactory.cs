@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Primitives;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.Common;
 
@@ -17,12 +16,9 @@ internal static class CacheEntryOptionsFactory
     internal static MemoryCacheEntryOptions WithAbsoluteExpiry(int minutes)
     {
         DateTimeOffset expirationTime = DateTimeOffset.UtcNow.AddMinutes(minutes);
-        CancellationChangeToken expirationToken =
-            new CancellationChangeToken(new CancellationTokenSource(TimeSpan.FromMinutes(minutes)).Token);
 
         return new MemoryCacheEntryOptions()
             .SetPriority(CacheItemPriority.NeverRemove)
-            .SetAbsoluteExpiration(expirationTime)
-            .AddExpirationToken(expirationToken);
+            .SetAbsoluteExpiration(expirationTime);
     }
 }
