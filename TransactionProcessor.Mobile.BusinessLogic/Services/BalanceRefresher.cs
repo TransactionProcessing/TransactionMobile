@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.Services
@@ -25,7 +27,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
         public void StartRefreshing()
         {
             _cts = new CancellationTokenSource();
-            _ = RefreshLoopAsync(_cts.Token);
+            // Run the refresh loop on a background thread so it does not run on the main UI thread.
+            _ = Task.Run(() => RefreshLoopAsync(_cts.Token));
         }
 
         public void StopRefreshing()
@@ -40,11 +43,11 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
             try
             {
                 // Do the first refresh
-                await RefreshBalanceAsync();
+                await RefreshBalanceAsync(token).ConfigureAwait(false);
 
-                while (await timer.WaitForNextTickAsync(token))
+                while (await timer.WaitForNextTickAsync(token).ConfigureAwait(false))
                 {
-                    await RefreshBalanceAsync();
+                    await RefreshBalanceAsync(token).ConfigureAwait(false);
                 }
             }
             catch (OperationCanceledException)
@@ -52,16 +55,17 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
             }
         }
 
-        private async Task RefreshBalanceAsync()
+        private async Task RefreshBalanceAsync(CancellationToken token)
         {
-            decimal balance = await GetBalanceFromApi();
+            decimal balance = await GetBalanceFromApi(token).ConfigureAwait(false);
 
+            // Setting the cache is lightweight; do on background thread to avoid UI thread work.
             this.ApplicationCache.SetMerchantBalance(balance);
         }
 
-        private async Task<decimal> GetBalanceFromApi()
+        private async Task<decimal> GetBalanceFromApi(CancellationToken token)
         {
-            var result = await this.MerchantService.GetMerchantBalance(CancellationToken.None);
+            var result = await this.MerchantService.GetMerchantBalance(token).ConfigureAwait(false);
             if (result.IsSuccess)
             {
                 return result.Data;

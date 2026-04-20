@@ -8,6 +8,7 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 using TransactionProcessor.Mobile.Extensions;
 using TransactionProcessor.Mobile.UIServices;
 using Microsoft.Extensions.DependencyInjection;
+//using Sentry;
 
 namespace TransactionProcessor.Mobile
 {
@@ -25,6 +26,7 @@ namespace TransactionProcessor.Mobile
                 .ConfigureAppServices()
                 .ConfigureUIServices()
                 .ConfigureDatabase()
+                //.ConfigureSentry()
                 .ConfigureFonts(fonts => {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
             }).Services.AddTransient<IDeviceService, DeviceService>()
@@ -33,7 +35,7 @@ namespace TransactionProcessor.Mobile
             builder.Logging.SetMinimumLevel(LogLevel.Trace);//.AddConsole();
             
             Container = builder.Build();
-
+            
             Logger.Initialise(new ConsoleLogger());
 
             return Container;
