@@ -14,9 +14,13 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
         Task<Result<TokenResponseModel>> GetToken(String username,
                                                   String password,
+                                                  String clientId,
+                                                  String clientSecret,
                                                   CancellationToken cancellationToken);
 
         Task<Result<TokenResponseModel>> RefreshAccessToken(String refreshToken,
+                                                            String clientId,
+                                                            String clientSecret,
                                                             CancellationToken cancellationToken);
 
         #endregion
@@ -26,34 +30,24 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
     {
         private readonly ISecurityServiceClient SecurityServiceClient;
 
-        private readonly IApplicationCache ApplicationCache;
-
-        public AuthenticationService(ISecurityServiceClient securityServiceClient, IApplicationCache applicationCache)
+        public AuthenticationService(ISecurityServiceClient securityServiceClient)
         {
             this.SecurityServiceClient = securityServiceClient;
-            this.ApplicationCache = applicationCache;
         }
 
         public async Task<Result<TokenResponseModel>> GetToken(String username,
                                                                String password,
+                                                               String clientId,
+                                                               String clientSecret,
                                                                CancellationToken cancellationToken)
         {
             try
             {
-                Configuration configuration = this.ApplicationCache.GetConfiguration();
-
-                if (configuration == null) {
-                    return ResultExtensions.FailureExtended("App configuration is not available. Please restart the application and try again.");
-                }
-
-                //username = "merchantuser@v28emulatormerchant.co.uk";
-                //password = "123456";
-
                 Logger.LogInformation($"About to request token for {username}");
-                Logger.LogDebug($"Token Request details UserName: {username} Password: ****** ClientId: {configuration.ClientId} ClientSecret: {configuration.ClientSecret}");
+                Logger.LogDebug($"Token Request details UserName: {username} Password: ****** ClientId: {clientId} ClientSecret: {clientSecret}");
                 
                 Result<TokenResponse> tokenResult =
-                    await this.SecurityServiceClient.GetToken(username, password, configuration.ClientId, configuration.ClientSecret, cancellationToken);
+                    await this.SecurityServiceClient.GetToken(username, password, clientId, clientSecret, cancellationToken);
 
                 if (tokenResult.IsFailed)
                 {
@@ -75,26 +69,19 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                 Logger.LogError($"Error getting Token", ex);
                 return ResultExtensions.FailureExtended("Error getting Token", ex);
             }
-
-            
         }
 
         public async Task<Result<TokenResponseModel>> RefreshAccessToken(String refreshToken,
+                                                                         String clientId,
+                                                                         String clientSecret,
                                                                          CancellationToken cancellationToken)
         {
-            Configuration configuration = this.ApplicationCache.GetConfiguration();
-
-            if (configuration == null) {
-                Logger.LogWarning("App configuration is not available during token refresh; refresh skipped.");
-                return ResultExtensions.FailureExtended("App configuration is not available. Token refresh failed.");
-            }
-
             try
             {
                 Logger.LogInformation($"About to request refresh token");
-                Logger.LogDebug($"Refresh Token Request details Token: {refreshToken} ClientId: {configuration.ClientId} ClientSecret: {configuration.ClientSecret}");
+                Logger.LogDebug($"Refresh Token Request details Token: {refreshToken} ClientId: {clientId} ClientSecret: {clientSecret}");
 
-                Result<TokenResponse> tokenResult = await this.SecurityServiceClient.GetToken(configuration.ClientId, configuration.ClientSecret, refreshToken, cancellationToken);
+                Result<TokenResponse> tokenResult = await this.SecurityServiceClient.GetToken(clientId, clientSecret, refreshToken, cancellationToken);
 
                 if (tokenResult.IsFailed)
                 {
@@ -105,11 +92,11 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                 Logger.LogDebug($"Token Response: [{JsonConvert.SerializeObject(tokenResult.Data.AccessToken)}]");
 
                 return Result.Success(new TokenResponseModel
-                                                             {
-                                                                 AccessToken = tokenResult.Data.AccessToken,
-                                                                 ExpiryInMinutes = tokenResult.Data.ExpiresIn,
-                                                                 RefreshToken = tokenResult.Data.RefreshToken
-                                                             });
+                                      {
+                                          AccessToken = tokenResult.Data.AccessToken,
+                                          ExpiryInMinutes = tokenResult.Data.ExpiresIn,
+                                          RefreshToken = tokenResult.Data.RefreshToken
+                                      });
             }
             catch (Exception ex)
             {

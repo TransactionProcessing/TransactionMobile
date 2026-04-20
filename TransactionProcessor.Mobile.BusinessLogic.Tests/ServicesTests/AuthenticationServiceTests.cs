@@ -12,26 +12,19 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
     public class AuthenticationServiceTests{
         private readonly IAuthenticationService AuthenticationService;
 
-        private readonly  Mock<ISecurityServiceClient> SecurityServiceClient;
+        private readonly Mock<ISecurityServiceClient> SecurityServiceClient;
 
-        private readonly Mock<IApplicationCache> ApplicationCache;
         public AuthenticationServiceTests(){
             Logger.Initialise(new NullLogger());
             this.SecurityServiceClient = new Mock<ISecurityServiceClient>();
-            this.ApplicationCache = new Mock<IApplicationCache>();
-            this.AuthenticationService = new AuthenticationService(this.SecurityServiceClient.Object,
-                                                                   this.ApplicationCache.Object);
-
-            // Standard cache mocking
-            this.ApplicationCache.Setup(a => a.GetConfiguration()).Returns(new Configuration());
-
+            this.AuthenticationService = new AuthenticationService(this.SecurityServiceClient.Object);
         }
 
         [Fact]
         public async Task AuthenticationService_GetToken_TokenReturned(){
             this.SecurityServiceClient.Setup(s => s.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(TokenResponse.Create(TestData.Token, TestData.RefreshToken, TestData.TokenExpiryInMinutes));
             
-            Result<TokenResponseModel> token = await this.AuthenticationService.GetToken(TestData.UserName, TestData.Password, CancellationToken.None);
+            Result<TokenResponseModel> token = await this.AuthenticationService.GetToken(TestData.UserName, TestData.Password, TestData.ClientId, TestData.ClientSecret, CancellationToken.None);
             token.IsSuccess.ShouldBeTrue();
             token.Data.AccessToken.ShouldBe(TestData.Token);
             token.Data.RefreshToken.ShouldBe(TestData.RefreshToken);
@@ -43,7 +36,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
         {
             this.SecurityServiceClient.Setup(s => s.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Failure());
 
-            Result<TokenResponseModel> token = await this.AuthenticationService.GetToken(TestData.UserName, TestData.Password, CancellationToken.None);
+            Result<TokenResponseModel> token = await this.AuthenticationService.GetToken(TestData.UserName, TestData.Password, TestData.ClientId, TestData.ClientSecret, CancellationToken.None);
             token.IsFailed.ShouldBeTrue();
         }
 
@@ -52,7 +45,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
         {
             this.SecurityServiceClient.Setup(s => s.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ThrowsAsync(new Exception());
             
-            Result<TokenResponseModel> token = await this.AuthenticationService.GetToken(TestData.UserName, TestData.Password, CancellationToken.None);
+            Result<TokenResponseModel> token = await this.AuthenticationService.GetToken(TestData.UserName, TestData.Password, TestData.ClientId, TestData.ClientSecret, CancellationToken.None);
             token.IsFailed.ShouldBeTrue();
         }
 
@@ -61,7 +54,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
         {
             this.SecurityServiceClient.Setup(s => s.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(TokenResponse.Create(TestData.Token, TestData.RefreshToken, TestData.TokenExpiryInMinutes));
             
-            Result<TokenResponseModel> token = await this.AuthenticationService.RefreshAccessToken(TestData.RefreshToken, CancellationToken.None);
+            Result<TokenResponseModel> token = await this.AuthenticationService.RefreshAccessToken(TestData.RefreshToken, TestData.ClientId, TestData.ClientSecret, CancellationToken.None);
             token.IsSuccess.ShouldBeTrue();
             token.Data.AccessToken.ShouldBe(TestData.Token);
             token.Data.RefreshToken.ShouldBe(TestData.RefreshToken);
@@ -73,7 +66,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
         {
             this.SecurityServiceClient.Setup(s => s.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Failure());
 
-            Result<TokenResponseModel> token = await this.AuthenticationService.RefreshAccessToken(TestData.RefreshToken, CancellationToken.None);
+            Result<TokenResponseModel> token = await this.AuthenticationService.RefreshAccessToken(TestData.RefreshToken, TestData.ClientId, TestData.ClientSecret, CancellationToken.None);
 
             token.IsFailed.ShouldBeTrue();
         }
@@ -83,30 +76,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
         {
             this.SecurityServiceClient.Setup(s => s.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ThrowsAsync(new Exception());
             
-            Result<TokenResponseModel> token = await this.AuthenticationService.RefreshAccessToken(TestData.RefreshToken, CancellationToken.None);
+            Result<TokenResponseModel> token = await this.AuthenticationService.RefreshAccessToken(TestData.RefreshToken, TestData.ClientId, TestData.ClientSecret, CancellationToken.None);
             
             token.IsFailed.ShouldBeTrue();
-        }
-        [Fact]
-        public async Task AuthenticationService_GetToken_ConfigurationNotCached_FailureReturned()
-        {
-            this.ApplicationCache.Setup(a => a.GetConfiguration()).Returns((Configuration)null);
-
-            Result<TokenResponseModel> token = await this.AuthenticationService.GetToken(TestData.UserName, TestData.Password, CancellationToken.None);
-
-            token.IsFailed.ShouldBeTrue();
-            this.SecurityServiceClient.Verify(s => s.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>()), Times.Never);
-        }
-
-        [Fact]
-        public async Task AuthenticationService_RefreshAccessToken_ConfigurationNotCached_FailureReturned()
-        {
-            this.ApplicationCache.Setup(a => a.GetConfiguration()).Returns((Configuration)null);
-
-            Result<TokenResponseModel> token = await this.AuthenticationService.RefreshAccessToken(TestData.RefreshToken, CancellationToken.None);
-
-            token.IsFailed.ShouldBeTrue();
-            this.SecurityServiceClient.Verify(s => s.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>()), Times.Never);
         }
     }
 }

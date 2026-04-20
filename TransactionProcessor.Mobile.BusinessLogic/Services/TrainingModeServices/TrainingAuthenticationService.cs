@@ -9,6 +9,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services.TrainingModeService
     {
         public async Task<Result<TokenResponseModel>> GetToken(String username,
                                                                String password,
+                                                               String clientId,
+                                                               String clientSecret,
                                                                CancellationToken cancellationToken) {
             return Result.Success(new TokenResponseModel {
                                                              AccessToken = "Token",
@@ -18,6 +20,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services.TrainingModeService
         }
 
         public async Task<Result<TokenResponseModel>> RefreshAccessToken(String refreshToken,
+                                                                         String clientId,
+                                                                         String clientSecret,
                                                                          CancellationToken cancellationToken) {
             return Result.Success(new TokenResponseModel
                                   {

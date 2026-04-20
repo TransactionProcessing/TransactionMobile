@@ -22,6 +22,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests
 
         public static String RefreshToken = "RefreshToken";
         public static Int32 TokenExpiryInMinutes = 5;
+        public static String ClientId = "clientId";
+        public static String ClientSecret = "clientSecret";
         public static Guid EstateId = Guid.Parse("21D339F4-C97F-4C30-A212-11CA01E2D508");
         public static Guid MerchantId = Guid.Parse("E8B4B839-434A-43A2-B373-D8813F63F615");
 

@@ -33,13 +33,15 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
         public async Task<Result<TokenResponseModel>> Handle(LogonCommands.GetTokenCommand request,
                                                              CancellationToken cancellationToken) {
 
-            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+            Configuration configuration = this.ApplicationCache.GetConfiguration();
+            if (configuration == null) {
+                return Result.Failure<TokenResponseModel>("App configuration is not available. Please restart the application and try again.");
+            }
 
+            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
             IAuthenticationService authenticationService = this.AuthenticationServiceResolver(useTrainingMode);
 
-            Result<TokenResponseModel> tokenResult = await authenticationService.GetToken(request.UserName, request.Password, cancellationToken);
-
-            return tokenResult;
+            return await authenticationService.GetToken(request.UserName, request.Password, configuration.ClientId, configuration.ClientSecret, cancellationToken);
         }
 
         public async Task<Result<Configuration>> Handle(LogonQueries.GetConfigurationQuery request,
@@ -70,13 +72,15 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
         public async Task<Result<TokenResponseModel>> Handle(LogonCommands.RefreshTokenCommand request,
                                                              CancellationToken cancellationToken)
         {
-            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+            Configuration configuration = this.ApplicationCache.GetConfiguration();
+            if (configuration == null) {
+                return Result.Failure<TokenResponseModel>("App configuration is not available. Token refresh failed.");
+            }
 
+            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
             IAuthenticationService authenticationService = this.AuthenticationServiceResolver(useTrainingMode);
 
-            Result<TokenResponseModel> tokenResult = await authenticationService.RefreshAccessToken(request.RefreshToken, cancellationToken);
-
-            return tokenResult;
+            return await authenticationService.RefreshAccessToken(request.RefreshToken, configuration.ClientId, configuration.ClientSecret, cancellationToken);
         }
     }
 }
