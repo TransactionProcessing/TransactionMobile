@@ -1,8 +1,7 @@
 ﻿using MediatR;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Primitives;
 using Shared.Results;
 using SimpleResults;
+using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
@@ -128,12 +127,6 @@ public class MerchantRequestHandler : IRequestHandler<MerchantQueries.GetContrac
 
     }
 
-    private static MemoryCacheEntryOptions BuildCacheEntryOptions() {
-        DateTime expirationTime = DateTime.Now.AddMinutes(60);
-        CancellationChangeToken expirationToken = new CancellationChangeToken(new CancellationTokenSource(TimeSpan.FromMinutes(60)).Token);
-        return new MemoryCacheEntryOptions()
-            .SetPriority(CacheItemPriority.NeverRemove)
-            .SetAbsoluteExpiration(expirationTime)
-            .AddExpirationToken(expirationToken);
-    }
+    private static MemoryCacheEntryOptions BuildCacheEntryOptions() =>
+        CacheEntryOptionsFactory.WithAbsoluteExpiry(60);
 }

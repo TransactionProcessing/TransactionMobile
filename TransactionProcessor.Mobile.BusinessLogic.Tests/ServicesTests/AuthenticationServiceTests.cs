@@ -87,5 +87,26 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
             
             token.IsFailed.ShouldBeTrue();
         }
+        [Fact]
+        public async Task AuthenticationService_GetToken_ConfigurationNotCached_FailureReturned()
+        {
+            this.ApplicationCache.Setup(a => a.GetConfiguration()).Returns((Configuration)null);
+
+            Result<TokenResponseModel> token = await this.AuthenticationService.GetToken(TestData.UserName, TestData.Password, CancellationToken.None);
+
+            token.IsFailed.ShouldBeTrue();
+            this.SecurityServiceClient.Verify(s => s.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task AuthenticationService_RefreshAccessToken_ConfigurationNotCached_FailureReturned()
+        {
+            this.ApplicationCache.Setup(a => a.GetConfiguration()).Returns((Configuration)null);
+
+            Result<TokenResponseModel> token = await this.AuthenticationService.RefreshAccessToken(TestData.RefreshToken, CancellationToken.None);
+
+            token.IsFailed.ShouldBeTrue();
+            this.SecurityServiceClient.Verify(s => s.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
     }
 }

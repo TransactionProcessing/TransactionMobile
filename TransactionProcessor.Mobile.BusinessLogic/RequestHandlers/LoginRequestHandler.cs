@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Primitives;
 using SimpleResults;
+using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
@@ -57,13 +56,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
             Result<Configuration> configurationResult = await configurationService.GetConfiguration(request.DeviceIdentifier, cancellationToken);
 
             if (configurationResult.IsSuccess) {
-                DateTime expirationTime = DateTime.Now.AddMinutes(60);
-                CancellationChangeToken expirationToken = new CancellationChangeToken(new CancellationTokenSource(TimeSpan.FromMinutes(60)).Token);
-                MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetPriority(CacheItemPriority.NeverRemove)
-                    .SetAbsoluteExpiration(expirationTime)
-                    .AddExpirationToken(expirationToken);
-                this.ApplicationCache.SetConfiguration(configurationResult.Data, cacheEntryOptions);
+                // Configuration TTL is set longer than the token lifetime so that the
+                // AccessToken eviction callback can always read ClientId/ClientSecret
+                // from the config when it fires a token refresh.
+                this.ApplicationCache.SetConfiguration(configurationResult.Data, CacheEntryOptionsFactory.WithAbsoluteExpiry(120));
             }
 
             return configurationResult;

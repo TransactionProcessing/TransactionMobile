@@ -42,6 +42,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
             {
                 Configuration configuration = this.ApplicationCache.GetConfiguration();
 
+                if (configuration == null) {
+                    return ResultExtensions.FailureExtended("App configuration is not available. Please restart the application and try again.");
+                }
+
                 //username = "merchantuser@v28emulatormerchant.co.uk";
                 //password = "123456";
 
@@ -79,6 +83,12 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                                                                          CancellationToken cancellationToken)
         {
             Configuration configuration = this.ApplicationCache.GetConfiguration();
+
+            if (configuration == null) {
+                Logger.LogWarning("App configuration is not available during token refresh; refresh skipped.");
+                return ResultExtensions.FailureExtended("App configuration is not available. Token refresh failed.");
+            }
+
             try
             {
                 Logger.LogInformation($"About to request refresh token");
