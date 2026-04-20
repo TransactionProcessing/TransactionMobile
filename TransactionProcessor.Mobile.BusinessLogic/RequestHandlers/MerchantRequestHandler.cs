@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Primitives;
 using Shared.Results;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -43,6 +45,7 @@ public class MerchantRequestHandler : IRequestHandler<MerchantQueries.GetContrac
             Result<List<ContractProductModel>> getProductsResult = await merchantService.GetContractProducts(cancellationToken);
             if (getProductsResult.IsSuccess) {
                 products = getProductsResult.Data;
+                this.ApplicationCache.SetContractProducts(products, BuildCacheEntryOptions());
             }
             else {
                 return getProductsResult;
@@ -67,10 +70,19 @@ public class MerchantRequestHandler : IRequestHandler<MerchantQueries.GetContrac
 
     public async Task<Result<MerchantDetailsModel>> Handle(MerchantQueries.GetMerchantDetailsQuery request,
                                                    CancellationToken cancellationToken) {
+        MerchantDetailsModel cachedMerchantDetails = this.ApplicationCache.GetMerchantDetails();
+        if (cachedMerchantDetails != null) {
+            return Result.Success(cachedMerchantDetails);
+        }
+
         Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
         IMerchantService merchantService = this.MerchantServiceResolver(useTrainingMode);
 
         Result<MerchantDetailsModel> merchantDetails = await merchantService.GetMerchantDetails(cancellationToken);
+
+        if (merchantDetails.IsSuccess) {
+            this.ApplicationCache.SetMerchantDetails(merchantDetails.Data, BuildCacheEntryOptions());
+        }
 
         return merchantDetails;
     }
@@ -92,6 +104,7 @@ public class MerchantRequestHandler : IRequestHandler<MerchantQueries.GetContrac
             }
 
             products = getProductsResult.Data;
+            this.ApplicationCache.SetContractProducts(products, BuildCacheEntryOptions());
         }
 
         if (request.ProductType.HasValue)
@@ -113,5 +126,14 @@ public class MerchantRequestHandler : IRequestHandler<MerchantQueries.GetContrac
 
         return Result.Success(operators);
 
+    }
+
+    private static MemoryCacheEntryOptions BuildCacheEntryOptions() {
+        DateTime expirationTime = DateTime.Now.AddMinutes(60);
+        CancellationChangeToken expirationToken = new CancellationChangeToken(new CancellationTokenSource(TimeSpan.FromMinutes(60)).Token);
+        return new MemoryCacheEntryOptions()
+            .SetPriority(CacheItemPriority.NeverRemove)
+            .SetAbsoluteExpiration(expirationTime)
+            .AddExpirationToken(expirationToken);
     }
 }

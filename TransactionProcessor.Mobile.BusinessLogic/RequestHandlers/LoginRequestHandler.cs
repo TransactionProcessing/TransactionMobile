@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Primitives;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
@@ -44,11 +46,27 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
         public async Task<Result<Configuration>> Handle(LogonQueries.GetConfigurationQuery request,
                                                         CancellationToken cancellationToken) {
 
-            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+            Configuration cachedConfiguration = this.ApplicationCache.GetConfiguration();
+            if (cachedConfiguration != null) {
+                return Result.Success(cachedConfiguration);
+            }
 
+            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
             IConfigurationService configurationService = this.ConfigurationServiceResolver(useTrainingMode);
 
-            return await configurationService.GetConfiguration(request.DeviceIdentifier, cancellationToken);
+            Result<Configuration> configurationResult = await configurationService.GetConfiguration(request.DeviceIdentifier, cancellationToken);
+
+            if (configurationResult.IsSuccess) {
+                DateTime expirationTime = DateTime.Now.AddMinutes(60);
+                CancellationChangeToken expirationToken = new CancellationChangeToken(new CancellationTokenSource(TimeSpan.FromMinutes(60)).Token);
+                MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetPriority(CacheItemPriority.NeverRemove)
+                    .SetAbsoluteExpiration(expirationTime)
+                    .AddExpirationToken(expirationToken);
+                this.ApplicationCache.SetConfiguration(configurationResult.Data, cacheEntryOptions);
+            }
+
+            return configurationResult;
         }
 
         #endregion

@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Moq;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -77,9 +78,9 @@ public class LoginRequestHandlerTests
     }
 
     [Fact]
-    public async Task LoginRequestHandler_Handle_GetConfigurationRequest_IsHandled()
+    public async Task LoginRequestHandler_Handle_GetConfigurationRequest_CacheMiss_ServiceIsCalled_ConfigIsCached()
     {
-        this.AuthenticationService.Setup(a => a.GetToken(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
+        this.ApplicationCache.Setup(a => a.GetConfiguration()).Returns((Configuration)null);
         this.ConfigurationService.Setup(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new Configuration()));
 
         LogonQueries.GetConfigurationQuery request = new LogonQueries.GetConfigurationQuery(TestData.DeviceIdentifier);
@@ -88,5 +89,22 @@ public class LoginRequestHandlerTests
 
         result.IsSuccess.ShouldBeTrue();
         result.Data.ShouldNotBeNull();
+        this.ConfigurationService.Verify(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.ApplicationCache.Verify(a => a.SetConfiguration(It.IsAny<Configuration>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task LoginRequestHandler_Handle_GetConfigurationRequest_CacheHit_ServiceIsNotCalled()
+    {
+        this.ApplicationCache.Setup(a => a.GetConfiguration()).Returns(new Configuration());
+
+        LogonQueries.GetConfigurationQuery request = new LogonQueries.GetConfigurationQuery(TestData.DeviceIdentifier);
+
+        Result<Configuration> result = await this.LoginRequestHandler.Handle(request, CancellationToken.None);
+
+        result.IsSuccess.ShouldBeTrue();
+        result.Data.ShouldNotBeNull();
+        this.ConfigurationService.Verify(c => c.GetConfiguration(It.IsAny<String>(), It.IsAny<CancellationToken>()), Times.Never);
+        this.ApplicationCache.Verify(a => a.SetConfiguration(It.IsAny<Configuration>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Never);
     }
 }

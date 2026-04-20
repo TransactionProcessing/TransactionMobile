@@ -97,8 +97,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
             Result<Configuration> configurationResult = await this.Mediator.Send(getConfigurationRequest);
 
             if (configurationResult.IsSuccess) {
-                // Cache the config object
-                this.ApplicationCache.SetConfiguration(configurationResult.Data);
                 // Initialise Sentry with the DSN from the configuration service
                 this.SentryService.InitializeSentry(configurationResult.Data.SentryDsn);
             }
@@ -135,28 +133,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
         private async Task<Result<List<ContractProductModel>>> GetMerchantContractProducts() {
             // Get Contracts
             MerchantQueries.GetContractProductsQuery getContractProductsRequest = new MerchantQueries.GetContractProductsQuery();
-            Result<List<ContractProductModel>> productsResult = await this.Mediator.Send(getContractProductsRequest);
-
-            if (productsResult.IsSuccess) {
-                this.CacheContractData(productsResult.Data);
-            }
-            
-            return productsResult;
-        }
-
-        private void CacheContractData(List<ContractProductModel> contractProductModels)
-        {
-            DateTime expirationTime = DateTime.Now.AddMinutes(60);
-            CancellationChangeToken expirationToken = new CancellationChangeToken(new CancellationTokenSource(TimeSpan.FromMinutes(60)).Token);
-            MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
-                                                        // Pin to cache.
-                                                        .SetPriority(CacheItemPriority.NeverRemove)
-                                                        // Set the actual expiration time
-                                                        .SetAbsoluteExpiration(expirationTime)
-                                                        // Force eviction to run
-                                                        .AddExpirationToken(expirationToken);
-
-            this.ApplicationCache.SetContractProducts(contractProductModels, cacheEntryOptions);
+            return await this.Mediator.Send(getContractProductsRequest);
         }
         
         private async Task<bool> CheckForUpdates(Configuration configuration) {
