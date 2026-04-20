@@ -62,13 +62,11 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
         List<ContractProductModel> models = new();
 
         TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
-        Guid estateId = this.ApplicationCache.GetEstateId();
-        Guid merchantId = this.ApplicationCache.GetMerchantId();
 
         String requestUri = this.BuildRequestUrl($"/api/merchants/contracts?application_version={this.ApplicationInfoService.VersionString}");
 
         Logger.LogInformation("About to request merchant contracts");
-        Logger.LogDebug($"Merchant Contract Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
+        Logger.LogDebug($"Merchant Contract Request details: Access Token {accessToken.AccessToken}");
 
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUri);
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
@@ -115,11 +113,9 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
     public async Task<Result<Decimal>> GetMerchantBalance(CancellationToken cancellationToken) {
         try {
             TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
-            Guid estateId = this.ApplicationCache.GetEstateId();
-            Guid merchantId = this.ApplicationCache.GetMerchantId();
             
             Logger.LogInformation("About to request merchant balance");
-            Logger.LogDebug($"Merchant Balance Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
+            Logger.LogDebug($"Merchant Balance Request details: Access Token {accessToken.AccessToken}");
 
             //MerchantBalanceResponse merchantBalance = new MerchantBalanceResponse {
             //                                                                          AvailableBalance = 0,
@@ -140,14 +136,11 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
 
     public async Task<Result<MerchantDetailsModel>> GetMerchantDetails(CancellationToken cancellationToken) {
         TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
-        Guid estateId = this.ApplicationCache.GetEstateId();
-        Guid merchantId = this.ApplicationCache.GetMerchantId();
-
 
         String requestUri = this.BuildRequestUrl($"/api/merchants?application_version={this.ApplicationInfoService.VersionString}");
 
         Logger.LogInformation("About to request merchant details");
-        Logger.LogDebug($"Merchant Details Request details:  Estate Id {estateId} Merchant Id {merchantId} Access Token {accessToken.AccessToken}");
+        Logger.LogDebug($"Merchant Details Request details: Access Token {accessToken.AccessToken}");
 
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUri);
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
@@ -170,6 +163,8 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
         Logger.LogDebug($"Merchant Details Response: [{JsonConvert.SerializeObject(responseData)}]");
 
         MerchantDetailsModel model = new MerchantDetailsModel {
+                                                                  EstateId = responseData.EstateId,
+                                                                  MerchantId = responseData.MerchantId,
                                                                   MerchantName = responseData.MerchantName,
                                                                   NextStatementDate = responseData.NextStatementDate,
                                                                   LastStatementDate = new DateTime(),

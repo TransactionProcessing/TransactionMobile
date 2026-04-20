@@ -35,14 +35,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
         void SetAccessToken(TokenResponseModel value, MemoryCacheEntryOptions options = default);
 
-        Guid GetEstateId();
-
-        void SetEstateId(Guid value, MemoryCacheEntryOptions options = default);
-
-        Guid GetMerchantId();
-
-        void SetMerchantId(Guid value, MemoryCacheEntryOptions options = default);
-
         MerchantDetailsModel GetMerchantDetails();
 
         void SetMerchantDetails(MerchantDetailsModel value, MemoryCacheEntryOptions options = default);
@@ -87,19 +79,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
             return this.TryGetValue<List<ContractProductModel>>("ContractProducts");
         }
 
-        public Guid GetEstateId()
-        {
-            return this.TryGetValue<Guid>("EstateId");
-        }
-
         public Boolean GetIsLoggedIn()
         {
             return this.TryGetValue<Boolean>("isLoggedIn");
-        }
-
-        public Guid GetMerchantId()
-        {
-            return this.TryGetValue<Guid>("MerchantId");
         }
 
         public String GetConfigHostUrl()
@@ -140,22 +122,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
             this.Set("ContractProducts", value, options);
         }
 
-        public void SetEstateId(Guid value,
-                                MemoryCacheEntryOptions options = default)
-        {
-            this.Set("EstateId", value, options);
-        }
-
         public void SetIsLoggedIn(Boolean value,
                                   MemoryCacheEntryOptions options = default)
         {
             this.Set("isLoggedIn", value, options);
-        }
-
-        public void SetMerchantId(Guid value,
-                                  MemoryCacheEntryOptions options = default)
-        {
-            this.Set("MerchantId", value, options);
         }
 
         public MerchantDetailsModel GetMerchantDetails()

@@ -5,6 +5,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Models;
 [ExcludeFromCodeCoverage]
 public class MerchantDetailsModel
 {
+    public Guid EstateId { get; set; }
+    public Guid MerchantId { get; set; }
     public Decimal Balance { get; set; }
     public Decimal AvailableBalance { get; set; }
     public String MerchantName { get; set; }

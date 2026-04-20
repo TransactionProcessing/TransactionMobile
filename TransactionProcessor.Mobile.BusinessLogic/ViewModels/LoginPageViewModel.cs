@@ -119,15 +119,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
         private async Task<Result<PerformLogonResponseModel>> PerformLogonTransaction() {
             // Logon Transaction
             TransactionCommands.PerformLogonCommand command = new(DateTime.Now);
-            Result<PerformLogonResponseModel> logonResult = await this.Mediator.Send(command);
-
-            if (logonResult.IsSuccess) {
-                // Set the user information
-                this.ApplicationCache.SetEstateId(logonResult.Data.EstateId);
-                this.ApplicationCache.SetMerchantId(logonResult.Data.MerchantId);
-            }
-
-            return logonResult;
+            return await this.Mediator.Send(command);
         }
 
         private async Task<Result<List<ContractProductModel>>> GetMerchantContractProducts() {

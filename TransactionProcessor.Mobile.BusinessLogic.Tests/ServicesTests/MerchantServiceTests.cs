@@ -85,6 +85,8 @@ public class MerchantServiceTests{
     [Fact]
     public async Task MerchantService_GetMerchantDetails_MerchantDetailsReturned(){
         MerchantResponse merchantResponse = new MerchantResponse{
+                                                                    EstateId = TestData.EstateId,
+                                                                    MerchantId = TestData.MerchantId,
                                                                     MerchantName = TestData.MerchantName,
                                                                     NextStatementDate = TestData.NextStatementDate,
                                                                     SettlementSchedule = SettlementSchedule.Immediate,
@@ -114,6 +116,8 @@ public class MerchantServiceTests{
 
         Result<MerchantDetailsModel> merchantDetails = await this.MerchantService.GetMerchantDetails(CancellationToken.None);
         merchantDetails.IsSuccess.ShouldBeTrue();
+        merchantDetails.Data.EstateId.ShouldBe(merchantResponse.EstateId);
+        merchantDetails.Data.MerchantId.ShouldBe(merchantResponse.MerchantId);
         merchantDetails.Data.Address.AddressLine1.ShouldBe(merchantResponse.Addresses.First().AddressLine1);
         merchantDetails.Data.Address.AddressLine2.ShouldBe(merchantResponse.Addresses.First().AddressLine2);
         merchantDetails.Data.Address.AddressLine3.ShouldBe(merchantResponse.Addresses.First().AddressLine3);

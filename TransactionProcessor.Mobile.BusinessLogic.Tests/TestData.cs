@@ -268,6 +268,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests
             };
 
         public static MerchantDetailsModel MerchantDetailsModel => new MerchantDetailsModel {
+                                                                                                EstateId = TestData.EstateId,
+                                                                                                MerchantId = TestData.MerchantId,
                                                                                                 MerchantName = TestData.MerchantName,
                                                                                                 Contact = new ContactModel {
                                                                                                               Name = TestData.ContactName,
