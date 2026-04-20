@@ -30,6 +30,12 @@
                            TextColor="White"
                            Opacity="0.85"
                            HorizontalOptions="Center"/>
+                    <Label Text="{Binding Balance}"
+                           AutomationId="BalanceLabel"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
                 </VerticalStackLayout>
             </Grid>
 

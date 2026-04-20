@@ -21,6 +21,7 @@ public class HomePageViewModelTests
     private HomePageViewModel viewModel;
 
     private readonly Mock<IDeviceService> DeviceService;
+    private readonly Mock<IBalanceRefresher> balanceRefresher;
 
     public HomePageViewModelTests() {
          this.navigationService = new Mock<INavigationService>();
@@ -28,11 +29,14 @@ public class HomePageViewModelTests
         this.dialogService = new Mock<IDialogService>();
         this.DeviceService = new Mock<IDeviceService>();
         this.navigationParameterService = new Mock<INavigationParameterService>();
+        this.balanceRefresher = new Mock<IBalanceRefresher>();
+        this.balanceRefresher.SetupAdd(b => b.BalanceChanged += It.IsAny<Action<Decimal>>());
         this.viewModel = new HomePageViewModel(this.applicationCache.Object,
                                                             this.dialogService.Object,
                                                             this.DeviceService.Object,
                                                             this.navigationService.Object,
-                                                            this.navigationParameterService.Object);
+                                                            this.navigationParameterService.Object,
+                                                            this.balanceRefresher.Object);
         Logger.Initialise(new NullLogger());
     }
 
@@ -102,5 +106,34 @@ public class HomePageViewModelTests
         this.viewModel.GoToAdminCommand.Execute(null);
 
         this.navigationService.Verify(n => n.GoToAdminPage(), Times.Once);
+    }
+
+    [Fact]
+    public async Task HomePageViewModel_Initialise_Balance_SetsBalanceFromCache()
+    {
+        this.applicationCache.Setup(a => a.GetMerchantBalance()).Returns(123.45m);
+
+        await this.viewModel.Initialise(CancellationToken.None);
+
+        Assert.Equal("Balance: 123.45", this.viewModel.Balance);
+    }
+
+    [Fact]
+    public void HomePageViewModel_BalanceChanged_Updates_Balance()
+    {
+        Action<Decimal> capturedHandler = null;
+        this.balanceRefresher.SetupAdd(b => b.BalanceChanged += It.IsAny<Action<Decimal>>())
+                             .Callback<Action<Decimal>>(h => capturedHandler = h);
+
+        var vm = new HomePageViewModel(this.applicationCache.Object,
+                                       this.dialogService.Object,
+                                       this.DeviceService.Object,
+                                       this.navigationService.Object,
+                                       this.navigationParameterService.Object,
+                                       this.balanceRefresher.Object);
+
+        capturedHandler?.Invoke(200.00m);
+
+        Assert.Equal("Balance: 200.00", vm.Balance);
     }
 }

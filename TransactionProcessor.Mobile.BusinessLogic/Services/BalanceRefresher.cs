@@ -7,6 +7,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 {
     public interface IBalanceRefresher
     {
+        event Action<Decimal> BalanceChanged;
         void StartRefreshing();
         void StopRefreshing();
     }
@@ -16,6 +17,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
         private readonly IApplicationCache ApplicationCache;
         private readonly IMerchantService MerchantService;
         private CancellationTokenSource? _cts;
+
+        public event Action<Decimal> BalanceChanged;
 
         public BalanceRefresher(IApplicationCache applicationCache, IMerchantService merchantService) {
             this.ApplicationCache = applicationCache;
@@ -57,6 +60,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
             decimal balance = await GetBalanceFromApi();
 
             this.ApplicationCache.SetMerchantBalance(balance);
+            this.BalanceChanged?.Invoke(balance);
         }
 
         private async Task<decimal> GetBalanceFromApi()
