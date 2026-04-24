@@ -18,19 +18,23 @@ jobs:
         run: |
           TAG="${{ github.event.release.tag_name }}"
           if [[ ! "$TAG" =~ ^v?([0-9]{4})\.([0-9]{1,2})\.([0-9]{1,2})$ ]]; then
-            echo "Tag '$TAG' does not match expected format YYYY.M.D (e.g. 2026.4.9)" >&2
+            echo "Tag '$TAG' does not match expected format vYYYY.M.D (e.g. v2026.4.1)" >&2
             exit 1
           fi
           YEAR="${BASH_REMATCH[1]}"
           MONTH="${BASH_REMATCH[2]}"
           DAY="${BASH_REMATCH[3]}"
 
-          # SemVer display version: YYYY.M.D (3-part, consistent with Windows)
-          APP_DISPLAY_VERSION="$YEAR.$MONTH.$DAY"
+          # Compute two-digit year and day-of-year
+          YEAR_SHORT=$(( YEAR - 2000 ))
+          DATE_STR=$(printf '%04d-%02d-%02d' "$YEAR" "$MONTH" "$DAY")
+          DOY=$(date -d "$DATE_STR" +%-j)
 
-          # MAUI ApplicationVersion must be a monotonically increasing integer (e.g. 20260409)
-          # Uses the same formula as Windows so the version is consistent across platforms
-          APP_VERSION=$(( YEAR * 10000 + MONTH * 100 + DAY ))
+          # Resizetizer-safe SemVer display version: YY.M.DOY  (e.g. 26.4.91)
+          APP_DISPLAY_VERSION="$YEAR_SHORT.$MONTH.$DOY"
+
+          # Android versionCode: YYYY * 1000 + DOY  (monotonically increasing integer)
+          APP_VERSION=$(( YEAR * 1000 + DOY ))
 
           echo "APP_DISPLAY_VERSION=$APP_DISPLAY_VERSION" >> $GITHUB_ENV
           echo "APP_VERSION=$APP_VERSION"                 >> $GITHUB_ENV

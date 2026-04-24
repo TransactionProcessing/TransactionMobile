@@ -1,0 +1,190 @@
+name: Release Version Check
+
+# Validates the release-versioning logic used by release_windows.yml and
+# release_android.yml by:
+#   1. Running the same tag-parsing scripts and asserting expected outputs.
+#   2. Performing an unsigned trial `dotnet publish` so that Resizetizer and
+#      the MAUI build pipeline accept the computed version numbers end-to-end.
+#
+# Uses a fixed test tag (v2026.4.1, Apr 1 2026, DOY 91):
+#   APP_DISPLAY_VERSION = 26.4.91
+#   APP_MSIX_VERSION    = 2026.4.1.0
+#   APP_VERSION(Android)= 2026091
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  TEST_TAG: 'v2026.4.1'
+  EXPECTED_DISPLAY: '26.4.91'
+  EXPECTED_MSIX: '2026.4.1.0'
+  EXPECTED_ANDROID_VERSION: '2026091'
+
+jobs:
+  verify_version_windows:
+    name: Verify version parsing + trial publish (Windows)
+    runs-on: windows-2022
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Parse tag, assert computed versions, and export to env
+        shell: powershell
+        run: |
+          $testTag = '${{ env.TEST_TAG }}'
+          Write-Host "Test tag: $testTag"
+
+          if ($testTag -notmatch '^v?(\d{4})\.(\d{1,2})\.(\d{1,2})$') {
+            Write-Error "Tag '$testTag' does not match expected format vYYYY.M.D"
+            exit 1
+          }
+          $year  = [int]$Matches[1]
+          $month = [int]$Matches[2]
+          $day   = [int]$Matches[3]
+
+          $yearShort = $year - 2000
+          $date      = Get-Date -Year $year -Month $month -Day $day
+          $dayOfYear = $date.DayOfYear
+
+          $displayVersion = "$yearShort.$month.$dayOfYear"
+          $msixVersion    = "$year.$month.$day.0"
+
+          Write-Host "APP_DISPLAY_VERSION = $displayVersion"
+          Write-Host "APP_MSIX_VERSION    = $msixVersion"
+
+          $expectedDisplay = '${{ env.EXPECTED_DISPLAY }}'
+          $expectedMsix    = '${{ env.EXPECTED_MSIX }}'
+
+          if ($displayVersion -ne $expectedDisplay) {
+            Write-Error "APP_DISPLAY_VERSION mismatch: got '$displayVersion', expected '$expectedDisplay'"
+            exit 1
+          }
+          if ($msixVersion -ne $expectedMsix) {
+            Write-Error "APP_MSIX_VERSION mismatch: got '$msixVersion', expected '$expectedMsix'"
+            exit 1
+          }
+
+          Write-Host "All Windows version assertions passed."
+
+          # Export for subsequent steps
+          echo "APP_DISPLAY_VERSION=$displayVersion" >> $env:GITHUB_ENV
+          echo "APP_MSIX_VERSION=$msixVersion"       >> $env:GITHUB_ENV
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          vs-prerelease: true
+
+      - name: Setup .NET SDK (10.x)
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Install MAUI workloads
+        run: dotnet workload install maui
+
+      - name: Restore packages
+        run: dotnet restore TransactionProcessor.Mobile.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://api.nuget.org/v3/index.json
+
+      - name: Publish Windows App (unsigned trial)
+        run: |
+          dotnet publish TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj `
+            -c Release `
+            -f net10.0-windows10.0.19041.0 `
+            /p:ApplicationDisplayVersion=${{ env.APP_DISPLAY_VERSION }} `
+            /p:AppxPackageSigningEnabled=false
+
+  verify_version_android:
+    name: Verify version parsing + trial publish (Android)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Parse tag, assert computed versions, and export to env
+        shell: bash
+        run: |
+          TEST_TAG='${{ env.TEST_TAG }}'
+          echo "Test tag: $TEST_TAG"
+
+          if [[ ! "$TEST_TAG" =~ ^v?([0-9]{4})\.([0-9]{1,2})\.([0-9]{1,2})$ ]]; then
+            echo "Tag '$TEST_TAG' does not match expected format vYYYY.M.D" >&2
+            exit 1
+          fi
+          YEAR="${BASH_REMATCH[1]}"
+          MONTH="${BASH_REMATCH[2]}"
+          DAY="${BASH_REMATCH[3]}"
+
+          YEAR_SHORT=$(( YEAR - 2000 ))
+          DATE_STR=$(printf '%04d-%02d-%02d' "$YEAR" "$MONTH" "$DAY")
+          DOY=$(date -d "$DATE_STR" +%-j)
+
+          APP_DISPLAY_VERSION="$YEAR_SHORT.$MONTH.$DOY"
+          APP_VERSION=$(( YEAR * 1000 + DOY ))
+
+          echo "APP_DISPLAY_VERSION = $APP_DISPLAY_VERSION"
+          echo "APP_VERSION         = $APP_VERSION"
+
+          EXPECTED_DISPLAY='${{ env.EXPECTED_DISPLAY }}'
+          EXPECTED_VERSION='${{ env.EXPECTED_ANDROID_VERSION }}'
+
+          if [[ "$APP_DISPLAY_VERSION" != "$EXPECTED_DISPLAY" ]]; then
+            echo "APP_DISPLAY_VERSION mismatch: got '$APP_DISPLAY_VERSION', expected '$EXPECTED_DISPLAY'" >&2
+            exit 1
+          fi
+          if [[ "$APP_VERSION" != "$EXPECTED_VERSION" ]]; then
+            echo "APP_VERSION mismatch: got '$APP_VERSION', expected '$EXPECTED_VERSION'" >&2
+            exit 1
+          fi
+
+          echo "All Android version assertions passed."
+
+          # Export for subsequent steps
+          echo "APP_DISPLAY_VERSION=$APP_DISPLAY_VERSION" >> $GITHUB_ENV
+          echo "APP_VERSION=$APP_VERSION"                 >> $GITHUB_ENV
+
+      - name: Install KVM and Android SDK
+        run: |
+          export ANDROID_SDK_ROOT=$HOME/android-sdk
+          export ANDROID_HOME=$ANDROID_SDK_ROOT
+          export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$PATH
+
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
+          unzip -q commandlinetools-linux-*.zip -d $ANDROID_SDK_ROOT/cmdline-tools
+          mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest
+          chmod +x $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
+
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-36"
+
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH" >> $GITHUB_ENV
+
+      - name: Install Android Build Tools
+        run: |
+          sdkmanager "build-tools;36.0.0"
+          sdkmanager --update
+
+      - name: Install MAUI workloads
+        run: dotnet workload install maui-android
+
+      - name: Restore packages
+        run: dotnet restore TransactionProcessor.Mobile.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+      - name: Publish Android APK (unsigned trial)
+        run: |
+          dotnet publish TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj \
+            -f net10.0-android \
+            -c Release \
+            --no-restore \
+            /p:ApplicationDisplayVersion=${{ env.APP_DISPLAY_VERSION }} \
+            /p:ApplicationVersion=${{ env.APP_VERSION }} \
+            /p:AndroidSignPackage=false
