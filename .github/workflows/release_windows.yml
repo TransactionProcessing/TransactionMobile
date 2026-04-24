@@ -25,10 +25,7 @@ jobs:
           $patch = if ($parts.Length -gt 2) { [int]($parts[2]) } else { 0 }
 
           # Valid MSIX/Appx version: A.B.C.D where each part is 0..65535
-          # Use day-of-year as revision (1..366) to keep it in range
-          $revision = [int](Get-Date).DayOfYear
-
-          $msixVersion = "$major.$minor.$patch.$revision"
+          $msixVersion = "$major.$minor.$patch.0"
 
           echo "APP_VERSION=$version" >> $env:GITHUB_ENV
           echo "APP_MSIX_VERSION=$msixVersion" >> $env:GITHUB_ENV
