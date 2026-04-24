@@ -31,6 +31,17 @@ jobs:
         with:
           vs-prerelease: true
 
+      - name: Setup .NET SDK (10.x)
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Dotnet info
+        run: |
+          dotnet --info
+          dotnet --list-sdks
+          dotnet --list-runtimes
+
       - name: Install MAUI workloads
         run: |
           dotnet workload install maui
