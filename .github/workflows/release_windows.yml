@@ -17,8 +17,8 @@ jobs:
         shell: powershell
         run: |
           $tag = "${{ github.event.release.tag_name }}"
-          if ($tag -notmatch '^v(\d{4})\.(\d{1,2})\.(\d{1,2})$') {
-            Write-Error "Tag '$tag' does not match expected format vYYYY.M.D"
+          if ($tag -notmatch '^v?(\d{4})\.(\d{1,2})\.(\d{1,2})$') {
+            Write-Error "Tag '$tag' does not match expected format YYYY.M.D (e.g. 2026.4.9)"
             exit 1
           }
           $year  = [int]$Matches[1]
