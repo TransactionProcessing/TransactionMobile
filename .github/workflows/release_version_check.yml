@@ -95,7 +95,6 @@ jobs:
             -c Release `
             -f net10.0-windows10.0.19041.0 `
             /p:ApplicationDisplayVersion=${{ env.APP_DISPLAY_VERSION }} `
-            /p:ApplicationVersion=${{ env.APP_MSIX_VERSION }} `
             /p:AppxPackageSigningEnabled=false
 
   verify_version_android:
