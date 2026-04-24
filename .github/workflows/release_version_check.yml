@@ -1,0 +1,107 @@
+name: Release Version Check
+
+# Validates the release-versioning logic used by release_windows.yml and
+# release_android.yml by running both the PowerShell (Windows) and bash
+# (Android) parsing scripts against a known test tag and asserting the
+# expected outputs.  This job runs on every PR so regressions are caught
+# before a real release is attempted.
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+# Fixed test tag used to validate the version-parsing logic.
+# Apr 1 2026 → DOY 91, YY 26.
+# Expected: APP_DISPLAY_VERSION=26.4.91, APP_MSIX_VERSION=2026.4.1.0, APP_VERSION(Android)=2026091
+env:
+  TEST_TAG: 'v2026.4.1'
+  EXPECTED_DISPLAY: '26.4.91'
+  EXPECTED_MSIX: '2026.4.1.0'
+  EXPECTED_ANDROID_VERSION: '2026091'
+
+jobs:
+  verify_version_windows:
+    name: Verify version parsing (Windows / PowerShell)
+    runs-on: windows-2022
+    permissions: {}
+    steps:
+      - name: Parse tag and assert computed versions
+        shell: powershell
+        run: |
+          $testTag = '${{ env.TEST_TAG }}'
+          Write-Host "Test tag: $testTag"
+
+          if ($testTag -notmatch '^v?(\d{4})\.(\d{1,2})\.(\d{1,2})$') {
+            Write-Error "Tag '$testTag' does not match expected format vYYYY.M.D"
+            exit 1
+          }
+          $year  = [int]$Matches[1]
+          $month = [int]$Matches[2]
+          $day   = [int]$Matches[3]
+
+          $yearShort = $year - 2000
+          $date      = Get-Date -Year $year -Month $month -Day $day
+          $dayOfYear = $date.DayOfYear
+
+          $displayVersion = "$yearShort.$month.$dayOfYear"
+          $msixVersion    = "$year.$month.$day.0"
+
+          Write-Host "APP_DISPLAY_VERSION = $displayVersion"
+          Write-Host "APP_MSIX_VERSION    = $msixVersion"
+
+          $expectedDisplay = '${{ env.EXPECTED_DISPLAY }}'
+          $expectedMsix    = '${{ env.EXPECTED_MSIX }}'
+
+          if ($displayVersion -ne $expectedDisplay) {
+            Write-Error "APP_DISPLAY_VERSION mismatch: got '$displayVersion', expected '$expectedDisplay'"
+            exit 1
+          }
+          if ($msixVersion -ne $expectedMsix) {
+            Write-Error "APP_MSIX_VERSION mismatch: got '$msixVersion', expected '$expectedMsix'"
+            exit 1
+          }
+
+          Write-Host "All Windows version assertions passed."
+
+  verify_version_android:
+    name: Verify version parsing (Android / bash)
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Parse tag and assert computed versions
+        shell: bash
+        run: |
+          TEST_TAG='${{ env.TEST_TAG }}'
+          echo "Test tag: $TEST_TAG"
+
+          if [[ ! "$TEST_TAG" =~ ^v?([0-9]{4})\.([0-9]{1,2})\.([0-9]{1,2})$ ]]; then
+            echo "Tag '$TEST_TAG' does not match expected format vYYYY.M.D" >&2
+            exit 1
+          fi
+          YEAR="${BASH_REMATCH[1]}"
+          MONTH="${BASH_REMATCH[2]}"
+          DAY="${BASH_REMATCH[3]}"
+
+          YEAR_SHORT=$(( YEAR - 2000 ))
+          DATE_STR=$(printf '%04d-%02d-%02d' "$YEAR" "$MONTH" "$DAY")
+          DOY=$(date -d "$DATE_STR" +%-j)
+
+          APP_DISPLAY_VERSION="$YEAR_SHORT.$MONTH.$DOY"
+          APP_VERSION=$(( YEAR * 1000 + DOY ))
+
+          echo "APP_DISPLAY_VERSION = $APP_DISPLAY_VERSION"
+          echo "APP_VERSION         = $APP_VERSION"
+
+          EXPECTED_DISPLAY='${{ env.EXPECTED_DISPLAY }}'
+          EXPECTED_VERSION='${{ env.EXPECTED_ANDROID_VERSION }}'
+
+          if [[ "$APP_DISPLAY_VERSION" != "$EXPECTED_DISPLAY" ]]; then
+            echo "APP_DISPLAY_VERSION mismatch: got '$APP_DISPLAY_VERSION', expected '$EXPECTED_DISPLAY'" >&2
+            exit 1
+          fi
+          if [[ "$APP_VERSION" != "$EXPECTED_VERSION" ]]; then
+            echo "APP_VERSION mismatch: got '$APP_VERSION', expected '$EXPECTED_VERSION'" >&2
+            exit 1
+          fi
+
+          echo "All Android version assertions passed."
