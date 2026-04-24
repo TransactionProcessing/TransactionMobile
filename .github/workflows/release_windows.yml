@@ -17,22 +17,25 @@ jobs:
         shell: powershell
         run: |
           $tag = "${{ github.event.release.tag_name }}"
-          if ($tag -notmatch '^v(\d{4})\.(\d{1,2})\.(\d{1,2})$') {
-            Write-Error "Tag '$tag' does not match expected format vYYYY.M.D"
+          if ($tag -notmatch '^v?(\d{4})\.(\d{1,2})\.(\d{1,2})$') {
+            Write-Error "Tag '$tag' does not match expected format YYYY.M.D (e.g. 2026.4.9)"
             exit 1
           }
           $year  = [int]$Matches[1]
           $month = [int]$Matches[2]
           $day   = [int]$Matches[3]
 
-          # SemVer display version: YY.M.D  (3-part, widely accepted)
-          $yy  = $year - 2000
-          $displayVersion = "$yy.$month.$day"
+          # SemVer display version: YYYY.M.D  (3-part, full year to avoid edge cases)
+          $displayVersion = "$year.$month.$day"
 
-          # Valid MSIX/Appx version: YYYY.M.D.0  (each part 0..65535)
+          # MAUI ApplicationVersion must be a monotonically increasing integer (e.g. 20260409)
+          $appVersion = ($year * 10000) + ($month * 100) + $day
+
+          # Valid MSIX/Appx package version: YYYY.M.D.0  (each part 0..65535)
           $msixVersion = "$year.$month.$day.0"
 
           echo "APP_DISPLAY_VERSION=$displayVersion" >> $env:GITHUB_ENV
+          echo "APP_VERSION=$appVersion"             >> $env:GITHUB_ENV
           echo "APP_MSIX_VERSION=$msixVersion"       >> $env:GITHUB_ENV
 
       - name: Setup MSBuild
@@ -72,7 +75,8 @@ jobs:
             -c Release `
             -f net10.0-windows10.0.19041.0 `
             /p:ApplicationDisplayVersion=${{ env.APP_DISPLAY_VERSION }} `
-            /p:ApplicationVersion=${{ env.APP_MSIX_VERSION }} `
+            /p:ApplicationVersion=${{ env.APP_VERSION }} `
+            /p:AppxPackageVersion=${{ env.APP_MSIX_VERSION }} `
             /p:AppxPackageSigningEnabled=true `
             /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"
 
