@@ -17,17 +17,25 @@ jobs:
         shell: bash
         run: |
           TAG="${{ github.event.release.tag_name }}"
-          VERSION="${TAG#v}"
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
-          MAJOR=${MAJOR:-0}
-          MINOR=${MINOR:-0}
-          PATCH=${PATCH:-0}
+          if [[ ! "$TAG" =~ ^v([0-9]{4})\.([0-9]{1,2})\.([0-9]{1,2})$ ]]; then
+            echo "Tag '$TAG' does not match expected format vYYYY.M.D" >&2
+            exit 1
+          fi
+          YEAR="${BASH_REMATCH[1]}"
+          MONTH="${BASH_REMATCH[2]}"
+          DAY="${BASH_REMATCH[3]}"
 
-          # Android versionCode must be a positive integer
-          VERSION_CODE=$(( MAJOR * 1000000 + MINOR * 1000 + PATCH ))
+          # SemVer display version: YY.M.DOY  (Resizetizer-safe 3-part version)
+          YY=$(( YEAR - 2000 ))
+          DOY=$(date -d "$YEAR-$MONTH-$DAY" +%j | sed 's/^0*//')
 
-          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
-          echo "APP_ANDROID_VERSION=$VERSION_CODE" >> $GITHUB_ENV
+          APP_DISPLAY_VERSION="$YY.$MONTH.$DOY"
+
+          # Android versionCode: monotonic integer  YYYY*1000 + DOY
+          APP_ANDROID_VERSION=$(( YEAR * 1000 + DOY ))
+
+          echo "APP_DISPLAY_VERSION=$APP_DISPLAY_VERSION" >> $GITHUB_ENV
+          echo "APP_ANDROID_VERSION=$APP_ANDROID_VERSION" >> $GITHUB_ENV
 
       - name: Install KVM and Android SDK (x86)
         run: |
@@ -71,7 +79,7 @@ jobs:
             -f net10.0-android \
             -c Release \
             --no-restore \
-            /p:ApplicationDisplayVersion=${{ env.APP_VERSION }} \
+            /p:ApplicationDisplayVersion=${{ env.APP_DISPLAY_VERSION }} \
             /p:ApplicationVersion=${{ env.APP_ANDROID_VERSION }} \
             /p:AndroidSigningKeyStore=$(pwd)/android_keystore.jks \
             /p:AndroidSigningKeyAlias=${{ secrets.ANDROID_KEY_ALIAS }} \

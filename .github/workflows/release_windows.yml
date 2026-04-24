@@ -17,18 +17,25 @@ jobs:
         shell: powershell
         run: |
           $tag = "${{ github.event.release.tag_name }}"
-          $version = $tag.TrimStart('v')
-          $parts = $version.Split('.')
+          if ($tag -notmatch '^v(\d{4})\.(\d{1,2})\.(\d{1,2})$') {
+            Write-Error "Tag '$tag' does not match expected format vYYYY.M.D"
+            exit 1
+          }
+          $year  = [int]$Matches[1]
+          $month = [int]$Matches[2]
+          $day   = [int]$Matches[3]
 
-          $major = [int]($parts[0])
-          $minor = if ($parts.Length -gt 1) { [int]($parts[1]) } else { 0 }
-          $patch = if ($parts.Length -gt 2) { [int]($parts[2]) } else { 0 }
+          # SemVer display version: YY.M.DOY  (Resizetizer-safe 3-part version)
+          $yy  = $year - 2000
+          $date = Get-Date -Year $year -Month $month -Day $day
+          $doy  = $date.DayOfYear
+          $displayVersion = "$yy.$month.$doy"
 
-          # Valid MSIX/Appx version: A.B.C.D where each part is 0..65535
-          $msixVersion = "$major.$minor.$patch.0"
+          # Valid MSIX/Appx version: YYYY.M.D.0  (each part 0..65535)
+          $msixVersion = "$year.$month.$day.0"
 
-          echo "APP_VERSION=$version" >> $env:GITHUB_ENV
-          echo "APP_MSIX_VERSION=$msixVersion" >> $env:GITHUB_ENV
+          echo "APP_DISPLAY_VERSION=$displayVersion" >> $env:GITHUB_ENV
+          echo "APP_MSIX_VERSION=$msixVersion"       >> $env:GITHUB_ENV
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.1
@@ -66,7 +73,7 @@ jobs:
           dotnet publish TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj `
             -c Release `
             -f net10.0-windows10.0.19041.0 `
-            /p:ApplicationDisplayVersion=${{ env.APP_VERSION }} `
+            /p:ApplicationDisplayVersion=${{ env.APP_DISPLAY_VERSION }} `
             /p:ApplicationVersion=${{ env.APP_MSIX_VERSION }} `
             /p:AppxPackageSigningEnabled=true `
             /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"
