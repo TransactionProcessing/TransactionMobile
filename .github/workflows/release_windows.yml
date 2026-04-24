@@ -25,11 +25,9 @@ jobs:
           $month = [int]$Matches[2]
           $day   = [int]$Matches[3]
 
-          # SemVer display version: YY.M.DOY  (Resizetizer-safe 3-part version)
+          # SemVer display version: YY.M.D  (3-part, widely accepted)
           $yy  = $year - 2000
-          $date = Get-Date -Year $year -Month $month -Day $day
-          $doy  = $date.DayOfYear
-          $displayVersion = "$yy.$month.$doy"
+          $displayVersion = "$yy.$month.$day"
 
           # Valid MSIX/Appx version: YYYY.M.D.0  (each part 0..65535)
           $msixVersion = "$year.$month.$day.0"
