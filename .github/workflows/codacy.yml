@@ -1,24 +1,26 @@
-name: Sync Codacy Issues
+name: Codacy Issue Sync
 
 on:
-  workflow_dispatch:
-    inputs:
-      dry_run:
-        description: "Run without creating or modifying GitHub issues"
-        required: false
-        default: false
-        type: boolean
   push:
-    branches:
-      - main
-      - master
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
 
 jobs:
-  sync-codacy:
+  codacy-issue-sync:
     uses: TransactionProcessing/org-ci-workflows/.github/workflows/sync-codacy-issues.yml@main
+    secrets: inherit
     with:
-      # Pass boolean to reusable workflow
-      dry_run: ${{ github.event.inputs.dry_run == true }}
-    secrets:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      CODACY_API_TOKEN: ${{ secrets.CODACY_API_TOKEN }}
+      # Optional: you can omit both and the reusable workflow will default them
+      # to the calling repo owner/name. Keeping them explicit is fine too.
+      codacy_org: TransactionProcessing
+      codacy_repo: TransactionMobile
+
+      # Optional knobs
+      dry_run: false
+      severity_filter: "Error,High,Warning,Info"
+      extra_labels: ""
+      assignees: ""
