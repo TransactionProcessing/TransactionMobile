@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using SecurityService.Client;
-using SecurityService.DataTransferObjects.Responses;
+﻿using SecurityService.Client;
+using SecurityService.DataTransferObjects;
 using Shared.Results;
+using Shared.Serialisation;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -55,7 +55,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                 }
 
                 Logger.LogInformation($"Token for {username} requested successfully");
-                Logger.LogDebug($"Token Response: [{JsonConvert.SerializeObject(tokenResult.Data.AccessToken)}]");
+                Logger.LogDebug($"Token Response: [{StringSerialiser.Serialise(tokenResult.Data.AccessToken)}]");
 
                 return Result.Success(new TokenResponseModel
                        {
@@ -89,7 +89,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                 }
 
                 Logger.LogInformation($"Refresh Token requested successfully");
-                Logger.LogDebug($"Token Response: [{JsonConvert.SerializeObject(tokenResult.Data.AccessToken)}]");
+                Logger.LogDebug($"Token Response: [{StringSerialiser.Serialise(tokenResult.Data.AccessToken)}]");
 
                 return Result.Success(new TokenResponseModel
                                       {

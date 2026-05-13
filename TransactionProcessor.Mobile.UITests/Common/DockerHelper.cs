@@ -1,7 +1,4 @@
-﻿using System.Net;
-using System.Net.Sockets;
-using System.Runtime.InteropServices;
-using DotNet.Testcontainers.Builders;
+﻿using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 using DotNet.Testcontainers.Networks;
 using EventStore.Client;
@@ -10,7 +7,11 @@ using SecurityService.Client;
 using Shared.IntegrationTesting;
 using Shared.IntegrationTesting.TestContainers;
 using Shared.Logger;
+using Shared.Serialisation;
 using Shouldly;
+using System.Net;
+using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using TransactionProcessor.Client;
 using TransactionProcessor.DataTransferObjects.Responses.Contract;
 using TransactionProcessor.IntegrationTesting.Helpers;
@@ -54,6 +55,7 @@ namespace TransactionProcessor.Mobile.UITests.Common
         public DockerHelper()
         {
             this.TestingContext = new TestingContext();
+            StringSerialiser.Initialise((IStringSerialiser)new SystemTextJsonSerializer(SystemTextJsonSerializer.GetDefaultJsonSerializerOptions()));
         }
 
         #endregion
@@ -107,6 +109,16 @@ namespace TransactionProcessor.Mobile.UITests.Common
             }
         }
 
+        String Serialise(Object arg)
+        {
+            return StringSerialiser.Serialise<Object>(arg, new SerialiserOptions(SerialiserPropertyFormat.SnakeCase));
+        }
+
+        Object Deserialise(String arg, Type type)
+        {
+            return StringSerialiser.DeserializeObject<Object>(arg, type, new SerialiserOptions(SerialiserPropertyFormat.SnakeCase));
+        }
+
         /// <summary>
         /// Starts the containers for scenario run.
         /// </summary>
@@ -144,8 +156,8 @@ namespace TransactionProcessor.Mobile.UITests.Common
 
                                               };
             HttpClient httpClient = new HttpClient(clientHandler);
-            this.SecurityServiceClient = new SecurityServiceClient(this.SecurityServiceBaseAddressResolver, httpClient);
-            this.TransactionProcessorClient = new TransactionProcessorClient(this.TransactionProcessorBaseAddressResolver, httpClient);
+            this.SecurityServiceClient = new SecurityServiceClient(this.SecurityServiceBaseAddressResolver, httpClient, Serialise, Deserialise);
+            this.TransactionProcessorClient = new TransactionProcessorClient(this.TransactionProcessorBaseAddressResolver, httpClient, Serialise, Deserialise);
 
             this.HttpClient = new HttpClient();
             this.HttpClient.BaseAddress = new Uri(this.TransactionProcessorAclBaseAddressResolver(string.Empty));
@@ -234,7 +246,7 @@ namespace TransactionProcessor.Mobile.UITests.Common
             this.Estates = new List<EstateDetails>();
             this.Clients = new List<ClientDetails>();
             this.Users = new Dictionary<String, Guid>();
-            this.Roles = new Dictionary<String, Guid>();
+            this.Roles = new Dictionary<String, String>();
             this.ApiResources = new List<String>();
         }
 
@@ -266,7 +278,7 @@ namespace TransactionProcessor.Mobile.UITests.Common
         /// </value>
         public NlogLogger Logger { get; set; }
         public Dictionary<String, Guid> Users;
-        public Dictionary<String, Guid> Roles;
+        public Dictionary<String, String> Roles;
         public List<String> ApiResources;
         //public List<String> IdentityResources;
 

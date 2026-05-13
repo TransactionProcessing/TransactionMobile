@@ -1,6 +1,6 @@
 ﻿using Moq;
 using SecurityService.Client;
-using SecurityService.DataTransferObjects.Responses;
+using SecurityService.DataTransferObjects;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;

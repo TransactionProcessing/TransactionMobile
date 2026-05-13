@@ -1,5 +1,5 @@
-﻿using System.Text;
-using Newtonsoft.Json;
+﻿using Shared.Results;
+using Shared.Serialisation;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -25,7 +25,8 @@ public class UpdateService : ClientProxyBase.ClientProxyBase, IUpdateService
     private readonly Func<String, String> BaseAddressResolver;
 
     public UpdateService(Func<String, String> baseAddressResolver,
-                         HttpClient httpClient) : base(httpClient)
+                         HttpClient httpClient, Func<Object, String> serialise,
+                         Func<String, Type, Object> deserialise) : base(httpClient, serialise, deserialise)
     {
         this.BaseAddressResolver = baseAddressResolver;
     }
@@ -44,22 +45,16 @@ public class UpdateService : ClientProxyBase.ClientProxyBase, IUpdateService
             Logger.LogInformation($"About to check for application updates for device identifier {deviceIdentifier}");
             Logger.LogDebug($"Application update request details: Uri {requestUri}");
 
-            using StringContent content = new(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
-            using HttpResponseMessage httpResponse = await this.HttpClient.PostAsync(requestUri, content, cancellationToken);
-            Logger.LogDebug($"Application update response [{httpResponse.StatusCode}]");
+            Result<ApplicationUpdateCheckResponse>? result = await this.Post<ApplicationUpdateCheckRequest, ApplicationUpdateCheckResponse>(requestUri, request, cancellationToken);
 
-            String responseContent = await this.HandleResponse(httpResponse, cancellationToken);
-            Logger.LogDebug($"Application update response content [{responseContent}]");
-
-            ApplicationUpdateCheckResponse? response = JsonConvert.DeserializeObject<ApplicationUpdateCheckResponse>(responseContent);
-
-            if (response == null)
-            {
-                return Result.Failure("Application update check did not return a valid response.");
+            if (result.IsFailed) {
+                return ResultHelpers.CreateFailure(result);
             }
 
+            Logger.LogDebug($"Application update response content [{StringSerialiser.Serialise(result.Data)}]");
+            
             Logger.LogInformation($"Application update check for device identifier {deviceIdentifier} completed successfully");
-            return Result.Success(response);
+            return Result.Success(result.Data);
         }
         catch (Exception ex)
         {

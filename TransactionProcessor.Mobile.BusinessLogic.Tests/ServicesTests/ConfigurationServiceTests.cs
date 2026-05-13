@@ -1,7 +1,7 @@
-﻿using System.Net;
-using Newtonsoft.Json;
-using RichardSzalay.MockHttp;
+﻿using RichardSzalay.MockHttp;
+using Shared.Serialisation;
 using Shouldly;
+using System.Net;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
@@ -15,10 +15,22 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
         private Func<String, String> BaseAddressResolver;
 
         private IConfigurationService ConfigurationService;
+
+        String Serialise(Object arg)
+        {
+            return StringSerialiser.Serialise<Object>(arg, new SerialiserOptions(SerialiserPropertyFormat.SnakeCase));
+        }
+
+        Object Deserialise(String arg, Type type)
+        {
+            return StringSerialiser.DeserializeObject<Object>(arg, type, new SerialiserOptions(SerialiserPropertyFormat.SnakeCase));
+        }
+
         public ConfigurationServiceTests(){
             this.MockHttpMessageHandler = new MockHttpMessageHandler();
             this.BaseAddressResolver = (s) => $"http://localhost";
-            this.ConfigurationService = new ConfigurationService(this.BaseAddressResolver, this.MockHttpMessageHandler.ToHttpClient());
+            this.ConfigurationService = new ConfigurationService(this.BaseAddressResolver, this.MockHttpMessageHandler.ToHttpClient(), Serialise, Deserialise);
+            StringSerialiser.Initialise((IStringSerialiser)new SystemTextJsonSerializer(SystemTextJsonSerializer.GetDefaultJsonSerializerOptions()));
         }
 
         [Theory]
@@ -57,7 +69,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
             Logger.Initialise(new NullLogger());
 
             this.MockHttpMessageHandler.When($"http://localhost/api/transactionmobileconfiguration/{TestData.DeviceIdentifier}")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedConfiguration)); // Respond with JSON
+                .Respond("application/json", StringSerialiser.Serialise(expectedConfiguration)); // Respond with JSON
 
             var configurationResult = await this.ConfigurationService.GetConfiguration(TestData.DeviceIdentifier, CancellationToken.None);
             configurationResult.IsSuccess.ShouldBeTrue();

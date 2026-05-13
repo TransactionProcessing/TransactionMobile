@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using RichardSzalay.MockHttp;
+﻿using RichardSzalay.MockHttp;
+using Shared.Serialisation;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
@@ -14,10 +14,21 @@ public class UpdateServiceTests
 
     private readonly IUpdateService UpdateService;
 
+    String Serialise(Object arg)
+    {
+        return StringSerialiser.Serialise<Object>(arg, new SerialiserOptions(SerialiserPropertyFormat.SnakeCase));
+    }
+
+    Object Deserialise(String arg, Type type)
+    {
+        return StringSerialiser.DeserializeObject<Object>(arg, type, new SerialiserOptions(SerialiserPropertyFormat.SnakeCase));
+    }
+
     public UpdateServiceTests()
     {
         this.MockHttpMessageHandler = new MockHttpMessageHandler();
-        this.UpdateService = new UpdateService(_ => "http://localhost", this.MockHttpMessageHandler.ToHttpClient());
+        this.UpdateService = new UpdateService(_ => "http://localhost", this.MockHttpMessageHandler.ToHttpClient(), Serialise, Deserialise);
+        StringSerialiser.Initialise((IStringSerialiser)new SystemTextJsonSerializer(SystemTextJsonSerializer.GetDefaultJsonSerializerOptions()));
     }
 
     [Fact]
@@ -34,7 +45,7 @@ public class UpdateServiceTests
         };
 
         this.MockHttpMessageHandler.When("http://localhost/api/applicationupdates/check")
-            .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
+            .Respond("application/json", StringSerialiser.Serialise(expectedResponse));
 
         Result<ApplicationUpdateCheckResponse> updateResult = await this.UpdateService.CheckForUpdates(TestData.ApplicationVersion,
                                                                                                        "com.transactionprocessor.mobile",

@@ -1,9 +1,9 @@
-﻿using System.Net;
-using Moq;
-using Newtonsoft.Json;
+﻿using Moq;
 using RichardSzalay.MockHttp;
+using Shared.Serialisation;
 using Shouldly;
 using SimpleResults;
+using System.Net;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
@@ -23,6 +23,16 @@ public class MerchantServiceTests{
 
     private readonly IMerchantService MerchantService;
 
+    String Serialise(Object arg)
+    {
+        return StringSerialiser.Serialise<Object>(arg, new SerialiserOptions(SerialiserPropertyFormat.SnakeCase));
+    }
+
+    Object Deserialise(String arg, Type type)
+    {
+        return StringSerialiser.DeserializeObject<Object>(arg, type, new SerialiserOptions(SerialiserPropertyFormat.SnakeCase));
+    }
+
     public MerchantServiceTests(){
         Logger.Initialise(new NullLogger());
         this.MockHttpMessageHandler = new MockHttpMessageHandler();
@@ -31,10 +41,11 @@ public class MerchantServiceTests{
         this.ApplicationInfoService = new Mock<IApplicationInfoService>();
         this.ApplicationInfoService.Setup(a => a.VersionString).Returns("1.0.0");
         this.MerchantService = new MerchantService(this.BaseAddressResolver, this.MockHttpMessageHandler.ToHttpClient(),this.ApplicationCache.Object,
-            this.ApplicationInfoService.Object);
+            this.ApplicationInfoService.Object, Serialise, Deserialise);
 
         // Standard cache mocking here
         this.ApplicationCache.Setup(a => a.GetAccessToken()).Returns(TestData.AccessToken);
+        StringSerialiser.Initialise((IStringSerialiser)new SystemTextJsonSerializer(SystemTextJsonSerializer.GetDefaultJsonSerializerOptions()));
     }
 
     [Fact]
@@ -65,7 +76,7 @@ public class MerchantServiceTests{
 
 
         this.MockHttpMessageHandler.When($"http://localhost/api/merchants/contracts?application_version=1.0.0")
-            .Respond("application/json", JsonConvert.SerializeObject(contracts)); // Respond with JSON
+            .Respond("application/json", StringSerialiser.Serialise(contracts)); // Respond with JSON
         
         var result = await this.MerchantService.GetContractProducts(CancellationToken.None);
         result.IsSuccess.ShouldBeTrue();
@@ -112,7 +123,7 @@ public class MerchantServiceTests{
                                                                 };
 
         this.MockHttpMessageHandler.When($"http://localhost/api/merchants?application_version=1.0.0")
-            .Respond("application/json", JsonConvert.SerializeObject(merchantResponse)); // Respond with JSON
+            .Respond("application/json", StringSerialiser.Serialise(merchantResponse)); // Respond with JSON
 
         Result<MerchantDetailsModel> merchantDetails = await this.MerchantService.GetMerchantDetails(CancellationToken.None);
         merchantDetails.IsSuccess.ShouldBeTrue();

@@ -1,4 +1,5 @@
 ﻿using Moq;
+using Shared.Serialisation;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Database;
@@ -43,6 +44,7 @@ public class TransactionRequestHandlerTests
                                                                        this.ApplicationCache.Object,
                                                                        this.ApplicationInfoService.Object,
                                                                        this.DeviceService.Object);
+        StringSerialiser.Initialise((IStringSerialiser)new SystemTextJsonSerializer(SystemTextJsonSerializer.GetDefaultJsonSerializerOptions()));
 
     }
 
