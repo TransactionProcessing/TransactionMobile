@@ -11,6 +11,7 @@
     xmlns:myAccount="clr-namespace:TransactionProcessor.Mobile.Pages.MyAccount"
     xmlns:support="clr-namespace:TransactionProcessor.Mobile.Pages.Support"
     Title="TransactionProcessor.Mobile"
+    Shell.FlyoutBehavior="Disabled"
     Shell.TabBarBackgroundColor="{DynamicResource shellTabBarBackgroundColor}"
     Shell.TabBarForegroundColor="{DynamicResource shellTabBarForegroundColor}"
     Shell.TabBarTitleColor="{DynamicResource shellTabBarForegroundColor}"
