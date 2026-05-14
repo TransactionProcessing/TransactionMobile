@@ -70,7 +70,7 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
         Logger.LogInformation("About to request merchant contracts");
         Logger.LogDebug($"Merchant Contract Request details: Access Token {accessToken.AccessToken}");
 
-        Result<List<ContractResponse>>? responseDataResult = await this.Get<List<ContractResponse>>(requestUri, cancellationToken);
+        Result<List<ContractResponse>>? responseDataResult = await this.Get<List<ContractResponse>>(requestUri, accessToken.AccessToken, cancellationToken);
 
         if (responseDataResult.IsFailed) {
             Logger.LogInformation($"GetMerchantContracts failed {responseDataResult.Status}");
