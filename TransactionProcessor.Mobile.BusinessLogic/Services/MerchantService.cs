@@ -153,7 +153,7 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
         ////ResponseData<MerchantResponse> responseData = this.HandleResponseContent<MerchantResponse>(content.Data);
         //MerchantResponse responseData = JsonConvert.DeserializeObject<MerchantResponse>(content.Data);
 
-        Result<MerchantResponse>? responseDataResult = await this.Get<MerchantResponse>(requestUri, cancellationToken);
+        Result<MerchantResponse>? responseDataResult = await this.Get<MerchantResponse>(requestUri, accessToken.AccessToken, cancellationToken);
 
         if (responseDataResult.IsFailed)
         {
