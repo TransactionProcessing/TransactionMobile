@@ -113,7 +113,7 @@ public class TransactionRequestHandler : IRequestHandler<TransactionCommands.Per
             TransactionDateTime = request.TransactionDateTime,
             TransactionNumber = transaction.transactionNumber.ToString(),
             DeviceIdentifier = this.DeviceService.GetIdentifier(),
-            ApplicationVersion = this.ApplicationInfoService.VersionString
+            ApplicationVersion = "1.0.5"//this.ApplicationInfoService.VersionString
         };
 
         Result<PerformLogonResponseModel> result = await transactionService.PerformLogon(model, cancellationToken);

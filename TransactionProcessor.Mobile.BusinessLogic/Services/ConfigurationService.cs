@@ -66,17 +66,18 @@ public class ConfigurationService : ClientProxyBase.ClientProxyBase, IConfigurat
             if (apiResponse.IsFailed)
                 return ResultHelpers.CreateFailure(apiResponse);
 
-            //response = new Configuration {
+            //response = new Configuration
+            //{
             //    ApplicationUpdateUri = "",
             //    ClientId = "mobileAppClient",
             //    ClientSecret = "d192cbc46d834d0da90e8a9d50ded543",
             //    EnableAutoUpdates = false,
             //    LogLevel = LogLevel.Debug,
-            //    SecurityServiceUri = "https://127.0.0.1:5001",
-            //    TransactionProcessorAclUri = "https://127.0.0.1:5003",
+            //    SecurityServiceUri = "https://192.168.1.86:5001",
+            //    TransactionProcessorAclUri = "http://192.168.1.86:5003",
             //};
             //return response;
-
+            Logger.LogDebug($"Configuration Response is {StringSerialiser.Serialise(apiResponse.Data)}");
             Logger.LogDebug($"About to build Configuration");
             response = new Configuration() {
                 ClientSecret = apiResponse.Data.ClientSecret,

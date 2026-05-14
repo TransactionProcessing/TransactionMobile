@@ -201,22 +201,22 @@ namespace TransactionProcessor.Mobile.UITests.Steps
             ClientDetails clientDetails = this.TestingContext.GetClientDetails("mobileAppClient");
             //ClientDetails clientDetails = ClientDetails.Create("clientId-mobileAppClient", "secret-mobile", new List<String>());
             var configRequest = new {
-                                        clientId = clientDetails.ClientId,
-                                        clientSecret = clientDetails.ClientSecret,
-                                        deviceIdentifier = deviceSerial,
+                                        client_id = clientDetails.ClientId,
+                                        client_secret = clientDetails.ClientSecret,
+                                        device_identifier = deviceSerial,
                                         id = deviceSerial,
-                                        enableAutoUpdates = false,
-                                        logLevel = 3,
-                                        hostAddresses = new List<Object>()
+                                        enable_auto_updates = false,
+                                        log_level = 3,
+                                        host_addresses = new List<Object>()
                                     };
-            configRequest.hostAddresses.Add(new
+            configRequest.host_addresses.Add(new
                                             {
                                                 servicetype = 1,
                                                 uri = this.TestingContext.DockerHelper.SecurityServiceBaseAddressResolver("").Replace("127.0.0.1", this.TestingContext.DockerHelper.LocalIPAddress)
             });
-            configRequest.hostAddresses.Add(new
+            configRequest.host_addresses.Add(new
                                             {
-                                                servicetype = 2,
+                                                service_type = 2,
                                                 uri = this.TestingContext.DockerHelper.TransactionProcessorAclBaseAddressResolver("").Replace("127.0.0.1", this.TestingContext.DockerHelper.LocalIPAddress)
             });
 

@@ -63,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
             name: windows-e2e_tests
-            path: C:\\Users\\runneradmin\\txnproc
+            path: C:\\Users\\runneradmin\\runner
 
       - name: Upload Appium Logs on Failure
         if: always()

@@ -162,7 +162,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
             name: android-e2e_tests
-            path: /home/txnproc/trace/
+            path: /home/runner/trace/
 
       - name: Upload Appium Logs on Failure
         if: always()
