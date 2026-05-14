@@ -1,8 +1,8 @@
 ﻿using Shared.Results;
-using Shared.Serialisation;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
+using TransactionProcessor.Mobile.BusinessLogic.Serialisation;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.Services;
 

@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Shared.Results;
-using Shared.Serialisation;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
+using TransactionProcessor.Mobile.BusinessLogic.Serialisation;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 using ProductType = TransactionProcessor.Mobile.BusinessLogic.Models.ProductType;

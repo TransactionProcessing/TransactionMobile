@@ -1,12 +1,12 @@
 using Moq;
 using RichardSzalay.MockHttp;
-using Shared.Serialisation;
 using Shouldly;
 using SimpleResults;
 using System.Net;
 using System.Text;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
+using TransactionProcessor.Mobile.BusinessLogic.Serialisation;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 
