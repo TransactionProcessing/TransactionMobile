@@ -342,7 +342,25 @@ namespace TransactionProcessor.Mobile.UITests.Steps
         public async Task GivenTheFollowingMetersAreAvailableAtThePataPawaPrePayHost(DataTable table)
         {
             List<ReqnrollExtensions.PataPawaMeter> meters = table.Rows.ToPataPawaMeters();
-            await this.TransactionProcessorSteps.GivenTheFollowingMetersAreAvailableAtThePataPawaPrePaidHost(meters);
+            await this.GivenTheFollowingMetersAreAvailableAtThePataPawaPrePaidHost(meters);
+        }
+
+        public async Task GivenTheFollowingMetersAreAvailableAtThePataPawaPrePaidHost(List<ReqnrollExtensions.PataPawaMeter> meters)
+        {
+            await this.SendRequestToTestHost<ReqnrollExtensions.PataPawaMeter>(meters, "/api/developer/patapawaprepay/createmeter");
+        }
+
+        public async Task SendRequestToTestHost<T>(List<T> objects, String url)
+        {
+            foreach (T o in objects)
+            {
+                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, url);
+
+                httpRequestMessage.Content = new StringContent(StringSerialiser.Serialise(o, new SerialiserOptions(SerialiserPropertyFormat.CamelCase)), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await this.TestingContext.DockerHelper.TestHostHttpClient.SendAsync(httpRequestMessage);
+                response.StatusCode.ShouldBe(HttpStatusCode.OK);
+            }
         }
     }
 }
