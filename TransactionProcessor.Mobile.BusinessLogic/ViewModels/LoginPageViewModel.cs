@@ -112,33 +112,12 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
 
             if (tokenResult.IsSuccess) {
                 // Cache the token
-                int index = 1;
-                foreach (var chunk in SplitToken(tokenResult.Data.AccessToken, 50))
-                {
-                    Logger.LogInformation($"JWT Chunk {index++}: {chunk}");
-                }
-
-
                 this.CacheAccessToken(tokenResult.Data);
             }
 
             return tokenResult;
         }
-
-        public static IEnumerable<string> SplitToken(string token, int chunkSize = 100)
-        {
-            if (string.IsNullOrWhiteSpace(token))
-                yield break;
-
-            if (chunkSize <= 0)
-                throw new ArgumentOutOfRangeException(nameof(chunkSize));
-
-            for (int i = 0; i < token.Length; i += chunkSize)
-            {
-                yield return token.Substring(i, Math.Min(chunkSize, token.Length - i));
-            }
-        }
-
+        
         private async Task<Result<PerformLogonResponseModel>> PerformLogonTransaction() {
             // Logon Transaction
             TransactionCommands.PerformLogonCommand command = new(DateTime.Now);
