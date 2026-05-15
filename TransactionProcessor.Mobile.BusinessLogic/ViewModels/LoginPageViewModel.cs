@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using MvvmHelpers.Commands;
+using Newtonsoft.Json.Linq;
 using SimpleResults;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -115,7 +117,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
 
             return tokenResult;
         }
-
+        
         private async Task<Result<PerformLogonResponseModel>> PerformLogonTransaction() {
             // Logon Transaction
             TransactionCommands.PerformLogonCommand command = new(DateTime.Now);

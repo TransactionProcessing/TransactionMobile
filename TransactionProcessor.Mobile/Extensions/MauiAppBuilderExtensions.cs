@@ -1,11 +1,8 @@
 ﻿using System.Net.Security;
 using banditoth.MAUI.DeviceId;
-using MediatR;
 using SecurityService.Client;
-using SimpleResults;
 using TransactionMobile.Maui.UIServices;
 using TransactionProcessor.Mobile.BusinessLogic.Database;
-using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.RequestHandlers;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
 using TransactionProcessor.Mobile.BusinessLogic.Services.TrainingModeServices;
@@ -26,10 +23,8 @@ using TransactionProcessor.Mobile.Pages.Transactions.Admin;
 using TransactionProcessor.Mobile.Pages.Transactions.BillPayment;
 using TransactionProcessor.Mobile.Pages.Transactions.MobileTopup;
 using TransactionProcessor.Mobile.Pages.Transactions.Voucher;
-//using TransactionProcessor.Mobile.Platforms.Android;
 using TransactionProcessor.Mobile.UIServices;
-using LogMessage = TransactionProcessor.Mobile.BusinessLogic.Models.LogMessage;
-using ClientProxyBase;
+using TransactionProcessor.Mobile.BusinessLogic.Serialisation;
 
 
 #if ANDROID
@@ -94,7 +89,15 @@ namespace TransactionProcessor.Mobile.Extensions {
             builder.Services.RegisterHttpClientX<ISecurityServiceClient, SecurityServiceClient>();
             builder.Services.AddSingleton<IApplicationCache, ApplicationCache>();
 
-            builder.ConfigureDeviceIdProvider();
+            builder.Services.AddSingleton<IStringSerialiser, SystemTextJsonSerializer>();
+            builder.Services.AddSingleton<Func<Object, String>>(_ => obj => StringSerialiser.Serialise(obj));
+            builder.Services.AddSingleton<Func<String, Type, Object>>(_ => (str, type) => StringSerialiser.DeserializeObject<Object>(str, type));
+
+                var serialiserSettings = SystemTextJsonSerializer.GetDefaultJsonSerializerOptions();
+
+                builder.Services.AddSingleton(serialiserSettings);
+                
+        builder.ConfigureDeviceIdProvider();
 
             return builder;
         }

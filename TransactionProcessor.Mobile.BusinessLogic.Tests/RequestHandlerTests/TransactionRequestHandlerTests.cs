@@ -5,6 +5,7 @@ using TransactionProcessor.Mobile.BusinessLogic.Database;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.RequestHandlers;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
+using TransactionProcessor.Mobile.BusinessLogic.Serialisation;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
@@ -43,6 +44,7 @@ public class TransactionRequestHandlerTests
                                                                        this.ApplicationCache.Object,
                                                                        this.ApplicationInfoService.Object,
                                                                        this.DeviceService.Object);
+        StringSerialiser.Initialise((IStringSerialiser)new SystemTextJsonSerializer(SystemTextJsonSerializer.GetDefaultJsonSerializerOptions()));
 
     }
 

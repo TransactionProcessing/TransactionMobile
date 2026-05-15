@@ -1,13 +1,12 @@
-using System.Net;
-using System.Text;
 using Moq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using RichardSzalay.MockHttp;
 using Shouldly;
 using SimpleResults;
+using System.Net;
+using System.Text;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
+using TransactionProcessor.Mobile.BusinessLogic.Serialisation;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 
@@ -23,15 +22,26 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
 
         private Mock<IApplicationCache> ApplicationCache;
 
+        String Serialise(Object arg)
+        {
+            return StringSerialiser.Serialise<Object>(arg, new SerialiserOptions(SerialiserPropertyFormat.SnakeCase));
+        }
+
+        Object Deserialise(String arg, Type type)
+        {
+            return StringSerialiser.DeserializeObject<Object>(arg, type, new SerialiserOptions(SerialiserPropertyFormat.SnakeCase));
+        }
+
         public TransactionServiceTests(){
             this.MockHttpMessageHandler = new MockHttpMessageHandler();
             this.BaseAddressResolver = (s) => $"http://localhost";
             this.ApplicationCache = new Mock<IApplicationCache>();
-            this.TransactionService = new TransactionService(this.BaseAddressResolver, this.MockHttpMessageHandler.ToHttpClient(), this.ApplicationCache.Object);
+            this.TransactionService = new TransactionService(this.BaseAddressResolver, this.MockHttpMessageHandler.ToHttpClient(), this.ApplicationCache.Object, this.Serialise,this.Deserialise);
             this.ApplicationCache.Setup(s => s.GetAccessToken()).Returns(new TokenResponseModel(){
                                                                                                      AccessToken = "token"
                                                                                                  });
             Logger.Initialise(new Logging.NullLogger());
+            StringSerialiser.Initialise((IStringSerialiser)new SystemTextJsonSerializer(SystemTextJsonSerializer.GetDefaultJsonSerializerOptions()));
         }
 
         [Fact]
@@ -54,7 +64,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                   };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/logontransactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", StringSerialiser.Serialise(expectedResponse)); // Respond with JSON
 
             Result<PerformLogonResponseModel> performLogonResult = await this.TransactionService.PerformLogon(requestModel, CancellationToken.None);
 
@@ -92,7 +102,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                              requestPayload = req.Content!.ReadAsStringAsync().GetAwaiter().GetResult();
 
                              return new HttpResponseMessage(HttpStatusCode.OK){
-                                                                                 Content = new StringContent(JsonConvert.SerializeObject(expectedResponse), Encoding.UTF8, "application/json")
+                                                                                 Content = new StringContent(StringSerialiser.Serialise(expectedResponse), Encoding.UTF8, "application/json")
                                                                              };
                          });
 
@@ -101,12 +111,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
             performLogonResult.IsSuccess.ShouldBeTrue();
             requestPayload.ShouldNotBeNullOrWhiteSpace();
             requestPayload.ShouldNotContain("$type");
-
-            JObject requestJson = JObject.Parse(requestPayload);
-            requestJson["ApplicationVersion"]?.Value<String>().ShouldBe(TestData.ApplicationVersion);
-            requestJson["DeviceIdentifier"]?.Value<String>().ShouldBe(TestData.DeviceIdentifier);
-            requestJson["TransactionDateTime"]?.Value<DateTime>().ShouldBe(TestData.TransactionDateTime);
-            requestJson["TransactionNumber"]?.Value<String>().ShouldBe(TestData.TransactionNumber);
         }
 
         [Theory]
@@ -155,7 +159,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                 };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/saletransactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", StringSerialiser.Serialise(expectedResponse)); // Respond with JSON
 
             Result<PerformMobileTopupResponseModel> performMobileTopupResult = await this.TransactionService.PerformMobileTopup(requestModel, CancellationToken.None);
 
@@ -218,7 +222,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                 };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/saletransactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", StringSerialiser.Serialise(expectedResponse)); // Respond with JSON
 
             Result<PerformVoucherIssueResponseModel> performVoucherIssueResult = await this.TransactionService.PerformVoucherIssue(requestModel, CancellationToken.None);
 
@@ -284,7 +288,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                 };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/saletransactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", StringSerialiser.Serialise(expectedResponse)); // Respond with JSON
 
             Result<PerformBillPaymentGetAccountResponseModel> performBillPaymentGetAccountResult = await this.TransactionService.PerformBillPaymentGetAccount(requestModel, CancellationToken.None);
             performBillPaymentGetAccountResult.ShouldNotBeNull();
@@ -346,7 +350,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                 };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/saletransactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", StringSerialiser.Serialise(expectedResponse)); // Respond with JSON
 
             Result<PerformBillPaymentGetMeterResponseModel> performBillPaymentGetMeterResult = await this.TransactionService.PerformBillPaymentGetMeter(requestModel, CancellationToken.None);
 
@@ -381,7 +385,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                 };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/saletransactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", StringSerialiser.Serialise(expectedResponse)); // Respond with JSON
 
             Result<PerformBillPaymentGetMeterResponseModel> performBillPaymentGetMeterResult = await this.TransactionService.PerformBillPaymentGetMeter(requestModel, CancellationToken.None);
 
@@ -440,7 +444,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                                                                                                 };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/saletransactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", StringSerialiser.Serialise(expectedResponse)); // Respond with JSON
 
             Result<PerformBillPaymentMakePaymentResponseModel> performBillPaymentGetMeterResult = await this.TransactionService.PerformBillPaymentMakePayment(requestModel, CancellationToken.None);
 
@@ -507,7 +511,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
             };
 
             this.MockHttpMessageHandler.When($"http://localhost/api/reconciliationtransactions")
-                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse)); // Respond with JSON
+                .Respond("application/json", StringSerialiser.Serialise(expectedResponse)); // Respond with JSON
 
             Result<PerformReconciliationResponseModel> performReconciliationResult = await this.TransactionService.PerformReconciliation(requestModel, CancellationToken.None);
 

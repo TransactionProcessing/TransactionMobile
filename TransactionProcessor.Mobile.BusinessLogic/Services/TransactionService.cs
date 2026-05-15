@@ -1,12 +1,8 @@
-﻿using System.Net;
-using System.Net.Http.Headers;
-using System.Text;
-using ClientProxyBase;
-using Newtonsoft.Json;
-using SimpleResults;
+﻿using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
+using TransactionProcessor.Mobile.BusinessLogic.Serialisation;
 using TransactionProcessorACL.DataTransferObjects;
 using TransactionProcessorACL.DataTransferObjects.Responses;
 
@@ -47,12 +43,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
         public TransactionService(Func<String, String> baseAddressResolver,
                                   HttpClient httpClient,
-                                  IApplicationCache applicationCache) : base(httpClient) {
+                                  IApplicationCache applicationCache, Func<Object, String> serialise, 
+                                  Func<String, Type, Object> deserialise) : base(httpClient, serialise, deserialise) {
             this.BaseAddressResolver = baseAddressResolver;
             this.ApplicationCache = applicationCache;
-
-            // Add the API version header
-            this.HttpClient.DefaultRequestHeaders.Add("api-version", "1.0");
         }
 
         #endregion
@@ -189,15 +183,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
             return Result.Success(responseModel);
         }
-        
-        protected override async Task<Result<String>> HandleResponseX(HttpResponseMessage responseMessage,
-                                                                      CancellationToken cancellationToken) {
-            if (responseMessage.StatusCode == HttpStatusCode.HttpVersionNotSupported) {
-                throw new ApplicationException("Application needs to be updated to the latest version");
-            }
-
-            return await base.HandleResponseX(responseMessage, cancellationToken);
-        }
 
         private String BuildRequestUrl(String route) {
             String baseAddress = this.BaseAddressResolver("TransactionProcessorACL");
@@ -212,33 +197,23 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                                                                                           CancellationToken cancellationToken) {
             String requestUri = this.BuildRequestUrl(route);
             try {
-                String requestSerialised = JsonConvert.SerializeObject(request);
-
-                StringContent httpContent = new StringContent(requestSerialised, Encoding.UTF8, "application/json");
-
+                String requestSerialised = StringSerialiser.Serialise(request);
+                
                 // Add the access token to the client headers
                 TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
 
                 Logger.LogDebug($"Transaction Request details: Uri {requestUri} Payload {requestSerialised} Access Token {accessToken.AccessToken}");
 
-                this.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
-
-                // Make the Http Call here
-                HttpResponseMessage httpResponse = await this.HttpClient.PostAsync(requestUri, httpContent, cancellationToken);
-
-                // Process the response
-                Result<String> result = await this.HandleResponseX(httpResponse, cancellationToken);
+                Result<TResponse>? result = await this.Post<TRequest, TResponse>(requestUri, request, accessToken.AccessToken, cancellationToken);
 
                 if (result.IsSuccess == false) {
-                    Logger.LogWarning("Error performing Voucher transaction");
-                    return Result.Failure("Error performing Voucher transaction");
+                    Logger.LogWarning("Error performing transaction");
+                    return Result.Failure("Error performing transaction");
                 }
 
-                Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {result.Data}");
+                Logger.LogDebug($"Transaction Response details: Payload {StringSerialiser.Serialise(result.Data)}");
 
-                var responseData = JsonConvert.DeserializeObject<TResponse>(result.Data);
-
-                return Result.Success(responseData);
+                return Result.Success(result.Data);
             }
             catch (Exception ex) {
                 // An exception has occurred, add some additional information to the message

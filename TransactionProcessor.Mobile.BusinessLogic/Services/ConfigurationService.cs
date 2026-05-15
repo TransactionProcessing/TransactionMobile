@@ -1,9 +1,9 @@
-﻿using System.Net;
-using System.Text;
-using Newtonsoft.Json;
+﻿using System.Text;
+using Shared.Results;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
+using TransactionProcessor.Mobile.BusinessLogic.Serialisation;
 using TransactionProcessor.Mobile.BusinessLogic.Services.DataTransferObjects;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.Services;
@@ -22,7 +22,7 @@ public class ConfigurationService : ClientProxyBase.ClientProxyBase, IConfigurat
     private readonly Func<String, String> BaseAddressResolver;
 
     public ConfigurationService(Func<String, String> baseAddressResolver,
-                                HttpClient httpClient) : base(httpClient) {
+                                HttpClient httpClient, Func<Object,String> serialise, Func<String,Type, Object> deserialise) : base(httpClient, serialise, deserialise) {
         this.BaseAddressResolver = baseAddressResolver;
     }
 
@@ -36,19 +36,19 @@ public class ConfigurationService : ClientProxyBase.ClientProxyBase, IConfigurat
         return requestUri;
     }
 
-    protected override async Task<String> HandleResponse(HttpResponseMessage responseMessage,
-                                                         CancellationToken cancellationToken)
-    {
-        String content = await responseMessage.Content.ReadAsStringAsync();
+    //protected override async Task<String> HandleResponse(HttpResponseMessage responseMessage,
+    //                                                     CancellationToken cancellationToken)
+    //{
+    //    String content = await responseMessage.Content.ReadAsStringAsync();
 
-        if (responseMessage.StatusCode == HttpStatusCode.NotFound)
-        {
-            // No error as maybe running under CI (which has no internet)
-            return content;
-        }
+    //    if (responseMessage.StatusCode == HttpStatusCode.NotFound)
+    //    {
+    //        // No error as maybe running under CI (which has no internet)
+    //        return content;
+    //    }
 
-        return await base.HandleResponse(responseMessage, cancellationToken);
-    }
+    //    return await base.HandleResponse(responseMessage, cancellationToken);
+    //}
 
     public async Task<Result<Configuration>> GetConfiguration(String deviceIdentifier,
                                                               CancellationToken cancellationToken)
@@ -60,33 +60,39 @@ public class ConfigurationService : ClientProxyBase.ClientProxyBase, IConfigurat
         {
             Logger.LogInformation($"About to request configuration for device identifier {deviceIdentifier}");
             Logger.LogDebug($"Configuration Request details: Uri {requestUri}");
-
-            // Make the Http Call here
-            HttpResponseMessage httpResponse = await this.HttpClient.GetAsync(requestUri, cancellationToken);
-            Logger.LogDebug($"Configuration Response [{httpResponse.StatusCode}]");
-                
-            // Process the response
-            String content = await this.HandleResponse(httpResponse, cancellationToken);
-            Logger.LogDebug($"Configuration Response Content [{content}]");
-
+            
             // call was successful so now deserialise the body to the response object
-            ConfigurationResponse apiResponse = JsonConvert.DeserializeObject<ConfigurationResponse>(content);
+            Result<ConfigurationResponse>? apiResponse = await this.Get<ConfigurationResponse>(requestUri, cancellationToken);
+            if (apiResponse.IsFailed)
+                return ResultHelpers.CreateFailure(apiResponse);
 
+            //response = new Configuration
+            //{
+            //    ApplicationUpdateUri = "",
+            //    ClientId = "mobileAppClient",
+            //    ClientSecret = "d192cbc46d834d0da90e8a9d50ded543",
+            //    EnableAutoUpdates = false,
+            //    LogLevel = LogLevel.Debug,
+            //    SecurityServiceUri = "https://192.168.1.86:5001",
+            //    TransactionProcessorAclUri = "http://192.168.1.86:5003",
+            //};
+            //return response;
+            Logger.LogDebug($"Configuration Response is {StringSerialiser.Serialise(apiResponse.Data)}");
             Logger.LogDebug($"About to build Configuration");
             response = new Configuration() {
-                ClientSecret = apiResponse.ClientSecret,
-                ClientId = apiResponse.ClientId,
-                ApplicationUpdateUri = apiResponse.ApplicationUpdateUri,
-                EnableAutoUpdates = apiResponse.EnableAutoUpdates,
-                SecurityServiceUri = apiResponse.HostAddresses.Single(h => h.ServiceType == ServiceType.Security).Uri,
+                ClientSecret = apiResponse.Data.ClientSecret,
+                ClientId = apiResponse.Data.ClientId,
+                ApplicationUpdateUri = apiResponse.Data.ApplicationUpdateUri,
+                EnableAutoUpdates = apiResponse.Data.EnableAutoUpdates,
+                SecurityServiceUri = apiResponse.Data.HostAddresses.Single(h => h.ServiceType == ServiceType.Security).Uri,
                 TransactionProcessorAclUri =
-                    apiResponse.HostAddresses.Single(h => h.ServiceType == ServiceType.TransactionProcessorAcl).Uri,
-                LogMessageBatchSize = apiResponse.LogMessageBatchSize.GetValueOrDefault(),
-                SentryDsn = apiResponse.SentryDsn ?? String.Empty,
+                    apiResponse.Data.HostAddresses.Single(h => h.ServiceType == ServiceType.TransactionProcessorAcl).Uri,
+                LogMessageBatchSize = apiResponse.Data.LogMessageBatchSize.GetValueOrDefault(),
+                SentryDsn = apiResponse.Data.SentryDsn ?? String.Empty,
             };
 
             Logger.LogDebug($"About to xlate log level");
-            response.LogLevel = apiResponse.LogLevel switch
+            response.LogLevel = apiResponse.Data.LogLevel switch
             {
                 LoggingLevel.Debug => LogLevel.Debug,
                 LoggingLevel.Error => LogLevel.Error,
@@ -98,7 +104,7 @@ public class ConfigurationService : ClientProxyBase.ClientProxyBase, IConfigurat
             };
 
             Logger.LogInformation($"Configuration for device identifier {deviceIdentifier} requested successfully");
-            Logger.LogDebug($"Configuration Response: [{content}]");
+            Logger.LogDebug($"Configuration Response: [{StringSerialiser.Serialise(apiResponse.Data)}]");
 
             return Result.Success(response);
         }
@@ -122,10 +128,10 @@ public class ConfigurationService : ClientProxyBase.ClientProxyBase, IConfigurat
         {
             messages = logMessages
         };
-        StringContent content = new StringContent(JsonConvert.SerializeObject(container), Encoding.UTF8, "application/json");
+        StringContent content = new(StringSerialiser.Serialise(container), Encoding.UTF8, "application/json");
 
-        HttpResponseMessage httpResponse = await this.HttpClient.PostAsync(requestUri, content, cancellationToken);
+        Result? result = await this.Post(requestUri, content, cancellationToken);
 
-        await this.HandleResponse(httpResponse, cancellationToken);
+        // TODO: return the result to the caller so that we can retry if it fails (and also log any errors that occur here)
     }
 }

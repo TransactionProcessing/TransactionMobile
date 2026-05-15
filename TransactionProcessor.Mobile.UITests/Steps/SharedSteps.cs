@@ -1,14 +1,15 @@
-﻿using System.Net;
-using System.Text;
-using System.Text.Json;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Reqnroll;
-using SecurityService.DataTransferObjects.Requests;
+using SecurityService.DataTransferObjects;
 using SecurityService.IntegrationTesting.Helpers;
 using Shared.IntegrationTesting;
+using Shared.Serialisation;
 using Shouldly;
-using TransactionProcessor.Database.Contexts;
+using System.Diagnostics.CodeAnalysis;
+using System.Net;
+using System.Text;
+using System.Text.Json;
 using TransactionProcessor.DataTransferObjects.Requests.Contract;
 using TransactionProcessor.DataTransferObjects.Requests.Estate;
 using TransactionProcessor.DataTransferObjects.Requests.Merchant;
@@ -19,6 +20,7 @@ using TransactionProcessor.DataTransferObjects.Responses.Merchant;
 using TransactionProcessor.IntegrationTesting.Helpers;
 using TransactionProcessor.Mobile.UITests.Common;
 using TransactionProcessor.Mobile.UITests.Pages;
+using TransactionProcessor.ProjectionEngine.Database.Database.Entities;
 using AssignOperatorRequest = TransactionProcessor.DataTransferObjects.Requests.Estate.AssignOperatorRequest;
 
 namespace TransactionProcessor.Mobile.UITests.Steps
@@ -51,9 +53,9 @@ namespace TransactionProcessor.Mobile.UITests.Steps
         public async Task GivenTheFollowingSecurityRolesExist(DataTable table)
         {
             List<CreateRoleRequest> requests = table.Rows.ToCreateRoleRequests();
-            List<(String, Guid)> responses = await this.SecurityServiceSteps.GivenICreateTheFollowingRoles(requests, CancellationToken.None);
+            List<(String, String)> responses = await this.SecurityServiceSteps.GivenICreateTheFollowingRoles(requests, CancellationToken.None);
 
-            foreach ((String, Guid) response in responses)
+            foreach ((String, String) response in responses)
             {
                 this.TestingContext.Roles.Add(response.Item1, response.Item2);
             }
@@ -199,27 +201,27 @@ namespace TransactionProcessor.Mobile.UITests.Steps
             ClientDetails clientDetails = this.TestingContext.GetClientDetails("mobileAppClient");
             //ClientDetails clientDetails = ClientDetails.Create("clientId-mobileAppClient", "secret-mobile", new List<String>());
             var configRequest = new {
-                                        clientId = clientDetails.ClientId,
-                                        clientSecret = clientDetails.ClientSecret,
-                                        deviceIdentifier = deviceSerial,
+                                        client_id = clientDetails.ClientId,
+                                        client_secret = clientDetails.ClientSecret,
+                                        device_identifier = deviceSerial,
                                         id = deviceSerial,
-                                        enableAutoUpdates = false,
-                                        logLevel = 3,
-                                        hostAddresses = new List<Object>()
+                                        enable_auto_updates = false,
+                                        log_level = 3,
+                                        host_addresses = new List<Object>()
                                     };
-            configRequest.hostAddresses.Add(new
+            configRequest.host_addresses.Add(new
                                             {
                                                 servicetype = 1,
                                                 uri = this.TestingContext.DockerHelper.SecurityServiceBaseAddressResolver("").Replace("127.0.0.1", this.TestingContext.DockerHelper.LocalIPAddress)
             });
-            configRequest.hostAddresses.Add(new
+            configRequest.host_addresses.Add(new
                                             {
-                                                servicetype = 2,
+                                                service_type = 2,
                                                 uri = this.TestingContext.DockerHelper.TransactionProcessorAclBaseAddressResolver("").Replace("127.0.0.1", this.TestingContext.DockerHelper.LocalIPAddress)
             });
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"http://127.0.0.1:{this.TestingContext.DockerHelper.ConfigHostPort}/api/transactionmobileconfiguration");
-            request.Content = new StringContent(JsonConvert.SerializeObject(configRequest), Encoding.UTF8, "application/json");
+            request.Content = new StringContent(StringSerialiser.Serialise(configRequest), Encoding.UTF8, "application/json");
 
             HttpClientHandler clientHandler = new HttpClientHandler
                                               {
@@ -274,10 +276,8 @@ namespace TransactionProcessor.Mobile.UITests.Steps
 
         private async Task<Decimal> GetMerchantBalance(Guid merchantId)
         {
-            JsonElement jsonElement = (JsonElement)await this.TestingContext.DockerHelper.ProjectionManagementClient.GetStateAsync<dynamic>("MerchantBalanceProjection", $"MerchantBalance-{merchantId:N}");
-            JObject jsonObject = JObject.Parse(jsonElement.GetRawText());
-            decimal balanceValue = jsonObject.SelectToken("merchant.balance").Value<decimal>();
-            return balanceValue;
+            MerchantBalanceProjectionState1 balanceState = await this.TestingContext.DockerHelper.ProjectionManagementClient.GetStateAsync<MerchantBalanceProjectionState1>("MerchantBalanceProjection", $"MerchantBalance-{merchantId:N}");
+            return balanceState.merchant.balance;
         }
 
         [Given(@"I make the following manual merchant deposits")]
@@ -342,7 +342,31 @@ namespace TransactionProcessor.Mobile.UITests.Steps
         public async Task GivenTheFollowingMetersAreAvailableAtThePataPawaPrePayHost(DataTable table)
         {
             List<ReqnrollExtensions.PataPawaMeter> meters = table.Rows.ToPataPawaMeters();
-            await this.TransactionProcessorSteps.GivenTheFollowingMetersAreAvailableAtThePataPawaPrePaidHost(meters);
+            await this.GivenTheFollowingMetersAreAvailableAtThePataPawaPrePaidHost(meters);
+        }
+
+        public async Task GivenTheFollowingMetersAreAvailableAtThePataPawaPrePaidHost(List<ReqnrollExtensions.PataPawaMeter> meters)
+        {
+            await this.SendRequestToTestHost<ReqnrollExtensions.PataPawaMeter>(meters, "/api/developer/patapawaprepay/createmeter");
+        }
+
+        public async Task SendRequestToTestHost<T>(List<T> objects, String url)
+        {
+            foreach (T o in objects)
+            {
+                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, url);
+
+                httpRequestMessage.Content = new StringContent(StringSerialiser.Serialise(o, new SerialiserOptions(SerialiserPropertyFormat.CamelCase)), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await this.TestingContext.DockerHelper.TestHostHttpClient.SendAsync(httpRequestMessage);
+                response.StatusCode.ShouldBe(HttpStatusCode.OK);
+            }
         }
     }
 }
+
+[ExcludeFromCodeCoverage]
+public record Merchant(string Id, string Name, int numberOfEventsProcessed, decimal balance);
+
+[ExcludeFromCodeCoverage]
+public record MerchantBalanceProjectionState1(Merchant merchant);

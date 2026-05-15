@@ -8,6 +8,7 @@ using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 using TransactionProcessor.Mobile.Extensions;
 using TransactionProcessor.Mobile.UIServices;
 using Microsoft.Extensions.DependencyInjection;
+using TransactionProcessor.Mobile.BusinessLogic.Serialisation;
 
 namespace TransactionProcessor.Mobile
 {
@@ -33,6 +34,9 @@ namespace TransactionProcessor.Mobile
             builder.Logging.SetMinimumLevel(LogLevel.Trace);//.AddConsole();
             
             Container = builder.Build();
+
+            var serialiser = Container.Services.GetRequiredService<IStringSerialiser>();
+            StringSerialiser.Initialise(serialiser);
 
             Logger.Initialise(new ConsoleLogger());
 

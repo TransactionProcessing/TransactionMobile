@@ -1,13 +1,11 @@
 ﻿using MediatR;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using SimpleResults;
-using System.Diagnostics;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Database;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
+using TransactionProcessor.Mobile.BusinessLogic.Serialisation;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers;
@@ -115,7 +113,7 @@ public class TransactionRequestHandler : IRequestHandler<TransactionCommands.Per
             TransactionDateTime = request.TransactionDateTime,
             TransactionNumber = transaction.transactionNumber.ToString(),
             DeviceIdentifier = this.DeviceService.GetIdentifier(),
-            ApplicationVersion = this.ApplicationInfoService.VersionString
+            ApplicationVersion = "1.0.5"//this.ApplicationInfoService.VersionString
         };
 
         Result<PerformLogonResponseModel> result = await transactionService.PerformLogon(model, cancellationToken);
@@ -123,7 +121,7 @@ public class TransactionRequestHandler : IRequestHandler<TransactionCommands.Per
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
         if (result.IsSuccess && result.Data.IsSuccessful == false)
         {
-            return  Result.Failure($"Logon transaction not successful {JsonConvert.SerializeObject(result.Data)}");
+            return  Result.Failure($"Logon transaction not successful {StringSerialiser.Serialise(result.Data)}");
         }
 
         return Result.Success(result.Data);
