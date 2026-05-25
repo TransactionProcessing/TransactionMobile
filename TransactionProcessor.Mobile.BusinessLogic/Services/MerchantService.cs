@@ -110,15 +110,7 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
             Logger.LogInformation("About to request merchant balance");
             Logger.LogDebug($"Merchant Balance Request details: Access Token {accessToken.AccessToken}");
 
-            //MerchantBalanceResponse merchantBalance = new MerchantBalanceResponse {
-            //                                                                          AvailableBalance = 0,
-            //                                                                          Balance = 0
-            //                                                                      };
-            //await this.EstateClient.GetMerchantBalance(accessToken.AccessToken, estateId, merchantId, cancellationToken);
-
             Logger.LogInformation("Balance for merchant requested successfully");
-            //Logger.LogDebug($"Merchant Balance Response: [{JsonConvert.SerializeObject(merchantBalance)}]");
-
             return Result.Success(0.0m);
         }
         catch(Exception ex) {
@@ -134,24 +126,6 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
 
         Logger.LogInformation("About to request merchant details");
         Logger.LogDebug($"Merchant Details Request details: Access Token {accessToken.AccessToken}");
-
-        //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUri);
-        //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
-        //var httpResponse = await this.HttpClient.SendAsync(request, cancellationToken);
-
-        //// Process the response
-        //Result<String> content = await this.HandleResponseX(httpResponse, cancellationToken);
-
-        //if (content.IsFailed)
-        //{
-        //    Logger.LogInformation($"GetMerchantContracts failed {content.Status}");
-        //    return Result.Failure(content.Message);
-        //}
-
-        //Logger.LogDebug($"Transaction Response details:  Status {httpResponse.StatusCode} Payload {content.Data}");
-
-        ////ResponseData<MerchantResponse> responseData = this.HandleResponseContent<MerchantResponse>(content.Data);
-        //MerchantResponse responseData = JsonConvert.DeserializeObject<MerchantResponse>(content.Data);
 
         Result<MerchantResponse>? responseDataResult = await this.Get<MerchantResponse>(requestUri, accessToken.AccessToken, cancellationToken);
 
@@ -171,8 +145,6 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
                                                                   NextStatementDate = responseDataResult.Data.NextStatementDate,
                                                                   LastStatementDate = new DateTime(),
                                                                   SettlementSchedule = responseDataResult.Data.SettlementSchedule.ToString(),
-                                                                  //AvailableBalance = merchantResponse.AvailableBalance,
-                                                                  //Balance = merchantResponse.Balance,
                                                                   Contact = new ContactModel {
                                                                                                  Name = responseDataResult.Data.Contacts.First().ContactName,
                                                                                                  EmailAddress = responseDataResult.Data.Contacts.First().ContactEmailAddress,

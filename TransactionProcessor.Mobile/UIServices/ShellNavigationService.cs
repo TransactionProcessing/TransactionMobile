@@ -1,5 +1,4 @@
-﻿using TransactionProcessor.Mobile;
-using TransactionProcessor.Mobile.BusinessLogic.Logging;
+﻿using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 using TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions;
 using TransactionProcessor.Mobile.Pages.MyAccount;
@@ -10,7 +9,7 @@ using TransactionProcessor.Mobile.Pages.Transactions.BillPayment;
 using TransactionProcessor.Mobile.Pages.Transactions.MobileTopup;
 using TransactionProcessor.Mobile.Pages.Transactions.Voucher;
 
-namespace TransactionMobile.Maui.UIServices;
+namespace TransactionProcessor.Mobile.UIServices;
 
 public class ShellNavigationService : INavigationService
 {
@@ -37,11 +36,11 @@ public class ShellNavigationService : INavigationService
     }
 
     public async Task GoToHome() {
-        await NavigateTo("///main/home");
+        await this.NavigateTo("///main/home");
     }
 
     public async Task GoToMobileTopupFailedPage() {
-        await NavigateTo($"{nameof(MobileTopupFailedPage)}");
+        await this.NavigateTo($"{nameof(MobileTopupFailedPage)}");
     }
 
     public async Task GoToMobileTopupPerformTopupPage(ProductDetails productDetails,
@@ -51,53 +50,53 @@ public class ShellNavigationService : INavigationService
                                                                             {nameof(ProductDetails), productDetails},
                                                                         };
 
-        await NavigateTo($"{nameof(MobileTopupPerformTopupPage)}", d);
+        await this.NavigateTo($"{nameof(MobileTopupPerformTopupPage)}", d);
     }
 
     public async Task GoToMobileTopupSelectOperatorPage() {
-        await NavigateTo($"{nameof(MobileTopupSelectOperatorPage)}");
+        await this.NavigateTo($"{nameof(MobileTopupSelectOperatorPage)}");
     }
 
     public async Task GoToBillPaymentSelectOperatorPage() {
-        await NavigateTo($"{nameof(BillPaymentSelectOperatorPage)}");
+        await this.NavigateTo($"{nameof(BillPaymentSelectOperatorPage)}");
     }
 
     public async Task GoToBillPaymentSelectProductPage(ProductDetails productDetails) {
         Dictionary<String, Object> d = new Dictionary<String, Object>() {
                                                                             {nameof(ProductDetails), productDetails},
                                                                         };
-        await NavigateTo($"{nameof(BillPaymentSelectProductPage)}",d);
+        await this.NavigateTo($"{nameof(BillPaymentSelectProductPage)}",d);
     }
 
     public async Task GoToAdminPage() {
-        await NavigateTo(nameof(AdminPage));
+        await this.NavigateTo(nameof(AdminPage));
     }
 
     public async Task GoToMobileTopupSelectProductPage(ProductDetails productDetails) {
         Dictionary<String, Object> d = new Dictionary<String, Object>() {
                                                                             {nameof(ProductDetails), productDetails},
                                                                         };
-        await NavigateTo($"{nameof(MobileTopupSelectProductPage)}", d);
+        await this.NavigateTo($"{nameof(MobileTopupSelectProductPage)}", d);
     }
 
     public async Task GoToMobileTopupSuccessPage() {
-        await NavigateTo($"{nameof(MobileTopupSuccessPage)}");
+        await this.NavigateTo($"{nameof(MobileTopupSuccessPage)}");
     }
 
     public async Task GoToVoucherIssueSuccessPage() {
-        await NavigateTo($"{nameof(VoucherIssueSuccessPage)}");
+        await this.NavigateTo($"{nameof(VoucherIssueSuccessPage)}");
     }
 
     public async Task GoToVoucherIssueFailedPage() {
-        await NavigateTo($"{nameof(VoucherIssueFailedPage)}");
+        await this.NavigateTo($"{nameof(VoucherIssueFailedPage)}");
     }
 
     public async Task GoToBillPaymentSuccessPage() {
-        await NavigateTo($"{nameof(BillPaymentSuccessPage)}");
+        await this.NavigateTo($"{nameof(BillPaymentSuccessPage)}");
     }
 
     public async Task GoToBillPaymentFailedPage() {
-        await NavigateTo($"{nameof(BillPaymentFailedPage)}");
+        await this.NavigateTo($"{nameof(BillPaymentFailedPage)}");
     }
 
     public async Task PopToRoot() {
@@ -106,7 +105,7 @@ public class ShellNavigationService : INavigationService
     }
 
     public async Task GoToVoucherSelectOperatorPage() {
-        await NavigateTo(nameof(VoucherSelectOperatorPage));
+        await this.NavigateTo(nameof(VoucherSelectOperatorPage));
     }
 
     public async Task GoToVoucherSelectProductPage(ProductDetails productDetails) {
@@ -115,7 +114,7 @@ public class ShellNavigationService : INavigationService
                                                                             {nameof(ProductDetails), productDetails},
                                                                         };
 
-        await NavigateTo($"{nameof(VoucherSelectProductPage)}", d);
+        await this.NavigateTo($"{nameof(VoucherSelectProductPage)}", d);
     }
 
     public async Task GoToVoucherIssueVoucherPage(ProductDetails productDetails,
@@ -124,7 +123,7 @@ public class ShellNavigationService : INavigationService
                                                                             {"VoucherAmount", voucherAmount},
                                                                             {nameof(ProductDetails), productDetails},
                                                                         };
-        await NavigateTo($"{nameof(VoucherPerformIssuePage)}", d);
+        await this.NavigateTo($"{nameof(VoucherPerformIssuePage)}", d);
     }
 
     public async Task GoToBillPaymentGetAccountPage(ProductDetails productDetails) {
@@ -132,14 +131,14 @@ public class ShellNavigationService : INavigationService
         Dictionary<String, Object> d = new Dictionary<String, Object>() {
                                                                             {nameof(ProductDetails), productDetails},
                                                                         };
-        await NavigateTo($"{nameof(BillPaymentGetAccountPage)}", d);
+        await this.NavigateTo($"{nameof(BillPaymentGetAccountPage)}", d);
     }
 
     public async Task GoToBillPaymentGetMeterPage(ProductDetails productDetails){
         Dictionary<String, Object> d = new Dictionary<String, Object>() {
                                                                             {nameof(ProductDetails), productDetails},
                                                                         };
-        await NavigateTo($"{nameof(BillPaymentGetMeterPage)}", d);
+        await this.NavigateTo($"{nameof(BillPaymentGetMeterPage)}", d);
     }
 
     public async Task GoToBillPaymentPayBillPage(ProductDetails productDetails,
@@ -149,7 +148,7 @@ public class ShellNavigationService : INavigationService
                                                                             {nameof(BillDetails), billDetails}
                                                                         };
 
-        await NavigateTo($"{nameof(BillPaymentPayBillPage)}", d);
+        await this.NavigateTo($"{nameof(BillPaymentPayBillPage)}", d);
     }
 
     public async Task GoToBillPaymentPayBillPage(ProductDetails productDetails,
@@ -160,41 +159,41 @@ public class ShellNavigationService : INavigationService
                                                                             {nameof(MeterDetails), meterDetails}
                                                                         };
 
-        await NavigateTo($"{nameof(BillPaymentPayBillPage)}", d);
+        await this.NavigateTo($"{nameof(BillPaymentPayBillPage)}", d);
     }
 
     public async Task GoToLoginPage() {
         Application.Current.MainPage = new AppShell();
-        await NavigateTo("///login");
+        await this.NavigateTo("///login");
     }
 
     public async Task GoToViewLogsPage() {
-        await NavigateTo(nameof(ViewLogsPage));
+        await this.NavigateTo(nameof(ViewLogsPage));
     }
 
     public async Task GoToMyAccountAddresses() {
         MyAccountAddressesPage p = (MyAccountAddressesPage)MauiProgram.Container.Services.GetService(typeof(MyAccountAddressesPage));
-        await NavigateTo(p);
+        await this.NavigateTo(p);
     }
 
     public async Task GoToMyAccountContacts() {
-        await NavigateTo(nameof(MyAccountContactPage));
+        await this.NavigateTo(nameof(MyAccountContactPage));
     }
 
     public async Task GoToMyAccountDetails() {
-        await NavigateTo(nameof(MyAccountDetailsPage));
+        await this.NavigateTo(nameof(MyAccountDetailsPage));
     }
 
     public async Task GoToReportsSalesAnalysis(){
-        await NavigateTo(nameof(ReportsSalesAnalysisPage));
+        await this.NavigateTo(nameof(ReportsSalesAnalysisPage));
     }
 
     public async Task GoToReportsBalanceAnalysis(){
-        await NavigateTo(nameof(ReportsBalanceAnalysisPage));
+        await this.NavigateTo(nameof(ReportsBalanceAnalysisPage));
     }
 
     public async Task GoToTransactions() {
-        await NavigateTo("///main/transactions");
+        await this.NavigateTo("///main/transactions");
     }
 
     private async Task NavigateTo(String route) {
@@ -224,7 +223,6 @@ public class ShellNavigationService : INavigationService
     private async Task NavigateTo(ContentPage page){
         try
         {
-            //Logger.LogInformation($"navigating to {route}");
             await Shell.Current.Navigation.PushAsync(page);
         }
         catch (Exception e)

@@ -13,8 +13,6 @@ namespace TransactionProcessor.Mobile
         protected override async void OnNavigating(ShellNavigatingEventArgs args)
         {
             base.OnNavigating(args);
-
-            //Logger.LogDebug($"In OnNavigating - Source [{args.Source.ToString()}] {JsonConvert.SerializeObject(args)}");
             if (args.Source == ShellNavigationSource.ShellSectionChanged)
             {
                 List<Page> existingPages = Navigation.NavigationStack.ToList();
