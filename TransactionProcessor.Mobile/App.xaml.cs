@@ -174,7 +174,6 @@ namespace TransactionProcessor.Mobile
             RegisterRouteOnce(nameof(BillPaymentSuccessPage), typeof(BillPaymentSuccessPage));
             RegisterRouteOnce(nameof(BillPaymentFailedPage), typeof(BillPaymentFailedPage));
             RegisterRouteOnce(nameof(AdminPage), typeof(AdminPage));
-            //RegisterRouteOnce(nameof(LoginPage), typeof(LoginPage));
 
             RegisterRouteOnce(nameof(ViewLogsPage), typeof(ViewLogsPage));
 
