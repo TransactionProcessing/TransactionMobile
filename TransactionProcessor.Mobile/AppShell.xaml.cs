@@ -10,7 +10,7 @@ namespace TransactionProcessor.Mobile
             InitializeComponent();
         }
 
-        protected override async void OnNavigating(ShellNavigatingEventArgs args)
+        protected override void OnNavigating(ShellNavigatingEventArgs args)
         {
             base.OnNavigating(args);
             if (args.Source == ShellNavigationSource.ShellSectionChanged)
@@ -27,13 +27,6 @@ namespace TransactionProcessor.Mobile
                     }
                 }
             }
-        }
-
-        protected override void OnNavigated(ShellNavigatedEventArgs args)
-        {
-            //Logger.LogDebug($"In OnNavigated - Source [{args.Source.ToString()}] {JsonConvert.SerializeObject(args)}");
-
-            base.OnNavigated(args);
         }
     }
 }
