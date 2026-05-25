@@ -246,11 +246,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
                 Result<List<ContractProductModel>> getMerchantContractProductsResult = await this.GetMerchantContractProducts();
                 this.HandleResult(getMerchantContractProductsResult);
 
-                //await this.WriteTimingTrace(sw, "After GetMerchantContractProducts");
-                //Result<Decimal> getMerchantBalanceResult =  await this.GetMerchantBalance();
-                //this.HandleResult(getMerchantBalanceResult);
-
-                //await this.WriteTimingTrace(sw, "After GetMerchantBalance");
+                await this.WriteTimingTrace(sw, "After GetMerchantContractProducts");
+                
                 this.ApplicationCache.SetIsLoggedIn(true);
                 
                 this.BalanceRefresher.StartRefreshing();

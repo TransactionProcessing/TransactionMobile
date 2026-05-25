@@ -35,21 +35,7 @@ public class ConfigurationService : ClientProxyBase.ClientProxyBase, IConfigurat
 
         return requestUri;
     }
-
-    //protected override async Task<String> HandleResponse(HttpResponseMessage responseMessage,
-    //                                                     CancellationToken cancellationToken)
-    //{
-    //    String content = await responseMessage.Content.ReadAsStringAsync();
-
-    //    if (responseMessage.StatusCode == HttpStatusCode.NotFound)
-    //    {
-    //        // No error as maybe running under CI (which has no internet)
-    //        return content;
-    //    }
-
-    //    return await base.HandleResponse(responseMessage, cancellationToken);
-    //}
-
+    
     public async Task<Result<Configuration>> GetConfiguration(String deviceIdentifier,
                                                               CancellationToken cancellationToken)
     {
@@ -66,17 +52,6 @@ public class ConfigurationService : ClientProxyBase.ClientProxyBase, IConfigurat
             if (apiResponse.IsFailed)
                 return ResultHelpers.CreateFailure(apiResponse);
 
-            //response = new Configuration
-            //{
-            //    ApplicationUpdateUri = "",
-            //    ClientId = "mobileAppClient",
-            //    ClientSecret = "d192cbc46d834d0da90e8a9d50ded543",
-            //    EnableAutoUpdates = false,
-            //    LogLevel = LogLevel.Debug,
-            //    SecurityServiceUri = "https://192.168.1.86:5001",
-            //    TransactionProcessorAclUri = "http://192.168.1.86:5003",
-            //};
-            //return response;
             Logger.LogDebug($"Configuration Response is {StringSerialiser.Serialise(apiResponse.Data)}");
             Logger.LogDebug($"About to build Configuration");
             response = new Configuration() {

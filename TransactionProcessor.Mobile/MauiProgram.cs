@@ -31,7 +31,7 @@ namespace TransactionProcessor.Mobile
             }).Services.AddTransient<IDeviceService, DeviceService>()
                 .AddMemoryCache();
 
-            builder.Logging.SetMinimumLevel(LogLevel.Trace);//.AddConsole();
+            builder.Logging.SetMinimumLevel(LogLevel.Trace);;
             
             Container = builder.Build();
 
