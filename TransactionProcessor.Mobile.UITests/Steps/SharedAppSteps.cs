@@ -34,7 +34,7 @@ namespace TransactionProcessor.Mobile.UITests.Steps
             if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
                 var driver = AppiumDriverWrapper.Driver as AndroidDriver;
                 AppState state = driver.GetAppState("com.transactionprocessor.mobile");
-                state.ShouldBe(AppState.NotRunning);
+                state.ShouldBe(AppState.RunningInBackground);
             }
         }
 
