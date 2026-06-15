@@ -134,8 +134,8 @@ public class ReportsBalanceAnalysisPageViewModel : ExtendedBaseViewModel
                                                                                                               },
                                                                               Fill = null,
                                                                               Name = "Balance",
-                                                                              TooltipLabelFormatter =
-                                                                                  (chartPoint) => $"{chartPoint.Context.Series.Name}: {chartPoint.PrimaryValue}"
+                                                                              YToolTipLabelFormatter = 
+                                                                                  (chartPoint) => $"{chartPoint.Context.Series.Name}: {chartPoint.StackedValue}"
                                                                           }
                                          };
     }

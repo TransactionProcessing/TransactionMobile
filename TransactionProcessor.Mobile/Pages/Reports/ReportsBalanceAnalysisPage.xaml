@@ -22,12 +22,11 @@
                                                Series="{Binding Series}"
                                                YAxes="{Binding YAxes}"
                                                XAxes="{Binding XAxes}"
-                                               TooltipFindingStrategy="{Binding TooltipFindingStrategy}"
                                                TooltipPosition="{Binding TooltipPosition}"
                                                HeightRequest="260"
                                                HorizontalOptions="FillAndExpand" />
             </Frame>
-
+            <!--TooltipFindingStrategy="{Binding TooltipFindingStrategy}"-->
             <Button Text="Back" AutomationId="BackButton" Style="{StaticResource ReportsButtonStyle}" Command="{Binding BackButtonCommand}"/>
         </VerticalStackLayout>
     </ScrollView>
