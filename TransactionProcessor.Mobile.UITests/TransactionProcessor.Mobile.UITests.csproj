@@ -9,31 +9,31 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="coverlet.collector" Version="8.0.1">
+	  <PackageReference Include="coverlet.collector">
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		  <PrivateAssets>all</PrivateAssets>
 	  </PackageReference>
-	  <PackageReference Include="Appium.WebDriver" Version="8.2.0" />
-	  <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.5" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.5" />
-	  <PackageReference Include="Shared.IntegrationTesting" Version="2026.5.6" />
-	  <PackageReference Include="Shouldly" Version="4.3.0" />
-	  <PackageReference Include="NUnit.ConsoleRunner" Version="3.22.0" />
-	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
-    <PackageReference Include="NUnit" Version="4.5.1" />
-    <PackageReference Include="NUnit.Analyzers" Version="4.12.0">
+	  <PackageReference Include="Appium.WebDriver" />
+	  <PackageReference Include="Microsoft.Data.Sqlite.Core" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+	  <PackageReference Include="Shared.IntegrationTesting" />
+	  <PackageReference Include="Shouldly" />
+	  <PackageReference Include="NUnit.ConsoleRunner" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" />
+	  <PackageReference Include="NUnit" />
+	  <PackageReference Include="NUnit.Analyzers">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-	  <PackageReference Include="NUnit3TestAdapter" Version="6.2.0" />
-	  <PackageReference Include="Reqnroll.NUnit" Version="3.3.4" />
-	  <PackageReference Include="Reqnroll.Tools.MsBuild.Generation" Version="3.3.4" />
-	  <PackageReference Include="TransactionProcessor.Client" Version="2026.4.3-build355" />
-	  <PackageReference Include="TransactionProcessor.IntegrationTesting.Helpers" Version="2026.4.3-build355" />
-	  <PackageReference Include="SecurityService.Client" Version="2026.4.3-build157" />
-	  <PackageReference Include="SecurityService.IntegrationTesting.Helpers" Version="2026.4.3-build157" />
-	  <PackageReference Include="TransactionProcessor.Database" Version="2026.4.3-build355" />
-	  <PackageReference Include="EventStoreProjections" Version="2023.12.3" />
+	  <PackageReference Include="NUnit3TestAdapter" />
+	  <PackageReference Include="Reqnroll.NUnit" />
+	  <PackageReference Include="Reqnroll.Tools.MsBuild.Generation" />
+	  <PackageReference Include="TransactionProcessor.Client" />
+	  <PackageReference Include="TransactionProcessor.IntegrationTesting.Helpers" />
+	  <PackageReference Include="SecurityService.Client" />
+	  <PackageReference Include="SecurityService.IntegrationTesting.Helpers" />
+	  <PackageReference Include="TransactionProcessor.Database" />
+	  <PackageReference Include="EventStoreProjections" />
   </ItemGroup>
 
   <ItemGroup>

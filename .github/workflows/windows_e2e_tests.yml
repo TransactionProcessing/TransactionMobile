@@ -52,7 +52,24 @@ jobs:
         shell: powershell      
         run: |         
          Import-Module Appx 
-         .\TransactionProcessor.Mobile/bin/Release\net10.0-windows10.0.19041.0\win-x64\AppPackages\TransactionProcessor.Mobile_1.0.0.1_Test\Install.ps1 -Force
+         $candidatePaths = @(
+           (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\AppPackages"),
+           (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\bin\Release\net10.0-windows10.0.19041.0\win-x64\AppPackages")
+         )
+         $appPackagesPath = $candidatePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+         if ($null -eq $appPackagesPath) {
+           throw "Unable to find AppPackages under: $($candidatePaths -join ', ')"
+         }
+         $installScript = Get-ChildItem -Path $appPackagesPath -Recurse -Filter Install.ps1 | Select-Object -First 1
+         if ($null -ne $installScript) {
+           & $installScript.FullName -Force
+         } else {
+           $msixPackage = Get-ChildItem -Path $appPackagesPath -Recurse -Filter *.msix | Select-Object -First 1
+           if ($null -eq $msixPackage) {
+             throw "Unable to find Install.ps1 or .msix package under $appPackagesPath."
+           }
+           Add-AppxPackage -Path $msixPackage.FullName -ForceApplicationShutdown
+         }
 
       - name: Run Windows End To End Tests
         run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "Category=PRTest&Category=Windows" --no-restore
