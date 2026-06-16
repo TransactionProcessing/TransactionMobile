@@ -51,18 +51,30 @@ jobs:
       - name: Debug AppPackages contents
         shell: powershell
         run: |
-         $appPackagesPath = ".\TransactionProcessor.Mobile\bin\Release\net10.0-windows10.0.19041.0\win-x64\AppPackages"
-         if (Test-Path $appPackagesPath) {
-           Get-ChildItem -Path $appPackagesPath -Recurse | Format-List FullName, Length, Mode
-         } else {
-           Write-Error "AppPackages path not found: $appPackagesPath"
+         $candidatePaths = @(
+          (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\AppPackages"),
+          (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\bin\Release\net10.0-windows10.0.19041.0\win-x64\AppPackages")
+         )
+         $appPackagesPath = $candidatePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+         if ($null -eq $appPackagesPath) {
+          Write-Error "Unable to find AppPackages under: $($candidatePaths -join ', ')"
+          exit 1
          }
+         Write-Host "Listing AppPackages from $appPackagesPath"
+         Get-ChildItem -Path $appPackagesPath -Recurse | Format-List FullName, Length, Mode
 
       - name: Install App
         shell: powershell
         run: |         
          Import-Module Appx 
-         $appPackagesPath = ".\TransactionProcessor.Mobile\bin\Release\net10.0-windows10.0.19041.0\win-x64\AppPackages"
+         $candidatePaths = @(
+           (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\AppPackages"),
+           (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\bin\Release\net10.0-windows10.0.19041.0\win-x64\AppPackages")
+         )
+         $appPackagesPath = $candidatePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+         if ($null -eq $appPackagesPath) {
+           throw "Unable to find AppPackages under: $($candidatePaths -join ', ')"
+         }
          $installScript = Get-ChildItem -Path $appPackagesPath -Recurse -Filter Install.ps1 | Select-Object -First 1
          if ($null -ne $installScript) {
            & $installScript.FullName -Force
