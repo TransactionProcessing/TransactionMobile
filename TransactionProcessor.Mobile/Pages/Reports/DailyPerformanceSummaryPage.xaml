@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
+             xmlns:models="clr-namespace:TransactionProcessor.Mobile.BusinessLogic.Models;assembly=TransactionProcessor.Mobile.BusinessLogic"
+             xmlns:reports1="clr-namespace:TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports;assembly=TransactionProcessor.Mobile.BusinessLogic"
+             x:Class="TransactionProcessor.Mobile.Pages.Reports.DailyPerformanceSummaryPage"
+             x:Name="SummaryPage"
+             x:DataType="reports1:DailyPerformanceSummaryPageViewModel"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+             <DataTemplate x:Key="MetricTemplate" x:DataType="models:DailyPerformanceMetricModel">
+                 <Frame Style="{StaticResource TransactionFormCard}"
+                        BackgroundColor="{DynamicResource salesAnalysisCardBackgroundColor}"
+                        BorderColor="{DynamicResource salesAnalysisCardBorderColor}"
+                        Padding="10"
+                        HasShadow="False"
+                        CornerRadius="14"
+                        MinimumHeightRequest="112"
+                        Margin="0"
+                        WidthRequest="160"
+                        HorizontalOptions="Fill">
+                    <Frame.Triggers>
+                        <DataTrigger TargetType="Frame"
+                                     Binding="{Binding Category}"
+                                     Value="{x:Static models:DailyPerformanceMetricCategory.Success}">
+                            <Setter Property="BackgroundColor" Value="#EAF7EE" />
+                            <Setter Property="BorderColor" Value="#1E8E3E" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Frame"
+                                     Binding="{Binding Category}"
+                                     Value="{x:Static models:DailyPerformanceMetricCategory.Failure}">
+                            <Setter Property="BackgroundColor" Value="#FDEEEF" />
+                            <Setter Property="BorderColor" Value="#D64545" />
+                        </DataTrigger>
+                    </Frame.Triggers>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="{Binding Title}"
+                               FontSize="10"
+                               MaxLines="2"
+                               LineBreakMode="WordWrap"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label"
+                                             Binding="{Binding Category}"
+                                             Value="{x:Static models:DailyPerformanceMetricCategory.Success}">
+                                    <Setter Property="TextColor" Value="#1E8E3E" />
+                                </DataTrigger>
+                                <DataTrigger TargetType="Label"
+                                             Binding="{Binding Category}"
+                                             Value="{x:Static models:DailyPerformanceMetricCategory.Failure}">
+                                    <Setter Property="TextColor" Value="#D64545" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                        <Label Text="{Binding Value}"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               LineBreakMode="WordWrap"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label"
+                                             Binding="{Binding Category}"
+                                             Value="{x:Static models:DailyPerformanceMetricCategory.Success}">
+                                    <Setter Property="TextColor" Value="#1E8E3E" />
+                                </DataTrigger>
+                                <DataTrigger TargetType="Label"
+                                             Binding="{Binding Category}"
+                                             Value="{x:Static models:DailyPerformanceMetricCategory.Failure}">
+                                    <Setter Property="TextColor" Value="#D64545" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                        <Label Text="{Binding Description}"
+                               FontSize="10"
+                               Opacity="0.75"
+                               LineBreakMode="WordWrap"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label"
+                                             Binding="{Binding Category}"
+                                             Value="{x:Static models:DailyPerformanceMetricCategory.Success}">
+                                    <Setter Property="TextColor" Value="#1E8E3E" />
+                                </DataTrigger>
+                                <DataTrigger TargetType="Label"
+                                             Binding="{Binding Category}"
+                                             Value="{x:Static models:DailyPerformanceMetricCategory.Failure}">
+                                    <Setter Property="TextColor" Value="#D64545" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                    </VerticalStackLayout>
+                </Frame>
+            </DataTemplate>
+
+            <DataTemplate x:Key="TransactionTemplate" x:DataType="models:DailyPerformanceTransactionModel">
+                <Frame Style="{StaticResource TransactionFormCard}"
+                       Padding="14"
+                       BackgroundColor="{DynamicResource salesAnalysisCardBackgroundColor}"
+                       BorderColor="{DynamicResource salesAnalysisCardBorderColor}">
+                    <Grid ColumnDefinitions="*,Auto"
+                          RowDefinitions="Auto,Auto"
+                          ColumnSpacing="12"
+                          RowSpacing="4">
+                        <Label Text="{Binding Reference}"
+                               FontAttributes="Bold"
+                               FontSize="14"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                        <Label Grid.Column="1"
+                               Text="{Binding Amount}"
+                               FontAttributes="Bold"
+                               FontSize="14"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                        <Label Grid.Row="1"
+                                Text="{Binding Product}"
+                                FontSize="12"
+                                Opacity="0.8"
+                                TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                        <Label Grid.Row="1"
+                               Grid.Column="1"
+                               FontSize="11"
+                               HorizontalTextAlignment="End"
+                               VerticalTextAlignment="Center"
+                               Text="{Binding Status}">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label"
+                                             Binding="{Binding Status}"
+                                             Value="Success">
+                                    <Setter Property="Text" Value="✓ Success" />
+                                    <Setter Property="TextColor" Value="#1E8E3E" />
+                                </DataTrigger>
+                                <DataTrigger TargetType="Label"
+                                             Binding="{Binding Status}"
+                                             Value="Failed">
+                                    <Setter Property="Text" Value="✕ Failed" />
+                                    <Setter Property="TextColor" Value="#D64545" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                    </Grid>
+                </Frame>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Style="{DynamicResource Layout}" Spacing="18">
+            <controls:TitleLabel Text="{Binding Title}"
+                                 AutomationId="DailyPerformanceSummary"
+                                 FontSize="20"
+                                 HorizontalTextAlignment="Center"
+                                 VerticalOptions="End"
+                                 FontAttributes="Bold"
+                                 TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}"
+                                 Padding="20,0,20,8"/>
+
+            <Picker Title="Select period"
+                    ItemsSource="{Binding PeriodOptions}"
+                    ItemDisplayBinding="{Binding DisplayText}"
+                    SelectedItem="{Binding SelectedPeriodOption}"
+                    TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}"
+                    TitleColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource Gray200}}">
+                <Picker.Behaviors>
+                    <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged"
+                                                    Command="{Binding PeriodChangedCommand}"
+                                                    BindingContext="{Binding Source={x:Reference SummaryPage}, Path=BindingContext}" />
+                </Picker.Behaviors>
+            </Picker>
+
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
+                               Color="{StaticResource reports}"
+                               HorizontalOptions="Center" />
+
+            <VerticalStackLayout IsVisible="{Binding HasError}" Spacing="4">
+                <Label Text="Unable to load performance summary."
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                <Label Text="{Binding ErrorMessage}"
+                       FontSize="12"
+                       Opacity="0.8"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="12" IsVisible="{Binding HasSummaryData}">
+                <Label Text="Summary"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                <HorizontalStackLayout Spacing="12"
+                                       BindableLayout.ItemsSource="{Binding TopSummaryCardsRow1}"
+                                       BindableLayout.ItemTemplate="{StaticResource MetricTemplate}" />
+                <HorizontalStackLayout Spacing="12"
+                                       BindableLayout.ItemsSource="{Binding TopSummaryCardsRow2}"
+                                       BindableLayout.ItemTemplate="{StaticResource MetricTemplate}" />
+
+                <Label Text="Recent transactions"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                <VerticalStackLayout Spacing="10"
+                                     BindableLayout.ItemsSource="{Binding DrillDownTransactions}"
+                                     BindableLayout.ItemTemplate="{StaticResource TransactionTemplate}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout IsVisible="{Binding HasEmptyState}" Spacing="4">
+                <Label Text="No performance summary available."
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                <Label Text="Try another period or refresh once transactions have been processed."
+                       FontSize="12"
+                       Opacity="0.8"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+            </VerticalStackLayout>
+
+            <Button Text="Back"
+                    AutomationId="BackButton"
+                    Style="{StaticResource ReportsButtonStyle}"
+                    Command="{Binding BackButtonCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

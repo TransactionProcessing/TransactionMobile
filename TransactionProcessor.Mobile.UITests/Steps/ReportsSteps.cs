@@ -7,12 +7,11 @@ namespace TransactionProcessor.Mobile.UITests.Steps;
 [Scope(Tag = "reports")]
 public class ReportsSteps{
     private readonly ReportsPage ReportsPage;
+    private readonly DailyPerformanceSummaryPage DailyPerformanceSummaryPage;
 
-    private readonly SalesAnalysisPage SalesAnalysisPage;
-
-    public ReportsSteps(ReportsPage reportsPage, SalesAnalysisPage salesAnalysisPage){
+    public ReportsSteps(ReportsPage reportsPage, DailyPerformanceSummaryPage dailyPerformanceSummaryPage){
         this.ReportsPage = reportsPage;
-        this.SalesAnalysisPage = salesAnalysisPage;
+        this.DailyPerformanceSummaryPage = dailyPerformanceSummaryPage;
     }
 
     [Then(@"the Reports Page is displayed")]
@@ -21,16 +20,16 @@ public class ReportsSteps{
         await this.ReportsPage.AssertOnPage();
     }
 
-    [When(@"I tap on the Sales Analysis Button")]
-    public async Task WhenITapOnTheSalesAnalysisButton(){
-        await this.ReportsPage.ClickSalesAnalysisButton();
-    }
-
-    [Then(@"the Sales Analysis Report is displayed")]
-    public async Task ThenTheSalesAnalysisReportIsDisplayed()
+    [When(@"I tap on the Daily Performance Summary Button")]
+    public async Task WhenITapOnTheDailyPerformanceSummaryButton()
     {
-        await this.SalesAnalysisPage.AssertOnPage();
+        await this.ReportsPage.ClickDailyPerformanceSummaryButton();
     }
 
+    [Then(@"the Daily Performance Summary Report is displayed")]
+    public async Task ThenTheDailyPerformanceSummaryReportIsDisplayed()
+    {
+        await this.DailyPerformanceSummaryPage.AssertOnPage();
+    }
 
 }

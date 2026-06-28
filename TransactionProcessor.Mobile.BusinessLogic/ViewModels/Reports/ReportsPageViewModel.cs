@@ -45,11 +45,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports
         {
             this.ReportsMenuOptions = new List<ListViewItem> {
                                                                  new ListViewItem {
-                                                                                      Title = "Sales Analysis"
-                                                                                  },
-                                                                 new ListViewItem {
-                                                                                      Title = "Balance Analysis"
-                                                                                  }
+                                                                                      Title = "Daily Performance Summary"
+                                                                                   },
                                                              };
             await base.Initialise(cancellationToken);
         }
@@ -62,8 +59,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports
 
             Task navigationTask = selectedOption switch
             {
-                ReportsOptions.SalesAnalysis => this.NavigationService.GoToReportsSalesAnalysis(),
-                ReportsOptions.BalanceAnalysis => this.NavigationService.GoToReportsBalanceAnalysis(),
+                ReportsOptions.DailyPerformanceSummary => this.NavigationService.GoToDailyPerformanceSummaryPage(),
                 _ => Task.Factory.StartNew(() => Logger.LogWarning($"Unsupported option selected {selectedOption}"))
             };
 
@@ -76,9 +72,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports
 
         public enum ReportsOptions
         {
-            SalesAnalysis = 0,
-
-            BalanceAnalysis = 1,
+            DailyPerformanceSummary = 0,
         }
 
         #endregion

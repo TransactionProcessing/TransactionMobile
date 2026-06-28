@@ -54,8 +54,8 @@ Scenario: Back Button from Reports Page Screen
 	Then the Merchant Home Page is displayed	
 	When I tap on Reports
 	Then the Reports Page is displayed
-	When I tap on the Sales Analysis Button
-	Then the Sales Analysis Report is displayed
+	When I tap on the Daily Performance Summary Button
+	Then the Daily Performance Summary Report is displayed
 	When I click on the back button
 	Then the Reports Page is displayed
 	When I click on the back button

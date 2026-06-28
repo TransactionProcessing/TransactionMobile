@@ -177,8 +177,7 @@ namespace TransactionProcessor.Mobile
 
             RegisterRouteOnce(nameof(ViewLogsPage), typeof(ViewLogsPage));
 
-            RegisterRouteOnce(nameof(ReportsBalanceAnalysisPage), typeof(ReportsBalanceAnalysisPage));
-            RegisterRouteOnce(nameof(ReportsSalesAnalysisPage), typeof(ReportsSalesAnalysisPage));
+            RegisterRouteOnce(nameof(DailyPerformanceSummaryPage), typeof(DailyPerformanceSummaryPage));
 
             RegisterRouteOnce(nameof(MyAccountAddressesPage), typeof(MyAccountAddressesPage));
             RegisterRouteOnce(nameof(MyAccountContactPage), typeof(MyAccountContactPage));

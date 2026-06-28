@@ -344,10 +344,10 @@ this.ScenarioInitialize(scenarioInfo, ruleInfo);
  await testRunner.ThenAsync("the Reports Page is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 57
- await testRunner.WhenAsync("I tap on the Sales Analysis Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.WhenAsync("I tap on the Daily Performance Summary Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 58
- await testRunner.ThenAsync("the Sales Analysis Report is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.ThenAsync("the Daily Performance Summary Report is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 59
  await testRunner.WhenAsync("I click on the back button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");

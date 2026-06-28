@@ -18,27 +18,21 @@ public class ReportsPage : BasePage2
         }
     }
 
-    private readonly String SalesAnalysisButton;
-    private readonly String BalanceAnalysisButton;
+    private readonly String DailyPerformanceSummaryButton;
     
 
 
     public ReportsPage(TestingContext testingContext) : base(testingContext)
     {
-        this.SalesAnalysisButton = "SalesAnalysisButton";
-        this.BalanceAnalysisButton = "BalanceAnalysisButton";
+        this.DailyPerformanceSummaryButton = "DailyPerformanceSummaryButton";
     }
-    public async Task ClickBalanceAnalysisButton()
+
+    public async Task ClickDailyPerformanceSummaryButton()
     {
-        IWebElement element = await this.WaitForElementByAccessibilityId(this.BalanceAnalysisButton);
+        IWebElement element = await this.WaitForElementByAccessibilityId(this.DailyPerformanceSummaryButton);
         element.Click();
     }
 
-    public async Task ClickSalesAnalysisButton()
-    {
-        IWebElement element = await this.WaitForElementByAccessibilityId(this.SalesAnalysisButton);
-        element.Click();
-    }
 }
 
 public class SupportPage : BasePage2{
