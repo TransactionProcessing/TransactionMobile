@@ -70,13 +70,7 @@
 		<MauiXaml Update="Pages\MyAccount\MyAccountPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Pages\Reports\ReportsBalanceAnalysisPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
 		<MauiXaml Update="Pages\Reports\ReportsPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Pages\Reports\ReportsSalesAnalysisPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Pages\Support\SupportPage.xaml">

@@ -43,6 +43,7 @@ public partial class ReportsPage : NoBackWithoutLogoutPage
 
         String iconSource = modelOption.Title switch
         {
+            "Daily Performance Summary" => "salesvalue.svg",
             "Sales Analysis" => "transactionsbutton.svg",
             "Balance Analysis" => "reportbutton.svg",
             _ => "reportbutton.svg"

@@ -183,13 +183,10 @@ public class ShellNavigationService : INavigationService
     public async Task GoToMyAccountDetails() {
         await this.NavigateTo(nameof(MyAccountDetailsPage));
     }
-
-    public async Task GoToReportsSalesAnalysis(){
-        await this.NavigateTo(nameof(ReportsSalesAnalysisPage));
-    }
-
-    public async Task GoToReportsBalanceAnalysis(){
-        await this.NavigateTo(nameof(ReportsBalanceAnalysisPage));
+    
+    public async Task GoToDailyPerformanceSummaryPage()
+    {
+        await this.NavigateTo(nameof(DailyPerformanceSummaryPage));
     }
 
     public async Task GoToTransactions() {

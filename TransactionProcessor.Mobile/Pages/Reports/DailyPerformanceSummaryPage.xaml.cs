@@ -2,14 +2,13 @@ using TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports;
 
 namespace TransactionProcessor.Mobile.Pages.Reports;
 
-public partial class ReportsBalanceAnalysisPage : ContentPage
+public partial class DailyPerformanceSummaryPage : ContentPage
 {
-    private ReportsBalanceAnalysisPageViewModel viewModel => this.BindingContext as ReportsBalanceAnalysisPageViewModel;
+    private DailyPerformanceSummaryPageViewModel viewModel => this.BindingContext as DailyPerformanceSummaryPageViewModel;
 
-    public ReportsBalanceAnalysisPage(ReportsBalanceAnalysisPageViewModel vm)
+    public DailyPerformanceSummaryPage(DailyPerformanceSummaryPageViewModel vm)
     {
         this.InitializeComponent();
-
         this.BindingContext = vm;
     }
 

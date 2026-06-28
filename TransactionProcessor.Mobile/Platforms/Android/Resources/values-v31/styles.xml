@@ -11,7 +11,7 @@
     • windowSplashScreenBrandingImage   – branding shown at the bottom of the screen
 -->
 <resources>
-    <style name="Maui.SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Maui.SplashTheme" parent="Maui.MainTheme">
         <item name="android:windowSplashScreenBackground">@color/colorPrimary</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_splash_icon</item>
         <item name="android:windowSplashScreenIconBackgroundColor">@color/colorPrimaryDark</item>

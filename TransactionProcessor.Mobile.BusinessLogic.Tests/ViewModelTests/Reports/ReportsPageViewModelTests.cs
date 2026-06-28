@@ -54,14 +54,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
 
             switch(selectedIndex){
                 case 0:
-                    this.NavigationService.Verify(v => v.GoToReportsSalesAnalysis(), Times.Once);
-                    break;
-                case 1:
-                    this.NavigationService.Verify(v => v.GoToReportsBalanceAnalysis(), Times.Once);
+                    this.NavigationService.Verify(v => v.GoToDailyPerformanceSummaryPage(), Times.Once);
                     break;
                 default:
-                    this.NavigationService.Verify(v => v.GoToReportsSalesAnalysis(), Times.Never);
-                    this.NavigationService.Verify(v => v.GoToReportsBalanceAnalysis(), Times.Never);
+                    this.NavigationService.Verify(v => v.GoToDailyPerformanceSummaryPage(), Times.Never);
                     break;
             }
         }
@@ -70,7 +66,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
         public async Task ReportsPageViewModel_Initialise_IsInitialised()
         {
             await this.ViewModel.Initialise(CancellationToken.None);
-            this.ViewModel.ReportsMenuOptions.Count.ShouldBe(2);
+            this.ViewModel.ReportsMenuOptions.Count.ShouldBe(1);
         }
 
         [Fact]
@@ -79,119 +75,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
             this.ViewModel.BackButtonCommand.Execute(null);
 
             this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
-        }
-    }
-
-    public class ReportsSalesAnalysisPageViewModelTests{
-        private readonly ReportsSalesAnalysisPageViewModel ViewModel;
-        private readonly Mock<INavigationService> NavigationService;
-        private readonly Mock<INavigationParameterService> NavigationParameterService;
-        private readonly Mock<IApplicationCache> ApplicationCache;
-        private readonly Mock<IDialogService> DialogService;
-        private readonly Mock<IDeviceService> DeviceService;
-
-        public ReportsSalesAnalysisPageViewModelTests(){
-            this.NavigationService = new Mock<INavigationService>();
-            this.NavigationParameterService = new Mock<INavigationParameterService>();
-            this.ApplicationCache = new Mock<IApplicationCache>();
-            this.DialogService = new Mock<IDialogService>();
-            this.DeviceService = new Mock<IDeviceService>();
-
-            this.ViewModel = new ReportsSalesAnalysisPageViewModel(this.NavigationService.Object,
-                                                                   this.ApplicationCache.Object,
-                                                                   this.DialogService.Object,
-                                                                   this.DeviceService.Object,
-                                                                   this.NavigationParameterService.Object);
-        }
-
-        [Fact]
-        public async Task ReportsSalesAnalysisPageViewModel_Initialise_Execute_IsExecuted(){
-            await this.ViewModel.Initialise(CancellationToken.None);
-
-            this.ViewModel.ComparisonDates.Count.ShouldBe(3);
-        }
-
-        [Fact]
-        public async Task ReportsSalesAnalysisPageViewModel_ComparisonDatePickerSelectedIndexChangedCommand_HomePageIsShown(){
-            ComparisonDate comparisonDate = new ComparisonDate(DateTime.Now.AddDays(-1), "Yesterday");
-            this.ViewModel.SelectedItem = comparisonDate;
-            this.ViewModel.ComparisonDatePickerSelectedIndexChangedCommand.Execute(comparisonDate);
-
-            // Nothing to actually verify yet here
-            this.ViewModel.SalesAnalysisList.Count.ShouldBe(2);
-        }
-
-        [Fact]
-        public void ReportsSalesAnalysisPageViewModel_ComparisonDatePickerSelectedIndexChangedCommand_WithoutSelectedItem_ReturnsEmptyList()
-        {
-            this.ViewModel.ComparisonDatePickerSelectedIndexChangedCommand.Execute(null);
-
-            this.ViewModel.SalesAnalysisList.ShouldNotBeNull();
-            this.ViewModel.SalesAnalysisList.ShouldBeEmpty();
-        }
-
-        [Fact]
-        public async Task ReportsSalesAnalysisPageViewModel_BackButtonCommand_HomePageIsShown()
-        {
-            this.ViewModel.BackButtonCommand.Execute(null);
-
-            this.NavigationService.Verify(n => n.GoBack(), Times.Once);
-        }
-    }
-
-    public class ReportsBalanceAnalysisPageViewModelTests
-    {
-        private ReportsBalanceAnalysisPageViewModel ViewModel;
-        private Mock<INavigationService> NavigationService;
-        private Mock<INavigationParameterService> NavigationParameterService;
-        private Mock<IApplicationCache> ApplicationCache;
-        private Mock<IDialogService> DialogService;
-        private readonly Mock<IDeviceService> DeviceService;
-
-        public ReportsBalanceAnalysisPageViewModelTests()
-        {
-            this.NavigationService = new Mock<INavigationService>();
-            this.NavigationParameterService = new Mock<INavigationParameterService>();
-            this.ApplicationCache = new Mock<IApplicationCache>();
-            this.DialogService = new Mock<IDialogService>();
-            this.DeviceService = new Mock<IDeviceService>();
-
-            this.ViewModel = new ReportsBalanceAnalysisPageViewModel(this.NavigationService.Object,
-                                                                     this.ApplicationCache.Object,
-                                                                     this.DialogService.Object,
-                                                                     this.DeviceService.Object,
-                                                                     this.NavigationParameterService.Object);
-        }
-
-        [Fact]
-        public async Task ReportsBalanceAnalysisPageViewModel_Initialise_Execute_IsExecuted()
-        {
-            await this.ViewModel.Initialise(CancellationToken.None);
-
-            this.ViewModel.XAxes.ShouldNotBeNull();
-            this.ViewModel.YAxes.ShouldNotBeNull();
-            this.ViewModel.TooltipFindingStrategy.ShouldBe(TooltipFindingStrategy.CompareOnlyX);
-            this.ViewModel.TooltipPosition.ShouldBe(TooltipPosition.Top);
-            this.ViewModel.Series.ShouldNotBeNull();
-        }
-
-        //[Fact]
-        //public async Task ReportsSalesAnalysisPageViewModel_ComparisonDatePickerSelectedIndexChangedCommand_HomePageIsShown()
-        //{
-        //    ComparisonDate comparisonDate = new ComparisonDate(DateTime.Now.AddDays(-1), "Yesterday");
-        //    this.viewModel.SelectedItem = comparisonDate;
-        //    viewModel.ComparisonDatePickerSelectedIndexChangedCommand.Execute(comparisonDate);
-
-        //    // Nothing to actually verify yet here
-        //    this.viewModel.SalesAnalysisList.Count.ShouldBe(2);
-        //}
-
-        [Fact]
-        public async Task ReportsBalanceAnalysisPageViewModel_BackButtonCommand_HomePageIsShown()
-        {
-            this.ViewModel.BackButtonCommand.Execute(null);
-
-            this.NavigationService.Verify(n => n.GoBack(), Times.Once);
         }
     }
 }
