@@ -38,7 +38,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
         private async Task RefreshLoopAsync(CancellationToken token)
         {
-            using PeriodicTimer timer = new PeriodicTimer(TimeSpan.FromSeconds(30));
+            using PeriodicTimer timer = new(TimeSpan.FromSeconds(30));
 
             try
             {
@@ -52,6 +52,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
             }
             catch (OperationCanceledException)
             {
+                // Nothing here but the task was cancelled, which is expected when stopping the refresher.
             }
         }
 

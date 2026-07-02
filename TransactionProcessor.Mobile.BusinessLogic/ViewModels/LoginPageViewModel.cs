@@ -254,6 +254,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
                 
                 await this.WriteTimingTrace(sw, "After SetIsLoggedIn");
                 await this.NavigationService.GoToHome();
+
+                // Cache the last login date
+                this.ApplicationCache.SetLastLoginDate(DateTime.Now);
             }
             catch(ApplicationException aex) {
                 Logger.LogError("Error during logon", aex);

@@ -24,9 +24,10 @@ public class TrainingConfigurationService : IConfigurationService
         });
     }
 
-    public async Task PostDiagnosticLogs(String deviceIdentifier,
+    public async Task<Result> PostDiagnosticLogs(String deviceIdentifier,
                                          List<LogMessage> logMessages,
                                          CancellationToken cancellationToken) {
         // Do nothing
+        return Result.Success();
     }
 }

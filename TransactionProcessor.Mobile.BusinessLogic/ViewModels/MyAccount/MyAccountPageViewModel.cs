@@ -83,7 +83,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.MyAccount
 
             this.MerchantName = merchantDetailsResult.Data.MerchantName;
 
-            this.LastLogin = DateTime.Now; // TODO: might cache this in the application
+            this.LastLogin = this.ApplicationCache.GetLastLoginDate();
             this.IsDarkThemeEnabled = await this.ApplicationThemeService.GetDarkThemeEnabled();
         }
 

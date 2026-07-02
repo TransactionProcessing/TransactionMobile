@@ -42,6 +42,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
         Decimal GetMerchantBalance();
 
         void SetMerchantBalance(Decimal value, MemoryCacheEntryOptions options = default);
+
+        DateTime GetLastLoginDate();
+
+        void SetLastLoginDate(DateTime value, MemoryCacheEntryOptions options = default);
     }
 
     [ExcludeFromCodeCoverage]
@@ -146,6 +150,15 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
         public void SetMerchantBalance(Decimal value,
                                        MemoryCacheEntryOptions options = default) {
             this.Set("MerchantBalance", value, options);
+        }
+
+        public DateTime GetLastLoginDate() {
+            return this.TryGetValue<DateTime>("LastLoginDate");
+        }
+
+        public void SetLastLoginDate(DateTime value,
+                                      MemoryCacheEntryOptions options = default) {
+            this.Set("LastLoginDate", value, options);
         }
 
         public void SetUseTrainingMode(Boolean value,

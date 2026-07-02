@@ -49,10 +49,16 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
                 }));
 
 
-                await configurationService.PostDiagnosticLogs(request.DeviceIdentifier, logMessageModels, CancellationToken.None);
+                Result result = await configurationService.PostDiagnosticLogs(request.DeviceIdentifier, logMessageModels, CancellationToken.None);
+
+                if (result.IsFailed) {
+                    // We have had a failure posting the logs so we will stop trying to upload any more logs
+                    return result;
+                }
 
                 // Clear the logs that have been uploaded
                 await this.DatabaseContext.RemoveUploadedMessages(logEntries);
+                
             }
 
             return Result.Success();
