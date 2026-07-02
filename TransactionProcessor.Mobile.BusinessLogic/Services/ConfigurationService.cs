@@ -12,7 +12,7 @@ public interface IConfigurationService
     Task<Result<Configuration>> GetConfiguration(String deviceIdentifier,
                                                  CancellationToken cancellationToken);
 
-    Task PostDiagnosticLogs(String deviceIdentifier,
+    Task<Result> PostDiagnosticLogs(String deviceIdentifier,
                             List<LogMessage> logMessages,
                             CancellationToken cancellationToken);
 }
@@ -92,7 +92,7 @@ public class ConfigurationService : ClientProxyBase.ClientProxyBase, IConfigurat
         }
     }
 
-    public async Task PostDiagnosticLogs(String deviceIdentifier,
+    public async Task<Result> PostDiagnosticLogs(String deviceIdentifier,
                                          List<LogMessage> logMessages,
                                          CancellationToken cancellationToken)
     {
@@ -105,8 +105,8 @@ public class ConfigurationService : ClientProxyBase.ClientProxyBase, IConfigurat
         };
         StringContent content = new(StringSerialiser.Serialise(container), Encoding.UTF8, "application/json");
 
-        Result? result = await this.Post(requestUri, content, cancellationToken);
+        Result result = await this.Post(requestUri, content, cancellationToken);
 
-        // TODO: return the result to the caller so that we can retry if it fails (and also log any errors that occur here)
+        return result;
     }
 }

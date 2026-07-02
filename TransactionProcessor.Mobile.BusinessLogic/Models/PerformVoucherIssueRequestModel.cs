@@ -5,7 +5,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Models;
 [ExcludeFromCodeCoverage]
 public class PerformVoucherIssueRequestModel
 {
-    // TODO: should we have a base transaction request model ?
 
     #region Properties
 

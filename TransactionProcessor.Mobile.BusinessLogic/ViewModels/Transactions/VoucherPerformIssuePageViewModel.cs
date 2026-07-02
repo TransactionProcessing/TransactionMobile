@@ -112,7 +112,6 @@ public partial class VoucherPerformIssuePageViewModel : ExtendedBaseViewModel
     private async Task IssueVoucher()
     {
         Logger.LogInformation("IssueVoucher called");
-        // TODO: Create Command and Send
         TransactionCommands.PerformVoucherIssueCommand command = new TransactionCommands.PerformVoucherIssueCommand(DateTime.Now,
                                                                                                        this.ProductDetails.ContractId,
                                                                                                        this.ProductDetails.ProductId,
