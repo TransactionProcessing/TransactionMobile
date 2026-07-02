@@ -40,6 +40,7 @@ public class SupportRequestHandlerTests
     public async Task SupportRequestHandlerTests_UploadLogsRequest_LogsToUpload_Only10Messages_Handle_IsHandled()
     {
         Mock<IConfigurationService> configurationService = new Mock<IConfigurationService>();
+        configurationService.Setup(c => c.PostDiagnosticLogs(It.IsAny<String>(), It.IsAny<List<Models.LogMessage>>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success());
         Func<Boolean, IConfigurationService> configurationServiceResolver = new Func<bool, IConfigurationService>((param) =>
         {
             return configurationService.Object;
@@ -76,6 +77,7 @@ public class SupportRequestHandlerTests
     public async Task SupportRequestHandlerTests_UploadLogsRequest_LogsToUpload_15Messages_Handle_IsHandled()
     {
         Mock<IConfigurationService> configurationService = new Mock<IConfigurationService>();
+        configurationService.Setup(c => c.PostDiagnosticLogs(It.IsAny<String>(), It.IsAny<List<Models.LogMessage>>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success());
         Func<Boolean, IConfigurationService> configurationServiceResolver = new Func<bool, IConfigurationService>((param) =>
         {
             return configurationService.Object;
