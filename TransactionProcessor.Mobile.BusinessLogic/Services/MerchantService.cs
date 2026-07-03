@@ -65,7 +65,7 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
 
         TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
 
-        String requestUri = this.BuildRequestUrl($"/api/merchants/contracts?application_version={this.ApplicationInfoService.VersionString}");
+        String requestUri = this.BuildRequestUrl($"/api/merchants/contracts?applicationVersion={this.ApplicationInfoService.VersionString}");
 
         Logger.LogInformation("About to request merchant contracts");
         Logger.LogDebug($"Merchant Contract Request details: Access Token {accessToken.AccessToken}");
@@ -122,7 +122,7 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
     public async Task<Result<MerchantDetailsModel>> GetMerchantDetails(CancellationToken cancellationToken) {
         TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
 
-        String requestUri = this.BuildRequestUrl($"/api/merchants?application_version={this.ApplicationInfoService.VersionString}");
+        String requestUri = this.BuildRequestUrl($"/api/merchants?applicationVersion={this.ApplicationInfoService.VersionString}");
 
         Logger.LogInformation("About to request merchant details");
         Logger.LogDebug($"Merchant Details Request details: Access Token {accessToken.AccessToken}");
@@ -141,6 +141,7 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
         MerchantDetailsModel model = new MerchantDetailsModel {
                                                                   EstateId = responseDataResult.Data.EstateId,
                                                                   MerchantId = responseDataResult.Data.MerchantId,
+                                                                  MerchantReportingId = responseDataResult.Data.MerchantReportingId,
                                                                   MerchantName = responseDataResult.Data.MerchantName,
                                                                   NextStatementDate = responseDataResult.Data.NextStatementDate,
                                                                   LastStatementDate = new DateTime(),

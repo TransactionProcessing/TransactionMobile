@@ -72,7 +72,7 @@ public sealed partial class DailyPerformanceSummaryPageViewModel : ExtendedBaseV
         private set => SetProperty(ref this.summary, value);
     }
 
-    public IReadOnlyList<DailyPerformanceMetricModel> SummaryCards => this.Summary?.Metrics ?? Array.Empty<DailyPerformanceMetricModel>();
+    public IReadOnlyList<DailyPerformanceMetricModel> SummaryCards => this.Summary?.Metrics ?? new List<DailyPerformanceMetricModel>();
 
     public IReadOnlyList<DailyPerformanceMetricModel> TopSummaryCards => this.SummaryCards.Take(4).ToList();
 
@@ -80,7 +80,7 @@ public sealed partial class DailyPerformanceSummaryPageViewModel : ExtendedBaseV
 
     public IReadOnlyList<DailyPerformanceMetricModel> TopSummaryCardsRow2 => this.TopSummaryCards.Skip(2).Take(2).ToList();
 
-    public IReadOnlyList<DailyPerformanceTransactionModel> DrillDownTransactions => this.Summary?.DrillDownTransactions ?? Array.Empty<DailyPerformanceTransactionModel>();
+    public IReadOnlyList<DailyPerformanceTransactionModel> DrillDownTransactions => this.Summary?.DrillDownTransactions ?? new List<DailyPerformanceTransactionModel>();
 
     public bool HasSummaryData => this.SummaryCards.Count > 0;
 
@@ -122,7 +122,7 @@ public sealed partial class DailyPerformanceSummaryPageViewModel : ExtendedBaseV
 
             this.Summary = result.Data;
         }
-        catch
+        catch(Exception ex)
         {
             this.Summary = null;
             this.ErrorMessage = "Unable to load performance summary.";

@@ -1,3 +1,5 @@
+using TransactionProcessor.Mobile.BusinessLogic.Services;
+
 namespace TransactionProcessor.Mobile.BusinessLogic.Models;
 
 public enum PerformanceSummaryPeriod
@@ -8,14 +10,15 @@ public enum PerformanceSummaryPeriod
     MonthToDate = 3,
 }
 
-public sealed record DailyPerformanceSummaryModel(
-    PerformanceSummaryPeriod Period,
-    DateTime FromDate,
-    DateTime ToDate,
-    string PeriodLabel,
-    IReadOnlyList<DailyPerformanceMetricModel> Metrics,
-    IReadOnlyList<DailyPerformanceTransactionModel> DrillDownTransactions)
+public sealed record DailyPerformanceSummaryModel()
 {
+    public PerformanceSummaryPeriod Period { get; set; }
+    public DateTime FromDate { get; set; }
+    public DateTime ToDate { get; set; }
+    public string PeriodLabel { get; set; }
+    public List<DailyPerformanceMetricModel> Metrics { get; set; }
+    public List<Models.DailyPerformanceTransactionModel> DrillDownTransactions { get; set; }
+
     public static DailyPerformanceSummaryModel CreateMock(PerformanceSummaryPeriod period)
     {
         DateTime today = DateTime.Today;
@@ -46,15 +49,22 @@ public sealed record DailyPerformanceSummaryModel(
 
         List<DailyPerformanceTransactionModel> drillDownTransactions = new()
         {
-            new DailyPerformanceTransactionModel("TXN-00048", "Mobile Topup", "Success", "250.00 KES", today.AddHours(-1)),
-            new DailyPerformanceTransactionModel("TXN-00047", "Bill Payment", "Success", "1,500.00 KES", today.AddHours(-2)),
-            new DailyPerformanceTransactionModel("TXN-00046", "Voucher Issue", "Failed", "0.00 KES", today.AddHours(-3)),
+            new DailyPerformanceTransactionModel("TXN-00048", "Mobile Topup", "Success", 250.00m, today.AddHours(-1)),
+            new DailyPerformanceTransactionModel("TXN-00047", "Bill Payment", "Success", 1500.00m, today.AddHours(-2)),
+            new DailyPerformanceTransactionModel("TXN-00046", "Voucher Issue", "Failed", 0.00m, today.AddHours(-3)),
         };
 
-        return new DailyPerformanceSummaryModel(period, fromDate, toDate, period.ToString(), metrics, drillDownTransactions);
+        return new DailyPerformanceSummaryModel() {
+            DrillDownTransactions = drillDownTransactions,
+            FromDate = fromDate,
+            ToDate = toDate,
+            Metrics = metrics,
+            Period = period,
+            PeriodLabel = period.ToString()
+        };
     }
 
-    private static DateTime StartOfWeek(DateTime date)
+    internal static DateTime StartOfWeek(DateTime date)
     {
         int daysSinceSunday = (int)date.DayOfWeek;
         return date.Date.AddDays(-daysSinceSunday);
@@ -67,8 +77,10 @@ public enum DailyPerformanceMetricCategory
     Total = 1,
     Success = 2,
     Failure = 3,
+    Average = 4,
+    TopSalesCount = 5
 }
 
 public sealed record DailyPerformanceMetricModel(string Title, string Value, string Description, DailyPerformanceMetricCategory Category = DailyPerformanceMetricCategory.Neutral);
 
-public sealed record DailyPerformanceTransactionModel(string Reference, string Product, string Status, string Amount, DateTime TransactionDateTime);
+public sealed record DailyPerformanceTransactionModel(string Reference, string Product, string Status, Decimal Amount, DateTime TransactionDateTime);

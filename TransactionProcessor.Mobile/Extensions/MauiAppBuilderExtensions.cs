@@ -81,6 +81,7 @@ namespace TransactionProcessor.Mobile.Extensions {
             builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
             builder.Services.AddSingleton<ITransactionService, TransactionService>();
             builder.Services.AddSingleton<IMerchantService, MerchantService>();
+            builder.Services.AddSingleton<IReportsService, ReportsService>();
             builder.Services.AddSingleton<IUpdateService, UpdateService>();
             builder.Services.AddSingleton<IBalanceRefresher,BalanceRefresher>();
             builder.RegisterConfigurationService().RegisterAuthenticationService().RegisterTransactionService().RegisterMerchantService();

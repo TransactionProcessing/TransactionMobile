@@ -44,7 +44,7 @@
     <PackageVersion Include="TransactionProcessor.Client" Version="2026.5.2" />
     <PackageVersion Include="TransactionProcessor.Database" Version="2026.5.2" />
     <PackageVersion Include="TransactionProcessor.IntegrationTesting.Helpers" Version="2026.5.2" />
-    <PackageVersion Include="TransactionProcessorACL.DataTransferObjects" Version="2026.5.2" />
+    <PackageVersion Include="TransactionProcessorACL.DataTransferObjects" Version="2026.7.1" />
     <PackageVersion Include="xunit.v3" Version="3.2.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
   </ItemGroup>
