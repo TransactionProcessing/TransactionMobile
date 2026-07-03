@@ -30,7 +30,11 @@ public sealed class ReportRequestHandler : IRequestHandler<ReportQueries.GetDail
         };
 
         MerchantDetailsModel merchant = this.ApplicationCache.GetMerchantDetails();
-        
+        if (merchant == null)
+        {
+            return Result.Failure("Merchant details are not available.");
+        }
+
         return await this.ReportsService.GetDailyPerformanceSummary(request.Period, merchant.MerchantReportingId, dates.startDate, dates.endDate, cancellationToken);
     }
 }
