@@ -75,7 +75,7 @@ public class MerchantServiceTests{
                                           });
 
 
-        this.MockHttpMessageHandler.When($"http://localhost/api/merchants/contracts?application_version=1.0.0")
+        this.MockHttpMessageHandler.When($"http://localhost/api/merchants/contracts?applicationVersion=1.0.0")
             .Respond("application/json", StringSerialiser.Serialise(contracts)); // Respond with JSON
         
         var result = await this.MerchantService.GetContractProducts(CancellationToken.None);
@@ -86,7 +86,7 @@ public class MerchantServiceTests{
     
     [Fact]
     public async Task MerchantService_GetContractProducts_HttpCallFailed_FailureReturned(){
-        this.MockHttpMessageHandler.When($"http://localhost/api/merchants/contracts?application_version=1.0.0")
+        this.MockHttpMessageHandler.When($"http://localhost/api/merchants/contracts?applicationVersion=1.0.0")
             .Respond(HttpStatusCode.InternalServerError);
 
         Result<List<ContractProductModel>> result = await this.MerchantService.GetContractProducts(CancellationToken.None);
@@ -122,7 +122,7 @@ public class MerchantServiceTests{
                                                                                                          }
                                                                 };
 
-        this.MockHttpMessageHandler.When($"http://localhost/api/merchants?application_version=1.0.0")
+        this.MockHttpMessageHandler.When($"http://localhost/api/merchants?applicationVersion=1.0.0")
             .Respond("application/json", StringSerialiser.Serialise(merchantResponse)); // Respond with JSON
 
         Result<MerchantDetailsModel> merchantDetails = await this.MerchantService.GetMerchantDetails(CancellationToken.None);
@@ -147,7 +147,7 @@ public class MerchantServiceTests{
     [Fact]
     public async Task MerchantService_GetMerchantDetails_ResultFailed_FailedResultIsReturned()
     {
-        this.MockHttpMessageHandler.When($"http://localhost/api/merchants?application_version=1.0.0")
+        this.MockHttpMessageHandler.When($"http://localhost/api/merchants?applicationVersion=1.0.0")
             .Respond(HttpStatusCode.BadRequest);
 
         Result<MerchantDetailsModel> merchantDetails = await this.MerchantService.GetMerchantDetails(CancellationToken.None);
@@ -156,7 +156,7 @@ public class MerchantServiceTests{
     
     [Fact]
     public async Task MerchantService_GetMerchantDetails_ExceptionThrown_FailedResultReturned(){
-        this.MockHttpMessageHandler.When($"http://localhost/api/merchants?application_version=1.0.0")
+        this.MockHttpMessageHandler.When($"http://localhost/api/merchants?applicationVersion=1.0.0")
             .Respond(HttpStatusCode.InternalServerError);
 
         Result<MerchantDetailsModel> merchantDetails = await this.MerchantService.GetMerchantDetails(CancellationToken.None);

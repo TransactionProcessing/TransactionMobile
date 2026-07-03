@@ -15,4 +15,5 @@ public class MerchantDetailsModel
     public String SettlementSchedule { get; set; }
     public AddressModel Address { get; set; }
     public ContactModel Contact { get; set; }
+    public int MerchantReportingId { get; set; }
 }
