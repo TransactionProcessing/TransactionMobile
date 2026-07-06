@@ -80,6 +80,7 @@ public class MerchantRequestHandler : IRequestHandler<MerchantQueries.GetContrac
 
         Result<MerchantDetailsModel> merchantDetails = await merchantService.GetMerchantDetails(cancellationToken);
 
+        //merchantDetails.Data.MerchantReportingId = 1;
         if (merchantDetails.IsSuccess) {
             this.ApplicationCache.SetMerchantDetails(merchantDetails.Data, BuildCacheEntryOptions());
         }
