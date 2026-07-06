@@ -152,23 +152,25 @@
                        FontAttributes="Bold"
                        TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
 
-                <Label Text="Top categories chart"
+                <Label Text="Transaction mix"
                        FontSize="16"
                        FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                <Label Text="{Binding ChartSubtitle}"
+                       FontSize="12"
+                       Opacity="0.8"
                        TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
                 <Frame Style="{StaticResource TransactionFormCard}"
                        BackgroundColor="{DynamicResource salesAnalysisCardBackgroundColor}"
                        BorderColor="{DynamicResource salesAnalysisCardBorderColor}"
-                       Padding="12"
+                       Padding="8"
                        CornerRadius="14"
                        HasShadow="False"
                        Margin="0">
-                    <lvc:CartesianChart AutomationId="TransactionMixChart"
-                                        Series="{Binding ChartSeries}"
-                                        XAxes="{Binding ChartXAxes}"
-                                        YAxes="{Binding ChartYAxes}"
-                                        HeightRequest="240"
-                                        HorizontalOptions="FillAndExpand" />
+                    <lvc:PieChart AutomationId="TransactionMixChart"
+                                  Series="{Binding ChartSeries}"
+                                  HeightRequest="260"
+                                  HorizontalOptions="FillAndExpand" />
                 </Frame>
 
                 <HorizontalStackLayout Spacing="12">

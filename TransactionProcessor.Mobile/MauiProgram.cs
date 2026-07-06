@@ -1,14 +1,16 @@
-﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui;
+using LiveChartsCore.SkiaSharpView.Maui;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
+using TransactionProcessor.Mobile.BusinessLogic.Serialisation;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 using TransactionProcessor.Mobile.Extensions;
 using TransactionProcessor.Mobile.UIServices;
-using Microsoft.Extensions.DependencyInjection;
-using TransactionProcessor.Mobile.BusinessLogic.Serialisation;
 
 namespace TransactionProcessor.Mobile
 {
@@ -19,6 +21,8 @@ namespace TransactionProcessor.Mobile
         {
             var builder = MauiApp.CreateBuilder();
             builder.UseMauiApp<App>()
+                .UseLiveCharts()
+                .UseSkiaSharp()
                 .UseMauiCommunityToolkit()
                 .ConfigureRequestHandlers()
                 .ConfigurePages()

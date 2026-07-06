@@ -191,13 +191,6 @@ public class ShellNavigationService : INavigationService
 
     public async Task GoToTransactionMixSummaryPage()
     {
-        TransactionMixPage? page = MauiProgram.Container.Services.GetService(typeof(TransactionMixPage)) as TransactionMixPage;
-        if (page is not null)
-        {
-            await this.NavigateTo(page);
-            return;
-        }
-
         await this.NavigateTo(nameof(TransactionMixPage));
     }
 
@@ -212,6 +205,7 @@ public class ShellNavigationService : INavigationService
             }
         catch(Exception e) {
             Logger.LogError($"Error navigating to {route}", e);
+            throw;
         }
     }
 
@@ -226,6 +220,7 @@ public class ShellNavigationService : INavigationService
         catch (Exception e)
         {
             Logger.LogError($"Error navigating to {route} (String route,IDictionary<String,Object> parameters)", e);
+            throw;
         }
     }
 
@@ -237,6 +232,7 @@ public class ShellNavigationService : INavigationService
         catch (Exception e)
         {
             Logger.LogError($"Error navigating to page (ContentPage page))", e);
+            throw;
         }
     }
 
