@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
+             xmlns:models="clr-namespace:TransactionProcessor.Mobile.BusinessLogic.Models;assembly=TransactionProcessor.Mobile.BusinessLogic"
+             xmlns:reports="clr-namespace:TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports;assembly=TransactionProcessor.Mobile.BusinessLogic"
+             x:Class="TransactionProcessor.Mobile.Pages.Reports.TransactionMixPage"
+             x:Name="TransactionMixPageRoot"
+             x:DataType="reports:TransactionMixPageViewModel"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="SummaryItemTemplate" x:DataType="models:TransactionMixSummaryItemModel">
+                <Frame Style="{StaticResource TransactionFormCard}"
+                       BackgroundColor="{DynamicResource salesAnalysisCardBackgroundColor}"
+                       BorderColor="{DynamicResource salesAnalysisCardBorderColor}"
+                       Padding="12"
+                       CornerRadius="14"
+                       HasShadow="False"
+                       Margin="0"
+                       AutomationId="{Binding Key}">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BindingContext.SelectItemCommand, Source={x:Reference TransactionMixPageRoot}}"
+                                              CommandParameter="{Binding .}" />
+                    </Frame.GestureRecognizers>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="{Binding Label}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                        <Label Text="{Binding Count, StringFormat='Count: {0:N0}'}"
+                               FontSize="12"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}"
+                               Opacity="0.85" />
+                        <Label Text="{Binding Value, StringFormat='Value: {0:N2}'}"
+                               FontSize="12"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}"
+                               Opacity="0.85" />
+                    </VerticalStackLayout>
+                </Frame>
+            </DataTemplate>
+
+            <DataTemplate x:Key="TransactionTemplate" x:DataType="models:TransactionMixDrillDownTransactionModel">
+                <Frame Style="{StaticResource TransactionFormCard}"
+                       Padding="14"
+                       BackgroundColor="{DynamicResource salesAnalysisCardBackgroundColor}"
+                       BorderColor="{DynamicResource salesAnalysisCardBorderColor}">
+                    <Grid ColumnDefinitions="*,Auto"
+                          RowDefinitions="Auto,Auto,Auto"
+                          ColumnSpacing="12"
+                          RowSpacing="4">
+                        <Label Text="{Binding Reference}"
+                               FontAttributes="Bold"
+                               FontSize="14"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                        <Label Grid.Column="1"
+                               Text="{Binding Amount, StringFormat='{0:N2}'}"
+                               FontAttributes="Bold"
+                               FontSize="14"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                        <Label Grid.Row="1"
+                               Text="{Binding Product}"
+                               FontSize="12"
+                               Opacity="0.85"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                        <Label Grid.Row="1"
+                               Grid.Column="1"
+                               Text="{Binding Status}"
+                               FontSize="12"
+                               HorizontalTextAlignment="End"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                        <Label Grid.Row="2"
+                               Text="{Binding TransactionType}"
+                               FontSize="11"
+                               Opacity="0.75"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                        <Label Grid.Row="2"
+                               Grid.Column="1"
+                               Text="{Binding TransactionDateTime, StringFormat='{0:dd MMM HH:mm}'}"
+                               FontSize="11"
+                               Opacity="0.75"
+                               HorizontalTextAlignment="End"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                    </Grid>
+                </Frame>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Style="{DynamicResource Layout}" Spacing="18">
+            <controls:TitleLabel Text="{Binding Title}"
+                                 AutomationId="TransactionMix"
+                                 FontSize="20"
+                                 HorizontalTextAlignment="Center"
+                                 VerticalOptions="End"
+                                 FontAttributes="Bold"
+                                 TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}"
+                                 Padding="20,0,20,8" />
+
+            <Picker Title="Breakdown"
+                    ItemsSource="{Binding BreakdownOptions}"
+                    ItemDisplayBinding="{Binding DisplayText}"
+                    SelectedItem="{Binding SelectedBreakdownOption}"
+                    TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}"
+                    TitleColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource Gray200}}" />
+
+            <Picker Title="Measure"
+                    ItemsSource="{Binding MeasureOptions}"
+                    ItemDisplayBinding="{Binding DisplayText}"
+                    SelectedItem="{Binding SelectedMeasureOption}"
+                    TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}"
+                    TitleColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource Gray200}}" />
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <DatePicker Date="{Binding StartDate}"
+                            Format="dd MMM yyyy"
+                            TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                <DatePicker Grid.Column="1"
+                            Date="{Binding EndDate}"
+                            Format="dd MMM yyyy"
+                            TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+            </Grid>
+
+            <Button Text="Apply filters"
+                    AutomationId="ApplyFiltersButton"
+                    Style="{StaticResource ReportsButtonStyle}"
+                    Command="{Binding ApplyFiltersCommand}" />
+
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
+                               Color="{StaticResource reports}"
+                               HorizontalOptions="Center" />
+
+            <VerticalStackLayout IsVisible="{Binding HasError}" Spacing="4">
+                <Label Text="Unable to load transaction mix."
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                <Label Text="{Binding ErrorMessage}"
+                       FontSize="12"
+                       Opacity="0.8"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="12"
+                                 IsVisible="{Binding HasSummaryData}"
+                                 AutomationId="TransactionMixSummary">
+                <Label Text="Summary"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+
+                <Label Text="Top categories chart"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                <Frame Style="{StaticResource TransactionFormCard}"
+                       BackgroundColor="{DynamicResource salesAnalysisCardBackgroundColor}"
+                       BorderColor="{DynamicResource salesAnalysisCardBorderColor}"
+                       Padding="12"
+                       CornerRadius="14"
+                       HasShadow="False"
+                       Margin="0">
+                    <lvc:CartesianChart AutomationId="TransactionMixChart"
+                                        Series="{Binding ChartSeries}"
+                                        XAxes="{Binding ChartXAxes}"
+                                        YAxes="{Binding ChartYAxes}"
+                                        HeightRequest="240"
+                                        HorizontalOptions="FillAndExpand" />
+                </Frame>
+
+                <HorizontalStackLayout Spacing="12">
+                    <Frame Style="{StaticResource TransactionFormCard}"
+                           BackgroundColor="{DynamicResource salesAnalysisCardBackgroundColor}"
+                           BorderColor="{DynamicResource salesAnalysisCardBorderColor}"
+                           Padding="12"
+                           CornerRadius="14"
+                           HasShadow="False"
+                           Margin="0"
+                           HorizontalOptions="FillAndExpand">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Total count"
+                                   FontSize="12"
+                                   TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                            <Label Text="{Binding Summary.TotalCount, StringFormat='{0:N0}'}"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                        </VerticalStackLayout>
+                    </Frame>
+                    <Frame Style="{StaticResource TransactionFormCard}"
+                           BackgroundColor="{DynamicResource salesAnalysisCardBackgroundColor}"
+                           BorderColor="{DynamicResource salesAnalysisCardBorderColor}"
+                           Padding="12"
+                           CornerRadius="14"
+                           HasShadow="False"
+                           Margin="0"
+                           HorizontalOptions="FillAndExpand">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Total value"
+                                   FontSize="12"
+                                   TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                            <Label Text="{Binding Summary.TotalValue, StringFormat='{0:N2}'}"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </HorizontalStackLayout>
+
+                <Label Text="Top categories"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                <CollectionView ItemsSource="{Binding TopItems}"
+                                ItemTemplate="{StaticResource SummaryItemTemplate}"
+                                SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+                </CollectionView>
+
+                <Label Text="{Binding SelectedItemLabel}"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                <CollectionView ItemsSource="{Binding SelectedItemTransactions}"
+                                ItemTemplate="{StaticResource TransactionTemplate}"
+                                SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+                </CollectionView>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout IsVisible="{Binding HasEmptyState}" Spacing="4">
+                <Label Text="No transaction mix data available."
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                <Label Text="Try another date range or wait until transactions are available."
+                       FontSize="12"
+                       Opacity="0.8"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+            </VerticalStackLayout>
+
+            <Button Text="Back"
+                    AutomationId="BackButton"
+                    Style="{StaticResource ReportsButtonStyle}"
+                    Command="{Binding BackButtonCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

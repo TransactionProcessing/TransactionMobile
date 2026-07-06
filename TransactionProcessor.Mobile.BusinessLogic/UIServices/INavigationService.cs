@@ -64,6 +64,8 @@ public interface INavigationService
 
     Task GoToDailyPerformanceSummaryPage();
 
+    Task GoToTransactionMixSummaryPage();
+
     Task GoToTransactions();
 
     #endregion

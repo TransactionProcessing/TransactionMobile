@@ -46,4 +46,54 @@ public class ReportRequestHandlerTests
                                   It.IsAny<CancellationToken>()),
                               Times.Once);
     }
+
+    [Fact]
+    public async Task GetTransactionMixSummaryQuery_ReturnsRequestedBreakdown()
+    {
+        Mock<IReportsService> reportsService = new();
+        Mock<IApplicationCache> applicationCache = new();
+        MerchantDetailsModel merchantDetails = new()
+        {
+            MerchantReportingId = 12345
+        };
+
+        applicationCache.Setup(a => a.GetMerchantDetails()).Returns(merchantDetails);
+        reportsService.Setup(r => r.GetTransactionMixSummary(
+                                  merchantDetails.MerchantReportingId,
+                                  It.IsAny<DateTime>(),
+                                  It.IsAny<DateTime>(),
+                                  TransactionMixBreakdown.Product,
+                                  TransactionMixMeasure.Value,
+                                  5,
+                                  It.IsAny<CancellationToken>()))
+                      .ReturnsAsync(Result.Success(TransactionMixSummaryModel.CreateMock(
+                          merchantReportingId: merchantDetails.MerchantReportingId,
+                          breakdown: TransactionMixBreakdown.Product,
+                          measure: TransactionMixMeasure.Value)));
+
+        ReportRequestHandler handler = new(reportsService.Object, applicationCache.Object);
+
+        Result<TransactionMixSummaryModel> result = await handler.Handle(
+            new ReportQueries.GetTransactionMixSummaryQuery(
+                StartDate: new DateTime(2026, 7, 1),
+                EndDate: new DateTime(2026, 7, 31),
+                Breakdown: TransactionMixBreakdown.Product,
+                Measure: TransactionMixMeasure.Value,
+                TopN: 5),
+            CancellationToken.None);
+
+        result.IsSuccess.ShouldBeTrue();
+        result.Data.Breakdown.ShouldBe(TransactionMixBreakdown.Product);
+        result.Data.Measure.ShouldBe(TransactionMixMeasure.Value);
+        result.Data.Items.ShouldNotBeEmpty();
+        reportsService.Verify(r => r.GetTransactionMixSummary(
+                                  merchantDetails.MerchantReportingId,
+                                  new DateTime(2026, 7, 1),
+                                  new DateTime(2026, 7, 31),
+                                  TransactionMixBreakdown.Product,
+                                  TransactionMixMeasure.Value,
+                                  5,
+                                  It.IsAny<CancellationToken>()),
+                              Times.Once);
+    }
 }
