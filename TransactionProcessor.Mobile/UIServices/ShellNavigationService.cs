@@ -189,6 +189,11 @@ public class ShellNavigationService : INavigationService
         await this.NavigateTo(nameof(DailyPerformanceSummaryPage));
     }
 
+    public async Task GoToTransactionMixSummaryPage()
+    {
+        await this.NavigateTo(nameof(TransactionMixPage));
+    }
+
     public async Task GoToTransactions() {
         await this.NavigateTo("///main/transactions");
     }

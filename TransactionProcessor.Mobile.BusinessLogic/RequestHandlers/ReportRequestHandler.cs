@@ -6,7 +6,8 @@ using TransactionProcessor.Mobile.BusinessLogic.Services;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers;
 
-public sealed class ReportRequestHandler : IRequestHandler<ReportQueries.GetDailyPerformanceSummaryQuery, Result<DailyPerformanceSummaryModel>> {
+public sealed class ReportRequestHandler : IRequestHandler<ReportQueries.GetDailyPerformanceSummaryQuery, Result<DailyPerformanceSummaryModel>>,
+                                          IRequestHandler<ReportQueries.GetTransactionMixSummaryQuery, Result<TransactionMixSummaryModel>> {
     private readonly IReportsService ReportsService;
     private readonly IApplicationCache ApplicationCache;
 
@@ -36,5 +37,23 @@ public sealed class ReportRequestHandler : IRequestHandler<ReportQueries.GetDail
         }
 
         return await this.ReportsService.GetDailyPerformanceSummary(request.Period, merchant.MerchantReportingId, dates.startDate, dates.endDate, cancellationToken);
+    }
+
+    public async Task<Result<TransactionMixSummaryModel>> Handle(ReportQueries.GetTransactionMixSummaryQuery request,
+                                                                 CancellationToken cancellationToken)
+    {
+        MerchantDetailsModel merchant = this.ApplicationCache.GetMerchantDetails();
+        if (merchant == null)
+        {
+            return Result.Failure("Merchant details are not available.");
+        }
+
+        return await this.ReportsService.GetTransactionMixSummary(merchant.MerchantReportingId,
+                                                                  request.StartDate,
+                                                                  request.EndDate,
+                                                                  request.Breakdown,
+                                                                  request.Measure,
+                                                                  request.TopN,
+                                                                  cancellationToken);
     }
 }

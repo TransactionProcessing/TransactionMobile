@@ -19,17 +19,25 @@ public class ReportsPage : BasePage2
     }
 
     private readonly String DailyPerformanceSummaryButton;
+    private readonly String TransactionMixButton;
     
 
 
     public ReportsPage(TestingContext testingContext) : base(testingContext)
     {
         this.DailyPerformanceSummaryButton = "DailyPerformanceSummaryButton";
+        this.TransactionMixButton = "TransactionMixButton";
     }
 
     public async Task ClickDailyPerformanceSummaryButton()
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.DailyPerformanceSummaryButton);
+        element.Click();
+    }
+
+    public async Task ClickTransactionMixButton()
+    {
+        IWebElement element = await this.WaitForElementByAccessibilityId(this.TransactionMixButton);
         element.Click();
     }
 

@@ -13,6 +13,13 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 {
     public interface IReportsService {
         Task<Result<DailyPerformanceSummaryModel>> GetDailyPerformanceSummary(PerformanceSummaryPeriod period, int merchantReportingId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken);
+        Task<Result<TransactionMixSummaryModel>> GetTransactionMixSummary(int merchantReportingId,
+                                                                          DateTime startDate,
+                                                                          DateTime endDate,
+                                                                          TransactionMixBreakdown breakdown,
+                                                                          TransactionMixMeasure measure,
+                                                                          int topN,
+                                                                          CancellationToken cancellationToken);
     }
     public class ReportsService : ClientProxyBase.ClientProxyBase, IReportsService
     {
@@ -73,9 +80,60 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                 ToDate = endDate,
                 FromDate = startDate
             };
-            
+
             return Result.Success(model);
 
+        }
+
+        public async Task<Result<TransactionMixSummaryModel>> GetTransactionMixSummary(int merchantReportingId,
+                                                                                       DateTime startDate,
+                                                                                       DateTime endDate,
+                                                                                       TransactionMixBreakdown breakdown,
+                                                                                       TransactionMixMeasure measure,
+                                                                                       int topN,
+                                                                                       CancellationToken cancellationToken)
+        {
+            TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
+
+            String requestUri = this.BuildRequestUrl($"/api/reporting/transactionmixsummary?applicationVersion={this.ApplicationInfoService.VersionString}");
+
+            MerchantTransactionMixSummaryRequest requestBody = new()
+            {
+                MerchantReportingId = merchantReportingId,
+                StartDate = startDate,
+                EndDate = endDate,
+                Breakdown = breakdown,
+                Measure = measure,
+                TopN = topN
+            };
+
+            Result<MerchantTransactionMixSummaryResponseDto>? responseDataResult = await this.Post<MerchantTransactionMixSummaryRequest, MerchantTransactionMixSummaryResponseDto>(requestUri, requestBody, accessToken.AccessToken, cancellationToken);
+
+            if (responseDataResult.IsFailed)
+            {
+                Logger.LogInformation($"GetTransactionMixSummary failed {responseDataResult.Status}");
+                return ResultHelpers.CreateFailure(responseDataResult);
+            }
+
+            TransactionMixSummaryModel model = new()
+            {
+                FromDate = responseDataResult.Data.FromDate,
+                ToDate = responseDataResult.Data.ToDate,
+                Breakdown = responseDataResult.Data.Breakdown,
+                Measure = responseDataResult.Data.Measure,
+                TotalCount = responseDataResult.Data.TotalCount,
+                TotalValue = responseDataResult.Data.TotalValue,
+                Items = responseDataResult.Data.Items.Select(i => new TransactionMixSummaryItemModel(i.Key, i.Label, i.Count, i.Value)).ToList(),
+                DrillDownTransactions = responseDataResult.Data.DrillDownTransactions.Select(t => new TransactionMixDrillDownTransactionModel(t.Reference,
+                                                                                                                                        t.TransactionType,
+                                                                                                                                        t.Product,
+                                                                                                                                        t.Operator,
+                                                                                                                                        t.Status,
+                                                                                                                                        t.Amount,
+                                                                                                                                        t.TransactionDateTime)).ToList()
+            };
+
+            return Result.Success(model);
         }
     }
 
@@ -111,6 +169,53 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
         public string Reference { get; set; }
 
         public string Product { get; set; }
+
+        public string Status { get; set; }
+
+        public decimal Amount { get; set; }
+
+        public DateTime TransactionDateTime { get; set; }
+    }
+
+    public class MerchantTransactionMixSummaryResponseDto
+    {
+        public DateTime FromDate { get; set; }
+
+        public DateTime ToDate { get; set; }
+
+        public TransactionMixBreakdown Breakdown { get; set; }
+
+        public TransactionMixMeasure Measure { get; set; }
+
+        public decimal TotalCount { get; set; }
+
+        public decimal TotalValue { get; set; }
+
+        public List<TransactionMixSummaryItemDto> Items { get; set; } = [];
+
+        public List<TransactionMixDrillDownTransactionDto> DrillDownTransactions { get; set; } = [];
+    }
+
+    public class TransactionMixSummaryItemDto
+    {
+        public string Key { get; set; }
+
+        public string Label { get; set; }
+
+        public decimal Count { get; set; }
+
+        public decimal Value { get; set; }
+    }
+
+    public class TransactionMixDrillDownTransactionDto
+    {
+        public string Reference { get; set; }
+
+        public string TransactionType { get; set; }
+
+        public string Product { get; set; }
+
+        public string Operator { get; set; }
 
         public string Status { get; set; }
 

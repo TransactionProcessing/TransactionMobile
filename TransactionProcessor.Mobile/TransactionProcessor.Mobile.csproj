@@ -73,6 +73,9 @@
 		<MauiXaml Update="Pages\Reports\ReportsPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Pages\Reports\TransactionMixPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Pages\Support\SupportPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

@@ -66,7 +66,21 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
         public async Task ReportsPageViewModel_Initialise_IsInitialised()
         {
             await this.ViewModel.Initialise(CancellationToken.None);
-            this.ViewModel.ReportsMenuOptions.Count.ShouldBe(1);
+            this.ViewModel.ReportsMenuOptions.Count.ShouldBe(2);
+        }
+
+        [Fact]
+        public async Task ReportsPageViewModel_TransactionMixCommand_Execute_IsExecuted()
+        {
+            ItemSelected<ListViewItem> itemSelected = new ItemSelected<ListViewItem>
+            {
+                SelectedItem = new ListViewItem { Title = "Transaction Mix" },
+                SelectedItemIndex = 1,
+            };
+
+            this.ViewModel.OptionSelectedCommand.Execute(itemSelected);
+
+            this.NavigationService.Verify(v => v.GoToTransactionMixSummaryPage(), Times.Once);
         }
 
         [Fact]
