@@ -172,6 +172,10 @@ public sealed partial class TransactionMixPageViewModel : ExtendedBaseViewModel
 
     public bool HasChartData => this.ChartSeries.Length > 0;
 
+    public string ChartSubtitle => this.HasChartData
+        ? $"Top {this.TopItems.Count} {this.SelectedBreakdown.ToDisplayText()} categories by {this.SelectedMeasure.ToDisplayText().ToLowerInvariant()}"
+        : "No chart data available";
+
     public IReadOnlyList<TransactionMixDrillDownTransactionModel> SelectedItemTransactions
     {
         get
@@ -303,43 +307,25 @@ public sealed partial class TransactionMixPageViewModel : ExtendedBaseViewModel
             return;
         }
 
-        List<string> labels = topItems.Select(item => item.Label).ToList();
         List<double> values = topItems.Select(item => this.SelectedMeasure == TransactionMixMeasure.Value ? (double)item.Value : (double)item.Count).ToList();
 
-        this.ChartSeries = new ISeries[]
+        this.ChartSeries = topItems.Select((item, index) =>
         {
-            new RowSeries<double>
+            double value = values[index];
+            return new PieSeries<double>(new[] { value })
             {
-                Values = values,
-                Name = this.SelectedMeasure.ToDisplayText(),
-                Stroke = null,
-                Fill = null,
-            }
-        };
+                Name = item.Label,
+            };
+        }).Cast<ISeries>().ToArray();
 
-        this.ChartYAxes = new List<ICartesianAxis>
-        {
-            new Axis
-            {
-                Labels = labels,
-                LabelsRotation = 0,
-                Name = this.SelectedBreakdown.ToDisplayText(),
-            }
-        };
-
-        this.ChartXAxes = new List<ICartesianAxis>
-        {
-            new Axis
-            {
-                Labeler = value => this.SelectedMeasure == TransactionMixMeasure.Value ? value.ToString("N2") : value.ToString("N0"),
-                Name = this.SelectedMeasure.ToDisplayText(),
-            }
-        };
+        this.ChartYAxes = [];
+        this.ChartXAxes = [];
 
         this.OnPropertyChanged(nameof(this.ChartSeries));
         this.OnPropertyChanged(nameof(this.ChartXAxes));
         this.OnPropertyChanged(nameof(this.ChartYAxes));
         this.OnPropertyChanged(nameof(this.HasChartData));
+        this.OnPropertyChanged(nameof(this.ChartSubtitle));
     }
 }
 

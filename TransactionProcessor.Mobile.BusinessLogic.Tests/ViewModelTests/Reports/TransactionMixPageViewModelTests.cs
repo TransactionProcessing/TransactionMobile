@@ -57,9 +57,11 @@ public class TransactionMixPageViewModelTests
         this.ViewModel.Items.Count.ShouldBeGreaterThan(0);
         this.ViewModel.TopItems.Count.ShouldBeGreaterThan(0);
         this.ViewModel.HasChartData.ShouldBeTrue();
-        this.ViewModel.ChartSeries.Length.ShouldBe(1);
-        this.ViewModel.ChartYAxes.Count.ShouldBe(1);
-        this.ViewModel.ChartXAxes.Count.ShouldBe(1);
+        this.ViewModel.ChartSeries.Length.ShouldBeGreaterThan(0);
+        this.ViewModel.ChartYAxes.Count.ShouldBe(0);
+        this.ViewModel.ChartXAxes.Count.ShouldBe(0);
+        this.ViewModel.ChartSubtitle.ShouldContain("Transaction Type");
+        this.ViewModel.ChartSubtitle.ShouldContain("count");
         this.ViewModel.IsLoading.ShouldBeFalse();
     }
 }

@@ -205,6 +205,7 @@ public class ShellNavigationService : INavigationService
             }
         catch(Exception e) {
             Logger.LogError($"Error navigating to {route}", e);
+            throw;
         }
     }
 
@@ -219,6 +220,7 @@ public class ShellNavigationService : INavigationService
         catch (Exception e)
         {
             Logger.LogError($"Error navigating to {route} (String route,IDictionary<String,Object> parameters)", e);
+            throw;
         }
     }
 
@@ -230,6 +232,7 @@ public class ShellNavigationService : INavigationService
         catch (Exception e)
         {
             Logger.LogError($"Error navigating to page (ContentPage page))", e);
+            throw;
         }
     }
 
