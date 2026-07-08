@@ -26,6 +26,12 @@ public interface IDialogService
                               TimeSpan? duration = null,
                               CancellationToken cancellationToken = default);
 
+    Task ShowSuccessToast(String message,
+                          Action? action = null,
+                          String? actionButtonText = "OK",
+                          TimeSpan? duration = null,
+                          CancellationToken cancellationToken = default);
+
     Task ShowWarningToast(String message,
                           Action? action = null,
                           String? actionButtonText = "OK",

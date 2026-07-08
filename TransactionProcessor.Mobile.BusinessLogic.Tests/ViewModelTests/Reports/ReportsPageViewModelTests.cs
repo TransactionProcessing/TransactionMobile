@@ -66,7 +66,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
         public async Task ReportsPageViewModel_Initialise_IsInitialised()
         {
             await this.ViewModel.Initialise(CancellationToken.None);
-            this.ViewModel.ReportsMenuOptions.Count.ShouldBe(2);
+            this.ViewModel.ReportsMenuOptions.Count.ShouldBe(3);
         }
 
         [Fact]
@@ -81,6 +81,20 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
             this.ViewModel.OptionSelectedCommand.Execute(itemSelected);
 
             this.NavigationService.Verify(v => v.GoToTransactionMixSummaryPage(), Times.Once);
+        }
+
+        [Fact]
+        public async Task ReportsPageViewModel_RecentActivityCommand_Execute_IsExecuted()
+        {
+            ItemSelected<ListViewItem> itemSelected = new ItemSelected<ListViewItem>
+            {
+                SelectedItem = new ListViewItem { Title = "Recent Activity and Receipt Report" },
+                SelectedItemIndex = 2,
+            };
+
+            this.ViewModel.OptionSelectedCommand.Execute(itemSelected);
+
+            this.NavigationService.Verify(v => v.GoToRecentActivityReportPage(), Times.Once);
         }
 
         [Fact]

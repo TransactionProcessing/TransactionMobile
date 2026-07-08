@@ -50,7 +50,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports
                                                                  new ListViewItem {
                                                                                       Title = "Transaction Mix"
                                                                                   },
-                                                              };
+                                                                 new ListViewItem {
+                                                                                      Title = "Recent Activity and Receipt Report"
+                                                                                  },
+                                                               };
             await base.Initialise(cancellationToken);
         }
 
@@ -64,6 +67,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports
             {
                 ReportsOptions.DailyPerformanceSummary => this.NavigationService.GoToDailyPerformanceSummaryPage(),
                 ReportsOptions.TransactionMix => this.NavigationService.GoToTransactionMixSummaryPage(),
+                ReportsOptions.RecentActivityAndReceiptReport => this.NavigationService.GoToRecentActivityReportPage(),
                 _ => Task.Factory.StartNew(() => Logger.LogWarning($"Unsupported option selected {selectedOption}"))
             };
 
@@ -79,6 +83,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports
             DailyPerformanceSummary = 0,
 
             TransactionMix = 1,
+
+            RecentActivityAndReceiptReport = 2,
         }
 
         #endregion

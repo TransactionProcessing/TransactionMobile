@@ -229,6 +229,8 @@ namespace TransactionProcessor.Mobile.Extensions {
             builder.Services.AddTransient<ReportsPageViewModel>();
             builder.Services.AddTransient<DailyPerformanceSummaryPageViewModel>();
             builder.Services.AddTransient<TransactionMixPageViewModel>();
+            builder.Services.AddTransient<RecentActivityReportPageViewModel>();
+            builder.Services.AddTransient<RecentActivityReceiptDetailPageViewModel>();
 
             return builder;
         }
@@ -271,6 +273,8 @@ namespace TransactionProcessor.Mobile.Extensions {
             builder.Services.AddTransient<ReportsPage>();
             builder.Services.AddTransient<DailyPerformanceSummaryPage>();
             builder.Services.AddTransient<TransactionMixPage>();
+            builder.Services.AddTransient<RecentActivityReportPage>();
+            builder.Services.AddTransient<RecentActivityReceiptDetailPage>();
             
             return builder;
         }

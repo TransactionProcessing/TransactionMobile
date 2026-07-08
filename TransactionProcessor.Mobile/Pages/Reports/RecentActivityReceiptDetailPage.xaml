@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
+             xmlns:reports="clr-namespace:TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports;assembly=TransactionProcessor.Mobile.BusinessLogic"
+             x:Class="TransactionProcessor.Mobile.Pages.Reports.RecentActivityReceiptDetailPage"
+             x:Name="RecentActivityReceiptDetailPageRoot"
+             x:DataType="reports:RecentActivityReceiptDetailPageViewModel"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Style="{DynamicResource Layout}" Spacing="18">
+            <controls:TitleLabel Text="{Binding Title}"
+                                 AutomationId="RecentActivityReceiptDetail"
+                                 FontSize="20"
+                                 HorizontalTextAlignment="Center"
+                                 VerticalOptions="End"
+                                 FontAttributes="Bold"
+                                 TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}"
+                                 Padding="20,0,20,8" />
+
+            <Frame Style="{StaticResource TransactionFormCard}"
+                   BackgroundColor="{DynamicResource salesAnalysisCardBackgroundColor}"
+                   BorderColor="{DynamicResource salesAnalysisCardBorderColor}"
+                   Padding="14"
+                   CornerRadius="14"
+                   HasShadow="False"
+                   Margin="0">
+                <Grid ColumnDefinitions="*,Auto"
+                      RowDefinitions="Auto,Auto,Auto,Auto"
+                      ColumnSpacing="12"
+                      RowSpacing="8">
+                    <Label Text="{Binding Reference}"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                    <Frame Grid.Column="1"
+                           Padding="10,4"
+                           CornerRadius="999"
+                           HasShadow="False"
+                           HorizontalOptions="End"
+                           VerticalOptions="Start"
+                           BackgroundColor="#EAF7EE"
+                           BorderColor="#1E8E3E">
+                        <Frame.Triggers>
+                            <DataTrigger TargetType="Frame"
+                                         Binding="{Binding Status}"
+                                         Value="Failed">
+                                <Setter Property="BackgroundColor" Value="#FDEEEF" />
+                                <Setter Property="BorderColor" Value="#D64545" />
+                            </DataTrigger>
+                        </Frame.Triggers>
+                        <Label Text="{Binding Status}"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center"
+                               TextColor="#1E8E3E">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label"
+                                             Binding="{Binding Status}"
+                                             Value="Failed">
+                                    <Setter Property="TextColor" Value="#D64545" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                    </Frame>
+                    <Label Grid.Row="1"
+                           Text="{Binding ReceiptReference, StringFormat='Receipt: {0}'}"
+                           FontSize="12"
+                           TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                    <Label Grid.Row="1"
+                           Grid.Column="1"
+                           Text="{Binding Amount, StringFormat='{0:N2}'}"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           HorizontalTextAlignment="End"
+                           TextColor="#1E8E3E">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label"
+                                         Binding="{Binding Status}"
+                                         Value="Failed">
+                                <Setter Property="TextColor" Value="#D64545" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                    <Label Grid.Row="2"
+                           Text="{Binding TransactionType, StringFormat='Transaction type: {0}'}"
+                           FontSize="12"
+                           TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                    <Label Grid.Row="2"
+                           Grid.Column="1"
+                           Text="{Binding TransactionDateTime, StringFormat='Date/time: {0}'}"
+                           FontSize="12"
+                           HorizontalTextAlignment="End"
+                           TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                    <Label Grid.Row="3"
+                           Text="{Binding Product, StringFormat='Product: {0}'}"
+                           FontSize="12"
+                           TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                    <Label Grid.Row="3"
+                           Grid.Column="1"
+                           Text="{Binding Operator, StringFormat='Operator: {0}'}"
+                           FontSize="12"
+                           HorizontalTextAlignment="End"
+                           TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                </Grid>
+            </Frame>
+
+            <Frame Style="{StaticResource TransactionFormCard}"
+                   BackgroundColor="{DynamicResource salesAnalysisCardBackgroundColor}"
+                   BorderColor="{DynamicResource salesAnalysisCardBorderColor}"
+                   Padding="14"
+                   CornerRadius="14"
+                   HasShadow="False"
+                   Margin="0">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Resend receipt"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                    <Entry Text="{Binding EmailAddress}"
+                           Placeholder="Enter email address"
+                           Keyboard="Email"
+                           AutomationId="RecentActivityReceiptEmailAddress"
+                           TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                    <Button Text="Resend receipt"
+                            AutomationId="RecentActivityReceiptResendButton"
+                            Style="{StaticResource ReportsButtonStyle}"
+                            Command="{Binding ResendReceiptCommand}" />
+                    <ActivityIndicator IsRunning="{Binding IsResendingReceipt}"
+                                       IsVisible="{Binding IsResendingReceipt}"
+                                       Color="{StaticResource reports}"
+                                       HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <Button Text="Back"
+                    AutomationId="BackButton"
+                    Style="{StaticResource ReportsButtonStyle}"
+                    Command="{Binding BackButtonCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -46,6 +46,7 @@ public partial class ReportsPage : NoBackWithoutLogoutPage
             "Daily Performance Summary" => "salesvalue.svg",
             "Sales Analysis" => "transactionsbutton.svg",
             "Balance Analysis" => "reportbutton.svg",
+            "Recent Activity and Receipt Report" => "reportbutton.svg",
             _ => "reportbutton.svg"
         };
 
