@@ -7,7 +7,8 @@ using TransactionProcessor.Mobile.BusinessLogic.Services;
 namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers;
 
 public sealed class ReportRequestHandler : IRequestHandler<ReportQueries.GetDailyPerformanceSummaryQuery, Result<DailyPerformanceSummaryModel>>,
-                                          IRequestHandler<ReportQueries.GetTransactionMixSummaryQuery, Result<TransactionMixSummaryModel>> {
+                                          IRequestHandler<ReportQueries.GetTransactionMixSummaryQuery, Result<TransactionMixSummaryModel>>,
+                                          IRequestHandler<ReportQueries.GetRecentActivityReceiptReportQuery, Result<RecentActivityReceiptReportModel>> {
     private readonly IReportsService ReportsService;
     private readonly IApplicationCache ApplicationCache;
 
@@ -55,5 +56,22 @@ public sealed class ReportRequestHandler : IRequestHandler<ReportQueries.GetDail
                                                                   request.Measure,
                                                                   request.TopN,
                                                                   cancellationToken);
+    }
+
+    public async Task<Result<RecentActivityReceiptReportModel>> Handle(ReportQueries.GetRecentActivityReceiptReportQuery request,
+                                                                       CancellationToken cancellationToken)
+    {
+        MerchantDetailsModel merchant = this.ApplicationCache.GetMerchantDetails();
+        if (merchant == null)
+        {
+            return Result.Failure("Merchant details are not available.");
+        }
+
+        return await this.ReportsService.GetRecentActivityReceiptReport(merchant.MerchantReportingId,
+                                                                        request.ReportDate.Date,
+                                                                        request.SearchText,
+                                                                        request.PageNumber,
+                                                                        request.PageSize,
+                                                                        cancellationToken);
     }
 }

@@ -96,4 +96,93 @@ public class ReportRequestHandlerTests
                                   It.IsAny<CancellationToken>()),
                               Times.Once);
     }
+
+    [Fact]
+    public async Task GetRecentActivityReceiptReportQuery_ReturnsMockedResultsForOneDate()
+    {
+        Mock<IReportsService> reportsService = new();
+        Mock<IApplicationCache> applicationCache = new();
+        MerchantDetailsModel merchantDetails = new()
+        {
+            MerchantReportingId = 12345
+        };
+
+        DateTime reportDate = new(2026, 7, 6);
+
+        applicationCache.Setup(a => a.GetMerchantDetails()).Returns(merchantDetails);
+        reportsService.Setup(r => r.GetRecentActivityReceiptReport(
+                                  merchantDetails.MerchantReportingId,
+                                  reportDate,
+                                  "TXN-10001",
+                                  1,
+                                  5,
+                                  It.IsAny<CancellationToken>()))
+                      .ReturnsAsync(Result.Success(RecentActivityReceiptReportModel.CreateMock(reportDate, "TXN-10001")));
+
+        ReportRequestHandler handler = new(reportsService.Object, applicationCache.Object);
+
+        Result<RecentActivityReceiptReportModel> result = await handler.Handle(
+            new ReportQueries.GetRecentActivityReceiptReportQuery(
+                ReportDate: reportDate,
+                SearchText: "TXN-10001",
+                PageNumber: 1,
+                PageSize: 5),
+            CancellationToken.None);
+
+        result.IsSuccess.ShouldBeTrue();
+        result.Data.ReportDate.ShouldBe(reportDate);
+        result.Data.Items.ShouldNotBeEmpty();
+        result.Data.Items.All(item => item.TransactionDateTime.Date == reportDate).ShouldBeTrue();
+        reportsService.Verify(r => r.GetRecentActivityReceiptReport(
+                                  merchantDetails.MerchantReportingId,
+                                  reportDate,
+                                  "TXN-10001",
+                                  1,
+                                  5,
+                                  It.IsAny<CancellationToken>()),
+                              Times.Once);
+    }
+
+    [Fact]
+    public async Task GetRecentActivityReceiptReportQuery_PassesPagingToService()
+    {
+        Mock<IReportsService> reportsService = new();
+        Mock<IApplicationCache> applicationCache = new();
+        MerchantDetailsModel merchantDetails = new()
+        {
+            MerchantReportingId = 12345
+        };
+
+        DateTime reportDate = new(2026, 7, 6);
+
+        applicationCache.Setup(a => a.GetMerchantDetails()).Returns(merchantDetails);
+        reportsService.Setup(r => r.GetRecentActivityReceiptReport(
+                                  merchantDetails.MerchantReportingId,
+                                  reportDate,
+                                  null,
+                                  2,
+                                  5,
+                                  It.IsAny<CancellationToken>()))
+                      .ReturnsAsync(Result.Success(RecentActivityReceiptReportModel.CreateMock(reportDate, null)));
+
+        ReportRequestHandler handler = new(reportsService.Object, applicationCache.Object);
+
+        Result<RecentActivityReceiptReportModel> result = await handler.Handle(
+            new ReportQueries.GetRecentActivityReceiptReportQuery(
+                ReportDate: reportDate,
+                SearchText: null,
+                PageNumber: 2,
+                PageSize: 5),
+            CancellationToken.None);
+
+        result.IsSuccess.ShouldBeTrue();
+        reportsService.Verify(r => r.GetRecentActivityReceiptReport(
+                                  merchantDetails.MerchantReportingId,
+                                  reportDate,
+                                  null,
+                                  2,
+                                  5,
+                                  It.IsAny<CancellationToken>()),
+                              Times.Once);
+    }
 }

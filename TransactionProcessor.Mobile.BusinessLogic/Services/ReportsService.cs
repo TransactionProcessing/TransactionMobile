@@ -20,6 +20,16 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                                                                           TransactionMixMeasure measure,
                                                                           int topN,
                                                                           CancellationToken cancellationToken);
+        Task<Result<RecentActivityReceiptReportModel>> GetRecentActivityReceiptReport(int merchantReportingId,
+                                                                                      DateTime reportDate,
+                                                                                      string? searchText,
+                                                                                      int pageNumber,
+                                                                                      int pageSize,
+                                                                                      CancellationToken cancellationToken);
+
+        Task<Result<RecentActivityReceiptResendResultModel>> ResendRecentActivityReceipt(string reference,
+                                                                                          string recipientEmailAddress,
+                                                                                          CancellationToken cancellationToken);
     }
     public class ReportsService : ClientProxyBase.ClientProxyBase, IReportsService
     {
@@ -135,6 +145,158 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
             return Result.Success(model);
         }
+
+        public async Task<Result<RecentActivityReceiptReportModel>> GetRecentActivityReceiptReport(int merchantReportingId,
+                                                                                                   DateTime reportDate,
+                                                                                                   string? searchText,
+                                                                                                   int pageNumber,
+                                                                                                   int pageSize,
+                                                                                                   CancellationToken cancellationToken)
+        {
+            TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
+
+            String requestUri = this.BuildRequestUrl("/api/reporting/recentactivityreceiptsearch");
+
+            RecentActivityReceiptSearchRequest requestBody = new()
+            {
+                ApplicationVersion = this.ApplicationInfoService.VersionString,
+                MerchantReportingId = merchantReportingId,
+                ReportDate = reportDate.Date,
+                SearchText = string.IsNullOrWhiteSpace(searchText) ? null : searchText.Trim(),
+                PageNumber = pageNumber > 0 ? pageNumber : 1,
+                PageSize = pageSize > 0 ? pageSize : 5
+            };
+
+            Result<RecentActivityReceiptSearchResponseDto>? responseDataResult = await this.Post<RecentActivityReceiptSearchRequest, RecentActivityReceiptSearchResponseDto>(requestUri, requestBody, accessToken.AccessToken, cancellationToken);
+
+            if (responseDataResult.IsFailed)
+            {
+                Logger.LogInformation($"GetRecentActivityReceiptReport failed {responseDataResult.Status}");
+                return ResultHelpers.CreateFailure(responseDataResult);
+            }
+
+            RecentActivityReceiptReportModel model = new()
+            {
+                ReportDate = responseDataResult.Data.ReportDate,
+                SearchText = requestBody.SearchText,
+                PageNumber = responseDataResult.Data.PageNumber,
+                PageSize = responseDataResult.Data.PageSize,
+                TotalCount = responseDataResult.Data.TotalCount,
+                Items = responseDataResult.Data.Items.Select(item => new RecentActivityReceiptItemModel(item.Reference,
+                                                                                                      item.TransactionType,
+                                                                                                      item.Product,
+                                                                                                      item.Operator,
+                                                                                                      item.Status,
+                                                                                                      item.Amount,
+                                                                                                      item.TransactionDateTime,
+                                                                                                      item.ReceiptReference)).ToList()
+            };
+
+            return Result.Success(model);
+        }
+
+        public async Task<Result<RecentActivityReceiptResendResultModel>> ResendRecentActivityReceipt(string reference,
+                                                                                                      string recipientEmailAddress,
+                                                                                                      CancellationToken cancellationToken)
+        {
+            TokenResponseModel accessToken = this.ApplicationCache.GetAccessToken();
+
+            String requestUri = this.BuildRequestUrl($"/api/transactions/resendreceipt?applicationVersion={this.ApplicationInfoService.VersionString}");
+
+            ResendReceiptRequestMessage requestBody = new()
+            {
+                Reference = reference,
+                RecipientEmailAddress = recipientEmailAddress
+            };
+
+            Result<RecentActivityReceiptResendResponseDto>? responseDataResult = await this.Post<ResendReceiptRequestMessage, RecentActivityReceiptResendResponseDto>(requestUri, requestBody, accessToken.AccessToken, cancellationToken);
+
+            if (responseDataResult.IsFailed)
+            {
+                Logger.LogInformation($"ResendRecentActivityReceipt failed {responseDataResult.Status}");
+                return ResultHelpers.CreateFailure(responseDataResult);
+            }
+
+            RecentActivityReceiptResendResultModel model = new()
+            {
+                Success = responseDataResult.Data.Success,
+                Message = responseDataResult.Data.Message,
+                Reference = responseDataResult.Data.Reference,
+                ReceiptReference = responseDataResult.Data.ReceiptReference,
+                TransactionReference = responseDataResult.Data.TransactionReference
+            };
+
+            return model.Success
+                ? Result.Success(model)
+                : Result.Failure(model.Message ?? "Unable to resend the receipt.");
+        }
+    }
+
+    public class RecentActivityReceiptSearchRequest
+    {
+        public string ApplicationVersion { get; set; }
+
+        public int MerchantReportingId { get; set; }
+
+        public DateTime ReportDate { get; set; }
+
+        public string? SearchText { get; set; }
+
+        public int PageNumber { get; set; } = 1;
+
+        public int PageSize { get; set; } = 5;
+    }
+
+    public class RecentActivityReceiptSearchResponseDto
+    {
+        public DateTime ReportDate { get; set; }
+
+        public int PageNumber { get; set; }
+
+        public int PageSize { get; set; }
+
+        public int TotalCount { get; set; }
+
+        public List<RecentActivityReceiptSearchItemDto> Items { get; set; } = [];
+    }
+
+    public class RecentActivityReceiptSearchItemDto
+    {
+        public string Reference { get; set; }
+
+        public string TransactionType { get; set; }
+
+        public string Product { get; set; }
+
+        public string Operator { get; set; }
+
+        public string Status { get; set; }
+
+        public decimal Amount { get; set; }
+
+        public DateTime TransactionDateTime { get; set; }
+
+        public string ReceiptReference { get; set; }
+    }
+
+    public class RecentActivityReceiptResendResponseDto
+    {
+        public bool Success { get; set; }
+
+        public string Message { get; set; }
+
+        public string Reference { get; set; }
+
+        public string ReceiptReference { get; set; }
+
+        public string TransactionReference { get; set; }
+    }
+
+    public class ResendReceiptRequestMessage
+    {
+        public string Reference { get; set; }
+
+        public string RecipientEmailAddress { get; set; }
     }
 
     public class MerchantDailyPerformanceSummaryRequest

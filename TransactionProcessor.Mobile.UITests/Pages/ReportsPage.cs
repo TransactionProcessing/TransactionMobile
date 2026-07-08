@@ -20,6 +20,7 @@ public class ReportsPage : BasePage2
 
     private readonly String DailyPerformanceSummaryButton;
     private readonly String TransactionMixButton;
+    private readonly String RecentActivityAndReceiptReportButton;
     
 
 
@@ -27,6 +28,7 @@ public class ReportsPage : BasePage2
     {
         this.DailyPerformanceSummaryButton = "DailyPerformanceSummaryButton";
         this.TransactionMixButton = "TransactionMixButton";
+        this.RecentActivityAndReceiptReportButton = "RecentActivityAndReceiptReportButton";
     }
 
     public async Task ClickDailyPerformanceSummaryButton()
@@ -38,6 +40,12 @@ public class ReportsPage : BasePage2
     public async Task ClickTransactionMixButton()
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.TransactionMixButton);
+        element.Click();
+    }
+
+    public async Task ClickRecentActivityAndReceiptReportButton()
+    {
+        IWebElement element = await this.WaitForElementByAccessibilityId(this.RecentActivityAndReceiptReportButton);
         element.Click();
     }
 

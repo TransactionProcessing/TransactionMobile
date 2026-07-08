@@ -19,6 +19,12 @@ public static class SnackBarOptionsHelper
                                 TextColor = Colors.White
                             };
 
+    public static SnackbarOptions GetSuccessSnackbarOptions =>
+        new SnackbarOptions {
+                                BackgroundColor = Color.FromArgb("#1E8E3E"),
+                                TextColor = Colors.White
+                            };
+
     public static SnackbarOptions GetWarningSnackbarOptions =>
         new SnackbarOptions {
                                 BackgroundColor = Colors.Orange,

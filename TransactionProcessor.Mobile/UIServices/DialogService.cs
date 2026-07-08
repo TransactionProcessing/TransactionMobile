@@ -49,6 +49,20 @@ namespace TransactionProcessor.Mobile.UIServices
                                                                cancellationToken);
         }
 
+        public async Task ShowSuccessToast(String message,
+                                           Action? action = null,
+                                           String? actionButtonText = "OK",
+                                           TimeSpan? duration = null,
+                                           CancellationToken cancellationToken = default)
+        {
+            await Application.Current.MainPage.DisplaySnackbar(message,
+                                                               action,
+                                                               actionButtonText,
+                                                               duration,
+                                                               SnackBarOptionsHelper.GetSuccessSnackbarOptions,
+                                                               cancellationToken);
+        }
+
         public async Task ShowWarningToast(String message,
                                            Action? action = null,
                                            String? actionButtonText = "OK",

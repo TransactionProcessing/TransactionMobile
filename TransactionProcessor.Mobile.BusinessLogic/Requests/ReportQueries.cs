@@ -13,4 +13,9 @@ public record ReportQueries
                                                 TransactionMixBreakdown Breakdown,
                                                 TransactionMixMeasure Measure,
                                                 int TopN) : IRequest<Result<TransactionMixSummaryModel>>;
+
+    public record GetRecentActivityReceiptReportQuery(DateTime ReportDate,
+                                                      string? SearchText,
+                                                      int PageNumber = 1,
+                                                      int PageSize = 5) : IRequest<Result<RecentActivityReceiptReportModel>>;
 }

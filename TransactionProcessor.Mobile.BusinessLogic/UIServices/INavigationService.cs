@@ -1,11 +1,9 @@
-﻿using TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions;
+using TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.UIServices;
 
 public interface INavigationService
 {
-    #region Methods
-
     Task QuitApplication();
     Task GoBack();
 
@@ -14,7 +12,7 @@ public interface INavigationService
     Task GoToMobileTopupFailedPage();
 
     Task GoToMobileTopupPerformTopupPage(ProductDetails productDetails,
-                                             Decimal topupAmount);
+                                         Decimal topupAmount);
 
     Task GoToMobileTopupSelectOperatorPage();
 
@@ -43,7 +41,7 @@ public interface INavigationService
     Task GoToVoucherSelectProductPage(ProductDetails productDetails);
 
     Task GoToVoucherIssueVoucherPage(ProductDetails productDetails,
-                                         Decimal voucherAmount);
+                                     Decimal voucherAmount);
 
     Task GoToBillPaymentGetAccountPage(ProductDetails productDetails);
 
@@ -66,7 +64,9 @@ public interface INavigationService
 
     Task GoToTransactionMixSummaryPage();
 
-    Task GoToTransactions();
+    Task GoToRecentActivityReportPage();
 
-    #endregion
+    Task GoToRecentActivityReceiptDetailPage(TransactionProcessor.Mobile.BusinessLogic.Models.RecentActivityReceiptItemModel item);
+
+    Task GoToTransactions();
 }

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
+             xmlns:models="clr-namespace:TransactionProcessor.Mobile.BusinessLogic.Models;assembly=TransactionProcessor.Mobile.BusinessLogic"
+             xmlns:reports="clr-namespace:TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports;assembly=TransactionProcessor.Mobile.BusinessLogic"
+             x:Class="TransactionProcessor.Mobile.Pages.Reports.RecentActivityReportPage"
+             x:Name="RecentActivityReportPageRoot"
+             x:DataType="reports:RecentActivityReportPageViewModel"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="RecentActivityItemTemplate" x:DataType="models:RecentActivityReceiptItemModel">
+                <Frame Style="{StaticResource TransactionFormCard}"
+                       Padding="14"
+                       BackgroundColor="{DynamicResource salesAnalysisCardBackgroundColor}"
+                       BorderColor="{DynamicResource salesAnalysisCardBorderColor}"
+                       CornerRadius="14"
+                       HasShadow="False"
+                       Margin="0"
+                       AutomationId="{Binding Reference}">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BindingContext.OpenItemCommand, Source={x:Reference RecentActivityReportPageRoot}}"
+                                              CommandParameter="{Binding .}" />
+                    </Frame.GestureRecognizers>
+                    <Grid ColumnDefinitions="*,Auto"
+                          RowDefinitions="Auto,Auto,Auto"
+                          ColumnSpacing="12"
+                          RowSpacing="4">
+                        <Label Text="{Binding Reference}"
+                               FontAttributes="Bold"
+                               FontSize="14"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                        <Frame Grid.Column="1"
+                               Padding="10,4"
+                               CornerRadius="999"
+                               HasShadow="False"
+                               HorizontalOptions="End"
+                               VerticalOptions="Start"
+                               BackgroundColor="#EAF7EE"
+                               BorderColor="#1E8E3E">
+                            <Frame.Triggers>
+                                <DataTrigger TargetType="Frame"
+                                             Binding="{Binding Status}"
+                                             Value="Failed">
+                                    <Setter Property="BackgroundColor" Value="#FDEEEF" />
+                                    <Setter Property="BorderColor" Value="#D64545" />
+                                </DataTrigger>
+                            </Frame.Triggers>
+                            <Label Text="{Binding Status}"
+                                   FontSize="11"
+                                   FontAttributes="Bold"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalTextAlignment="Center"
+                                   TextColor="#1E8E3E">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label"
+                                                 Binding="{Binding Status}"
+                                                 Value="Failed">
+                                        <Setter Property="TextColor" Value="#D64545" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                        </Frame>
+                        <Label Grid.Row="1"
+                               Text="{Binding Product}"
+                               FontSize="12"
+                               Opacity="0.85"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                        <Label Grid.Row="1"
+                               Grid.Column="1"
+                               Text="{Binding Amount, StringFormat='{0:N2}'}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               HorizontalTextAlignment="End"
+                               TextColor="#1E8E3E">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label"
+                                             Binding="{Binding Status}"
+                                             Value="Failed">
+                                    <Setter Property="TextColor" Value="#D64545" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                        <Label Grid.Row="2"
+                               Text="{Binding Operator}"
+                               FontSize="11"
+                               Opacity="0.75"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                        <Label Grid.Row="2"
+                               Grid.Column="1"
+                               Text="{Binding TransactionDateTime, StringFormat='{0:dd MMM HH:mm}'}"
+                               FontSize="11"
+                               Opacity="0.75"
+                               HorizontalTextAlignment="End"
+                               TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                    </Grid>
+                </Frame>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid Style="{DynamicResource Layout}"
+          RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto"
+          RowSpacing="18">
+            <controls:TitleLabel Text="{Binding Title}"
+                                 AutomationId="RecentActivityReport"
+                                 Grid.Row="0"
+                                 FontSize="20"
+                                 HorizontalTextAlignment="Center"
+                                 VerticalOptions="End"
+                                 FontAttributes="Bold"
+                                 TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}"
+                                 Padding="20,0,20,8" />
+
+            <Label Text="Single date only"
+                   Grid.Row="1"
+                   FontSize="12"
+                   Opacity="0.8"
+                   TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+
+            <DatePicker Date="{Binding SelectedDate}"
+                        Grid.Row="2"
+                        Format="dd MMM yyyy"
+                        AutomationId="RecentActivityDatePicker"
+                        TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+
+            <Entry Text="{Binding SearchText}"
+                   Grid.Row="3"
+                   Placeholder="Search transaction ID, receipt, status, product or operator"
+                   AutomationId="RecentActivitySearchText"
+                   TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+
+            <Button Text="Search"
+                    Grid.Row="4"
+                    AutomationId="RecentActivitySearchButton"
+                    Style="{StaticResource ReportsButtonStyle}"
+                    Command="{Binding SearchCommand}" />
+
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               Grid.Row="5"
+                               IsVisible="{Binding IsLoading}"
+                               Color="{StaticResource reports}"
+                               HorizontalOptions="Center" />
+
+            <VerticalStackLayout Grid.Row="6"
+                                 IsVisible="{Binding HasError}"
+                                 Spacing="4">
+                <Label Text="Unable to load recent activity."
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                <Label Text="{Binding ErrorMessage}"
+                       FontSize="12"
+                       Opacity="0.8"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+            </VerticalStackLayout>
+
+            <Grid Grid.Row="7"
+                  RowDefinitions="Auto,*,Auto"
+                  RowSpacing="12"
+                  IsVisible="{Binding HasResults}">
+                <Label Text="Results"
+                       Grid.Row="0"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+
+                <CollectionView Grid.Row="1"
+                                ItemsSource="{Binding Items}"
+                                ItemTemplate="{StaticResource RecentActivityItemTemplate}"
+                                SelectionMode="None"
+                                AutomationId="RecentActivityResults">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+                </CollectionView>
+
+                <HorizontalStackLayout Grid.Row="2"
+                                       Spacing="12"
+                                       HorizontalOptions="Center"
+                                       IsVisible="{Binding HasPagination}">
+                    <Button Text="Previous"
+                            Style="{StaticResource ReportsButtonStyle}"
+                            Command="{Binding PreviousPageCommand}"
+                            IsEnabled="{Binding CanGoToPreviousPage}" />
+                    <Label Text="{Binding PageDisplayText}"
+                           VerticalTextAlignment="Center"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                    <Button Text="Next"
+                            Style="{StaticResource ReportsButtonStyle}"
+                            Command="{Binding NextPageCommand}"
+                            IsEnabled="{Binding CanGoToNextPage}" />
+                </HorizontalStackLayout>
+            </Grid>
+
+            <VerticalStackLayout Grid.Row="7"
+                                 IsVisible="{Binding HasEmptyState}"
+                                 Spacing="4">
+                <Label Text="No recent activity found."
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+                <Label Text="Try another search term for the same date."
+                       FontSize="12"
+                       Opacity="0.8"
+                       TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
+            </VerticalStackLayout>
+
+            <Button Text="Back"
+                    Grid.Row="8"
+                    AutomationId="BackButton"
+                    Style="{StaticResource ReportsButtonStyle}"
+                    Command="{Binding BackButtonCommand}" />
+    </Grid>
+</ContentPage>

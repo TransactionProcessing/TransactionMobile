@@ -194,6 +194,20 @@ public class ShellNavigationService : INavigationService
         await this.NavigateTo(nameof(TransactionMixPage));
     }
 
+    public async Task GoToRecentActivityReportPage()
+    {
+        await this.NavigateTo(nameof(RecentActivityReportPage));
+    }
+
+    public async Task GoToRecentActivityReceiptDetailPage(TransactionProcessor.Mobile.BusinessLogic.Models.RecentActivityReceiptItemModel item)
+    {
+        Dictionary<String, Object> d = new Dictionary<String, Object>() {
+                                                                            {nameof(TransactionProcessor.Mobile.BusinessLogic.Models.RecentActivityReceiptItemModel), item},
+                                                                        };
+
+        await this.NavigateTo(nameof(RecentActivityReceiptDetailPage), d);
+    }
+
     public async Task GoToTransactions() {
         await this.NavigateTo("///main/transactions");
     }
