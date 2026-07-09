@@ -123,6 +123,12 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
             TransactionCommands.PerformLogonCommand command = new(DateTime.Now);
             return await this.Mediator.Send(command);
         }
+        
+        private async Task<Result<MerchantDetailsModel>> GetMerchantDetails()
+        {
+            MerchantQueries.GetMerchantDetailsQuery query = new MerchantQueries.GetMerchantDetailsQuery();
+            return  await this.Mediator.Send(query);
+        }
 
         private async Task<Result<List<ContractProductModel>>> GetMerchantContractProducts() {
             // Get Contracts
@@ -245,9 +251,13 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
                 await this.WriteTimingTrace(sw, "After PerformLogonTransaction");
                 Result<List<ContractProductModel>> getMerchantContractProductsResult = await this.GetMerchantContractProducts();
                 this.HandleResult(getMerchantContractProductsResult);
-
                 await this.WriteTimingTrace(sw, "After GetMerchantContractProducts");
-                
+
+                Result<MerchantDetailsModel> getMerchantDetailsResult = await this.GetMerchantDetails();
+                this.HandleResult(getMerchantDetailsResult);
+                await this.WriteTimingTrace(sw, "After GetMerchantDetails");
+
+                this.ApplicationCache.SetMerchantDetails(getMerchantDetailsResult.Data);
                 this.ApplicationCache.SetIsLoggedIn(true);
                 
                 this.BalanceRefresher.StartRefreshing();
