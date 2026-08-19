@@ -142,7 +142,13 @@ public class TransactionsSteps{
     
     [Then(@"the Select Product Page is displayed")]
     public async Task ThenTheSelectProductPageIsDisplayed() {
-        await this.transactionsMobileTopupSelectProductPage.AssertOnPage();
+        Task t = this.operatorType switch {
+            OperatorType.MobileTopup => this.transactionsMobileTopupSelectProductPage.AssertOnPage(),
+            OperatorType.Voucher => this.transactionsVoucherSelectProductPage.AssertOnPage(),
+            OperatorType.BillPayment => this.transactionsBillPaymentSelectProductPage.AssertOnPage()
+        };
+
+        await t;
     }
 
     [When(@"I tap on the '([^']*)' product button")]
