@@ -4,7 +4,7 @@ namespace TransactionProcessor.Mobile.UITests.Pages;
 
 public class MainPage : BasePage2
 {
-    protected override String Trait => "MainPageHeader";
+    protected override String Trait => "Home";
 
     private readonly String TransactionsButton;
 
