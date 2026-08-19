@@ -196,7 +196,7 @@ public class TransactionsBillPaymentSuccessfulPaymentPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "BillPaymentSuccessful";
+    protected override String Trait => "CompleteButton";
 
     public async Task ClickCompleteButton()
     {
