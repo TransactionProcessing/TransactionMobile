@@ -73,16 +73,24 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.MyAccount
                 new() { Title = "Logout" }
             ];
 
-            MerchantQueries.GetMerchantDetailsQuery query = new MerchantQueries.GetMerchantDetailsQuery();
+            MerchantDetailsModel merchant = this.ApplicationCache.GetMerchantDetails();
+            if (merchant == null)
+            {
+                MerchantQueries.GetMerchantDetailsQuery query = new();
 
-            Result<MerchantDetailsModel> merchantDetailsResult = await this.Mediator.Send(query, cancellationToken);
-            if (merchantDetailsResult.IsFailed) {
-                await this.DialogService.ShowWarningToast("Unable to load merchant details. Please try again later.", cancellationToken: cancellationToken);
-                return;
+                Result<MerchantDetailsModel> merchantDetailsResult = await this.Mediator.Send(query, cancellationToken);
+                if (merchantDetailsResult.IsFailed)
+                {
+                    await this.DialogService.ShowWarningToast("Unable to load merchant details. Please try again later.", cancellationToken: cancellationToken);
+                    return;
+                }
+
+                this.MerchantName = merchantDetailsResult.Data.MerchantName;
             }
-
-            this.MerchantName = merchantDetailsResult.Data.MerchantName;
-
+            else {
+                this.MerchantName = merchant.MerchantName;
+            }
+            
             this.LastLogin = this.ApplicationCache.GetLastLoginDate();
             this.IsDarkThemeEnabled = await this.ApplicationThemeService.GetDarkThemeEnabled();
         }

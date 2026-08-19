@@ -67,12 +67,14 @@ public class LoginPageViewModelTests
         this.Mediator.Setup(m => m.Send(It.IsAny<LogonCommands.GetTokenCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
         this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformLogonCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformLogonResponseModel));
         this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
-        
+        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
+
         this.ViewModel.LogonCommand.Execute(null);
         
         this.Mediator.Verify(x => x.Send(It.IsAny<LogonCommands.GetTokenCommand>(), It.IsAny<CancellationToken>()), Times.Once);
         this.Mediator.Verify(x => x.Send(It.IsAny<TransactionCommands.PerformLogonCommand>(), It.IsAny<CancellationToken>()), Times.Once);
         this.Mediator.Verify(x => x.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
     }
 
@@ -86,6 +88,8 @@ public class LoginPageViewModelTests
         this.Mediator.Setup(m => m.Send(It.IsAny<LogonCommands.GetTokenCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
         this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformLogonCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformLogonResponseModel));
         this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
+        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
+
         this.ViewModel.ConfigHostUrl = configUrl;
 
         this.ViewModel.LogonCommand.Execute(null);
@@ -93,6 +97,7 @@ public class LoginPageViewModelTests
         this.Mediator.Verify(x => x.Send(It.IsAny<LogonCommands.GetTokenCommand>(), It.IsAny<CancellationToken>()), Times.Once);
         this.Mediator.Verify(x => x.Send(It.IsAny<TransactionCommands.PerformLogonCommand>(), It.IsAny<CancellationToken>()), Times.Once);
         this.Mediator.Verify(x => x.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Verify(x => x.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
         this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
         if (String.IsNullOrEmpty(configUrl) == false){
             this.ApplicationCache.Verify(v => v.SetConfigHostUrl(It.IsAny<String>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Once);
@@ -147,6 +152,9 @@ public class LoginPageViewModelTests
         this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformLogonCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformLogonResponseModel));
         this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
         this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantBalanceQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantBalance));
+        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
+        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
+
         this.ApplicationInfoService.Setup(a => a.VersionString).Returns(TestData.ApplicationVersion);
         this.ApplicationInfoService.Setup(a => a.PackageName).Returns("com.transactionprocessor.mobile");
         this.DeviceService.Setup(d => d.GetPlatform()).Returns("Android");
