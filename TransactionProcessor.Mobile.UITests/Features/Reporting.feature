@@ -75,6 +75,7 @@ Background:
 @PRTest
 Scenario: View Transaction Mix Report
 	Given I am on the Login Screen
+	And the application is in training mode
 	And my device is registered
 	When I enter 'user1' as the Email Address
 	And I enter '123456' as the Password
