@@ -32,7 +32,7 @@ namespace TransactionProcessor.Mobile.UITests.Pages
 
         #region Properties
 
-        protected override String Trait => "My Account";
+        protected override String Trait => "MerchantNameLabel";
 
         #endregion
 

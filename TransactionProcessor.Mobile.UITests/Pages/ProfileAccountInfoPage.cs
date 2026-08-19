@@ -36,7 +36,7 @@ public class ProfileAccountInfoPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "MyDetails";
+    protected override String Trait => "MerchantNameLabel";
 
     #endregion
 

@@ -13,7 +13,7 @@ public class TransactionsVoucherSelectProductPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "SelectaProduct";
+    protected override String Trait => "BackButton";
 
     #endregion
 

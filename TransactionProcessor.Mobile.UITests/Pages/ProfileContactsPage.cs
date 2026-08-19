@@ -32,7 +32,7 @@ public class ProfileContactsPage : BasePage2
     #region Properties
 
     //protected override String Trait => "MyContacts";
-    protected override String Trait => "MyContacts";
+    protected override String Trait => "PrimaryContactLabel";
 
     #endregion
 

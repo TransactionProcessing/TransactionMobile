@@ -6,14 +6,7 @@ namespace TransactionProcessor.Mobile.UITests.Pages;
 
 public class TransactionsPage : BasePage2
 {
-    protected override String Trait{
-        get{
-            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows){
-                return "SelectTransactionType";
-            }
-            return "Transactions";
-        }
-    }
+    protected override String Trait => "SelectTransactionType";
 
     private readonly String MobileTopupButton;
     private readonly String VoucherButton;

@@ -21,7 +21,7 @@ public class TransactionsMobileTopupEnterTopupDetailsPage : BasePage2 {
 
     #region Properties
 
-    protected override String Trait => "EnterTopupDetails";
+    protected override String Trait => "CustomerMobileNumberEntry";
 
     public async Task EnterCustomerMobileNumber(String customerMobileNumber) {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.CustomerMobileNumberEntry);

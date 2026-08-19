@@ -6,17 +6,7 @@ namespace TransactionProcessor.Mobile.UITests.Pages;
 
 public class ReportsPage : BasePage2
 {
-    protected override String Trait
-    {
-        get
-        {
-            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
-            {
-                return "Reports";
-            }
-            return "Reports";
-        }
-    }
+    protected override String Trait => "BackButton";
 
     private readonly String DailyPerformanceSummaryButton;
     private readonly String TransactionMixButton;
@@ -52,15 +42,7 @@ public class ReportsPage : BasePage2
 }
 
 public class SupportPage : BasePage2{
-    protected override String Trait{
-        get{
-            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows){
-                return "Support";
-            }
-
-            return "Support";
-        }
-    }
+    protected override String Trait => "BackButton";
 
     private readonly String UploadLogsButton;
     private readonly String ViewLogsButton;
