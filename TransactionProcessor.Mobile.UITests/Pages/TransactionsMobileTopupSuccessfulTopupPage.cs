@@ -15,7 +15,7 @@ public class TransactionsMobileTopupSuccessfulTopupPage : BasePage2 {
 
     #region Properties
 
-    protected override String Trait => "CompleteButton";
+    protected override String Trait => "MobileTopupSuccessPageHeader";
 
     public async Task ClickCompleteButton() {
         await Retry.For(async () => {

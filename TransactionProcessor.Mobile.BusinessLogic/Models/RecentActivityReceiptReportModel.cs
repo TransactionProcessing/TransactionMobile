@@ -69,6 +69,8 @@ public sealed record RecentActivityReceiptItemModel(string Reference,
                                                     DateTime TransactionDateTime,
                                                     string ReceiptReference)
 {
+    public string AutomationId => AutomationIdHelper.Create("RecentActivityResult", this.Reference);
+
     public bool Matches(string searchText)
     {
         return this.Reference.Contains(searchText, StringComparison.OrdinalIgnoreCase)

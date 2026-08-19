@@ -12,7 +12,7 @@ public class TransactionsMobileTopupSelectOperatorPage : BasePage2
     }
 
     #region Properties
-    protected override String Trait => "BackButton";
+    protected override String Trait => "MobileTopupSelectOperatorPageHeader";
 
     #endregion
 

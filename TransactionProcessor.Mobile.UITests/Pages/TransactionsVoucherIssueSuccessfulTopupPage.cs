@@ -17,7 +17,7 @@ public class TransactionsVoucherIssueSuccessfulTopupPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "CompleteButton";
+    protected override String Trait => "VoucherIssueSuccessPageHeader";
 
     public async Task ClickCompleteButton()
     {

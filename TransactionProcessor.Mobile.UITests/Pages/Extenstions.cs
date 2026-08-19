@@ -105,10 +105,11 @@ public static class Extenstions
     //    return element;
     //}
     public static async Task<IWebElement> GetElement(this AppiumDriver driver,
-                                                     string automationId,
-                                                     string androidPackage = "com.transactionprocessor.mobile")
+                                                      string automationId,
+                                                      TimeSpan? timeout = null,
+                                                      string androidPackage = "com.transactionprocessor.mobile")
     {
-        TimeSpan retryFor = TimeSpan.FromSeconds(60);
+        TimeSpan retryFor = timeout ?? TimeSpan.FromSeconds(60);
 
         IWebElement element = null;
 

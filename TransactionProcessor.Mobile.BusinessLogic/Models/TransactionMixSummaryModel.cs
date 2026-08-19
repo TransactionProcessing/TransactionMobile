@@ -75,7 +75,10 @@ public sealed record TransactionMixSummaryModel
 public sealed record TransactionMixSummaryItemModel(string Key,
                                                     string Label,
                                                     decimal Count,
-                                                    decimal Value);
+                                                    decimal Value)
+{
+    public string AutomationId => AutomationIdHelper.Create("TransactionMixItem", this.Key);
+}
 
 public sealed record TransactionMixDrillDownTransactionModel(string Reference,
                                                              string TransactionType,

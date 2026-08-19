@@ -5,7 +5,7 @@
              xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
              Shell.NavBarIsVisible="False">
     <StackLayout Margin="20" Style="{DynamicResource Layout}">
-        <controls:TitleLabel Text="{Binding Title}" AutomationId="{Binding Title}" FontSize="20" HorizontalTextAlignment="Center"
+         <controls:TitleLabel Text="{Binding Title}" AutomationId="ViewLogsPageHeader" FontSize="20" HorizontalTextAlignment="Center"
                                  VerticalOptions="End" FontAttributes="Bold" Padding="20,0,0,20"/>
         <ListView ItemsSource="{Binding LogMessages}" HasUnevenRows="true" VerticalScrollBarVisibility="Always">
                 <ListView.ItemTemplate>

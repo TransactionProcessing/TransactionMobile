@@ -19,7 +19,7 @@
                        CornerRadius="14"
                        HasShadow="False"
                        Margin="0"
-                       AutomationId="{Binding Reference}">
+                        AutomationId="{Binding AutomationId}">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding BindingContext.OpenItemCommand, Source={x:Reference RecentActivityReportPageRoot}}"
                                               CommandParameter="{Binding .}" />

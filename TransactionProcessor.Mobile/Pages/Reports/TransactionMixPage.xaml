@@ -20,7 +20,7 @@
                        CornerRadius="14"
                        HasShadow="False"
                        Margin="0"
-                       AutomationId="{Binding Key}">
+                        AutomationId="{Binding AutomationId}">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding BindingContext.SelectItemCommand, Source={x:Reference TransactionMixPageRoot}}"
                                               CommandParameter="{Binding .}" />

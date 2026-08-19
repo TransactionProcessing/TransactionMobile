@@ -20,7 +20,7 @@
                 <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="6" Padding="20">
                     <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="60" WidthRequest="60" HorizontalOptions="Center"/>
                     <Label Text="Select Transaction Type"
-                           AutomationId="SelectTransactionType"
+                           AutomationId="TransactionsPageHeader"
                            FontSize="20"
                            FontAttributes="Bold"
                            TextColor="White"

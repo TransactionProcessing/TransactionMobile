@@ -6,7 +6,7 @@ namespace TransactionProcessor.Mobile.UITests.Pages;
 
 public class TransactionsPage : BasePage2
 {
-    protected override String Trait => "SelectTransactionType";
+    protected override String Trait => "TransactionsPageHeader";
 
     private readonly String MobileTopupButton;
     private readonly String VoucherButton;

@@ -6,7 +6,7 @@ namespace TransactionProcessor.Mobile.UITests.Pages;
 
 public class ReportsPage : BasePage2
 {
-    protected override String Trait => "BackButton";
+    protected override String Trait => "ReportsPageHeader";
 
     private readonly String DailyPerformanceSummaryButton;
     private readonly String TransactionMixButton;
@@ -42,7 +42,7 @@ public class ReportsPage : BasePage2
 }
 
 public class SupportPage : BasePage2{
-    protected override String Trait => "BackButton";
+    protected override String Trait => "SupportPageHeader";
 
     private readonly String UploadLogsButton;
     private readonly String ViewLogsButton;

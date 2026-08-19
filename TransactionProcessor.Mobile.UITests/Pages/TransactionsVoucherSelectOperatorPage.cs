@@ -12,7 +12,7 @@ public class TransactionsVoucherSelectOperatorPage : BasePage2
     }
 
     #region Properties
-    protected override String Trait => "BackButton";
+    protected override String Trait => "VoucherSelectOperatorPageHeader";
     #endregion
 
     public async Task ClickOperatorButton(String operatorName)

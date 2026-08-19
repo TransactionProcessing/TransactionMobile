@@ -19,7 +19,7 @@
                 </Grid.Background>
                 <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="4" Padding="20">
                     <Label Text="{Binding Title}"
-                           AutomationId="{Binding Title}"
+                           AutomationId="MobileTopupPerformTopupPageHeader"
                            FontSize="20"
                            FontAttributes="Bold"
                            TextColor="White"

@@ -14,7 +14,7 @@ public class TransactionsBillPaymentSelectOperatorPage : BasePage2
 
     #region Properties
     
-    protected override String Trait => "BackButton";
+    protected override String Trait => "BillPaymentSelectOperatorPageHeader";
 
     #endregion
 
@@ -29,7 +29,7 @@ public class TransactionsBillPaymentSelectProductPage : BasePage2{
     public TransactionsBillPaymentSelectProductPage(TestingContext testingContext) : base(testingContext){
     }
 
-    protected override String Trait => "BackButton";
+    protected override String Trait => "BillPaymentSelectProductPageHeader";
 
     public async Task ClickProductButton(String productText)
     {
@@ -196,7 +196,7 @@ public class TransactionsBillPaymentSuccessfulPaymentPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "CompleteButton";
+    protected override String Trait => "BillPaymentSuccessPageHeader";
 
     public async Task ClickCompleteButton()
     {

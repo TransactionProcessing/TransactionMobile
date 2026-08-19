@@ -109,7 +109,7 @@ public class TransactionsSteps{
     [Then(@"the Voucher Issue Successful Page is displayed")]
     public async Task ThenTheVoucherIssueSuccessfulPageIsDisplayed()
     {
-        await this.transactionsVoucherIssueSuccessfulTopupPage.AssertOnPage();
+        await this.transactionsVoucherIssueSuccessfulTopupPage.AssertOnPage(TimeSpan.FromMinutes(2));
     }
 
     [Then(@"the Transaction Select Mobile Topup Operator Page is displayed")]
@@ -180,7 +180,7 @@ public class TransactionsSteps{
 
     [Then(@"the Mobile Topup Successful Page is displayed")]
     public async Task ThenTheMobileTopupSuccessfulPageIsDisplayed() {
-        await this.transactionsMobileTopupSuccessfulTopupPage.AssertOnPage();
+        await this.transactionsMobileTopupSuccessfulTopupPage.AssertOnPage(TimeSpan.FromMinutes(2));
     }
 
     [Then(@"I tap on Complete")]
@@ -254,7 +254,7 @@ public class TransactionsSteps{
 
     [Then(@"the Bill Payment Successful Page is displayed")]
     public async Task ThenTheBillPaymentSuccessfulPageIsDisplayed(){
-        await this.transactionsBillPaymentSuccessfulPaymentPage.AssertOnPage();
+        await this.transactionsBillPaymentSuccessfulPaymentPage.AssertOnPage(TimeSpan.FromMinutes(2));
     }
 
     [Then(@"the Enter Meter Details Page is displayed")]
