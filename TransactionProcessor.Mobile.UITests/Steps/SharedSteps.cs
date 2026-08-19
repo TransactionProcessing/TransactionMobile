@@ -46,7 +46,8 @@ namespace TransactionProcessor.Mobile.UITests.Steps
             this.loginPage = new LoginPage(testingContext);
             this.SecurityServiceSteps = new SecurityServiceSteps(testingContext.DockerHelper.SecurityServiceClient);
             this.TransactionProcessorSteps = new TransactionProcessorSteps(this.TestingContext.DockerHelper.TransactionProcessorClient, this.TestingContext.DockerHelper.TestHostHttpClient,
-                this.TestingContext.DockerHelper.ProjectionManagementClient);
+                this.TestingContext.DockerHelper.ProjectionManagementClient,
+                this.TestingContext.DockerHelper.AgencyBankingClient);
         }
 
         [Given(@"the following security roles exist")]
@@ -168,7 +169,7 @@ namespace TransactionProcessor.Mobile.UITests.Steps
         public async Task GivenICreateTheFollowingMerchants(DataTable table)
         {
             var estates = this.TestingContext.Estates.Select(e => e).ToList();
-            List<(EstateDetails estate, CreateMerchantRequest)> requests = table.Rows.ToCreateMerchantRequests(estates);
+            var requests = table.Rows.ToCreateMerchantRequests(estates);
 
             List<MerchantResponse> verifiedMerchants = await this.TransactionProcessorSteps.WhenICreateTheFollowingMerchants(this.TestingContext.AccessToken, requests);
 

@@ -12,6 +12,7 @@ using Shouldly;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using TestHosts.Clients;
 using TransactionProcessor.Client;
 using TransactionProcessor.DataTransferObjects.Responses.Contract;
 using TransactionProcessor.IntegrationTesting.Helpers;
@@ -41,6 +42,8 @@ namespace TransactionProcessor.Mobile.UITests.Common
         private const String MinimumSupportedApplicationVersion = "1.0.5";
 
         private readonly TestingContext TestingContext;
+
+        public IAgencyBankingClient AgencyBankingClient;
 
         #endregion
 
@@ -119,6 +122,16 @@ namespace TransactionProcessor.Mobile.UITests.Common
             return StringSerialiser.DeserializeObject<Object>(arg, type, new SerialiserOptions(SerialiserPropertyFormat.SnakeCase));
         }
 
+        String Serialise_CamelCase(Object arg)
+        {
+            return StringSerialiser.Serialise<Object>(arg, new SerialiserOptions(SerialiserPropertyFormat.CamelCase));
+        }
+
+        Object Deserialise_CamelCase(String arg, Type type)
+        {
+            return StringSerialiser.DeserializeObject<Object>(arg, type, new SerialiserOptions(SerialiserPropertyFormat.CamelCase));
+        }
+
         /// <summary>
         /// Starts the containers for scenario run.
         /// </summary>
@@ -164,7 +177,8 @@ namespace TransactionProcessor.Mobile.UITests.Common
 
             this.TestHostHttpClient = new HttpClient(clientHandler);
             this.TestHostHttpClient.BaseAddress = new Uri($"http://127.0.0.1:{this.TestHostServicePort}");
-
+            this.AgencyBankingClient = new AgencyBankingClient(TestHostServiceBaseAddressResolver, httpClient, Serialise_CamelCase, this.Deserialise_CamelCase);
+            
             this.ProjectionManagementClient = new EventStoreProjectionManagementClient(this.ConfigureEventStoreSettings());
         }
 
@@ -173,7 +187,9 @@ namespace TransactionProcessor.Mobile.UITests.Common
         public String TransactionProcessorAclBaseAddressResolver(String api) => $"http://127.0.0.1:{this.TransactionProcessorAclPort}";
 
         public String SecurityServiceBaseAddressResolver(String api) => $"https://127.0.0.1:{this.SecurityServicePort}";
-        
+
+        public String TestHostServiceBaseAddressResolver(String api) => $"http://127.0.0.1:{this.TestHostServicePort}";
+
         public const int ConfigHostDockerPort = 9200;
 
         public String ConfigHostContainerName;
