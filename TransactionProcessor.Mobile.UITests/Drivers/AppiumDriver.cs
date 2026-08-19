@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Reflection;
+using System.Net.Sockets;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Enums;
@@ -17,15 +18,20 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
 
     public class AppiumDriverWrapper
     {
+        private const int AppiumPort = 4723;
+        private static readonly Uri AppiumServerUri = new($"http://127.0.0.1:{AppiumPort}/");
+
         public static MobileTestPlatform MobileTestPlatform;
         public static AppiumDriver Driver;
 
         public void StartApp()
         {
-            AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723).Build();
+            bool appiumAlreadyRunning = this.IsPortOpen("127.0.0.1", AppiumPort);
+            AppiumLocalService appiumService = null;
 
-            if (appiumService.IsRunning == false)
+            if (appiumAlreadyRunning == false)
             {
+                appiumService = new AppiumServiceBuilder().UsingPort(AppiumPort).Build();
                 appiumService.OutputDataReceived += (sender,
                                                      args) => {
                                                          Console.WriteLine(args.Data);
@@ -44,7 +50,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             }
         }
 
-        private static void SetupWindowsDriver(AppiumLocalService appiumService)
+        private static void SetupWindowsDriver(AppiumLocalService? appiumService)
         {
             var driverOptions = new AppiumOptions();
             driverOptions.AutomationName = "windows";
@@ -56,10 +62,12 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             driverOptions.AddAdditionalAppiumOption("ms:waitForAppLaunch", "50");
             //driverOptions.AddAdditionalAppiumOption("appium:createSessionTimeout", "100000");
             driverOptions.App = "TransactionMobile_zct748q4xfh0m!App";
-            AppiumDriverWrapper.Driver = new WindowsDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
+            AppiumDriverWrapper.Driver = appiumService == null
+                ? new WindowsDriver(AppiumServerUri, driverOptions, TimeSpan.FromMinutes(10))
+                : new WindowsDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
         }
         
-        private static void SetupAndroidDriver(AppiumLocalService appiumService)
+        private static void SetupAndroidDriver(AppiumLocalService? appiumService)
         {
             var driverOptions = new AppiumOptions();
             driverOptions.AddAdditionalAppiumOption("adbExecTimeout", TimeSpan.FromMinutes(5).TotalMilliseconds);
@@ -82,7 +90,9 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
 
             driverOptions.App = apkPath;
 
-            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.Android.AndroidDriver(appiumService, driverOptions, TimeSpan.FromMinutes(5));
+            AppiumDriverWrapper.Driver = appiumService == null
+                ? new OpenQA.Selenium.Appium.Android.AndroidDriver(AppiumServerUri, driverOptions, TimeSpan.FromMinutes(5))
+                : new OpenQA.Selenium.Appium.Android.AndroidDriver(appiumService, driverOptions, TimeSpan.FromMinutes(5));
         }
 
         public List<LogEntry> GetLogs()
@@ -110,6 +120,28 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+            }
+        }
+
+        private bool IsPortOpen(string host, int port)
+        {
+            try
+            {
+                using TcpClient client = new TcpClient();
+                IAsyncResult result = client.BeginConnect(host, port, null, null);
+                bool completed = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(1));
+                if (completed == false)
+                {
+                    client.Close();
+                    return false;
+                }
+
+                client.EndConnect(result);
+                return client.Connected;
+            }
+            catch
+            {
+                return false;
             }
         }
     }
