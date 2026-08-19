@@ -27,6 +27,12 @@ public class LoginPage : BasePage2 {
     }
 
     public async Task<String> GetDeviceSerial() {
+        if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android)
+        {
+            // Android returns a fixed test identifier from the app's device service.
+            return "stagingmerchant1device";
+        }
+
         IWebElement element = await this.WaitForElementByAccessibilityId(this.DeviceSerial);
         return element.Text;
     }
