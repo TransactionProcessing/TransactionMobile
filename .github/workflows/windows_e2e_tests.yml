@@ -72,7 +72,7 @@ jobs:
          }
 
       - name: Run Windows End To End Tests
-        run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "Category=PRTest&Category=Windows" --no-restore
+        run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "FullyQualifiedName~EndToEndTestsFeature&Category=Windows|FullyQualifiedName~ReportingFeature" --no-restore
         #run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --list-tests -v:d
 
       - name: Upload Logs on Failure

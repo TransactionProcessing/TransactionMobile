@@ -142,7 +142,7 @@ jobs:
         run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net10.0-android -c Release --no-restore
 
       - name: Run Android Navigation Tests
-        run: dotnet test TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=PRNavTest)&(Category=Android)" --no-restore
+        run: dotnet test TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "FullyQualifiedName~PageNavigationFeature&Category=Android" --no-restore
 
       - name: Upload Appium Logs on Failure
         if: always()
@@ -287,7 +287,7 @@ jobs:
         run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net10.0-android -c Release --no-restore
 
       - name: Run Android Navigation Tests
-        run: dotnet test TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=PRHWNavTest)&(Category=Android)" --no-restore
+        run: dotnet test TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "FullyQualifiedName~HardwarePageNavigationFeature&Category=Android" --no-restore
 
       - name: Upload Appium Logs on Failure
         if: always()
