@@ -86,7 +86,7 @@ jobs:
               Select-Object -First 1
 
             if ($null -eq $package) {
-              Write-Host "Attempt $attempt: installed app not visible yet, waiting 5 seconds."
+              Write-Host ("Attempt {0}: installed app not visible yet, waiting 5 seconds." -f $attempt)
               Start-Sleep -Seconds 5
             }
           }
