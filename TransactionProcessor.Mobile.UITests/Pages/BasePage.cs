@@ -97,7 +97,7 @@ namespace TransactionProcessor.Mobile.UITests.Pages
 
         internal async Task<IWebElement> WaitForElementByAccessibilityId(String accessibilityId, TimeSpan? timeout = null, Int32 i  = 0)
         {
-            return await AppiumDriverWrapper.Driver.GetElement(accessibilityId);
+            return await AppiumDriverWrapper.Driver.GetElement(accessibilityId, timeout: timeout);
         }
 
         //internal async Task WaitForNoElementByAccessibilityId(String accessibilityId, TimeSpan? timeout = null)

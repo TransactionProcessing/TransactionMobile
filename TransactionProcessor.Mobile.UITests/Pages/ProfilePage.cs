@@ -46,8 +46,6 @@ namespace TransactionProcessor.Mobile.UITests.Pages
         public async Task ClickAddressesButton() {
             IWebElement element = await this.WaitForElementByAccessibilityId(this.AddressesButton);
             element.Click();
-
-            var x = await AppiumDriverWrapper.Driver.GetPageSource();
         }
 
         public async Task ClickContactsButton() {
