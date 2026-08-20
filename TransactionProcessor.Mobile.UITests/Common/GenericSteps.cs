@@ -1,7 +1,7 @@
-﻿using NLog;
+using NLog;
 using Reqnroll;
-using Shared.IntegrationTesting;
 using Shared.Logger;
+using TransactionProcessor.Mobile.UITests.Drivers;
 
 namespace TransactionProcessor.Mobile.UITests.Common;
 
@@ -9,81 +9,66 @@ namespace TransactionProcessor.Mobile.UITests.Common;
 [Scope(Tag = "base")]
 public class GenericSteps
 {
-    private readonly ScenarioContext ScenarioContext;
-
-    private readonly TestingContext TestingContext;
+    private readonly ScenarioContext scenarioContext;
+    private readonly TestingContext testingContext;
+    private readonly AppiumDriverWrapper appiumDriver;
 
     public GenericSteps(ScenarioContext scenarioContext,
-                        TestingContext testingContext)
+                        TestingContext testingContext,
+                        AppiumDriverWrapper appiumDriver)
     {
-        this.ScenarioContext = scenarioContext;
-        this.TestingContext = testingContext;
+        this.scenarioContext = scenarioContext;
+        this.testingContext = testingContext;
+        this.appiumDriver = appiumDriver;
     }
 
     [BeforeScenario(Order = 0)]
-    public async Task StartSystem(){
-        if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest") ||
-            this.ScenarioContext.ScenarioInfo.Tags.Contains("PRHWNavTest"))
+    public async Task StartSystem()
+    {
+        string scenarioName = this.scenarioContext.ScenarioInfo.Title.Replace(" ", "");
+        NlogLogger logger = new();
+        logger.Initialise(LogManager.GetLogger(scenarioName), scenarioName);
+        LogManager.AddHiddenAssembly(typeof(NlogLogger).Assembly);
+
+        this.testingContext.Logger = logger;
+        this.testingContext.TestHostHelper = new TestHostHelper(this.testingContext);
+        this.testingContext.TestHostHelper.Logger = logger;
+
+        try
         {
-            // Initialise a logger
-            String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
-            NlogLogger logger = new NlogLogger();
-            logger.Initialise(LogManager.GetLogger(scenarioName), scenarioName);
-            LogManager.AddHiddenAssembly(typeof(NlogLogger).Assembly);
-            this.TestingContext.Logger = logger;
+            this.testingContext.Logger.LogInformation("About to start local test host");
+            await Setup.GlobalSetup().ConfigureAwait(false);
+            await this.testingContext.TestHostHelper.StartTestHostForScenarioRun(scenarioName).ConfigureAwait(false);
+            this.testingContext.Logger.LogInformation("Local test host started");
         }
-        else{
-            DockerServices dockerServices = DockerServices.EventStore |
-                                            DockerServices.MessagingService | DockerServices.SecurityService |
-                                            DockerServices.TestHost | DockerServices.SqlServer | DockerServices.TransactionProcessor |
-                                            DockerServices.TransactionProcessorAcl | DockerServices.ConfigurationHost;
-
-            //dockerServices = DockerServices.EventStore | DockerServices.SqlServer | (DockerServices)512;
-
-            // Initialise a logger
-            String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
-            NlogLogger logger = new NlogLogger();
-            logger.Initialise(LogManager.GetLogger(scenarioName), scenarioName);
-            LogManager.AddHiddenAssembly(typeof(NlogLogger).Assembly);
-
-            this.TestingContext.DockerHelper = new DockerHelper();
-            this.TestingContext.DockerHelper.Logger = logger;
-            this.TestingContext.Logger = logger;
-            this.TestingContext.DockerHelper.RequiredDockerServices = dockerServices;
-            this.TestingContext.Logger.LogInformation("About to Start Global Setup");
-
-            String? isCi = Environment.GetEnvironmentVariable("IsCI");
-            this.TestingContext.Logger.LogInformation($"IsCI [{isCi}]");
-            if (String.Compare(isCi, Boolean.TrueString, StringComparison.InvariantCultureIgnoreCase) == 0)
-            {
-                // override teh SQL Server image
-                this.TestingContext.Logger.LogInformation("Sql Image overridden");
-                this.TestingContext.DockerHelper.SetImageDetails(ContainerType.SqlServer, ("mssqlserver:2022-ltsc2022", false));
-            }
-
-            await Setup.GlobalSetup(this.TestingContext.DockerHelper);
-            
-        this.TestingContext.DockerHelper.DockerCredentials = Setup.DockerCredentials;
-        this.TestingContext.DockerHelper.SqlCredentials = Setup.SqlCredentials;
-        this.TestingContext.DockerHelper.SqlServerContainerName = "sharedsqlserver";
-
-        this.TestingContext.Logger.LogInformation("About to Start Containers for Scenario Run");
-
-        
-
-            await this.TestingContext.DockerHelper.StartContainersForScenarioRun(scenarioName, dockerServices).ConfigureAwait(false);
-        this.TestingContext.Logger.LogInformation("Containers for Scenario Run Started");
+        catch
+        {
+            await UiFailureDiagnostics.CaptureAsync(this.testingContext, this.scenarioContext, this.appiumDriver, "BeforeScenario").ConfigureAwait(false);
+            throw;
         }
+    }
+
+    [AfterStep(Order = 100)]
+    public async Task CaptureFailureDiagnosticsAfterStep()
+    {
+        if (this.scenarioContext.TestError == null)
+        {
+            return;
+        }
+
+        await UiFailureDiagnostics.CaptureAsync(this.testingContext, this.scenarioContext, this.appiumDriver, "AfterStep").ConfigureAwait(false);
     }
 
     [AfterScenario(Order = 0)]
     public async Task StopSystem()
     {
-        if (this.ScenarioContext.ScenarioInfo.Tags.Contains("PRNavTest") == false && this.ScenarioContext.ScenarioInfo.Tags.Contains("PRHWNavTest") == false)
+        this.testingContext.Logger?.LogInformation("About to stop local test host");
+        if (this.testingContext.TestHostHelper != null)
         {
-            this.TestingContext.Logger.LogInformation("About to Stop Containers for Scenario Run");
-            await this.TestingContext.DockerHelper.StopContainersForScenarioRun(DockerServices.None).ConfigureAwait(false);
-            this.TestingContext.Logger.LogInformation("Containers for Scenario Run Stopped");
+            await this.testingContext.TestHostHelper.StopTestHostForScenarioRun().ConfigureAwait(false);
         }
+
+        this.testingContext.Logger?.LogInformation("Local test host stopped");
     }
 }
+

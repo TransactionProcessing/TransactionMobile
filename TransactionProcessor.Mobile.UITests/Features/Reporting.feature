@@ -72,6 +72,12 @@ Background:
 
 	Given I have created a config for my device
 
+	Given the following transaction mix report transactions exist
+	| Reference | TransactionType | Product          | Operator         | Status  | Amount | TransactionDateTime |
+	| TXN-10001 | Mobile Topup    | Custom           | Safaricom        | Success | 100.00 | Today              |
+	| TXN-10002 | Bill Payment    | Bill Pay (Post)  | PataPawa PostPay | Success | 250.00 | Today              |
+	| TXN-10003 | Voucher Issue   | 10 KES           | Voucher          | Failed  | 0.00   | Today              |
+
 @PRTest
 Scenario: View Transaction Mix Report
 	Given I am on the Login Screen
@@ -80,20 +86,8 @@ Scenario: View Transaction Mix Report
 	And I enter '123456' as the Password
 	And I tap on Login
 	Then the Merchant Home Page is displayed
-	When I tap on Transactions
-	Then the Transaction Page is displayed
-	When I tap on the Mobile Topup button
-	Then the Transaction Select Mobile Topup Operator Page is displayed
-	When I tap on the 'Safaricom' button
-	Then the Select Product Page is displayed
-	When I tap on the 'Custom' product button
-	Then the Enter Topup Details Page is displayed
-	When I enter '07777777775' as the Customer Mobile Number
-	And I enter 10.00 as the Topup Amount
-	And I tap on Perform Topup
-	Then the Mobile Topup Successful Page is displayed
-	And I tap on Complete
-	Then the Transaction Page is displayed
+	When I tap on Profile
+	Then the My Profile Page is displayed
 	When I click on the back button
 	Then the Merchant Home Page is displayed
 	When I tap on Reports

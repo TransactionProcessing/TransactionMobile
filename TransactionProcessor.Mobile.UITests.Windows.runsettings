@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <RunConfiguration>
+    <EnvironmentVariables>
+      <UITEST_PLATFORM>Windows</UITEST_PLATFORM>
+      <UITEST_WINDOWS_APP_ID>TransactionMobile_zct748q4xfh0m!App</UITEST_WINDOWS_APP_ID>
+      <UITEST_APPIUM_STARTUP_TIMEOUT_SECONDS>180</UITEST_APPIUM_STARTUP_TIMEOUT_SECONDS>
+    </EnvironmentVariables>
+  </RunConfiguration>
+</RunSettings>
