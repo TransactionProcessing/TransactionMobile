@@ -86,8 +86,16 @@ jobs:
            Add-AppxPackage -Path $msixPackage.FullName -ForceApplicationShutdown
          }
 
+      - name: Prepare Windows UI test settings
+        id: windows_settings
+        shell: powershell
+        run: |
+          $settingsPath = Join-Path $env:RUNNER_TEMP "windows-ui-tests.runsettings"
+          Copy-Item -Path "TransactionProcessor.Mobile.UITests.Windows.runsettings" -Destination $settingsPath -Force
+          "runsettings_path=$settingsPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
       - name: Run Windows Navigation Tests
-        run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "(Category=PRNavTest)&(Category=Windows)" --no-restore
+        run: dotnet test TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=PRNavTest)&(Category=Windows)" --no-restore --settings "${{ steps.windows_settings.outputs.runsettings_path }}"
 
       - name: Upload Appium Logs on Failure
         if: always()
