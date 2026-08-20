@@ -35,16 +35,6 @@ public class LoginSteps
         this.testingContext.Logger.LogInformation($"Configured device host: {configHostUrl}");
     }
 
-    [Given(@"the application is in training mode")]
-    public async Task GivenTheApplicationIsInTrainingMode()
-    {
-        bool isTrainingModeOn = await this.loginPage.IsTrainingModeOn().ConfigureAwait(false);
-        if (isTrainingModeOn)
-        {
-            await this.loginPage.SetTrainingModeOff().ConfigureAwait(false);
-        }
-    }
-
     [When(@"I enter '(.*)' as the Email Address")]
     public async Task WhenIEnterAsTheEmailAddress(string emailAddress)
     {
