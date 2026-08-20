@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 using OpenQA.Selenium;
@@ -26,13 +27,15 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
         public static MobileTestPlatform MobileTestPlatform;
         public static AppiumDriver Driver;
         private AppiumLocalService? appiumService;
+        private Uri? appiumServerUri;
         private readonly List<string> appiumStartupOutput = new();
         private string? appiumLogFilePath;
         private TestAppConfig.AppiumTraceMode appiumTraceMode = TestAppConfig.AppiumTraceMode.Summary;
+        private bool ownsAppiumService;
 
         public string? AppiumLogFilePath => this.appiumLogFilePath;
 
-        public string? ServiceUrl => this.appiumService?.ServiceUrl.ToString();
+        public string? ServiceUrl => this.appiumServerUri?.ToString();
 
         public string[] GetStartupOutputSnapshot() => [.. this.appiumStartupOutput];
 
@@ -48,40 +51,53 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             await this.CleanupPreviousSessionAsync().ConfigureAwait(false);
             this.appiumStartupOutput.Clear();
             this.appiumLogFilePath = CreateAppiumLogFilePath(testAppConfig.Platform);
+            this.appiumServerUri = null;
+            this.ownsAppiumService = false;
 
             this.TraceStartupConfiguration(testAppConfig);
-            await this.TryStopLikelyAppiumListenersAsync(AppiumPort).ConfigureAwait(false);
-            EnsurePortIsAvailable(AppiumPort);
-
-            this.appiumService ??= new AppiumServiceBuilder()
-                .UsingPort(AppiumPort)
-                .WithLogFile(new FileInfo(this.appiumLogFilePath))
-                .WithStartUpTimeOut(testAppConfig.AppiumStartupTimeout)
-                .Build();
-
-            if (this.appiumService.IsRunning == false)
+            Uri? externalAppiumServerUri = await TryGetRunningAppiumServerUriAsync(testAppConfig.AppiumStartupTimeout).ConfigureAwait(false);
+            if (externalAppiumServerUri is not null)
             {
-                this.appiumService.OutputDataReceived += (_, args) => this.TraceAppiumVerbose(args.Data);
-
-                try
-                {
-                    this.appiumService.Start();
-                }
-                catch (Exception exception)
-                {
-                    throw new InvalidOperationException(this.BuildStartupFailureMessage(testAppConfig, exception), exception);
-                }
+                this.appiumServerUri = externalAppiumServerUri;
+                this.TraceAppiumSummary($"Reusing existing Appium server at {this.appiumServerUri}.");
             }
+            else
+            {
+                await this.TryStopLikelyAppiumListenersAsync(AppiumPort).ConfigureAwait(false);
+                EnsurePortIsAvailable(AppiumPort);
 
-            this.TraceAppiumSummary($"Appium service started at {this.appiumService.ServiceUrl}");
+                this.appiumService ??= new AppiumServiceBuilder()
+                    .UsingPort(AppiumPort)
+                    .WithLogFile(new FileInfo(this.appiumLogFilePath))
+                    .WithStartUpTimeOut(testAppConfig.AppiumStartupTimeout)
+                    .Build();
+
+                if (this.appiumService.IsRunning == false)
+                {
+                    this.appiumService.OutputDataReceived += (_, args) => this.TraceAppiumVerbose(args.Data);
+
+                    try
+                    {
+                        this.appiumService.Start();
+                    }
+                    catch (Exception exception)
+                    {
+                        throw new InvalidOperationException(this.BuildStartupFailureMessage(testAppConfig, exception), exception);
+                    }
+                }
+
+                this.ownsAppiumService = true;
+                this.appiumServerUri = this.appiumService.ServiceUrl;
+                this.TraceAppiumSummary($"Appium service started at {this.appiumServerUri}");
+            }
 
             if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android)
             {
-                AppiumDriverWrapper.SetupAndroidDriver(this.appiumService, testAppConfig);
+                AppiumDriverWrapper.SetupAndroidDriver(this.appiumServerUri, testAppConfig);
             }
             else if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
             {
-                AppiumDriverWrapper.SetupWindowsDriver(this.appiumService, testAppConfig);
+                AppiumDriverWrapper.SetupWindowsDriver(this.appiumServerUri, testAppConfig);
             }
             else
             {
@@ -445,8 +461,13 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             }
         }
 
-        private static void SetupWindowsDriver(AppiumLocalService appiumService, TestAppConfig testAppConfig)
+        private static void SetupWindowsDriver(Uri? appiumServerUri, TestAppConfig testAppConfig)
         {
+            if (appiumServerUri is null)
+            {
+                throw new InvalidOperationException("Appium server URL is not available.");
+            }
+
             var driverOptions = new AppiumOptions();
             driverOptions.AutomationName = "windows";
             driverOptions.PlatformName = "windows";
@@ -457,11 +478,16 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             driverOptions.AddAdditionalAppiumOption("ms:waitForAppLaunch", "50");
             //driverOptions.AddAdditionalAppiumOption("appium:createSessionTimeout", "100000");
             driverOptions.App = testAppConfig.WindowsAppId;
-            AppiumDriverWrapper.Driver = new WindowsDriver(appiumService, driverOptions, TimeSpan.FromMinutes(10));
+            AppiumDriverWrapper.Driver = new WindowsDriver(appiumServerUri, driverOptions, TimeSpan.FromMinutes(10));
         }
 
-        private static void SetupAndroidDriver(AppiumLocalService appiumService, TestAppConfig testAppConfig)
+        private static void SetupAndroidDriver(Uri? appiumServerUri, TestAppConfig testAppConfig)
         {
+            if (appiumServerUri is null)
+            {
+                throw new InvalidOperationException("Appium server URL is not available.");
+            }
+
             var driverOptions = new AppiumOptions();
             driverOptions.AddAdditionalAppiumOption("adbExecTimeout", TimeSpan.FromMinutes(5).TotalMilliseconds);
             driverOptions.AutomationName = "UIAutomator2";
@@ -477,7 +503,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
 
             driverOptions.App = testAppConfig.AndroidAppPath;
 
-            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.Android.AndroidDriver(appiumService, driverOptions, TimeSpan.FromMinutes(5));
+            AppiumDriverWrapper.Driver = new OpenQA.Selenium.Appium.Android.AndroidDriver(appiumServerUri, driverOptions, TimeSpan.FromMinutes(5));
         }
 
         public List<LogEntry> GetLogs()
@@ -538,7 +564,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             {
                 AppiumDriverWrapper.Driver = null;
 
-                if (this.appiumService != null)
+                if (this.ownsAppiumService && this.appiumService != null)
                 {
                     try
                     {
@@ -553,6 +579,8 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
                     }
                 }
 
+                this.appiumServerUri = null;
+                this.ownsAppiumService = false;
                 await Task.CompletedTask.ConfigureAwait(false);
             }
         }
@@ -565,6 +593,43 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             }
 
             await this.StopAppAsync().ConfigureAwait(false);
+        }
+
+        private static async Task<Uri?> TryGetRunningAppiumServerUriAsync(TimeSpan timeout)
+        {
+            using HttpClient client = new()
+            {
+                Timeout = TimeSpan.FromSeconds(Math.Min(Math.Max(timeout.TotalSeconds / 4, 2), 10))
+            };
+
+            Uri serverUri = new($"http://127.0.0.1:{AppiumPort}/");
+            Uri statusUri = new(serverUri, "status");
+            DateTime deadline = DateTime.UtcNow.Add(TimeSpan.FromSeconds(Math.Min(Math.Max(timeout.TotalSeconds / 3, 5), 15)));
+
+            while (DateTime.UtcNow < deadline)
+            {
+                if (await IsAppiumStatusEndpointHealthyAsync(client, statusUri).ConfigureAwait(false))
+                {
+                    return serverUri;
+                }
+
+                await Task.Delay(250).ConfigureAwait(false);
+            }
+
+            return null;
+        }
+
+        private static async Task<bool> IsAppiumStatusEndpointHealthyAsync(HttpClient client, Uri statusUri)
+        {
+            try
+            {
+                using HttpResponseMessage response = await client.GetAsync(statusUri, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+                return response.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
