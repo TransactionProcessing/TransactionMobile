@@ -31,10 +31,10 @@ jobs:
           nohup appium --log appium.log &
 
       - name: Restore MAUI App for Windows
-        run: dotnet restore TransactionProcessor.Mobile.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+        run: dotnet restore TransactionProcessor.Mobile.sln -r win-x64 --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
-        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net10.0-windows10.0.19041.0 -c Release --no-restore
+        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net10.0-windows10.0.19041.0 -r win-x64 -c Release --no-restore
        
       - name: Decrypt PFX File
         run: |
