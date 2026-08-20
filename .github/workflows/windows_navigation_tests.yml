@@ -83,12 +83,39 @@ jobs:
            Add-AppxPackage -Path $msixPackage.FullName -ForceApplicationShutdown
          }
 
+      - name: Resolve Windows UI test app id
+        id: windows_app
+        shell: powershell
+        run: |
+          $package = Get-AppxPackage |
+            Where-Object { $_.Name -like 'TransactionMobile*' -or $_.Name -like 'TransactionProcessor.Mobile*' } |
+            Sort-Object InstallDate -Descending |
+            Select-Object -First 1
+
+          if ($null -eq $package) {
+            Write-Error "Unable to find the installed TransactionProcessor.Mobile package."
+            Get-AppxPackage | Sort-Object Name | Select-Object Name, PackageFamilyName, InstallLocation | Format-Table -AutoSize
+            exit 1
+          }
+
+          $windowsAppId = "$($package.PackageFamilyName)!App"
+          Write-Host "Resolved Windows app id: $windowsAppId"
+          "windows_app_id=$windowsAppId" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
       - name: Prepare Windows UI test settings
         id: windows_settings
         shell: powershell
         run: |
           $settingsPath = Join-Path $env:RUNNER_TEMP "windows-ui-tests.runsettings"
           Copy-Item -Path "TransactionProcessor.Mobile.UITests.Windows.runsettings" -Destination $settingsPath -Force
+          [xml]$settingsXml = Get-Content -Raw $settingsPath
+          $nodes = $settingsXml.SelectNodes("//EnvironmentVariables/UITEST_WINDOWS_APP_ID")
+          if ($nodes.Count -ne 1) {
+            throw "Expected exactly one UITEST_WINDOWS_APP_ID entry in the runsettings template."
+          }
+
+          $nodes.Item(0).InnerText = "${{ steps.windows_app.outputs.windows_app_id }}"
+          $settingsXml.Save($settingsPath)
           "runsettings_path=$settingsPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
 
       - name: Run Windows Navigation Tests
