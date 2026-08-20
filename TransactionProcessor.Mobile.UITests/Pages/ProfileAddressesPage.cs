@@ -43,7 +43,7 @@ public class ProfileAddressesPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "MyAddresses";
+        protected override String Trait => "My Addresses";
 
     #endregion
 
