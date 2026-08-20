@@ -135,19 +135,6 @@ jobs:
         run: |
           nohup appium --log appium.log &
 
-      - name: Set up Docker (Ubuntu)
-        if: runner.os == 'Linux'
-        run: |
-          # Check Docker version to ensure it's installed properly
-          docker --version
-          docker info
-
-          # Allow current user to access Docker without sudo (optional, for convenience)
-          sudo usermod -aG docker $USER
-
-          # Restart Docker service to apply changes
-          sudo systemctl restart docker
-
       - name: Restore MAUI App for Android
         run: dotnet restore TransactionProcessor.Mobile.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
