@@ -87,14 +87,28 @@ jobs:
         id: windows_app
         shell: powershell
         run: |
-          $package = Get-AppxPackage |
-            Where-Object { $_.Name -like 'TransactionMobile*' -or $_.Name -like 'TransactionProcessor.Mobile*' } |
-            Sort-Object InstallDate -Descending |
-            Select-Object -First 1
+          $package = $null
+          for ($attempt = 1; $attempt -le 12 -and $null -eq $package; $attempt++) {
+            $package = Get-AppxPackage -AllUsers |
+              Where-Object {
+                $_.Name -like '*TransactionMobile*' -or
+                $_.Name -like '*TransactionProcessor.Mobile*' -or
+                $_.PackageFamilyName -like '*TransactionMobile*' -or
+                $_.PackageFamilyName -like '*TransactionProcessor.Mobile*' -or
+                $_.InstallLocation -like '*TransactionProcessor.Mobile*'
+              } |
+              Sort-Object InstallDate -Descending |
+              Select-Object -First 1
+
+            if ($null -eq $package) {
+              Write-Host "Attempt $attempt: installed app not visible yet, waiting 5 seconds."
+              Start-Sleep -Seconds 5
+            }
+          }
 
           if ($null -eq $package) {
             Write-Error "Unable to find the installed TransactionProcessor.Mobile package."
-            Get-AppxPackage | Sort-Object Name | Select-Object Name, PackageFamilyName, InstallLocation | Format-Table -AutoSize
+            Get-AppxPackage -AllUsers | Sort-Object Name | Select-Object Name, PackageFamilyName, InstallLocation | Format-Table -AutoSize
             exit 1
           }
 
