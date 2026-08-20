@@ -33,33 +33,102 @@ public class LoginPage : BasePage2 {
     public async Task<Boolean> IsTrainingModeOn()
     {
         IWebElement element = await this.WaitForElementByAccessibilityId(this.UseTrainingModeSwitch);
-        if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android) {
-            var text = element.GetAttribute("checked");
-            if (text == "false") {
-                return false;
-            }
-
-            return true;
-        }
-
-        if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows){
-            return false;
-        }
-
-        return true;
+        return this.ReadTrainingModeStateOrThrow(element);
     }
 
     public async Task SetTrainingModeOn()
     {
-        IWebElement element = await this.WaitForElementByAccessibilityId(this.UseTrainingModeSwitch);
-        element.Click();
+        await this.SetTrainingModeState(true).ConfigureAwait(false);
     }
 
     public async Task SetTrainingModeOff()
     {
-        IWebElement element = await this.WaitForElementByAccessibilityId(this.UseTrainingModeSwitch);
+        await this.SetTrainingModeState(false).ConfigureAwait(false);
+    }
 
-        element.Click();
+    private async Task SetTrainingModeState(Boolean desiredState)
+    {
+        await Retry.For(async () =>
+        {
+            IWebElement element = await this.WaitForElementByAccessibilityId(this.UseTrainingModeSwitch);
+            Boolean currentState = this.ReadTrainingModeStateOrThrow(element);
+            if (currentState == desiredState)
+            {
+                return;
+            }
+
+            element.Click();
+
+            IWebElement refreshedElement = await this.WaitForElementByAccessibilityId(this.UseTrainingModeSwitch);
+            Boolean updatedState = this.ReadTrainingModeStateOrThrow(refreshedElement);
+            if (updatedState != desiredState)
+            {
+                throw new InvalidOperationException($"Unable to set training mode to {(desiredState ? "on" : "off")}.");
+            }
+        }).ConfigureAwait(false);
+    }
+
+    private Boolean ReadTrainingModeStateOrThrow(IWebElement element)
+    {
+        Boolean? trainingModeOn = this.TryReadTrainingModeState(element);
+        if (trainingModeOn.HasValue)
+        {
+            return trainingModeOn.Value;
+        }
+
+        throw new InvalidOperationException("Unable to determine the training mode switch state.");
+    }
+
+    private Boolean? TryReadTrainingModeState(IWebElement element)
+    {
+        String?[] attributeNames =
+        [
+            "checked",
+            "IsChecked",
+            "Toggle.ToggleState",
+            "ToggleState",
+            "SelectionItem.IsSelected",
+            "IsSelected",
+            "Value.Value"
+        ];
+
+        foreach (String attributeName in attributeNames)
+        {
+            String? attributeValue = element.GetAttribute(attributeName);
+            Boolean? parsedValue = this.TryParseSwitchState(attributeValue);
+            if (parsedValue.HasValue)
+            {
+                return parsedValue;
+            }
+        }
+
+        return null;
+    }
+
+    private Boolean? TryParseSwitchState(String? value)
+    {
+        if (String.IsNullOrWhiteSpace(value))
+        {
+            return null;
+        }
+
+        String normalizedValue = new String(value.Where(Char.IsLetterOrDigit).ToArray()).ToLowerInvariant();
+        return normalizedValue switch
+        {
+            "true" => true,
+            "1" => true,
+            "on" => true,
+            "checked" => true,
+            "selected" => true,
+            "false" => false,
+            "0" => false,
+            "off" => false,
+            "unchecked" => false,
+            "unselected" => false,
+            _ when normalizedValue.Contains("on", StringComparison.OrdinalIgnoreCase) && normalizedValue.Contains("off", StringComparison.OrdinalIgnoreCase) == false => true,
+            _ when normalizedValue.Contains("off", StringComparison.OrdinalIgnoreCase) => false,
+            _ => null,
+        };
     }
 
     public async Task EnterEmailAddress(String emailAddress)

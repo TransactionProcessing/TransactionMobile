@@ -449,9 +449,9 @@ public class SharedSteps
     public async Task GivenTheApplicationIsInTrainingMode()
     {
         bool isTrainingModeOn = await this.loginPage.IsTrainingModeOn().ConfigureAwait(false);
-        if (isTrainingModeOn)
+        if (isTrainingModeOn == false)
         {
-            await this.loginPage.SetTrainingModeOff().ConfigureAwait(false);
+            await this.loginPage.SetTrainingModeOn().ConfigureAwait(false);
         }
     }
 
