@@ -8,5 +8,5 @@ public class ViewLogsPage : BasePage2{
         
     }
 
-    protected override String Trait => "ViewLogs";
+    protected override String Trait => "View Logs";
 }

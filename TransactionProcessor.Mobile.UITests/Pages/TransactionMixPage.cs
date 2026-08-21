@@ -4,7 +4,7 @@ namespace TransactionProcessor.Mobile.UITests.Pages;
 
 public class TransactionMixPage : BasePage2
 {
-    protected override string Trait => "TransactionMix";
+    protected override string Trait => "Transaction Mix";
 
     private readonly string SummarySection;
 

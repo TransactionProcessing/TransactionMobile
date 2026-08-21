@@ -8,7 +8,7 @@ namespace TransactionProcessor.Mobile.UITests.Pages;
 
 public class RecentActivityReportPage : BasePage2
 {
-    protected override string Trait => "RecentActivityReport";
+    protected override string Trait => "Recent Activity and Receipt Report";
 
     public RecentActivityReportPage(TestingContext testingContext) : base(testingContext)
     {
