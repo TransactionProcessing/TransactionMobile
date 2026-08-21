@@ -18,6 +18,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
       - name: Enable KVM group perms
         run: |
             echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -185,7 +190,7 @@ jobs:
           echo "runsettings_path=$settings_path" >> "$GITHUB_OUTPUT"
 
       - name: Run Android Navigation Tests
-        run: dotnet test TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=PRNavTest)&(Category=Android)" --no-restore --settings "${{ steps.android_settings.outputs.runsettings_path }}"
+        run: dotnet test --project TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=PRNavTest)&(Category=Android)" --no-restore --settings "${{ steps.android_settings.outputs.runsettings_path }}"
 
       - name: Upload Appium Logs on Failure
         if: always()
@@ -206,6 +211,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
       - name: Enable KVM group perms
         run: |
             echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -373,7 +383,7 @@ jobs:
           echo "runsettings_path=$settings_path" >> "$GITHUB_OUTPUT"
 
       - name: Run Android Navigation Tests
-        run: dotnet test TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=PRHWNavTest)&(Category=Android)" --no-restore --settings "${{ steps.android_settings.outputs.runsettings_path }}"
+        run: dotnet test --project TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=PRHWNavTest)&(Category=Android)" --no-restore --settings "${{ steps.android_settings.outputs.runsettings_path }}"
 
       - name: Upload Appium Logs on Failure
         if: always()

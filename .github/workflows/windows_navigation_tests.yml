@@ -12,6 +12,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.1
         with:
@@ -133,7 +138,7 @@ jobs:
           "runsettings_path=$settingsPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
 
       - name: Run Windows Navigation Tests
-        run: dotnet test TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=PRNavTest)&(Category=Windows)" --no-restore --settings "${{ steps.windows_settings.outputs.runsettings_path }}"
+        run: dotnet test --project TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=PRNavTest)&(Category=Windows)" --no-restore --settings "${{ steps.windows_settings.outputs.runsettings_path }}"
 
       - name: Upload Appium Logs on Failure
         if: always()
