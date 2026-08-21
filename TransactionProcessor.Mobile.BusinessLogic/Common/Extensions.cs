@@ -11,7 +11,7 @@ public static class Extensions
 {
     public static TransactionRecord ToTransactionRecord(this TransactionCommands.PerformLogonCommand request,
                                                         Boolean isTrainingMode) {
-        TransactionRecord transactionRecord = new TransactionRecord {
+        TransactionRecord transactionRecord = new() {
                                                                         TransactionDateTime = request.TransactionDateTime,
                                                                         TransactionType = 1,
                                                                         IsTrainingMode = isTrainingMode
@@ -22,7 +22,7 @@ public static class Extensions
 
     public static TransactionRecord ToTransactionRecord(this TransactionCommands.PerformMobileTopupCommand request,
                                                         Boolean isTrainingMode) {
-        TransactionRecord transactionRecord = new TransactionRecord {
+        TransactionRecord transactionRecord = new() {
                                                                         TransactionDateTime = request.TransactionDateTime,
                                                                         TransactionType = 2,
                                                                         Amount = request.TopupAmount,
@@ -38,7 +38,7 @@ public static class Extensions
     }
 
     public static TransactionRecord ToTransactionRecord(this TransactionCommands.PerformVoucherIssueCommand request, Boolean isTrainingMode) {
-        TransactionRecord transactionRecord = new TransactionRecord {
+        TransactionRecord transactionRecord = new() {
                                                                         TransactionDateTime = request.TransactionDateTime,
                                                                         TransactionType = 2,
                                                                         Amount = request.VoucherAmount,
@@ -55,8 +55,7 @@ public static class Extensions
     }
 
     public static TransactionRecord ToTransactionRecord(this TransactionCommands.PerformBillPaymentGetAccountCommand request, Boolean isTrainingMode) {
-        TransactionRecord transactionRecord = new TransactionRecord
-                                              {
+        TransactionRecord transactionRecord = new() {
                                                   TransactionDateTime = request.TransactionDateTime,
                                                   TransactionType = 2,
                                                   Amount = 0,
@@ -70,8 +69,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
     }
 
     public static TransactionRecord ToTransactionRecord(this TransactionCommands.PerformBillPaymentMakePostPaymentCommand request, Boolean isTrainingMode) {
-        TransactionRecord transactionRecord = new TransactionRecord
-                                              {
+        TransactionRecord transactionRecord = new() {
                                                   TransactionDateTime = request.TransactionDateTime,
                                                   TransactionType = 2,
                                                   Amount = 0,
@@ -86,8 +84,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
 
     public static TransactionRecord ToTransactionRecord(this TransactionCommands.PerformBillPaymentMakePrePaymentCommand request, Boolean isTrainingMode)
     {
-        TransactionRecord transactionRecord = new TransactionRecord
-                                              {
+        TransactionRecord transactionRecord = new() {
                                                   TransactionDateTime = request.TransactionDateTime,
                                                   TransactionType = 2,
                                                   Amount = 0,
@@ -102,8 +99,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
 
     public static TransactionRecord ToTransactionRecord(this TransactionCommands.PerformBillPaymentGetMeterCommand request, Boolean isTrainingMode)
     {
-        TransactionRecord transactionRecord = new TransactionRecord
-                                              {
+        TransactionRecord transactionRecord = new() {
                                                   TransactionDateTime = request.TransactionDateTime,
                                                   TransactionType = 2,
                                                   Amount = 0,
@@ -169,8 +165,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
 
     public static LogonTransactionRequestMessage ToLogonTransactionRequest(this PerformLogonRequestModel model)
     {
-        LogonTransactionRequestMessage logonTransactionRequest = new LogonTransactionRequestMessage
-        {
+        LogonTransactionRequestMessage logonTransactionRequest = new() {
             ApplicationVersion = model.ApplicationVersion,
             DeviceIdentifier = model.DeviceIdentifier,
             TransactionDateTime = model.TransactionDateTime,
@@ -182,8 +177,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
 
     public static ReconciliationRequestMessage ToReconciliationRequest(this PerformReconciliationRequestModel model)
     {
-        ReconciliationRequestMessage reconciliationRequest = new ReconciliationRequestMessage
-        {
+        ReconciliationRequestMessage reconciliationRequest = new() {
             ApplicationVersion = model.ApplicationVersion,
             TransactionDateTime = model.TransactionDateTime,
             DeviceIdentifier = model.DeviceIdentifier,
@@ -207,8 +201,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
 
     public static SaleTransactionRequestMessage ToSaleTransactionRequest(this PerformVoucherIssueRequestModel model)
     {
-        SaleTransactionRequestMessage saleTransactionRequest = new SaleTransactionRequestMessage
-        {
+        SaleTransactionRequestMessage saleTransactionRequest = new() {
             ProductId = model.ProductId,
             OperatorId = model.OperatorId,
             ApplicationVersion = model.ApplicationVersion,
@@ -231,8 +224,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
 
     public static SaleTransactionRequestMessage ToSaleTransactionRequest(this PerformMobileTopupRequestModel model)
     {
-        SaleTransactionRequestMessage saleTransactionRequest = new SaleTransactionRequestMessage
-        {
+        SaleTransactionRequestMessage saleTransactionRequest = new() {
             ProductId = model.ProductId,
             OperatorId = model.OperatorId,
             ApplicationVersion = model.ApplicationVersion,
@@ -253,8 +245,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
     }
 
     public static SaleTransactionRequestMessage ToSaleTransactionRequest(this PerformBillPaymentGetAccountModel model) {
-        SaleTransactionRequestMessage saleTransactionRequest = new SaleTransactionRequestMessage
-                                                               {
+        SaleTransactionRequestMessage saleTransactionRequest = new() {
                                                                    ProductId = model.ProductId,
                                                                    OperatorId = model.OperatorId,
                                                                    ApplicationVersion = model.ApplicationVersion,
@@ -274,8 +265,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
 
     public static SaleTransactionRequestMessage ToSaleTransactionRequest(this PerformBillPaymentMakePaymentModel model)
     {
-        SaleTransactionRequestMessage saleTransactionRequest = new SaleTransactionRequestMessage
-                                                               {
+        SaleTransactionRequestMessage saleTransactionRequest = new() {
                                                                    ProductId = model.ProductId,
             OperatorId = model.OperatorId,
             ApplicationVersion = model.ApplicationVersion,
@@ -308,8 +298,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
 
     public static SaleTransactionRequestMessage ToSaleTransactionRequest(this PerformBillPaymentGetMeterModel model)
     {
-        SaleTransactionRequestMessage saleTransactionRequest = new SaleTransactionRequestMessage
-        {
+        SaleTransactionRequestMessage saleTransactionRequest = new() {
             ProductId = model.ProductId,
             OperatorId = model.OperatorId,
             ApplicationVersion = model.ApplicationVersion,
@@ -331,7 +320,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
                                                 String fieldName)
     {
         // Create a case insensitive version of the dictionary
-        Dictionary<String, String> caseInsensitiveDictionary = new Dictionary<String, String>(StringComparer.InvariantCultureIgnoreCase);
+        Dictionary<String, String> caseInsensitiveDictionary = new(StringComparer.InvariantCultureIgnoreCase);
         foreach (KeyValuePair<String, String> keyValuePair in additionalTransactionMetadata)
         {
             caseInsensitiveDictionary.Add(keyValuePair.Key, keyValuePair.Value);
@@ -350,7 +339,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
 
     public static BillDetails ToBillDetails(this Dictionary<String, String> additionalTransactionMetadata)
     {
-        BillDetails billDetails = new BillDetails();
+        BillDetails billDetails = new();
 
         billDetails.AccountName = additionalTransactionMetadata.ExtractFieldFromMetadata<String>("customerAccountName");
         billDetails.AccountNumber = additionalTransactionMetadata.ExtractFieldFromMetadata<String>("customerAccountNumber");
@@ -362,10 +351,10 @@ CustomerAccountNumber = request.CustomerAccountNumber,
 
     public static MeterDetails ToMeterDetails(this Dictionary<String, String> additionalTransactionMetadata, String meterNumber)
     {
-        MeterDetails meterDetails = new MeterDetails();
+        MeterDetails meterDetails = new();
 
         meterDetails.MeterNumber = meterNumber;
-        meterDetails.CustomerName = additionalTransactionMetadata.ExtractFieldFromMetadata<String>("pataPawaPrePaidCustomerName"); ;
+        meterDetails.CustomerName = additionalTransactionMetadata.ExtractFieldFromMetadata<String>("pataPawaPrePaidCustomerName");
 
         return meterDetails;
     }

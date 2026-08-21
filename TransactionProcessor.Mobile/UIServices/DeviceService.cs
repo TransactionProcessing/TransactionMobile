@@ -20,8 +20,7 @@ public class DeviceService : IDeviceService
         String Id = deviceInformation.Id.ToString();
         return Id.Replace("-","");;
 #endif
-        return "stagingmerchant1device";
-        //return this.DeviceIdProvider.GetDeviceId().Replace("-","");
+        return this.DeviceIdProvider.GetDeviceId().Replace("-","");
     }
 
     public String GetModel()

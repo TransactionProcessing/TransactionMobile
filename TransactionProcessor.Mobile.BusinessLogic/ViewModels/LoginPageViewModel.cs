@@ -281,22 +281,27 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
         }
 
         [ExcludeFromCodeCoverage]
-        private async void AccessTokenExpired(Object key,
+        private async Task AccessTokenExpired(Object key,
                                         Object value,
                                         EvictionReason reason,
                                         Object state)
         {
-            if (reason == EvictionReason.Expired || reason == EvictionReason.TokenExpired)
-            {
-                // access token has expired need to make another call to get new one
-                TokenResponseModel token = value as TokenResponseModel;
+            try {
+                if (reason == EvictionReason.Expired || reason == EvictionReason.TokenExpired) {
+                    // access token has expired need to make another call to get new one
+                    TokenResponseModel token = value as TokenResponseModel;
 
-                LogonCommands.RefreshTokenCommand command = new (token.RefreshToken);
-                Result<TokenResponseModel> newTokenResult = await this.Mediator.Send(command, CancellationToken.None);
+                    LogonCommands.RefreshTokenCommand command = new(token.RefreshToken);
+                    Result<TokenResponseModel> newTokenResult = await this.Mediator.Send(command, CancellationToken.None);
 
-                if (newTokenResult.IsSuccess) {
-                    this.CacheAccessToken(newTokenResult.Data);
+                    if (newTokenResult.IsSuccess) {
+                        this.CacheAccessToken(newTokenResult.Data);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Failed to refresh access token after cache eviction.", ex);
             }
         }
 
@@ -312,7 +317,11 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
                                                         // Force eviction to run
                                                         .AddExpirationToken(expirationToken)
                                                         // Add eviction callback
-                                                        .RegisterPostEvictionCallback(callback:this.AccessTokenExpired);
+                                                        .RegisterPostEvictionCallback(
+                                                            (key, value, reason, state) =>
+                                                            {
+                                                                _ = AccessTokenExpired(key, value, reason, state);
+                                                            }); ;
 
             this.ApplicationCache.SetAccessToken(token, cacheEntryOptions);
         }
