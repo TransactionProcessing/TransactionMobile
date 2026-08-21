@@ -37,6 +37,27 @@ public class SupportRequestHandlerTests
     }
 
     [Fact]
+    public async Task SupportRequestHandlerTests_UploadLogsRequest_NoConfiguration_ReturnsFailure()
+    {
+        Mock<IConfigurationService> configurationService = new Mock<IConfigurationService>();
+        Func<Boolean, IConfigurationService> configurationServiceResolver = _ => configurationService.Object;
+
+        Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        applicationCache.Setup(s => s.GetConfiguration()).Returns((Configuration)null);
+
+        SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, applicationCache.Object);
+
+        SupportCommands.UploadLogsCommand request = new(TestData.DeviceIdentifier);
+
+        Result response = await handler.Handle(request, CancellationToken.None);
+
+        response.IsFailed.ShouldBeTrue();
+        configurationService.Verify(c => c.PostDiagnosticLogs(It.IsAny<String>(), It.IsAny<List<Models.LogMessage>>(), It.IsAny<CancellationToken>()), Times.Never);
+        databaseContext.Verify(d => d.GetLogMessages(It.IsAny<Int32>(), It.IsAny<Boolean>()), Times.Never);
+    }
+
+    [Fact]
     public async Task SupportRequestHandlerTests_UploadLogsRequest_LogsToUpload_Only10Messages_Handle_IsHandled()
     {
         Mock<IConfigurationService> configurationService = new Mock<IConfigurationService>();
@@ -115,6 +136,71 @@ public class SupportRequestHandlerTests
 
         response.IsSuccess.ShouldBeTrue();
         databaseContext.Verify(d => d.RemoveUploadedMessages(It.IsAny<List<Database.LogMessage>>()), Times.Exactly(2));
+    }
+
+    [Fact]
+    public async Task SupportRequestHandlerTests_UploadLogsRequest_InvalidLogLevel_ReturnsFailure()
+    {
+        Mock<IConfigurationService> configurationService = new Mock<IConfigurationService>();
+        Func<Boolean, IConfigurationService> configurationServiceResolver = _ => configurationService.Object;
+
+        Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
+        databaseContext.Setup(d => d.GetLogMessages(It.IsAny<Int32>(), It.IsAny<Boolean>())).ReturnsAsync(new List<Database.LogMessage>
+        {
+            new Database.LogMessage { LogLevel = "NotALogLevel" }
+        });
+
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        applicationCache.Setup(s => s.GetConfiguration()).Returns(new Configuration());
+
+        SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, applicationCache.Object);
+
+        SupportCommands.UploadLogsCommand request = new(TestData.DeviceIdentifier);
+
+        Result response = await handler.Handle(request, CancellationToken.None);
+
+        response.IsFailed.ShouldBeTrue();
+        configurationService.Verify(c => c.PostDiagnosticLogs(It.IsAny<String>(), It.IsAny<List<Models.LogMessage>>(), It.IsAny<CancellationToken>()), Times.Never);
+        databaseContext.Verify(d => d.RemoveUploadedMessages(It.IsAny<List<Database.LogMessage>>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task SupportRequestHandlerTests_UploadLogsRequest_CancellationStopsFurtherProcessing()
+    {
+        Mock<IConfigurationService> configurationService = new Mock<IConfigurationService>();
+        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        configurationService.Setup(c => c.PostDiagnosticLogs(It.IsAny<String>(), It.IsAny<List<Models.LogMessage>>(), It.IsAny<CancellationToken>()))
+            .Callback<String, List<Models.LogMessage>, CancellationToken>((_, _, _) =>
+            {
+                cancellationTokenSource.Cancel();
+            })
+            .ReturnsAsync(Result.Success());
+
+        Func<Boolean, IConfigurationService> configurationServiceResolver = _ => configurationService.Object;
+
+        Mock<IDatabaseContext> databaseContext = new Mock<IDatabaseContext>();
+        databaseContext.SetupSequence(d => d.GetLogMessages(It.IsAny<Int32>(), It.IsAny<Boolean>()))
+            .ReturnsAsync(new List<Database.LogMessage>
+            {
+                new Database.LogMessage { LogLevel = LogLevel.Debug.ToString() }
+            })
+            .ReturnsAsync(new List<Database.LogMessage>
+            {
+                new Database.LogMessage { LogLevel = LogLevel.Debug.ToString() }
+            });
+
+        Mock<IApplicationCache> applicationCache = new Mock<IApplicationCache>();
+        applicationCache.Setup(s => s.GetConfiguration()).Returns(new Configuration());
+
+        SupportRequestHandler handler = new SupportRequestHandler(configurationServiceResolver, databaseContext.Object, applicationCache.Object);
+
+        SupportCommands.UploadLogsCommand request = new(TestData.DeviceIdentifier);
+
+        await Should.ThrowAsync<OperationCanceledException>(async () => await handler.Handle(request, cancellationTokenSource.Token));
+
+        configurationService.Verify(c => c.PostDiagnosticLogs(It.IsAny<String>(), It.IsAny<List<Models.LogMessage>>(), cancellationTokenSource.Token), Times.Once);
+        databaseContext.Verify(d => d.GetLogMessages(It.IsAny<Int32>(), It.IsAny<Boolean>()), Times.Once);
+        databaseContext.Verify(d => d.RemoveUploadedMessages(It.IsAny<List<Database.LogMessage>>()), Times.Once);
     }
 
     [Theory]

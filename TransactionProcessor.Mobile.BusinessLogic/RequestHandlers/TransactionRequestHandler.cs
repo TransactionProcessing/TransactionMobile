@@ -74,10 +74,14 @@ public class TransactionRequestHandler : IRequestHandler<TransactionCommands.Per
                                                     };
 
         Result<PerformMobileTopupResponseModel> result = await transactionService.PerformMobileTopup(model, cancellationToken);
-        
+        if (result.IsFailed)
+        {
+            return result;
+        }
+
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
 
-        if (result.IsSuccess && result.Data.IsSuccessful == false)
+        if (result.Data.IsSuccessful == false)
         {
             return Result.Failure("Logon transaction not successful");
         }
@@ -118,10 +122,13 @@ public class TransactionRequestHandler : IRequestHandler<TransactionCommands.Per
 
         Result<PerformLogonResponseModel> result = await transactionService.PerformLogon(model, cancellationToken);
 
+        if (result.IsFailed)
+            return result;
+        
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
-        if (result.IsSuccess && result.Data.IsSuccessful == false)
+        if (result.Data.IsSuccessful == false)
         {
-            return  Result.Failure($"Logon transaction not successful {StringSerialiser.Serialise(result.Data)}");
+            return Result.Failure($"Logon transaction not successful {StringSerialiser.Serialise(result.Data)}");
         }
 
         return Result.Success(result.Data);
@@ -151,10 +158,14 @@ public class TransactionRequestHandler : IRequestHandler<TransactionCommands.Per
         };
 
         Result<PerformVoucherIssueResponseModel> result = await transactionService.PerformVoucherIssue(model, cancellationToken);
+        if (result.IsFailed)
+        {
+            return result;
+        }
 
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
 
-        if (result.IsSuccess && result.Data.IsSuccessful == false)
+        if (result.Data.IsSuccessful == false)
         {
             return Result.Failure("Voucher Issue not successful");
         }
@@ -183,6 +194,10 @@ public class TransactionRequestHandler : IRequestHandler<TransactionCommands.Per
         };
 
         Result<PerformBillPaymentGetAccountResponseModel> result = await transactionService.PerformBillPaymentGetAccount(model, cancellationToken);
+        if (result.IsFailed)
+        {
+            return result;
+        }
 
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
 
@@ -275,10 +290,14 @@ public class TransactionRequestHandler : IRequestHandler<TransactionCommands.Per
         };
         
         Result<PerformBillPaymentMakePaymentResponseModel> result = await transactionService.PerformBillPaymentMakePayment(model, cancellationToken);
+        if (result.IsFailed)
+        {
+            return result;
+        }
 
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
 
-        if (result.IsSuccess && result.Data.IsSuccessful == false)
+        if (result.Data.IsSuccessful == false)
         {
             return Result.Failure("Bill Payment not successful");
         }
@@ -311,10 +330,14 @@ public class TransactionRequestHandler : IRequestHandler<TransactionCommands.Per
                                                    };
 
         Result<PerformBillPaymentMakePaymentResponseModel> result = await transactionService.PerformBillPaymentMakePayment(model, cancellationToken);
+        if (result.IsFailed)
+        {
+            return result;
+        }
 
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
 
-        if (result.IsSuccess && result.Data.IsSuccessful == false)
+        if (result.Data.IsSuccessful == false)
         {
             return Result.Failure("Bill Payment not successful");
         }
@@ -343,6 +366,10 @@ public class TransactionRequestHandler : IRequestHandler<TransactionCommands.Per
                                                   };
 
         Result<PerformBillPaymentGetMeterResponseModel> result = await transactionService.PerformBillPaymentGetMeter(model, cancellationToken);
+        if (result.IsFailed)
+        {
+            return result;
+        }
 
         await this.UpdateTransactionRecord(transaction.transactionRecord.UpdateFrom(result));
 
