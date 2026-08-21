@@ -1,0 +1,540 @@
+﻿name: Nightly Build
+
+on:
+  schedule:
+  - cron: "20 23 * * *"
+  repository_dispatch:
+
+jobs:
+  unit_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Install KVM and Android SDK (x86)
+        run: |
+          # Set up environment variables
+          export ANDROID_SDK_ROOT=$HOME/android-sdk
+          export ANDROID_HOME=$ANDROID_SDK_ROOT
+          export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$PATH
+
+          # Create necessary directories
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+
+          # Download and install command-line tools
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
+          unzip -q commandlinetools-linux-*.zip -d $ANDROID_SDK_ROOT/cmdline-tools
+          mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest
+          chmod +x $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
+
+          # Accept licenses and install required components
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
+          # Install Android API level 35 and necessary system images
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-36" "system-images;android-36;google_apis;x86_64"
+
+          # Export paths for future steps
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$PATH" >> $GITHUB_ENV
+
+      - name: Install Android Build Tools
+        run: |
+          echo "Installing Android Build Tools..."
+          sdkmanager "build-tools;36.0.0"  # Updated to use Android 34 build tools
+          sdkmanager --update
+
+      - name: Install MAUI workloads
+        run: |
+          dotnet workload install maui-android
+
+      - name: Build Code
+        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json -f net10.0-android -c Release #--no-restore
+
+      - name: Run unit tests
+        run: dotnet test --project TransactionProcessor.Mobile.BusinessLogic.Tests/TransactionProcessor.Mobile.BusinessLogic.Tests.csproj --configuration Release
+
+  windows_ui_tests:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          vs-prerelease: true
+     
+      - name: Install MAUI workloads
+        run: |
+          dotnet workload install maui
+
+      - name: Install Appium and Drivers
+        run: |
+          npm install -g appium --unsafe-perm=true --allow-root
+          appium driver install --source=npm appium-windows-driver
+
+      - name: Start Appium Server
+        run: |
+          nohup appium --log appium.log &
+
+      - name: Restore MAUI App for Windows
+        run: dotnet restore TransactionProcessor.Mobile.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json     
+        
+      - name: Decrypt PFX File
+        run: |
+          echo "${{ secrets.WINDOWSSIGNINGCERT }}" > cert.pfx.asc
+          certutil -decode cert.pfx.asc cert.pfx
+
+      - name: Add Cert to Store
+        run: certutil -user -q -p ${{ secrets.WINDOWSSIGNINGCERTPWD }} -importpfx cert.pfx NoRoot
+
+      - name: Publish App
+        run: |
+         dotnet publish TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj -c Release -f net10.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
+
+      - name: Debug AppPackages contents
+        shell: powershell
+        run: |
+         $candidatePaths = @(
+          (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\AppPackages"),
+          (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\bin\Release\net10.0-windows10.0.19041.0\win-x64\AppPackages")
+         )
+         $appPackagesPath = $candidatePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+         if ($null -eq $appPackagesPath) {
+          Write-Error "Unable to find AppPackages under: $($candidatePaths -join ', ')"
+          exit 1
+         }
+         Write-Host "Listing AppPackages from $appPackagesPath"
+         Get-ChildItem -Path $appPackagesPath -Recurse | Format-List FullName, Length, Mode
+
+      - name: Install App
+        shell: powershell
+        run: |         
+         Import-Module Appx 
+         $candidatePaths = @(
+           (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\AppPackages"),
+           (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\bin\Release\net10.0-windows10.0.19041.0\win-x64\AppPackages")
+         )
+         $appPackagesPath = $candidatePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+         if ($null -eq $appPackagesPath) {
+           throw "Unable to find AppPackages under: $($candidatePaths -join ', ')"
+         }
+         $installScript = Get-ChildItem -Path $appPackagesPath -Recurse -Filter Install.ps1 | Select-Object -First 1
+         if ($null -ne $installScript) {
+           & $installScript.FullName -Force
+         } else {
+           $msixPackage = Get-ChildItem -Path $appPackagesPath -Recurse -Filter *.msix | Select-Object -First 1
+           if ($null -eq $msixPackage) {
+             throw "Unable to find Install.ps1 or .msix package under $appPackagesPath."
+           }
+           Add-AppxPackage -Path $msixPackage.FullName -ForceApplicationShutdown
+         }
+
+      - name: Resolve Windows UI test app id
+        id: windows_app
+        shell: powershell
+        run: |
+          $package = $null
+          for ($attempt = 1; $attempt -le 12 -and $null -eq $package; $attempt++) {
+            $package = Get-AppxPackage -AllUsers |
+              Where-Object {
+                $_.Name -like '*TransactionMobile*' -or
+                $_.Name -like '*TransactionProcessor.Mobile*' -or
+                $_.PackageFamilyName -like '*TransactionMobile*' -or
+                $_.PackageFamilyName -like '*TransactionProcessor.Mobile*' -or
+                $_.InstallLocation -like '*TransactionProcessor.Mobile*'
+              } |
+              Sort-Object InstallDate -Descending |
+              Select-Object -First 1
+
+            if ($null -eq $package) {
+              Write-Host ("Attempt {0}: installed app not visible yet, waiting 5 seconds." -f $attempt)
+              Start-Sleep -Seconds 5
+            }
+          }
+
+          if ($null -eq $package) {
+            Write-Error "Unable to find the installed TransactionProcessor.Mobile package."
+            Get-AppxPackage -AllUsers | Sort-Object Name | Select-Object Name, PackageFamilyName, InstallLocation | Format-Table -AutoSize
+            exit 1
+          }
+
+          $windowsAppId = "$($package.PackageFamilyName)!App"
+          Write-Host "Resolved Windows app id: $windowsAppId"
+          "windows_app_id=$windowsAppId" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Prepare Windows UI test settings
+        id: windows_settings
+        shell: powershell
+        run: |
+          $settingsPath = Join-Path $env:RUNNER_TEMP "windows-ui-tests.runsettings"
+          Copy-Item -Path "TransactionProcessor.Mobile.UITests.Windows.runsettings" -Destination $settingsPath -Force
+          [xml]$settingsXml = Get-Content -Raw $settingsPath
+          $nodes = $settingsXml.SelectNodes("//EnvironmentVariables/UITEST_WINDOWS_APP_ID")
+          if ($nodes.Count -ne 1) {
+            throw "Expected exactly one UITEST_WINDOWS_APP_ID entry in the runsettings template."
+          }
+
+          $nodes.Item(0).InnerText = "${{ steps.windows_app.outputs.windows_app_id }}"
+          $settingsXml.Save($settingsPath)
+          "runsettings_path=$settingsPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Run Windows Navigation Tests
+        run: dotnet test --project TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=Windows)" --no-restore --settings "${{ steps.windows_settings.outputs.runsettings_path }}"
+
+      - name: Upload Appium Logs on Failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+            name: windows-software_navigation_tests_appium
+            path: appium.log
+
+    runs-on: windows-2022
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          vs-prerelease: true
+     
+      - name: Install MAUI workloads
+        run: |
+          dotnet workload install maui
+
+      - name: Install Appium and Drivers
+        run: |
+          npm install -g appium --unsafe-perm=true --allow-root
+          appium driver install --source=npm appium-windows-driver
+
+      - name: Start Appium Server
+        run: |
+          nohup appium --log appium.log &
+
+      - name: Restore MAUI App for Windows
+        run: dotnet restore TransactionProcessor.Mobile.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+      - name: Decrypt PFX File
+        run: |
+          echo "${{ secrets.WINDOWSSIGNINGCERT }}" > cert.pfx.asc
+          certutil -decode cert.pfx.asc cert.pfx
+
+      - name: Add Cert to Store
+        run: certutil -user -q -p ${{ secrets.WINDOWSSIGNINGCERTPWD }} -importpfx cert.pfx NoRoot
+
+      - name: Publish App
+        run: |
+         dotnet publish TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj -c Release -f net10.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
+      
+      - name: Install App
+        shell: powershell      
+        run: |         
+         Import-Module Appx 
+         $candidatePaths = @(
+           (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\AppPackages"),
+           (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\bin\Release\net10.0-windows10.0.19041.0\win-x64\AppPackages")
+         )
+         $appPackagesPath = $candidatePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+         if ($null -eq $appPackagesPath) {
+           throw "Unable to find AppPackages under: $($candidatePaths -join ', ')"
+         }
+         $installScript = Get-ChildItem -Path $appPackagesPath -Recurse -Filter Install.ps1 | Select-Object -First 1
+         if ($null -ne $installScript) {
+           & $installScript.FullName -Force
+         } else {
+           $msixPackage = Get-ChildItem -Path $appPackagesPath -Recurse -Filter *.msix | Select-Object -First 1
+           if ($null -eq $msixPackage) {
+             throw "Unable to find Install.ps1 or .msix package under $appPackagesPath."
+           }
+           Add-AppxPackage -Path $msixPackage.FullName -ForceApplicationShutdown
+         }
+
+      - name: Resolve Windows UI test app id
+        id: windows_app
+        shell: powershell
+        run: |
+          $package = $null
+          for ($attempt = 1; $attempt -le 12 -and $null -eq $package; $attempt++) {
+            $package = Get-AppxPackage -AllUsers |
+              Where-Object {
+                $_.Name -like '*TransactionMobile*' -or
+                $_.Name -like '*TransactionProcessor.Mobile*' -or
+                $_.PackageFamilyName -like '*TransactionMobile*' -or
+                $_.PackageFamilyName -like '*TransactionProcessor.Mobile*' -or
+                $_.InstallLocation -like '*TransactionProcessor.Mobile*'
+              } |
+              Sort-Object InstallDate -Descending |
+              Select-Object -First 1
+
+            if ($null -eq $package) {
+              Write-Host ("Attempt {0}: installed app not visible yet, waiting 5 seconds." -f $attempt)
+              Start-Sleep -Seconds 5
+            }
+          }
+
+          if ($null -eq $package) {
+            Write-Error "Unable to find the installed TransactionProcessor.Mobile package."
+            Get-AppxPackage -AllUsers | Sort-Object Name | Select-Object Name, PackageFamilyName, InstallLocation | Format-Table -AutoSize
+            exit 1
+          }
+
+          $windowsAppId = "$($package.PackageFamilyName)!App"
+          Write-Host "Resolved Windows app id: $windowsAppId"
+          "windows_app_id=$windowsAppId" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Prepare Windows UI test settings
+        id: windows_settings
+        shell: powershell
+        run: |
+          $settingsPath = Join-Path $env:RUNNER_TEMP "windows-ui-tests.runsettings"
+          Copy-Item -Path "TransactionProcessor.Mobile.UITests.Windows.runsettings" -Destination $settingsPath -Force
+          [xml]$settingsXml = Get-Content -Raw $settingsPath
+          $nodes = $settingsXml.SelectNodes("//EnvironmentVariables/UITEST_WINDOWS_APP_ID")
+          if ($nodes.Count -ne 1) {
+            throw "Expected exactly one UITEST_WINDOWS_APP_ID entry in the runsettings template."
+          }
+
+          $nodes.Item(0).InnerText = "${{ steps.windows_app.outputs.windows_app_id }}"
+          $settingsXml.Save($settingsPath)
+          "runsettings_path=$settingsPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Run Windows End To End Tests
+        run: dotnet test --project TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "Category=PRTest&Category=Windows" --no-restore --settings "${{ steps.windows_settings.outputs.runsettings_path }}"
+        #run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --list-tests -v:d
+
+      - name: Upload Logs on Failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+            name: windows-e2e_tests
+            path: C:\\Users\\runneradmin\\runner
+
+      - name: Upload Appium Logs on Failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+            name: windows-e2e_tests_appium
+            path: appium.log
+  
+  android_ui_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Enable KVM group perms
+        run: |
+            echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+            sudo udevadm control --reload-rules
+            sudo udevadm trigger --name-match=kvm
+
+      - name: Install KVM and Android SDK (x86)
+        run: |
+          # Set up environment variables
+          export ANDROID_SDK_ROOT=$HOME/android-sdk
+          export ANDROID_HOME=$ANDROID_SDK_ROOT
+          export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$PATH
+
+          # Create necessary directories
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+
+          # Download and install command-line tools
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
+          unzip -q commandlinetools-linux-*.zip -d $ANDROID_SDK_ROOT/cmdline-tools
+          mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest
+          chmod +x $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
+
+          # Accept licenses and install required components
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
+          # Install Android API level 35 and necessary system images
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "emulator" "platforms;android-36" "system-images;android-36;google_apis;x86_64"
+
+          # Export paths for future steps
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$PATH" >> $GITHUB_ENV
+
+      - name: Cache Emulator System Image (x86)
+        uses: actions/cache@v3
+        with:
+          path: ~/.android/avd
+          key: android-emulator-x86-${{ runner.os }}-android-36
+
+      - name: Create Android Emulator (x86)
+        run: |
+          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-36;google_apis;x86_64" --device "pixel_4"
+
+      - name: List AVDs
+        run: avdmanager list avd
+
+      - name: Start Emulator
+        run: |
+          echo "Starting emulator..."
+          
+          export ANDROID_AVD_HOME=$HOME/.config/.android/avd
+
+          nohup $ANDROID_HOME/emulator/emulator -avd test_emulator -no-window -no-audio -no-snapshot -gpu swiftshader_indirect -verbose > emulator.log 2>&1 &
+
+          echo "Waiting for emulator process to start..."
+          sleep 10  # Allow time for initialization
+
+          echo "Checking if emulator process is running..."
+          ps aux | grep emulator
+
+          echo "Checking ADB devices..."
+          adb devices
+        
+      - name: Restart ADB
+        run: |
+            adb kill-server
+            adb start-server
+            adb devices
+
+      - name: Wait for Emulator to Boot (Timeout 10 min with Debug)
+        run: |
+          # Start waiting for the emulator
+          echo "Waiting for emulator to boot..."
+
+          # Check the list of devices connected (debugging)
+          adb wait-for-device          
+
+          # Wait for emulator boot completion
+          timeout 600 bash -c '
+            while true; do
+              # Show the current list of devices (debugging)
+              adb devices
+        
+              # Check if the emulator is booting by checking the boot status
+              BOOT_COMPLETED=$(adb shell getprop sys.boot_completed 2>/dev/null)
+              echo "Boot status: $BOOT_COMPLETED"
+
+              # If boot is completed, break the loop
+              if [ "$BOOT_COMPLETED" == "1" ]; then
+                echo "Emulator boot completed!"
+                break
+              fi
+
+              # If boot is not completed, keep waiting
+              echo "Emulator still booting, waiting..."
+              sleep 5
+            done
+          '  
+
+      - name: Install Android Build Tools
+        run: |
+          echo "Installing Android Build Tools..."
+          sdkmanager "build-tools;36.0.0"  # Updated to use Android 34 build tools
+          sdkmanager --update
+
+      - name: Install MAUI workloads
+        run: |
+          dotnet workload install maui-android
+
+      - name: Install Appium and Drivers
+        run: |
+          sudo npm install -g appium
+          appium driver install uiautomator2
+
+      - name: Start Appium Server
+        run: |
+          nohup appium --log appium.log &
+
+      - name: Restore MAUI App for Android
+        run: dotnet restore TransactionProcessor.Mobile.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
+
+      - name: Build Code
+        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net10.0-android -c Release --no-restore
+
+      - name: Locate Android APK
+        id: android_apk
+        run: |
+          apk_path=$(find "$GITHUB_WORKSPACE/TransactionProcessor.Mobile/bin/Release/net10.0-android" -type f -name '*-Signed.apk' | head -n 1)
+          if [ -z "$apk_path" ]; then
+            echo "Unable to find a signed APK under TransactionProcessor.Mobile/bin/Release/net10.0-android."
+            find "$GITHUB_WORKSPACE/TransactionProcessor.Mobile/bin/Release/net10.0-android" -type f -name '*.apk' -print
+            exit 1
+          fi
+
+          echo "UITEST_ANDROID_APP_PATH=$apk_path" >> "$GITHUB_ENV"
+          echo "apk_path=$apk_path" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare Android UI test settings
+        id: android_settings
+        run: |
+          settings_path="$RUNNER_TEMP/android-ui-tests.runsettings"
+          cp TransactionProcessor.Mobile.UITests.Android.runsettings "$settings_path"
+
+          python3 - "$settings_path" "${{ steps.android_apk.outputs.apk_path }}" <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          settings_file = Path(sys.argv[1])
+          apk_path = sys.argv[2]
+          content = settings_file.read_text()
+          updated_content, replacements = re.subn(
+              r"<UITEST_ANDROID_APP_PATH>.*?</UITEST_ANDROID_APP_PATH>",
+              f"<UITEST_ANDROID_APP_PATH>{apk_path}</UITEST_ANDROID_APP_PATH>",
+              content,
+              count=1,
+              flags=re.DOTALL,
+          )
+
+          if replacements != 1:
+              raise SystemExit("Expected exactly one UITEST_ANDROID_APP_PATH entry in the runsettings template.")
+
+          settings_file.write_text(updated_content)
+          PY
+
+          echo "runsettings_path=$settings_path" >> "$GITHUB_OUTPUT"
+
+      - name: Run Android Navigation Tests
+        run: dotnet test --project TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=Android)" --no-restore --settings "${{ steps.android_settings.outputs.runsettings_path }}"
+
+      - name: Upload Logs on Failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+            name: android-e2e_tests
+            path: /home/runner/trace/
+
+      - name: Upload Appium Logs on Failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+            name: android-e2e_tests_appium
+            path: appium.log
+
+      - name: Capture emulator logs
+        if: always()
+        run: adb logcat -d > emulator-log.txt
+
+      - name: Upload emulator logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+            name: android-emulator-logs
+            path: emulator-log.txt
