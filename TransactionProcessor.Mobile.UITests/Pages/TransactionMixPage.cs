@@ -1,10 +1,11 @@
 using TransactionProcessor.Mobile.UITests.Common;
+using TransactionProcessor.Mobile.UITests.Drivers;
 
 namespace TransactionProcessor.Mobile.UITests.Pages;
 
 public class TransactionMixPage : BasePage2
 {
-    protected override string Trait => "TransactionMix";
+    protected override string Trait => AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows ? "Transaction Mix" : "TransactionMix";
 
     private readonly string SummarySection;
 

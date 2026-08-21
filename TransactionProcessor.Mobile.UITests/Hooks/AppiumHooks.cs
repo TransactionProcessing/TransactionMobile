@@ -12,48 +12,69 @@ namespace TransactionProcessor.Mobile.UITests.Hooks
     {
         private readonly AppiumDriverWrapper AppiumDriver;
         private readonly TestingContext TestingContext;
+        private readonly ScenarioContext scenarioContext;
+
         public AppiumHooks(AppiumDriverWrapper appiumDriver,
-                           TestingContext testingContext) {
+                           TestingContext testingContext,
+                           ScenarioContext scenarioContext) {
             this.AppiumDriver = appiumDriver;
             this.TestingContext = testingContext;
+            this.scenarioContext = scenarioContext;
         }
 
         [BeforeScenario(Order = 1)]
-        public void StartApp()
+        public async Task StartApp()
         {
             if (this.TestingContext.Logger == null)
             {
                 this.TestingContext.Logger = new NlogLogger();
             }
 
-            //this.TestingContext.Logger.LogInformation("About to Start App");
-            //this.TestingContext.Logger.LogInformation("App Started");
-
-            Retry.For(async () => {
-                                this.AppiumDriver.StartApp();
-                //AppState state = AppiumDriverWrapper.Driver.GetAppState("com.transactionprocessing.pos");
-                //                state.ShouldBe(AppState.NotRunning);
-                            }).Wait();
+            await Retry.For(async () =>
+            {
+                try
+                {
+                    await this.AppiumDriver.StartAppAsync().ConfigureAwait(false);
+                }
+                catch
+                {
+                    await UiFailureDiagnostics.CaptureAsync(this.TestingContext, this.scenarioContext, this.AppiumDriver, "AppiumBeforeScenario").ConfigureAwait(false);
+                    throw;
+                }
+            }).ConfigureAwait(false);
         }
 
         [AfterScenario(Order = 1)]
-        public void ShutdownApp()
+        public async Task ShutdownApp()
         {
-            if (this.AppiumDriver == null) {
-                return;
-            }
-
-            if (this.TestingContext.Logger == null){
+            if (this.TestingContext.Logger == null)
+            {
                 this.TestingContext.Logger = new NlogLogger();
             }
+
             this.TestingContext.Logger.LogInformation("About to Shutdown App");
-            var logs = this.AppiumDriver.GetLogs();
-            if (logs != null) {
-                foreach (LogEntry logEntry in logs) {
+
+            try
+            {
+                foreach (LogEntry logEntry in this.AppiumDriver.GetLogs())
+                {
                     this.TestingContext.Logger.LogInformation($"{logEntry.Timestamp}|{logEntry.Level}|{logEntry.Message}");
                 }
             }
-            this.AppiumDriver.StopApp();
+            catch (Exception ex)
+            {
+                this.TestingContext.Logger.LogWarning($"Unable to collect Appium logs during teardown: {ex.Message}");
+            }
+            finally
+            {
+                if (this.scenarioContext.TestError != null)
+                {
+                    await UiFailureDiagnostics.CaptureAsync(this.TestingContext, this.scenarioContext, this.AppiumDriver, "AfterScenario").ConfigureAwait(false);
+                }
+
+                await this.AppiumDriver.StopAppAsync().ConfigureAwait(false);
+            }
+
             this.TestingContext.Logger.LogInformation("App Shutdown");
         }
     }

@@ -105,10 +105,11 @@ public static class Extenstions
     //    return element;
     //}
     public static async Task<IWebElement> GetElement(this AppiumDriver driver,
-                                                     string automationId,
-                                                     string androidPackage = "com.transactionprocessor.mobile")
+                                                      string automationId,
+                                                      string androidPackage = "com.transactionprocessor.mobile",
+                                                      TimeSpan? timeout = null)
     {
-        TimeSpan retryFor = TimeSpan.FromSeconds(60);
+        TimeSpan retryFor = timeout ?? TimeSpan.FromSeconds(60);
 
         IWebElement element = null;
 
@@ -141,6 +142,16 @@ public static class Extenstions
                     catch (NoSuchElementException)
                     {
                         // do nothing; handled by retry
+                    }
+                }
+
+                if (element == null && platform == "windows")
+                {
+                    element = driver.FindElements(MobileBy.Name(automationId)).FirstOrDefault();
+
+                    if (element == null)
+                    {
+                        element = driver.FindElements(MobileBy.XPath($"//*[@Name='{automationId}']")).FirstOrDefault();
                     }
                 }
 

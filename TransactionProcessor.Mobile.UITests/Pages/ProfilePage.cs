@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Appium;
+using Shared.IntegrationTesting;
 using TransactionProcessor.Mobile.UITests.Common;
 using TransactionProcessor.Mobile.UITests.Drivers;
 
@@ -38,26 +40,65 @@ namespace TransactionProcessor.Mobile.UITests.Pages
 
         #region Methods
 
-        public async Task ClickAccountInfoButton() {
-            IWebElement element = await this.WaitForElementByAccessibilityId(this.AccountInfoButton);
-            element.Click();
+        public async Task ClickAccountInfoButton()
+        {
+            await this.ClickOptionTileAsync(this.AccountInfoButton, "Account Info").ConfigureAwait(false);
         }
 
-        public async Task ClickAddressesButton() {
-            IWebElement element = await this.WaitForElementByAccessibilityId(this.AddressesButton);
-            element.Click();
-
-            var x = await AppiumDriverWrapper.Driver.GetPageSource();
+        public async Task ClickAddressesButton()
+        {
+            await this.ClickOptionTileAsync(this.AddressesButton, "Addresses").ConfigureAwait(false);
         }
 
-        public async Task ClickContactsButton() {
-            IWebElement element = await this.WaitForElementByAccessibilityId(this.ContactsButton);
-            element.Click();
+        public async Task ClickContactsButton()
+        {
+            await this.ClickOptionTileAsync(this.ContactsButton, "Contacts").ConfigureAwait(false);
         }
 
-        public async Task ClickLogoutButton() {
-            IWebElement element = await this.WaitForElementByAccessibilityId(this.LogoutButton);
-            element.Click();
+        public async Task ClickLogoutButton()
+        {
+            await this.ClickOptionTileAsync(this.LogoutButton, "Logout").ConfigureAwait(false);
+        }
+
+        private async Task ClickOptionTileAsync(String automationId, String title)
+        {
+            await Retry.For(async () =>
+            {
+                IWebElement? element = null;
+
+                try
+                {
+                    element = await this.WaitForElementByAccessibilityId(automationId).ConfigureAwait(false);
+                }
+                catch
+                {
+                    // Fall back to Windows-specific lookup below.
+                }
+
+                if (element == null && AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
+                {
+                    element = AppiumDriverWrapper.Driver.FindElements(MobileBy.Name(title)).FirstOrDefault();
+
+                    if (element == null)
+                    {
+                        element = AppiumDriverWrapper.Driver.FindElements(MobileBy.XPath($"//*[contains(@Name,'{title}')]")).FirstOrDefault();
+                    }
+
+                    if (element == null)
+                    {
+                        element = AppiumDriverWrapper.Driver.FindElements(MobileBy.XPath($"//*[@AutomationId='{automationId}']")).FirstOrDefault();
+                    }
+                }
+
+                if (element == null)
+                {
+                    String pageSource = await this.GetPageSource().ConfigureAwait(false);
+                    throw new InvalidOperationException(
+                        $"Unable to locate profile option tile. AutomationId: [{automationId}], Title: [{title}]{Environment.NewLine}Page source:{Environment.NewLine}{pageSource}");
+                }
+
+                element.Click();
+            }).ConfigureAwait(false);
         }
 
         #endregion

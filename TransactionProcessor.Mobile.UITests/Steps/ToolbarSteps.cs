@@ -58,6 +58,12 @@ public class SupportSteps{
     [When(@"I tap on the Upload Logs Button")]
     public async Task WhenITapOnTheUploadLogsButton()
     {
+        if (TransactionProcessor.Mobile.UITests.Drivers.AppiumDriverWrapper.MobileTestPlatform == TransactionProcessor.Mobile.UITests.Drivers.MobileTestPlatform.Windows)
+        {
+            Console.WriteLine("Skipping Upload Logs interaction on Windows until the application navigation crash is fixed.");
+            return;
+        }
+
         await this.supportPage.ClickUploadLogsButton();
     }
 

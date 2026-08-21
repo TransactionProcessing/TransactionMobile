@@ -1,4 +1,4 @@
-﻿using SecurityService.Client;
+using SecurityService.Client;
 using SecurityService.DataTransferObjects;
 using Shared.Results;
 using SimpleResults;

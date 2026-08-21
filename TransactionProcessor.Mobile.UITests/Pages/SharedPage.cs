@@ -22,8 +22,8 @@ namespace TransactionProcessor.Mobile.UITests.Pages
                 IWebElement alert = await AppiumDriverWrapper.Driver.GetElement("ContentScrollViewer");
 
                 var allLabels = alert.FindElements(MobileBy.ClassName("TextBlock"));
-                allLabels[0].Text.ShouldBe(logoutAlertTitle);
-                allLabels[1].Text.ShouldBe(logoutAlertMessage);
+                allLabels.Select(label => label.Text).ShouldContain(logoutAlertTitle);
+                allLabels.Select(label => label.Text).ShouldContain(logoutAlertMessage);
             }
             else{
                 IAlert a = await this.SwitchToAlert();

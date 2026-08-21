@@ -33,9 +33,6 @@ jobs:
       - name: Restore MAUI App for Windows
         run: dotnet restore TransactionProcessor.Mobile.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
-      - name: Build Code
-        run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net10.0-android -c Release --no-restore
-       
       - name: Decrypt PFX File
         run: |
           echo "${{ secrets.WINDOWSSIGNINGCERT }}" > cert.pfx.asc
@@ -71,8 +68,57 @@ jobs:
            Add-AppxPackage -Path $msixPackage.FullName -ForceApplicationShutdown
          }
 
+      - name: Resolve Windows UI test app id
+        id: windows_app
+        shell: powershell
+        run: |
+          $package = $null
+          for ($attempt = 1; $attempt -le 12 -and $null -eq $package; $attempt++) {
+            $package = Get-AppxPackage -AllUsers |
+              Where-Object {
+                $_.Name -like '*TransactionMobile*' -or
+                $_.Name -like '*TransactionProcessor.Mobile*' -or
+                $_.PackageFamilyName -like '*TransactionMobile*' -or
+                $_.PackageFamilyName -like '*TransactionProcessor.Mobile*' -or
+                $_.InstallLocation -like '*TransactionProcessor.Mobile*'
+              } |
+              Sort-Object InstallDate -Descending |
+              Select-Object -First 1
+
+            if ($null -eq $package) {
+              Write-Host ("Attempt {0}: installed app not visible yet, waiting 5 seconds." -f $attempt)
+              Start-Sleep -Seconds 5
+            }
+          }
+
+          if ($null -eq $package) {
+            Write-Error "Unable to find the installed TransactionProcessor.Mobile package."
+            Get-AppxPackage -AllUsers | Sort-Object Name | Select-Object Name, PackageFamilyName, InstallLocation | Format-Table -AutoSize
+            exit 1
+          }
+
+          $windowsAppId = "$($package.PackageFamilyName)!App"
+          Write-Host "Resolved Windows app id: $windowsAppId"
+          "windows_app_id=$windowsAppId" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Prepare Windows UI test settings
+        id: windows_settings
+        shell: powershell
+        run: |
+          $settingsPath = Join-Path $env:RUNNER_TEMP "windows-ui-tests.runsettings"
+          Copy-Item -Path "TransactionProcessor.Mobile.UITests.Windows.runsettings" -Destination $settingsPath -Force
+          [xml]$settingsXml = Get-Content -Raw $settingsPath
+          $nodes = $settingsXml.SelectNodes("//EnvironmentVariables/UITEST_WINDOWS_APP_ID")
+          if ($nodes.Count -ne 1) {
+            throw "Expected exactly one UITEST_WINDOWS_APP_ID entry in the runsettings template."
+          }
+
+          $nodes.Item(0).InnerText = "${{ steps.windows_app.outputs.windows_app_id }}"
+          $settingsXml.Save($settingsPath)
+          "runsettings_path=$settingsPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
       - name: Run Windows End To End Tests
-        run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --filter "Category=PRTest&Category=Windows" --no-restore
+        run: dotnet test TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "Category=PRTest&Category=Windows" --no-restore --settings "${{ steps.windows_settings.outputs.runsettings_path }}"
         #run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --list-tests -v:d
 
       - name: Upload Logs on Failure

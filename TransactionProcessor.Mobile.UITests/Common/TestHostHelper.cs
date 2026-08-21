@@ -15,209 +15,144 @@ using System.Runtime.InteropServices;
 using TransactionProcessor.Client;
 using TransactionProcessor.DataTransferObjects.Responses.Contract;
 using TransactionProcessor.IntegrationTesting.Helpers;
+using TransactionProcessor.Mobile.UiTestBackend;
+using TransactionProcessor.Mobile.UITests.Drivers;
 using ReqnrollTableHelper = Shared.IntegrationTesting.ReqnrollTableHelper;
 
 namespace TransactionProcessor.Mobile.UITests.Common
 {
-    public class DockerHelper : global::Shared.IntegrationTesting.TestContainers.DockerHelper
+    public class TestHostHelper
     {
-        #region Fields
-        
-        /// <summary>
-        /// The HTTP client
-        /// </summary>
-        public HttpClient HttpClient;
+        private readonly HttpClientHandler httpClientHandler;
 
-        /// <summary>
-        /// The security service client
-        /// </summary>
-        public ISecurityServiceClient SecurityServiceClient;
-
-        /// <summary>
-        /// The transaction processor client
-        /// </summary>
-        public ITransactionProcessorClient TransactionProcessorClient;
-
-        private const String MinimumSupportedApplicationVersion = "1.0.5";
-
-        private readonly TestingContext TestingContext;
-
-        #endregion
-
-        public EventStoreProjectionManagementClient ProjectionManagementClient;
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DockerHelper"/> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        public DockerHelper()
+        public TestHostHelper(TestingContext testingContext)
         {
-            this.TestingContext = new TestingContext();
             StringSerialiser.Initialise((IStringSerialiser)new SystemTextJsonSerializer(SystemTextJsonSerializer.GetDefaultJsonSerializerOptions()));
+            this.TestingContext = testingContext;
+            this.httpClientHandler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (_, _, _, _) => true
+            };
         }
 
-        #endregion
+        public TestingContext TestingContext { get; }
 
-        #region Methods
+        public Guid TestId { get; private set; } = Guid.NewGuid();
+
+        public string LocalIPAddress { get; private set; } = "127.0.0.1";
+
+        public int ConfigHostPort { get; private set; }
+
+        public string ConfigHostName => $"mobileconfighost{this.TestId:N}";
+
+        public HttpClient? HttpClient { get; private set; }
+
+        public HttpClient? TestHostHttpClient { get; private set; }
+
+        public ISecurityServiceClient? SecurityServiceClient { get; private set; }
+
+        public ITransactionProcessorClient? TransactionProcessorClient { get; private set; }
+
+        public EventStoreProjectionManagementClient? ProjectionManagementClient { get; private set; }
+
+        public NlogLogger? Logger { get; set; }
+
+        public BackendSeed ScenarioSeed => this.TestingContext.ScenarioSeed;
+
+        public async Task StartTestHostForScenarioRun(String scenarioName, object? _ = null)
+        {
+            this.TestId = Guid.NewGuid();
+            this.LocalIPAddress = this.GetLocalIPAddress();
+            this.TestingContext.ResetScenarioState();
+
+            int port = GetFreeTcpPort();
+            this.ConfigHostPort = port;
+
+            this.TestingContext.BackendHost = await TestBackendHost.StartAsync(port, this.TestingContext.ScenarioSeed).ConfigureAwait(false);
+            this.TestingContext.BackendHost.ApplySeed(this.TestingContext.ScenarioSeed);
+
+            this.HttpClient = this.TestingContext.BackendHost.CreateClient();
+            this.TestHostHttpClient = this.TestingContext.BackendHost.CreateClient();
+            this.SecurityServiceClient = null;
+            this.TransactionProcessorClient = null;
+            this.ProjectionManagementClient = null;
+        }
+
+        public async Task StopTestHostForScenarioRun(object? _ = null)
+        {
+            if (this.TestingContext.BackendHost != null)
+            {
+                await this.TestingContext.BackendHost.DisposeAsync().ConfigureAwait(false);
+                this.TestingContext.BackendHost = null;
+            }
+
+            this.HttpClient?.Dispose();
+            this.TestHostHttpClient?.Dispose();
+            this.HttpClient = null;
+            this.TestHostHttpClient = null;
+        }
 
         public string GetLocalIPAddress()
         {
-            String result = String.Empty;
-            if (String.IsNullOrEmpty(Environment.GetEnvironmentVariable("ENV_IPADDRESS")))
+            string? configuredAddress = Environment.GetEnvironmentVariable("ENV_IPADDRESS");
+            if (string.IsNullOrWhiteSpace(configuredAddress) == false)
             {
-                // Nothing in environment so not running under CI
-                IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
-                foreach (IPAddress ip in host.AddressList)
-                {
-                    this.Trace($"{ip}");
-                    if (ip.AddressFamily == AddressFamily.InterNetwork)
-                    {
-                        result = ip.ToString();
-                        break;
-                    }
-                }
-            }
-            else {
-                result= Environment.GetEnvironmentVariable("ENV_IPADDRESS");
+                return configuredAddress;
             }
 
-            return result;
+            return "127.0.0.1";
         }
 
-        public String LocalIPAddress { get; private set; }
-
-        public override ContainerBuilder SetupTransactionProcessorAclContainer(){
-            this.AdditionalVariables.Add(ContainerType.TransactionProcessorAcl, new Dictionary<String, String> {
-                {"AppSettings:SkipVersionCheck", "true"}
-            });
-            
-            return base.SetupTransactionProcessorAclContainer();
-        }
-
-        public override async Task CreateSubscriptions()
+        public string ConfigHostUrlForCurrentPlatform()
         {
-            List<(String streamName, String groupName, Int32 maxRetries)> subscriptions = new List<(String streamName, String groupName, Int32 maxRetries)>();
-            subscriptions.AddRange(TransactionProcessor.IntegrationTesting.Helpers.SubscriptionsHelper.GetSubscriptions());
-            
-            foreach ((String streamName, String groupName, Int32 maxRetries) subscription in subscriptions)
+            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Android)
             {
-                var x = subscription;
-                x.maxRetries = 2;
-                await this.CreatePersistentSubscription(x);
-            }
-        }
-
-        String Serialise(Object arg)
-        {
-            return StringSerialiser.Serialise<Object>(arg, new SerialiserOptions(SerialiserPropertyFormat.SnakeCase));
-        }
-
-        Object Deserialise(String arg, Type type)
-        {
-            return StringSerialiser.DeserializeObject<Object>(arg, type, new SerialiserOptions(SerialiserPropertyFormat.SnakeCase));
-        }
-
-        /// <summary>
-        /// Starts the containers for scenario run.
-        /// </summary>
-        /// <param name="scenarioName">Name of the scenario.</param>
-        public override async Task StartContainersForScenarioRun(String scenarioName, DockerServices dockerServices)
-        {
-            var engineType = await BaseDockerHelper.GetDockerEnginePlatform();
-            
-            if (engineType.Data == DockerEnginePlatform.Windows){
-                this.SetImageDetails(ContainerType.EventStore, ("stuartferguson/eventstore_windows", true));
-            }
-            
-            // Get the address of the host
-            this.LocalIPAddress = this.GetLocalIPAddress();
-            this.Trace(this.LocalIPAddress);
-
-            await base.StartContainersForScenarioRun(scenarioName, dockerServices);
-
-            var c = this.Containers.SingleOrDefault(c => c.Item1 == DockerServices.ConfigurationHost);
-
-            //var c = await this.StartContainer2(this.SetupConfigHostContainer,this.TestNetworks, DockerServices.ConfigurationHost);
-            this.ConfigHostPort = c.Item2.GetMappedPublicPort(ConfigHostDockerPort);
-
-            // Setup the base address resolvers
-
-            HttpClientHandler clientHandler = new HttpClientHandler
-                                              {
-                                                  ServerCertificateCustomValidationCallback = (message,
-                                                                                               certificate2,
-                                                                                               arg3,
-                                                                                               arg4) =>
-                                                                                              {
-                                                                                                  return true;
-                                                                                              }
-
-                                              };
-            HttpClient httpClient = new HttpClient(clientHandler);
-            this.SecurityServiceClient = new SecurityServiceClient(this.SecurityServiceBaseAddressResolver, httpClient, Serialise, Deserialise);
-            this.TransactionProcessorClient = new TransactionProcessorClient(this.TransactionProcessorBaseAddressResolver, httpClient, Serialise, Deserialise);
-
-            this.HttpClient = new HttpClient();
-            this.HttpClient.BaseAddress = new Uri(this.TransactionProcessorAclBaseAddressResolver(string.Empty));
-
-            this.TestHostHttpClient = new HttpClient(clientHandler);
-            this.TestHostHttpClient.BaseAddress = new Uri($"http://127.0.0.1:{this.TestHostServicePort}");
-
-            this.ProjectionManagementClient = new EventStoreProjectionManagementClient(this.ConfigureEventStoreSettings());
-        }
-
-        public String TransactionProcessorBaseAddressResolver(String api) => $"http://127.0.0.1:{this.TransactionProcessorPort}";
-
-        public String TransactionProcessorAclBaseAddressResolver(String api) => $"http://127.0.0.1:{this.TransactionProcessorAclPort}";
-
-        public String SecurityServiceBaseAddressResolver(String api) => $"https://127.0.0.1:{this.SecurityServicePort}";
-        
-        public const int ConfigHostDockerPort = 9200;
-
-        public String ConfigHostContainerName;
-        public Int32 ConfigHostPort;
-
-        public HttpClient TestHostHttpClient;
-
-        public ContainerBuilder SetupConfigHostContainer()
-        {
-            this.Trace("About to Start Config Host Container");
-            Dictionary<String,String> environmentVariables = new();
-            environmentVariables.Add("AppSettings:InMemoryDatabase","true");
-
-            this.ConfigHostContainerName = $"mobileconfighost{this.TestId:N}";
-
-            String imageName = "stuartferguson/mobileconfiguration:master";
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && this.DockerPlatform == DockerEnginePlatform.Windows){
-                imageName = "stuartferguson/mobileconfigurationwindows:master";
+                return this.TestingContext.BackendHost?.AndroidBaseUrl ?? $"http://10.0.2.2:{this.ConfigHostPort}";
             }
 
-            ContainerBuilder configHostContainer = new ContainerBuilder().WithName(this.ConfigHostContainerName)
-                .WithImage(imageName)
-                .WithEnvironment(environmentVariables)
-                .MountHostFolder(this.DockerPlatform, this.HostTraceFolder)
-                .WithPortBinding(ConfigHostDockerPort, true);
-
-            return configHostContainer;
+            return this.TestingContext.BackendHost?.WindowsBaseUrl ?? $"http://127.0.0.1:{this.ConfigHostPort}";
         }
 
+        public void ApplySeed(BackendSeed seed)
+        {
+            this.TestingContext.ScenarioSeed = seed.CloneSeed();
+            this.TestingContext.BackendHost?.ApplySeed(this.TestingContext.ScenarioSeed);
+        }
 
-        //public override ContainerBuilder SetupTransactionProcessorContainer()
-        //{
-        //    //List<String> variables = new List<String>();
-        //    //variables.Add($"OperatorConfiguration:PataPawaPrePay:Url=http://{this.TestHostContainerName}:{DockerPorts.TestHostPort}/api/patapawaprepay");
+        public void SetDeviceMapping(string deviceIdentifier)
+        {
+            this.TestingContext.BackendHost?.SetDeviceMapping(deviceIdentifier);
+        }
 
-        //    //this.AdditionalVariables.Add(ContainerType.FileProcessor, variables);
-        //    this.AdditionalVariables.Add(ContainerType.TransactionProcessor, new Dictionary<String, String> {
-        //        {"OperatorConfiguration:PataPawaPrePay:Url", $"http://{this.TestHostContainerName}:{DockerPorts.TestHostPort}/api/patapawaprepay"}
-        //    });
-            
-        //    return base.SetupTransactionProcessorContainer();
-        //}
+        public void ResetBackend()
+        {
+            this.TestingContext.ScenarioSeed = new BackendSeed();
+            this.TestingContext.BackendHost?.Reset();
+        }
 
-        #endregion
+        public string SecurityServiceBaseAddressResolver(string _)
+        {
+            return this.ConfigHostUrlForCurrentPlatform();
+        }
+
+        public string TransactionProcessorAclBaseAddressResolver(string _)
+        {
+            return this.ConfigHostUrlForCurrentPlatform();
+        }
+
+        public string TransactionProcessorBaseAddressResolver(string _)
+        {
+            return this.ConfigHostUrlForCurrentPlatform();
+        }
+
+        private static int GetFreeTcpPort()
+        {
+            TcpListener listener = new(IPAddress.Loopback, 0);
+            listener.Start();
+            int port = ((IPEndPoint)listener.LocalEndpoint).Port;
+            listener.Stop();
+            return port;
+        }
     }
 
     public class TestingContext
@@ -248,6 +183,7 @@ namespace TransactionProcessor.Mobile.UITests.Common
             this.Users = new Dictionary<String, Guid>();
             this.Roles = new Dictionary<String, String>();
             this.ApiResources = new List<String>();
+            this.ScenarioSeed = new BackendSeed();
         }
 
         #endregion
@@ -260,15 +196,15 @@ namespace TransactionProcessor.Mobile.UITests.Common
         /// <value>
         /// The access token.
         /// </value>
-        public String AccessToken { get; set; }
+        public String AccessToken { get; set; } = String.Empty;
 
         /// <summary>
-        /// Gets or sets the docker helper.
+        /// Gets or sets the test host helper.
         /// </summary>
         /// <value>
-        /// The docker helper.
+        /// The test host helper.
         /// </value>
-        public DockerHelper DockerHelper { get; set; }
+        public TestHostHelper TestHostHelper { get; set; }
 
         /// <summary>
         /// Gets or sets the logger.
@@ -281,6 +217,9 @@ namespace TransactionProcessor.Mobile.UITests.Common
         public Dictionary<String, String> Roles;
         public List<String> ApiResources;
         //public List<String> IdentityResources;
+        public BackendSeed ScenarioSeed { get; set; }
+        public bool FailureDiagnosticsCaptured { get; set; }
+        public TestBackendHost? BackendHost { get; set; }
 
         #endregion
 
@@ -309,6 +248,18 @@ namespace TransactionProcessor.Mobile.UITests.Common
                                      String estateReference)
         {
             this.Estates.Add(EstateDetails.Create(estateId, estateName, estateReference));
+        }
+
+        public void ResetScenarioState()
+        {
+            this.AccessToken = String.Empty;
+            this.FailureDiagnosticsCaptured = false;
+            this.ScenarioSeed = new BackendSeed();
+            this.Estates.Clear();
+            this.Clients.Clear();
+            this.Users.Clear();
+            this.Roles.Clear();
+            this.ApiResources.Clear();
         }
 
         /// <summary>

@@ -135,27 +135,57 @@ jobs:
         run: |
           nohup appium --log appium.log &
 
-      - name: Set up Docker (Ubuntu)
-        if: runner.os == 'Linux'
-        run: |
-          # Check Docker version to ensure it's installed properly
-          docker --version
-          docker info
-
-          # Allow current user to access Docker without sudo (optional, for convenience)
-          sudo usermod -aG docker $USER
-
-          # Restart Docker service to apply changes
-          sudo systemctl restart docker
-
       - name: Restore MAUI App for Android
         run: dotnet restore TransactionProcessor.Mobile.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
 
       - name: Build Code
         run: dotnet build TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj  -f net10.0-android -c Release --no-restore
 
+      - name: Locate Android APK
+        id: android_apk
+        run: |
+          apk_path=$(find "$GITHUB_WORKSPACE/TransactionProcessor.Mobile/bin/Release/net10.0-android" -type f -name '*-Signed.apk' | head -n 1)
+          if [ -z "$apk_path" ]; then
+            echo "Unable to find a signed APK under TransactionProcessor.Mobile/bin/Release/net10.0-android."
+            find "$GITHUB_WORKSPACE/TransactionProcessor.Mobile/bin/Release/net10.0-android" -type f -name '*.apk' -print
+            exit 1
+          fi
+
+          echo "UITEST_ANDROID_APP_PATH=$apk_path" >> "$GITHUB_ENV"
+          echo "apk_path=$apk_path" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare Android UI test settings
+        id: android_settings
+        run: |
+          settings_path="$RUNNER_TEMP/android-ui-tests.runsettings"
+          cp TransactionProcessor.Mobile.UITests.Android.runsettings "$settings_path"
+
+          python3 - "$settings_path" "${{ steps.android_apk.outputs.apk_path }}" <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          settings_file = Path(sys.argv[1])
+          apk_path = sys.argv[2]
+          content = settings_file.read_text()
+          updated_content, replacements = re.subn(
+              r"<UITEST_ANDROID_APP_PATH>.*?</UITEST_ANDROID_APP_PATH>",
+              f"<UITEST_ANDROID_APP_PATH>{apk_path}</UITEST_ANDROID_APP_PATH>",
+              content,
+              count=1,
+              flags=re.DOTALL,
+          )
+
+          if replacements != 1:
+              raise SystemExit("Expected exactly one UITEST_ANDROID_APP_PATH entry in the runsettings template.")
+
+          settings_file.write_text(updated_content)
+          PY
+
+          echo "runsettings_path=$settings_path" >> "$GITHUB_OUTPUT"
+
       - name: Run Android Navigation Tests
-        run: dotnet test TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=PRTest)&(Category=Android)" --no-restore
+        run: dotnet test TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=PRTest)&(Category=Android)" --no-restore --settings "${{ steps.android_settings.outputs.runsettings_path }}"
 
       - name: Upload Logs on Failure
         if: always()

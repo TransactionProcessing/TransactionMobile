@@ -17,9 +17,27 @@ namespace TransactionProcessor.Mobile.UITests.Pages
         }
 
         public async Task AssertOnPage(TimeSpan? timeout = null){
-            String message = $"Unable to verify on page: {this.GetType().Name} with trait {this.Trait} {Environment.NewLine} Source: {AppiumDriverWrapper.Driver.PageSource}";
+            try
+            {
+                await this.WaitForElementByAccessibilityId(this.Trait, timeout).ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                String pageSource = "<unavailable>";
 
-            Should.NotThrow(async () => await this.WaitForElementByAccessibilityId(this.Trait, timeout), message);
+                try
+                {
+                    pageSource = AppiumDriverWrapper.Driver.PageSource;
+                }
+                catch (Exception pageSourceException)
+                {
+                    pageSource = $"<unavailable: {pageSourceException.Message}>";
+                }
+
+                throw new InvalidOperationException(
+                    $"Unable to verify on page: {this.GetType().Name} with trait {this.Trait}{Environment.NewLine}Source: {pageSource}",
+                    exception);
+            }
         }
 
         //public async Task WaitForPageToLeave(TimeSpan? timeout = null)
@@ -97,7 +115,7 @@ namespace TransactionProcessor.Mobile.UITests.Pages
 
         internal async Task<IWebElement> WaitForElementByAccessibilityId(String accessibilityId, TimeSpan? timeout = null, Int32 i  = 0)
         {
-            return await AppiumDriverWrapper.Driver.GetElement(accessibilityId);
+            return await AppiumDriverWrapper.Driver.GetElement(accessibilityId, timeout: timeout);
         }
 
         //internal async Task WaitForNoElementByAccessibilityId(String accessibilityId, TimeSpan? timeout = null)

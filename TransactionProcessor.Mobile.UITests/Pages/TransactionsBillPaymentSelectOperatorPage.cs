@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Appium;
 using Shared.IntegrationTesting;
 using TransactionProcessor.Mobile.UITests.Common;
 using TransactionProcessor.Mobile.UITests.Drivers;
@@ -9,32 +10,113 @@ public class TransactionsBillPaymentSelectOperatorPage : BasePage2
 {
     public TransactionsBillPaymentSelectOperatorPage(TestingContext testingContext) : base(testingContext)
     {
-
     }
 
     #region Properties
-    
-    protected override String Trait => "SelectanOperator";
+
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows ? "Select an Operator" : "SelectanOperator";
 
     #endregion
 
     public async Task ClickOperatorButton(String operatorName)
     {
-        IWebElement element = await this.WaitForElementByAccessibilityId(operatorName);
-        element.Click();
+        String automationId = operatorName.Replace(" ", "");
+        await this.ClickByTitleFallbackAsync(automationId, operatorName, "Unable to locate bill payment operator tile.").ConfigureAwait(false);
+    }
+
+    private async Task ClickByTitleFallbackAsync(String automationId, String title, String failureMessagePrefix)
+    {
+        await Retry.For(async () =>
+        {
+            IWebElement? element = null;
+
+            try
+            {
+                element = await this.WaitForElementByAccessibilityId(automationId).ConfigureAwait(false);
+            }
+            catch
+            {
+            }
+
+            if (element == null && AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
+            {
+                element = AppiumDriverWrapper.Driver.FindElements(MobileBy.Name(title)).FirstOrDefault();
+
+                if (element == null)
+                {
+                    element = AppiumDriverWrapper.Driver.FindElements(MobileBy.XPath($"//*[contains(@Name,'{title}')]")).FirstOrDefault();
+                }
+
+                if (element == null)
+                {
+                    element = AppiumDriverWrapper.Driver.FindElements(MobileBy.XPath($"//*[@AutomationId='{automationId}']")).FirstOrDefault();
+                }
+            }
+
+            if (element == null)
+            {
+                String pageSource = await this.GetPageSource().ConfigureAwait(false);
+                throw new InvalidOperationException(
+                    $"{failureMessagePrefix} AutomationId: [{automationId}], Title: [{title}]{Environment.NewLine}Page source:{Environment.NewLine}{pageSource}");
+            }
+
+            element.Click();
+        }).ConfigureAwait(false);
     }
 }
 
-public class TransactionsBillPaymentSelectProductPage : BasePage2{
-    public TransactionsBillPaymentSelectProductPage(TestingContext testingContext) : base(testingContext){
+public class TransactionsBillPaymentSelectProductPage : BasePage2
+{
+    public TransactionsBillPaymentSelectProductPage(TestingContext testingContext) : base(testingContext)
+    {
     }
 
-    protected override String Trait{ get; }
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows ? "Select a Product" : "SelectaProduct";
 
     public async Task ClickProductButton(String productText)
     {
-        IWebElement element = await this.WaitForElementByAccessibilityId(productText);
-        element.Click();
+        String automationId = productText.Replace(" ", "");
+        await this.ClickByTitleFallbackAsync(automationId, productText, "Unable to locate bill payment product tile.").ConfigureAwait(false);
+    }
+
+    private async Task ClickByTitleFallbackAsync(String automationId, String title, String failureMessagePrefix)
+    {
+        await Retry.For(async () =>
+        {
+            IWebElement? element = null;
+
+            try
+            {
+                element = await this.WaitForElementByAccessibilityId(automationId).ConfigureAwait(false);
+            }
+            catch
+            {
+            }
+
+            if (element == null && AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
+            {
+                element = AppiumDriverWrapper.Driver.FindElements(MobileBy.Name(title)).FirstOrDefault();
+
+                if (element == null)
+                {
+                    element = AppiumDriverWrapper.Driver.FindElements(MobileBy.XPath($"//*[contains(@Name,'{title}')]")).FirstOrDefault();
+                }
+
+                if (element == null)
+                {
+                    element = AppiumDriverWrapper.Driver.FindElements(MobileBy.XPath($"//*[@AutomationId='{automationId}']")).FirstOrDefault();
+                }
+            }
+
+            if (element == null)
+            {
+                String pageSource = await this.GetPageSource().ConfigureAwait(false);
+                throw new InvalidOperationException(
+                    $"{failureMessagePrefix} AutomationId: [{automationId}], Title: [{title}]{Environment.NewLine}Page source:{Environment.NewLine}{pageSource}");
+            }
+
+            element.Click();
+        }).ConfigureAwait(false);
     }
 }
 
@@ -50,7 +132,7 @@ public class TransactionsBillPaymentEnterAccountDetailsPage : BasePage2
         this.GetAccountButton = "GetAccountButton";
     }
 
-    protected override String Trait => "GetCustomerAccount";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows ? "Get Customer Account" : "GetCustomerAccount";
 
     public async Task EnterCustomerAccountNumber(String customerAccountNumber)
     {
@@ -61,11 +143,11 @@ public class TransactionsBillPaymentEnterAccountDetailsPage : BasePage2
 
     public async Task ClickGetAccountButton()
     {
-        await Retry.For(async () => {
-                            IWebElement element = await this.WaitForElementByAccessibilityId(this.GetAccountButton);
-                            //element.Displayed.ShouldBeTrue();
-                            element.Click();
-                        });
+        await Retry.For(async () =>
+        {
+            IWebElement element = await this.WaitForElementByAccessibilityId(this.GetAccountButton);
+            element.Click();
+        });
     }
 }
 
@@ -81,7 +163,7 @@ public class TransactionsBillPaymentEnterMeterDetailsPage : BasePage2
         this.GetMeterButton = "GetMeterButton";
     }
 
-    protected override String Trait => "GetMeter";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows ? "Get Meter" : "GetMeter";
 
     public async Task EnterMeterNumber(String meterNumber)
     {
@@ -92,11 +174,11 @@ public class TransactionsBillPaymentEnterMeterDetailsPage : BasePage2
 
     public async Task ClickGetMeterButton()
     {
-        await Retry.For(async () => {
-                            IWebElement element = await this.WaitForElementByAccessibilityId(this.GetMeterButton);
-                            //element.Displayed.ShouldBeTrue();
-                            element.Click();
-                        });
+        await Retry.For(async () =>
+        {
+            IWebElement element = await this.WaitForElementByAccessibilityId(this.GetMeterButton);
+            element.Click();
+        });
     }
 }
 
@@ -110,7 +192,7 @@ public class TransactionsBillPaymentMakeAPaymentPage : BasePage2
     public TransactionsBillPaymentMakeAPaymentPage(TestingContext testingContext) : base(testingContext)
     {
         this.CustomerMobileNumberEntry = "CustomerMobileNumberEntry";
-        
+
         // TODO: handle prepayment as well
         this.PostPaymentAmountEntry = "PostPaymentAmountEntry";
         this.PrePaymentAmountEntry = "PrePaymentAmountEntry";
@@ -123,7 +205,7 @@ public class TransactionsBillPaymentMakeAPaymentPage : BasePage2
 
     }
 
-    protected override String Trait => "MakeBillPayment";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows ? "Make Bill Payment" : "MakeBillPayment";
 
     public async Task EnterCustomerMobileNumber(String customerMobileNumber)
     {
@@ -139,9 +221,11 @@ public class TransactionsBillPaymentMakeAPaymentPage : BasePage2
 
     public readonly String MeterNumberLabel;
 
-    public async Task<String> GetAccountNumberValue(){
+    public async Task<String> GetAccountNumberValue()
+    {
         return await this.GetLabelValue(this.AccountNumberLabel);
     }
+
     public async Task<String> GetMeterNumberValue()
     {
         return await this.GetLabelValue(this.MeterNumberLabel);
@@ -151,10 +235,12 @@ public class TransactionsBillPaymentMakeAPaymentPage : BasePage2
     {
         return await this.GetLabelValue(this.AccountHolderLabel);
     }
+
     public async Task<String> GetBalanceValue()
     {
         return await this.GetLabelValue(this.BalanceLabel);
     }
+
     public async Task<String> GetDueDateValue()
     {
         return await this.GetLabelValue(this.DueDateLabel);
@@ -176,11 +262,11 @@ public class TransactionsBillPaymentMakeAPaymentPage : BasePage2
 
     public async Task ClickMakePaymentButton()
     {
-        await Retry.For(async () => {
-                            IWebElement element = await this.WaitForElementByAccessibilityId(this.MakePaymentButton);
-                            //element.Displayed.ShouldBeTrue();
-                            element.Click();
-                        });
+        await Retry.For(async () =>
+        {
+            IWebElement element = await this.WaitForElementByAccessibilityId(this.MakePaymentButton);
+            element.Click();
+        });
     }
 }
 
@@ -196,15 +282,15 @@ public class TransactionsBillPaymentSuccessfulPaymentPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "BillPaymentSuccessful";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows ? "Bill Payment Successful" : "BillPaymentSuccessful";
 
     public async Task ClickCompleteButton()
     {
-        await Retry.For(async () => {
-                            IWebElement element = await this.WaitForElementByAccessibilityId(this.CompleteButton);
-                            //element.Displayed.ShouldBeTrue();
-                            element.Click();
-                        });
+        await Retry.For(async () =>
+        {
+            IWebElement element = await this.WaitForElementByAccessibilityId(this.CompleteButton);
+            element.Click();
+        });
     }
 
     #endregion
