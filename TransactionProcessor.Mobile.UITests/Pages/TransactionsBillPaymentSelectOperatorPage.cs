@@ -132,7 +132,7 @@ public class TransactionsBillPaymentEnterAccountDetailsPage : BasePage2
         this.GetAccountButton = "GetAccountButton";
     }
 
-    protected override String Trait => "GetCustomerAccount";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows ? "Get Customer Account" : "GetCustomerAccount";
 
     public async Task EnterCustomerAccountNumber(String customerAccountNumber)
     {
@@ -163,7 +163,7 @@ public class TransactionsBillPaymentEnterMeterDetailsPage : BasePage2
         this.GetMeterButton = "GetMeterButton";
     }
 
-    protected override String Trait => "GetMeter";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows ? "Get Meter" : "GetMeter";
 
     public async Task EnterMeterNumber(String meterNumber)
     {
@@ -205,7 +205,7 @@ public class TransactionsBillPaymentMakeAPaymentPage : BasePage2
 
     }
 
-    protected override String Trait => "MakeBillPayment";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows ? "Make Bill Payment" : "MakeBillPayment";
 
     public async Task EnterCustomerMobileNumber(String customerMobileNumber)
     {
