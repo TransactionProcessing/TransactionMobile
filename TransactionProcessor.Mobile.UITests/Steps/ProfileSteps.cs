@@ -12,6 +12,7 @@ public class ProfileSteps{
     private readonly TestingContext TestingContext;
 
     private ProfilePage profilePage;
+    private MainPage mainPage;
 
     private ProfileAddressesPage profileAddressesPage;
 
@@ -21,6 +22,7 @@ public class ProfileSteps{
     public ProfileSteps(TestingContext testingContext){
         this.TestingContext = testingContext;
         this.profilePage = new ProfilePage(testingContext);
+        this.mainPage = new MainPage(testingContext);
         this.profileAccountInfoPage = new ProfileAccountInfoPage(testingContext);
         this.profileContactsPage = new ProfileContactsPage(testingContext);
         this.profileAddressesPage = new ProfileAddressesPage(testingContext);
@@ -35,7 +37,7 @@ public class ProfileSteps{
     [When(@"I tap on Logout")]
     public async Task WhenITapOnLogout()
     {
-        await this.profilePage.ClickLogoutButton();
+        await this.mainPage.ClickLogoutButton();
     }
 
     [When(@"I tap on the Addresses button")]

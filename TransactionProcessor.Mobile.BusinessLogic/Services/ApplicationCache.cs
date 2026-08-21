@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.Services
@@ -35,7 +36,11 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
         void SetAccessToken(TokenResponseModel value, MemoryCacheEntryOptions options = default);
 
+        void ClearAccessToken();
+
         MerchantDetailsModel GetMerchantDetails();
+
+        void ClearMerchantDetails();
 
         void SetMerchantDetails(MerchantDetailsModel value, MemoryCacheEntryOptions options = default);
 
@@ -114,6 +119,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
             this.Set("AccessToken", value, options);
         }
 
+        public void ClearAccessToken() {
+            this.MemoryCache.Remove("AccessToken");
+        }
+
         public void SetConfiguration(Configuration value,
                                      MemoryCacheEntryOptions options = default)
         {
@@ -135,6 +144,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
         public MerchantDetailsModel GetMerchantDetails()
         {
             return this.TryGetValue<MerchantDetailsModel>("MerchantDetails");
+        }
+
+        public void ClearMerchantDetails() {
+            this.MemoryCache.Remove("MerchantDetails");
         }
 
         public void SetMerchantDetails(MerchantDetailsModel value,

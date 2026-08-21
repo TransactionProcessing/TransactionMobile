@@ -84,7 +84,8 @@ public class ExtendedBaseViewModel : BaseViewModel
         if (leave) {
             Logger.LogInformation("LogoutCommand called");
             this.ApplicationCache.SetIsLoggedIn(false);
-            this.ApplicationCache.SetAccessToken(null);
+            this.ApplicationCache.ClearAccessToken();
+            this.ApplicationCache.ClearMerchantDetails();
           
             await this.NavigationService.GoToLoginPage();
         }
