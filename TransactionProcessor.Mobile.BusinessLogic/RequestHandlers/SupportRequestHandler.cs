@@ -25,35 +25,36 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
             this.ApplicationCache = applicationCache;
         }
 
-        public async Task<Result> Handle(SupportCommands.UploadLogsCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(SupportCommands.UploadLogsCommand request, CancellationToken cancellationToken)
+    {
+        Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
+        Configuration configuration = this.ApplicationCache.GetConfiguration();
+        if (configuration == null)
         {
-            Boolean useTrainingMode = this.ApplicationCache.GetUseTrainingMode();
-            Configuration configuration = this.ApplicationCache.GetConfiguration();
-            while (true) {
-                IConfigurationService configurationService = this.ConfigurationServiceResolver(useTrainingMode);
+            return Result.Failure("Configuration is not available.");
+        }
 
-                List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(configuration.LogMessageBatchSize.GetValueOrDefault(10), useTrainingMode);
+        while (true) {
+            cancellationToken.ThrowIfCancellationRequested();
+            IConfigurationService configurationService = this.ConfigurationServiceResolver(useTrainingMode);
 
-                if (logEntries.Any() == false) {
-                    break;
-                }
+            List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(configuration.LogMessageBatchSize.GetValueOrDefault(10), useTrainingMode);
 
-                List<Models.LogMessage> logMessageModels = new();
+            if (logEntries.Any() == false) {
+                break;
+            }
 
-                logEntries.ForEach(l => logMessageModels.Add(new Models.LogMessage {
-                    LogLevel = Enum.Parse<Models.LogLevel>(l.LogLevel),
-                    LogLevelString = l.LogLevel,
-                    Message = l.Message,
-                    EntryDateTime = l.EntryDateTime,
-                    Id = l.Id
-                }));
+            Result<List<Models.LogMessage>> logMessageModelsResult = this.TryBuildLogMessageModels(logEntries);
+            if (logMessageModelsResult.IsFailed)
+            {
+                return Result.Failure(logMessageModelsResult.Errors.FirstOrDefault() ?? "Unable to map log messages.");
+            }
 
+            Result result = await configurationService.PostDiagnosticLogs(request.DeviceIdentifier, logMessageModelsResult.Data, cancellationToken);
 
-                Result result = await configurationService.PostDiagnosticLogs(request.DeviceIdentifier, logMessageModels, CancellationToken.None);
-
-                if (result.IsFailed) {
-                    // We have had a failure posting the logs so we will stop trying to upload any more logs
-                    return result;
+            if (result.IsFailed) {
+                // We have had a failure posting the logs so we will stop trying to upload any more logs
+                return result;
                 }
 
                 // Clear the logs that have been uploaded
@@ -70,17 +71,37 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
 
             List<LogMessage> logEntries = await this.DatabaseContext.GetLogMessages(50, useTrainingMode);
 
+            Result<List<Models.LogMessage>> logMessageModelsResult = this.TryBuildLogMessageModels(logEntries);
+            if (logMessageModelsResult.IsFailed)
+            {
+                return Result.Failure(logMessageModelsResult.Errors.FirstOrDefault() ?? "Unable to map log messages.");
+            }
+
+            return Result.Success(logMessageModelsResult.Data.OrderByDescending(l => l.EntryDateTime).ToList());
+        }
+
+        private Result<List<Models.LogMessage>> TryBuildLogMessageModels(List<LogMessage> logEntries)
+        {
             List<Models.LogMessage> logMessageModels = new();
 
-            logEntries.ForEach(l => logMessageModels.Add(new Models.LogMessage {
-                                                                                   LogLevel = Enum.Parse<Models.LogLevel>(l.LogLevel),
-                                                                                   LogLevelString = l.LogLevel,
-                                                                                   Message = l.Message,
-                                                                                   EntryDateTime = l.EntryDateTime,
-                                                                                   Id = l.Id
-                                                                               }));
+            foreach (LogMessage logEntry in logEntries)
+            {
+                if (Enum.TryParse<Models.LogLevel>(logEntry.LogLevel, ignoreCase: true, out Models.LogLevel logLevel) == false)
+                {
+                    return Result.Failure($"Invalid log level '{logEntry.LogLevel}'.");
+                }
 
-            return Result.Success(logMessageModels.OrderByDescending(l => l.EntryDateTime).ToList());
+                logMessageModels.Add(new Models.LogMessage
+                {
+                    LogLevel = logLevel,
+                    LogLevelString = logEntry.LogLevel,
+                    Message = logEntry.Message,
+                    EntryDateTime = logEntry.EntryDateTime,
+                    Id = logEntry.Id
+                });
+            }
+
+            return Result.Success(logMessageModels);
         }
     }
 }
