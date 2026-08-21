@@ -32,6 +32,91 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
             return StringSerialiser.DeserializeObject<Object>(arg, type, new SerialiserOptions(SerialiserPropertyFormat.SnakeCase));
         }
 
+        void ArrangeThrowingSaleTransactionHandler()
+        {
+            this.MockHttpMessageHandler.When($"http://localhost/api/saletransactions")
+                .Respond(_ => throw new HttpRequestException("HTTP pipeline failure"));
+        }
+
+        PerformMobileTopupRequestModel CreateMobileTopupRequestModel()
+        {
+            return new PerformMobileTopupRequestModel{
+                                                         ApplicationVersion = TestData.ApplicationVersion,
+                                                         DeviceIdentifier = TestData.DeviceIdentifier,
+                                                         TransactionDateTime = TestData.TransactionDateTime,
+                                                         TransactionNumber = TestData.TransactionNumber,
+                                                         ContractId = TestData.Operator1ProductDetails.ContractId,
+                                                         CustomerAccountNumber = TestData.CustomerAccountNumber,
+                                                         CustomerEmailAddress = TestData.CustomerEmailAddress,
+                                                         OperatorId = TestData.OperatorId1,
+                                                         ProductId = TestData.Operator1ProductDetails.ProductId,
+                                                         TopupAmount = TestData.PaymentAmount
+                                                     };
+        }
+
+        PerformVoucherIssueRequestModel CreateVoucherIssueRequestModel()
+        {
+            return new PerformVoucherIssueRequestModel{
+                                                          ApplicationVersion = TestData.ApplicationVersion,
+                                                          DeviceIdentifier = TestData.DeviceIdentifier,
+                                                          TransactionDateTime = TestData.TransactionDateTime,
+                                                          TransactionNumber = TestData.TransactionNumber,
+                                                          ContractId = TestData.Operator1ProductDetails.ContractId,
+                                                          CustomerEmailAddress = TestData.CustomerEmailAddress,
+                                                          OperatorId = TestData.OperatorId1,
+                                                          ProductId = TestData.Operator1ProductDetails.ProductId,
+                                                          RecipientEmailAddress = TestData.RecipientEmailAddress,
+                                                          RecipientMobileNumber = TestData.RecipientMobileNumber,
+                                                          VoucherAmount = TestData.PaymentAmount
+                                                      };
+        }
+
+        PerformBillPaymentGetAccountModel CreateBillPaymentGetAccountRequestModel()
+        {
+            return new PerformBillPaymentGetAccountModel{
+                                                            ApplicationVersion = TestData.ApplicationVersion,
+                                                            DeviceIdentifier = TestData.DeviceIdentifier,
+                                                            TransactionDateTime = TestData.TransactionDateTime,
+                                                            TransactionNumber = TestData.TransactionNumber,
+                                                            ContractId = TestData.Operator1ProductDetails.ContractId,
+                                                            OperatorId = TestData.OperatorId1,
+                                                            ProductId = TestData.Operator1ProductDetails.ProductId,
+                                                            CustomerAccountNumber = TestData.CustomerAccountNumber,
+                                                        };
+        }
+
+        PerformBillPaymentGetMeterModel CreateBillPaymentGetMeterRequestModel()
+        {
+            return new PerformBillPaymentGetMeterModel{
+                                                           ApplicationVersion = TestData.ApplicationVersion,
+                                                           DeviceIdentifier = TestData.DeviceIdentifier,
+                                                           TransactionDateTime = TestData.TransactionDateTime,
+                                                           TransactionNumber = TestData.TransactionNumber,
+                                                           ContractId = TestData.Operator1ProductDetails.ContractId,
+                                                           OperatorId = TestData.OperatorId1,
+                                                           ProductId = TestData.Operator1ProductDetails.ProductId,
+                                                           MeterNumber = TestData.MeterNumber
+                                                       };
+        }
+
+        PerformBillPaymentMakePaymentModel CreateBillPaymentMakePaymentRequestModel(Boolean isPostPayment)
+        {
+            return new PerformBillPaymentMakePaymentModel{
+                                                             ApplicationVersion = TestData.ApplicationVersion,
+                                                             DeviceIdentifier = TestData.DeviceIdentifier,
+                                                             TransactionDateTime = TestData.TransactionDateTime,
+                                                             TransactionNumber = TestData.TransactionNumber,
+                                                             ContractId = TestData.Operator1ProductDetails.ContractId,
+                                                             OperatorId = TestData.OperatorId1,
+                                                             ProductId = TestData.Operator1ProductDetails.ProductId,
+                                                             CustomerAccountName = TestData.CustomerAccountName,
+                                                             PaymentAmount = TestData.PaymentAmount,
+                                                             CustomerAccountNumber = TestData.CustomerAccountNumber,
+                                                             CustomerMobileNumber = TestData.CustomerMobileNumber,
+                                                             PostPayment = isPostPayment
+                                                         };
+        }
+
         public TransactionServiceTests(){
             this.MockHttpMessageHandler = new MockHttpMessageHandler();
             this.BaseAddressResolver = (s) => $"http://localhost";
@@ -173,6 +258,19 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
         }
 
         [Fact]
+        public async Task TransactionService_PerformMobileTopup_ReturnsFailureWhenHttpPipelineThrows()
+        {
+            PerformMobileTopupRequestModel requestModel = this.CreateMobileTopupRequestModel();
+
+            this.ArrangeThrowingSaleTransactionHandler();
+
+            Result<PerformMobileTopupResponseModel> result = await this.TransactionService.PerformMobileTopup(requestModel, CancellationToken.None);
+
+            result.IsFailed.ShouldBeTrue();
+            result.Message.ShouldBe("Error performing Mobile top-up transaction");
+        }
+
+        [Fact]
         public async Task TransactionService_PerformVoucherIssue_MobileTopupFailed(){
 
             PerformMobileTopupRequestModel requestModel = new PerformMobileTopupRequestModel{
@@ -261,6 +359,19 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
         }
 
         [Fact]
+        public async Task TransactionService_PerformVoucherIssue_ReturnsFailureWhenHttpPipelineThrows()
+        {
+            PerformVoucherIssueRequestModel requestModel = this.CreateVoucherIssueRequestModel();
+
+            this.ArrangeThrowingSaleTransactionHandler();
+
+            Result<PerformVoucherIssueResponseModel> result = await this.TransactionService.PerformVoucherIssue(requestModel, CancellationToken.None);
+
+            result.IsFailed.ShouldBeTrue();
+            result.Message.ShouldBe("Error performing Voucher transaction");
+        }
+
+        [Fact]
         public async Task TransactionService_PerformBillPaymentGetAccount_GetAccountPerformed() {
             PerformBillPaymentGetAccountModel requestModel = new PerformBillPaymentGetAccountModel{
                                                                                                       ApplicationVersion = TestData.ApplicationVersion,
@@ -322,6 +433,19 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
             Result<PerformBillPaymentGetAccountResponseModel> performBillPaymentGetAccountResult = await this.TransactionService.PerformBillPaymentGetAccount(requestModel, CancellationToken.None);
 
             performBillPaymentGetAccountResult.IsFailed.ShouldBeTrue();
+        }
+
+        [Fact]
+        public async Task TransactionService_PerformBillPaymentGetAccount_ReturnsFailureWhenHttpPipelineThrows()
+        {
+            PerformBillPaymentGetAccountModel requestModel = this.CreateBillPaymentGetAccountRequestModel();
+
+            this.ArrangeThrowingSaleTransactionHandler();
+
+            Result<PerformBillPaymentGetAccountResponseModel> result = await this.TransactionService.PerformBillPaymentGetAccount(requestModel, CancellationToken.None);
+
+            result.IsFailed.ShouldBeTrue();
+            result.Message.ShouldBe("Error performing bill payment - get account transaction");
         }
 
 
@@ -416,6 +540,19 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
             performBillPaymentGetMeterResult.IsFailed.ShouldBeTrue();
         }
 
+        [Fact]
+        public async Task TransactionService_PerformBillPaymentGetMeter_ReturnsFailureWhenHttpPipelineThrows()
+        {
+            PerformBillPaymentGetMeterModel requestModel = this.CreateBillPaymentGetMeterRequestModel();
+
+            this.ArrangeThrowingSaleTransactionHandler();
+
+            Result<PerformBillPaymentGetMeterResponseModel> result = await this.TransactionService.PerformBillPaymentGetMeter(requestModel, CancellationToken.None);
+
+            result.IsFailed.ShouldBeTrue();
+            result.Message.ShouldBe("Error performing bill payment - get meter transaction");
+        }
+
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
@@ -451,6 +588,21 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
             performBillPaymentGetMeterResult.IsSuccess.ShouldBeTrue();
             performBillPaymentGetMeterResult.Data.ShouldNotBeNull();
             performBillPaymentGetMeterResult.Data.IsSuccessful.ShouldBeTrue();
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task TransactionService_PerformBillPaymentMakePayment_ReturnsFailureWhenHttpPipelineThrows(Boolean isPostPayment)
+        {
+            PerformBillPaymentMakePaymentModel requestModel = this.CreateBillPaymentMakePaymentRequestModel(isPostPayment);
+
+            this.ArrangeThrowingSaleTransactionHandler();
+
+            Result<PerformBillPaymentMakePaymentResponseModel> result = await this.TransactionService.PerformBillPaymentMakePayment(requestModel, CancellationToken.None);
+
+            result.IsFailed.ShouldBeTrue();
+            result.Message.ShouldBe("Error performing bill payment - make payment transaction");
         }
 
         [Theory]
