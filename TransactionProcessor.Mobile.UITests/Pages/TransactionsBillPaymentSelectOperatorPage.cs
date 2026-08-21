@@ -20,7 +20,8 @@ public class TransactionsBillPaymentSelectOperatorPage : BasePage2
 
     public async Task ClickOperatorButton(String operatorName)
     {
-        await this.ClickByTitleFallbackAsync(operatorName, operatorName, "Unable to locate bill payment operator tile.").ConfigureAwait(false);
+        String automationId = operatorName.Replace(" ", "");
+        await this.ClickByTitleFallbackAsync(automationId, operatorName, "Unable to locate bill payment operator tile.").ConfigureAwait(false);
     }
 
     private async Task ClickByTitleFallbackAsync(String automationId, String title, String failureMessagePrefix)
@@ -74,7 +75,8 @@ public class TransactionsBillPaymentSelectProductPage : BasePage2
 
     public async Task ClickProductButton(String productText)
     {
-        await this.ClickByTitleFallbackAsync(productText, productText, "Unable to locate bill payment product tile.").ConfigureAwait(false);
+        String automationId = productText.Replace(" ", "");
+        await this.ClickByTitleFallbackAsync(automationId, productText, "Unable to locate bill payment product tile.").ConfigureAwait(false);
     }
 
     private async Task ClickByTitleFallbackAsync(String automationId, String title, String failureMessagePrefix)

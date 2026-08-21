@@ -18,7 +18,8 @@ public class TransactionsVoucherSelectOperatorPage : BasePage2
 
     public async Task ClickOperatorButton(String operatorName)
     {
-        await this.ClickByTitleFallbackAsync(operatorName, operatorName, "Unable to locate voucher operator tile.").ConfigureAwait(false);
+        String automationId = operatorName.Replace(" ", "");
+        await this.ClickByTitleFallbackAsync(automationId, operatorName, "Unable to locate voucher operator tile.").ConfigureAwait(false);
     }
 
     private async Task ClickByTitleFallbackAsync(String automationId, String title, String failureMessagePrefix)

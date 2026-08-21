@@ -20,7 +20,8 @@ public class TransactionsVoucherSelectProductPage : BasePage2
 
     public async Task ClickProductButton(String productText)
     {
-        await this.ClickByTitleFallbackAsync(productText, productText, "Unable to locate voucher product tile.").ConfigureAwait(false);
+        String automationId = productText.Replace(" ", "");
+        await this.ClickByTitleFallbackAsync(automationId, productText, "Unable to locate voucher product tile.").ConfigureAwait(false);
     }
 
     private async Task ClickByTitleFallbackAsync(String automationId, String title, String failureMessagePrefix)
