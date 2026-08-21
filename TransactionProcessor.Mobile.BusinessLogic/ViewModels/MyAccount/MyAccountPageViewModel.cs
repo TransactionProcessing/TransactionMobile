@@ -103,8 +103,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.MyAccount
 
         private async Task LogoutCommandExecute() {
             Logger.LogInformation("LogoutCommand called");
-            this.ApplicationCache.SetAccessToken(null);
+            this.ApplicationCache.ClearAccessToken();
             this.ApplicationCache.SetIsLoggedIn(false);
+            this.ApplicationCache.ClearMerchantDetails();
 
             await this.NavigationService.GoToLoginPage();
         }

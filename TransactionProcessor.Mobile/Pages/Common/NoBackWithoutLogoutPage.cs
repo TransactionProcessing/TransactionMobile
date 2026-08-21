@@ -42,7 +42,8 @@ public class NoBackWithoutLogoutPage : ContentPage
         if (leave)
         {
             applicationCache.SetIsLoggedIn(false);
-            applicationCache.SetAccessToken(null);
+            applicationCache.ClearAccessToken();
+            applicationCache.ClearMerchantDetails();
 
             await navigationService.GoToLoginPage();
         }
