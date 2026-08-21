@@ -23,6 +23,14 @@ public sealed class ReportRequestHandler : IRequestHandler<ReportQueries.GetDail
 
         DateTime current = DateTime.Now.Date;
 
+        if (request.Period is not (PerformanceSummaryPeriod.Today or
+                                   PerformanceSummaryPeriod.Yesterday or
+                                   PerformanceSummaryPeriod.ThisWeek or
+                                   PerformanceSummaryPeriod.MonthToDate))
+        {
+            return Result.Failure("Invalid performance summary period.");
+        }
+
         (DateTime startDate, DateTime endDate) dates = request.Period switch {
             PerformanceSummaryPeriod.Today => (current, current),
             PerformanceSummaryPeriod.Yesterday => (current.AddDays(-1), current.AddDays(-1)),
