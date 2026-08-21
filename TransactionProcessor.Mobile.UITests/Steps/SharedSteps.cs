@@ -269,6 +269,47 @@ public class SharedSteps
         return Task.CompletedTask;
     }
 
+    [Given(@"I replace the merchants with the following merchants")]
+    [Then(@"I replace the merchants with the following merchants")]
+    public Task GivenIReplaceTheMerchantsWithTheFollowingMerchants(DataTable table)
+    {
+        this.testingContext.ScenarioSeed.Merchants.Clear();
+
+        foreach (DataTableRow row in table.Rows)
+        {
+            string estateName = GetString(row, "EstateName");
+            string estateReference = GetOptionalString(row, "EstateReference") ?? estateName;
+            string merchantName = GetString(row, "MerchantName");
+            string emailAddress = GetOptionalString(row, "EmailAddress", "ContactEmailAddress") ?? $"{merchantName.Replace(" ", string.Empty).ToLowerInvariant()}@example.com";
+            string contactName = GetOptionalString(row, "ContactName", "MerchantContactName") ?? merchantName;
+
+            this.testingContext.ScenarioSeed.Merchants.Add(new MerchantSeed
+            {
+                EstateName = estateName,
+                MerchantName = merchantName,
+                AddressLine1 = GetString(row, "AddressLine1"),
+                AddressLine2 = GetString(row, "AddressLine2"),
+                AddressLine3 = GetString(row, "AddressLine3"),
+                AddressLine4 = GetString(row, "AddressLine4"),
+                Town = GetString(row, "Town"),
+                Region = GetString(row, "Region"),
+                PostalCode = GetString(row, "PostalCode"),
+                Country = GetString(row, "Country"),
+                ContactName = contactName,
+                ContactEmailAddress = emailAddress,
+                ContactPhoneNumber = GetOptionalString(row, "ContactPhoneNumber", "PhoneNumber") ?? "123456789",
+                SettlementSchedule = GetOptionalString(row, "SettlementSchedule")
+            });
+
+            EstateDetails estate = EnsureEstate(CreateGuid($"estate:{estateName}"), estateName, estateReference);
+            MerchantResponse merchantResponse = CreateMerchantResponse(estateName, merchantName, row);
+            estate.AddMerchant(merchantResponse);
+        }
+
+        this.testingContext.TestHostHelper.ApplySeed(this.testingContext.ScenarioSeed);
+        return Task.CompletedTask;
+    }
+
     [Given(@"I have assigned the following  operator to the merchants")]
     public Task GivenIHaveAssignedTheFollowingOperatorToTheMerchants(DataTable table)
     {
