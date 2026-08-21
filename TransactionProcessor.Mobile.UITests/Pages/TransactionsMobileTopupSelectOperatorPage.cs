@@ -13,7 +13,7 @@ public class TransactionsMobileTopupSelectOperatorPage : BasePage2
     }
 
     #region Properties
-    protected override String Trait => "SelectanOperator";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows ? "Select an Operator" : "SelectanOperator";
 
     #endregion
 

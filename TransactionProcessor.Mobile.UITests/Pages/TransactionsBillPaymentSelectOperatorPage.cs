@@ -14,7 +14,7 @@ public class TransactionsBillPaymentSelectOperatorPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "SelectanOperator";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows ? "Select an Operator" : "SelectanOperator";
 
     #endregion
 
@@ -70,7 +70,7 @@ public class TransactionsBillPaymentSelectProductPage : BasePage2
     {
     }
 
-    protected override String Trait { get; }
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows ? "Select a Product" : "SelectaProduct";
 
     public async Task ClickProductButton(String productText)
     {

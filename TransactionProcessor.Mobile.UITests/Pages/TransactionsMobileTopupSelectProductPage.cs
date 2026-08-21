@@ -14,7 +14,7 @@ public class TransactionsMobileTopupSelectProductPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "SelectaProduct";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows ? "Select a Product" : "SelectaProduct";
 
     #endregion
 
