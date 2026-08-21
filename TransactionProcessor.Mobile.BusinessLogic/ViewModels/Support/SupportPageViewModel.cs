@@ -75,7 +75,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Support
 
             if (result.IsSuccess) {
                 await this.DialogService.ShowInformationToast("Logs have been uploaded successfully.");
-                await this.NavigationService.GoBack();
             } else {
                 await this.DialogService.ShowWarningToast("Failed to upload logs.");
             }
