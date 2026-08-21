@@ -8,7 +8,7 @@ namespace TransactionProcessor.Mobile.UITests.Pages;
 
 public class RecentActivityReportPage : BasePage2
 {
-    protected override string Trait => "Recent Activity and Receipt Report";
+    protected override string Trait => AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows ? "Recent Activity and Receipt Report" : "RecentActivityandReceiptReport";
 
     public RecentActivityReportPage(TestingContext testingContext) : base(testingContext)
     {

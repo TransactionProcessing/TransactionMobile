@@ -15,7 +15,7 @@ public class TransactionsMobileTopupSuccessfulTopupPage : BasePage2 {
 
     #region Properties
 
-    protected override String Trait => "Mobile Topup Successful";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows ? "Mobile Topup Successful" : "MobileTopupSuccessful";
 
     public async Task ClickCompleteButton() {
         await Retry.For(async () => {

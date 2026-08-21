@@ -8,5 +8,5 @@ public class ViewLogsPage : BasePage2{
         
     }
 
-    protected override String Trait => "View Logs";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows ? "View Logs" : "ViewLogs";
 }

@@ -282,7 +282,7 @@ public class TransactionsBillPaymentSuccessfulPaymentPage : BasePage2
 
     #region Properties
 
-    protected override String Trait => "Bill Payment Successful";
+    protected override String Trait => AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows ? "Bill Payment Successful" : "BillPaymentSuccessful";
 
     public async Task ClickCompleteButton()
     {
