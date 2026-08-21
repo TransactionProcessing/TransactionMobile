@@ -83,6 +83,11 @@ public class MainPage : BasePage2
         await this.ClickTopLevelButtonAsync(this.SupportButton, "Support").ConfigureAwait(false);
     }
 
+    public async Task ClickLogoutButton()
+    {
+        await this.ClickTopLevelButtonAsync("BackButton", "Log Out").ConfigureAwait(false);
+    }
+
     private async Task ClickTopLevelButtonAsync(String automationId, String title)
     {
         await Retry.For(async () =>

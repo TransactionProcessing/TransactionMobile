@@ -58,6 +58,19 @@ public class MyAccountPageViewModelTests
     }
 
     [Fact]
+    public async Task MyAccountPageViewModel_Initialise_WhenMerchantDetailsAreCached_UsesCachedMerchantDetails() {
+        this.ApplicationCache.Setup(a => a.GetMerchantDetails()).Returns(TestData.MerchantDetailsModel);
+        this.ApplicationCache.Setup(a => a.GetLastLoginDate()).Returns(DateTime.Now);
+        this.ApplicationThemeService.Setup(s => s.GetDarkThemeEnabled()).ReturnsAsync(false);
+        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
+
+        await this.ViewModel.Initialise(CancellationToken.None);
+
+        this.ViewModel.MerchantName.ShouldBe(TestData.MerchantDetailsModel.MerchantName);
+        this.Mediator.Verify(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Fact]
     public async Task MyAccountPageViewModel_SetDarkTheme_ThemeStoredAndPropertyUpdated() {
         await this.ViewModel.SetDarkTheme(true);
 
