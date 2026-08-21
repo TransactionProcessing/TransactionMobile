@@ -1,4 +1,6 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Appium;
+using Shared.IntegrationTesting;
 using TransactionProcessor.Mobile.UITests.Common;
 using TransactionProcessor.Mobile.UITests.Drivers;
 
@@ -33,20 +35,58 @@ public class ReportsPage : BasePage2
 
     public async Task ClickDailyPerformanceSummaryButton()
     {
-        IWebElement element = await this.WaitForElementByAccessibilityId(this.DailyPerformanceSummaryButton);
-        element.Click();
+        await this.ClickReportTileAsync(this.DailyPerformanceSummaryButton, "Daily Performance Summary").ConfigureAwait(false);
     }
 
     public async Task ClickTransactionMixButton()
     {
-        IWebElement element = await this.WaitForElementByAccessibilityId(this.TransactionMixButton);
-        element.Click();
+        await this.ClickReportTileAsync(this.TransactionMixButton, "Transaction Mix").ConfigureAwait(false);
     }
 
     public async Task ClickRecentActivityAndReceiptReportButton()
     {
-        IWebElement element = await this.WaitForElementByAccessibilityId(this.RecentActivityAndReceiptReportButton);
-        element.Click();
+        await this.ClickReportTileAsync(this.RecentActivityAndReceiptReportButton, "Recent Activity and Receipt Report").ConfigureAwait(false);
+    }
+
+    private async Task ClickReportTileAsync(String automationId, String title)
+    {
+        await Retry.For(async () =>
+        {
+            IWebElement? element = null;
+
+            try
+            {
+                element = await this.WaitForElementByAccessibilityId(automationId).ConfigureAwait(false);
+            }
+            catch
+            {
+                // Fall through to the Windows-specific lookup below.
+            }
+
+            if (element == null && AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
+            {
+                element = AppiumDriverWrapper.Driver.FindElements(MobileBy.Name(title)).FirstOrDefault();
+
+                if (element == null)
+                {
+                    element = AppiumDriverWrapper.Driver.FindElements(MobileBy.XPath($"//*[contains(@Name,'{title}')]")).FirstOrDefault();
+                }
+
+                if (element == null)
+                {
+                    element = AppiumDriverWrapper.Driver.FindElements(MobileBy.XPath($"//*[@AutomationId='{automationId}']")).FirstOrDefault();
+                }
+            }
+
+            if (element == null)
+            {
+                string pageSource = await this.GetPageSource().ConfigureAwait(false);
+                throw new InvalidOperationException(
+                    $"Unable to locate report tile. AutomationId: [{automationId}], Title: [{title}]{Environment.NewLine}Page source:{Environment.NewLine}{pageSource}");
+            }
+
+            element.Click();
+        }).ConfigureAwait(false);
     }
 
 }
@@ -73,13 +113,52 @@ public class SupportPage : BasePage2{
 
     public async Task ClickUploadLogsButton()
     {
-        IWebElement element = await this.WaitForElementByAccessibilityId(this.UploadLogsButton);
-        element.Click();
+        await this.ClickSupportTileAsync(this.UploadLogsButton, "Upload Logs").ConfigureAwait(false);
     }
 
     public async Task ClickViewLogsButton()
     {
-        IWebElement element = await this.WaitForElementByAccessibilityId(this.ViewLogsButton);
-        element.Click();
+        await this.ClickSupportTileAsync(this.ViewLogsButton, "View Logs").ConfigureAwait(false);
+    }
+
+    private async Task ClickSupportTileAsync(String automationId, String title)
+    {
+        await Retry.For(async () =>
+        {
+            IWebElement? element = null;
+
+            try
+            {
+                element = await this.WaitForElementByAccessibilityId(automationId).ConfigureAwait(false);
+            }
+            catch
+            {
+                // Fall through to the Windows-specific lookup below.
+            }
+
+            if (element == null && AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
+            {
+                element = AppiumDriverWrapper.Driver.FindElements(MobileBy.Name(title)).FirstOrDefault();
+
+                if (element == null)
+                {
+                    element = AppiumDriverWrapper.Driver.FindElements(MobileBy.XPath($"//*[contains(@Name,'{title}')]")).FirstOrDefault();
+                }
+
+                if (element == null)
+                {
+                    element = AppiumDriverWrapper.Driver.FindElements(MobileBy.XPath($"//*[@AutomationId='{automationId}']")).FirstOrDefault();
+                }
+            }
+
+            if (element == null)
+            {
+                string pageSource = await this.GetPageSource().ConfigureAwait(false);
+                throw new InvalidOperationException(
+                    $"Unable to locate support tile. AutomationId: [{automationId}], Title: [{title}]{Environment.NewLine}Page source:{Environment.NewLine}{pageSource}");
+            }
+
+            element.Click();
+        }).ConfigureAwait(false);
     }
 }

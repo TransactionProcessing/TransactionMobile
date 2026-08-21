@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Appium;
+using Shared.IntegrationTesting;
 using TransactionProcessor.Mobile.UITests.Common;
 using TransactionProcessor.Mobile.UITests.Drivers;
 
@@ -6,11 +8,15 @@ namespace TransactionProcessor.Mobile.UITests.Pages;
 
 public class TransactionsPage : BasePage2
 {
-    protected override String Trait{
-        get{
-            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows){
+    protected override String Trait
+    {
+        get
+        {
+            if (AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
+            {
                 return "SelectTransactionType";
             }
+
             return "Transactions";
         }
     }
@@ -25,21 +31,60 @@ public class TransactionsPage : BasePage2
         this.VoucherButton = "VoucherButton";
         this.BillPaymentButton = "BillPaymentButton";
     }
+
     public async Task ClickMobileTopupButton()
     {
-        IWebElement element = await this.WaitForElementByAccessibilityId(this.MobileTopupButton);
-        element.Click();
+        await this.ClickTileAsync(this.MobileTopupButton, "Mobile Topup").ConfigureAwait(false);
     }
 
     public async Task ClickVoucherButton()
     {
-        IWebElement element = await this.WaitForElementByAccessibilityId(this.VoucherButton);
-        element.Click();
+        await this.ClickTileAsync(this.VoucherButton, "Voucher").ConfigureAwait(false);
     }
 
     public async Task ClickBillPaymentButton()
     {
-        IWebElement element = await this.WaitForElementByAccessibilityId(this.BillPaymentButton);
-        element.Click();
+        await this.ClickTileAsync(this.BillPaymentButton, "Bill Payment").ConfigureAwait(false);
+    }
+
+    private async Task ClickTileAsync(String automationId, String title)
+    {
+        await Retry.For(async () =>
+        {
+            IWebElement? element = null;
+
+            try
+            {
+                element = await this.WaitForElementByAccessibilityId(automationId).ConfigureAwait(false);
+            }
+            catch
+            {
+                // Fall through to the Windows-specific lookup below.
+            }
+
+            if (element == null && AppiumDriverWrapper.MobileTestPlatform == MobileTestPlatform.Windows)
+            {
+                element = AppiumDriverWrapper.Driver.FindElements(MobileBy.Name(title)).FirstOrDefault();
+
+                if (element == null)
+                {
+                    element = AppiumDriverWrapper.Driver.FindElements(MobileBy.XPath($"//*[contains(@Name,'{title}')]")).FirstOrDefault();
+                }
+
+                if (element == null)
+                {
+                    element = AppiumDriverWrapper.Driver.FindElements(MobileBy.XPath($"//*[@AutomationId='{automationId}']")).FirstOrDefault();
+                }
+            }
+
+            if (element == null)
+            {
+                string pageSource = await this.GetPageSource().ConfigureAwait(false);
+                throw new InvalidOperationException(
+                    $"Unable to locate transactions option tile. AutomationId: [{automationId}], Title: [{title}]{Environment.NewLine}Page source:{Environment.NewLine}{pageSource}");
+            }
+
+            element.Click();
+        }).ConfigureAwait(false);
     }
 }
