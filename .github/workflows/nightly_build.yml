@@ -192,140 +192,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-            name: windows-software_navigation_tests_appium
-            path: appium.log
-
-    runs-on: windows-2022
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '10.0.x'
-
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.1
-        with:
-          vs-prerelease: true
-     
-      - name: Install MAUI workloads
-        run: |
-          dotnet workload install maui
-
-      - name: Install Appium and Drivers
-        run: |
-          npm install -g appium --unsafe-perm=true --allow-root
-          appium driver install --source=npm appium-windows-driver
-
-      - name: Start Appium Server
-        run: |
-          nohup appium --log appium.log &
-
-      - name: Restore MAUI App for Windows
-        run: dotnet restore TransactionProcessor.Mobile.sln --source ${{ secrets.PUBLICFEEDURL }} --source ${{ secrets.PRIVATEFEED_URL }} --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json
-
-      - name: Decrypt PFX File
-        run: |
-          echo "${{ secrets.WINDOWSSIGNINGCERT }}" > cert.pfx.asc
-          certutil -decode cert.pfx.asc cert.pfx
-
-      - name: Add Cert to Store
-        run: certutil -user -q -p ${{ secrets.WINDOWSSIGNINGCERTPWD }} -importpfx cert.pfx NoRoot
-
-      - name: Publish App
-        run: |
-         dotnet publish TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj -c Release -f net10.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
-      
-      - name: Install App
-        shell: powershell      
-        run: |         
-         Import-Module Appx 
-         $candidatePaths = @(
-           (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\AppPackages"),
-           (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\bin\Release\net10.0-windows10.0.19041.0\win-x64\AppPackages")
-         )
-         $appPackagesPath = $candidatePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
-         if ($null -eq $appPackagesPath) {
-           throw "Unable to find AppPackages under: $($candidatePaths -join ', ')"
-         }
-         $installScript = Get-ChildItem -Path $appPackagesPath -Recurse -Filter Install.ps1 | Select-Object -First 1
-         if ($null -ne $installScript) {
-           & $installScript.FullName -Force
-         } else {
-           $msixPackage = Get-ChildItem -Path $appPackagesPath -Recurse -Filter *.msix | Select-Object -First 1
-           if ($null -eq $msixPackage) {
-             throw "Unable to find Install.ps1 or .msix package under $appPackagesPath."
-           }
-           Add-AppxPackage -Path $msixPackage.FullName -ForceApplicationShutdown
-         }
-
-      - name: Resolve Windows UI test app id
-        id: windows_app
-        shell: powershell
-        run: |
-          $package = $null
-          for ($attempt = 1; $attempt -le 12 -and $null -eq $package; $attempt++) {
-            $package = Get-AppxPackage -AllUsers |
-              Where-Object {
-                $_.Name -like '*TransactionMobile*' -or
-                $_.Name -like '*TransactionProcessor.Mobile*' -or
-                $_.PackageFamilyName -like '*TransactionMobile*' -or
-                $_.PackageFamilyName -like '*TransactionProcessor.Mobile*' -or
-                $_.InstallLocation -like '*TransactionProcessor.Mobile*'
-              } |
-              Sort-Object InstallDate -Descending |
-              Select-Object -First 1
-
-            if ($null -eq $package) {
-              Write-Host ("Attempt {0}: installed app not visible yet, waiting 5 seconds." -f $attempt)
-              Start-Sleep -Seconds 5
-            }
-          }
-
-          if ($null -eq $package) {
-            Write-Error "Unable to find the installed TransactionProcessor.Mobile package."
-            Get-AppxPackage -AllUsers | Sort-Object Name | Select-Object Name, PackageFamilyName, InstallLocation | Format-Table -AutoSize
-            exit 1
-          }
-
-          $windowsAppId = "$($package.PackageFamilyName)!App"
-          Write-Host "Resolved Windows app id: $windowsAppId"
-          "windows_app_id=$windowsAppId" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
-
-      - name: Prepare Windows UI test settings
-        id: windows_settings
-        shell: powershell
-        run: |
-          $settingsPath = Join-Path $env:RUNNER_TEMP "windows-ui-tests.runsettings"
-          Copy-Item -Path "TransactionProcessor.Mobile.UITests.Windows.runsettings" -Destination $settingsPath -Force
-          [xml]$settingsXml = Get-Content -Raw $settingsPath
-          $nodes = $settingsXml.SelectNodes("//EnvironmentVariables/UITEST_WINDOWS_APP_ID")
-          if ($nodes.Count -ne 1) {
-            throw "Expected exactly one UITEST_WINDOWS_APP_ID entry in the runsettings template."
-          }
-
-          $nodes.Item(0).InnerText = "${{ steps.windows_app.outputs.windows_app_id }}"
-          $settingsXml.Save($settingsPath)
-          "runsettings_path=$settingsPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
-
-      - name: Run Windows End To End Tests
-        run: dotnet test --project TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "Category=PRTest&Category=Windows" --no-restore --settings "${{ steps.windows_settings.outputs.runsettings_path }}"
-        #run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --list-tests -v:d
-
-      - name: Upload Logs on Failure
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-            name: windows-e2e_tests
-            path: C:\\Users\\runneradmin\\runner
-
-      - name: Upload Appium Logs on Failure
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-            name: windows-e2e_tests_appium
+            name: windows-ui_tests_appium
             path: appium.log
   
   android_ui_tests:
@@ -514,18 +381,11 @@ jobs:
       - name: Run Android Navigation Tests
         run: dotnet test --project TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=Android)" --no-restore --settings "${{ steps.android_settings.outputs.runsettings_path }}"
 
-      - name: Upload Logs on Failure
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-            name: android-e2e_tests
-            path: /home/runner/trace/
-
       - name: Upload Appium Logs on Failure
         if: always()
         uses: actions/upload-artifact@v4
         with:
-            name: android-e2e_tests_appium
+            name: android-ui_tests_appium
             path: appium.log
 
       - name: Capture emulator logs
