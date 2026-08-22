@@ -57,7 +57,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Support
             await this.ViewModel.UploadLogsCommand.ExecuteAsync(null);
 
             this.Mediator.Verify(m => m.Send(It.IsAny<SupportCommands.UploadLogsCommand>(),It.IsAny<CancellationToken>()),Times.Once);
-            this.DialogService.Verify(d => d.ShowInformationToast("Logs have been uploaded successfully."), Times.Once);
+            this.DialogService.Verify(d => d.ShowUploadLogsCompleteNotice(), Times.Once);
             this.NavigationService.Verify(n => n.GoBack(), Times.Never);
         }
 

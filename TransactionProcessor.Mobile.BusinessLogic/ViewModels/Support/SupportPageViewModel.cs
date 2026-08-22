@@ -74,7 +74,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Support
             var result = await this.Mediator.Send(command, CancellationToken.None);
 
             if (result.IsSuccess) {
-                await this.DialogService.ShowInformationToast("Logs have been uploaded successfully.");
+                await this.DialogService.ShowUploadLogsCompleteNotice();
             } else {
                 await this.DialogService.ShowWarningToast("Failed to upload logs.");
             }
