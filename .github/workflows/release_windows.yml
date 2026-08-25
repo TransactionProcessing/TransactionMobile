@@ -82,9 +82,10 @@ jobs:
       - name: Find MSIX package
         shell: powershell
         run: |
-          $msix = Get-ChildItem -Path "TransactionProcessor.Mobile/bin/Release/net10.0-windows10.0.19041.0/win-x64/AppPackages" -Recurse -Filter "*.msixbundle" | Select-Object -First 1
+          $appPackages = "TransactionProcessor.Mobile/AppPackages"
+          $msix = Get-ChildItem -Path $appPackages -Recurse -Filter "*.msixbundle" | Select-Object -First 1
           if ($msix -eq $null) {
-            $msix = Get-ChildItem -Path "TransactionProcessor.Mobile/bin/Release/net10.0-windows10.0.19041.0/win-x64/AppPackages" -Recurse -Filter "*.msix" | Select-Object -First 1
+            $msix = Get-ChildItem -Path $appPackages -Recurse -Filter "*.msix" | Select-Object -First 1
           }
           if ($msix -eq $null) {
             Write-Error "No .msix or .msixbundle file found in AppPackages directory."
@@ -96,7 +97,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-app-packages
-          path: TransactionProcessor.Mobile/bin/Release/net10.0-windows10.0.19041.0/win-x64/AppPackages/
+          path: TransactionProcessor.Mobile/AppPackages/
 
       - name: Upload MSIX to release
         uses: softprops/action-gh-release@v1
