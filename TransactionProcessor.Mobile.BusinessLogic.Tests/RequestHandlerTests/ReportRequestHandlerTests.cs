@@ -48,6 +48,34 @@ public class ReportRequestHandlerTests
     }
 
     [Fact]
+    public async Task GetDailyPerformanceSummaryQuery_InvalidPeriod_ReturnsFailure()
+    {
+        Mock<IReportsService> reportsService = new();
+        Mock<IApplicationCache> applicationCache = new();
+        MerchantDetailsModel merchantDetails = new()
+        {
+            MerchantReportingId = 12345
+        };
+
+        applicationCache.Setup(a => a.GetMerchantDetails()).Returns(merchantDetails);
+
+        ReportRequestHandler handler = new(reportsService.Object, applicationCache.Object);
+
+        Result<DailyPerformanceSummaryModel> result = await handler.Handle(
+            new ReportQueries.GetDailyPerformanceSummaryQuery((PerformanceSummaryPeriod)999),
+            CancellationToken.None);
+
+        result.IsFailed.ShouldBeTrue();
+        reportsService.Verify(r => r.GetDailyPerformanceSummary(
+                                  It.IsAny<PerformanceSummaryPeriod>(),
+                                  It.IsAny<Int32>(),
+                                  It.IsAny<DateTime>(),
+                                  It.IsAny<DateTime>(),
+                                  It.IsAny<CancellationToken>()),
+                              Times.Never);
+    }
+
+    [Fact]
     public async Task GetTransactionMixSummaryQuery_ReturnsRequestedBreakdown()
     {
         Mock<IReportsService> reportsService = new();

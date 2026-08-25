@@ -26,6 +26,8 @@ public interface IDialogService
                               TimeSpan? duration = null,
                               CancellationToken cancellationToken = default);
 
+    Task ShowUploadLogsCompleteNotice();
+
     Task ShowSuccessToast(String message,
                           Action? action = null,
                           String? actionButtonText = "OK",

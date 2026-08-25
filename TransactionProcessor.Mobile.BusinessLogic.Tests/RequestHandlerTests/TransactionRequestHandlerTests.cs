@@ -66,13 +66,28 @@ public class TransactionRequestHandlerTests
     public async Task TransactionRequestHandler_LogonTransactionRequest_Handle_LogonFailed_IsHandled()
     {
         this.TransactionService.Setup(t => t.PerformLogon(It.IsAny<PerformLogonRequestModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(
-                                                                                                                                             Result.Success(TestData.PerformLogonResponseFailedModel));
+                                                                                                                                              Result.Success(TestData.PerformLogonResponseFailedModel));
 
         TransactionCommands.PerformLogonCommand request = new(TestData.TransactionDateTime);
 
         Result<PerformLogonResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
 
         result.IsSuccess.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task TransactionRequestHandler_LogonTransactionRequest_Handle_ServiceFailure_ReturnsFailure_AndDoesNotUpdateTransaction()
+    {
+        this.DatabaseContext.Setup(d => d.CreateTransaction(It.IsAny<TransactionRecord>())).ReturnsAsync(1);
+        this.TransactionService.Setup(t => t.PerformLogon(It.IsAny<PerformLogonRequestModel>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Result.Failure("Logon failed"));
+
+        TransactionCommands.PerformLogonCommand request = new(TestData.TransactionDateTime);
+
+        Result<PerformLogonResponseModel> result = await this.TransactionRequestHandler.Handle(request, CancellationToken.None);
+
+        result.IsFailed.ShouldBeTrue();
+        this.DatabaseContext.Verify(d => d.UpdateTransaction(It.IsAny<TransactionRecord>()), Times.Never);
     }
 
     [Fact]

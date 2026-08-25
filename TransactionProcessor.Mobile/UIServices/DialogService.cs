@@ -45,8 +45,27 @@ namespace TransactionProcessor.Mobile.UIServices
                                                                action,
                                                                actionButtonText,
                                                                duration,
-                                                               SnackBarOptionsHelper.GetInfoSnackbarOptions,
-                                                               cancellationToken);
+                                                                SnackBarOptionsHelper.GetInfoSnackbarOptions,
+                                                                cancellationToken);
+        }
+
+        public async Task ShowUploadLogsCompleteNotice()
+        {
+            if (OperatingSystem.IsWindows())
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Logs uploaded",
+                    "Logs have been uploaded successfully.",
+                    "OK");
+                return;
+            }
+
+            await Application.Current.MainPage.DisplaySnackbar(
+                "Logs have been uploaded successfully.",
+                null,
+                "OK",
+                null,
+                SnackBarOptionsHelper.GetSuccessSnackbarOptions);
         }
 
         public async Task ShowSuccessToast(String message,
