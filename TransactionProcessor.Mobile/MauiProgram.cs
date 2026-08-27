@@ -16,7 +16,7 @@ namespace TransactionProcessor.Mobile
 {
     public static class MauiProgram
     {
-        public static MauiApp Container;
+        public static MauiApp Container { get; private set; } = default!;
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
