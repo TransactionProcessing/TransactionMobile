@@ -417,12 +417,12 @@ public class SharedSteps
     [Given(@"the following transaction mix report transactions exist")]
     public Task GivenTheFollowingTransactionMixReportTransactionsExist(DataTable table)
     {
-        foreach (DataTableRow row in table.Rows)
-        {
+        foreach (DataTableRow row in table.Rows) {
+            RequestKind requestKind = Enum.Parse<RequestKind>(GetString(row, "TransactionType"));
             this.testingContext.ScenarioSeed.ReportTransactions.Add(new ReportTransactionSeed
             {
                 Reference = GetString(row, "Reference"),
-                TransactionType = GetString(row, "TransactionType"),
+                TransactionType = requestKind,
                 Product = GetString(row, "Product"),
                 Operator = GetString(row, "Operator"),
                 Status = GetString(row, "Status"),

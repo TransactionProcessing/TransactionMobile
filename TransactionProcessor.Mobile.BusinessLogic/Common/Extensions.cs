@@ -7,7 +7,7 @@ using TransactionProcessorACL.DataTransferObjects.Responses;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.Common;
 
-public static class Extensions
+public static partial class Extensions
 {
     public static TransactionRecord ToTransactionRecord(this TransactionCommands.PerformLogonCommand request,
                                                         Boolean isTrainingMode) {
@@ -199,6 +199,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
         return reconciliationRequest;
     }
 
+
     public static SaleTransactionRequestMessage ToSaleTransactionRequest(this PerformVoucherIssueRequestModel model)
     {
         SaleTransactionRequestMessage saleTransactionRequest = new() {
@@ -214,9 +215,9 @@ CustomerAccountNumber = request.CustomerAccountNumber,
         
         // Add the additional request data
         saleTransactionRequest.AdditionalRequestMetadata = new Dictionary<String, String> {
-                                                                                                  {"Amount", model.VoucherAmount.ToString()},
-                                                                                                  {"RecipientEmail", model.RecipientEmailAddress},
-                                                                                                  {"RecipientMobile", model.RecipientMobileNumber}
+                                                                                                  {MetadataFields.Amount, model.VoucherAmount.ToString()},
+                                                                                                  {MetadataFields.RecipientEmail, model.RecipientEmailAddress},
+                                                                                                  {MetadataFields.RecipientMobile, model.RecipientMobileNumber}
                                                                                               };
 
         return saleTransactionRequest;
@@ -237,8 +238,8 @@ CustomerAccountNumber = request.CustomerAccountNumber,
 
         // Add the additional request data
         saleTransactionRequest.AdditionalRequestMetadata = new Dictionary<String, String> {
-                                                                                                  {"Amount", model.TopupAmount.ToString()},
-                                                                                                  {"CustomerAccountNumber", model.CustomerAccountNumber}
+                                                                                                  {MetadataFields.Amount, model.TopupAmount.ToString()},
+                                                                                                  {MetadataFields.CustomerAccountNumber, model.CustomerAccountNumber}
                                                                                               };
 
         return saleTransactionRequest;
@@ -256,8 +257,8 @@ CustomerAccountNumber = request.CustomerAccountNumber,
                                                                };
         // Add the additional request data
         saleTransactionRequest.AdditionalRequestMetadata = new Dictionary<String, String> {
-                                                                                              {"CustomerAccountNumber", model.CustomerAccountNumber},
-                                                                                              {"PataPawaPostPaidMessageType", "VerifyAccount"}
+                                                                                              {MetadataFields.CustomerAccountNumber, model.CustomerAccountNumber},
+                                                                                              {MetadataFields.PataPawaPostPaidMessageType, "VerifyAccount"}
                                                                                           };
 
         return saleTransactionRequest;
@@ -277,19 +278,19 @@ CustomerAccountNumber = request.CustomerAccountNumber,
         if (model.PostPayment){
             // Add the additional request data
             saleTransactionRequest.AdditionalRequestMetadata = new Dictionary<String, String>{
-                                                                                                 { "CustomerAccountNumber", model.CustomerAccountNumber },
-                                                                                                 { "CustomerName", model.CustomerAccountName },
-                                                                                                 { "MobileNumber", model.CustomerMobileNumber },
-                                                                                                 { "Amount", model.PaymentAmount.ToString() },
-                                                                                                 { "PataPawaPostPaidMessageType", "ProcessBill" }
+                                                                                                 { MetadataFields.CustomerAccountNumber, model.CustomerAccountNumber },
+                                                                                                 { MetadataFields.CustomerName, model.CustomerAccountName },
+                                                                                                 { MetadataFields.MobileNumber, model.CustomerMobileNumber },
+                                                                                                 { MetadataFields.Amount, model.PaymentAmount.ToString() },
+                                                                                                 { MetadataFields.PataPawaPostPaidMessageType, "ProcessBill" }
                                                                                              };
         }
         else{
             saleTransactionRequest.AdditionalRequestMetadata = new Dictionary<String, String>{
-                                                                                                 { "MeterNumber", model.CustomerAccountNumber },
-                                                                                                 { "CustomerName", model.CustomerAccountName },
-                                                                                                 { "PataPawaPrePayMessageType", "vend" },
-                                                                                                 { "Amount", model.PaymentAmount.ToString() },
+                                                                                                 { MetadataFields.MeterNumber, model.CustomerAccountNumber },
+                                                                                                 { MetadataFields.CustomerName, model.CustomerAccountName },
+                                                                                                 { MetadataFields.PataPawaPrePayMessageType, "vend" },
+                                                                                                 { MetadataFields.Amount, model.PaymentAmount.ToString() },
                                                                                              };
         }
 
@@ -310,7 +311,7 @@ CustomerAccountNumber = request.CustomerAccountNumber,
         // Add the additional request data
         saleTransactionRequest.AdditionalRequestMetadata = new Dictionary<String, String> {
                                                                                               {"MeterNumber", model.MeterNumber.ToString()},
-                                                                                              {"PataPawaPrePayMessageType", "meter"}
+                                                                                              {MetadataFields.PataPawaPrePayMessageType, "meter"}
                                                                                           };
 
         return saleTransactionRequest;

@@ -405,7 +405,7 @@ internal sealed class BackendState
             this.runtimeReceipts.AddRange(this.Seed.Deposits.Select(deposit => new BackendRuntimeReceipt(
                 deposit.Reference,
                 $"RCPT-{deposit.Reference}",
-                "Deposit",
+                RequestKind.MerchantDeposit,
                 "Deposit",
                 "Merchant",
                 "Success",
@@ -626,7 +626,7 @@ internal sealed class BackendState
             {
                 Reference = request.TransactionNumber,
                 ReceiptReference = $"RCPT-{request.TransactionNumber}",
-                TransactionType = "Logon",
+                TransactionType = RequestKind.Logon,
                 Product = "Logon",
                 Operator = "System",
                 Status = "Success",
@@ -651,7 +651,7 @@ internal sealed class BackendState
         lock (this.gate)
         {
             MerchantSeed merchant = this.ResolveMerchant(request.DeviceIdentifier);
-            (string kind, string productName, string operatorName, decimal amount, string? customerAccountNumber, string? customerAccountName, string? meterName, string? recipientEmail, string? recipientMobile) = this.InterpretSaleRequest(request);
+            (RequestKind kind, string productName, string operatorName, decimal amount, string? customerAccountNumber, string? customerAccountName, string? meterName, string? recipientEmail, string? recipientMobile) = this.InterpretSaleRequest(request);
 
             bool shouldFail = amount == 150m;
             string responseCode = shouldFail ? "1000" : "0000";
@@ -692,7 +692,7 @@ internal sealed class BackendState
                 });
             }
 
-            if (kind == "BillPaymentGetAccount")
+            if (kind == RequestKind.BillPaymentGetAccount)
             {
                 BillSeed bill = this.Seed.Bills.FirstOrDefault(b => string.Equals(b.AccountNumber, customerAccountNumber, StringComparison.OrdinalIgnoreCase))
                                 ?? new BillSeed { AccountNumber = customerAccountNumber ?? string.Empty, AccountName = customerAccountName ?? "Mr Test Customer", Amount = amount, DueDate = DateTime.UtcNow.Date.AddDays(3) };
@@ -704,7 +704,7 @@ internal sealed class BackendState
                     ["customerBillDueDate"] = bill.DueDate.ToString("dd-MM-yyyy")
                 };
             }
-            else if (kind == "BillPaymentGetMeter")
+            else if (kind == RequestKind.BillPaymentGetMeter)
             {
                 MeterSeed meter = this.Seed.Meters.FirstOrDefault(m => string.Equals(m.MeterNumber, meterName ?? string.Empty, StringComparison.OrdinalIgnoreCase))
                                   ?? new MeterSeed { MeterNumber = meterName ?? string.Empty, CustomerName = "Mr Test Customer" };
@@ -1050,7 +1050,9 @@ internal sealed class BackendState
             _ => CalculationType.Fixed
         };
 
-    private (string kind, string productName, string operatorName, decimal amount, string? customerAccountNumber, string? customerAccountName, string? meterName, string? recipientEmail, string? recipientMobile) InterpretSaleRequest(SaleTransactionRequestMessage request)
+    
+    
+    private (RequestKind kind, string productName, string operatorName, decimal amount, string? customerAccountNumber, string? customerAccountName, string? meterName, string? recipientEmail, string? recipientMobile) InterpretSaleRequest(SaleTransactionRequestMessage request)
     {
         decimal amount = request.AdditionalRequestMetadata?.TryGetValue("Amount", out string? amountText) == true && decimal.TryParse(amountText, out decimal parsedAmount)
             ? parsedAmount
@@ -1063,33 +1065,33 @@ internal sealed class BackendState
         {
             if (TryGetMetadataValue(request.AdditionalRequestMetadata, "PataPawaPostPaidMessageType", out string? type) && string.Equals(type, "VerifyAccount", StringComparison.OrdinalIgnoreCase))
             {
-                return ("BillPaymentGetAccount", productName, operatorName, amount, TryGetMetadataValue(request.AdditionalRequestMetadata, "CustomerAccountNumber", out string? accountNumber) ? accountNumber : null, request.CustomerEmailAddress, null, null, null);
+                return (RequestKind.BillPaymentGetAccount, productName, operatorName, amount, TryGetMetadataValue(request.AdditionalRequestMetadata, "CustomerAccountNumber", out string? accountNumber) ? accountNumber : null, request.CustomerEmailAddress, null, null, null);
             }
 
-            return ("BillPaymentMakePayment", productName, operatorName, amount, TryGetMetadataValue(request.AdditionalRequestMetadata, "CustomerAccountNumber", out string? accountNumber2) ? accountNumber2 : null, request.CustomerEmailAddress, null, null, null);
+            return (RequestKind.BillPaymentMakePayment, productName, operatorName, amount, TryGetMetadataValue(request.AdditionalRequestMetadata, "CustomerAccountNumber", out string? accountNumber2) ? accountNumber2 : null, request.CustomerEmailAddress, null, null, null);
         }
 
         if (request.AdditionalRequestMetadata?.ContainsKey("PataPawaPrePayMessageType") == true)
         {
             if (TryGetMetadataValue(request.AdditionalRequestMetadata, "PataPawaPrePayMessageType", out string? type) && string.Equals(type, "meter", StringComparison.OrdinalIgnoreCase))
             {
-                return ("BillPaymentGetMeter", productName, operatorName, amount, null, null, TryGetMetadataValue(request.AdditionalRequestMetadata, "MeterNumber", out string? meterNumber) ? meterNumber : null, null, null);
+                return (RequestKind.BillPaymentGetMeter, productName, operatorName, amount, null, null, TryGetMetadataValue(request.AdditionalRequestMetadata, "MeterNumber", out string? meterNumber) ? meterNumber : null, null, null);
             }
 
-            return ("BillPaymentMakePayment", productName, operatorName, amount, null, null, TryGetMetadataValue(request.AdditionalRequestMetadata, "MeterNumber", out string? meterNumber2) ? meterNumber2 : null, null, null);
+            return (RequestKind.BillPaymentMakePayment, productName, operatorName, amount, null, null, TryGetMetadataValue(request.AdditionalRequestMetadata, "MeterNumber", out string? meterNumber2) ? meterNumber2 : null, null, null);
         }
 
         if (request.AdditionalRequestMetadata?.ContainsKey("RecipientMobile") == true)
         {
-            return ("Voucher", productName, operatorName, amount, null, null, null, TryGetMetadataValue(request.AdditionalRequestMetadata, "RecipientEmail", out string? email) ? email : null, TryGetMetadataValue(request.AdditionalRequestMetadata, "RecipientMobile", out string? mobile) ? mobile : null);
+            return (RequestKind.Voucher, productName, operatorName, amount, null, null, null, TryGetMetadataValue(request.AdditionalRequestMetadata, "RecipientEmail", out string? email) ? email : null, TryGetMetadataValue(request.AdditionalRequestMetadata, "RecipientMobile", out string? mobile) ? mobile : null);
         }
 
         if (request.AdditionalRequestMetadata?.ContainsKey("CustomerAccountNumber") == true)
         {
-            return ("MobileTopup", productName, operatorName, amount, TryGetMetadataValue(request.AdditionalRequestMetadata, "CustomerAccountNumber", out string? accountNumber3) ? accountNumber3 : null, null, null, null, null);
+            return (RequestKind.MobileTopup, productName, operatorName, amount, TryGetMetadataValue(request.AdditionalRequestMetadata, "CustomerAccountNumber", out string? accountNumber3) ? accountNumber3 : null, null, null, null, null);
         }
 
-        return ("MobileTopup", productName, operatorName, amount, null, null, null, null, null);
+        return (RequestKind.MobileTopup, productName, operatorName, amount, null, null, null, null, null);
     }
 
     private static bool TryGetMetadataValue(Dictionary<string, string>? metadata, string key, out string? value)
@@ -1126,7 +1128,7 @@ internal sealed class BackendState
             ?.DisplayText ?? "Unknown";
     }
 
-    private sealed record BackendRuntimeReceipt(string Reference, string ReceiptReference, string TransactionType, string Product, string OperatorName, string Status, decimal Amount, DateTime TransactionDateTime);
+    private sealed record BackendRuntimeReceipt(string Reference, string ReceiptReference, RequestKind TransactionType, string Product, string OperatorName, string Status, decimal Amount, DateTime TransactionDateTime);
     private sealed record BackendRuntimeLog(string DeviceIdentifier, string Message, DateTime EntryDateTime, string LogLevel);
 }
 
