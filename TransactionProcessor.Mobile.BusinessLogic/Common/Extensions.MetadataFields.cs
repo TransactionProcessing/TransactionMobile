@@ -1,13 +1,14 @@
-﻿namespace TransactionProcessor.Mobile.BusinessLogic.Common;
+namespace TransactionProcessor.Mobile.BusinessLogic.Common;
 
-    public static class MetadataFields {
-        public static string Amount = "Amount";
-        public static string RecipientEmail = "RecipientEmail";
-        public static string RecipientMobile = "RecipientMobile";
-        public static String CustomerAccountNumber = "CustomerAccountNumber";
-        public static String PataPawaPostPaidMessageType = "PataPawaPostPaidMessageType";
-        public static String PataPawaPrePayMessageType = "PataPawaPrePayMessageType";
-        public static String MeterNumber = "MeterNumber";
-        public static String CustomerName = "CustomerName";
-        public static String MobileNumber = "MobileNumber";
-    }
+public static class MetadataFields
+{
+    public const string Amount = "Amount";
+    public const string RecipientEmail = "RecipientEmail";
+    public const string RecipientMobile = "RecipientMobile";
+    public const string CustomerAccountNumber = "CustomerAccountNumber";
+    public const string PataPawaPostPaidMessageType = "PataPawaPostPaidMessageType";
+    public const string PataPawaPrePayMessageType = "PataPawaPrePayMessageType";
+    public const string MeterNumber = "MeterNumber";
+    public const string CustomerName = "CustomerName";
+    public const string MobileNumber = "MobileNumber";
+}
