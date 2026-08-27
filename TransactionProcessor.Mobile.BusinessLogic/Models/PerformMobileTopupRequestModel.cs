@@ -5,8 +5,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Models
     [ExcludeFromCodeCoverage]
     public class PerformMobileTopupRequestModel
     {
-        // TODO: should we have a base transaction request model ?
-
         #region Properties
 
         public String ApplicationVersion { get; set; }
