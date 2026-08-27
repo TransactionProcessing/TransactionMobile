@@ -1,6 +1,8 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Net.Sockets;
+using System.Text;
+using System.Text.Json;
 using NUnit.Framework;
 using Shouldly;
 using TransactionProcessor.DataTransferObjects.Responses.Merchant;
@@ -84,11 +86,103 @@ public class TestBackendHostSmokeTests
         resetMerchant.Contacts[0].ContactEmailAddress.ShouldBe("test@example.com");
     }
 
+    [Test]
+    public async Task TransactionMixSummary_ReturnsTransactionTypeAsString()
+    {
+        await using TestBackendHost host = await TestBackendHost.StartAsync(GetFreePort()).ConfigureAwait(false);
+
+        using HttpClient client = host.CreateClient();
+        SeedReportTransaction(host, RequestKind.MobileTopup);
+
+        StringContent requestContent = new(
+            JsonSerializer.Serialize(new
+            {
+                MerchantReportingId = 12345,
+                StartDate = new DateTime(2026, 8, 27),
+                EndDate = new DateTime(2026, 8, 27),
+                Breakdown = 1,
+                Measure = 1,
+                TopN = 5
+            }, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower }),
+            Encoding.UTF8,
+            "application/json");
+
+        HttpResponseMessage response = await client.PostAsync("/api/reporting/transactionmixsummary", requestContent).ConfigureAwait(false);
+
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        using JsonDocument document = JsonDocument.Parse(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        JsonElement transactionType = document.RootElement.GetProperty("drill_down_transactions")
+                                                         .EnumerateArray()
+                                                         .Single()
+                                                         .GetProperty("transaction_type");
+
+        transactionType.ValueKind.ShouldBe(JsonValueKind.String);
+        transactionType.GetString().ShouldBe("Mobile Topup");
+    }
+
+    [Test]
+    public async Task RecentActivityReceiptSearch_ReturnsTransactionTypeAsString()
+    {
+        await using TestBackendHost host = await TestBackendHost.StartAsync(GetFreePort()).ConfigureAwait(false);
+
+        using HttpClient client = host.CreateClient();
+        SeedReportTransaction(host, RequestKind.BillPaymentMakePayment);
+
+        StringContent requestContent = new(
+            JsonSerializer.Serialize(new
+            {
+                MerchantReportingId = 12345,
+                ReportDate = new DateTime(2026, 8, 27),
+                SearchText = (string?)null,
+                PageNumber = 1,
+                PageSize = 5
+            }, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower }),
+            Encoding.UTF8,
+            "application/json");
+
+        HttpResponseMessage response = await client.PostAsync("/api/reporting/recentactivityreceiptsearch", requestContent).ConfigureAwait(false);
+
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        using JsonDocument document = JsonDocument.Parse(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        JsonElement transactionType = document.RootElement.GetProperty("items")
+                                                         .EnumerateArray()
+                                                         .Single()
+                                                         .GetProperty("transaction_type");
+
+        transactionType.ValueKind.ShouldBe(JsonValueKind.String);
+        transactionType.GetString().ShouldBe("Bill Payment");
+    }
+
     private static int GetFreePort()
     {
         using TcpListener listener = new(IPAddress.Loopback, 0);
         listener.Start();
         int port = ((IPEndPoint)listener.LocalEndpoint).Port;
         return port;
+    }
+
+    private static void SeedReportTransaction(TestBackendHost host, RequestKind transactionType)
+    {
+        BackendSeed seed = new()
+        {
+            ReportTransactions =
+            [
+                new ReportTransactionSeed
+                {
+                    Reference = "TXN-10001",
+                    ReceiptReference = "RCPT-10001",
+                    TransactionType = transactionType,
+                    Product = "Custom",
+                    Operator = "Safaricom",
+                    Status = "Success",
+                    Amount = 100.00m,
+                    TransactionDateTime = new DateTime(2026, 8, 27, 9, 30, 0)
+                }
+            ]
+        };
+
+        host.ApplySeed(seed);
     }
 }

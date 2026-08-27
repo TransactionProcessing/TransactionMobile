@@ -849,7 +849,7 @@ internal sealed class BackendState
                 .Select(t => new
                 {
                     reference = t.Reference,
-                    transactionType = t.TransactionType,
+                    transactionType = ToReportTransactionTypeLabel(t.TransactionType),
                     product = t.Product,
                     operatorName = t.OperatorName,
                     status = t.Status,
@@ -897,7 +897,7 @@ internal sealed class BackendState
                 items = paged.Select(item => new
                 {
                     reference = item.Reference,
-                    transactionType = item.TransactionType,
+                    transactionType = ToReportTransactionTypeLabel(item.TransactionType),
                     product = item.Product,
                     operatorName = item.OperatorName,
                     status = item.Status,
@@ -1112,6 +1112,17 @@ internal sealed class BackendState
         }
 
         return false;
+    }
+
+    private static string ToReportTransactionTypeLabel(RequestKind transactionType)
+    {
+        return transactionType switch
+        {
+            RequestKind.MobileTopup => "Mobile Topup",
+            RequestKind.BillPaymentMakePayment => "Bill Payment",
+            RequestKind.Voucher => "Voucher Issue",
+            _ => transactionType.ToString()
+        };
     }
 
     private string ResolveOperatorName(Guid operatorId)
