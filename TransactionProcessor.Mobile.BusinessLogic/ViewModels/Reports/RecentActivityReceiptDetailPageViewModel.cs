@@ -143,9 +143,9 @@ public sealed partial class RecentActivityReceiptDetailPageViewModel : ExtendedB
         await base.Initialise(cancellationToken);
 
         IDictionary<string, object> parameters = this.NavigationParameterService.GetParameters();
-        if (parameters.TryGetValue(nameof(RecentActivityReceiptItemModel), out object? item) && item is RecentActivityReceiptItemModel selectedItem)
+        if (parameters.TryGetValue(nameof(RecentActivityReceiptItemModel), out object? item) && item is RecentActivityReceiptItemModel receiptItem)
         {
-            this.SelectedItem = selectedItem;
+            this.SelectedItem = receiptItem;
         }
     }
 }

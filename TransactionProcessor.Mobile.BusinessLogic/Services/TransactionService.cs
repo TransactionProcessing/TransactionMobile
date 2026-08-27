@@ -33,6 +33,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
     {
         #region Fields
 
+        private const string SaleTransactionRoute = "api/saletransactions";
+
         private readonly IApplicationCache ApplicationCache;
 
         private readonly Func<String, String> BaseAddressResolver;
@@ -57,7 +59,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                                                                                                           CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform bill payment get account transaction");
 
-            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), "api/saletransactions", cancellationToken);
+            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), SaleTransactionRoute, cancellationToken);
 
             if (result.IsSuccess == false) {
                 Logger.LogWarning("Error performing bill payment - get account transaction");
@@ -75,7 +77,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                                                                                                             CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform bill payment make payment transaction");
             
-            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(),"api/saletransactions", cancellationToken);
+            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), SaleTransactionRoute, cancellationToken);
 
             if (result.IsSuccess == false) {
                 Logger.LogWarning("Error performing bill payment - make payment transaction");
@@ -92,7 +94,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
         public async Task<Result<PerformBillPaymentGetMeterResponseModel>> PerformBillPaymentGetMeter(PerformBillPaymentGetMeterModel model, CancellationToken cancellationToken){
             Logger.LogInformation("About to perform bill payment get meter transaction");
 
-            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), "api/saletransactions", cancellationToken);
+            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), SaleTransactionRoute, cancellationToken);
 
             if (result.IsSuccess == false) {
                 Logger.LogWarning("Error performing bill payment - get meter transaction");
@@ -130,7 +132,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
             Logger.LogInformation("About to perform mobile top-up transaction");
 
             Result<SaleTransactionResponseMessage> result =
-                await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), "api/saletransactions", cancellationToken);
+                await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), SaleTransactionRoute, cancellationToken);
 
             if (result.IsSuccess == false) {
                 Logger.LogWarning("Error performing Mobile top-up transaction");
@@ -169,7 +171,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                                                                                       CancellationToken cancellationToken) {
             Logger.LogInformation("About to perform voucher transaction");
 
-            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), "api/saletransactions", cancellationToken);
+            Result<SaleTransactionResponseMessage> result = await this.SendTransactionRequest<SaleTransactionRequestMessage, SaleTransactionResponseMessage>(model.ToSaleTransactionRequest(), SaleTransactionRoute, cancellationToken);
             
             if (result.IsSuccess == false)
             {
