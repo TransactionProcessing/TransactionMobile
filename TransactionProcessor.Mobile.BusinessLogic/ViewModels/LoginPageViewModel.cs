@@ -321,7 +321,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels
                                                             (key, value, reason, state) =>
                                                             {
                                                                 _ = AccessTokenExpired(key, value, reason, state);
-                                                            }); ;
+                                                            });
 
             this.ApplicationCache.SetAccessToken(token, cacheEntryOptions);
         }

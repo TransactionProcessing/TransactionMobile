@@ -160,11 +160,24 @@ public sealed record DepositSeed
     public DateTime DateTime { get; init; } = DateTime.UtcNow;
 }
 
+public enum RequestKind
+{
+    NotSet,
+    Logon,
+    MerchantDeposit,
+    BillPaymentGetAccount,
+    BillPaymentGetMeter,
+    BillPaymentMakePayment,
+    Voucher,
+    MobileTopup
+
+}
+
 public sealed record ReceiptSeed
 {
     public string Reference { get; init; } = string.Empty;
     public string ReceiptReference { get; init; } = string.Empty;
-    public string TransactionType { get; init; } = string.Empty;
+    public RequestKind TransactionType { get; init; } = RequestKind.NotSet;
     public string Product { get; init; } = string.Empty;
     public string Operator { get; init; } = string.Empty;
     public string Status { get; init; } = "Success";
@@ -175,7 +188,7 @@ public sealed record ReceiptSeed
 public sealed record ReportTransactionSeed
 {
     public string Reference { get; init; } = string.Empty;
-    public string TransactionType { get; init; } = string.Empty;
+    public RequestKind TransactionType { get; init; } = RequestKind.NotSet;
     public string Product { get; init; } = string.Empty;
     public string Operator { get; init; } = string.Empty;
     public string Status { get; init; } = "Success";
