@@ -4,6 +4,7 @@ using Shouldly;
 using SimpleResults;
 using System.Net;
 using System.Text;
+using System.Reflection;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Serialisation;
@@ -30,6 +31,16 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
         Object Deserialise(String arg, Type type)
         {
             return StringSerialiser.DeserializeObject<Object>(arg, type, new SerialiserOptions(SerialiserPropertyFormat.SnakeCase));
+        }
+
+        [Fact]
+        public void TransactionService_DefinesSharedSaleTransactionsRouteConstant()
+        {
+            FieldInfo? routeField = typeof(TransactionService).GetField("SaleTransactionRoute", BindingFlags.NonPublic | BindingFlags.Static);
+
+            routeField.ShouldNotBeNull();
+            routeField!.IsLiteral.ShouldBeTrue();
+            routeField.GetRawConstantValue().ShouldBe("api/saletransactions");
         }
 
         void ArrangeThrowingSaleTransactionHandler()
