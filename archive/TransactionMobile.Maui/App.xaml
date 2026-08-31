@@ -1,8 +1,0 @@
-﻿<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:TransactionMobile.Maui"
-             x:Class="TransactionMobile.Maui.App">
-    <Application.Resources>
-        <ResourceDictionary Source="Resources/Styles/LightTheme.xaml"/>
-    </Application.Resources>
-</Application>

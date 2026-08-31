@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36203.30
+# Visual Studio Version 18
+VisualStudioVersion = 18.9.12120.119 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionProcessor.Mobile", "TransactionProcessor.Mobile\TransactionProcessor.Mobile.csproj", "{6BE81803-4FDB-4900-8ED4-971A6AD4140D}"
 EndProject
@@ -16,8 +16,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionProcessor.Mobile.UITests", "TransactionProcessor.Mobile.UITests\TransactionProcessor.Mobile.UITests.csproj", "{E892CDC5-7DDF-4A0A-B8DB-AAC2DE758E56}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionProcessor.Mobile.UiTestBackend", "TransactionProcessor.Mobile.UiTestBackend\TransactionProcessor.Mobile.UiTestBackend.csproj", "{B7AB20D4-69B2-4C8A-9E4A-00D47C4869F4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCategoryLister", "TestCategoryLister\TestCategoryLister.csproj", "{A9557544-11B0-4718-A52D-8D513C9DD619}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +45,6 @@ Global
 		{B7AB20D4-69B2-4C8A-9E4A-00D47C4869F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7AB20D4-69B2-4C8A-9E4A-00D47C4869F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7AB20D4-69B2-4C8A-9E4A-00D47C4869F4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A9557544-11B0-4718-A52D-8D513C9DD619}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A9557544-11B0-4718-A52D-8D513C9DD619}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A9557544-11B0-4718-A52D-8D513C9DD619}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A9557544-11B0-4718-A52D-8D513C9DD619}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,7 +55,6 @@ Global
 		{327D1FDB-E953-4501-9DED-193EF75148E1} = {7AB22349-8BB9-41D3-A40F-268DFC30FD0C}
 		{E892CDC5-7DDF-4A0A-B8DB-AAC2DE758E56} = {7AB22349-8BB9-41D3-A40F-268DFC30FD0C}
 		{B7AB20D4-69B2-4C8A-9E4A-00D47C4869F4} = {7AB22349-8BB9-41D3-A40F-268DFC30FD0C}
-		{A9557544-11B0-4718-A52D-8D513C9DD619} = {7AB22349-8BB9-41D3-A40F-268DFC30FD0C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4A92260C-922A-4553-A4DE-94C3BE3BA20F}
