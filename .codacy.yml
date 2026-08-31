@@ -1,0 +1,5 @@
+---
+exclude_paths:
+  - "TransactionProcessor.Mobile.BusinessLogic.Tests/**"
+  - "TransactionProcessor.Mobile.UITests/**"
+  - "TransactionProcessor.Mobile.UiTestBackend/**"
