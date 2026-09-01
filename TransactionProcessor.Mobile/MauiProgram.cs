@@ -16,7 +16,6 @@ namespace TransactionProcessor.Mobile
 {
     public static class MauiProgram
     {
-        public static MauiApp Container { get; private set; } = default!;
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
@@ -37,14 +36,14 @@ namespace TransactionProcessor.Mobile
 
             builder.Logging.SetMinimumLevel(LogLevel.Trace);
             
-            Container = builder.Build();
+            MauiApp app = builder.Build();
 
-            var serialiser = Container.Services.GetRequiredService<IStringSerialiser>();
+            var serialiser = app.Services.GetRequiredService<IStringSerialiser>();
             StringSerialiser.Initialise(serialiser);
 
             Logger.Initialise(new ConsoleLogger());
 
-            return Container;
+            return app;
         }
     }
 

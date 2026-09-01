@@ -60,8 +60,8 @@ namespace TransactionProcessor.Mobile.Extensions {
                 return factory.CreateClient("default");
             });
 
-            builder.Services.AddSingleton(new Func<String, String>(configSetting => {
-                                                                    IApplicationCache applicationCache = MauiProgram.Container.Services.GetService<IApplicationCache>();
+            builder.Services.AddSingleton<Func<String, String>>(serviceProvider => configSetting => {
+                                                                    IApplicationCache applicationCache = serviceProvider.GetService<IApplicationCache>();
 
                                                                     if (applicationCache != null)
                                                                         return configSetting switch {
@@ -75,7 +75,7 @@ namespace TransactionProcessor.Mobile.Extensions {
                                                                         };
 
                                                                     return null;
-                                                                }));
+                                                                    });
 
             builder.Services.AddSingleton<IConfigurationService, ConfigurationService>();
             builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
@@ -103,50 +103,50 @@ namespace TransactionProcessor.Mobile.Extensions {
         }
 
         private static MauiAppBuilder RegisterConfigurationService(this MauiAppBuilder builder) {
-            builder.Services.AddSingleton(new Func<Boolean, IConfigurationService>(useTrainingMode =>
+            builder.Services.AddSingleton<Func<Boolean, IConfigurationService>>(serviceProvider => useTrainingMode =>
             {
                 return useTrainingMode switch {
                     true => new TrainingConfigurationService(),
-                    _ => MauiProgram.Container.Services.GetService<IConfigurationService>()
+                    _ => serviceProvider.GetService<IConfigurationService>()
                 } ?? throw new InvalidOperationException("Failed to resolve IConfigurationService.");
-            }));
+            });
             return builder;
         }
 
         private static MauiAppBuilder RegisterAuthenticationService(this MauiAppBuilder builder)
         {
-            builder.Services.AddSingleton(new Func<Boolean, IAuthenticationService>(useTrainingMode => {
+            builder.Services.AddSingleton<Func<Boolean, IAuthenticationService>>(serviceProvider => useTrainingMode => {
                 return useTrainingMode switch
                 {
                     true => new TrainingAuthenticationService(),
-                    _ => MauiProgram.Container.Services.GetService<IAuthenticationService>()
+                    _ => serviceProvider.GetService<IAuthenticationService>()
                 } ?? throw new InvalidOperationException("Failed to resolve IConfigurationService.");
-            }));
+            });
             return builder;
         }
 
         private static MauiAppBuilder RegisterTransactionService(this MauiAppBuilder builder) {
-            builder.Services.AddSingleton(new Func<Boolean, ITransactionService>(useTrainingMode =>
+            builder.Services.AddSingleton<Func<Boolean, ITransactionService>>(serviceProvider => useTrainingMode =>
             {
                 return useTrainingMode switch
                 {
                     true => new TrainingTransactionService(),
-                    _ => MauiProgram.Container.Services.GetService<ITransactionService>()
+                    _ => serviceProvider.GetService<ITransactionService>()
                 } ?? throw new InvalidOperationException("Failed to resolve ITransactionService.");
-            }));
+            });
             return builder;
         }
 
         private static MauiAppBuilder RegisterMerchantService(this MauiAppBuilder builder)
         {
-            builder.Services.AddSingleton(new Func<Boolean, IMerchantService>(useTrainingMode =>
+            builder.Services.AddSingleton<Func<Boolean, IMerchantService>>(serviceProvider => useTrainingMode =>
             {
                 return useTrainingMode switch
                 {
                     true => new TrainingMerchantService(),
-                    _ => MauiProgram.Container.Services.GetService<IMerchantService>()
+                    _ => serviceProvider.GetService<IMerchantService>()
                 } ?? throw new InvalidOperationException("Failed to resolve ITransactionService.");
-            }));
+            });
             return builder;
         }
 
@@ -236,6 +236,7 @@ namespace TransactionProcessor.Mobile.Extensions {
         }
 
         public static MauiAppBuilder ConfigurePages(this MauiAppBuilder builder) {
+            builder.Services.AddTransient<LoadingPage>();
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<HomePage>();
             builder.Services.AddTransient<TransactionsPage>();

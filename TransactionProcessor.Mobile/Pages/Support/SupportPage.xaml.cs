@@ -1,5 +1,7 @@
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
+using TransactionProcessor.Mobile.BusinessLogic.Services;
+using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 using TransactionProcessor.Mobile.BusinessLogic.ViewModels.Support;
 using TransactionProcessor.Mobile.Pages.Common;
 
@@ -9,7 +11,11 @@ namespace TransactionProcessor.Mobile.Pages.Support
     {
         private SupportPageViewModel viewModel => BindingContext as SupportPageViewModel;
 
-        public SupportPage(SupportPageViewModel vm) {
+        public SupportPage(SupportPageViewModel vm,
+                           INavigationService navigationService,
+                           IDialogService dialogService,
+                           IApplicationCache applicationCache)
+            : base(navigationService, dialogService, applicationCache) {
             this.InitializeComponent();
             BindingContext = vm;
         }

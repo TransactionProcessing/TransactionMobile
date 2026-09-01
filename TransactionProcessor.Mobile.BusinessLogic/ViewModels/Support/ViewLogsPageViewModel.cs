@@ -12,6 +12,7 @@ public class ViewLogsPageViewModel : ExtendedBaseViewModel
     #region Fields
 
     private readonly IMediator Mediator;
+    private List<LogMessageModel> logMessages = new();
 
     #endregion
 
@@ -31,7 +32,10 @@ public class ViewLogsPageViewModel : ExtendedBaseViewModel
 
     #region Properties
 
-    public List<LogMessageModel> LogMessages { get; private set; }
+    public List<LogMessageModel> LogMessages {
+        get => this.logMessages;
+        private set => this.SetProperty(ref this.logMessages, value);
+    }
 
     #endregion
 
