@@ -84,6 +84,10 @@ namespace TransactionProcessor.Mobile.Extensions {
             builder.Services.AddSingleton<IReportsService, ReportsService>();
             builder.Services.AddSingleton<IUpdateService, UpdateService>();
             builder.Services.AddSingleton<IBalanceRefresher,BalanceRefresher>();
+            builder.Services.AddSingleton<TrainingConfigurationService>();
+            builder.Services.AddSingleton<TrainingAuthenticationService>();
+            builder.Services.AddSingleton<TrainingTransactionService>();
+            builder.Services.AddSingleton<TrainingMerchantService>();
             builder.RegisterConfigurationService().RegisterAuthenticationService().RegisterTransactionService().RegisterMerchantService();
             
             builder.Services.RegisterHttpClientX<ISecurityServiceClient, SecurityServiceClient>();
@@ -106,8 +110,8 @@ namespace TransactionProcessor.Mobile.Extensions {
             builder.Services.AddSingleton<Func<Boolean, IConfigurationService>>(serviceProvider => useTrainingMode =>
             {
                 return useTrainingMode switch {
-                    true => new TrainingConfigurationService(),
-                    _ => serviceProvider.GetService<IConfigurationService>()
+                    true => serviceProvider.GetRequiredService<TrainingConfigurationService>(),
+                    _ => serviceProvider.GetRequiredService<IConfigurationService>()
                 } ?? throw new InvalidOperationException("Failed to resolve IConfigurationService.");
             });
             return builder;
@@ -118,8 +122,8 @@ namespace TransactionProcessor.Mobile.Extensions {
             builder.Services.AddSingleton<Func<Boolean, IAuthenticationService>>(serviceProvider => useTrainingMode => {
                 return useTrainingMode switch
                 {
-                    true => new TrainingAuthenticationService(),
-                    _ => serviceProvider.GetService<IAuthenticationService>()
+                    true => serviceProvider.GetRequiredService<TrainingAuthenticationService>(),
+                    _ => serviceProvider.GetRequiredService<IAuthenticationService>()
                 } ?? throw new InvalidOperationException("Failed to resolve IConfigurationService.");
             });
             return builder;
@@ -130,8 +134,8 @@ namespace TransactionProcessor.Mobile.Extensions {
             {
                 return useTrainingMode switch
                 {
-                    true => new TrainingTransactionService(),
-                    _ => serviceProvider.GetService<ITransactionService>()
+                    true => serviceProvider.GetRequiredService<TrainingTransactionService>(),
+                    _ => serviceProvider.GetRequiredService<ITransactionService>()
                 } ?? throw new InvalidOperationException("Failed to resolve ITransactionService.");
             });
             return builder;
@@ -143,8 +147,8 @@ namespace TransactionProcessor.Mobile.Extensions {
             {
                 return useTrainingMode switch
                 {
-                    true => new TrainingMerchantService(),
-                    _ => serviceProvider.GetService<IMerchantService>()
+                    true => serviceProvider.GetRequiredService<TrainingMerchantService>(),
+                    _ => serviceProvider.GetRequiredService<IMerchantService>()
                 } ?? throw new InvalidOperationException("Failed to resolve ITransactionService.");
             });
             return builder;
