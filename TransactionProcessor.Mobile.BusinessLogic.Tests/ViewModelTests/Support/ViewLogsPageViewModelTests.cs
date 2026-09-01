@@ -53,6 +53,19 @@ public class ViewLogsPageViewModelTests
     }
 
     [Fact]
+    public async Task ViewLogsPageViewModel_LoadLogMessages_RaisesPropertyChanged(){
+        this.Mediator.Setup(m => m.Send(It.IsAny<SupportQueries.ViewLogsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new List<LogMessage>(){
+                                                                                                                                                              new LogMessage()
+                                                                                                                                                          }));
+        String? changedPropertyName = null;
+        this.ViewModel.PropertyChanged += (_, args) => changedPropertyName = args.PropertyName;
+
+        await this.ViewModel.LoadLogMessages();
+
+        changedPropertyName.ShouldBe(nameof(ViewLogsPageViewModel.LogMessages));
+    }
+
+    [Fact]
     public void ViewLogsPageViewModel_BackButtonCommand_Execute_IsExecuted()
     {
         this.ViewModel.BackButtonCommand.Execute(null);
