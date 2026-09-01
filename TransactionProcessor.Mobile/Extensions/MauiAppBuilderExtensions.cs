@@ -61,20 +61,17 @@ namespace TransactionProcessor.Mobile.Extensions {
             });
 
             builder.Services.AddSingleton<Func<String, String>>(serviceProvider => configSetting => {
-                                                                    IApplicationCache applicationCache = serviceProvider.GetService<IApplicationCache>();
+                                                                     IApplicationCache applicationCache = serviceProvider.GetRequiredService<IApplicationCache>();
 
-                                                                    if (applicationCache != null)
-                                                                        return configSetting switch {
-                                                                            "ConfigServiceUrl" => applicationCache.GetConfigHostUrl() ?? String.Empty,
-                                                                            "ApplicationUpdateServiceUrl" when String.IsNullOrWhiteSpace(applicationCache.GetConfiguration()?.ApplicationUpdateUri) == false => applicationCache.GetConfiguration().ApplicationUpdateUri,
-                                                                            "SecurityService" => applicationCache.GetConfiguration()?.SecurityServiceUri ?? String.Empty,
-                                                                            "TransactionProcessorACL" => applicationCache.GetConfiguration()?.TransactionProcessorAclUri ?? String.Empty,
-                                                                            "TransactionProcessorApi" => applicationCache.GetConfiguration()?.TransactionProcessorUri ?? String.Empty,
-                                                                            "EstateReportingApi" => applicationCache.GetConfiguration()?.EstateReportingUri ?? String.Empty,
-                                                                            _ => String.Empty
-                                                                        };
-
-                                                                    return null;
+                                                                     return configSetting switch {
+                                                                         "ConfigServiceUrl" => applicationCache.GetConfigHostUrl() ?? String.Empty,
+                                                                         "ApplicationUpdateServiceUrl" when String.IsNullOrWhiteSpace(applicationCache.GetConfiguration()?.ApplicationUpdateUri) == false => applicationCache.GetConfiguration().ApplicationUpdateUri,
+                                                                         "SecurityService" => applicationCache.GetConfiguration()?.SecurityServiceUri ?? String.Empty,
+                                                                         "TransactionProcessorACL" => applicationCache.GetConfiguration()?.TransactionProcessorAclUri ?? String.Empty,
+                                                                         "TransactionProcessorApi" => applicationCache.GetConfiguration()?.TransactionProcessorUri ?? String.Empty,
+                                                                         "EstateReportingApi" => applicationCache.GetConfiguration()?.EstateReportingUri ?? String.Empty,
+                                                                         _ => String.Empty
+                                                                     };
                                                                     });
 
             builder.Services.AddSingleton<IConfigurationService, ConfigurationService>();
