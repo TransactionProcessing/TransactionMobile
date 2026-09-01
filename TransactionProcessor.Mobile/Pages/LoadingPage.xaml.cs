@@ -3,8 +3,11 @@ using TransactionProcessor.Mobile.BusinessLogic.Services;
 namespace TransactionProcessor.Mobile.Pages;
 
 public partial class LoadingPage : ContentPage {
-    public LoadingPage() {
+    private readonly IApplicationCache applicationCache;
+
+    public LoadingPage(IApplicationCache applicationCache) {
         InitializeComponent();
+        this.applicationCache = applicationCache;
     }
 
     protected override async void OnNavigatedTo(NavigatedToEventArgs args) {
@@ -20,8 +23,7 @@ public partial class LoadingPage : ContentPage {
 
     async Task<bool> isAuthenticated() {
         await Task.Delay(2000);
-        IApplicationCache applicationCache = MauiProgram.Container.Services.GetService<IApplicationCache>();
-        Boolean isLoggedIn = applicationCache.GetIsLoggedIn();
+        Boolean isLoggedIn = this.applicationCache.GetIsLoggedIn();
         return isLoggedIn;
     }
 }

@@ -14,11 +14,14 @@ namespace TransactionProcessor.Mobile.UIServices;
 public class ShellNavigationService : INavigationService
 {
     private readonly INavigationParameterService NavigationParameterService;
+    private readonly IServiceProvider ServiceProvider;
 
     #region Methods
 
-    public ShellNavigationService(INavigationParameterService navigationParameterService) {
+    public ShellNavigationService(INavigationParameterService navigationParameterService,
+                                  IServiceProvider serviceProvider) {
         this.NavigationParameterService = navigationParameterService;
+        this.ServiceProvider = serviceProvider;
     }
 
     public async Task QuitApplication(){
@@ -172,7 +175,7 @@ public class ShellNavigationService : INavigationService
     }
 
     public async Task GoToMyAccountAddresses() {
-        MyAccountAddressesPage p = (MyAccountAddressesPage)MauiProgram.Container.Services.GetService(typeof(MyAccountAddressesPage));
+        MyAccountAddressesPage p = this.ServiceProvider.GetRequiredService<MyAccountAddressesPage>();
         await this.NavigateTo(p);
     }
 

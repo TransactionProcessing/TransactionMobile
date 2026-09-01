@@ -1,5 +1,7 @@
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
+using TransactionProcessor.Mobile.BusinessLogic.Services;
+using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 using TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports;
 using TransactionProcessor.Mobile.Pages.Common;
 
@@ -9,7 +11,11 @@ public partial class ReportsPage : NoBackWithoutLogoutPage
 {
     private ReportsPageViewModel viewModel => BindingContext as ReportsPageViewModel;
 
-    public ReportsPage(ReportsPageViewModel vm)
+    public ReportsPage(ReportsPageViewModel vm,
+                       INavigationService navigationService,
+                       IDialogService dialogService,
+                       IApplicationCache applicationCache)
+	: base(navigationService, dialogService, applicationCache)
 	{
 		this.InitializeComponent();
         BindingContext = vm;

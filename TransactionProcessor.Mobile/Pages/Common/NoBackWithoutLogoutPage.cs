@@ -11,6 +11,19 @@ namespace TransactionProcessor.Mobile.Pages.Common;
 
 public class NoBackWithoutLogoutPage : ContentPage
 {
+    private readonly INavigationService navigationService;
+    private readonly IDialogService dialogService;
+    private readonly IApplicationCache applicationCache;
+
+    protected NoBackWithoutLogoutPage(INavigationService navigationService,
+                                      IDialogService dialogService,
+                                      IApplicationCache applicationCache)
+    {
+        this.navigationService = navigationService;
+        this.dialogService = dialogService;
+        this.applicationCache = applicationCache;
+    }
+
     protected override Boolean OnBackButtonPressed() {
         Type type = this.GetType().UnderlyingSystemType;
 
@@ -28,24 +41,19 @@ public class NoBackWithoutLogoutPage : ContentPage
     }
 
     private async Task ShowHomePage() {
-        INavigationService navigationService = MauiProgram.Container.Services.GetRequiredService<INavigationService>();
-        await navigationService.GoToHome();
+        await this.navigationService.GoToHome();
     }
 
     private async Task ShowLoginPage()
     {
-        IDialogService dialogService = MauiProgram.Container.Services.GetRequiredService<IDialogService>();
-        IApplicationCache applicationCache = MauiProgram.Container.Services.GetRequiredService<IApplicationCache>();
-        INavigationService navigationService = MauiProgram.Container.Services.GetRequiredService<INavigationService>();
-
-        Boolean leave = await dialogService.ShowDialog("Title", "Logout Message", "yes", "no");
+        Boolean leave = await this.dialogService.ShowDialog("Title", "Logout Message", "yes", "no");
         if (leave)
         {
-            applicationCache.SetIsLoggedIn(false);
-            applicationCache.ClearAccessToken();
-            applicationCache.ClearMerchantDetails();
+            this.applicationCache.SetIsLoggedIn(false);
+            this.applicationCache.ClearAccessToken();
+            this.applicationCache.ClearMerchantDetails();
 
-            await navigationService.GoToLoginPage();
+            await this.navigationService.GoToLoginPage();
         }
     }
 }

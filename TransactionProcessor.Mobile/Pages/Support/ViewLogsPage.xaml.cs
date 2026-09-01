@@ -12,9 +12,7 @@ namespace TransactionProcessor.Mobile.Pages.Support
         }
 
         protected override async void OnAppearing() {
-            ViewLogsPageViewModel vm = MauiProgram.Container.Services.GetRequiredService<ViewLogsPageViewModel>();
-            await vm.LoadLogMessages();
-            this.BindingContext = vm;
+            await this.viewModel.LoadLogMessages();
         }
     }
 }

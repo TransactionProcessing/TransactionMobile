@@ -12,7 +12,8 @@ public partial class HomePage : NoBackWithoutLogoutPage
     public HomePage(HomePageViewModel vm,
                     IDialogService dialogService,
                     IApplicationCache applicationCache,
-                    INavigationService navigationService) {
+                    INavigationService navigationService)
+        : base(navigationService, dialogService, applicationCache) {
         this.InitializeComponent();
         this.BindingContext = vm;
     }
