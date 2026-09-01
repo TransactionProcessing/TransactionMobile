@@ -14,14 +14,14 @@ namespace TransactionProcessor.Mobile.UIServices;
 public class ShellNavigationService : INavigationService
 {
     private readonly INavigationParameterService NavigationParameterService;
-    private readonly IServiceProvider ServiceProvider;
+    private readonly Func<MyAccountAddressesPage> MyAccountAddressesPageFactory;
 
     #region Methods
 
     public ShellNavigationService(INavigationParameterService navigationParameterService,
-                                  IServiceProvider serviceProvider) {
+                                  Func<MyAccountAddressesPage> myAccountAddressesPageFactory) {
         this.NavigationParameterService = navigationParameterService;
-        this.ServiceProvider = serviceProvider;
+        this.MyAccountAddressesPageFactory = myAccountAddressesPageFactory;
     }
 
     public async Task QuitApplication(){
@@ -175,7 +175,7 @@ public class ShellNavigationService : INavigationService
     }
 
     public async Task GoToMyAccountAddresses() {
-        MyAccountAddressesPage p = this.ServiceProvider.GetRequiredService<MyAccountAddressesPage>();
+        MyAccountAddressesPage p = this.MyAccountAddressesPageFactory();
         await this.NavigateTo(p);
     }
 

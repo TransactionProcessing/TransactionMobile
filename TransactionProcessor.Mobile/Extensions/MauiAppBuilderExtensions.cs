@@ -176,6 +176,8 @@ namespace TransactionProcessor.Mobile.Extensions {
 
         public static MauiAppBuilder ConfigureUIServices(this MauiAppBuilder builder) {
             builder.Services.AddSingleton<IDialogService, DialogService>();
+            builder.Services.AddTransient<Func<MyAccountAddressesPage>>(serviceProvider =>
+                () => serviceProvider.GetRequiredService<MyAccountAddressesPage>());
             builder.Services.AddSingleton<INavigationService, ShellNavigationService>();
             builder.Services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
             builder.Services.AddSingleton<IApplicationUpdateLauncherService, ApplicationUpdateLauncherService>();
