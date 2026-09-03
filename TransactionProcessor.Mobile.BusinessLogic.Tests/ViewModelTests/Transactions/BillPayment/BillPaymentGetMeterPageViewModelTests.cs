@@ -1,5 +1,5 @@
-﻿using MediatR;
-using Moq;
+using MediatR;
+using Imposter.Abstractions;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
@@ -12,31 +12,31 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Transac
 
 public class BillPaymentGetMeterPageViewModelTests
 {
-    private readonly Mock<IMediator> Mediator;
+    private readonly IMediatorImposter Mediator;
 
-    private readonly Mock<INavigationService> NavigationService;
+    private readonly INavigationServiceImposter NavigationService;
 
-    private Mock<INavigationParameterService> NavigationParameterService;
+    private INavigationParameterServiceImposter NavigationParameterService;
 
-    private readonly Mock<IApplicationCache> ApplicationCache;
+    private readonly IApplicationCacheImposter ApplicationCache;
 
-    private readonly Mock<IDialogService> DialogSevice;
+    private readonly IDialogServiceImposter DialogSevice;
 
     private readonly BillPaymentGetMeterPageViewModel ViewModel;
 
-    private readonly Mock<IDeviceService> DeviceService;
+    private readonly IDeviceServiceImposter DeviceService;
 
     public BillPaymentGetMeterPageViewModelTests()
     {
-        this.Mediator = new Mock<IMediator>();
-        this.NavigationService = new Mock<INavigationService>();
-        this.NavigationParameterService = new Mock<INavigationParameterService>();
-        this.ApplicationCache = new Mock<IApplicationCache>();
-        this.DialogSevice = new Mock<IDialogService>();
-        this.DeviceService = new Mock<IDeviceService>();
-        this.ViewModel = new BillPaymentGetMeterPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object,
-                                                              this.DialogSevice.Object, this.DeviceService.Object, this.Mediator.Object,
-                                                              this.NavigationParameterService.Object);
+        this.Mediator = new IMediatorImposter();
+        this.NavigationService = new INavigationServiceImposter();
+        this.NavigationParameterService = new INavigationParameterServiceImposter();
+        this.ApplicationCache = new IApplicationCacheImposter();
+        this.DialogSevice = new IDialogServiceImposter();
+        this.DeviceService = new IDeviceServiceImposter();
+        this.ViewModel = new BillPaymentGetMeterPageViewModel(this.NavigationService.Instance(), this.ApplicationCache.Instance(),
+                                                              this.DialogSevice.Instance(), this.DeviceService.Instance(), this.Mediator.Instance(),
+                                                              this.NavigationParameterService.Instance());
 
         Logger.Initialise(new NullLogger());
     }
@@ -44,9 +44,9 @@ public class BillPaymentGetMeterPageViewModelTests
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_ApplyQueryAttributes_QueryAttributesApplied()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.ContractProductList));
 
-        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<String, Object> {
             {nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel},
         });
         await this.ViewModel.Initialise(CancellationToken.None);
@@ -59,9 +59,9 @@ public class BillPaymentGetMeterPageViewModelTests
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_GetMeterCommand_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformBillPaymentGetMeterCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetMeterResponseModel));
+        this.Mediator.Send(Arg<IRequest<Result<PerformBillPaymentGetMeterResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetMeterResponseModel));
 
-        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<String, Object> {
             {nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel},
         });
         await this.ViewModel.Initialise(CancellationToken.None);
@@ -69,15 +69,15 @@ public class BillPaymentGetMeterPageViewModelTests
 
         this.ViewModel.GetMeterCommand.Execute(null);
 
-        this.NavigationService.Verify(n => n.GoToBillPaymentPayBillPage(It.IsAny<ProductDetails>(), It.IsAny<MeterDetails>()), Times.Once);
+        this.NavigationService.GoToBillPaymentPayBillPage(Arg<ProductDetails>.Any(), Arg<MeterDetails>.Any()).Called(Count.Once());
     }
 
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_GetMeterCommand_Failed_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformBillPaymentGetMeterCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetMeterResponseModelFailed));
+        this.Mediator.Send(Arg<IRequest<Result<PerformBillPaymentGetMeterResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetMeterResponseModelFailed));
 
-        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<String, Object> {
             {nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel},
         });
         await this.ViewModel.Initialise(CancellationToken.None);
@@ -85,7 +85,7 @@ public class BillPaymentGetMeterPageViewModelTests
 
         this.ViewModel.GetMeterCommand.Execute(null);
 
-        this.NavigationService.Verify(n => n.GoToBillPaymentFailedPage(), Times.Once);
+        this.NavigationService.GoToBillPaymentFailedPage().Called(Count.Once());
     }
 
 
@@ -94,6 +94,6 @@ public class BillPaymentGetMeterPageViewModelTests
     {
         this.ViewModel.BackButtonCommand.Execute(null);
 
-        this.NavigationService.Verify(n => n.GoBack(), Times.Once);
+        this.NavigationService.GoBack().Called(Count.Once());
     }
 }

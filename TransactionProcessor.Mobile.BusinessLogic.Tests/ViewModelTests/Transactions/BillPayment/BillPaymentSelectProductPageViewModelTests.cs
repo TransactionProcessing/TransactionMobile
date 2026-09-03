@@ -1,5 +1,5 @@
-﻿using MediatR;
-using Moq;
+using MediatR;
+using Imposter.Abstractions;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
@@ -17,43 +17,43 @@ public class BillPaymentSelectProductPageViewModelTests
 {
     #region Methods
 
-    private readonly Mock<IMediator> Mediator;
+    private readonly IMediatorImposter Mediator;
 
-    private readonly Mock<INavigationService> NavigationService;
+    private readonly INavigationServiceImposter NavigationService;
 
-    private readonly Mock<INavigationParameterService> NavigationParameterService;
+    private readonly INavigationParameterServiceImposter NavigationParameterService;
 
-    private readonly Mock<IApplicationCache> ApplicationCache;
+    private readonly IApplicationCacheImposter ApplicationCache;
 
-    private readonly Mock<IDialogService> DialogSevice;
+    private readonly IDialogServiceImposter DialogSevice;
 
     private readonly BillPaymentSelectProductPageViewModel ViewModel;
 
-    private readonly Mock<IDeviceService> DeviceService;
+    private readonly IDeviceServiceImposter DeviceService;
 
     public BillPaymentSelectProductPageViewModelTests()
     {
-        this.Mediator = new Mock<IMediator>();
+        this.Mediator = new IMediatorImposter();
         
-        this.NavigationService = new Mock<INavigationService>();
-        this.NavigationParameterService = new Mock<INavigationParameterService>();
-        this.ApplicationCache = new Mock<IApplicationCache>();
-        this.DialogSevice = new Mock<IDialogService>();
-        this.DeviceService = new Mock<IDeviceService>();
-        this.ViewModel = new BillPaymentSelectProductPageViewModel(this.Mediator.Object,
-                                                                   this.NavigationService.Object,
-                                                                   this.ApplicationCache.Object,
-                                                                   this.DialogSevice.Object,
-                                                                   this.DeviceService.Object,
-                                                                   this.NavigationParameterService.Object);
+        this.NavigationService = new INavigationServiceImposter();
+        this.NavigationParameterService = new INavigationParameterServiceImposter();
+        this.ApplicationCache = new IApplicationCacheImposter();
+        this.DialogSevice = new IDialogServiceImposter();
+        this.DeviceService = new IDeviceServiceImposter();
+        this.ViewModel = new BillPaymentSelectProductPageViewModel(this.Mediator.Instance(),
+                                                                   this.NavigationService.Instance(),
+                                                                   this.ApplicationCache.Instance(),
+                                                                   this.DialogSevice.Instance(),
+                                                                   this.DeviceService.Instance(),
+                                                                   this.NavigationParameterService.Instance());
     }
 
     [Fact]
     public async Task BillPaymentSelectProductPageViewModel_ApplyQueryAttributes_QueryAttributesApplied()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.ContractProductList));
 
-        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> { { nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel }, });
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<String, Object> { { nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel }, });
         await this.ViewModel.Initialise(CancellationToken.None);
         this.ViewModel.ProductDetails.OperatorId.ShouldBe(TestData.OperatorId1);
     }
@@ -61,11 +61,11 @@ public class BillPaymentSelectProductPageViewModelTests
     [Fact]
     public async Task BillPaymentSelectProductPageViewModel_Initialise_IsInitialised()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.ContractProductList));
 
-        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> { { nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel }, });
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<String, Object> { { nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel }, });
         await this.ViewModel.Initialise(CancellationToken.None);
-        this.Mediator.Verify(x => x.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
 
         this.ViewModel.Products.Count.ShouldBe(3);
     }
@@ -73,10 +73,10 @@ public class BillPaymentSelectProductPageViewModelTests
     [Fact]
     public async Task BillPaymentSelectProductPageViewModel_ProductSelectedCommand_PostPay_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
-        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> { { nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel }, });
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.ContractProductList));
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<String, Object> { { nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel }, });
         await this.ViewModel.Initialise(CancellationToken.None);
-        this.Mediator.Verify(x => x.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
 
         this.ViewModel.Products.Count.ShouldBe(3);
 
@@ -88,17 +88,17 @@ public class BillPaymentSelectProductPageViewModelTests
 
         this.ViewModel.ProductSelectedCommand.Execute(selectedContractProduct);
 
-        this.NavigationService.Verify(n => n.GoToBillPaymentGetAccountPage(It.IsAny<ProductDetails>()), Times.Once);
+        this.NavigationService.GoToBillPaymentGetAccountPage(Arg<ProductDetails>.Any()).Called(Count.Once());
     }
 
     [Fact]
     public async Task BillPaymentSelectProductPageViewModel_ProductSelectedCommand_PrePay_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.ContractProductList));
 
-        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> { { nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel }, });
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<String, Object> { { nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel }, });
         await this.ViewModel.Initialise(CancellationToken.None);
-        this.Mediator.Verify(x => x.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
 
         this.ViewModel.Products.Count.ShouldBe(3);
 
@@ -110,7 +110,7 @@ public class BillPaymentSelectProductPageViewModelTests
 
         this.ViewModel.ProductSelectedCommand.Execute(selectedContractProduct);
 
-        this.NavigationService.Verify(n => n.GoToBillPaymentGetMeterPage(It.IsAny<ProductDetails>()), Times.Once);
+        this.NavigationService.GoToBillPaymentGetMeterPage(Arg<ProductDetails>.Any()).Called(Count.Once());
     }
 
     [Fact]
@@ -118,7 +118,7 @@ public class BillPaymentSelectProductPageViewModelTests
     {
         this.ViewModel.BackButtonCommand.Execute(null);
 
-        this.NavigationService.Verify(n => n.GoBack(), Times.Once);
+        this.NavigationService.GoBack().Called(Count.Once());
     }
 
     #endregion

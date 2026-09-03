@@ -1,4 +1,4 @@
-﻿using Moq;
+using Imposter.Abstractions;
 using RichardSzalay.MockHttp;
 using Shouldly;
 using SimpleResults;
@@ -18,8 +18,8 @@ public class MerchantServiceTests{
 
     private Func<String, String> BaseAddressResolver;
     
-    private readonly Mock<IApplicationCache> ApplicationCache;
-    private readonly Mock<IApplicationInfoService> ApplicationInfoService;
+    private readonly IApplicationCacheImposter ApplicationCache;
+    private readonly IApplicationInfoServiceImposter ApplicationInfoService;
 
     private readonly IMerchantService MerchantService;
 
@@ -37,14 +37,14 @@ public class MerchantServiceTests{
         Logger.Initialise(new NullLogger());
         this.MockHttpMessageHandler = new MockHttpMessageHandler();
         this.BaseAddressResolver = (s) => $"http://localhost";
-        this.ApplicationCache = new Mock<IApplicationCache>();
-        this.ApplicationInfoService = new Mock<IApplicationInfoService>();
-        this.ApplicationInfoService.Setup(a => a.VersionString).Returns("1.0.0");
-        this.MerchantService = new MerchantService(this.BaseAddressResolver, this.MockHttpMessageHandler.ToHttpClient(),this.ApplicationCache.Object,
-            this.ApplicationInfoService.Object, Serialise, Deserialise);
+        this.ApplicationCache = new IApplicationCacheImposter();
+        this.ApplicationInfoService = new IApplicationInfoServiceImposter();
+        this.ApplicationInfoService.VersionString.Getter().Returns("1.0.0");
+        this.MerchantService = new MerchantService(this.BaseAddressResolver, this.MockHttpMessageHandler.ToHttpClient(),this.ApplicationCache.Instance(),
+            this.ApplicationInfoService.Instance(), Serialise, Deserialise);
 
         // Standard cache mocking here
-        this.ApplicationCache.Setup(a => a.GetAccessToken()).Returns(TestData.AccessToken);
+        this.ApplicationCache.GetAccessToken().Returns(TestData.AccessToken);
         StringSerialiser.Initialise((IStringSerialiser)new SystemTextJsonSerializer(SystemTextJsonSerializer.GetDefaultJsonSerializerOptions()));
     }
 

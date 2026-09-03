@@ -1,6 +1,6 @@
-﻿using LiveChartsCore.Measure;
+using LiveChartsCore.Measure;
 using MediatR;
-using Moq;
+using Imposter.Abstractions;
 using Shouldly;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -12,29 +12,29 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
 {
     public class ReportsPageViewModelTests
     {
-        private readonly Mock<INavigationService> NavigationService;
-        private readonly Mock<INavigationParameterService> NavigationParameterService;
-        private readonly Mock<IApplicationCache> ApplicationCache;
-        private readonly Mock<IDialogService> DialogService;
-        private readonly Mock<IDeviceService> DeviceService;
-        private readonly Mock<IMediator> Mediator;
+        private readonly INavigationServiceImposter NavigationService;
+        private readonly INavigationParameterServiceImposter NavigationParameterService;
+        private readonly IApplicationCacheImposter ApplicationCache;
+        private readonly IDialogServiceImposter DialogService;
+        private readonly IDeviceServiceImposter DeviceService;
+        private readonly IMediatorImposter Mediator;
 
         private readonly ReportsPageViewModel ViewModel;
 
         public ReportsPageViewModelTests(){
-            this.NavigationService = new Mock<INavigationService>();
-            this.NavigationParameterService = new Mock<INavigationParameterService>();
-            this.ApplicationCache = new Mock<IApplicationCache>();
-            this.DialogService = new Mock<IDialogService>();
-            this.DeviceService = new Mock<IDeviceService>();
-            this.Mediator = new Mock<IMediator>();
+            this.NavigationService = new INavigationServiceImposter();
+            this.NavigationParameterService = new INavigationParameterServiceImposter();
+            this.ApplicationCache = new IApplicationCacheImposter();
+            this.DialogService = new IDialogServiceImposter();
+            this.DeviceService = new IDeviceServiceImposter();
+            this.Mediator = new IMediatorImposter();
 
-            this.ViewModel = new ReportsPageViewModel(this.NavigationService.Object,
-                                                      this.ApplicationCache.Object,
-                                                      this.DialogService.Object,
-                                                      this.DeviceService.Object,
-                                                      this.Mediator.Object,
-                                                      this.NavigationParameterService.Object);
+            this.ViewModel = new ReportsPageViewModel(this.NavigationService.Instance(),
+                                                      this.ApplicationCache.Instance(),
+                                                      this.DialogService.Instance(),
+                                                      this.DeviceService.Instance(),
+                                                      this.Mediator.Instance(),
+                                                      this.NavigationParameterService.Instance());
         }
 
         [Theory]
@@ -54,10 +54,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
 
             switch(selectedIndex){
                 case 0:
-                    this.NavigationService.Verify(v => v.GoToDailyPerformanceSummaryPage(), Times.Once);
+                    this.NavigationService.GoToDailyPerformanceSummaryPage().Called(Count.Once());
                     break;
                 default:
-                    this.NavigationService.Verify(v => v.GoToDailyPerformanceSummaryPage(), Times.Never);
+                    this.NavigationService.GoToDailyPerformanceSummaryPage().Called(Count.Never());
                     break;
             }
         }
@@ -80,7 +80,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
 
             this.ViewModel.OptionSelectedCommand.Execute(itemSelected);
 
-            this.NavigationService.Verify(v => v.GoToTransactionMixSummaryPage(), Times.Once);
+            this.NavigationService.GoToTransactionMixSummaryPage().Called(Count.Once());
         }
 
         [Fact]
@@ -94,7 +94,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
 
             this.ViewModel.OptionSelectedCommand.Execute(itemSelected);
 
-            this.NavigationService.Verify(v => v.GoToRecentActivityReportPage(), Times.Once);
+            this.NavigationService.GoToRecentActivityReportPage().Called(Count.Once());
         }
 
         [Fact]
@@ -102,7 +102,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
         {
             this.ViewModel.BackButtonCommand.Execute(null);
 
-            this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
+            this.NavigationService.GoToHome().Called(Count.Once());
         }
     }
 }

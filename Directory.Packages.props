@@ -13,6 +13,7 @@
     <PackageVersion Include="LiveChartsCore.SkiaSharpView" Version="2.0.5" />
     <PackageVersion Include="LiveChartsCore.SkiaSharpView.Maui" Version="2.0.5" />
     <PackageVersion Include="MediatR" Version="14.2.0" />
+    <PackageVersion Include="Imposter" Version="0.1.10" />
     <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="10.0.11" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.11" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="10.0.11" />
@@ -20,7 +21,6 @@
     <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.100" />
     <PackageVersion Include="Microsoft.Maui.Controls.Compatibility" Version="10.0.100" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
-    <PackageVersion Include="Moq" Version="4.20.72" />
     <PackageVersion Include="NUnit" Version="4.6.1" />
     <PackageVersion Include="NUnit.Analyzers" Version="4.14.0" />
     <PackageVersion Include="NUnit.ConsoleRunner" Version="3.22.0" />

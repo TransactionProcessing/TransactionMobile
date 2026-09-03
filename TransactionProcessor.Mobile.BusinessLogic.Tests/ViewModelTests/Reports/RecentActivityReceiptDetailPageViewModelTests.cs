@@ -1,4 +1,4 @@
-using Moq;
+using Imposter.Abstractions;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -10,28 +10,28 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
 
 public class RecentActivityReceiptDetailPageViewModelTests
 {
-    private readonly Mock<INavigationService> NavigationService;
-    private readonly Mock<IApplicationCache> ApplicationCache;
-    private readonly Mock<IDialogService> DialogService;
-    private readonly Mock<IDeviceService> DeviceService;
-    private readonly Mock<INavigationParameterService> NavigationParameterService;
-    private readonly Mock<IReportsService> ReportsService;
+    private readonly INavigationServiceImposter NavigationService;
+    private readonly IApplicationCacheImposter ApplicationCache;
+    private readonly IDialogServiceImposter DialogService;
+    private readonly IDeviceServiceImposter DeviceService;
+    private readonly INavigationParameterServiceImposter NavigationParameterService;
+    private readonly IReportsServiceImposter ReportsService;
     private readonly RecentActivityReceiptDetailPageViewModel ViewModel;
 
     public RecentActivityReceiptDetailPageViewModelTests()
     {
-        this.NavigationService = new Mock<INavigationService>();
-        this.ApplicationCache = new Mock<IApplicationCache>();
-        this.DialogService = new Mock<IDialogService>();
-        this.DeviceService = new Mock<IDeviceService>();
-        this.NavigationParameterService = new Mock<INavigationParameterService>();
-        this.ReportsService = new Mock<IReportsService>();
-        this.ViewModel = new RecentActivityReceiptDetailPageViewModel(this.NavigationService.Object,
-                                                                       this.ApplicationCache.Object,
-                                                                       this.DialogService.Object,
-                                                                       this.DeviceService.Object,
-                                                                       this.NavigationParameterService.Object,
-                                                                       this.ReportsService.Object);
+        this.NavigationService = new INavigationServiceImposter();
+        this.ApplicationCache = new IApplicationCacheImposter();
+        this.DialogService = new IDialogServiceImposter();
+        this.DeviceService = new IDeviceServiceImposter();
+        this.NavigationParameterService = new INavigationParameterServiceImposter();
+        this.ReportsService = new IReportsServiceImposter();
+        this.ViewModel = new RecentActivityReceiptDetailPageViewModel(this.NavigationService.Instance(),
+                                                                       this.ApplicationCache.Instance(),
+                                                                       this.DialogService.Instance(),
+                                                                       this.DeviceService.Instance(),
+                                                                       this.NavigationParameterService.Instance(),
+                                                                       this.ReportsService.Instance());
     }
 
     [Fact]
@@ -46,7 +46,7 @@ public class RecentActivityReceiptDetailPageViewModelTests
                                                   new DateTime(2026, 7, 6, 9, 30, 0),
                                                   "RCPT-10001");
 
-        this.NavigationParameterService.Setup(p => p.GetParameters()).Returns(new Dictionary<string, object>
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<string, object>
         {
             { nameof(RecentActivityReceiptItemModel), item }
         });
@@ -70,7 +70,7 @@ public class RecentActivityReceiptDetailPageViewModelTests
                                                   new DateTime(2026, 7, 6, 9, 30, 0),
                                                   "RCPT-10001");
 
-        this.NavigationParameterService.Setup(p => p.GetParameters()).Returns(new Dictionary<string, object>
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<string, object>
         {
             { nameof(RecentActivityReceiptItemModel), item }
         });
@@ -78,9 +78,9 @@ public class RecentActivityReceiptDetailPageViewModelTests
         await this.ViewModel.Initialise(CancellationToken.None);
 
         this.ViewModel.EmailAddress = "customer@example.com";
-        this.ReportsService.Setup(r => r.ResendRecentActivityReceipt("TXN-10001",
+        this.ReportsService.ResendRecentActivityReceipt("TXN-10001",
                                                                      "customer@example.com",
-                                                                     It.IsAny<CancellationToken>()))
+                                                                     Arg<CancellationToken>.Any())
                            .ReturnsAsync(Result.Success(new RecentActivityReceiptResendResultModel
                            {
                                Success = true,
@@ -90,11 +90,10 @@ public class RecentActivityReceiptDetailPageViewModelTests
 
         await this.ViewModel.ResendReceiptCommand.ExecuteAsync(null);
 
-        this.ReportsService.Verify(r => r.ResendRecentActivityReceipt("TXN-10001",
+        this.ReportsService.ResendRecentActivityReceipt("TXN-10001",
                                                                       "customer@example.com",
-                                                                      It.IsAny<CancellationToken>()),
-                                   Times.Once);
-        this.DialogService.Verify(d => d.ShowSuccessToast("Receipt resend requested. Sent to customer@example.com.", null, "OK", null, It.IsAny<CancellationToken>()), Times.Once);
+                                                                      Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.DialogService.ShowSuccessToast("Receipt resend requested. Sent to customer@example.com.", Arg<Action?>.Any(), "OK", Arg<TimeSpan?>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
         this.ViewModel.EmailAddress.ShouldBe(string.Empty);
     }
 
@@ -110,7 +109,7 @@ public class RecentActivityReceiptDetailPageViewModelTests
                                                   new DateTime(2026, 7, 6, 9, 30, 0),
                                                   "RCPT-10001");
 
-        this.NavigationParameterService.Setup(p => p.GetParameters()).Returns(new Dictionary<string, object>
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<string, object>
         {
             { nameof(RecentActivityReceiptItemModel), item }
         });
@@ -121,7 +120,7 @@ public class RecentActivityReceiptDetailPageViewModelTests
 
         await this.ViewModel.ResendReceiptCommand.ExecuteAsync(null);
 
-        this.DialogService.Verify(d => d.ShowWarningToast("Enter a valid email address before resending the receipt.", null, "OK", null, It.IsAny<CancellationToken>()), Times.Once);
+        this.DialogService.ShowWarningToast("Enter a valid email address before resending the receipt.", Arg<Action?>.Any(), "OK", Arg<TimeSpan?>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
     }
 
     [Fact]
@@ -136,7 +135,7 @@ public class RecentActivityReceiptDetailPageViewModelTests
                                                   new DateTime(2026, 7, 6, 9, 30, 0),
                                                   "RCPT-10001");
 
-        this.NavigationParameterService.Setup(p => p.GetParameters()).Returns(new Dictionary<string, object>
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<string, object>
         {
             { nameof(RecentActivityReceiptItemModel), item }
         });
@@ -144,13 +143,13 @@ public class RecentActivityReceiptDetailPageViewModelTests
         await this.ViewModel.Initialise(CancellationToken.None);
 
         this.ViewModel.EmailAddress = "customer@example.com";
-        this.ReportsService.Setup(r => r.ResendRecentActivityReceipt("TXN-10001",
+        this.ReportsService.ResendRecentActivityReceipt("TXN-10001",
                                                                      "customer@example.com",
-                                                                     It.IsAny<CancellationToken>()))
+                                                                     Arg<CancellationToken>.Any())
                            .ReturnsAsync(Result.Failure("Receipt resend failed."));
 
         await this.ViewModel.ResendReceiptCommand.ExecuteAsync(null);
 
-        this.DialogService.Verify(d => d.ShowWarningToast("Receipt resend failed.", null, "OK", null, It.IsAny<CancellationToken>()), Times.Once);
+        this.DialogService.ShowWarningToast("Receipt resend failed.", Arg<Action?>.Any(), "OK", Arg<TimeSpan?>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
     }
 }

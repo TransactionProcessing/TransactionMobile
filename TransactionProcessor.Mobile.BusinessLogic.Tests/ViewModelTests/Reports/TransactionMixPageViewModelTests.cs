@@ -1,5 +1,5 @@
 using MediatR;
-using Moq;
+using Imposter.Abstractions;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
@@ -13,36 +13,36 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
 
 public class TransactionMixPageViewModelTests
 {
-    private readonly Mock<IMediator> Mediator;
-    private readonly Mock<INavigationService> NavigationService;
-    private readonly Mock<IApplicationCache> ApplicationCache;
-    private readonly Mock<IDialogService> DialogService;
-    private readonly Mock<IDeviceService> DeviceService;
-    private readonly Mock<INavigationParameterService> NavigationParameterService;
+    private readonly IMediatorImposter Mediator;
+    private readonly INavigationServiceImposter NavigationService;
+    private readonly IApplicationCacheImposter ApplicationCache;
+    private readonly IDialogServiceImposter DialogService;
+    private readonly IDeviceServiceImposter DeviceService;
+    private readonly INavigationParameterServiceImposter NavigationParameterService;
     private readonly TransactionMixPageViewModel ViewModel;
 
     public TransactionMixPageViewModelTests()
     {
-        this.Mediator = new Mock<IMediator>();
+        this.Mediator = new IMediatorImposter();
         this.Mediator
-            .Setup(m => m.Send(It.IsAny<ReportQueries.GetTransactionMixSummaryQuery>(), It.IsAny<CancellationToken>()))
+            .Send(Arg<IRequest<Result<TransactionMixSummaryModel>>>.Any(), Arg<CancellationToken>.Any())
             .ReturnsAsync(Result.Success(TransactionMixSummaryModel.CreateMock(
                 merchantReportingId: 12345,
                 breakdown: TransactionMixBreakdown.TransactionType,
                 measure: TransactionMixMeasure.Count)));
 
-        this.NavigationService = new Mock<INavigationService>();
-        this.ApplicationCache = new Mock<IApplicationCache>();
-        this.DialogService = new Mock<IDialogService>();
-        this.DeviceService = new Mock<IDeviceService>();
-        this.NavigationParameterService = new Mock<INavigationParameterService>();
+        this.NavigationService = new INavigationServiceImposter();
+        this.ApplicationCache = new IApplicationCacheImposter();
+        this.DialogService = new IDialogServiceImposter();
+        this.DeviceService = new IDeviceServiceImposter();
+        this.NavigationParameterService = new INavigationParameterServiceImposter();
 
-        this.ViewModel = new TransactionMixPageViewModel(this.Mediator.Object,
-                                                         this.NavigationService.Object,
-                                                         this.ApplicationCache.Object,
-                                                         this.DialogService.Object,
-                                                         this.DeviceService.Object,
-                                                         this.NavigationParameterService.Object);
+        this.ViewModel = new TransactionMixPageViewModel(this.Mediator.Instance(),
+                                                         this.NavigationService.Instance(),
+                                                         this.ApplicationCache.Instance(),
+                                                         this.DialogService.Instance(),
+                                                         this.DeviceService.Instance(),
+                                                         this.NavigationParameterService.Instance());
     }
 
     [Fact]

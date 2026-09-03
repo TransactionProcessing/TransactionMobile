@@ -1,5 +1,5 @@
-﻿using MediatR;
-using Moq;
+using MediatR;
+using Imposter.Abstractions;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -13,43 +13,43 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.MyAccou
 [Collection("ViewModelTests")]
 public class MyAccountDetailsPageViewModelTests
 {
-    private readonly Mock<INavigationService> NavigationService;
-    private Mock<INavigationParameterService> NavigationParameterService;
+    private readonly INavigationServiceImposter NavigationService;
+    private INavigationParameterServiceImposter NavigationParameterService;
 
-    private readonly Mock<IApplicationCache> ApplicationCache;
+    private readonly IApplicationCacheImposter ApplicationCache;
 
-    private readonly Mock<IDialogService> DialogService;
+    private readonly IDialogServiceImposter DialogService;
 
     private readonly MyAccountDetailsPageViewModel ViewModel;
 
-    private readonly Mock<IDeviceService> DeviceService;
+    private readonly IDeviceServiceImposter DeviceService;
 
-    private readonly Mock<IMediator> Mediator;
+    private readonly IMediatorImposter Mediator;
 
     public MyAccountDetailsPageViewModelTests()
     {
-        this.NavigationService = new Mock<INavigationService>();
-        this.NavigationParameterService = new Mock<INavigationParameterService>();
-        this.ApplicationCache = new Mock<IApplicationCache>();
-        this.DialogService = new Mock<IDialogService>();
-        this.DeviceService = new Mock<IDeviceService>();
-        this.Mediator = new Mock<IMediator>();
-        this.ViewModel = new MyAccountDetailsPageViewModel(this.NavigationService.Object,
-                                                           this.ApplicationCache.Object,
-                                                           this.DialogService.Object,
-                                                           this.DeviceService.Object,
-                                                           this.NavigationParameterService.Object,
-                                                           this.Mediator.Object);
+        this.NavigationService = new INavigationServiceImposter();
+        this.NavigationParameterService = new INavigationParameterServiceImposter();
+        this.ApplicationCache = new IApplicationCacheImposter();
+        this.DialogService = new IDialogServiceImposter();
+        this.DeviceService = new IDeviceServiceImposter();
+        this.Mediator = new IMediatorImposter();
+        this.ViewModel = new MyAccountDetailsPageViewModel(this.NavigationService.Instance(),
+                                                           this.ApplicationCache.Instance(),
+                                                           this.DialogService.Instance(),
+                                                           this.DeviceService.Instance(),
+                                                           this.NavigationParameterService.Instance(),
+                                                           this.Mediator.Instance());
     }
 
     [Fact]
     public async Task MyAccountDetailsPageViewModel_Initialise_IsInitialised()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
+        this.Mediator.Send(Arg<IRequest<Result<MerchantDetailsModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
 
         await this.ViewModel.Initialise(CancellationToken.None);
 
-        this.Mediator.Verify(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Send(Arg<IRequest<Result<MerchantDetailsModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
         this.ViewModel.Balance.ShouldBe(TestData.Balance);
         this.ViewModel.AvailableBalance.ShouldBe(TestData.AvailableBalance);
         this.ViewModel.MerchantName.ShouldBe(TestData.MerchantName);
@@ -63,6 +63,6 @@ public class MyAccountDetailsPageViewModelTests
     {
         this.ViewModel.BackButtonCommand.Execute(null);
 
-        this.NavigationService.Verify(n => n.GoBack(), Times.Once);
+        this.NavigationService.GoBack().Called(Count.Once());
     }
 }

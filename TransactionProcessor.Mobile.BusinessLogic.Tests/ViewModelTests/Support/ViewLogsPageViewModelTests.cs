@@ -1,5 +1,5 @@
-﻿using MediatR;
-using Moq;
+using MediatR;
+using Imposter.Abstractions;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -13,38 +13,38 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Support
 [Collection("ViewModelTests")]
 public class ViewLogsPageViewModelTests
 {
-    private readonly Mock<INavigationService> NavigationService;
+    private readonly INavigationServiceImposter NavigationService;
 
-    private readonly Mock<INavigationParameterService> NavigationParameterService;
+    private readonly INavigationParameterServiceImposter NavigationParameterService;
 
-    private readonly Mock<IMediator> Mediator;
+    private readonly IMediatorImposter Mediator;
 
-    private readonly Mock<IApplicationCache> ApplicationCache;
+    private readonly IApplicationCacheImposter ApplicationCache;
 
-    private readonly Mock<IDialogService> DialogService;
+    private readonly IDialogServiceImposter DialogService;
 
     private readonly ViewLogsPageViewModel ViewModel;
 
-    private readonly Mock<IDeviceService> DeviceService;
+    private readonly IDeviceServiceImposter DeviceService;
 
     public ViewLogsPageViewModelTests() {
-        this.NavigationService = new Mock<INavigationService>();
-        this.NavigationParameterService = new Mock<INavigationParameterService>();
-        this.Mediator = new Mock<IMediator>();
-        this.ApplicationCache = new Mock<IApplicationCache>();
-        this.DialogService = new Mock<IDialogService>();
-        this.DeviceService = new Mock<IDeviceService>();
-        this.ViewModel = new ViewLogsPageViewModel(this.Mediator.Object,
-                                                   this.NavigationService.Object,
-                                                   this.ApplicationCache.Object,
-                                                   this.DialogService.Object,
-                                                   this.DeviceService.Object, this.NavigationParameterService.Object);
+        this.NavigationService = new INavigationServiceImposter();
+        this.NavigationParameterService = new INavigationParameterServiceImposter();
+        this.Mediator = new IMediatorImposter();
+        this.ApplicationCache = new IApplicationCacheImposter();
+        this.DialogService = new IDialogServiceImposter();
+        this.DeviceService = new IDeviceServiceImposter();
+        this.ViewModel = new ViewLogsPageViewModel(this.Mediator.Instance(),
+                                                   this.NavigationService.Instance(),
+                                                   this.ApplicationCache.Instance(),
+                                                   this.DialogService.Instance(),
+                                                   this.DeviceService.Instance(), this.NavigationParameterService.Instance());
     }
 
     [Fact]
     public async Task SupportPageViewModel_UploadLogsCommand_Execute_IsExecuted(){
 
-        this.Mediator.Setup(m => m.Send(It.IsAny<SupportQueries.ViewLogsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new List<LogMessage>(){
+        this.Mediator.Send(Arg<IRequest<Result<List<LogMessage>>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(new List<LogMessage>(){
                                                                                                                                                               new LogMessage()
                                                                                                                                                           }));
 
@@ -54,7 +54,7 @@ public class ViewLogsPageViewModelTests
 
     [Fact]
     public async Task ViewLogsPageViewModel_LoadLogMessages_RaisesPropertyChanged(){
-        this.Mediator.Setup(m => m.Send(It.IsAny<SupportQueries.ViewLogsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new List<LogMessage>(){
+        this.Mediator.Send(Arg<IRequest<Result<List<LogMessage>>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(new List<LogMessage>(){
                                                                                                                                                               new LogMessage()
                                                                                                                                                           }));
         String? changedPropertyName = null;
@@ -70,6 +70,6 @@ public class ViewLogsPageViewModelTests
     {
         this.ViewModel.BackButtonCommand.Execute(null);
 
-        this.NavigationService.Verify(n => n.GoBack(), Times.Once);
+        this.NavigationService.GoBack().Called(Count.Once());
     }
 }

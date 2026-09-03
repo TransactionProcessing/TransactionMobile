@@ -1,4 +1,4 @@
-using Moq;
+using Imposter.Abstractions;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 using TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions;
 
@@ -7,20 +7,20 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Transac
 [Collection("ViewModelTests")]
 public class MobileTopupSuccessPageViewModelTests
 {
-    private readonly Mock<INavigationService> NavigationService;
+    private readonly INavigationServiceImposter NavigationService;
 
     private readonly MobileTopupSuccessPageViewModel ViewModel;
     
     public MobileTopupSuccessPageViewModelTests() {
-        this.NavigationService = new Mock<INavigationService>();
+        this.NavigationService = new INavigationServiceImposter();
         
-        this.ViewModel = new MobileTopupSuccessPageViewModel(this.NavigationService.Object);
+        this.ViewModel = new MobileTopupSuccessPageViewModel(this.NavigationService.Instance());
     }
     
     [Fact]
     public void MobileTopupSuccessPageViewModel_CompletedCommand_Execute_IsExecuted()
     {
         this.ViewModel.CompletedCommand.Execute(null);
-        this.NavigationService.Verify(n => n.PopToRoot(), Times.Once);
+        this.NavigationService.PopToRoot().Called(Count.Once());
     }
 }

@@ -1,4 +1,4 @@
-using Moq;
+using Imposter.Abstractions;
 using RichardSzalay.MockHttp;
 using Shouldly;
 using SimpleResults;
@@ -21,7 +21,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
 
         private ITransactionService TransactionService;
 
-        private Mock<IApplicationCache> ApplicationCache;
+        private IApplicationCacheImposter ApplicationCache;
 
         String Serialise(Object arg)
         {
@@ -131,9 +131,9 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
         public TransactionServiceTests(){
             this.MockHttpMessageHandler = new MockHttpMessageHandler();
             this.BaseAddressResolver = (s) => $"http://localhost";
-            this.ApplicationCache = new Mock<IApplicationCache>();
-            this.TransactionService = new TransactionService(this.BaseAddressResolver, this.MockHttpMessageHandler.ToHttpClient(), this.ApplicationCache.Object, this.Serialise,this.Deserialise);
-            this.ApplicationCache.Setup(s => s.GetAccessToken()).Returns(new TokenResponseModel(){
+            this.ApplicationCache = new IApplicationCacheImposter();
+            this.TransactionService = new TransactionService(this.BaseAddressResolver, this.MockHttpMessageHandler.ToHttpClient(), this.ApplicationCache.Instance(), this.Serialise,this.Deserialise);
+            this.ApplicationCache.GetAccessToken().Returns(new TokenResponseModel(){
                                                                                                      AccessToken = "token"
                                                                                                  });
             Logger.Initialise(new Logging.NullLogger());

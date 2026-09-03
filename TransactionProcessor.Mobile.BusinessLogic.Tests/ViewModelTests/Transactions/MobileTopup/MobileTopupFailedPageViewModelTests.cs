@@ -1,4 +1,4 @@
-using Moq;
+using Imposter.Abstractions;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 using TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions;
@@ -10,14 +10,14 @@ using NullLogger = Logging.NullLogger;
 [Collection("ViewModelTests")]
 public class MobileTopupFailedPageViewModelTests
 {
-    private readonly Mock<INavigationService> NavigationService;
+    private readonly INavigationServiceImposter NavigationService;
 
     private readonly MobileTopupFailedPageViewModel ViewModel;
     public MobileTopupFailedPageViewModelTests()
     {
-        this.NavigationService = new Mock<INavigationService>();
+        this.NavigationService = new INavigationServiceImposter();
 
-        this.ViewModel = new MobileTopupFailedPageViewModel(this.NavigationService.Object);
+        this.ViewModel = new MobileTopupFailedPageViewModel(this.NavigationService.Instance());
         Logger.Initialise(new NullLogger());
     }
 
@@ -25,6 +25,6 @@ public class MobileTopupFailedPageViewModelTests
     public void MobileTopupFailedPageViewModel_CancelledCommand_Execute_IsExecuted()
     {
         this.ViewModel.CancelledCommand.Execute(null);
-        this.NavigationService.Verify(n => n.PopToRoot(), Times.Once);
+        this.NavigationService.PopToRoot().Called(Count.Once());
     }
 }

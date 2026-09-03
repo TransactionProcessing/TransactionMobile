@@ -1,6 +1,6 @@
-﻿using System.Text;
+using System.Text;
 using MediatR;
-using Moq;
+using Imposter.Abstractions;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Database;
@@ -14,51 +14,52 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Support
     [Collection("ViewModelTests")]
     public class SupportPageViewModelTests
     {
-        private readonly Mock<INavigationService> NavigationService;
+        private readonly INavigationServiceImposter NavigationService;
 
-        private readonly Mock<INavigationParameterService> NavigationParameterService;
+        private readonly INavigationParameterServiceImposter NavigationParameterService;
 
-        private readonly Mock<IDatabaseContext> DatabaseContext;
+        private readonly IDatabaseContextImposter DatabaseContext;
 
-        private readonly Mock<IMediator> Mediator;
+        private readonly IMediatorImposter Mediator;
 
-        private readonly Mock<IDeviceService> DeviceService;
+        private readonly IDeviceServiceImposter DeviceService;
 
-        private readonly Mock<IApplicationInfoService> ApplicationInfoService;
+        private readonly IApplicationInfoServiceImposter ApplicationInfoService;
 
-        private readonly Mock<IApplicationCache> ApplicationCache;
+        private readonly IApplicationCacheImposter ApplicationCache;
 
-        private readonly Mock<IDialogService> DialogService;
+        private readonly IDialogServiceImposter DialogService;
 
         private readonly SupportPageViewModel ViewModel;
         public SupportPageViewModelTests() {
-            this.NavigationService = new Mock<INavigationService>();
-            this.NavigationParameterService = new Mock<INavigationParameterService>();
-            this.DatabaseContext = new Mock<IDatabaseContext>();
-            this.Mediator = new Mock<IMediator>();
-            this.DeviceService = new Mock<IDeviceService>();
-            this.ApplicationInfoService = new Mock<IApplicationInfoService>();
-            this.ApplicationCache = new Mock<IApplicationCache>();
-            this.DialogService = new Mock<IDialogService>();
-            this.ViewModel = new SupportPageViewModel(this.DeviceService.Object,
-                                                      this.ApplicationInfoService.Object,
-                                                      this.DatabaseContext.Object,
-                                                      this.Mediator.Object,
-                                                      this.NavigationService.Object,
-                                                      this.ApplicationCache.Object,
-                                                      this.DialogService.Object,
-                                                      this.NavigationParameterService.Object);
+            this.NavigationService = new INavigationServiceImposter();
+            this.NavigationParameterService = new INavigationParameterServiceImposter();
+            this.DatabaseContext = new IDatabaseContextImposter();
+            this.Mediator = new IMediatorImposter();
+            this.DeviceService = new IDeviceServiceImposter();
+            this.ApplicationInfoService = new IApplicationInfoServiceImposter();
+            this.ApplicationCache = new IApplicationCacheImposter();
+            this.DialogService = new IDialogServiceImposter();
+            this.DialogService.ShowUploadLogsCompleteNotice().Returns(Task.CompletedTask);
+            this.ViewModel = new SupportPageViewModel(this.DeviceService.Instance(),
+                                                      this.ApplicationInfoService.Instance(),
+                                                      this.DatabaseContext.Instance(),
+                                                      this.Mediator.Instance(),
+                                                      this.NavigationService.Instance(),
+                                                      this.ApplicationCache.Instance(),
+                                                      this.DialogService.Instance(),
+                                                      this.NavigationParameterService.Instance());
         }
 
         [Fact]
         public async Task SupportPageViewModel_UploadLogsCommand_Execute_IsExecuted()
         {
-            this.Mediator.Setup(m => m.Send(It.IsAny<SupportCommands.UploadLogsCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success());
+            this.Mediator.Send(Arg<IRequest<Result>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success());
             await this.ViewModel.UploadLogsCommand.ExecuteAsync(null);
 
-            this.Mediator.Verify(m => m.Send(It.IsAny<SupportCommands.UploadLogsCommand>(),It.IsAny<CancellationToken>()),Times.Once);
-            this.DialogService.Verify(d => d.ShowUploadLogsCompleteNotice(), Times.Once);
-            this.NavigationService.Verify(n => n.GoBack(), Times.Never);
+            this.Mediator.Send(Arg<IRequest<Result>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+            this.DialogService.ShowUploadLogsCompleteNotice().Called(Count.Once());
+            this.NavigationService.GoBack().Called(Count.Never());
         }
 
         [Fact]
@@ -66,14 +67,14 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Support
         {
             this.ViewModel.ViewLogsCommand.Execute(null);
 
-            this.NavigationService.Verify(n => n.GoToViewLogsPage(), Times.Once);
+            this.NavigationService.GoToViewLogsPage().Called(Count.Once());
         }
 
         [Fact]
         public void SupportPageViewModel_Platform_ValueIsReturned(){
-            this.DeviceService.Setup(d => d.GetPlatform()).Returns("Platform");
-            this.DeviceService.Setup(d => d.GetManufacturer()).Returns("Manufacturer");
-            this.DeviceService.Setup(d => d.GetModel()).Returns("Model");
+            this.DeviceService.GetPlatform().Returns("Platform");
+            this.DeviceService.GetManufacturer().Returns("Manufacturer");
+            this.DeviceService.GetModel().Returns("Model");
 
             String platform = this.ViewModel.Platform;
 
@@ -88,7 +89,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Support
         [Fact]
         public void SupportPageViewModel_NumberTransactionsStored_ValueIsReturned()
         {
-            this.DatabaseContext.Setup(d => d.GetTransactions(It.IsAny<Boolean>())).ReturnsAsync(new List<TransactionRecord>{
+            this.DatabaseContext.GetTransactions(Arg<Boolean>.Any()).ReturnsAsync(new List<TransactionRecord>{
                                                                                                                                 new TransactionRecord()
 
                                                                                                                             });
@@ -102,8 +103,8 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Support
         [Fact]
         public void SupportPageViewModel_ApplicationName_ValueIsReturned()
         {
-            this.ApplicationInfoService.Setup(d => d.ApplicationName).Returns("ApplicationName");
-            this.ApplicationInfoService.Setup(d => d.VersionString).Returns("VersionString");
+            this.ApplicationInfoService.ApplicationName.Getter().Returns("ApplicationName");
+            this.ApplicationInfoService.VersionString.Getter().Returns("VersionString");
 
             String applicationName = this.ViewModel.ApplicationName;
 
@@ -117,7 +118,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Support
         {
             this.ViewModel.BackButtonCommand.Execute(null);
 
-            this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
+            this.NavigationService.GoToHome().Called(Count.Once());
         }
     }
 }

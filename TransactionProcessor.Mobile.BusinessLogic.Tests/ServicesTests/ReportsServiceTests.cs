@@ -1,4 +1,4 @@
-using Moq;
+using Imposter.Abstractions;
 using RichardSzalay.MockHttp;
 using Shouldly;
 using SimpleResults;
@@ -15,26 +15,26 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests;
 public class ReportsServiceTests
 {
     private readonly MockHttpMessageHandler MockHttpMessageHandler;
-    private readonly Mock<IApplicationCache> ApplicationCache;
-    private readonly Mock<IApplicationInfoService> ApplicationInfoService;
+    private readonly IApplicationCacheImposter ApplicationCache;
+    private readonly IApplicationInfoServiceImposter ApplicationInfoService;
     private readonly IReportsService ReportsService;
 
     public ReportsServiceTests()
     {
         this.MockHttpMessageHandler = new MockHttpMessageHandler();
-        this.ApplicationCache = new Mock<IApplicationCache>();
-        this.ApplicationInfoService = new Mock<IApplicationInfoService>();
-        this.ApplicationCache.Setup(s => s.GetAccessToken()).Returns(new TokenResponseModel
+        this.ApplicationCache = new IApplicationCacheImposter();
+        this.ApplicationInfoService = new IApplicationInfoServiceImposter();
+        this.ApplicationCache.GetAccessToken().Returns(new TokenResponseModel
         {
             AccessToken = "token"
         });
-        this.ApplicationInfoService.Setup(s => s.VersionString).Returns("1.2.3");
+        this.ApplicationInfoService.VersionString.Getter().Returns("1.2.3");
         this.ReportsService = new ReportsService(_ => "http://localhost",
                                                  this.MockHttpMessageHandler.ToHttpClient(),
-                                                 this.ApplicationCache.Object,
+                                                 this.ApplicationCache.Instance(),
                                                  obj => StringSerialiser.Serialise(obj),
                                                  (json, type) => StringSerialiser.DeserializeObject<object>(json, type),
-                                                 this.ApplicationInfoService.Object);
+                                                 this.ApplicationInfoService.Instance());
         Logger.Initialise(new NullLogger());
         StringSerialiser.Initialise((IStringSerialiser)new SystemTextJsonSerializer(SystemTextJsonSerializer.GetDefaultJsonSerializerOptions()));
     }

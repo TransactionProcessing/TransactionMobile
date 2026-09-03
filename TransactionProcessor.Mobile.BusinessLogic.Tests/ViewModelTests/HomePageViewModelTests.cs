@@ -1,4 +1,4 @@
-using Moq;
+using Imposter.Abstractions;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
@@ -11,61 +11,60 @@ using NullLogger = Logging.NullLogger;
 [Collection("ViewModelTests")]
 public class HomePageViewModelTests
 {
-    private Mock<INavigationService> navigationService;
-    private Mock<INavigationParameterService> navigationParameterService;
+    private INavigationServiceImposter navigationService;
+    private INavigationParameterServiceImposter navigationParameterService;
 
-    private Mock<IApplicationCache> applicationCache;
+    private IApplicationCacheImposter applicationCache;
 
-    private Mock<IDialogService> dialogService;
+    private IDialogServiceImposter dialogService;
 
     private HomePageViewModel viewModel;
 
-    private readonly Mock<IDeviceService> DeviceService;
-    private readonly Mock<IBalanceRefresher> balanceRefresher;
+    private readonly IDeviceServiceImposter DeviceService;
+    private readonly IBalanceRefresherImposter balanceRefresher;
 
     public HomePageViewModelTests() {
-         this.navigationService = new Mock<INavigationService>();
-        this.applicationCache = new Mock<IApplicationCache>();
-        this.dialogService = new Mock<IDialogService>();
-        this.DeviceService = new Mock<IDeviceService>();
-        this.navigationParameterService = new Mock<INavigationParameterService>();
-        this.balanceRefresher = new Mock<IBalanceRefresher>();
-        this.balanceRefresher.SetupAdd(b => b.BalanceChanged += It.IsAny<Action<Decimal>>());
-        this.viewModel = new HomePageViewModel(this.applicationCache.Object,
-                                                            this.dialogService.Object,
-                                                            this.DeviceService.Object,
-                                                            this.navigationService.Object,
-                                                            this.navigationParameterService.Object,
-                                                            this.balanceRefresher.Object);
+         this.navigationService = new INavigationServiceImposter();
+        this.applicationCache = new IApplicationCacheImposter();
+        this.dialogService = new IDialogServiceImposter();
+        this.DeviceService = new IDeviceServiceImposter();
+        this.navigationParameterService = new INavigationParameterServiceImposter();
+        this.balanceRefresher = new IBalanceRefresherImposter();
+        this.viewModel = new HomePageViewModel(this.applicationCache.Instance(),
+                                                            this.dialogService.Instance(),
+                                                            this.DeviceService.Instance(),
+                                                            this.navigationService.Instance(),
+                                                            this.navigationParameterService.Instance(),
+                                                            this.balanceRefresher.Instance());
         Logger.Initialise(new NullLogger());
     }
 
     [Fact]
     public void HomePageViewModel_BackButtonCommand_Execute_UserSelectsToLogout_LoginPageDisplayed()
     {
-        this.dialogService.Setup(d => d.ShowDialog(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>())).ReturnsAsync(true);
+        this.dialogService.ShowDialog(Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any()).ReturnsAsync(true);
         
         this.viewModel.BackButtonCommand.Execute(null);
 
-        this.navigationService.Verify(n => n.GoToLoginPage(), Times.Once);
-        this.dialogService.Verify(d => d.ShowDialog(It.IsAny<String>(),
-                                               It.IsAny<String>(),
-                                               It.IsAny<String>(),
-                                               It.IsAny<String>()), Times.Once);
+        this.navigationService.GoToLoginPage().Called(Count.Once());
+        this.dialogService.ShowDialog(Arg<String>.Any(),
+                                               Arg<String>.Any(),
+                                               Arg<String>.Any(),
+                                               Arg<String>.Any()).Called(Count.Once());
     }
 
     [Fact]
     public void HomePageViewModel_BackButtonCommand_Execute_UserSelectsNotToLogout_LoginPageDisplayed()
     {
-        this.dialogService.Setup(d => d.ShowDialog(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>())).ReturnsAsync(false);
+        this.dialogService.ShowDialog(Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any()).ReturnsAsync(false);
      
         this.viewModel.BackButtonCommand.Execute(null);
 
-        this.navigationService.VerifyNoOtherCalls();
-        this.dialogService.Verify(d => d.ShowDialog(It.IsAny<String>(),
-                                               It.IsAny<String>(),
-                                               It.IsAny<String>(),
-                                               It.IsAny<String>()), Times.Once);
+        this.navigationService.GoToLoginPage().Called(Count.Never());
+        this.dialogService.ShowDialog(Arg<String>.Any(),
+                                               Arg<String>.Any(),
+                                               Arg<String>.Any(),
+                                               Arg<String>.Any()).Called(Count.Once());
     }
 
     [Fact]
@@ -73,7 +72,7 @@ public class HomePageViewModelTests
     {
         this.viewModel.GoToTransactionsCommand.Execute(null);
 
-        this.navigationService.Verify(n => n.GoToTransactions(), Times.Once);
+        this.navigationService.GoToTransactions().Called(Count.Once());
     }
 
     [Fact]
@@ -81,7 +80,7 @@ public class HomePageViewModelTests
     {
         this.viewModel.GoToMobileTopupCommand.Execute(null);
 
-        this.navigationService.Verify(n => n.GoToMobileTopupSelectOperatorPage(), Times.Once);
+        this.navigationService.GoToMobileTopupSelectOperatorPage().Called(Count.Once());
     }
 
     [Fact]
@@ -89,7 +88,7 @@ public class HomePageViewModelTests
     {
         this.viewModel.GoToBillPaymentCommand.Execute(null);
 
-        this.navigationService.Verify(n => n.GoToBillPaymentSelectOperatorPage(), Times.Once);
+        this.navigationService.GoToBillPaymentSelectOperatorPage().Called(Count.Once());
     }
 
     [Fact]
@@ -97,7 +96,7 @@ public class HomePageViewModelTests
     {
         this.viewModel.GoToVoucherCommand.Execute(null);
 
-        this.navigationService.Verify(n => n.GoToVoucherSelectOperatorPage(), Times.Once);
+        this.navigationService.GoToVoucherSelectOperatorPage().Called(Count.Once());
     }
 
     [Fact]
@@ -105,13 +104,13 @@ public class HomePageViewModelTests
     {
         this.viewModel.GoToAdminCommand.Execute(null);
 
-        this.navigationService.Verify(n => n.GoToAdminPage(), Times.Once);
+        this.navigationService.GoToAdminPage().Called(Count.Once());
     }
 
     [Fact]
     public async Task HomePageViewModel_Initialise_Balance_SetsBalanceFromCache()
     {
-        this.applicationCache.Setup(a => a.GetMerchantBalance()).Returns(123.45m);
+        this.applicationCache.GetMerchantBalance().Returns(123.45m);
 
         await this.viewModel.Initialise(CancellationToken.None);
 
@@ -122,15 +121,14 @@ public class HomePageViewModelTests
     public void HomePageViewModel_BalanceChanged_Updates_Balance()
     {
         Action<Decimal> capturedHandler = null;
-        this.balanceRefresher.SetupAdd(b => b.BalanceChanged += It.IsAny<Action<Decimal>>())
-                             .Callback<Action<Decimal>>(h => capturedHandler = h);
+        this.balanceRefresher.BalanceChanged.OnSubscribe(h => capturedHandler = h);
 
-        var vm = new HomePageViewModel(this.applicationCache.Object,
-                                       this.dialogService.Object,
-                                       this.DeviceService.Object,
-                                       this.navigationService.Object,
-                                       this.navigationParameterService.Object,
-                                       this.balanceRefresher.Object);
+        var vm = new HomePageViewModel(this.applicationCache.Instance(),
+                                       this.dialogService.Instance(),
+                                       this.DeviceService.Instance(),
+                                       this.navigationService.Instance(),
+                                       this.navigationParameterService.Instance(),
+                                       this.balanceRefresher.Instance());
 
         capturedHandler?.Invoke(200.00m);
 

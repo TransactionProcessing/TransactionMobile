@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
-using Moq;
+using Imposter.Abstractions;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
@@ -17,65 +17,63 @@ public class LoginPageViewModelTests
 {
     private LoginPageViewModel ViewModel;
 
-    private readonly Mock<IMediator> Mediator;
+    private readonly IMediatorImposter Mediator;
 
-    private readonly Mock<INavigationService> NavigationService;
-    private Mock<INavigationParameterService> NavigationParameterService;
+    private readonly INavigationServiceImposter NavigationService;
+    private INavigationParameterServiceImposter NavigationParameterService;
 
-    private readonly Mock<IApplicationCache> ApplicationCache;
+    private readonly IApplicationCacheImposter ApplicationCache;
 
-    private readonly Mock<IDeviceService> DeviceService;
+    private readonly IDeviceServiceImposter DeviceService;
 
-    private readonly Mock<IApplicationInfoService> ApplicationInfoService;
+    private readonly IApplicationInfoServiceImposter ApplicationInfoService;
 
-    private readonly Mock<IApplicationUpdateLauncherService> ApplicationUpdateLauncherService;
+    private readonly IApplicationUpdateLauncherServiceImposter ApplicationUpdateLauncherService;
 
-    private readonly Mock<IDialogService> DialogService;
+    private readonly IDialogServiceImposter DialogService;
 
-    private readonly Mock<IUpdateService> UpdateService;
+    private readonly IUpdateServiceImposter UpdateService;
 
-    private readonly Mock<IBalanceRefresher> BalanceRefresher;
+    private readonly IBalanceRefresherImposter BalanceRefresher;
 
-    private readonly Mock<ISentryService> SentryService;
+    private readonly ISentryServiceImposter SentryService;
+
+    private int warningToastCount;
+    private int informationToastCount;
 
     public LoginPageViewModelTests() {
-        this.Mediator = new Mock<IMediator>();
-        this.NavigationService = new Mock<INavigationService>();
-        this.NavigationParameterService = new Mock<INavigationParameterService>();
-        this.ApplicationCache = new Mock<IApplicationCache>();
-        this.DeviceService = new Mock<IDeviceService>();
-        this.ApplicationInfoService = new Mock<IApplicationInfoService>();
-        this.ApplicationUpdateLauncherService = new Mock<IApplicationUpdateLauncherService>();
-        this.DialogService = new Mock<IDialogService>();
-        this.UpdateService = new Mock<IUpdateService>();
-        this.BalanceRefresher = new Mock<IBalanceRefresher>();
-        this.SentryService = new Mock<ISentryService>();
+        this.Mediator = new IMediatorImposter();
+        this.NavigationService = new INavigationServiceImposter();
+        this.NavigationParameterService = new INavigationParameterServiceImposter();
+        this.ApplicationCache = new IApplicationCacheImposter();
+        this.DeviceService = new IDeviceServiceImposter();
+        this.ApplicationInfoService = new IApplicationInfoServiceImposter();
+        this.ApplicationUpdateLauncherService = new IApplicationUpdateLauncherServiceImposter();
+        this.DialogService = new IDialogServiceImposter();
+        this.UpdateService = new IUpdateServiceImposter();
+        this.BalanceRefresher = new IBalanceRefresherImposter();
+        this.SentryService = new ISentryServiceImposter();
+        this.DialogService.ShowWarningToast(Arg<String>.Any(), Arg<Action?>.Any(), Arg<String?>.Any(), Arg<TimeSpan?>.Any(), Arg<CancellationToken>.Any())
+            .Returns(Task.CompletedTask)
+            .Callback((String _, Action? _, String? _, TimeSpan? _, CancellationToken _) =>
+            {
+                this.warningToastCount++;
+                return Task.CompletedTask;
+            });
+        this.DialogService.ShowInformationToast(Arg<String>.Any(), Arg<Action?>.Any(), Arg<String?>.Any(), Arg<TimeSpan?>.Any(), Arg<CancellationToken>.Any())
+            .Returns(Task.CompletedTask)
+            .Callback((String _, Action? _, String? _, TimeSpan? _, CancellationToken _) =>
+            {
+                this.informationToastCount++;
+                return Task.CompletedTask;
+            });
 
-
-        this.ViewModel = new LoginPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.ApplicationCache.Object,
-                                                this.DeviceService.Object, this.ApplicationInfoService.Object,
-                                                this.DialogService.Object, this.NavigationParameterService.Object,
-                                                this.UpdateService.Object, this.ApplicationUpdateLauncherService.Object,
-                                                this.BalanceRefresher.Object, this.SentryService.Object);
+        this.ViewModel = new LoginPageViewModel(this.Mediator.Instance(), this.NavigationService.Instance(), this.ApplicationCache.Instance(),
+                                                this.DeviceService.Instance(), this.ApplicationInfoService.Instance(),
+                                                this.DialogService.Instance(), this.NavigationParameterService.Instance(),
+                                                this.UpdateService.Instance(), this.ApplicationUpdateLauncherService.Instance(),
+                                                this.BalanceRefresher.Instance(), this.SentryService.Instance());
         Logger.Initialise(new Logging.NullLogger());
-    }
-    
-    [Fact]
-    public void LoginPageViewModel_LoginCommand_Execute_IsExecuted()
-    {
-        this.Mediator.Setup(m => m.Send(It.IsAny<LogonQueries.GetConfigurationQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new Configuration()));
-        this.Mediator.Setup(m => m.Send(It.IsAny<LogonCommands.GetTokenCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
-        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformLogonCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformLogonResponseModel));
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
-
-        this.ViewModel.LogonCommand.Execute(null);
-        
-        this.Mediator.Verify(x => x.Send(It.IsAny<LogonCommands.GetTokenCommand>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.Mediator.Verify(x => x.Send(It.IsAny<TransactionCommands.PerformLogonCommand>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.Mediator.Verify(x => x.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.Mediator.Verify(x => x.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
     }
 
     [Theory]
@@ -84,104 +82,96 @@ public class LoginPageViewModelTests
     [InlineData("http://localhost")]
     public void LoginPageViewModel_LoginCommand_Execute_ConfigUrlSet_IsExecuted(String configUrl)
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<LogonQueries.GetConfigurationQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new Configuration()));
-        this.Mediator.Setup(m => m.Send(It.IsAny<LogonCommands.GetTokenCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
-        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformLogonCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformLogonResponseModel));
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
+        this.Mediator.Send(Arg<IRequest<Result<Configuration>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(new Configuration()));
+        this.Mediator.Send(Arg<IRequest<Result<TokenResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.AccessToken));
+        this.Mediator.Send(Arg<IRequest<Result<PerformLogonResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.PerformLogonResponseModel));
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.ContractProductList));
+        this.Mediator.Send(Arg<IRequest<Result<MerchantDetailsModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
 
         this.ViewModel.ConfigHostUrl = configUrl;
 
         this.ViewModel.LogonCommand.Execute(null);
 
-        this.Mediator.Verify(x => x.Send(It.IsAny<LogonCommands.GetTokenCommand>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.Mediator.Verify(x => x.Send(It.IsAny<TransactionCommands.PerformLogonCommand>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.Mediator.Verify(x => x.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.Mediator.Verify(x => x.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
+        this.Mediator.Send(Arg<IRequest<Result<TokenResponseModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.Mediator.Send(Arg<IRequest<Result<PerformLogonResponseModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.Mediator.Send(Arg<IRequest<Result<MerchantDetailsModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.NavigationService.GoToHome().Called(Count.Once());
         if (String.IsNullOrEmpty(configUrl) == false){
-            this.ApplicationCache.Verify(v => v.SetConfigHostUrl(It.IsAny<String>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Once);
+            this.ApplicationCache.SetConfigHostUrl(Arg<String>.Any(), Arg<MemoryCacheEntryOptions>.Any()).Called(Count.Once());
         }
     }
 
     [Fact]
     public void LoginPageViewModel_LoginCommand_Execute_ErrorGettingConfig_WarningToastIsShown()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<LogonQueries.GetConfigurationQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Failure("Error"));
+        this.Mediator.Send(Arg<IRequest<Result<Configuration>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Failure("Error"));
 
         this.ViewModel.LogonCommand.Execute(null);
 
-        this.Mediator.Verify(x => x.Send(It.IsAny<LogonQueries.GetConfigurationQuery>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.Mediator.Verify(x => x.Send(It.IsAny<LogonCommands.GetTokenCommand>(), It.IsAny<CancellationToken>()), Times.Never);
-        this.NavigationService.Verify(n => n.GoToHome(), Times.Never);
+        this.Mediator.Send(Arg<IRequest<Result<Configuration>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.Mediator.Send(Arg<IRequest<Result<TokenResponseModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Never());
+        this.NavigationService.GoToHome().Called(Count.Never());
 
-        this.DialogService.Verify(n => n.ShowWarningToast(It.IsAny<String>(),
-                                                          null,
-                                                          "OK",
-                                                          null,
-                                                          CancellationToken.None), Times.Once);
+        this.warningToastCount.ShouldBe(1);
     }
 
     [Fact]
     public void LoginPageViewModel_LoginCommand_Execute_ErrorGettingToken_WarningToastIsShown()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<LogonQueries.GetConfigurationQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new Configuration()));
-        this.Mediator.Setup(m => m.Send(It.IsAny<LogonCommands.GetTokenCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Failure("Error"));
+        this.Mediator.Send(Arg<IRequest<Result<Configuration>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(new Configuration()));
+        this.Mediator.Send(Arg<IRequest<Result<TokenResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Failure("Error"));
 
         this.ViewModel.LogonCommand.Execute(null);
 
-        this.Mediator.Verify(x => x.Send(It.IsAny<LogonQueries.GetConfigurationQuery>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.Mediator.Verify(x => x.Send(It.IsAny<LogonCommands.GetTokenCommand>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.Mediator.Verify(x => x.Send(It.IsAny<TransactionCommands.PerformLogonCommand>(), It.IsAny<CancellationToken>()), Times.Never);
-        this.Mediator.Verify(x => x.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>()), Times.Never);
-        this.NavigationService.Verify(n => n.GoToHome(), Times.Never);
+        this.Mediator.Send(Arg<IRequest<Result<Configuration>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.Mediator.Send(Arg<IRequest<Result<TokenResponseModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.Mediator.Send(Arg<IRequest<Result<PerformLogonResponseModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Never());
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Never());
+        this.NavigationService.GoToHome().Called(Count.Never());
 
-        this.DialogService.Verify(n => n.ShowWarningToast(It.IsAny<String>(),
-                                                          null,
-                                                          "OK",
-                                                          null,
-                                                          CancellationToken.None), Times.Once);
+        this.warningToastCount.ShouldBe(1);
     }
 
     [Fact]
     public async Task LoginPageViewModel_LoginCommand_Execute_UpdateCheckFails_LogonContinues()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<LogonQueries.GetConfigurationQuery>(), It.IsAny<CancellationToken>()))
+        this.Mediator.Send(Arg<IRequest<Result<Configuration>>>.Any(), Arg<CancellationToken>.Any())
             .ReturnsAsync(Result.Success(new Configuration { EnableAutoUpdates = true }));
-        this.Mediator.Setup(m => m.Send(It.IsAny<LogonCommands.GetTokenCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
-        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformLogonCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformLogonResponseModel));
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantBalanceQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantBalance));
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
+        this.Mediator.Send(Arg<IRequest<Result<TokenResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.AccessToken));
+        this.Mediator.Send(Arg<IRequest<Result<PerformLogonResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.PerformLogonResponseModel));
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.ContractProductList));
+        this.Mediator.Send(Arg<IRequest<Result<Decimal>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.MerchantBalance));
+        this.Mediator.Send(Arg<IRequest<Result<MerchantDetailsModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
+        this.Mediator.Send(Arg<IRequest<Result<MerchantDetailsModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
 
-        this.ApplicationInfoService.Setup(a => a.VersionString).Returns(TestData.ApplicationVersion);
-        this.ApplicationInfoService.Setup(a => a.PackageName).Returns("com.transactionprocessor.mobile");
-        this.DeviceService.Setup(d => d.GetPlatform()).Returns("Android");
-        this.DeviceService.Setup(d => d.GetIdentifier()).Returns(TestData.DeviceIdentifier);
-        this.UpdateService.Setup(u => u.CheckForUpdates(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>()))
+        this.ApplicationInfoService.VersionString.Getter().Returns(TestData.ApplicationVersion);
+        this.ApplicationInfoService.PackageName.Getter().Returns("com.transactionprocessor.mobile");
+        this.DeviceService.GetPlatform().Returns("Android");
+        this.DeviceService.GetIdentifier().Returns(TestData.DeviceIdentifier);
+        this.UpdateService.CheckForUpdates(Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<CancellationToken>.Any())
             .ReturnsAsync(Result.Failure("Update check failed"));
 
         await this.ViewModel.LogonCommand.ExecuteAsync(null);
 
-        this.UpdateService.Verify(u => u.CheckForUpdates(TestData.ApplicationVersion,
+        this.UpdateService.CheckForUpdates(TestData.ApplicationVersion,
                                                          "com.transactionprocessor.mobile",
                                                          "Android",
                                                          TestData.DeviceIdentifier,
-                                                         It.IsAny<CancellationToken>()), Times.Once);
-        this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
+                                                         Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.NavigationService.GoToHome().Called(Count.Once());
     }
 
     [Fact]
     public async Task LoginPageViewModel_LoginCommand_Execute_UpdateRequired_UpdateLauncherIsCalled_And_AppQuits()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<LogonQueries.GetConfigurationQuery>(), It.IsAny<CancellationToken>()))
+        this.Mediator.Send(Arg<IRequest<Result<Configuration>>>.Any(), Arg<CancellationToken>.Any())
             .ReturnsAsync(Result.Success(new Configuration { EnableAutoUpdates = true }));
-        this.ApplicationInfoService.Setup(a => a.VersionString).Returns(TestData.ApplicationVersion);
-        this.ApplicationInfoService.Setup(a => a.PackageName).Returns("com.transactionprocessor.mobile");
-        this.DeviceService.Setup(d => d.GetPlatform()).Returns("Android");
-        this.DeviceService.Setup(d => d.GetIdentifier()).Returns(TestData.DeviceIdentifier);
-        this.UpdateService.Setup(u => u.CheckForUpdates(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>()))
+        this.ApplicationInfoService.VersionString.Getter().Returns(TestData.ApplicationVersion);
+        this.ApplicationInfoService.PackageName.Getter().Returns("com.transactionprocessor.mobile");
+        this.DeviceService.GetPlatform().Returns("Android");
+        this.DeviceService.GetIdentifier().Returns(TestData.DeviceIdentifier);
+        this.UpdateService.CheckForUpdates(Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<CancellationToken>.Any())
             .ReturnsAsync(Result.Success(new ApplicationUpdateCheckResponse
             {
                 DownloadUri = "https://updates.example.com/transactionmobile.apk",
@@ -189,36 +179,28 @@ public class LoginPageViewModelTests
                 Message = "Install update",
                 UpdateRequired = true
             }));
-        this.DialogService.Setup(d => d.ShowDialog(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>())).ReturnsAsync(true);
+        this.DialogService.ShowDialog(Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any()).ReturnsAsync(true);
 
         await this.ViewModel.LogonCommand.ExecuteAsync(null);
 
-        this.DialogService.Verify(d => d.ShowInformationToast("Downloading the required update...",
-                                                              null,
-                                                              "OK",
-                                                              null,
-                                                              CancellationToken.None), Times.Once);
-        this.ApplicationUpdateLauncherService.Verify(l => l.LaunchUpdateAsync("https://updates.example.com/transactionmobile.apk", It.IsAny<CancellationToken>()), Times.Once);
-        this.NavigationService.Verify(n => n.QuitApplication(), Times.Once);
-        this.Mediator.Verify(x => x.Send(It.IsAny<TransactionCommands.PerformLogonCommand>(), It.IsAny<CancellationToken>()), Times.Never);
-        this.NavigationService.Verify(n => n.GoToHome(), Times.Never);
-        this.DialogService.Verify(n => n.ShowWarningToast(It.IsAny<String>(),
-                                                          null,
-                                                          "OK",
-                                                          null,
-                                                          CancellationToken.None), Times.Never);
+        this.informationToastCount.ShouldBe(1);
+        this.ApplicationUpdateLauncherService.LaunchUpdateAsync("https://updates.example.com/transactionmobile.apk", Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.NavigationService.QuitApplication().Called(Count.Once());
+        this.Mediator.Send(Arg<IRequest<Result<PerformLogonResponseModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Never());
+        this.NavigationService.GoToHome().Called(Count.Never());
+        this.warningToastCount.ShouldBe(0);
     }
 
     [Fact]
     public async Task LoginPageViewModel_LoginCommand_Execute_UpdateLauncherFails_WarningToastIsShown_And_AppStaysOpen()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<LogonQueries.GetConfigurationQuery>(), It.IsAny<CancellationToken>()))
+        this.Mediator.Send(Arg<IRequest<Result<Configuration>>>.Any(), Arg<CancellationToken>.Any())
             .ReturnsAsync(Result.Success(new Configuration { EnableAutoUpdates = true }));
-        this.ApplicationInfoService.Setup(a => a.VersionString).Returns(TestData.ApplicationVersion);
-        this.ApplicationInfoService.Setup(a => a.PackageName).Returns("com.transactionprocessor.mobile");
-        this.DeviceService.Setup(d => d.GetPlatform()).Returns("Android");
-        this.DeviceService.Setup(d => d.GetIdentifier()).Returns(TestData.DeviceIdentifier);
-        this.UpdateService.Setup(u => u.CheckForUpdates(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<CancellationToken>()))
+        this.ApplicationInfoService.VersionString.Getter().Returns(TestData.ApplicationVersion);
+        this.ApplicationInfoService.PackageName.Getter().Returns("com.transactionprocessor.mobile");
+        this.DeviceService.GetPlatform().Returns("Android");
+        this.DeviceService.GetIdentifier().Returns(TestData.DeviceIdentifier);
+        this.UpdateService.CheckForUpdates(Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<CancellationToken>.Any())
             .ReturnsAsync(Result.Success(new ApplicationUpdateCheckResponse
             {
                 DownloadUri = "https://updates.example.com/transactionmobile.apk",
@@ -226,92 +208,80 @@ public class LoginPageViewModelTests
                 Message = "Install update",
                 UpdateRequired = true
             }));
-        this.DialogService.Setup(d => d.ShowDialog(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<String>())).ReturnsAsync(true);
-        this.ApplicationUpdateLauncherService.Setup(l => l.LaunchUpdateAsync(It.IsAny<String>(), It.IsAny<CancellationToken>()))
+        this.DialogService.ShowDialog(Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any()).ReturnsAsync(true);
+        this.ApplicationUpdateLauncherService.LaunchUpdateAsync(Arg<String>.Any(), Arg<CancellationToken>.Any())
             .ThrowsAsync(new ApplicationException("Unable to start the application update installer."));
 
         await this.ViewModel.LogonCommand.ExecuteAsync(null);
 
-        this.NavigationService.Verify(n => n.QuitApplication(), Times.Never);
-        this.NavigationService.Verify(n => n.GoToHome(), Times.Never);
-        this.DialogService.Verify(d => d.ShowWarningToast("Unable to start the application update installer.",
-                                                          null,
-                                                          "OK",
-                                                          null,
-                                                          CancellationToken.None), Times.Once);
+        this.NavigationService.QuitApplication().Called(Count.Never());
+        this.NavigationService.GoToHome().Called(Count.Never());
+        this.warningToastCount.ShouldBe(1);
     }
 
     [Fact]
     public void LoginPageViewModel_LoginCommand_Execute_ErrorDuringLogonTransaction_WarningToastIsShown()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<LogonQueries.GetConfigurationQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new Configuration()));
-        this.Mediator.Setup(m => m.Send(It.IsAny<LogonCommands.GetTokenCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
-        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformLogonCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Failure(""));
+        this.Mediator.Send(Arg<IRequest<Result<Configuration>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(new Configuration()));
+        this.Mediator.Send(Arg<IRequest<Result<TokenResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.AccessToken));
+        this.Mediator.Send(Arg<IRequest<Result<PerformLogonResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Failure(""));
 
         this.ViewModel.LogonCommand.Execute(null);
 
-        this.Mediator.Verify(x => x.Send(It.IsAny<LogonQueries.GetConfigurationQuery>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.Mediator.Verify(x => x.Send(It.IsAny<LogonCommands.GetTokenCommand>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.Mediator.Verify(x => x.Send(It.IsAny<TransactionCommands.PerformLogonCommand>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.Mediator.Verify(x => x.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>()), Times.Never);
+        this.Mediator.Send(Arg<IRequest<Result<Configuration>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.Mediator.Send(Arg<IRequest<Result<TokenResponseModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.Mediator.Send(Arg<IRequest<Result<PerformLogonResponseModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Never());
         
-        this.NavigationService.Verify(n => n.GoToHome(), Times.Never);
+        this.NavigationService.GoToHome().Called(Count.Never());
 
-        this.DialogService.Verify(n => n.ShowWarningToast(It.IsAny<String>(),
-                                                          null,
-                                                          "OK",
-                                                          null,
-                                                          CancellationToken.None), Times.Once);
+        this.warningToastCount.ShouldBe(1);
     }
 
     [Fact]
     public void LoginPageViewModel_LoginCommand_Execute_ErrorDuringGetContractProducts_WarningToastIsShown()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<LogonQueries.GetConfigurationQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new Configuration()));
-        this.Mediator.Setup(m => m.Send(It.IsAny<LogonCommands.GetTokenCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
-        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformLogonCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformLogonResponseModel));
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Failure(""));
+        this.Mediator.Send(Arg<IRequest<Result<Configuration>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(new Configuration()));
+        this.Mediator.Send(Arg<IRequest<Result<TokenResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.AccessToken));
+        this.Mediator.Send(Arg<IRequest<Result<PerformLogonResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.PerformLogonResponseModel));
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Failure(""));
 
         this.ViewModel.LogonCommand.Execute(null);
 
-        this.Mediator.Verify(x => x.Send(It.IsAny<LogonQueries.GetConfigurationQuery>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.Mediator.Verify(x => x.Send(It.IsAny<LogonCommands.GetTokenCommand>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.Mediator.Verify(x => x.Send(It.IsAny<TransactionCommands.PerformLogonCommand>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.Mediator.Verify(x => x.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.NavigationService.Verify(n => n.GoToHome(), Times.Never);
+        this.Mediator.Send(Arg<IRequest<Result<Configuration>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.Mediator.Send(Arg<IRequest<Result<TokenResponseModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.Mediator.Send(Arg<IRequest<Result<PerformLogonResponseModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.NavigationService.GoToHome().Called(Count.Never());
 
-        this.DialogService.Verify(n => n.ShowWarningToast(It.IsAny<String>(),
-                                                     null,
-                                                     "OK",
-                                                     null,
-                                                     CancellationToken.None), Times.Once);
+        this.warningToastCount.ShouldBe(1);
     }
     
     [Fact]
     public void LoginPageViewModel_BackButtonCommand_Execute_IsExecuted()
     {
         this.ViewModel.BackButtonCommand.Execute(null);
-        this.NavigationService.Verify(n => n.QuitApplication(), Times.Once);
+        this.NavigationService.QuitApplication().Called(Count.Once());
     }
 
     [Fact]
     public async Task LoginPageViewModel_LoginCommand_Execute_SentryInitialisedWithDsnFromConfiguration()
     {
         String sentryDsn = "https://key@sentry.io/123";
-        this.Mediator.Setup(m => m.Send(It.IsAny<LogonQueries.GetConfigurationQuery>(), It.IsAny<CancellationToken>()))
+        this.Mediator.Send(Arg<IRequest<Result<Configuration>>>.Any(), Arg<CancellationToken>.Any())
             .ReturnsAsync(Result.Success(new Configuration { SentryDsn = sentryDsn }));
-        this.Mediator.Setup(m => m.Send(It.IsAny<LogonCommands.GetTokenCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.AccessToken));
-        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformLogonCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformLogonResponseModel));
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
+        this.Mediator.Send(Arg<IRequest<Result<TokenResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.AccessToken));
+        this.Mediator.Send(Arg<IRequest<Result<PerformLogonResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.PerformLogonResponseModel));
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.ContractProductList));
 
         await this.ViewModel.LogonCommand.ExecuteAsync(null);
 
-        this.SentryService.Verify(s => s.InitializeSentry(sentryDsn), Times.Once);
+        this.SentryService.InitializeSentry(sentryDsn).Called(Count.Once());
     }
     
     [Fact]
     public void LoginPageViewModel_PropertyTests_ValuesAreAsExpected(){
-        this.DeviceService.Setup(d => d.GetIdentifier()).Returns("testidentifier");
+        this.DeviceService.GetIdentifier().Returns("testidentifier");
         
         this.ViewModel.Password = TestData.Password;
         this.ViewModel.UserName = TestData.UserName;

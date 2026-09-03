@@ -1,5 +1,5 @@
-﻿using MediatR;
-using Moq;
+using MediatR;
+using Imposter.Abstractions;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -13,39 +13,39 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.MyAccou
 [Collection("ViewModelTests")]
 public class MyAccountAddressPageViewModelTests
 {
-    private readonly Mock<INavigationService> NavigationService;
-    private Mock<INavigationParameterService> NavigationParameterService;
-    private readonly Mock<IApplicationCache> ApplicationCache;
-    private readonly Mock<IDialogService> DialogService;
-    private readonly Mock<IMediator> Mediator;
+    private readonly INavigationServiceImposter NavigationService;
+    private INavigationParameterServiceImposter NavigationParameterService;
+    private readonly IApplicationCacheImposter ApplicationCache;
+    private readonly IDialogServiceImposter DialogService;
+    private readonly IMediatorImposter Mediator;
     private readonly MyAccountAddressPageViewModel ViewModel;
 
-    private readonly Mock<IDeviceService> DeviceService;
+    private readonly IDeviceServiceImposter DeviceService;
 
     public MyAccountAddressPageViewModelTests()
     {
-        this.NavigationService = new Mock<INavigationService>();
-        this.NavigationParameterService = new Mock<INavigationParameterService>();
-        this.ApplicationCache = new Mock<IApplicationCache>();
-        this.DialogService = new Mock<IDialogService>();
-        this.Mediator = new Mock<IMediator>();
-        this.DeviceService = new Mock<IDeviceService>();
-        this.ViewModel = new MyAccountAddressPageViewModel(this.NavigationService.Object,
-                                                           this.ApplicationCache.Object,
-                                                           this.DialogService.Object,
-                                                           this.DeviceService.Object,
-                                                           this.Mediator.Object,
-                                                           this.NavigationParameterService.Object);
+        this.NavigationService = new INavigationServiceImposter();
+        this.NavigationParameterService = new INavigationParameterServiceImposter();
+        this.ApplicationCache = new IApplicationCacheImposter();
+        this.DialogService = new IDialogServiceImposter();
+        this.Mediator = new IMediatorImposter();
+        this.DeviceService = new IDeviceServiceImposter();
+        this.ViewModel = new MyAccountAddressPageViewModel(this.NavigationService.Instance(),
+                                                           this.ApplicationCache.Instance(),
+                                                           this.DialogService.Instance(),
+                                                           this.DeviceService.Instance(),
+                                                           this.Mediator.Instance(),
+                                                           this.NavigationParameterService.Instance());
     }
 
     [Fact]
     public async Task MyAccountAddressPageViewModel_Initialise_IsInitialised()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
+        this.Mediator.Send(Arg<IRequest<Result<MerchantDetailsModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
 
         await this.ViewModel.Initialise(CancellationToken.None);
 
-        this.Mediator.Verify(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Send(Arg<IRequest<Result<MerchantDetailsModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
         this.ViewModel.Address.ShouldNotBeNull();
         this.ViewModel.Address.AddressLine1.ShouldBe(TestData.AddressLine1);
         this.ViewModel.Address.AddressLine2.ShouldBe(TestData.AddressLine2);
@@ -61,6 +61,6 @@ public class MyAccountAddressPageViewModelTests
     {
         this.ViewModel.BackButtonCommand.Execute(null);
 
-        this.NavigationService.Verify(n => n.GoBack(), Times.Once);
+        this.NavigationService.GoBack().Called(Count.Once());
     }
 }
