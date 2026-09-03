@@ -1,5 +1,5 @@
 using MediatR;
-using Moq;
+using Imposter.Abstractions;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
@@ -15,30 +15,30 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Transac
 [Collection("ViewModelTests")]
 public class MobileTopupSelectOperatorPageViewModelTests
 {
-    private readonly Mock<IMediator> Mediator;
+    private readonly IMediatorImposter Mediator;
 
-    private readonly Mock<INavigationService> NavigationService;
+    private readonly INavigationServiceImposter NavigationService;
 
-    private readonly Mock<INavigationParameterService> NavigationParameterService;
+    private readonly INavigationParameterServiceImposter NavigationParameterService;
 
-    private readonly Mock<IApplicationCache> ApplicationCache;
+    private readonly IApplicationCacheImposter ApplicationCache;
 
-    private readonly Mock<IDialogService> DialogSevice;
+    private readonly IDialogServiceImposter DialogSevice;
 
     private readonly MobileTopupSelectOperatorPageViewModel ViewModel;
 
-    private readonly Mock<IDeviceService> DeviceService;
+    private readonly IDeviceServiceImposter DeviceService;
 
     public MobileTopupSelectOperatorPageViewModelTests() {
-        this.Mediator = new Mock<IMediator>();
+        this.Mediator = new IMediatorImposter();
         
-        this.NavigationService = new Mock<INavigationService>();
-        this.NavigationParameterService = new Mock<INavigationParameterService>();
-        this.ApplicationCache = new Mock<IApplicationCache>();
-        this.DialogSevice = new Mock<IDialogService>();
-        this.DeviceService = new Mock<IDeviceService>();
-        this.ViewModel = new MobileTopupSelectOperatorPageViewModel(this.Mediator.Object, this.NavigationService.Object, this.DialogSevice.Object, this.ApplicationCache.Object, this.DeviceService.Object,
-            this.NavigationParameterService.Object);
+        this.NavigationService = new INavigationServiceImposter();
+        this.NavigationParameterService = new INavigationParameterServiceImposter();
+        this.ApplicationCache = new IApplicationCacheImposter();
+        this.DialogSevice = new IDialogServiceImposter();
+        this.DeviceService = new IDeviceServiceImposter();
+        this.ViewModel = new MobileTopupSelectOperatorPageViewModel(this.Mediator.Instance(), this.NavigationService.Instance(), this.DialogSevice.Instance(), this.ApplicationCache.Instance(), this.DeviceService.Instance(),
+            this.NavigationParameterService.Instance());
 
         
     }
@@ -46,10 +46,10 @@ public class MobileTopupSelectOperatorPageViewModelTests
     [Fact]
     public async Task MobileTopupSelectOperatorPageViewModel_Initialise_IsInitialised()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetProductOperatorsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractOperatorList));
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractOperatorModel>>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.ContractOperatorList));
 
         await this.ViewModel.Initialise(CancellationToken.None);
-        this.Mediator.Verify(x => x.Send(It.IsAny<MerchantQueries.GetProductOperatorsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractOperatorModel>>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
 
         this.ViewModel.Operators.Count.ShouldBe(1);
     }
@@ -57,7 +57,7 @@ public class MobileTopupSelectOperatorPageViewModelTests
     [Fact]
     public async Task MobileTopupSelectOperatorPageViewModel_OperatorSelectedCommand_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetProductOperatorsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractOperatorList));
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractOperatorModel>>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.ContractOperatorList));
 
         await this.ViewModel.Initialise(CancellationToken.None);
 
@@ -71,16 +71,16 @@ public class MobileTopupSelectOperatorPageViewModelTests
 
         this.ViewModel.OperatorSelectedCommand.Execute(selectedContractOperator);
         
-        this.NavigationService.Verify(n => n.GoToMobileTopupSelectProductPage(It.IsAny<ProductDetails>()), Times.Once);
+        this.NavigationService.GoToMobileTopupSelectProductPage(Arg<ProductDetails>.Any()).Called(Count.Once());
     }
 
     [Fact]
     public async Task MobileTopupSelectOperatorPageViewModel_BackButtonCommand_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.ContractProductList));
         
         this.ViewModel.BackButtonCommand.Execute(null);
 
-        this.NavigationService.Verify(n => n.GoBack(), Times.Once);
+        this.NavigationService.GoBack().Called(Count.Once());
     }
 }

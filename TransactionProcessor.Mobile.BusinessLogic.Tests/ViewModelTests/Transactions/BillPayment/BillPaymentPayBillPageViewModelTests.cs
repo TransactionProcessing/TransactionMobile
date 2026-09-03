@@ -1,5 +1,5 @@
-﻿using MediatR;
-using Moq;
+using MediatR;
+using Imposter.Abstractions;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -16,36 +16,36 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Transac
 [Collection("ViewModelTests")]
 public class BillPaymentPayBillPageViewModelTests
 {
-    private readonly Mock<IMediator> Mediator;
+    private readonly IMediatorImposter Mediator;
 
-    private readonly Mock<INavigationService> NavigationService;
+    private readonly INavigationServiceImposter NavigationService;
 
-    private Mock<INavigationParameterService> NavigationParameterService;
+    private INavigationParameterServiceImposter NavigationParameterService;
 
-    private readonly Mock<IApplicationCache> ApplicationCache;
+    private readonly IApplicationCacheImposter ApplicationCache;
 
-    private readonly Mock<IDialogService> DialogSevice;
+    private readonly IDialogServiceImposter DialogSevice;
 
     private readonly BillPaymentPayBillPageViewModel ViewModel;
 
-    private readonly Mock<IDeviceService> DeviceService;
+    private readonly IDeviceServiceImposter DeviceService;
 
     public BillPaymentPayBillPageViewModelTests() {
-        this.Mediator = new Mock<IMediator>();
-        this.NavigationService = new Mock<INavigationService>();
-        this.NavigationParameterService = new Mock<INavigationParameterService>();
-        this.ApplicationCache = new Mock<IApplicationCache>();
-        this.DialogSevice = new Mock<IDialogService>();
-        this.DeviceService = new Mock<IDeviceService>();
-        this.ViewModel = new BillPaymentPayBillPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object,
-                               this.DialogSevice.Object, this.Mediator.Object, this.DeviceService.Object,
-                               this.NavigationParameterService.Object);
+        this.Mediator = new IMediatorImposter();
+        this.NavigationService = new INavigationServiceImposter();
+        this.NavigationParameterService = new INavigationParameterServiceImposter();
+        this.ApplicationCache = new IApplicationCacheImposter();
+        this.DialogSevice = new IDialogServiceImposter();
+        this.DeviceService = new IDeviceServiceImposter();
+        this.ViewModel = new BillPaymentPayBillPageViewModel(this.NavigationService.Instance(), this.ApplicationCache.Instance(),
+                               this.DialogSevice.Instance(), this.Mediator.Instance(), this.DeviceService.Instance(),
+                               this.NavigationParameterService.Instance());
     }
 
     [Fact]
     public async Task BillPaymentPayBillPageViewModel_ApplyQueryAttributes_PostPay_QueryAttributesApplied()
     {
-        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<String, Object> {
             {nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel},
             {nameof(BillDetails), TestData.BillDetails_ViewModel}
         });
@@ -63,7 +63,7 @@ public class BillPaymentPayBillPageViewModelTests
     [Fact]
     public async Task BillPaymentPayBillPageViewModel_ApplyQueryAttributes_PrePay_QueryAttributesApplied()
     {
-        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<String, Object> {
             {nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel},
             {nameof(MeterDetails), TestData.MeterDetails_ViewModel}
         });
@@ -85,7 +85,7 @@ public class BillPaymentPayBillPageViewModelTests
                                                                   isCompletedCalled = true;
                                                               };
 
-        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<String, Object> {
             {nameof(ProductDetails), TestData.Operator1ProductDetails},
             {nameof(BillDetails), TestData.BillDetails}
         });
@@ -103,7 +103,7 @@ public class BillPaymentPayBillPageViewModelTests
                                                        {
                                                            isCompletedCalled = true;
                                                        };
-        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<String, Object> {
             {nameof(ProductDetails), TestData.Operator1ProductDetails},
             {nameof(BillDetails), TestData.BillDetails}
         });
@@ -115,70 +115,70 @@ public class BillPaymentPayBillPageViewModelTests
     [Fact]
     public async Task BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_SuccessfulPostPayPayment_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformBillPaymentMakePostPaymentCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformBillPaymentMakePaymentResponseModel()
+        this.Mediator.Send(Arg<IRequest<Result<PerformBillPaymentMakePaymentResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(new PerformBillPaymentMakePaymentResponseModel()
                                                                                                                                                           {
                                                                                                                                                               ResponseCode = "0000"
                                                                                                                                                           }));
-        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<String, Object> {
             {nameof(ProductDetails), TestData.Operator1ProductDetails},
             {nameof(BillDetails), TestData.BillDetails}
         });
         await this.ViewModel.Initialise(CancellationToken.None);
         this.ViewModel.MakeBillPaymentCommand.Execute(null);
-        this.Mediator.Verify(m => m.Send(It.IsAny<TransactionCommands.PerformBillPaymentMakePostPaymentCommand>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.NavigationService.Verify(v => v.GoToBillPaymentSuccessPage(), Times.Once);
+        this.Mediator.Send(Arg<IRequest<Result<PerformBillPaymentMakePaymentResponseModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.NavigationService.GoToBillPaymentSuccessPage().Called(Count.Once());
     }
 
     [Fact]
     public async Task BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_SuccessfulPrePayPayment_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformBillPaymentMakePrePaymentCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformBillPaymentMakePaymentResponseModel()
+        this.Mediator.Send(Arg<IRequest<Result<PerformBillPaymentMakePaymentResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(new PerformBillPaymentMakePaymentResponseModel()
                                                                                                                                                          {
                                                                                                                                                              ResponseCode = "0000"
                                                                                                                                                          }));
 
-        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<String, Object> {
             {nameof(ProductDetails), TestData.Operator1ProductDetails},
             {nameof(MeterDetails), TestData.MeterDetails}
         });
         await this.ViewModel.Initialise(CancellationToken.None);
         this.ViewModel.MakeBillPaymentCommand.Execute(null);
-        this.Mediator.Verify(m => m.Send(It.IsAny< TransactionCommands.PerformBillPaymentMakePrePaymentCommand>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.NavigationService.Verify(v => v.GoToBillPaymentSuccessPage(), Times.Once);
+        this.Mediator.Send(Arg<IRequest<Result<PerformBillPaymentMakePaymentResponseModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.NavigationService.GoToBillPaymentSuccessPage().Called(Count.Once());
     }
 
     [Fact]
     public async Task BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_FailedPostPayPayment_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformBillPaymentMakePostPaymentCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformBillPaymentMakePaymentResponseModel() {
+        this.Mediator.Send(Arg<IRequest<Result<PerformBillPaymentMakePaymentResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(new PerformBillPaymentMakePaymentResponseModel() {
                                                                                                                                                                                                                ResponseCode = "1010"
                                                                                                                                                                                                            }));
-        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<String, Object> {
             {nameof(ProductDetails), TestData.Operator1ProductDetails},
             {nameof(BillDetails), TestData.BillDetails}
         });
         await this.ViewModel.Initialise(CancellationToken.None);
         this.ViewModel.MakeBillPaymentCommand.Execute(null);
-        this.Mediator.Verify(m => m.Send(It.IsAny<TransactionCommands.PerformBillPaymentMakePostPaymentCommand>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.NavigationService.Verify(v => v.GoToBillPaymentFailedPage(), Times.Once);
+        this.Mediator.Send(Arg<IRequest<Result<PerformBillPaymentMakePaymentResponseModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.NavigationService.GoToBillPaymentFailedPage().Called(Count.Once());
     }
 
     [Fact]
     public async Task BillPaymentPayBillPageViewModel_MakeBillPaymentCommand_Execute_FailedPrePayPayment_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformBillPaymentMakePrePaymentCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(new PerformBillPaymentMakePaymentResponseModel()
+        this.Mediator.Send(Arg<IRequest<Result<PerformBillPaymentMakePaymentResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(new PerformBillPaymentMakePaymentResponseModel()
                                                                                                                                                          {
                                                                                                                                                              ResponseCode = "1010"
                                                                                                                                                          }));
 
-        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> {
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<String, Object> {
             {nameof(ProductDetails), TestData.Operator1ProductDetails},
             {nameof(MeterDetails), TestData.MeterDetails}
         });
         await this.ViewModel.Initialise(CancellationToken.None);
         this.ViewModel.MakeBillPaymentCommand.Execute(null);
-        this.Mediator.Verify(m => m.Send(It.IsAny< TransactionCommands.PerformBillPaymentMakePrePaymentCommand>(), It.IsAny<CancellationToken>()), Times.Once);
-        this.NavigationService.Verify(v => v.GoToBillPaymentFailedPage(), Times.Once);
+        this.Mediator.Send(Arg<IRequest<Result<PerformBillPaymentMakePaymentResponseModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.NavigationService.GoToBillPaymentFailedPage().Called(Count.Once());
     }
 
     [Fact]
@@ -198,6 +198,6 @@ public class BillPaymentPayBillPageViewModelTests
     public void MobileTopupPerformTopupPageViewModel_BackButtonCommand_Execute_IsExecuted()
     {
         this.ViewModel.BackButtonCommand.Execute(null);
-        this.NavigationService.Verify(v => v.GoBack(), Times.Once);
+        this.NavigationService.GoBack().Called(Count.Once());
     }
 }

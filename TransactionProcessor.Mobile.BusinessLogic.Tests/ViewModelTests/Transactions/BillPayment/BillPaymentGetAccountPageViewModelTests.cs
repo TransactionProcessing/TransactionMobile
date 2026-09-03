@@ -1,5 +1,5 @@
-﻿using MediatR;
-using Moq;
+using MediatR;
+using Imposter.Abstractions;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
@@ -15,30 +15,30 @@ using NullLogger = Logging.NullLogger;
 [Collection("ViewModelTests")]
 public class BillPaymentGetAccountPageViewModelTests
 {
-    private readonly Mock<IMediator> Mediator;
+    private readonly IMediatorImposter Mediator;
 
-    private readonly Mock<INavigationService> NavigationService;
+    private readonly INavigationServiceImposter NavigationService;
 
-    private readonly Mock<INavigationParameterService> NavigationParameterService;
+    private readonly INavigationParameterServiceImposter NavigationParameterService;
 
-    private readonly Mock<IApplicationCache> ApplicationCache;
+    private readonly IApplicationCacheImposter ApplicationCache;
 
-    private readonly Mock<IDialogService> DialogSevice;
+    private readonly IDialogServiceImposter DialogSevice;
 
     private readonly BillPaymentGetAccountPageViewModel ViewModel;
 
-    private readonly Mock<IDeviceService> DeviceService;
+    private readonly IDeviceServiceImposter DeviceService;
 
     public BillPaymentGetAccountPageViewModelTests() {
-        this.Mediator = new Mock<IMediator>();
-        this.NavigationService = new Mock<INavigationService>();
-        this.NavigationParameterService = new Mock<INavigationParameterService>();
-        this.ApplicationCache = new Mock<IApplicationCache>();
-        this.DialogSevice = new Mock<IDialogService>();
-        this.DeviceService = new Mock<IDeviceService>();
-        this.ViewModel = new BillPaymentGetAccountPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object, 
-                                                                this.DialogSevice.Object, this.DeviceService.Object, this.Mediator.Object,
-                                                                this.NavigationParameterService.Object);
+        this.Mediator = new IMediatorImposter();
+        this.NavigationService = new INavigationServiceImposter();
+        this.NavigationParameterService = new INavigationParameterServiceImposter();
+        this.ApplicationCache = new IApplicationCacheImposter();
+        this.DialogSevice = new IDialogServiceImposter();
+        this.DeviceService = new IDeviceServiceImposter();
+        this.ViewModel = new BillPaymentGetAccountPageViewModel(this.NavigationService.Instance(), this.ApplicationCache.Instance(),
+                                                                this.DialogSevice.Instance(), this.DeviceService.Instance(), this.Mediator.Instance(),
+                                                                this.NavigationParameterService.Instance());
 
         Logger.Initialise(new NullLogger()); 
     }
@@ -46,9 +46,9 @@ public class BillPaymentGetAccountPageViewModelTests
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_ApplyQueryAttributes_QueryAttributesApplied()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetContractProductsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractProductList));
+        this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.ContractProductList));
 
-        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> { { nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel }, });
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<String, Object> { { nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel }, });
         await this.ViewModel.Initialise(CancellationToken.None);
         
         this.ViewModel.ProductDetails.ShouldNotBeNull();
@@ -60,30 +60,30 @@ public class BillPaymentGetAccountPageViewModelTests
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_GetAccountCommand_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformBillPaymentGetAccountCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetAccountResponseModel));
+        this.Mediator.Send(Arg<IRequest<Result<PerformBillPaymentGetAccountResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetAccountResponseModel));
 
-        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> { { nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel }, });
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<String, Object> { { nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel }, });
         await this.ViewModel.Initialise(CancellationToken.None);
         this.ViewModel.CustomerAccountNumber = TestData.CustomerAccountNumber;
         
         this.ViewModel.GetAccountCommand.Execute(null);
         
-        this.NavigationService.Verify(n => n.GoToBillPaymentPayBillPage(It.IsAny<ProductDetails>(), It.IsAny<BillDetails>()), Times.Once);
+        this.NavigationService.GoToBillPaymentPayBillPage(Arg<ProductDetails>.Any(), Arg<BillDetails>.Any()).Called(Count.Once());
     }
 
     [Fact]
     public async Task BillPaymentGetAccountPageViewModel_GetAccountCommand_Failed_Execute_IsExecuted()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformBillPaymentGetAccountCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetAccountResponseModelFailed));
+        this.Mediator.Send(Arg<IRequest<Result<PerformBillPaymentGetAccountResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.PerformBillPaymentGetAccountResponseModelFailed));
 
-        this.NavigationParameterService.Setup(n => n.GetParameters()).Returns(new Dictionary<String, Object> { { nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel }, });
+        this.NavigationParameterService.GetParameters().Returns(new Dictionary<String, Object> { { nameof(ProductDetails), TestData.Operator1ProductDetails_ViewModel }, });
         await this.ViewModel.Initialise(CancellationToken.None);
         
         this.ViewModel.CustomerAccountNumber = TestData.CustomerAccountNumber;
 
         this.ViewModel.GetAccountCommand.Execute(null);
         
-        this.NavigationService.Verify(n => n.GoToBillPaymentFailedPage(), Times.Once);
+        this.NavigationService.GoToBillPaymentFailedPage().Called(Count.Once());
     }
 
 
@@ -92,6 +92,6 @@ public class BillPaymentGetAccountPageViewModelTests
     {
         this.ViewModel.BackButtonCommand.Execute(null);
 
-        this.NavigationService.Verify(n => n.GoBack(), Times.Once);
+        this.NavigationService.GoBack().Called(Count.Once());
     }
 }

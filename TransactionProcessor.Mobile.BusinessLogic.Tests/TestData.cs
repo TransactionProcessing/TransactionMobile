@@ -1,4 +1,4 @@
-﻿using TransactionProcessor.Mobile.BusinessLogic.Database;
+using TransactionProcessor.Mobile.BusinessLogic.Database;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.Tests

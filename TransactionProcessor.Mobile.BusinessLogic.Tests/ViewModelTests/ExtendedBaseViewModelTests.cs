@@ -1,4 +1,4 @@
-﻿using Moq;
+using Imposter.Abstractions;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
@@ -8,27 +8,27 @@ using TransactionProcessor.Mobile.BusinessLogic.ViewModels;
 namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests
 {
     public class ExtendedBaseViewModelTests{
-        private Mock<IApplicationCache> ApplicationCache = null;
+        private IApplicationCacheImposter ApplicationCache = null;
 
-        private Mock<IDialogService> DialogService = null;
+        private IDialogServiceImposter DialogService = null;
 
-        private Mock<INavigationService> NavigationService = null;
-        private Mock<INavigationParameterService> NavigationParameterService = null;
+        private INavigationServiceImposter NavigationService = null;
+        private INavigationParameterServiceImposter NavigationParameterService = null;
 
-        private Mock<IDeviceService> DeviceService = null;
+        private IDeviceServiceImposter DeviceService = null;
 
         private ExtendedBaseViewModel ViewModel = null;
         public ExtendedBaseViewModelTests(){
-            this.ApplicationCache = new Mock<IApplicationCache>();
-            this.DialogService = new Mock<IDialogService>();
-            this.NavigationService = new Mock<INavigationService>();
-            this.DeviceService = new Mock<IDeviceService>();
-            this.NavigationParameterService = new Mock<INavigationParameterService>();
-            this.ViewModel = new ExtendedBaseViewModel(this.ApplicationCache.Object,
-                                                                        this.DialogService.Object,
-                                                                        this.NavigationService.Object,
-                                                                        this.DeviceService.Object,
-                                                                        this.NavigationParameterService.Object);
+            this.ApplicationCache = new IApplicationCacheImposter();
+            this.DialogService = new IDialogServiceImposter();
+            this.NavigationService = new INavigationServiceImposter();
+            this.DeviceService = new IDeviceServiceImposter();
+            this.NavigationParameterService = new INavigationParameterServiceImposter();
+            this.ViewModel = new ExtendedBaseViewModel(this.ApplicationCache.Instance(),
+                                                                        this.DialogService.Instance(),
+                                                                        this.NavigationService.Instance(),
+                                                                        this.DeviceService.Instance(),
+                                                                        this.NavigationParameterService.Instance());
         }
 
         [Fact]
@@ -54,14 +54,14 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests
         [InlineData(Orientation.Landscape)]
         [InlineData(Orientation.Portrait)]
         public async Task ExtendedBaseViewModel_Initialise_OrientationIsSet(Orientation orientation){
-            var viewModel = new ExtendedBaseViewModel(this.ApplicationCache.Object,
-                                                      this.DialogService.Object,
-                                                      this.NavigationService.Object,
-                                                      this.DeviceService.Object,
-                                                      this.NavigationParameterService.Object,
+            var viewModel = new ExtendedBaseViewModel(this.ApplicationCache.Instance(),
+                                                      this.DialogService.Instance(),
+                                                      this.NavigationService.Instance(),
+                                                      this.DeviceService.Instance(),
+                                                      this.NavigationParameterService.Instance(),
                                                       orientation);
             await this.ViewModel.Initialise(CancellationToken.None);
-            this.DeviceService.Verify(v => v.SetOrientation(It.IsAny<Orientation>()), Times.Once);
+            this.DeviceService.SetOrientation(Arg<Orientation>.Any()).Called(Count.Once());
             viewModel.Orientation.ShouldBe(orientation);
         }
 

@@ -1,5 +1,5 @@
 using MediatR;
-using Moq;
+using Imposter.Abstractions;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
@@ -13,29 +13,29 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Reports
 
 public class RecentActivityReportPageViewModelTests
 {
-    private readonly Mock<IMediator> Mediator;
-    private readonly Mock<INavigationService> NavigationService;
-    private readonly Mock<IApplicationCache> ApplicationCache;
-    private readonly Mock<IDialogService> DialogService;
-    private readonly Mock<IDeviceService> DeviceService;
-    private readonly Mock<INavigationParameterService> NavigationParameterService;
+    private readonly IMediatorImposter Mediator;
+    private readonly INavigationServiceImposter NavigationService;
+    private readonly IApplicationCacheImposter ApplicationCache;
+    private readonly IDialogServiceImposter DialogService;
+    private readonly IDeviceServiceImposter DeviceService;
+    private readonly INavigationParameterServiceImposter NavigationParameterService;
     private readonly RecentActivityReportPageViewModel ViewModel;
 
     public RecentActivityReportPageViewModelTests()
     {
-        this.Mediator = new Mock<IMediator>();
-        this.NavigationService = new Mock<INavigationService>();
-        this.ApplicationCache = new Mock<IApplicationCache>();
-        this.DialogService = new Mock<IDialogService>();
-        this.DeviceService = new Mock<IDeviceService>();
-        this.NavigationParameterService = new Mock<INavigationParameterService>();
+        this.Mediator = new IMediatorImposter();
+        this.NavigationService = new INavigationServiceImposter();
+        this.ApplicationCache = new IApplicationCacheImposter();
+        this.DialogService = new IDialogServiceImposter();
+        this.DeviceService = new IDeviceServiceImposter();
+        this.NavigationParameterService = new INavigationParameterServiceImposter();
 
-        this.ViewModel = new RecentActivityReportPageViewModel(this.Mediator.Object,
-                                                                this.NavigationService.Object,
-                                                                this.ApplicationCache.Object,
-                                                                this.DialogService.Object,
-                                                                this.DeviceService.Object,
-                                                                this.NavigationParameterService.Object);
+        this.ViewModel = new RecentActivityReportPageViewModel(this.Mediator.Instance(),
+                                                                this.NavigationService.Instance(),
+                                                                this.ApplicationCache.Instance(),
+                                                                this.DialogService.Instance(),
+                                                                this.DeviceService.Instance(),
+                                                                this.NavigationParameterService.Instance());
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public class RecentActivityReportPageViewModelTests
     {
         DateTime reportDate = new(2026, 7, 6);
         this.Mediator
-            .Setup(m => m.Send(It.Is<ReportQueries.GetRecentActivityReceiptReportQuery>(q => q.ReportDate == reportDate && q.SearchText == null && q.PageNumber == 1 && q.PageSize == 5), It.IsAny<CancellationToken>()))
+            .Send(Arg<IRequest<Result<RecentActivityReceiptReportModel>>>.Is(q => ((ReportQueries.GetRecentActivityReceiptReportQuery)q).ReportDate == reportDate && ((ReportQueries.GetRecentActivityReceiptReportQuery)q).SearchText == null && ((ReportQueries.GetRecentActivityReceiptReportQuery)q).PageNumber == 1 && ((ReportQueries.GetRecentActivityReceiptReportQuery)q).PageSize == 5), Arg<CancellationToken>.Any())
             .ReturnsAsync(Result.Success(RecentActivityReceiptReportModel.CreateMock(reportDate, null)));
 
         this.ViewModel.SelectedDate = reportDate;
@@ -60,7 +60,7 @@ public class RecentActivityReportPageViewModelTests
     {
         DateTime reportDate = new(2026, 7, 6);
         this.Mediator
-            .Setup(m => m.Send(It.Is<ReportQueries.GetRecentActivityReceiptReportQuery>(q => q.ReportDate == reportDate && q.SearchText == "TXN-10001" && q.PageNumber == 1 && q.PageSize == 5), It.IsAny<CancellationToken>()))
+            .Send(Arg<IRequest<Result<RecentActivityReceiptReportModel>>>.Is(q => ((ReportQueries.GetRecentActivityReceiptReportQuery)q).ReportDate == reportDate && ((ReportQueries.GetRecentActivityReceiptReportQuery)q).SearchText == "TXN-10001" && ((ReportQueries.GetRecentActivityReceiptReportQuery)q).PageNumber == 1 && ((ReportQueries.GetRecentActivityReceiptReportQuery)q).PageSize == 5), Arg<CancellationToken>.Any())
             .ReturnsAsync(Result.Success(RecentActivityReceiptReportModel.CreateMock(reportDate, "TXN-10001")));
 
         this.ViewModel.SelectedDate = reportDate;
@@ -69,7 +69,8 @@ public class RecentActivityReportPageViewModelTests
         await this.ViewModel.SearchCommand.ExecuteAsync(null);
 
         this.ViewModel.Items.ShouldContain(item => item.Reference == "TXN-10001");
-        this.Mediator.VerifyAll();
+        this.Mediator.Send(Arg<IRequest<Result<RecentActivityReceiptReportModel>>>.Is(q => ((ReportQueries.GetRecentActivityReceiptReportQuery)q).ReportDate == reportDate && ((ReportQueries.GetRecentActivityReceiptReportQuery)q).SearchText == "TXN-10001" && ((ReportQueries.GetRecentActivityReceiptReportQuery)q).PageNumber == 1 && ((ReportQueries.GetRecentActivityReceiptReportQuery)q).PageSize == 5), Arg<CancellationToken>.Any())
+            .Called(Count.Once());
     }
 
     [Fact]
@@ -77,10 +78,10 @@ public class RecentActivityReportPageViewModelTests
     {
         DateTime reportDate = new(2026, 7, 6);
         this.Mediator
-            .Setup(m => m.Send(It.Is<ReportQueries.GetRecentActivityReceiptReportQuery>(q => q.ReportDate == reportDate && q.PageNumber == 1 && q.PageSize == 5), It.IsAny<CancellationToken>()))
+            .Send(Arg<IRequest<Result<RecentActivityReceiptReportModel>>>.Is(q => ((ReportQueries.GetRecentActivityReceiptReportQuery)q).ReportDate == reportDate && ((ReportQueries.GetRecentActivityReceiptReportQuery)q).PageNumber == 1 && ((ReportQueries.GetRecentActivityReceiptReportQuery)q).PageSize == 5), Arg<CancellationToken>.Any())
             .ReturnsAsync(Result.Success(RecentActivityReceiptReportModel.CreateMock(reportDate, null, 1, 5)));
         this.Mediator
-            .Setup(m => m.Send(It.Is<ReportQueries.GetRecentActivityReceiptReportQuery>(q => q.ReportDate == reportDate && q.PageNumber == 2 && q.PageSize == 5), It.IsAny<CancellationToken>()))
+            .Send(Arg<IRequest<Result<RecentActivityReceiptReportModel>>>.Is(q => ((ReportQueries.GetRecentActivityReceiptReportQuery)q).ReportDate == reportDate && ((ReportQueries.GetRecentActivityReceiptReportQuery)q).PageNumber == 2 && ((ReportQueries.GetRecentActivityReceiptReportQuery)q).PageSize == 5), Arg<CancellationToken>.Any())
             .ReturnsAsync(Result.Success(RecentActivityReceiptReportModel.CreateMock(reportDate, null, 2, 5)));
 
         this.ViewModel.SelectedDate = reportDate;
@@ -90,6 +91,6 @@ public class RecentActivityReportPageViewModelTests
 
         this.ViewModel.PageNumber.ShouldBe(2);
         this.ViewModel.Items.ShouldAllBe(item => item.TransactionDateTime.Date == reportDate);
-        this.Mediator.Verify(m => m.Send(It.Is<ReportQueries.GetRecentActivityReceiptReportQuery>(q => q.PageNumber == 2 && q.PageSize == 5), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Send(Arg<IRequest<Result<RecentActivityReceiptReportModel>>>.Is(q => ((ReportQueries.GetRecentActivityReceiptReportQuery)q).PageNumber == 2 && ((ReportQueries.GetRecentActivityReceiptReportQuery)q).PageSize == 5), Arg<CancellationToken>.Any()).Called(Count.Once());
     }
 }

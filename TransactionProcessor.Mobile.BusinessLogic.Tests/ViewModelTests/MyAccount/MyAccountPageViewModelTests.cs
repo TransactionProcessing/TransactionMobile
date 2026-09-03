@@ -1,5 +1,5 @@
-﻿using MediatR;
-using Moq;
+using MediatR;
+using Imposter.Abstractions;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
@@ -16,40 +16,40 @@ public class MyAccountPageViewModelTests
 {
     #region Methods
 
-    private readonly Mock<INavigationService> NavigationService;
-    private readonly Mock<INavigationParameterService> NavigationParameterService;
+    private readonly INavigationServiceImposter NavigationService;
+    private readonly INavigationParameterServiceImposter NavigationParameterService;
 
-    private readonly Mock<IApplicationCache> ApplicationCache;
+    private readonly IApplicationCacheImposter ApplicationCache;
 
-    private readonly Mock<IDialogService> DialogService;
+    private readonly IDialogServiceImposter DialogService;
 
-    private readonly Mock<IMediator> Mediator;
-    private readonly Mock<IApplicationThemeService> ApplicationThemeService;
+    private readonly IMediatorImposter Mediator;
+    private readonly IApplicationThemeServiceImposter ApplicationThemeService;
 
     private readonly MyAccountPageViewModel ViewModel;
 
-    private readonly Mock<IDeviceService> DeviceService;
+    private readonly IDeviceServiceImposter DeviceService;
 
     public MyAccountPageViewModelTests() {
-        this.NavigationService = new Mock<INavigationService>();
-        this.NavigationParameterService = new Mock<INavigationParameterService>();
-        this.ApplicationCache = new Mock<IApplicationCache>();
-        this.DialogService = new Mock<IDialogService>();
-        this.DeviceService = new Mock<IDeviceService>();
-        this.Mediator = new Mock<IMediator>();
-        this.ApplicationThemeService = new Mock<IApplicationThemeService>();
-        this.ViewModel = new MyAccountPageViewModel(this.NavigationService.Object, this.ApplicationCache.Object,
-                                                                       this.DialogService.Object, this.DeviceService.Object,
-                                                                       this.ApplicationThemeService.Object,
-                                                                       this.Mediator.Object,
-                                                                       this.NavigationParameterService.Object);
+        this.NavigationService = new INavigationServiceImposter();
+        this.NavigationParameterService = new INavigationParameterServiceImposter();
+        this.ApplicationCache = new IApplicationCacheImposter();
+        this.DialogService = new IDialogServiceImposter();
+        this.DeviceService = new IDeviceServiceImposter();
+        this.Mediator = new IMediatorImposter();
+        this.ApplicationThemeService = new IApplicationThemeServiceImposter();
+        this.ViewModel = new MyAccountPageViewModel(this.NavigationService.Instance(), this.ApplicationCache.Instance(),
+                                                                       this.DialogService.Instance(), this.DeviceService.Instance(),
+                                                                       this.ApplicationThemeService.Instance(),
+                                                                       this.Mediator.Instance(),
+                                                                       this.NavigationParameterService.Instance());
     }
 
     [Fact]
     public async Task MyAccountPageViewModel_Initialise_IsInitialised() {
-        this.ApplicationThemeService.Setup(s => s.GetDarkThemeEnabled()).ReturnsAsync(true);
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success( TestData.MerchantDetailsModel));
-        this.ApplicationCache.Setup(a => a.GetLastLoginDate()).Returns(DateTime.Now);
+        this.ApplicationThemeService.GetDarkThemeEnabled().ReturnsAsync(true);
+        this.Mediator.Send(Arg<IRequest<Result<MerchantDetailsModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success( TestData.MerchantDetailsModel));
+        this.ApplicationCache.GetLastLoginDate().Returns(DateTime.Now);
         await this.ViewModel.Initialise(CancellationToken.None);
 
         this.ViewModel.MerchantName.ShouldBe(TestData.MerchantDetailsModel.MerchantName);
@@ -59,15 +59,15 @@ public class MyAccountPageViewModelTests
 
     [Fact]
     public async Task MyAccountPageViewModel_Initialise_WhenMerchantDetailsAreCached_UsesCachedMerchantDetails() {
-        this.ApplicationCache.Setup(a => a.GetMerchantDetails()).Returns(TestData.MerchantDetailsModel);
-        this.ApplicationCache.Setup(a => a.GetLastLoginDate()).Returns(DateTime.Now);
-        this.ApplicationThemeService.Setup(s => s.GetDarkThemeEnabled()).ReturnsAsync(false);
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
+        this.ApplicationCache.GetMerchantDetails().Returns(TestData.MerchantDetailsModel);
+        this.ApplicationCache.GetLastLoginDate().Returns(DateTime.Now);
+        this.ApplicationThemeService.GetDarkThemeEnabled().ReturnsAsync(false);
+        this.Mediator.Send(Arg<IRequest<Result<MerchantDetailsModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
 
         await this.ViewModel.Initialise(CancellationToken.None);
 
         this.ViewModel.MerchantName.ShouldBe(TestData.MerchantDetailsModel.MerchantName);
-        this.Mediator.Verify(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>()), Times.Never);
+        this.Mediator.Send(Arg<IRequest<Result<MerchantDetailsModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Never());
     }
 
     [Fact]
@@ -75,35 +75,35 @@ public class MyAccountPageViewModelTests
         await this.ViewModel.SetDarkTheme(true);
 
         this.ViewModel.IsDarkThemeEnabled.ShouldBeTrue();
-        this.ApplicationThemeService.Verify(s => s.SetDarkTheme(true), Times.Once);
+        this.ApplicationThemeService.SetDarkTheme(true).Called(Count.Once());
     }
 
     [Fact]
     public void MyAccountPageViewModel_OptionSelectedCommand_AccountInfo_Execute_IsExecuted() {
         this.ViewModel.OptionSelectedCommand.Execute(this.CreateItemSelected(MyAccountPageViewModel.AccountOptions.AccountInfo));
 
-        this.NavigationService.Verify(n => n.GoToMyAccountDetails(), Times.Once);
+        this.NavigationService.GoToMyAccountDetails().Called(Count.Once());
     }
 
     [Fact]
     public void MyAccountPageViewModel_OptionSelectedCommand_Addresses_Execute_IsExecuted() {
         this.ViewModel.OptionSelectedCommand.Execute(this.CreateItemSelected(MyAccountPageViewModel.AccountOptions.Addresses));
 
-        this.NavigationService.Verify(n => n.GoToMyAccountAddresses(), Times.Once);
+        this.NavigationService.GoToMyAccountAddresses().Called(Count.Once());
     }
 
     [Fact]
     public void MyAccountPageViewModel_OptionSelectedCommand_Contacts_Execute_IsExecuted() {
         this.ViewModel.OptionSelectedCommand.Execute(this.CreateItemSelected(MyAccountPageViewModel.AccountOptions.Contacts));
 
-        this.NavigationService.Verify(n => n.GoToMyAccountContacts(), Times.Once);
+        this.NavigationService.GoToMyAccountContacts().Called(Count.Once());
     }
 
     [Fact]
     public void MyAccountPageViewModel_OptionSelectedCommand_Logout_Execute_IsExecuted() {
         this.ViewModel.OptionSelectedCommand.Execute(this.CreateItemSelected(MyAccountPageViewModel.AccountOptions.Logout));
 
-        this.NavigationService.Verify(n => n.GoToLoginPage(), Times.Once);
+        this.NavigationService.GoToLoginPage().Called(Count.Once());
     }
 
     [Fact]
@@ -111,7 +111,7 @@ public class MyAccountPageViewModelTests
     {
         this.ViewModel.OptionSelectedCommand.Execute(this.CreateItemSelected((MyAccountPageViewModel.AccountOptions)99));
 
-        this.NavigationService.Verify(n => n.GoToMyAccountDetails(), Times.Never);
+        this.NavigationService.GoToMyAccountDetails().Called(Count.Never());
     }
 
     [Fact]
@@ -130,7 +130,7 @@ public class MyAccountPageViewModelTests
     {
         this.ViewModel.BackButtonCommand.Execute(null);
 
-        this.NavigationService.Verify(n=> n.GoToHome(),Times.Once);
+        this.NavigationService.GoToHome().Called(Count.Once());
     }
 
     private ItemSelected<ListViewItem> CreateItemSelected(MyAccountPageViewModel.AccountOptions selectedOption) {

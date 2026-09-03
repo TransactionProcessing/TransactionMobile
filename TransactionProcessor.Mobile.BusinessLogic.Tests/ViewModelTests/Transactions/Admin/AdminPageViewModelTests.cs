@@ -1,5 +1,5 @@
-﻿using MediatR;
-using Moq;
+using MediatR;
+using Imposter.Abstractions;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
@@ -11,49 +11,49 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Transac
     [Collection("ViewModelTests")]
     public class AdminPageViewModelTests
     {
-        private readonly Mock<INavigationService> NavigationService;
-        private readonly Mock<INavigationParameterService> NavigationParameterService;
+        private readonly INavigationServiceImposter NavigationService;
+        private readonly INavigationParameterServiceImposter NavigationParameterService;
 
-        private readonly Mock<IMediator> Mediator;
+        private readonly IMediatorImposter Mediator;
 
-        private readonly Mock<IDeviceService> DeviceService;
+        private readonly IDeviceServiceImposter DeviceService;
 
-        private readonly Mock<IApplicationInfoService> ApplicationInfoService;
+        private readonly IApplicationInfoServiceImposter ApplicationInfoService;
 
-        private readonly Mock<IApplicationCache> ApplicationCache;
+        private readonly IApplicationCacheImposter ApplicationCache;
 
-        private readonly Mock<IDialogService> DialogService;
+        private readonly IDialogServiceImposter DialogService;
 
         private readonly AdminPageViewModel ViewModel;
         public AdminPageViewModelTests() {
-            this.NavigationService = new Mock<INavigationService>();
-            this.NavigationParameterService = new Mock<INavigationParameterService>();
-            this.Mediator = new Mock<IMediator>();
-            this.DeviceService = new Mock<IDeviceService>();
-            this.ApplicationInfoService = new Mock<IApplicationInfoService>();
-            this.DialogService = new Mock<IDialogService>();
-            this.ApplicationCache = new Mock<IApplicationCache>();
-            this.ViewModel = new AdminPageViewModel(this.Mediator.Object,
-                                                    this.NavigationService.Object,
-                                                    this.ApplicationCache.Object,
-                                                    this.DialogService.Object,
-                                                    this.DeviceService.Object,
-                                                    this.ApplicationInfoService.Object, this.NavigationParameterService.Object);
+            this.NavigationService = new INavigationServiceImposter();
+            this.NavigationParameterService = new INavigationParameterServiceImposter();
+            this.Mediator = new IMediatorImposter();
+            this.DeviceService = new IDeviceServiceImposter();
+            this.ApplicationInfoService = new IApplicationInfoServiceImposter();
+            this.DialogService = new IDialogServiceImposter();
+            this.ApplicationCache = new IApplicationCacheImposter();
+            this.ViewModel = new AdminPageViewModel(this.Mediator.Instance(),
+                                                    this.NavigationService.Instance(),
+                                                    this.ApplicationCache.Instance(),
+                                                    this.DialogService.Instance(),
+                                                    this.DeviceService.Instance(),
+                                                    this.ApplicationInfoService.Instance(), this.NavigationParameterService.Instance());
         }
 
         [Fact]
         public void AdminPageViewModel_AdminCommand_Execute_IsExecuted()
         {
-            this.Mediator.Setup(m => m.Send(It.IsAny<TransactionCommands.PerformReconciliationCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success());
+            this.Mediator.Send(Arg<IRequest<Result<PerformReconciliationResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success());
             this.ViewModel.ReconciliationCommand.Execute(null);
-            this.NavigationService.Verify(n => n.GoToHome(), Times.Once);
+            this.NavigationService.GoToHome().Called(Count.Once());
         }
 
         [Fact]
         public void AdminPageViewModel_BackButtonCommand_Execute_IsExecuted()
         {
             this.ViewModel.BackButtonCommand.Execute(null);
-            this.NavigationService.Verify(n => n.GoBack(), Times.Once);
+            this.NavigationService.GoBack().Called(Count.Once());
         }
     }
 }

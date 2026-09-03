@@ -1,5 +1,5 @@
-﻿using MediatR;
-using Moq;
+using MediatR;
+using Imposter.Abstractions;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
@@ -15,42 +15,42 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Transac
     [Collection("ViewModelTests")]
     public class BillPaymentSelectOperatorPageViewModelTests
     {
-        private readonly Mock<IMediator> Mediator;
+        private readonly IMediatorImposter Mediator;
 
-        private readonly Mock<INavigationService> NavigationService;
+        private readonly INavigationServiceImposter NavigationService;
 
-        private readonly Mock<INavigationParameterService> NavigationParameterService;
+        private readonly INavigationParameterServiceImposter NavigationParameterService;
 
-        private readonly Mock<IApplicationCache> ApplicationCache;
+        private readonly IApplicationCacheImposter ApplicationCache;
 
-        private readonly Mock<IDialogService> DialogSevice;
+        private readonly IDialogServiceImposter DialogSevice;
 
         private readonly BillPaymentSelectOperatorPageViewModel ViewModel;
 
-        private readonly Mock<IDeviceService> DeviceService;
+        private readonly IDeviceServiceImposter DeviceService;
 
         public BillPaymentSelectOperatorPageViewModelTests() {
-            this.Mediator = new Mock<IMediator>();
-            this.NavigationParameterService = new Mock<INavigationParameterService>();
-            this.NavigationService = new Mock<INavigationService>();
-            this.ApplicationCache = new Mock<IApplicationCache>();
-            this.DialogSevice = new Mock<IDialogService>();
-            this.DeviceService = new Mock<IDeviceService>();
-            this.ViewModel = new BillPaymentSelectOperatorPageViewModel(this.Mediator.Object,
-                                                                        this.NavigationService.Object,
-                                                                        this.ApplicationCache.Object,
-                                                                        this.DialogSevice.Object,
-                                                                        this.DeviceService.Object,
-                                                                        this.NavigationParameterService.Object);
+            this.Mediator = new IMediatorImposter();
+            this.NavigationParameterService = new INavigationParameterServiceImposter();
+            this.NavigationService = new INavigationServiceImposter();
+            this.ApplicationCache = new IApplicationCacheImposter();
+            this.DialogSevice = new IDialogServiceImposter();
+            this.DeviceService = new IDeviceServiceImposter();
+            this.ViewModel = new BillPaymentSelectOperatorPageViewModel(this.Mediator.Instance(),
+                                                                        this.NavigationService.Instance(),
+                                                                        this.ApplicationCache.Instance(),
+                                                                        this.DialogSevice.Instance(),
+                                                                        this.DeviceService.Instance(),
+                                                                        this.NavigationParameterService.Instance());
         }
 
         [Fact]
         public async Task BillPaymentSelectOperatorPageViewModel_Initialise_IsInitialised()
         {
-            this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetProductOperatorsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractOperatorList));
+            this.Mediator.Send(Arg<IRequest<Result<List<ContractOperatorModel>>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.ContractOperatorList));
 
             await this.ViewModel.Initialise(CancellationToken.None);
-            this.Mediator.Verify(x => x.Send(It.IsAny<MerchantQueries.GetProductOperatorsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
+            this.Mediator.Send(Arg<IRequest<Result<List<ContractOperatorModel>>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
 
             this.ViewModel.Operators.Count.ShouldBe(1);
         }
@@ -58,7 +58,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Transac
         [Fact]
         public async Task BillPaymentSelectOperatorPageViewModel_OperatorSelectedCommand_Execute_IsExecuted()
         {
-            this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetProductOperatorsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.ContractOperatorList));
+            this.Mediator.Send(Arg<IRequest<Result<List<ContractOperatorModel>>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.ContractOperatorList));
 
             await this.ViewModel.Initialise(CancellationToken.None);
 
@@ -72,7 +72,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Transac
 
             this.ViewModel.OperatorSelectedCommand.Execute(selectedContractOperator);
 
-            this.NavigationService.Verify(n => n.GoToBillPaymentSelectProductPage(It.IsAny<ProductDetails>()), Times.Once);
+            this.NavigationService.GoToBillPaymentSelectProductPage(Arg<ProductDetails>.Any()).Called(Count.Once());
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.Transac
 
             this.ViewModel.BackButtonCommand.Execute(null);
 
-            this.NavigationService.Verify(n => n.GoBack(), Times.Once);
+            this.NavigationService.GoBack().Called(Count.Once());
         }
     }
 }

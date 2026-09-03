@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Moq;
+using Microsoft.Extensions.Caching.Memory;
+using Imposter.Abstractions;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -13,11 +13,11 @@ public class MerchantRequestHandlerTests
 {
     #region Fields
 
-    private readonly Mock<IApplicationCache> ApplicationCache;
+    private readonly IApplicationCacheImposter ApplicationCache;
 
     private readonly MerchantRequestHandler MerchantRequestHandler;
 
-    private readonly Mock<IMerchantService> MerchantService;
+    private readonly IMerchantServiceImposter MerchantService;
 
     private Func<Boolean, IMerchantService> MerchantServiceResolver;
     #endregion
@@ -25,13 +25,13 @@ public class MerchantRequestHandlerTests
     #region Constructors
 
     public MerchantRequestHandlerTests() {
-        this.MerchantService = new Mock<IMerchantService>();
-        this.ApplicationCache = new Mock<IApplicationCache>();
-        this.MerchantService = new Mock<IMerchantService>();
+        this.MerchantService = new IMerchantServiceImposter();
+        this.ApplicationCache = new IApplicationCacheImposter();
+        this.MerchantService = new IMerchantServiceImposter();
         this.MerchantServiceResolver = (param) => {
-                                           return this.MerchantService.Object;
+                                           return this.MerchantService.Instance();
                                        };
-        this.MerchantRequestHandler = new MerchantRequestHandler(this.MerchantServiceResolver, this.ApplicationCache.Object);
+        this.MerchantRequestHandler = new MerchantRequestHandler(this.MerchantServiceResolver, this.ApplicationCache.Instance());
     }
 
     #endregion
@@ -40,7 +40,7 @@ public class MerchantRequestHandlerTests
 
     [Fact]
     public async Task MerchantRequestHandler_GetContractProductsRequest_Handle_IsHandled() {
-        this.MerchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
+        this.MerchantService.GetContractProducts(Arg<CancellationToken>.Any())
             .ReturnsAsync(Result.Success(TestData.ContractProductList));
 
         MerchantQueries.GetContractProductsQuery request = new MerchantQueries.GetContractProductsQuery();
@@ -54,9 +54,9 @@ public class MerchantRequestHandlerTests
     [Fact]
     public async Task MerchantRequestHandler_GetContractProductsRequest_Handle_CacheIsNull_ServiceIsCalled_ProductsAreCached(){
         List<ContractProductModel> products = null;
-        this.ApplicationCache.Setup(a => a.GetContractProducts()).Returns(products);
+        this.ApplicationCache.GetContractProducts().Returns(products);
 
-        this.MerchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
+        this.MerchantService.GetContractProducts(Arg<CancellationToken>.Any())
             .ReturnsAsync(Result.Success(TestData.ContractProductList));
 
         MerchantQueries.GetContractProductsQuery request = new MerchantQueries.GetContractProductsQuery();
@@ -65,16 +65,16 @@ public class MerchantRequestHandlerTests
 
         result.IsSuccess.ShouldBeTrue();
         result.Data.Count.ShouldBe(TestData.ContractProductList.Count);
-        this.ApplicationCache.Verify(a => a.SetContractProducts(It.IsAny<List<ContractProductModel>>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Once);
+        this.ApplicationCache.SetContractProducts(Arg<List<ContractProductModel>>.Any(), Arg<MemoryCacheEntryOptions>.Any()).Called(Count.Once());
     }
 
     [Fact]
     public async Task MerchantRequestHandler_GetContractProductsRequest_Handle_GetContractProductsFailed_IsHandled()
     {
         List<ContractProductModel> products = new List<ContractProductModel>();
-        this.ApplicationCache.Setup(a => a.GetContractProducts()).Returns(products);
+        this.ApplicationCache.GetContractProducts().Returns(products);
 
-        this.MerchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
+        this.MerchantService.GetContractProducts(Arg<CancellationToken>.Any())
             .ReturnsAsync(Result.Failure("failed"));
 
         MerchantQueries.GetContractProductsQuery request = new MerchantQueries.GetContractProductsQuery();
@@ -87,7 +87,7 @@ public class MerchantRequestHandlerTests
     [Fact]
     public async Task MerchantRequestHandler_GetContractProductsRequest_Handle_FilterByType_IsHandled()
     {
-        this.MerchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
+        this.MerchantService.GetContractProducts(Arg<CancellationToken>.Any())
             .ReturnsAsync(Result.Success(TestData.ContractProductList));
 
         MerchantQueries.GetContractProductsQuery request = new MerchantQueries.GetContractProductsQuery(ProductType.Voucher);
@@ -102,9 +102,9 @@ public class MerchantRequestHandlerTests
     public async Task MerchantRequestHandler_GetContractProductsRequest_Handle_CacheIsEmpty_ServiceIsCalled_ProductsAreCached()
     {
         List<ContractProductModel> products = new List<ContractProductModel>();
-        this.ApplicationCache.Setup(a => a.GetContractProducts()).Returns(products);
+        this.ApplicationCache.GetContractProducts().Returns(products);
 
-        this.MerchantService.Setup(m => m.GetContractProducts(It.IsAny<CancellationToken>()))
+        this.MerchantService.GetContractProducts(Arg<CancellationToken>.Any())
             .ReturnsAsync(Result.Success(TestData.ContractProductList));
 
         MerchantQueries.GetContractProductsQuery request = new MerchantQueries.GetContractProductsQuery();
@@ -113,12 +113,12 @@ public class MerchantRequestHandlerTests
 
         result.IsSuccess.ShouldBeTrue();
         result.Data.Count.ShouldBe(TestData.ContractProductList.Count);
-        this.ApplicationCache.Verify(a => a.SetContractProducts(It.IsAny<List<ContractProductModel>>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Once);
+        this.ApplicationCache.SetContractProducts(Arg<List<ContractProductModel>>.Any(), Arg<MemoryCacheEntryOptions>.Any()).Called(Count.Once());
     }
 
     [Fact]
     public async Task MerchantRequestHandler_GetMerchantBalanceRequest_Handle_IsHandled() {
-        this.MerchantService.Setup(m => m.GetMerchantBalance(It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantBalance));
+        this.MerchantService.GetMerchantBalance(Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.MerchantBalance));
 
         MerchantQueries.GetMerchantBalanceQuery request = new MerchantQueries.GetMerchantBalanceQuery();
 
@@ -131,30 +131,30 @@ public class MerchantRequestHandlerTests
     [Fact]
     public async Task MerchantRequestHandler_GetMerchantDetailsRequest_Handle_CacheMiss_ServiceIsCalled_DetailsAreCached()
     {
-        this.ApplicationCache.Setup(a => a.GetMerchantDetails()).Returns((MerchantDetailsModel)null);
-        this.MerchantService.Setup(m => m.GetMerchantDetails(It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
+        this.ApplicationCache.GetMerchantDetails().Returns((MerchantDetailsModel)null);
+        this.MerchantService.GetMerchantDetails(Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
 
         MerchantQueries.GetMerchantDetailsQuery request = new MerchantQueries.GetMerchantDetailsQuery();
 
         Result<MerchantDetailsModel> result = await this.MerchantRequestHandler.Handle(request, CancellationToken.None);
 
         result.IsSuccess.ShouldBeTrue();
-        this.MerchantService.Verify(m => m.GetMerchantDetails(It.IsAny<CancellationToken>()), Times.Once);
-        this.ApplicationCache.Verify(a => a.SetMerchantDetails(It.IsAny<MerchantDetailsModel>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Once);
+        this.MerchantService.GetMerchantDetails(Arg<CancellationToken>.Any()).Called(Count.Once());
+        this.ApplicationCache.SetMerchantDetails(Arg<MerchantDetailsModel>.Any(), Arg<MemoryCacheEntryOptions>.Any()).Called(Count.Once());
     }
 
     [Fact]
     public async Task MerchantRequestHandler_GetMerchantDetailsRequest_Handle_CacheHit_ServiceIsNotCalled()
     {
-        this.ApplicationCache.Setup(a => a.GetMerchantDetails()).Returns(TestData.MerchantDetailsModel);
+        this.ApplicationCache.GetMerchantDetails().Returns(TestData.MerchantDetailsModel);
 
         MerchantQueries.GetMerchantDetailsQuery request = new MerchantQueries.GetMerchantDetailsQuery();
 
         Result<MerchantDetailsModel> result = await this.MerchantRequestHandler.Handle(request, CancellationToken.None);
 
         result.IsSuccess.ShouldBeTrue();
-        this.MerchantService.Verify(m => m.GetMerchantDetails(It.IsAny<CancellationToken>()), Times.Never);
-        this.ApplicationCache.Verify(a => a.SetMerchantDetails(It.IsAny<MerchantDetailsModel>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Never);
+        this.MerchantService.GetMerchantDetails(Arg<CancellationToken>.Any()).Called(Count.Never());
+        this.ApplicationCache.SetMerchantDetails(Arg<MerchantDetailsModel>.Any(), Arg<MemoryCacheEntryOptions>.Any()).Called(Count.Never());
     }
 
     #endregion

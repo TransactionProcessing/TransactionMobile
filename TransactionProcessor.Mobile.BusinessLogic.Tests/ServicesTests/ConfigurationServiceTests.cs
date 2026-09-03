@@ -1,4 +1,4 @@
-﻿using RichardSzalay.MockHttp;
+using RichardSzalay.MockHttp;
 using Shouldly;
 using System.Net;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;

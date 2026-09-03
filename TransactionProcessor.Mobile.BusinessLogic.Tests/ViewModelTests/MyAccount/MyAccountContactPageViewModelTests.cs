@@ -1,5 +1,5 @@
-﻿using MediatR;
-using Moq;
+using MediatR;
+using Imposter.Abstractions;
 using Shouldly;
 using SimpleResults;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -13,41 +13,41 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests.MyAccou
 [Collection("ViewModelTests")]
 public class MyAccountContactPageViewModelTests
 {
-    private readonly Mock<INavigationService> NavigationService;
-    private readonly Mock<INavigationParameterService> NavigationParameterService;
+    private readonly INavigationServiceImposter NavigationService;
+    private readonly INavigationParameterServiceImposter NavigationParameterService;
 
-    private readonly Mock<IApplicationCache> ApplicationCache;
+    private readonly IApplicationCacheImposter ApplicationCache;
 
-    private readonly Mock<IDialogService> DialogService;
+    private readonly IDialogServiceImposter DialogService;
 
     private readonly MyAccountContactPageViewModel ViewModel;
 
-    private readonly Mock<IDeviceService> DeviceService;
-    private readonly Mock<IMediator> Mediator;
+    private readonly IDeviceServiceImposter DeviceService;
+    private readonly IMediatorImposter Mediator;
 
     public MyAccountContactPageViewModelTests() {
-        this.NavigationService = new Mock<INavigationService>();
-        this.ApplicationCache = new Mock<IApplicationCache>();
-        this.NavigationParameterService = new Mock<INavigationParameterService>();
-        this.DialogService = new Mock<IDialogService>();
-        this.DeviceService = new Mock<IDeviceService>();
-        this.Mediator = new Mock<IMediator>();
+        this.NavigationService = new INavigationServiceImposter();
+        this.ApplicationCache = new IApplicationCacheImposter();
+        this.NavigationParameterService = new INavigationParameterServiceImposter();
+        this.DialogService = new IDialogServiceImposter();
+        this.DeviceService = new IDeviceServiceImposter();
+        this.Mediator = new IMediatorImposter();
 
-        this.ViewModel = new MyAccountContactPageViewModel(this.NavigationService.Object,
-                                                           this.ApplicationCache.Object,
-                                                           this.DialogService.Object, this.DeviceService.Object,
-                                                           this.NavigationParameterService.Object,
-                                                           this.Mediator.Object);
+        this.ViewModel = new MyAccountContactPageViewModel(this.NavigationService.Instance(),
+                                                           this.ApplicationCache.Instance(),
+                                                           this.DialogService.Instance(), this.DeviceService.Instance(),
+                                                           this.NavigationParameterService.Instance(),
+                                                           this.Mediator.Instance());
     }
 
     [Fact]
     public async Task MyAccountContactPageViewModel_Initialise_IsInitialised()
     {
-        this.Mediator.Setup(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
+        this.Mediator.Send(Arg<IRequest<Result<MerchantDetailsModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
 
         await this.ViewModel.Initialise(CancellationToken.None);
 
-        this.Mediator.Verify(m => m.Send(It.IsAny<MerchantQueries.GetMerchantDetailsQuery>(), It.IsAny<CancellationToken>()), Times.Once);
+        this.Mediator.Send(Arg<IRequest<Result<MerchantDetailsModel>>>.Any(), Arg<CancellationToken>.Any()).Called(Count.Once());
         this.ViewModel.Contact.ShouldNotBeNull();
         this.ViewModel.Contact.EmailAddress.ShouldBe(TestData.ContactEmailAddress);
         this.ViewModel.Contact.Name.ShouldBe(TestData.ContactName);
@@ -59,6 +59,6 @@ public class MyAccountContactPageViewModelTests
     {
         this.ViewModel.BackButtonCommand.Execute(null);
 
-        this.NavigationService.Verify(n => n.GoBack(), Times.Once);
+        this.NavigationService.GoBack().Called(Count.Once());
     }
 }

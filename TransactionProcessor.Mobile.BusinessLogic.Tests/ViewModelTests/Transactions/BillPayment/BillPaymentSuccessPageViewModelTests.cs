@@ -1,4 +1,4 @@
-﻿using Moq;
+using Imposter.Abstractions;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 using TransactionProcessor.Mobile.BusinessLogic.ViewModels.Transactions;
@@ -10,12 +10,12 @@ using NullLogger = Logging.NullLogger;
 [Collection("ViewModelTests")]
 public class BillPaymentSuccessPageViewModelTests
 {
-    private readonly Mock<INavigationService> NavigationService;
+    private readonly INavigationServiceImposter NavigationService;
     private readonly BillPaymentSuccessPageViewModel ViewModel;
     public BillPaymentSuccessPageViewModelTests()
     {
-        this.NavigationService = new Mock<INavigationService>();
-        this.ViewModel = new BillPaymentSuccessPageViewModel(this.NavigationService.Object);
+        this.NavigationService = new INavigationServiceImposter();
+        this.ViewModel = new BillPaymentSuccessPageViewModel(this.NavigationService.Instance());
         Logger.Initialise(new NullLogger());
     }
 
@@ -23,6 +23,6 @@ public class BillPaymentSuccessPageViewModelTests
     public void BillPaymentSuccessPageViewModel_CompletedCommand_Execute_IsExecuted()
     {
         this.ViewModel.CompletedCommand.Execute(null);
-        this.NavigationService.Verify(n => n.PopToRoot(), Times.Once);
+        this.NavigationService.PopToRoot().Called(Count.Once());
     }
 }
