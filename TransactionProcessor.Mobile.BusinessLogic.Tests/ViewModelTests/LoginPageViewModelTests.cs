@@ -192,6 +192,34 @@ public class LoginPageViewModelTests
     }
 
     [Fact]
+    public async Task LoginPageViewModel_LoginCommand_Execute_UpdateLauncherFails_WarningToastIsShown_And_AppStaysOpen()
+    {
+        this.Mediator.Send(Arg<IRequest<Result<Configuration>>>.Any(), Arg<CancellationToken>.Any())
+            .ReturnsAsync(Result.Success(new Configuration { EnableAutoUpdates = true }));
+        this.ApplicationInfoService.VersionString.Getter().Returns(TestData.ApplicationVersion);
+        this.ApplicationInfoService.PackageName.Getter().Returns("com.transactionprocessor.mobile");
+        this.DeviceService.GetPlatform().Returns("Android");
+        this.DeviceService.GetIdentifier().Returns(TestData.DeviceIdentifier);
+        this.UpdateService.CheckForUpdates(Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<CancellationToken>.Any())
+            .ReturnsAsync(Result.Success(new ApplicationUpdateCheckResponse
+            {
+                DownloadUri = "https://updates.example.com/transactionmobile.apk",
+                LatestVersion = "1.0.1",
+                Message = "Install update",
+                UpdateRequired = true
+            }));
+        this.DialogService.ShowDialog(Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any()).ReturnsAsync(true);
+        this.ApplicationUpdateLauncherService.LaunchUpdateAsync(Arg<String>.Any(), Arg<CancellationToken>.Any())
+            .ThrowsAsync(new ApplicationException("Unable to start the application update installer."));
+
+        await this.ViewModel.LogonCommand.ExecuteAsync(null);
+
+        this.NavigationService.QuitApplication().Called(Count.Never());
+        this.NavigationService.GoToHome().Called(Count.Never());
+        this.warningToastCount.ShouldBe(1);
+    }
+
+    [Fact]
     public void LoginPageViewModel_LoginCommand_Execute_ErrorDuringLogonTransaction_WarningToastIsShown()
     {
         this.Mediator.Send(Arg<IRequest<Result<Configuration>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(new Configuration()));
