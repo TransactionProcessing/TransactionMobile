@@ -33,7 +33,7 @@
             <!-- Contact details card -->
             <VerticalStackLayout Padding="20,20,20,16" Spacing="16">
 
-                <Frame Style="{StaticResource HomeCardFrame}">
+                <Border Style="{StaticResource HomeCardFrame}">
                     <VerticalStackLayout Spacing="12">
                         <Label Text="Primary Contact"
                                FontSize="16"
@@ -79,7 +79,7 @@
                                    AutomationId="ContactMobileNumberLabel"/>
                         </Grid>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <Button Text="Edit Contact"
                         Style="{StaticResource StandardButton}"

@@ -2,7 +2,7 @@ using Imposter.Abstractions;
 using SecurityService.Client;
 using SecurityService.DataTransferObjects;
 using Shouldly;
-using SimpleResults;
+using TransactionProcessing.UnionResults;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
@@ -22,7 +22,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
 
         [Fact]
         public async Task AuthenticationService_GetToken_TokenReturned(){
-            this.SecurityServiceClient.GetToken(Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(TokenResponse.Create(TestData.Token, TestData.RefreshToken, TestData.TokenExpiryInMinutes));
+            this.SecurityServiceClient.GetToken(Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TokenResponse.Create(TestData.Token, TestData.RefreshToken, TestData.TokenExpiryInMinutes)));
             
             Result<TokenResponseModel> token = await this.AuthenticationService.GetToken(TestData.UserName, TestData.Password, TestData.ClientId, TestData.ClientSecret, CancellationToken.None);
             token.IsSuccess.ShouldBeTrue();
@@ -34,7 +34,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
         [Fact]
         public async Task AuthenticationService_GetToken_SecurityClientFailed_TokenNotReturned()
         {
-            this.SecurityServiceClient.GetToken(Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Failure());
+            this.SecurityServiceClient.GetToken(Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result<TokenResponse>.Fail(Error.Failure("Failed")));
 
             Result<TokenResponseModel> token = await this.AuthenticationService.GetToken(TestData.UserName, TestData.Password, TestData.ClientId, TestData.ClientSecret, CancellationToken.None);
             token.IsFailed.ShouldBeTrue();
@@ -52,7 +52,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
         [Fact]
         public async Task AuthenticationService_RefreshAccessToken_TokenReturned()
         {
-            this.SecurityServiceClient.GetToken(Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(TokenResponse.Create(TestData.Token, TestData.RefreshToken, TestData.TokenExpiryInMinutes));
+            this.SecurityServiceClient.GetToken(Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TokenResponse.Create(TestData.Token, TestData.RefreshToken, TestData.TokenExpiryInMinutes)));
             
             Result<TokenResponseModel> token = await this.AuthenticationService.RefreshAccessToken(TestData.RefreshToken, TestData.ClientId, TestData.ClientSecret, CancellationToken.None);
             token.IsSuccess.ShouldBeTrue();
@@ -64,7 +64,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
         [Fact]
         public async Task AuthenticationService_RefreshAccessToken_SecurityClientFailed_TokenNotReturned()
         {
-            this.SecurityServiceClient.GetToken(Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Failure());
+            this.SecurityServiceClient.GetToken(Arg<String>.Any(), Arg<String>.Any(), Arg<String>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result<TokenResponse>.Fail(Error.Failure("Failed")));
 
             Result<TokenResponseModel> token = await this.AuthenticationService.RefreshAccessToken(TestData.RefreshToken, TestData.ClientId, TestData.ClientSecret, CancellationToken.None);
 

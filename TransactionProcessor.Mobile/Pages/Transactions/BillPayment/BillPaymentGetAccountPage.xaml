@@ -34,7 +34,7 @@
 
             <!-- Form card -->
             <VerticalStackLayout Padding="20,20,20,16" Spacing="12">
-                <Frame Style="{StaticResource TransactionFormCard}">
+                <Border Style="{StaticResource TransactionFormCard}">
                     <VerticalStackLayout Spacing="12">
                         <Entry x:Name="CustomerAccountNumberEntry"
                                Placeholder="Customer Account Number"
@@ -43,7 +43,7 @@
                                Text="{Binding CustomerAccountNumber}"
                                Keyboard="Numeric"/>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <Button x:Name="GetAccountButton"
                         Text="Get Account"

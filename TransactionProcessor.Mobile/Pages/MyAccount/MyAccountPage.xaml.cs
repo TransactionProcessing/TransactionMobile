@@ -36,15 +36,15 @@ public partial class MyAccountPage : NoBackWithoutLogoutPage
         Int32 rowCount = 0;
         foreach (ListViewItem modelOption in viewModel.MyAccountOptions)
         {
-            Frame tile = this.CreateOptionTile(modelOption, rowCount);
+            Border tile = this.CreateOptionTile(modelOption, rowCount);
             this.MyAccountOptionsList.Children.Add(tile);
             rowCount++;
         }
     }
 
-    private Frame CreateOptionTile(ListViewItem modelOption, Int32 rowCount)
+    private Border CreateOptionTile(ListViewItem modelOption, Int32 rowCount)
     {
-        Frame tile = new Frame();
+        Border tile = new Border();
         tile.SetDynamicResource(VisualElement.StyleProperty, "SelectionTileFrame");
         tile.AutomationId = $"{modelOption.Title.Replace(" ", "")}Button";
 

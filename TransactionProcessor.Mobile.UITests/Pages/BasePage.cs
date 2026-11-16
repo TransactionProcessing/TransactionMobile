@@ -1,5 +1,5 @@
 ﻿using OpenQA.Selenium;
-using Shared.IntegrationTesting;
+using TransactionProcessing.Shared.IntegrationTesting;
 using Shouldly;
 using TransactionProcessor.Mobile.UITests.Common;
 using TransactionProcessor.Mobile.UITests.Drivers;

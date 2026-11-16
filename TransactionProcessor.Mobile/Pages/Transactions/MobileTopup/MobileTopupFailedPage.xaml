@@ -29,13 +29,13 @@
 
             <!-- Status card -->
             <VerticalStackLayout Padding="20,20,20,16" Spacing="12">
-                <Frame Style="{StaticResource StatusCardFrame}">
+                <Border Style="{StaticResource StatusCardFrame}">
                     <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                         <Image Source="paymentfailure.svg" VerticalOptions="Start" Style="{DynamicResource PaymentImage}" HorizontalOptions="Center"/>
                         <Label Style="{StaticResource StatusMessageLabel}"
                                Text="Unfortunately, we could not process your mobile top-up, this may be for a variety of reasons.  If you wish you can retry the transaction."/>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <Button x:Name="CancelButton"
                         Style="{DynamicResource MobileTopupButtonStyle}" AutomationId="CancelButton">

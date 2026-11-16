@@ -40,34 +40,34 @@
                     </VerticalStackLayout>
 
                     <!-- Login card -->
-                    <Frame CornerRadius="30"
+                    <Border StrokeShape="RoundRectangle 30"
                            Padding="30,30,30,40"
-                           HasShadow="True"
+                           Shadow="{StaticResource CardShadow}"
                            BackgroundColor="{DynamicResource cardBackgroundColor}"
                            Margin="0"
-                           BorderColor="{DynamicResource cardBorderColor}">
+                           Stroke="{DynamicResource cardBorderColor}">
                         <VerticalStackLayout Spacing="8">
 
                             <!-- Username field -->
                             <Label Text="Email / Username" Style="{StaticResource LoginFieldLabel}"/>
-                            <Frame Style="{StaticResource LoginEntryContainerFrame}">
+                            <Border Style="{StaticResource LoginEntryContainerFrame}">
                                 <Entry x:Name="UserNameEntry"
                                        Placeholder="Enter your email or username"
                                        AutomationId="UserNameEntry"
                                        Style="{StaticResource LoginEntryCardStyle}"
                                        Text="{Binding UserName}"/>
-                            </Frame>
+                            </Border>
 
                             <!-- Password field -->
                             <Label Text="Password" Style="{StaticResource LoginFieldLabel}" Margin="0,12,0,0"/>
-                            <Frame Style="{StaticResource LoginEntryContainerFrame}">
+                            <Border Style="{StaticResource LoginEntryContainerFrame}">
                                 <Entry x:Name="PasswordEntry"
                                        Placeholder="Enter your password"
                                        AutomationId="PasswordEntry"
                                        IsPassword="True"
                                        Style="{StaticResource LoginEntryCardStyle}"
                                        Text="{Binding Password}"/>
-                            </Frame>
+                            </Border>
 
                             <!-- Training mode toggle -->
                             <HorizontalStackLayout Spacing="10" Margin="0,12,0,4">
@@ -110,17 +110,17 @@
                                    Placeholder="Configuration URL"/>
 
                         </VerticalStackLayout>
-                    </Frame>
+                    </Border>
 
                 </VerticalStackLayout>
             </ScrollView>
             <Grid IsVisible="{Binding IsBusy}" BackgroundColor="#80000000" InputTransparent="False">
-                <Frame HorizontalOptions="Center"
+                <Border HorizontalOptions="Center"
                        VerticalOptions="Center"
                        Padding="24"
-                       CornerRadius="18"
+                       StrokeShape="RoundRectangle 18"
                        BackgroundColor="#CC1F2A44"
-                       BorderColor="#00FFFFFF">
+                       Stroke="#00FFFFFF">
                     <VerticalStackLayout Spacing="12">
                         <ActivityIndicator IsRunning="{Binding IsBusy}"
                                            Color="White"
@@ -130,7 +130,7 @@
                                FontAttributes="Bold"
                                HorizontalTextAlignment="Center" />
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
             </Grid>
         </Grid>
     </ContentPage.Content>

@@ -53,7 +53,7 @@ jobs:
           chmod +x $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
 
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-36"
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-37"
 
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
           echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
@@ -78,7 +78,7 @@ jobs:
       - name: Publish Android APK
         run: |
           dotnet publish TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj \
-            -f net10.0-android \
+            -f net11.0-android \
             -c Release \
             --no-restore \
             /p:ApplicationDisplayVersion=${{ env.APP_DISPLAY_VERSION }} \
@@ -91,7 +91,7 @@ jobs:
       - name: Upload APK to release
         uses: softprops/action-gh-release@v1
         with:
-          files: TransactionProcessor.Mobile/bin/Release/net10.0-android/*-Signed.apk
+          files: TransactionProcessor.Mobile/bin/Release/net11.0-android/*-Signed.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -99,7 +99,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: android-apk
-          path: TransactionProcessor.Mobile/bin/Release/net10.0-android/*-Signed.apk
+          path: TransactionProcessor.Mobile/bin/Release/net11.0-android/*-Signed.apk
 
       - name: Clean up keystore
         if: always()

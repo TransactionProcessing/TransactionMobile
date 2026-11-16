@@ -29,7 +29,7 @@
 
             <!-- Device and app info card -->
             <VerticalStackLayout Padding="20,20,20,0" Spacing="16">
-                <Frame Style="{StaticResource HomeCardFrame}">
+                <Border Style="{StaticResource HomeCardFrame}">
                     <VerticalStackLayout Spacing="6">
                         <Label Text="{Binding ApplicationName, Mode=OneTime}"
                                FontSize="14"
@@ -42,7 +42,7 @@
                                FontSize="13"
                                TextColor="{StaticResource labelTextColor}"/>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
             </VerticalStackLayout>
 
             <!-- Support action tiles -->

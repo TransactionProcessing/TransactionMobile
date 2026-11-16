@@ -1,5 +1,4 @@
-﻿using Shared.Results;
-using SimpleResults;
+﻿using TransactionProcessing.UnionResults;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,7 +30,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                                                                                           string recipientEmailAddress,
                                                                                           CancellationToken cancellationToken);
     }
-    public class ReportsService : ClientProxyBase.ClientProxyBase, IReportsService
+    public class ReportsService : TransactionProcessing.ClientProxyBase.ClientProxyBase, IReportsService
     {
         #region Fields
 
@@ -69,11 +68,11 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
             MerchantDailyPerformanceSummaryRequest requestBody = new (){ MerchantReportingId = merchantReportingId, StartDate = startDate, EndDate = endDate };
             
-            Result<MerchantDailyPerformanceSummaryResponse>? responseDataResult = await this.Post<MerchantDailyPerformanceSummaryRequest, MerchantDailyPerformanceSummaryResponse>(requestUri, requestBody, accessToken.AccessToken, cancellationToken);
+            Result<MerchantDailyPerformanceSummaryResponse> responseDataResult = await this.Post<MerchantDailyPerformanceSummaryRequest, MerchantDailyPerformanceSummaryResponse>(requestUri, requestBody, accessToken.AccessToken, cancellationToken);
 
             if (responseDataResult.IsFailed)
             {
-                Logger.LogInformation($"GetDailyPerformanceSummary failed {responseDataResult.Status}");
+                Logger.LogInformation($"GetDailyPerformanceSummary failed {responseDataResult.Message}");
                 return ResultHelpers.CreateFailure(responseDataResult);
             }
             
@@ -117,11 +116,11 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                 TopN = topN
             };
 
-            Result<MerchantTransactionMixSummaryResponseDto>? responseDataResult = await this.Post<MerchantTransactionMixSummaryRequest, MerchantTransactionMixSummaryResponseDto>(requestUri, requestBody, accessToken.AccessToken, cancellationToken);
+            Result<MerchantTransactionMixSummaryResponseDto> responseDataResult = await this.Post<MerchantTransactionMixSummaryRequest, MerchantTransactionMixSummaryResponseDto>(requestUri, requestBody, accessToken.AccessToken, cancellationToken);
 
             if (responseDataResult.IsFailed)
             {
-                Logger.LogInformation($"GetTransactionMixSummary failed {responseDataResult.Status}");
+                Logger.LogInformation($"GetTransactionMixSummary failed {responseDataResult.Message}");
                 return ResultHelpers.CreateFailure(responseDataResult);
             }
 
@@ -167,11 +166,11 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                 PageSize = pageSize > 0 ? pageSize : 5
             };
 
-            Result<RecentActivityReceiptSearchResponseDto>? responseDataResult = await this.Post<RecentActivityReceiptSearchRequest, RecentActivityReceiptSearchResponseDto>(requestUri, requestBody, accessToken.AccessToken, cancellationToken);
+            Result<RecentActivityReceiptSearchResponseDto> responseDataResult = await this.Post<RecentActivityReceiptSearchRequest, RecentActivityReceiptSearchResponseDto>(requestUri, requestBody, accessToken.AccessToken, cancellationToken);
 
             if (responseDataResult.IsFailed)
             {
-                Logger.LogInformation($"GetRecentActivityReceiptReport failed {responseDataResult.Status}");
+                Logger.LogInformation($"GetRecentActivityReceiptReport failed {responseDataResult.Message}");
                 return ResultHelpers.CreateFailure(responseDataResult);
             }
 
@@ -209,11 +208,11 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                 RecipientEmailAddress = recipientEmailAddress
             };
 
-            Result<RecentActivityReceiptResendResponseDto>? responseDataResult = await this.Post<ResendReceiptRequestMessage, RecentActivityReceiptResendResponseDto>(requestUri, requestBody, accessToken.AccessToken, cancellationToken);
+            Result<RecentActivityReceiptResendResponseDto> responseDataResult = await this.Post<ResendReceiptRequestMessage, RecentActivityReceiptResendResponseDto>(requestUri, requestBody, accessToken.AccessToken, cancellationToken);
 
             if (responseDataResult.IsFailed)
             {
-                Logger.LogInformation($"ResendRecentActivityReceipt failed {responseDataResult.Status}");
+                Logger.LogInformation($"ResendRecentActivityReceipt failed {responseDataResult.Message}");
                 return ResultHelpers.CreateFailure(responseDataResult);
             }
 

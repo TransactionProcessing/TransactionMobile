@@ -151,9 +151,6 @@ namespace TransactionProcessor.Mobile
             //    }
             //});
 #endif
-            MainPage = new AppShell();
-
-
             RegisterRouteOnce(nameof(MobileTopupSelectOperatorPage), typeof(MobileTopupSelectOperatorPage));
             RegisterRouteOnce(nameof(MobileTopupSelectProductPage), typeof(MobileTopupSelectProductPage));
             RegisterRouteOnce(nameof(MobileTopupPerformTopupPage), typeof(MobileTopupPerformTopupPage));
@@ -185,6 +182,11 @@ namespace TransactionProcessor.Mobile
             RegisterRouteOnce(nameof(MyAccountAddressesPage), typeof(MyAccountAddressesPage));
             RegisterRouteOnce(nameof(MyAccountContactPage), typeof(MyAccountContactPage));
             RegisterRouteOnce(nameof(MyAccountDetailsPage), typeof(MyAccountDetailsPage));
+        }
+
+        protected override Window CreateWindow(IActivationState? activationState)
+        {
+            return new Window(new AppShell());
         }
 
         static readonly HashSet<string> s_registeredRoutes = new();

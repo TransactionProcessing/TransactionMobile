@@ -1,6 +1,6 @@
-using NLog;
+﻿using NLog;
 using Reqnroll;
-using Shared.Logger;
+using TransactionProcessing.Shared.Logger;
 using TransactionProcessor.Mobile.UITests.Drivers;
 
 namespace TransactionProcessor.Mobile.UITests.Common;
@@ -28,7 +28,7 @@ public class GenericSteps
         string scenarioName = this.scenarioContext.ScenarioInfo.Title.Replace(" ", "");
         NlogLogger logger = new();
         logger.Initialise(LogManager.GetLogger(scenarioName), scenarioName);
-        LogManager.AddHiddenAssembly(typeof(NlogLogger).Assembly);
+        LogManager.Setup().SetupLogFactory(setup => setup.AddCallSiteHiddenAssembly(typeof(NlogLogger).Assembly));
 
         this.testingContext.Logger = logger;
         this.testingContext.TestHostHelper = new TestHostHelper(this.testingContext);

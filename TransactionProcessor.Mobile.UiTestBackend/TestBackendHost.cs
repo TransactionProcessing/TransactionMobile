@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
@@ -581,7 +581,7 @@ internal sealed class BackendState
                 MerchantReportingId = this.GetMerchantReportingId(estateName, merchant.MerchantName),
                 MerchantName = merchant.MerchantName,
                 MerchantReference = merchant.MerchantName,
-                NextStatementDate = DateTime.UtcNow.Date.AddDays(30),
+                NextStatementDate = DateOnly.FromDateTime(DateTime.UtcNow.Date.AddDays(30)),
                 SettlementSchedule = ParseSettlementSchedule(merchant.SettlementSchedule),
                 Addresses =
                 [
@@ -631,7 +631,7 @@ internal sealed class BackendState
                 Operator = "System",
                 Status = "Success",
                 Amount = 0m,
-                TransactionDateTime = request.TransactionDateTime
+                TransactionDateTime = request.TransactionDateTime.UtcDateTime
             });
             
             return new LogonTransactionResponseMessage
@@ -676,7 +676,7 @@ internal sealed class BackendState
                     operatorName,
                     "Success",
                     amount,
-                    request.TransactionDateTime);
+                    request.TransactionDateTime.UtcDateTime);
 
                 this.runtimeReceipts.Add(receipt);
                 this.Seed.ReportTransactions.Add(new ReportTransactionSeed
@@ -688,7 +688,7 @@ internal sealed class BackendState
                     Operator = operatorName,
                     Status = "Success",
                     Amount = amount,
-                    TransactionDateTime = request.TransactionDateTime
+                    TransactionDateTime = request.TransactionDateTime.UtcDateTime
                 });
             }
 

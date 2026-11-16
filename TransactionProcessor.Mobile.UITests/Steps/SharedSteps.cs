@@ -1,6 +1,6 @@
 using Reqnroll;
 using SecurityService.DataTransferObjects;
-using Shared.IntegrationTesting;
+using TransactionProcessing.Shared.IntegrationTesting;
 using Shouldly;
 using System.Net;
 using System.Text;
@@ -17,7 +17,7 @@ using TransactionProcessor.Mobile.UITests.Pages;
 namespace TransactionProcessor.Mobile.UITests.Steps;
 
 using ClientDetails = Common.ClientDetails;
-using ReqnrollTableHelper = Shared.IntegrationTesting.ReqnrollTableHelper;
+using ReqnrollTableHelper = TransactionProcessing.Shared.IntegrationTesting.ReqnrollTableHelper;
 
 [Binding]
 [Scope(Tag = "shared")]

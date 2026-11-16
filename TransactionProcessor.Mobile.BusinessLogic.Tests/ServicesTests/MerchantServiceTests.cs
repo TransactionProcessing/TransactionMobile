@@ -1,7 +1,7 @@
 using Imposter.Abstractions;
 using RichardSzalay.MockHttp;
 using Shouldly;
-using SimpleResults;
+using TransactionProcessing.UnionResults;
 using System.Net;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -99,7 +99,7 @@ public class MerchantServiceTests{
                                                                     EstateId = TestData.EstateId,
                                                                     MerchantId = TestData.MerchantId,
                                                                     MerchantName = TestData.MerchantName,
-                                                                    NextStatementDate = TestData.NextStatementDate,
+                                                                    NextStatementDate = DateOnly.FromDateTime(TestData.NextStatementDate),
                                                                     SettlementSchedule = SettlementSchedule.Immediate,
                                                                     Contacts = new List<ContactResponse>{
                                                                                                             new ContactResponse{
@@ -140,7 +140,7 @@ public class MerchantServiceTests{
         merchantDetails.Data.Contact.EmailAddress.ShouldBe(merchantResponse.Contacts.First().ContactEmailAddress);
         merchantDetails.Data.Contact.MobileNumber.ShouldBe(merchantResponse.Contacts.First().ContactPhoneNumber);
         merchantDetails.Data.MerchantName.ShouldBe(merchantResponse.MerchantName);
-        merchantDetails.Data.NextStatementDate.ShouldBe(merchantResponse.NextStatementDate);
+        merchantDetails.Data.NextStatementDate.ShouldBe(merchantResponse.NextStatementDate.ToDateTime(TimeOnly.MinValue));
         merchantDetails.Data.SettlementSchedule.ShouldBe(merchantResponse.SettlementSchedule.ToString());
     }
 

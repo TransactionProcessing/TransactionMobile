@@ -34,7 +34,7 @@
 
             <!-- Account info card -->
             <VerticalStackLayout Padding="20,20,20,0" Spacing="16">
-                <Frame Style="{DynamicResource HomeCardFrame}">
+                <Border Style="{DynamicResource HomeCardFrame}">
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="8" RowSpacing="4">
                         <Label Grid.Row="0" Grid.Column="0"
                                Text="Merchant Name"
@@ -57,7 +57,7 @@
                                AutomationId="LastLoginLabel"
                                TextColor="{DynamicResource labelTextColor}"/>
                     </Grid>
-                </Frame>
+                </Border>
             </VerticalStackLayout>
 
             <!-- Account option tiles -->
@@ -67,7 +67,7 @@
                        FontAttributes="Bold"
                        TextColor="{DynamicResource labelTextColor}"/>
 
-                <Frame Style="{DynamicResource HomeCardFrame}">
+                <Border Style="{DynamicResource HomeCardFrame}">
                     <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="4">
                         <Label Grid.Row="0"
                                Grid.Column="0"
@@ -88,7 +88,7 @@
                                TextColor="{DynamicResource labelTextColor}"
                                Opacity="0.8"/>
                     </Grid>
-                </Frame>
+                </Border>
 
                 <FlexLayout x:Name="MyAccountOptionsList"
                             Wrap="Wrap"

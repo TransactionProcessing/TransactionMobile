@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Shared.Results;
-using SimpleResults;
+using TransactionProcessing.UnionResults;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Serialisation;
@@ -22,7 +21,7 @@ public interface IMerchantService
 
     #endregion
 }
-public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
+public class MerchantService : TransactionProcessing.ClientProxyBase.ClientProxyBase, IMerchantService
 {
     #region Fields
 
@@ -70,10 +69,10 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
         Logger.LogInformation("About to request merchant contracts");
         Logger.LogDebug($"Merchant Contract Request details: Access Token {accessToken.AccessToken}");
 
-        Result<List<ContractResponse>>? responseDataResult = await this.Get<List<ContractResponse>>(requestUri, accessToken.AccessToken, cancellationToken);
+        Result<List<ContractResponse>> responseDataResult = await this.Get<List<ContractResponse>>(requestUri, accessToken.AccessToken, cancellationToken);
 
         if (responseDataResult.IsFailed) {
-            Logger.LogInformation($"GetMerchantContracts failed {responseDataResult.Status}");
+            Logger.LogInformation($"GetMerchantContracts failed {responseDataResult.Message}");
             return ResultHelpers.CreateFailure(responseDataResult);
         }
 
@@ -115,7 +114,7 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
         }
         catch(Exception ex) {
             Logger.LogError("Error getting merchant balance",ex);
-            return ResultExtensions.FailureExtended("Error getting merchant balance", ex);
+            return ResultExtensions.FailureExtended<Decimal>("Error getting merchant balance", ex);
         }
     }
 
@@ -127,11 +126,11 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
         Logger.LogInformation("About to request merchant details");
         Logger.LogDebug($"Merchant Details Request details: Access Token {accessToken.AccessToken}");
 
-        Result<MerchantResponse>? responseDataResult = await this.Get<MerchantResponse>(requestUri, accessToken.AccessToken, cancellationToken);
+        Result<MerchantResponse> responseDataResult = await this.Get<MerchantResponse>(requestUri, accessToken.AccessToken, cancellationToken);
 
         if (responseDataResult.IsFailed)
         {
-            Logger.LogInformation($"GetMerchantContracts failed {responseDataResult.Status}");
+            Logger.LogInformation($"GetMerchantContracts failed {responseDataResult.Message}");
             return ResultHelpers.CreateFailure(responseDataResult);
         }
 
@@ -143,7 +142,7 @@ public class MerchantService : ClientProxyBase.ClientProxyBase, IMerchantService
                                                                   MerchantId = responseDataResult.Data.MerchantId,
                                                                   MerchantReportingId = responseDataResult.Data.MerchantReportingId,
                                                                   MerchantName = responseDataResult.Data.MerchantName,
-                                                                  NextStatementDate = responseDataResult.Data.NextStatementDate,
+                                                                  NextStatementDate = responseDataResult.Data.NextStatementDate.ToDateTime(TimeOnly.MinValue),
                                                                   LastStatementDate = new DateTime(),
                                                                   SettlementSchedule = responseDataResult.Data.SettlementSchedule.ToString(),
                                                                   Contact = new ContactModel {

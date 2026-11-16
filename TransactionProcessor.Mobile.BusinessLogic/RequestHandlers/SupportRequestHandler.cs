@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using SimpleResults;
+using TransactionProcessing.UnionResults;
 using TransactionProcessor.Mobile.BusinessLogic.Database;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Requests;
@@ -47,7 +47,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
             Result<List<Models.LogMessage>> logMessageModelsResult = this.TryBuildLogMessageModels(logEntries);
             if (logMessageModelsResult.IsFailed)
             {
-                return Result.Failure(logMessageModelsResult.Errors.FirstOrDefault() ?? "Unable to map log messages.");
+                return Result.Failure((String.IsNullOrWhiteSpace(logMessageModelsResult.Message) ? "Unable to map log messages." : logMessageModelsResult.Message));
             }
 
             Result result = await configurationService.PostDiagnosticLogs(request.DeviceIdentifier, logMessageModelsResult.Data, cancellationToken);
@@ -74,7 +74,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.RequestHandlers
             Result<List<Models.LogMessage>> logMessageModelsResult = this.TryBuildLogMessageModels(logEntries);
             if (logMessageModelsResult.IsFailed)
             {
-                return Result.Failure(logMessageModelsResult.Errors.FirstOrDefault() ?? "Unable to map log messages.");
+                return Result.Failure((String.IsNullOrWhiteSpace(logMessageModelsResult.Message) ? "Unable to map log messages." : logMessageModelsResult.Message));
             }
 
             return Result.Success(logMessageModelsResult.Data.OrderByDescending(l => l.EntryDateTime).ToList());

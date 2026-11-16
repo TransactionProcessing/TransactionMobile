@@ -1,5 +1,5 @@
 using Shouldly;
-using SimpleResults;
+using TransactionProcessing.UnionResults;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Database;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -573,10 +573,10 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.CommonTests
     public class ResultExtensionsTests{
         [Fact]
         public void FailureExtended_FailureResultReturned(){
-            var result = ResultExtensions.FailureExtended("Message", new Exception("ExceptionsMessage"));
+            var result = ResultExtensions.FailureExtended<String>("Message", new Exception("ExceptionsMessage"));
             result.IsFailed.ShouldBeTrue();
             result.Message.ShouldBe("Message");
-            result.Errors.Single().ShouldBe("ExceptionsMessage");
+            result.Errors.Single().Message.ShouldBe("ExceptionsMessage");
         }
     }
 }

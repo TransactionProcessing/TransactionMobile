@@ -1,12 +1,9 @@
-﻿using SimpleResults;
+﻿using TransactionProcessing.UnionResults;
 
 public static class ResultExtensions
 {
-    public static Result FailureExtended(string message, Exception exception)
+    public static Result<T> FailureExtended<T>(string message, Exception exception)
     {
-        return Result.Failure(message,
-            new List<String>{
-                exception.Message
-            });
+        return Result<T>.Fail(Result.Failure(message, new[] { exception.Message }));
     }
 }

@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium;
 using Reqnroll;
-using Shared.IntegrationTesting;
-using Shared.Logger;
+using TransactionProcessing.Shared.IntegrationTesting;
+using TransactionProcessing.Shared.Logger;
 using TransactionProcessor.Mobile.UITests.Common;
 using TransactionProcessor.Mobile.UITests.Drivers;
 

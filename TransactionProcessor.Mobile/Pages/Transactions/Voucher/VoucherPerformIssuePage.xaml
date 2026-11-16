@@ -34,7 +34,7 @@
 
             <!-- Form card -->
             <VerticalStackLayout Padding="20,20,20,16" Spacing="12">
-                <Frame Style="{StaticResource TransactionFormCard}">
+                <Border Style="{StaticResource TransactionFormCard}">
                     <VerticalStackLayout Spacing="12">
                         <Entry x:Name="RecipientMobileNumberEntry"
                                Placeholder="Recipient Mobile Number"
@@ -87,7 +87,7 @@
                             </Entry.Behaviors>
                         </Entry>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <Button x:Name="IssueVoucherButton"
                         Text="Issue Voucher"

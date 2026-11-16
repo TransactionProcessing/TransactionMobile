@@ -52,10 +52,10 @@
                       RowSpacing="12">
 
                     <!-- Mobile Topup card -->
-                    <Frame Grid.Row="0" Grid.Column="0" Style="{StaticResource HomeCardFrame}">
-                        <Frame.GestureRecognizers>
+                    <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource HomeCardFrame}">
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding GoToMobileTopupCommand}" AutomationId="MobileTopupCard"/>
-                        </Frame.GestureRecognizers>
+                        </Border.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                             <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label Text="Mobile Topup"
@@ -64,13 +64,13 @@
                                    TextColor="{StaticResource mobileTopup}"
                                    HorizontalOptions="Center"/>
                         </VerticalStackLayout>
-                    </Frame>
+                    </Border>
 
                     <!-- Bill Payment card -->
-                    <Frame Grid.Row="0" Grid.Column="1" Style="{StaticResource HomeCardFrame}">
-                        <Frame.GestureRecognizers>
+                    <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource HomeCardFrame}">
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding GoToBillPaymentCommand}" AutomationId="BillPaymentCard"/>
-                        </Frame.GestureRecognizers>
+                        </Border.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                             <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label Text="Bill Payment"
@@ -79,13 +79,13 @@
                                    TextColor="{StaticResource billPayment}"
                                    HorizontalOptions="Center"/>
                         </VerticalStackLayout>
-                    </Frame>
+                    </Border>
 
                     <!-- Voucher card -->
-                    <Frame Grid.Row="1" Grid.Column="0" Style="{StaticResource HomeCardFrame}">
-                        <Frame.GestureRecognizers>
+                    <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource HomeCardFrame}">
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding GoToVoucherCommand}" AutomationId="VoucherCard"/>
-                        </Frame.GestureRecognizers>
+                        </Border.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                             <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label Text="Voucher"
@@ -94,13 +94,13 @@
                                    TextColor="{StaticResource voucher}"
                                    HorizontalOptions="Center"/>
                         </VerticalStackLayout>
-                    </Frame>
+                    </Border>
 
                     <!-- Admin card -->
-                    <Frame Grid.Row="1" Grid.Column="1" Style="{StaticResource HomeCardFrame}">
-                        <Frame.GestureRecognizers>
+                    <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource HomeCardFrame}">
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding GoToAdminCommand}" AutomationId="AdminCard"/>
-                        </Frame.GestureRecognizers>
+                        </Border.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                             <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label Text="Admin"
@@ -109,7 +109,7 @@
                                    TextColor="{StaticResource admin}"
                                    HorizontalOptions="Center"/>
                         </VerticalStackLayout>
-                    </Frame>
+                    </Border>
 
                 </Grid>
 

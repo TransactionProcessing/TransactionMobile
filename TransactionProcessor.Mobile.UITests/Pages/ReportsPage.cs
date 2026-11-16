@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
-using Shared.IntegrationTesting;
+using TransactionProcessing.Shared.IntegrationTesting;
 using TransactionProcessor.Mobile.UITests.Common;
 using TransactionProcessor.Mobile.UITests.Drivers;
 

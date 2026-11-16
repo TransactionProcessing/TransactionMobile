@@ -4,10 +4,10 @@ using DotNet.Testcontainers.Networks;
 using EventStore.Client;
 using Reqnroll;
 using SecurityService.Client;
-using Shared.IntegrationTesting;
-using Shared.IntegrationTesting.TestContainers;
-using Shared.Logger;
-using Shared.Serialisation;
+using TransactionProcessing.Shared.IntegrationTesting;
+using TransactionProcessing.Shared.IntegrationTesting.TestContainers;
+using TransactionProcessing.Shared.Logger;
+using TransactionProcessing.Shared.Serialisation;
 using Shouldly;
 using System.Net;
 using System.Net.Sockets;
@@ -17,7 +17,7 @@ using TransactionProcessor.DataTransferObjects.Responses.Contract;
 using TransactionProcessor.IntegrationTesting.Helpers;
 using TransactionProcessor.Mobile.UiTestBackend;
 using TransactionProcessor.Mobile.UITests.Drivers;
-using ReqnrollTableHelper = Shared.IntegrationTesting.ReqnrollTableHelper;
+using ReqnrollTableHelper = TransactionProcessing.Shared.IntegrationTesting.ReqnrollTableHelper;
 
 namespace TransactionProcessor.Mobile.UITests.Common
 {
@@ -53,7 +53,6 @@ namespace TransactionProcessor.Mobile.UITests.Common
 
         public ITransactionProcessorClient? TransactionProcessorClient { get; private set; }
 
-        public EventStoreProjectionManagementClient? ProjectionManagementClient { get; private set; }
 
         public NlogLogger? Logger { get; set; }
 
@@ -75,7 +74,6 @@ namespace TransactionProcessor.Mobile.UITests.Common
             this.TestHostHttpClient = this.TestingContext.BackendHost.CreateClient();
             this.SecurityServiceClient = null;
             this.TransactionProcessorClient = null;
-            this.ProjectionManagementClient = null;
         }
 
         public async Task StopTestHostForScenarioRun(object? _ = null)

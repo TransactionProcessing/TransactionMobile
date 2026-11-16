@@ -34,7 +34,7 @@
 
             <!-- Form card -->
             <VerticalStackLayout Padding="20,20,20,16" Spacing="12">
-                <Frame Style="{StaticResource TransactionFormCard}">
+                <Border Style="{StaticResource TransactionFormCard}">
                     <VerticalStackLayout Spacing="12">
                         <Entry x:Name="MeterNumberEntry"
                                Placeholder="Meter Number"
@@ -43,7 +43,7 @@
                                Text="{Binding MeterNumber}"
                                Keyboard="Numeric"/>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <Button x:Name="GetMeterButton"
                         Text="Get Meter"

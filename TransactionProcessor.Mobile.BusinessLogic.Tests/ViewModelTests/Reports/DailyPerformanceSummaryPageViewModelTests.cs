@@ -1,6 +1,6 @@
 using MediatR;
 using Imposter.Abstractions;
-using SimpleResults;
+using TransactionProcessing.UnionResults;
 using Shouldly;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Models;

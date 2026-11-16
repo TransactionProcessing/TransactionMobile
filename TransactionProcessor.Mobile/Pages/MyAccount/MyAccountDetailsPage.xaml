@@ -34,7 +34,7 @@
             <VerticalStackLayout Padding="20,20,20,16" Spacing="16">
 
                 <!-- Merchant info card -->
-                <Frame Style="{StaticResource HomeCardFrame}">
+                <Border Style="{StaticResource HomeCardFrame}">
                     <VerticalStackLayout Spacing="12">
                         <Label Text="Merchant Details"
                                FontSize="16"
@@ -56,10 +56,10 @@
                                    AutomationId="MerchantNameLabel"/>
                         </Grid>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <!-- Balance card -->
-                <Frame Style="{StaticResource HomeCardFrame}">
+                <Border Style="{StaticResource HomeCardFrame}">
                     <VerticalStackLayout Spacing="12">
                         <Label Text="Balances"
                                FontSize="16"
@@ -94,10 +94,10 @@
                                    AutomationId="AvailableBalanceLabel"/>
                         </Grid>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <!-- Statement card -->
-                <Frame Style="{StaticResource HomeCardFrame}">
+                <Border Style="{StaticResource HomeCardFrame}">
                     <VerticalStackLayout Spacing="12">
                         <Label Text="Statement"
                                FontSize="16"
@@ -141,7 +141,7 @@
                                    AutomationId="SettlementScheduleLabel"/>
                         </Grid>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <Button Text="Edit Details"
                         Style="{StaticResource StandardButton}"
