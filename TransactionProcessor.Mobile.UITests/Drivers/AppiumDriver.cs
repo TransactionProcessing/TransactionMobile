@@ -498,6 +498,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
             driverOptions.AddAdditionalAppiumOption("appPackage", "com.transactionprocessor.mobile");
             driverOptions.AddAdditionalAppiumOption("enforceAppInstall", true);
+            driverOptions.AddAdditionalAppiumOption("ignoreHiddenApiPolicyError", true);
             driverOptions.AddAdditionalAppiumOption("uiautomator2ServerInstallTimeout", "40000");
             driverOptions.AddAdditionalAppiumOption("uiautomator2ServerLaunchTimeout", "120000");
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
