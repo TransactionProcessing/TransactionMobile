@@ -160,6 +160,7 @@
 
 	<PropertyGroup Condition="'$(TargetFramework)' == 'net11.0-android'">
 		<DefineConstants>ANDROID</DefineConstants>
+		<PublishReadyToRun>false</PublishReadyToRun>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net11.0-android|AnyCPU'">
