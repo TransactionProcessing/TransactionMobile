@@ -29,13 +29,13 @@
 
             <!-- Status card -->
             <VerticalStackLayout Padding="20,20,20,16" Spacing="12">
-                <Frame Style="{StaticResource StatusCardFrame}">
+                <Border Style="{StaticResource StatusCardFrame}">
                     <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                         <Image Source="paymentsuccess.svg" VerticalOptions="Start" Style="{DynamicResource PaymentImage}" HorizontalOptions="Center"/>
                         <Label Style="{StaticResource StatusMessageLabel}"
                                Text="Thank you for your bill payment. An automated payment receipt will be sent to your email entered."/>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <Button x:Name="CompleteButton" Text="Complete"
                         Style="{DynamicResource BillPaymentButtonStyle}" AutomationId="CompleteButton">

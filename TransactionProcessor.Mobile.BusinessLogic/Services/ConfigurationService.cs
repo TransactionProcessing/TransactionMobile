@@ -1,6 +1,5 @@
 ﻿using System.Text;
-using Shared.Results;
-using SimpleResults;
+using TransactionProcessing.UnionResults;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Serialisation;
@@ -17,7 +16,7 @@ public interface IConfigurationService
                             CancellationToken cancellationToken);
 }
 
-public class ConfigurationService : ClientProxyBase.ClientProxyBase, IConfigurationService
+public class ConfigurationService : TransactionProcessing.ClientProxyBase.ClientProxyBase, IConfigurationService
 {
     private readonly Func<String, String> BaseAddressResolver;
 
@@ -48,7 +47,7 @@ public class ConfigurationService : ClientProxyBase.ClientProxyBase, IConfigurat
             Logger.LogDebug($"Configuration Request details: Uri {requestUri}");
             
             // call was successful so now deserialise the body to the response object
-            Result<ConfigurationResponse>? apiResponse = await this.Get<ConfigurationResponse>(requestUri, cancellationToken);
+            Result<ConfigurationResponse> apiResponse = await this.Get<ConfigurationResponse>(requestUri, cancellationToken);
             if (apiResponse.IsFailed)
                 return ResultHelpers.CreateFailure(apiResponse);
 
@@ -88,7 +87,7 @@ public class ConfigurationService : ClientProxyBase.ClientProxyBase, IConfigurat
             // An exception has occurred, add some additional information to the message
             Logger.LogError($"Error getting configuration for device Id {deviceIdentifier} {ex.Message}.",ex);
 
-            return ResultExtensions.FailureExtended($"Error getting configuration data for device Id {deviceIdentifier}", ex);
+            return ResultExtensions.FailureExtended<Configuration>($"Error getting configuration data for device Id {deviceIdentifier}", ex);
         }
     }
 

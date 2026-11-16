@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using MvvmHelpers.Commands;
 using System.Windows.Input;
-using ClientProxyBase;
+using TransactionProcessing.ClientProxyBase;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Services;

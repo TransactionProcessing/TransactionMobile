@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
@@ -19,12 +19,12 @@
                                  TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}"
                                  Padding="20,0,20,8" />
 
-            <Frame Style="{StaticResource TransactionFormCard}"
+            <Border Style="{StaticResource TransactionFormCard}"
                    BackgroundColor="{DynamicResource salesAnalysisCardBackgroundColor}"
-                   BorderColor="{DynamicResource salesAnalysisCardBorderColor}"
+                   Stroke="{DynamicResource salesAnalysisCardBorderColor}"
                    Padding="14"
-                   CornerRadius="14"
-                   HasShadow="False"
+                   StrokeShape="RoundRectangle 14"
+                   Shadow="{x:Null}"
                    Margin="0">
                 <Grid ColumnDefinitions="*,Auto"
                       RowDefinitions="Auto,Auto,Auto,Auto"
@@ -34,22 +34,22 @@
                            FontSize="18"
                            FontAttributes="Bold"
                            TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
-                    <Frame Grid.Column="1"
+                    <Border Grid.Column="1"
                            Padding="10,4"
-                           CornerRadius="999"
-                           HasShadow="False"
+                           StrokeShape="RoundRectangle 999"
+                           Shadow="{x:Null}"
                            HorizontalOptions="End"
                            VerticalOptions="Start"
                            BackgroundColor="#EAF7EE"
-                           BorderColor="#1E8E3E">
-                        <Frame.Triggers>
-                            <DataTrigger TargetType="Frame"
+                           Stroke="#1E8E3E">
+                        <Border.Triggers>
+                            <DataTrigger TargetType="Border"
                                          Binding="{Binding Status}"
                                          Value="Failed">
                                 <Setter Property="BackgroundColor" Value="#FDEEEF" />
-                                <Setter Property="BorderColor" Value="#D64545" />
+                                <Setter Property="Stroke" Value="#D64545" />
                             </DataTrigger>
-                        </Frame.Triggers>
+                        </Border.Triggers>
                         <Label Text="{Binding Status}"
                                FontSize="11"
                                FontAttributes="Bold"
@@ -64,7 +64,7 @@
                                 </DataTrigger>
                             </Label.Triggers>
                         </Label>
-                    </Frame>
+                    </Border>
                     <Label Grid.Row="1"
                            Text="{Binding ReceiptReference, StringFormat='Receipt: {0}'}"
                            FontSize="12"
@@ -105,14 +105,14 @@
                            HorizontalTextAlignment="End"
                            TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
                 </Grid>
-            </Frame>
+            </Border>
 
-            <Frame Style="{StaticResource TransactionFormCard}"
+            <Border Style="{StaticResource TransactionFormCard}"
                    BackgroundColor="{DynamicResource salesAnalysisCardBackgroundColor}"
-                   BorderColor="{DynamicResource salesAnalysisCardBorderColor}"
+                   Stroke="{DynamicResource salesAnalysisCardBorderColor}"
                    Padding="14"
-                   CornerRadius="14"
-                   HasShadow="False"
+                   StrokeShape="RoundRectangle 14"
+                   Shadow="{x:Null}"
                    Margin="0">
                 <VerticalStackLayout Spacing="10">
                     <Label Text="Resend receipt"
@@ -133,7 +133,7 @@
                                        Color="{StaticResource reports}"
                                        HorizontalOptions="Center" />
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
 
             <Button Text="Back"
                     AutomationId="BackButton"

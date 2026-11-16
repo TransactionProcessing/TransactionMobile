@@ -1,4 +1,4 @@
-﻿name: Build and Run Windows Navigation Tests
+name: Build and Run Windows Navigation Tests
 
 on:
   pull_request:
@@ -15,7 +15,7 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.0.x'
+          dotnet-version: '11.0.x'
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.1
@@ -28,7 +28,7 @@ jobs:
 
       - name: Install Appium and Drivers
         run: |
-          npm install -g appium --unsafe-perm=true --allow-root
+          npm install -g appium@3 --unsafe-perm=true --allow-root
           appium driver install --source=npm appium-windows-driver
 
       - name: Start Appium Server
@@ -48,14 +48,14 @@ jobs:
 
       - name: Publish App
         run: |
-         dotnet publish TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj -c Release -f net10.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"      
+         dotnet publish TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj -c Release -f net11.0-windows10.0.19041.0 /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint="${{ secrets.WINDOWSSIGNINGCERTTHUMBPRINT }}"
 
       - name: Debug AppPackages contents
         shell: powershell
         run: |
          $candidatePaths = @(
           (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\AppPackages"),
-          (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\bin\Release\net10.0-windows10.0.19041.0\win-x64\AppPackages")
+          (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\bin\Release\net11.0-windows10.0.19041.0\win-x64\AppPackages")
          )
          $appPackagesPath = $candidatePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
          if ($null -eq $appPackagesPath) {
@@ -71,7 +71,7 @@ jobs:
          Import-Module Appx 
          $candidatePaths = @(
            (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\AppPackages"),
-           (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\bin\Release\net10.0-windows10.0.19041.0\win-x64\AppPackages")
+           (Join-Path $env:GITHUB_WORKSPACE "TransactionProcessor.Mobile\bin\Release\net11.0-windows10.0.19041.0\win-x64\AppPackages")
          )
          $appPackagesPath = $candidatePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
          if ($null -eq $appPackagesPath) {
@@ -139,12 +139,17 @@ jobs:
 
       - name: Run Windows Navigation Tests
         run: dotnet test --project TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=PRNavTest)&(Category=Windows)" --no-restore --settings "${{ steps.windows_settings.outputs.runsettings_path }}"
+        env:
+          TEMP: ${{ runner.temp }}
+          TMP: ${{ runner.temp }}
 
       - name: Upload Appium Logs on Failure
         if: always()
         uses: actions/upload-artifact@v4
         with:
             name: windows-software_navigation_tests_appium
-            path: appium.log
+            path: |
+              appium.log
+              ${{ runner.temp }}\TransactionProcessor.Mobile.UITests\
 
   

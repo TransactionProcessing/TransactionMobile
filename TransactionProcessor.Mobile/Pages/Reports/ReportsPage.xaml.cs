@@ -35,15 +35,15 @@ public partial class ReportsPage : NoBackWithoutLogoutPage
         Int32 rowCount = 0;
         foreach (ListViewItem modelOption in viewModel.ReportsMenuOptions)
         {
-            Frame tile = this.CreateReportTile(modelOption, rowCount);
+            Border tile = this.CreateReportTile(modelOption, rowCount);
             this.ReportsList.Children.Add(tile);
             rowCount++;
         }
     }
 
-    private Frame CreateReportTile(ListViewItem modelOption, Int32 rowCount)
+    private Border CreateReportTile(ListViewItem modelOption, Int32 rowCount)
     {
-        Frame tile = new Frame();
+        Border tile = new Border();
         tile.SetDynamicResource(VisualElement.StyleProperty, "SelectionTileFrame");
         tile.AutomationId = $"{modelOption.Title.Replace(" ", "")}Button";
 

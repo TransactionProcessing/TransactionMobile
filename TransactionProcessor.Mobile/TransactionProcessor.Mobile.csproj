@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	
 	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-		<TargetFrameworks>net10.0-android</TargetFrameworks>
+		<TargetFrameworks>net11.0-android</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-		<TargetFrameworks>net10.0-android;net10.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net11.0-android;net11.0-windows10.0.19041.0</TargetFrameworks>
 	</PropertyGroup>
 	
 	<PropertyGroup>
@@ -29,7 +29,7 @@
 		<!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
 		<WindowsPackageType>MSIX</WindowsPackageType>
 
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 	</PropertyGroup>
@@ -148,30 +148,30 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ClientProxyBase" />
+		<PackageReference Include="TransactionProcessing.ClientProxyBase" />
 	  <PackageReference Include="Microsoft.Maui.Controls" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" />
-	  <PackageReference Include="Shared.Results" />
+	  <PackageReference Include="TransactionProcessing.UnionResults" />
 		<PackageReference Include="banditoth.MAUI.DeviceId" />
 		<PackageReference Include="CommunityToolkit.Maui" />
 		<PackageReference Include="LiveChartsCore.SkiaSharpView.Maui" />
 		<PackageReference Include="Sentry.Maui" />
 	</ItemGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net10.0-android'">
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net11.0-android'">
 		<DefineConstants>ANDROID</DefineConstants>
+		<PublishReadyToRun>false</PublishReadyToRun>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-android|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net11.0-android|AnyCPU'">
 	  <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-android|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net11.0-android|AnyCPU'">
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net10.0-windows10.0.19041.0'">
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net11.0-windows10.0.19041.0'">
 		<!-- Restore Install.ps1 / Add-AppDevPackage.ps1 / Dependencies -->
 		<GenerateInstallScript>true</GenerateInstallScript>
 

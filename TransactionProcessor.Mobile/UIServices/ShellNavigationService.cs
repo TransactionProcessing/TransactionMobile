@@ -163,7 +163,11 @@ public class ShellNavigationService : INavigationService
     }
 
     public async Task GoToLoginPage() {
-        Application.Current.MainPage = new AppShell();
+        Window? window = Application.Current?.Windows.FirstOrDefault();
+        if (window is not null)
+        {
+            window.Page = new AppShell();
+        }
         await this.NavigateTo("///login");
     }
 

@@ -5,12 +5,15 @@ namespace TransactionProcessor.Mobile.UIServices
 {
     public class DialogService : IDialogService
     {
+        private static Page CurrentPage => Application.Current?.Windows.FirstOrDefault()?.Page
+            ?? throw new InvalidOperationException("No active application window is available.");
+
         #region Methods
 
         public async Task ShowDialog(String title,
                                      String message,
                                      String cancelString) {
-            await Application.Current.MainPage.DisplayAlert(title, message, cancelString);
+            await CurrentPage.DisplayAlertAsync(title, message, cancelString);
         }
 
         public async Task<Boolean> ShowDialog(String title,
@@ -18,7 +21,7 @@ namespace TransactionProcessor.Mobile.UIServices
                                               String acceptString,
                                               String cancelString) {
             await Task.Delay(200); // allow view to fully appear
-            return await Application.Current.MainPage.DisplayAlert(title, message, acceptString, cancelString);
+            return await CurrentPage.DisplayAlertAsync(title, message, acceptString, cancelString);
         }
 
         public async Task ShowErrorToast(String message,
@@ -27,7 +30,7 @@ namespace TransactionProcessor.Mobile.UIServices
                                          TimeSpan? duration = null,
                                          CancellationToken cancellationToken = default)
         {
-            await Application.Current.MainPage.DisplaySnackbar(message,
+            await CurrentPage.DisplaySnackbar(message,
                                                                action,
                                                                actionButtonText,
                                                                duration,
@@ -41,7 +44,7 @@ namespace TransactionProcessor.Mobile.UIServices
                                                TimeSpan? duration = null,
                                                CancellationToken cancellationToken = default)
         {
-            await Application.Current.MainPage.DisplaySnackbar(message,
+            await CurrentPage.DisplaySnackbar(message,
                                                                action,
                                                                actionButtonText,
                                                                duration,
@@ -53,14 +56,14 @@ namespace TransactionProcessor.Mobile.UIServices
         {
             if (OperatingSystem.IsWindows())
             {
-                await Application.Current.MainPage.DisplayAlert(
+                await CurrentPage.DisplayAlertAsync(
                     "Logs uploaded",
                     "Logs have been uploaded successfully.",
                     "OK");
                 return;
             }
 
-            await Application.Current.MainPage.DisplaySnackbar(
+            await CurrentPage.DisplaySnackbar(
                 "Logs have been uploaded successfully.",
                 null,
                 "OK",
@@ -74,7 +77,7 @@ namespace TransactionProcessor.Mobile.UIServices
                                            TimeSpan? duration = null,
                                            CancellationToken cancellationToken = default)
         {
-            await Application.Current.MainPage.DisplaySnackbar(message,
+            await CurrentPage.DisplaySnackbar(message,
                                                                action,
                                                                actionButtonText,
                                                                duration,
@@ -92,7 +95,7 @@ namespace TransactionProcessor.Mobile.UIServices
             {
                 duration = TimeSpan.FromSeconds(10);
             }
-            await Application.Current.MainPage.DisplaySnackbar(message,
+            await CurrentPage.DisplaySnackbar(message,
                                                                action,
                                                                actionButtonText,
                                                                duration,

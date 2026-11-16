@@ -30,15 +30,15 @@ public partial class VoucherSelectOperatorPage : ContentPage
         Int32 rowCount = 0;
         foreach (ContractOperatorModel modelOperator in viewModel.Operators)
         {
-            Frame tile = this.CreateOperatorTile(modelOperator, rowCount);
+            Border tile = this.CreateOperatorTile(modelOperator, rowCount);
             this.OperatorList.Children.Add(tile);
             rowCount++;
         }
     }
 
-    private Frame CreateOperatorTile(ContractOperatorModel modelOperator, Int32 rowCount)
+    private Border CreateOperatorTile(ContractOperatorModel modelOperator, Int32 rowCount)
     {
-        Frame tile = new Frame();
+        Border tile = new Border();
         tile.SetDynamicResource(VisualElement.StyleProperty, "SelectionTileFrame");
         tile.AutomationId = modelOperator.OperatorName.Replace(" ", "");
 

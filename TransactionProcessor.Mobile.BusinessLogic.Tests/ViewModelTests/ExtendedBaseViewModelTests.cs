@@ -1,6 +1,6 @@
 using Imposter.Abstractions;
 using Shouldly;
-using SimpleResults;
+using TransactionProcessing.UnionResults;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
 using TransactionProcessor.Mobile.BusinessLogic.ViewModels;
@@ -29,15 +29,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ViewModelTests
                                                                         this.NavigationService.Instance(),
                                                                         this.DeviceService.Instance(),
                                                                         this.NavigationParameterService.Instance());
-        }
-
-        [Fact]
-        public async Task ExtendedBaseViewModel_HandleResult_ResultIsNull_ErrorThrown(){
-            Result<String> result = null;
-            ApplicationException exception= Should.Throw<ApplicationException>(() => {
-                                                                                   this.ViewModel.HandleResult(result);
-                                                                               });
-            exception.Message.ShouldBe("Result from function call was null");
         }
 
         [Fact]

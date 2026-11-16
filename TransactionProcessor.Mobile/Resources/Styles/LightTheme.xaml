@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <?xaml-comp compile="true" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
@@ -7,6 +7,8 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Colors.xaml" />
     </ResourceDictionary.MergedDictionaries>
+
+    <Shadow x:Key="CardShadow" Brush="#40000000" Offset="0,2" Radius="8" Opacity="0.35" />
 
     <!-- Colors in use -->
     <Color x:Key="pageBackgroundColor">#FFFFFF</Color>
@@ -207,13 +209,13 @@
         <Setter Property="HeightRequest"  Value="150"/>
         <Setter Property="WidthRequest" Value="150"/>
     </Style>
-    <Style x:Key="MainFrame" TargetType="Frame">
+    <Style x:Key="MainFrame" TargetType="Border">
         <Setter Property="WidthRequest" Value="{OnPlatform Android=320,WinUI=400, iOS=300, MacCatalyst=400}"></Setter>
-        <Setter Property="HasShadow" Value="True"></Setter>
+        <Setter Property="Shadow"><Setter.Value><Shadow Brush="#40000000" Offset="0,2" Radius="8" Opacity="0.35"/></Setter.Value></Setter>
         <Setter Property="Padding" Value="50,20,50,20"></Setter>
         <Setter Property="Margin" Value="0,0,0,0"></Setter>
         <Setter Property="VerticalOptions" Value="Center"/>
-        <Setter Property="CornerRadius" Value="20"></Setter>
+        <Setter Property="StrokeShape" Value="RoundRectangle 20"></Setter>
         <Setter Property="Opacity" Value="0.9"></Setter>
         <Setter Property="BackgroundColor" Value="{DynamicResource cardBackgroundColor}"></Setter>
     </Style>
@@ -225,11 +227,11 @@
         <Setter Property="FontAttributes" Value="Bold"/>
     </Style>
 
-    <Style x:Key="LoginEntryContainerFrame" TargetType="Frame">
-        <Setter Property="CornerRadius" Value="12"/>
+    <Style x:Key="LoginEntryContainerFrame" TargetType="Border">
+        <Setter Property="StrokeShape" Value="RoundRectangle 12"/>
         <Setter Property="Padding" Value="10,0"/>
-        <Setter Property="HasShadow" Value="False"/>
-        <Setter Property="BorderColor" Value="{DynamicResource entryContainerBorderColor}"/>
+
+        <Setter Property="Stroke" Value="{DynamicResource entryContainerBorderColor}"/>
         <Setter Property="BackgroundColor" Value="{DynamicResource entryContainerBackgroundColor}"/>
         <Setter Property="Margin" Value="0"/>
     </Style>
@@ -253,41 +255,41 @@
         <Setter Property="HorizontalOptions" Value="Fill"/>
     </Style>
 
-    <Style x:Key="HomeCardFrame" TargetType="Frame">
-        <Setter Property="CornerRadius" Value="16"/>
-        <Setter Property="HasShadow" Value="True"/>
+    <Style x:Key="HomeCardFrame" TargetType="Border">
+        <Setter Property="StrokeShape" Value="RoundRectangle 16"/>
+        <Setter Property="Shadow"><Setter.Value><Shadow Brush="#40000000" Offset="0,2" Radius="8" Opacity="0.35"/></Setter.Value></Setter>
         <Setter Property="BackgroundColor" Value="{DynamicResource cardBackgroundColor}"/>
         <Setter Property="Padding" Value="16,20"/>
-        <Setter Property="BorderColor" Value="{DynamicResource cardBorderColor}"/>
+        <Setter Property="Stroke" Value="{DynamicResource cardBorderColor}"/>
         <Setter Property="Margin" Value="0"/>
     </Style>
 
-    <Style x:Key="SelectionTileFrame" TargetType="Frame">
-        <Setter Property="CornerRadius" Value="16"/>
-        <Setter Property="HasShadow" Value="True"/>
+    <Style x:Key="SelectionTileFrame" TargetType="Border">
+        <Setter Property="StrokeShape" Value="RoundRectangle 16"/>
+        <Setter Property="Shadow"><Setter.Value><Shadow Brush="#40000000" Offset="0,2" Radius="8" Opacity="0.35"/></Setter.Value></Setter>
         <Setter Property="BackgroundColor" Value="{DynamicResource cardBackgroundColor}"/>
         <Setter Property="Padding" Value="12,16"/>
-        <Setter Property="BorderColor" Value="{DynamicResource cardBorderColor}"/>
+        <Setter Property="Stroke" Value="{DynamicResource cardBorderColor}"/>
         <Setter Property="Margin" Value="4"/>
         <Setter Property="WidthRequest" Value="150"/>
         <Setter Property="HeightRequest" Value="110"/>
     </Style>
 
-    <Style x:Key="TransactionFormCard" TargetType="Frame">
-        <Setter Property="CornerRadius" Value="16"/>
-        <Setter Property="HasShadow" Value="True"/>
+    <Style x:Key="TransactionFormCard" TargetType="Border">
+        <Setter Property="StrokeShape" Value="RoundRectangle 16"/>
+        <Setter Property="Shadow"><Setter.Value><Shadow Brush="#40000000" Offset="0,2" Radius="8" Opacity="0.35"/></Setter.Value></Setter>
         <Setter Property="BackgroundColor" Value="{DynamicResource cardBackgroundColor}"/>
         <Setter Property="Padding" Value="20,16"/>
-        <Setter Property="BorderColor" Value="{DynamicResource cardBorderColor}"/>
+        <Setter Property="Stroke" Value="{DynamicResource cardBorderColor}"/>
         <Setter Property="Margin" Value="0,8,0,8"/>
     </Style>
 
-    <Style x:Key="StatusCardFrame" TargetType="Frame">
-        <Setter Property="CornerRadius" Value="16"/>
-        <Setter Property="HasShadow" Value="True"/>
+    <Style x:Key="StatusCardFrame" TargetType="Border">
+        <Setter Property="StrokeShape" Value="RoundRectangle 16"/>
+        <Setter Property="Shadow"><Setter.Value><Shadow Brush="#40000000" Offset="0,2" Radius="8" Opacity="0.35"/></Setter.Value></Setter>
         <Setter Property="BackgroundColor" Value="{DynamicResource cardBackgroundColor}"/>
         <Setter Property="Padding" Value="24,20"/>
-        <Setter Property="BorderColor" Value="{DynamicResource cardBorderColor}"/>
+        <Setter Property="Stroke" Value="{DynamicResource cardBorderColor}"/>
         <Setter Property="Margin" Value="0,8,0,8"/>
     </Style>
 

@@ -1,7 +1,7 @@
 using Imposter.Abstractions;
 using RichardSzalay.MockHttp;
 using Shouldly;
-using SimpleResults;
+using TransactionProcessing.UnionResults;
 using System.Net;
 using System.Text;
 using System.Reflection;
@@ -413,7 +413,6 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.ServicesTests
                 .Respond("application/json", StringSerialiser.Serialise(expectedResponse)); // Respond with JSON
 
             Result<PerformBillPaymentGetAccountResponseModel> performBillPaymentGetAccountResult = await this.TransactionService.PerformBillPaymentGetAccount(requestModel, CancellationToken.None);
-            performBillPaymentGetAccountResult.ShouldNotBeNull();
             performBillPaymentGetAccountResult.IsSuccess.ShouldBeTrue();
             performBillPaymentGetAccountResult.Data.ShouldNotBeNull();
             performBillPaymentGetAccountResult.Data.IsSuccessful.ShouldBeTrue();

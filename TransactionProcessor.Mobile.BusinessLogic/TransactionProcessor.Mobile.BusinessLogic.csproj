@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net11.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -15,7 +15,7 @@
     <PackageReference Include="SQLitePCLRaw.provider.sqlite3" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" />
     <PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" />
-    <PackageReference Include="Shared.Results">
+    <PackageReference Include="TransactionProcessing.UnionResults">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="TransactionProcessorACL.DataTransferObjects" />

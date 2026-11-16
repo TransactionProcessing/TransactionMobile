@@ -1,7 +1,7 @@
 using Imposter.Abstractions;
 using RichardSzalay.MockHttp;
 using Shouldly;
-using SimpleResults;
+using TransactionProcessing.UnionResults;
 using System.Net;
 using System.Text;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;

@@ -36,14 +36,14 @@ public partial class MobileTopupSelectProductPage : ContentPage
 
         Int32 rowCount = 0;
         foreach (ContractProductModel modelProduct in viewModel.Products) {
-            Frame tile = this.CreateProductTile(modelProduct, rowCount);
+            Border tile = this.CreateProductTile(modelProduct, rowCount);
             this.ProductsList.Children.Add(tile);
             rowCount++;
         }
     }
 
-    private Frame CreateProductTile(ContractProductModel modelProduct, Int32 rowCount) {
-        Frame tile = new Frame();
+    private Border CreateProductTile(ContractProductModel modelProduct, Int32 rowCount) {
+        Border tile = new Border();
         tile.SetDynamicResource(VisualElement.StyleProperty, "SelectionTileFrame");
         tile.AutomationId = modelProduct.ProductDisplayText.Replace(" ", "");
 

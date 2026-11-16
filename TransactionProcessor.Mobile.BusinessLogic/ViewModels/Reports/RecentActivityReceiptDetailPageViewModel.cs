@@ -3,7 +3,7 @@ using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
-using SimpleResults;
+using TransactionProcessing.UnionResults;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.ViewModels.Reports;
 

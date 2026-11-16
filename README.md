@@ -2,6 +2,29 @@
 
 ![Alt](https://repobeats.axiom.co/api/embed/8c4c40e2db665c43af4c4e1014a3dca92fe330aa.svg "Repobeats analytics image")
 
+## Development setup
+
+Install the .NET 11 SDK. The repository pins SDK version 11.0.100 in `global.json`.
+
+Install the .NET MAUI workload for your development platform:
+
+```sh
+# Windows
+dotnet workload install maui
+
+# Linux (Android only)
+dotnet workload install maui-android
+```
+
+Restore the solution and run the business logic tests:
+
+```sh
+dotnet restore TransactionProcessor.Mobile.sln
+dotnet test TransactionProcessor.Mobile.BusinessLogic.Tests/TransactionProcessor.Mobile.BusinessLogic.Tests.csproj --configuration Release
+```
+
+The shared .NET 11 client packages use `TransactionProcessing.UnionResults`.
+
 ## Release versioning
 
 Releases are tagged in calendar format: **`vYYYY.M.D`** (e.g. `v2026.4.1`).

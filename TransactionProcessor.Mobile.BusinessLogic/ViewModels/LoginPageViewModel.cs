@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using MvvmHelpers.Commands;
 using Newtonsoft.Json.Linq;
-using SimpleResults;
+using TransactionProcessing.UnionResults;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Input;

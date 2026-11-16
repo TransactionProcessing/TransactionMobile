@@ -36,10 +36,10 @@
             <VerticalStackLayout Padding="20,24,20,16" Spacing="16">
 
                 <!-- Reconciliation tile -->
-                <Frame Style="{StaticResource HomeCardFrame}" AutomationId="ReconciliationButton">
-                    <Frame.GestureRecognizers>
+                <Border Style="{StaticResource HomeCardFrame}" AutomationId="ReconciliationButton">
+                    <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ReconciliationCommand}"/>
-                    </Frame.GestureRecognizers>
+                    </Border.GestureRecognizers>
                     <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
                         <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="36" WidthRequest="36" VerticalOptions="Center"/>
                         <Label Text="Reconciliation"
@@ -48,7 +48,7 @@
                                TextColor="{StaticResource admin}"
                                VerticalOptions="Center"/>
                     </HorizontalStackLayout>
-                </Frame>
+                </Border>
 
                 <Button Text="Back"
                         AutomationId="BackButton"

@@ -36,13 +36,13 @@ namespace TransactionProcessor.Mobile.Pages.Support
             };
 
             foreach (var option in options) {
-                Frame tile = this.CreateSupportTile(option.Title, option.Icon, option.AutomationId, option.Command);
+                Border tile = this.CreateSupportTile(option.Title, option.Icon, option.AutomationId, option.Command);
                 this.SupportOptionsList.Children.Add(tile);
             }
         }
 
-        private Frame CreateSupportTile(String title, String iconSource, String automationId, IRelayCommand command) {
-            Frame tile = new Frame();
+        private Border CreateSupportTile(String title, String iconSource, String automationId, IRelayCommand command) {
+            Border tile = new Border();
             tile.SetDynamicResource(VisualElement.StyleProperty, "SelectionTileFrame");
             tile.AutomationId = automationId;
 

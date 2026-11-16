@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
-using SimpleResults;
+using TransactionProcessing.UnionResults;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Services;
 using TransactionProcessor.Mobile.BusinessLogic.UIServices;
@@ -93,10 +93,6 @@ public class ExtendedBaseViewModel : BaseViewModel
 
     public virtual void HandleResult<T>(Result<T> result)
     {
-        if (result == null) {
-            throw new ApplicationException("Result from function call was null");
-        }
-
         if (result.IsFailed)
         {
             throw new ApplicationException(result.Message);

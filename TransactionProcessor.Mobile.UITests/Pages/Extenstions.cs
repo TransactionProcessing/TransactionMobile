@@ -2,7 +2,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Windows;
-using Shared.IntegrationTesting;
+using TransactionProcessing.Shared.IntegrationTesting;
 using Shouldly;
 using TransactionProcessor.Mobile.UITests.Drivers;
 //using OpenQA.Selenium.Appium.MultiTouch;

@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using SimpleResults;
+using TransactionProcessing.UnionResults;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.Services.TrainingModeServices;

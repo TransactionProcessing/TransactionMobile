@@ -35,7 +35,7 @@
             <!-- Content -->
             <VerticalStackLayout Padding="20,20,20,16" Spacing="12">
 
-                <Frame Style="{StaticResource TransactionFormCard}" IsVisible="{Binding IsPostPayVisible}">
+                <Border Style="{StaticResource TransactionFormCard}" IsVisible="{Binding IsPostPayVisible}">
                     <VerticalStackLayout x:Name="PostPayLayout" Spacing="10">
                         <Label Text="Bill Details"
                                HorizontalTextAlignment="Center"
@@ -85,9 +85,9 @@
                             </Entry.Behaviors>
                         </Entry>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
-                <Frame Style="{StaticResource TransactionFormCard}" IsVisible="{Binding IsPrePayVisible}">
+                <Border Style="{StaticResource TransactionFormCard}" IsVisible="{Binding IsPrePayVisible}">
                     <VerticalStackLayout x:Name="PrePayLayout" Spacing="10">
                         <Label Text="Meter Details"
                                HorizontalTextAlignment="Center"
@@ -115,7 +115,7 @@
                             </Entry.Behaviors>
                         </Entry>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <Button x:Name="MakePaymentButton" Text="Make Payment"
                         Style="{DynamicResource BillPaymentButtonStyle}" AutomationId="MakePaymentButton">

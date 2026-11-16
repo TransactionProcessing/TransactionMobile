@@ -78,10 +78,10 @@ jobs:
         with:
           vs-prerelease: true
 
-      - name: Setup .NET SDK (10.x)
+      - name: Setup .NET SDK (11.x)
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.0.x'
+          dotnet-version: '11.0.x'
 
       - name: Install MAUI workloads
         run: dotnet workload install maui
@@ -93,7 +93,7 @@ jobs:
         run: |
           dotnet publish TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj `
             -c Release `
-            -f net10.0-windows10.0.19041.0 `
+            -f net11.0-windows10.0.19041.0 `
             /p:ApplicationDisplayVersion=${{ env.APP_DISPLAY_VERSION }} `
             /p:AppxPackageSigningEnabled=false
 
@@ -162,7 +162,7 @@ jobs:
           chmod +x $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
 
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-36"
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-37.0" --channel=3
 
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
           echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
@@ -170,7 +170,7 @@ jobs:
 
       - name: Install Android Build Tools
         run: |
-          sdkmanager "build-tools;36.0.0"
+          sdkmanager "build-tools;37.0.0" --channel=3
           sdkmanager --update
 
       - name: Install MAUI workloads
@@ -182,9 +182,10 @@ jobs:
       - name: Publish Android APK (unsigned trial)
         run: |
           dotnet publish TransactionProcessor.Mobile/TransactionProcessor.Mobile.csproj \
-            -f net10.0-android \
+            -f net11.0-android \
             -c Release \
             --no-restore \
+            /p:PublishReadyToRun=false \
             /p:ApplicationDisplayVersion=${{ env.APP_DISPLAY_VERSION }} \
             /p:ApplicationVersion=${{ env.APP_VERSION }} \
             /p:AndroidSignPackage=false

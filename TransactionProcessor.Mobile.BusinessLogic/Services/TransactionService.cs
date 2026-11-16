@@ -1,4 +1,4 @@
-﻿using SimpleResults;
+﻿using TransactionProcessing.UnionResults;
 using TransactionProcessor.Mobile.BusinessLogic.Common;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
@@ -29,7 +29,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
         #endregion
     }
 
-    public class TransactionService : ClientProxyBase.ClientProxyBase, ITransactionService
+    public class TransactionService : TransactionProcessing.ClientProxyBase.ClientProxyBase, ITransactionService
     {
         #region Fields
 
@@ -206,7 +206,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
 
                 Logger.LogDebug($"Transaction Request details: Uri {requestUri} Payload {requestSerialised} Access Token {accessToken.AccessToken}");
 
-                Result<TResponse>? result = await this.Post<TRequest, TResponse>(requestUri, request, accessToken.AccessToken, cancellationToken);
+                Result<TResponse> result = await this.Post<TRequest, TResponse>(requestUri, request, accessToken.AccessToken, cancellationToken);
 
                 if (result.IsSuccess == false) {
                     Logger.LogWarning("Error performing transaction");
@@ -221,7 +221,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Services
                 // An exception has occurred, add some additional information to the message
                 Logger.LogError("Error posting transaction.", ex);
 
-                return ResultExtensions.FailureExtended("Error posting transaction", ex);
+                return ResultExtensions.FailureExtended<TResponse>("Error posting transaction", ex);
             }
         }
 

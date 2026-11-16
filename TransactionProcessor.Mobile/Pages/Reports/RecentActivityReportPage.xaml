@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:TransactionProcessor.Mobile.Controls"
@@ -12,18 +12,18 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <DataTemplate x:Key="RecentActivityItemTemplate" x:DataType="models:RecentActivityReceiptItemModel">
-                <Frame Style="{StaticResource TransactionFormCard}"
+                <Border Style="{StaticResource TransactionFormCard}"
                        Padding="14"
                        BackgroundColor="{DynamicResource salesAnalysisCardBackgroundColor}"
-                       BorderColor="{DynamicResource salesAnalysisCardBorderColor}"
-                       CornerRadius="14"
-                       HasShadow="False"
+                       Stroke="{DynamicResource salesAnalysisCardBorderColor}"
+                       StrokeShape="RoundRectangle 14"
+                       Shadow="{x:Null}"
                        Margin="0"
                        AutomationId="{Binding Reference}">
-                    <Frame.GestureRecognizers>
+                    <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding BindingContext.OpenItemCommand, Source={x:Reference RecentActivityReportPageRoot}}"
                                               CommandParameter="{Binding .}" />
-                    </Frame.GestureRecognizers>
+                    </Border.GestureRecognizers>
                     <Grid ColumnDefinitions="*,Auto"
                           RowDefinitions="Auto,Auto,Auto"
                           ColumnSpacing="12"
@@ -32,22 +32,22 @@
                                FontAttributes="Bold"
                                FontSize="14"
                                TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
-                        <Frame Grid.Column="1"
+                        <Border Grid.Column="1"
                                Padding="10,4"
-                               CornerRadius="999"
-                               HasShadow="False"
+                               StrokeShape="RoundRectangle 999"
+                               Shadow="{x:Null}"
                                HorizontalOptions="End"
                                VerticalOptions="Start"
                                BackgroundColor="#EAF7EE"
-                               BorderColor="#1E8E3E">
-                            <Frame.Triggers>
-                                <DataTrigger TargetType="Frame"
+                               Stroke="#1E8E3E">
+                            <Border.Triggers>
+                                <DataTrigger TargetType="Border"
                                              Binding="{Binding Status}"
                                              Value="Failed">
                                     <Setter Property="BackgroundColor" Value="#FDEEEF" />
-                                    <Setter Property="BorderColor" Value="#D64545" />
+                                    <Setter Property="Stroke" Value="#D64545" />
                                 </DataTrigger>
-                            </Frame.Triggers>
+                            </Border.Triggers>
                             <Label Text="{Binding Status}"
                                    FontSize="11"
                                    FontAttributes="Bold"
@@ -62,7 +62,7 @@
                                     </DataTrigger>
                                 </Label.Triggers>
                             </Label>
-                        </Frame>
+                        </Border>
                         <Label Grid.Row="1"
                                Text="{Binding Product}"
                                FontSize="12"
@@ -96,7 +96,7 @@
                                HorizontalTextAlignment="End"
                                TextColor="{AppThemeBinding Light={StaticResource MidnightBlue}, Dark={StaticResource White}}" />
                     </Grid>
-                </Frame>
+                </Border>
             </DataTemplate>
         </ResourceDictionary>
     </ContentPage.Resources>

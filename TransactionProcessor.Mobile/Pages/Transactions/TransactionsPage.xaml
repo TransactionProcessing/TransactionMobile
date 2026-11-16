@@ -37,12 +37,12 @@
                       RowSpacing="12">
 
                     <!-- Mobile Topup tile -->
-                    <Frame Grid.Row="0" Grid.Column="0"
+                    <Border Grid.Row="0" Grid.Column="0"
                            Style="{StaticResource HomeCardFrame}"
                            AutomationId="MobileTopupButton">
-                        <Frame.GestureRecognizers>
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding MobileTopupCommand}"/>
-                        </Frame.GestureRecognizers>
+                        </Border.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                             <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label Text="Mobile Topup"
@@ -52,15 +52,15 @@
                                    HorizontalOptions="Center"
                                    HorizontalTextAlignment="Center"/>
                         </VerticalStackLayout>
-                    </Frame>
+                    </Border>
 
                     <!-- Mobile Wallet tile -->
-                    <Frame Grid.Row="0" Grid.Column="1"
+                    <Border Grid.Row="0" Grid.Column="1"
                            Style="{StaticResource HomeCardFrame}"
                            AutomationId="MobileWalletButton">
-                        <Frame.GestureRecognizers>
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding MobileWalletCommand}"/>
-                        </Frame.GestureRecognizers>
+                        </Border.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                             <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label Text="Mobile Wallet"
@@ -70,15 +70,15 @@
                                    HorizontalOptions="Center"
                                    HorizontalTextAlignment="Center"/>
                         </VerticalStackLayout>
-                    </Frame>
+                    </Border>
 
                     <!-- Bill Payment tile -->
-                    <Frame Grid.Row="1" Grid.Column="0"
+                    <Border Grid.Row="1" Grid.Column="0"
                            Style="{StaticResource HomeCardFrame}"
                            AutomationId="BillPaymentButton">
-                        <Frame.GestureRecognizers>
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding BillPaymentCommand}"/>
-                        </Frame.GestureRecognizers>
+                        </Border.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                             <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label Text="Bill Payment"
@@ -88,15 +88,15 @@
                                    HorizontalOptions="Center"
                                    HorizontalTextAlignment="Center"/>
                         </VerticalStackLayout>
-                    </Frame>
+                    </Border>
 
                     <!-- Voucher tile -->
-                    <Frame Grid.Row="1" Grid.Column="1"
+                    <Border Grid.Row="1" Grid.Column="1"
                            Style="{StaticResource HomeCardFrame}"
                            AutomationId="VoucherButton">
-                        <Frame.GestureRecognizers>
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding VoucherCommand}"/>
-                        </Frame.GestureRecognizers>
+                        </Border.GestureRecognizers>
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                             <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label Text="Voucher"
@@ -106,15 +106,15 @@
                                    HorizontalOptions="Center"
                                    HorizontalTextAlignment="Center"/>
                         </VerticalStackLayout>
-                    </Frame>
+                    </Border>
 
                     <!-- Admin tile (spans full width) -->
-                    <Frame Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                    <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                            Style="{StaticResource HomeCardFrame}"
                            AutomationId="AdminButton">
-                        <Frame.GestureRecognizers>
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding AdminCommand}"/>
-                        </Frame.GestureRecognizers>
+                        </Border.GestureRecognizers>
                         <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
                             <Image Source="{AppThemeBinding Light=transactionsbutton.svg, Dark=transactionsbutton_dark.svg}" HeightRequest="36" WidthRequest="36" VerticalOptions="Center"/>
                             <Label Text="Admin"
@@ -123,7 +123,7 @@
                                    TextColor="{StaticResource admin}"
                                    VerticalOptions="Center"/>
                         </HorizontalStackLayout>
-                    </Frame>
+                    </Border>
 
                 </Grid>
 

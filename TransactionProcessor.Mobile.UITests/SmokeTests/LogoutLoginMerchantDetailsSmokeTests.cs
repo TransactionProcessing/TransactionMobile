@@ -1,6 +1,6 @@
-using NLog;
+﻿using NLog;
 using NUnit.Framework;
-using Shared.Logger;
+using TransactionProcessing.Shared.Logger;
 using Shouldly;
 using TransactionProcessor.Mobile.UiTestBackend;
 using TransactionProcessor.Mobile.UITests.Common;
@@ -86,7 +86,7 @@ public class LogoutLoginMerchantDetailsSmokeTests : BaseTestFixture
 
         NlogLogger logger = new();
         logger.Initialise(LogManager.GetLogger(scenarioName), scenarioName);
-        LogManager.AddHiddenAssembly(typeof(NlogLogger).Assembly);
+        LogManager.Setup().SetupLogFactory(setup => setup.AddCallSiteHiddenAssembly(typeof(NlogLogger).Assembly));
 
         this.testingContext = new TestingContext();
         this.testingContext.Logger = logger;

@@ -475,8 +475,8 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
 
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 6000);
-            driverOptions.AddAdditionalAppiumOption("ms:waitForAppLaunch", "50");
-            //driverOptions.AddAdditionalAppiumOption("appium:createSessionTimeout", "100000");
+            driverOptions.AddAdditionalAppiumOption("ms:waitForAppLaunch", 50);
+            driverOptions.AddAdditionalAppiumOption("createSessionTimeout", 180000);
             driverOptions.App = testAppConfig.WindowsAppId;
             AppiumDriverWrapper.Driver = new WindowsDriver(appiumServerUri, driverOptions, TimeSpan.FromMinutes(10));
         }

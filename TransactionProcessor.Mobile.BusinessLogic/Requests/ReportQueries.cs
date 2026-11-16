@@ -1,5 +1,5 @@
 using MediatR;
-using SimpleResults;
+using TransactionProcessing.UnionResults;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 
 namespace TransactionProcessor.Mobile.BusinessLogic.Requests;

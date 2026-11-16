@@ -1,5 +1,4 @@
-﻿using Shared.Results;
-using SimpleResults;
+﻿using TransactionProcessing.UnionResults;
 using TransactionProcessor.Mobile.BusinessLogic.Logging;
 using TransactionProcessor.Mobile.BusinessLogic.Models;
 using TransactionProcessor.Mobile.BusinessLogic.Serialisation;
@@ -15,7 +14,7 @@ public interface IUpdateService
                                                                  CancellationToken cancellationToken);
 }
 
-public class UpdateService : ClientProxyBase.ClientProxyBase, IUpdateService
+public class UpdateService : TransactionProcessing.ClientProxyBase.ClientProxyBase, IUpdateService
 {
     private sealed record ApplicationUpdateCheckRequest(String ApplicationVersion,
                                                         String PackageName,
@@ -45,7 +44,7 @@ public class UpdateService : ClientProxyBase.ClientProxyBase, IUpdateService
             Logger.LogInformation($"About to check for application updates for device identifier {deviceIdentifier}");
             Logger.LogDebug($"Application update request details: Uri {requestUri}");
 
-            Result<ApplicationUpdateCheckResponse>? result = await this.Post<ApplicationUpdateCheckRequest, ApplicationUpdateCheckResponse>(requestUri, request, cancellationToken);
+            Result<ApplicationUpdateCheckResponse> result = await this.Post<ApplicationUpdateCheckRequest, ApplicationUpdateCheckResponse>(requestUri, request, cancellationToken);
 
             if (result.IsFailed) {
                 return ResultHelpers.CreateFailure(result);
@@ -59,7 +58,7 @@ public class UpdateService : ClientProxyBase.ClientProxyBase, IUpdateService
         catch (Exception ex)
         {
             Logger.LogError($"Error checking for application updates for device identifier {deviceIdentifier} {ex.Message}.", ex);
-            return ResultExtensions.FailureExtended($"Error checking for application updates for device identifier {deviceIdentifier}", ex);
+            return ResultExtensions.FailureExtended<ApplicationUpdateCheckResponse>($"Error checking for application updates for device identifier {deviceIdentifier}", ex);
         }
     }
 
