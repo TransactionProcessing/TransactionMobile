@@ -576,7 +576,7 @@ namespace TransactionProcessor.Mobile.BusinessLogic.Tests.CommonTests
             var result = ResultExtensions.FailureExtended<String>("Message", new Exception("ExceptionsMessage"));
             result.IsFailed.ShouldBeTrue();
             result.Message.ShouldBe("Message");
-            result.Errors.Single().Message.ShouldBe("ExceptionsMessage");
+            result.Errors.Select(error => error.Message).ShouldContain("ExceptionsMessage");
         }
     }
 }

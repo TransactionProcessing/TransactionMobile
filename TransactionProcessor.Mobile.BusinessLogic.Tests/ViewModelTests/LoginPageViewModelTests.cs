@@ -273,6 +273,7 @@ public class LoginPageViewModelTests
         this.Mediator.Send(Arg<IRequest<Result<TokenResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.AccessToken));
         this.Mediator.Send(Arg<IRequest<Result<PerformLogonResponseModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.PerformLogonResponseModel));
         this.Mediator.Send(Arg<IRequest<Result<List<ContractProductModel>>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.ContractProductList));
+        this.Mediator.Send(Arg<IRequest<Result<MerchantDetailsModel>>>.Any(), Arg<CancellationToken>.Any()).ReturnsAsync(Result.Success(TestData.MerchantDetailsModel));
 
         await this.ViewModel.LogonCommand.ExecuteAsync(null);
 
