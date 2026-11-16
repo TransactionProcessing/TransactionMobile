@@ -185,6 +185,7 @@ jobs:
             -f net11.0-android \
             -c Release \
             --no-restore \
+            /p:PublishReadyToRun=false \
             /p:ApplicationDisplayVersion=${{ env.APP_DISPLAY_VERSION }} \
             /p:ApplicationVersion=${{ env.APP_VERSION }} \
             /p:AndroidSignPackage=false
