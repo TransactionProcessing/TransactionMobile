@@ -124,6 +124,9 @@ jobs:
 
       - name: Run Windows End To End Tests
         run: dotnet test --project TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "Category=PRTest&Category=Windows" --no-restore --settings "${{ steps.windows_settings.outputs.runsettings_path }}"
+        env:
+          TEMP: ${{ runner.temp }}
+          TMP: ${{ runner.temp }}
         #run: dotnet test TransactionProcessor.Mobile.UiTests/TransactionProcessor.Mobile.UiTests.csproj --list-tests -v:d
 
       - name: Upload Logs on Failure

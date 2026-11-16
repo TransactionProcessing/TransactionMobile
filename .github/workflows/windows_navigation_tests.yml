@@ -139,6 +139,9 @@ jobs:
 
       - name: Run Windows Navigation Tests
         run: dotnet test --project TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=PRNavTest)&(Category=Windows)" --no-restore --settings "${{ steps.windows_settings.outputs.runsettings_path }}"
+        env:
+          TEMP: ${{ runner.temp }}
+          TMP: ${{ runner.temp }}
 
       - name: Upload Appium Logs on Failure
         if: always()
