@@ -28,7 +28,7 @@ jobs:
 
       - name: Install Appium and Drivers
         run: |
-          npm install -g appium --unsafe-perm=true --allow-root
+          npm install -g appium@3 --unsafe-perm=true --allow-root
           appium driver install --source=npm appium-windows-driver
 
       - name: Start Appium Server
