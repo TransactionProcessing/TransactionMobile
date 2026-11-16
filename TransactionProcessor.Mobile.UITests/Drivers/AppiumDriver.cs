@@ -492,7 +492,7 @@ namespace TransactionProcessor.Mobile.UITests.Drivers
             driverOptions.AddAdditionalAppiumOption("adbExecTimeout", TimeSpan.FromMinutes(5).TotalMilliseconds);
             driverOptions.AutomationName = "UIAutomator2";
             driverOptions.PlatformName = "Android";
-            driverOptions.PlatformVersion = "16.0";
+            driverOptions.PlatformVersion = "17.0";
             driverOptions.DeviceName = "emulator-5554";
 
             driverOptions.AddAdditionalAppiumOption(MobileCapabilityType.FullReset, true);

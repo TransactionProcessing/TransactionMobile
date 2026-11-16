@@ -145,6 +145,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
             name: windows-software_navigation_tests_appium
-            path: appium.log
+            path: ${{ runner.temp }}\TransactionProcessor.Mobile.UITests\
 
   
