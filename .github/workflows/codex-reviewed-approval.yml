@@ -1,0 +1,29 @@
+name: Codex reviewed PR approval
+
+# Trigger locally; delegate review validation and approval to org-ci-workflows.
+on:
+  issue_comment:
+    types: [created, edited]
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+  checks: read
+
+concurrency:
+  group: codex-approval
+  cancel-in-progress: false
+
+jobs:
+  approve:
+    if: ${{ github.event_name != 'issue_comment' || (github.event.issue.pull_request && github.event.comment.user.login == 'chatgpt-codex-connector[bot]') }}
+    uses: TransactionProcessing/org-ci-workflows/.github/workflows/reusable-codex-reviewed-approval.yml@main
+    with:
+      base_branch: main
+      required_checks_json: '[["unit_tests","github-actions"]]'
+    secrets:
+      reviewer_token: ${{ secrets.PR_REVIEW_USER_TOKEN }}
