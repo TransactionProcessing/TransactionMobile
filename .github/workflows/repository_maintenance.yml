@@ -15,4 +15,4 @@ jobs:
     uses: TransactionProcessing/org-ci-workflows/.github/workflows/cleanup-stale-branches.yml@main
     with:
       stale-days: ${{ fromJSON(vars.STALE_BRANCH_DAYS || '60') }}
-      dry-run: true
+      dry-run: false
