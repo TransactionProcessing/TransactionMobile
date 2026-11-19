@@ -4,6 +4,9 @@ name: Codex reviewed PR approval
 on:
   issue_comment:
     types: [created, edited]
+  workflow_run:
+    workflows: ["Build and Run Unit Tests"]
+    types: [completed]
   schedule:
     - cron: '7,22,37,52 * * * *'
   workflow_dispatch:
