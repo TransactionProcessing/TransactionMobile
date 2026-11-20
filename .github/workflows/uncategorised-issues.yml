@@ -1,0 +1,28 @@
+name: Uncategorised issues
+
+on:
+  issues:
+    types: [opened, reopened, edited, labeled, unlabeled, typed, untyped]
+  schedule:
+    - cron: '17 2 * * *'
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Preview changes only
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  issues: write
+
+concurrency:
+  group: uncategorised-issues-${{ github.event.issue.number || 'all' }}
+  cancel-in-progress: false
+
+jobs:
+  reconcile:
+    uses: TransactionProcessing/org-ci-workflows/.github/workflows/reusable-uncategorised-issues.yml@main
+    with:
+      issue-number: ${{ github.event.issue.number || 0 }}
+      dry-run: ${{ inputs.dry-run || false }}
