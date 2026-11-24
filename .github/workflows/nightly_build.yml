@@ -346,6 +346,7 @@ jobs:
           fi
 
           echo "UITEST_ANDROID_APP_PATH=$apk_path" >> "$GITHUB_ENV"
+          echo "UITEST_ANDROID_PLATFORM_VERSION=17.0" >> "$GITHUB_ENV"
           echo "apk_path=$apk_path" >> "$GITHUB_OUTPUT"
 
       - name: Prepare Android UI test settings
