@@ -36,6 +36,7 @@ jobs:
           # Export paths for future steps
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
           echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "ANDROID_AVD_HOME=$HOME/.android/avd" >> $GITHUB_ENV
           echo "PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$PATH" >> $GITHUB_ENV
 
       - name: Install Android Build Tools
@@ -248,11 +249,17 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.android/avd
-          key: android-emulator-x86-${{ runner.os }}-android-37.0
+          key: android-emulator-x86-${{ runner.os }}-android-37.0-data-8g-v1
 
       - name: Create Android Emulator (x86)
         run: |
-          echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-37.0;google_apis;x86_64" --device "pixel_4"
+          avd_config="$ANDROID_AVD_HOME/test_emulator.avd/config.ini"
+          if [ ! -f "$avd_config" ]; then
+            echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-37.0;google_apis;x86_64" --device "pixel_4"
+          fi
+
+          sed -i '/^disk.dataPartition.size=/d' "$avd_config"
+          echo "disk.dataPartition.size=8G" >> "$avd_config"
 
       - name: List AVDs
         run: avdmanager list avd
@@ -261,9 +268,9 @@ jobs:
         run: |
           echo "Starting emulator..."
           
-          export ANDROID_AVD_HOME=$HOME/.config/.android/avd
+          export ANDROID_AVD_HOME=$HOME/.android/avd
 
-          nohup $ANDROID_HOME/emulator/emulator -avd test_emulator -no-window -no-audio -no-snapshot -gpu swiftshader_indirect -verbose > emulator.log 2>&1 &
+          nohup $ANDROID_HOME/emulator/emulator -avd test_emulator -no-window -no-audio -no-snapshot -wipe-data -gpu swiftshader_indirect -verbose > emulator.log 2>&1 &
 
           echo "Waiting for emulator process to start..."
           sleep 10  # Allow time for initialization
@@ -309,6 +316,9 @@ jobs:
               sleep 5
             done
           '  
+
+      - name: Check Android emulator data storage
+        run: adb shell df -h /data
 
       - name: Install Android Build Tools
         run: |
