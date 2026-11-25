@@ -253,9 +253,21 @@ jobs:
 
       - name: Create Android Emulator (x86)
         run: |
+          set -o pipefail
+          mkdir -p "$ANDROID_AVD_HOME"
+
           avd_config="$ANDROID_AVD_HOME/test_emulator.avd/config.ini"
           if [ ! -f "$avd_config" ]; then
-            echo "no" | avdmanager create avd -n test_emulator -k "system-images;android-37.0;google_apis;x86_64" --device "pixel_4"
+            echo "no" | avdmanager create avd --force -n test_emulator \
+              -k "system-images;android-37.0;google_apis;x86_64" \
+              --device "pixel_4" \
+              --path "$ANDROID_AVD_HOME/test_emulator.avd"
+          fi
+
+          if [ ! -f "$avd_config" ]; then
+            echo "Android emulator creation did not produce $avd_config"
+            avdmanager list avd
+            exit 1
           fi
 
           sed -i '/^disk.dataPartition.size=/d' "$avd_config"
