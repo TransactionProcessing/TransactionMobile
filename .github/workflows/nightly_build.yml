@@ -402,7 +402,47 @@ jobs:
           echo "runsettings_path=$settings_path" >> "$GITHUB_OUTPUT"
 
       - name: Run Android Navigation Tests
-        run: dotnet test --project TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj --filter "(Category=Android)" --no-restore --settings "${{ steps.android_settings.outputs.runsettings_path }}"
+        run: |
+          set -o pipefail
+
+          run_android_tests() {
+            local output_file="$1"
+            set +e
+            dotnet test --project TransactionProcessor.Mobile.UITests/TransactionProcessor.Mobile.UITests.csproj \
+              --filter "(Category=Android)" \
+              --no-restore \
+              --settings "${{ steps.android_settings.outputs.runsettings_path }}" 2>&1 | tee "$output_file"
+            local command_status=${PIPESTATUS[0]}
+            set -e
+            return "$command_status"
+          }
+
+          first_attempt_log="$RUNNER_TEMP/android-ui-tests-attempt-1.log"
+          if run_android_tests "$first_attempt_log"; then
+            exit 0
+          else
+            first_attempt_status=$?
+          fi
+
+          if ! grep -Eq "System UI isn.t responding" "$first_attempt_log"; then
+            echo "Android UI tests failed without the known emulator System UI hang; not retrying."
+            exit "$first_attempt_status"
+          fi
+
+          echo "Detected Android emulator System UI hang. Rebooting before one retry."
+          adb reboot
+          adb wait-for-device
+          boot_deadline=$((SECONDS + 600))
+          while [ "$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d "\\r")" != "1" ]; do
+            if [ "$SECONDS" -ge "$boot_deadline" ]; then
+              echo "Emulator did not finish rebooting within 10 minutes."
+              exit 1
+            fi
+            sleep 5
+          done
+
+          echo "Emulator reboot completed; retrying Android UI tests once."
+          run_android_tests "$RUNNER_TEMP/android-ui-tests-attempt-2.log"
 
       - name: Upload Appium Logs on Failure
         if: always()
